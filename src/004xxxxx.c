@@ -38,7 +38,9 @@ LAB_00422c37:
 
 // Address: 00422f11
 void Add_Object_To_Collision_Response_List(sprite_status* pActwk) {
-  // TODO
+  if (colibuffer[0] >= 126) return; // unsigned
+  colibuffer[0] += 2;
+  colibuffer[colibuffer[0] / 2] = pActwk - actwk;
 }
 
 // Address: 0042b8b8

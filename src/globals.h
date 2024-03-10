@@ -4,6 +4,7 @@
 #include "types.h"
 
 extern sprite_status actwk[110];
+extern unsigned short colibuffer[64];
 extern unsigned char soz_darkness_level;
 extern unsigned char soz_ghosts;
 extern short plring;
