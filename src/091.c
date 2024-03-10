@@ -13,16 +13,15 @@ bool chk_pl_attack(sprite_status* pActwk, sprite_status* pPlayerwk) {
   switch (character) {
     case SONIC:
       break;
-    case MILES:
+    case MILES: {
       if (((unsigned char*)pPlayerwk)[47] == 0) return false;
-      pPlayerwk->cddat1 & 64;
-      if (((unsigned char*)pPlayerwk)[47] != 0) return false;
-      // d1 = pPlayerwk->xposi - pActwk->xposi;
-      // d2 = pPlayerwk->yposi - pActwk->yposi;
-      // d0 = FUN_00411511(d1, d2);
-      // d0 -= 32;
-      // if (d0 > 64) return false; // unsigned
-      // return true;
+      if (pPlayerwk->cddat1 & 64) return false;
+      short xposi = pPlayerwk->xposi - pActwk->xposi;
+      short yposi = pPlayerwk->yposi - pActwk->yposi;
+      unsigned short d0 = FUN_00411511(xposi, yposi) - 32;
+      if (d0 > 64) return false; // unsigned
+      return true;
+    }
     case KNUCKLES:
       if (((unsigned char*)pPlayerwk)[47] == 1) return true;
       if (((unsigned char*)pPlayerwk)[47] == 3) return true;
