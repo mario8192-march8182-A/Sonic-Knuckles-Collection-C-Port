@@ -71,7 +71,7 @@ void gost08_ctr(sprite_status* pActwk) {
   if (actwk[0].actfree[10] != KNUCKLES && markerno == 0) return;
   if (soz_darkness_level != 0) {
     unsigned char cnt = cnt_tbl[soz_darkness_level];
-    if (soz_ghosts > cnt) return; // unsigned
+    if (soz_ghosts >= cnt) return; // unsigned
     --((short*)pActwk)[29];
     if (((short*)pActwk)[29] >= 0) return;
     ++soz_ghosts;

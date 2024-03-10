@@ -19,7 +19,7 @@ bool chk_pl_attack(sprite_status* pActwk, sprite_status* pPlayerwk) {
       short xposi = pPlayerwk->xposi - pActwk->xposi;
       short yposi = pPlayerwk->yposi - pActwk->yposi;
       unsigned short d0 = FUN_00411511(xposi, yposi) - 32;
-      if (d0 > 64) return false; // unsigned
+      if (d0 >= 64) return false; // unsigned
       return true;
     }
     case KNUCKLES:
