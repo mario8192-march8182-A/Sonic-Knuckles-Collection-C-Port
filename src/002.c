@@ -3,6 +3,7 @@
 #include "004xxxxx.h"
 
 
+// skdisasm label: CreateChild6_Simple
 void set_act05(sprite_status* pActwk, set_act05_data* data) {
   sprite_status* pNewActwk;
   short i = 0;
@@ -24,6 +25,7 @@ void set_act05(sprite_status* pActwk, set_act05_data* data) {
   } while (cnt != -1);
 }
 
+// skdisasm label: Perform_DPLC
 void set_emy_wchg(sprite_status* pActwk, wrt_tbl* data) {
   if (pActwk->patno == ((unsigned char*)pActwk)[58]) return;
   ((unsigned char*)pActwk)[58] = pActwk->patno;
@@ -51,6 +53,7 @@ void set_emy_wchg(sprite_status* pActwk, wrt_tbl* data) {
   } while (cnt != -1);
 }
 
+// skdisasm label: HurtCharacter_Directly
 void set_pl_damage(sprite_status* pAttackActwk, sprite_status* pPlayerwk) {
   playdamageset(pPlayerwk, pAttackActwk);
 }
@@ -59,6 +62,7 @@ unsigned short pl_wk_tbl[4] = {
   0, 0, 1, 1
 };
 
+// skdisasm label: Check_PlayerCollision
 bool chk_emy_col(sprite_status* pActwk, sprite_status** ppColiActwk) {
   if (pActwk->colicnt == 0) return false;
   pActwk->colicnt = 0;

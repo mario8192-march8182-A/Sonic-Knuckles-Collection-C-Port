@@ -3,6 +3,7 @@
 #include "091.h"
 
 
+// skdisasm label: Check_PlayerAttack
 bool chk_pl_attack(sprite_status* pActwk, sprite_status* pPlayerwk) {
   if (pPlayerwk->cddat2 & 2) return true;
   if (pPlayerwk->mstno == 9) return true;
