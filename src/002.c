@@ -5,10 +5,10 @@
 
 
 // skdisasm label: CreateChild6_Simple
-void set_act05(sprite_status* pActwk, set_act05_data* data) {
+void set_act05(sprite_status* pActwk, set_act05_data* pData) {
   sprite_status* pNewActwk;
   short i = 0;
-  short cnt = data->cnt;
+  short cnt = pData->cnt;
 
   do {
     bool created = Create_New_Sprite3(pActwk, &pNewActwk);
@@ -17,7 +17,7 @@ void set_act05(sprite_status* pActwk, set_act05_data* data) {
     ((unsigned short*)pNewActwk)[35] = pActwk - actwk; // oya (parent)
     pNewActwk->patbase = pActwk->patbase;
     pNewActwk->sproffset = pActwk->sproffset;
-    pNewActwk->r_ptr = data->act;
+    pNewActwk->r_ptr = pData->act;
     pNewActwk->userflag1 = i;
     pNewActwk->xposi = pActwk->xposi;
     pNewActwk->yposi = pActwk->yposi;
@@ -27,12 +27,12 @@ void set_act05(sprite_status* pActwk, set_act05_data* data) {
 }
 
 // skdisasm label: Perform_DPLC
-void set_emy_wchg(sprite_status* pActwk, wrt_tbl* data) {
+void set_emy_wchg(sprite_status* pActwk, wrt_tbl* pTbl) {
   if (pActwk->patno == ((unsigned char*)pActwk)[58]) return;
   ((unsigned char*)pActwk)[58] = pActwk->patno;
-  unsigned long* a3 = data->unknown;
+  unsigned long* a3 = pTbl->unknown;
   unsigned short vram_adr = (pActwk->sproffset & 0x7FF) << 5;
-  unsigned short* tbl = data->tbl[pActwk->patno];
+  unsigned short* tbl = pTbl->tbl[pActwk->patno];
   short cnt = *tbl++; // this conversion from unsigned to signed should be safe
   cnt = cnt >> 8 | cnt << 8; // rotate lower and upper 8 bits
   unsigned short d3 = 0;
