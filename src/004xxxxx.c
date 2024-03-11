@@ -1,12 +1,30 @@
+#include <string.h>
 #include "globals.h"
 #include "macros.h"
 #include "004xxxxx.h"
 
 
+// SONIC3K.EXE address: 0040a98e
+void PlaySoundRegister(long id) {
+  // TODO
+}
+
 // SONIC3K.EXE address: 00410426
 // skdisasm label: Add_To_DMA_Queue
 void Copy_Data_To_VRAM(unsigned short d1, unsigned short d2, unsigned short d3) {
   // TODO
+}
+
+// SONIC3K.EXE address: 0041a82d
+// skdisasm label: Play_SFX
+void soundset(long id) {
+  PlaySoundRegister(id);
+}
+
+// SONIC3K.EXE addresses: 0041eacf, 0041ead9
+// skdisasm labels: Delete_Current_Sprite, Delete_Referenced_Sprite
+void frameout(sprite_status* pActwk) {
+  memset(pActwk, 0, sizeof(*pActwk));
 }
 
 // SONIC3K.EXE address: 0041eb34

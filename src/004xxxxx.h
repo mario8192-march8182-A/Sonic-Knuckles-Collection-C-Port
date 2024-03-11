@@ -3,7 +3,10 @@
 
 #include <stdbool.h>
 
+void PlaySoundRegister(long id);
 void Copy_Data_To_VRAM(unsigned short d1, unsigned short d2, unsigned short d3);
+void soundset(long id);
+void frameout(sprite_status* pActwk);
 void actionsub(sprite_status* pActwk);
 void playdamageset(sprite_status* pPlayerwk, sprite_status* pAttackActwk);
 void Add_Object_To_Collision_Response_List(sprite_status* pActwk);

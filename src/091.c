@@ -3,6 +3,12 @@
 #include "091.h"
 
 
+// skdisasm label: Set_Raw_Animation
+void pg_init(sprite_status* pActwk, unsigned char* pg_tbl) {
+  ((unsigned char**)pActwk)[12] = pg_tbl;
+  pActwk->patcnt = pActwk->pattim = 0;
+}
+
 // skdisasm label: Check_PlayerAttack
 bool chk_pl_attack(sprite_status* pActwk, sprite_status* pPlayerwk) {
   if (BIT_1_IS_SET(pPlayerwk->cddat2)) return true;

@@ -11,6 +11,8 @@ set_act05_data gost08_body_set_tbl = {
   &gost08_body
 };
 
+unsigned char gost08_away_pg00[13] = { 13, 4, 13, 4, 14, 4, 15, 4, 16, 3, 17, 3, 244 };
+
 unsigned short gost08_tbl00[2] = { 0, 8 };
 unsigned short gost08_tbl01[2] = { 0, 152 };
 unsigned short gost08_tbl02[2] = { 0, 296 };
@@ -121,5 +123,18 @@ void gost08_body(sprite_status* pActwk) {
     }
   }
   Add_Object_To_Collision_Response_List(pActwk);
+  actionsub(pActwk);
+}
+
+void gost08_body__fout0(sprite_status* pActwk) {
+  --soz_ghosts;
+  set_wchg_fout0(pActwk);
+}
+
+void gost08_body__fout1(sprite_status* pActwk) {
+  pActwk->r_ptr = &gost08_body_fout0;
+  ((void(*)(sprite_status*)pActwk)[13] = &gost08_body_fout0;
+  pg_init(pActwk, gost08_away_pg00);
+  soundset(-118);
   actionsub(pActwk);
 }

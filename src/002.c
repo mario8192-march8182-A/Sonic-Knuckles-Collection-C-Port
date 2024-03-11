@@ -1,4 +1,5 @@
 #include "globals.h"
+#include "macros.h"
 #include "002.h"
 #include "004xxxxx.h"
 
@@ -51,6 +52,19 @@ void set_emy_wchg(sprite_status* pActwk, wrt_tbl* data) {
     Copy_Data_To_VRAM(d1, d2, d3);
     --cnt;
   } while (cnt != -1);
+}
+
+// skdisasm label: Go_Delete_SpriteSlotted2
+void set_wchg_fout0(sprite_status* pActwk) {
+  pActwk->r_ptr = &frameout;
+  SET_BIT_7(pActwk->cddat1);
+  clr_wchg_bit(pActwk);
+}
+
+// skdisasm label: Remove_From_TrackingSlot
+void clr_wchg_bit(sprite_status* pActwk) {
+  unsigned char bit_string = ~(((unsigned char*)pActwk)[59]);
+  DAT_008549d4[((unsigned short*)pActwk)[30]] &= bit_string;
 }
 
 // skdisasm label: HurtCharacter_Directly
