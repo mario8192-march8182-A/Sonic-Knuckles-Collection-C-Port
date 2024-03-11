@@ -1,5 +1,6 @@
 #include "../globals.h"
 #include "../constants.h"
+#include "../macros.h"
 #include "gost08.h"
 #include "../004xxxxx.h"
 #include "../002.h"
@@ -100,7 +101,7 @@ void gost08_body(sprite_status* pActwk) {
 
   act_tbl[pActwk->r_no / 2](pActwk);
   set_emy_wchg(pActwk, &gost08_wrt_tbl);
-  if (pActwk->actflg >= 0) {
+  if (!BIT_7_IS_SET(pActwk->actflg)) {
     gost08_body__fout0(pActwk);
     return;
   }

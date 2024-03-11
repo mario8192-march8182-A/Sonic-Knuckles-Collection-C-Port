@@ -1,4 +1,5 @@
 #include "globals.h"
+#include "macros.h"
 #include "004xxxxx.h"
 
 
@@ -19,7 +20,7 @@ void playdamageset(sprite_status* pPlayerwk, sprite_status* pAttackActwk) {
     if (vs_flag == 0) goto LAB_00422c37;
     ring_cnt = pl2ring;
   }
-  if (pPlayerwk->cddat2 & 1) goto LAB_00422c23;
+  if (BIT_0_IS_SET(pPlayerwk->cddat2)) goto LAB_00422c23;
   if (DAT_00831194 != 0) goto LAB_00422c23;
   if (((signed char*)pPlayerwk)[55] < 0) goto LAB_00422c37;
   if (ring_cnt == 0) goto LAB_00422d50;
