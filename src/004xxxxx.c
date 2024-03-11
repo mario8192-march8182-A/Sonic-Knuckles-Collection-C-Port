@@ -3,17 +3,20 @@
 #include "004xxxxx.h"
 
 
-// Address: 00410426
+// SONIC3K.EXE address: 00410426
+// skdisasm label: Add_To_DMA_Queue
 void Copy_Data_To_VRAM(unsigned short d1, unsigned short d2, unsigned short d3) {
   // TODO
 }
 
-// Address: 0041eb34
+// SONIC3K.EXE address: 0041eb34
+// skdisasm label: Draw_Sprite
 void actionsub(sprite_status* pActwk) {
   // TODO
 }
 
-// Address: 00422b67
+// SONIC3K.EXE address: 00422b67
+// skdisasm label: HurtCharacter
 void playdamageset(sprite_status* pPlayerwk, sprite_status* pAttackActwk) {
   short ring_cnt = plring;
   if (pPlayerwk != &actwk[0]) {
@@ -37,20 +40,23 @@ LAB_00422c37:
   // TODO
 }
 
-// Address: 00422f11
+// SONIC3K.EXE address: 00422f11
+// skdisasm label: Add_SpriteToCollisionResponseList
 void Add_Object_To_Collision_Response_List(sprite_status* pActwk) {
   if (colibuffer[0] >= 126) return; // unsigned
   colibuffer[0] += 2;
   colibuffer[colibuffer[0] / 2] = pActwk - actwk;
 }
 
-// Address: 0042b8b8
+// SONIC3K.EXE address: 0042b8b8
+// skdisasm label: Create_New_Sprite
 bool Create_New_Sprite(sprite_status** ppNewActwk) {
   *ppNewActwk = &actwk[3];
   return Create_New_Sprite_Int(ppNewActwk, 89);
 }
 
-// Address: 0042b8cf
+// SONIC3K.EXE address: 0042b8cf
+// skdisasm label: Create_New_Sprite3
 bool Create_New_Sprite3(sprite_status* pActwk, sprite_status** ppNewActwk) {
   *ppNewActwk = pActwk;
 
