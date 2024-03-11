@@ -1,10 +1,11 @@
 #ifndef GLOBALS_H
 #define GLOBALS_H
 
+#include "constants.h"
 #include "types.h"
 
-extern sprite_status actwk[110];
-extern unsigned short colibuffer[64];
+extern sprite_status actwk[ACTWK_SLOTS];
+extern unsigned short colibuffer[COLBUFFER_SLOTS];
 extern unsigned char soz_darkness_level;
 extern unsigned char soz_ghosts;
 extern short plring;

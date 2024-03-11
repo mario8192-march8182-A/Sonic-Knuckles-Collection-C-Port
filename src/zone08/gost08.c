@@ -1,5 +1,4 @@
 #include "../globals.h"
-#include "../constants.h"
 #include "../macros.h"
 #include "gost08.h"
 #include "../004xxxxx.h"

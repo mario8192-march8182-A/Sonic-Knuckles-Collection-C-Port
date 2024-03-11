@@ -13,4 +13,12 @@ character_id;
 #define KO_ADR 68
 #define OYA_ADR 70
 
+#define ACTWK_SLOTS 110
+#define ACTWK_DYNAMIC_START 3
+#define ACTWK_RESERVED_START 93
+
+#define COLBUFFER_SLOTS 64
+#define COLBUFFER_SLOT_SIZE 2
+#define COLBUFFER_MAX_SIZE 126
+
 #endif

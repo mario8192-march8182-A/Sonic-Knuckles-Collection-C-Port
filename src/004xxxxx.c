@@ -43,16 +43,16 @@ LAB_00422c37:
 // SONIC3K.EXE address: 00422f11
 // skdisasm label: Add_SpriteToCollisionResponseList
 void Add_Object_To_Collision_Response_List(sprite_status* pActwk) {
-  if (colibuffer[0] >= 126) return; // unsigned
-  colibuffer[0] += 2;
-  colibuffer[colibuffer[0] / 2] = pActwk - actwk;
+  if (colibuffer[0] >= COLBUFFER_MAX_SIZE) return; // unsigned
+  colibuffer[0] += COLBUFFER_SLOT_SIZE;
+  colibuffer[colibuffer[0] / COLBUFFER_SLOT_SIZE] = pActwk - actwk;
 }
 
 // SONIC3K.EXE address: 0042b8b8
 // skdisasm label: Create_New_Sprite
 bool Create_New_Sprite(sprite_status** ppNewActwk) {
-  *ppNewActwk = &actwk[3];
-  return Create_New_Sprite_Int(ppNewActwk, 89);
+  *ppNewActwk = &actwk[ACTWK_DYNAMIC_START];
+  return Create_New_Sprite_Int(ppNewActwk, ACTWK_RESERVED_START - ACTWK_DYNAMIC_START - 1);
 }
 
 // SONIC3K.EXE address: 0042b8cf
@@ -75,7 +75,7 @@ bool Create_New_Sprite3(sprite_status* pActwk, sprite_status** ppNewActwk) {
     because 'slot_cnt' is zero-based.
   */
 
-  short slot_cnt = (&actwk[93] - pActwk) - 1 - 1;
+  short slot_cnt = (&actwk[ACTWK_RESERVED_START] - pActwk) - 1 - 1;
   if (slot_cnt < 0) return false;
   return Create_New_Sprite_Int(ppNewActwk, slot_cnt);
 }
