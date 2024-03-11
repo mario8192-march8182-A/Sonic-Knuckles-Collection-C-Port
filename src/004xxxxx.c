@@ -12,7 +12,18 @@ void Copy_Data_To_VRAM(unsigned short d1, unsigned short d2, unsigned short d3) 
 // SONIC3K.EXE address: 0041eb34
 // skdisasm label: Draw_Sprite
 void actionsub(sprite_status* pActwk) {
-  // TODO
+  unsigned char level_no = pActwk->sprpri / (PBUFFER_LEVEL_SLOTS * PBUFFER_LEVEL_SLOT_SIZE);
+  unsigned short* pri_level = &pbuffer[level_no][0];
+
+  do {
+    if (pri_level[0] < PBUFFER_LEVEL_MAX_SIZE) { // unsigned
+      pri_level[0] += PBUFFER_LEVEL_SLOT_SIZE;
+      pri_level[pri_level[0] / PBUFFER_LEVEL_SLOT_SIZE] = pActwk - actwk;
+      return;
+    }
+    if (pri_level == &pbuffer[PBUFFER_LEVELS - 1][0]) return;
+    pri_level += PBUFFER_LEVEL_SLOTS;
+  } while (1);
 }
 
 // SONIC3K.EXE address: 00422b67

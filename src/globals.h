@@ -4,6 +4,7 @@
 #include "constants.h"
 #include "types.h"
 
+extern unsigned short pbuffer[PBUFFER_LEVELS][PBUFFER_LEVEL_SLOTS];
 extern sprite_status actwk[ACTWK_SLOTS];
 extern unsigned short colibuffer[COLBUFFER_SLOTS];
 extern unsigned char soz_darkness_level;
