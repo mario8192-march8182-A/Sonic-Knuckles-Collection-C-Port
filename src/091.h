@@ -3,7 +3,7 @@
 
 #include <stdbool.h>
 
-void pg_init(sprite_status* pActwk, unsigned char* pg_tbl);
+void pg_init(sprite_status* pActwk, signed char* pg_tbl);
 bool chk_pl_attack(sprite_status* pActwk, sprite_status* pPlayerwk);
 
 #endif

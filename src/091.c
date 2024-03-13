@@ -4,8 +4,8 @@
 
 
 // skdisasm label: Set_Raw_Animation
-void pg_init(sprite_status* pActwk, unsigned char* pg_tbl) {
-  ((unsigned char**)pActwk)[12] = pg_tbl;
+void pg_init(sprite_status* pActwk, signed char* pg_tbl) {
+  ((signed char**)pActwk)[12] = pg_tbl;
   pActwk->patcnt = pActwk->pattim = 0;
 }
 

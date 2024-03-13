@@ -11,7 +11,7 @@ set_act05_data gost08_body_set_tbl = {
   &gost08_body
 };
 
-unsigned char gost08_away_pg00[13] = { 13, 4, 13, 4, 14, 4, 15, 4, 16, 3, 17, 3, 244 };
+signed char gost08_away_pg00[13] = { 13, 4, 13, 4, 14, 4, 15, 4, 16, 3, 17, 3, -12 };
 
 unsigned short gost08_tbl00[2] = { 0, 8 };
 unsigned short gost08_tbl01[2] = { 0, 152 };
