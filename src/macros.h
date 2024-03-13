@@ -28,4 +28,13 @@
 #define BIT_6_IS_SET(value) (value & 64)
 #define BIT_7_IS_SET(value) (value & 128)
 
+#define SPRITE_STATUS_UCHAR(pointer, offset) ((unsigned char*)pointer)[offset]
+#define SPRITE_STATUS_SCHAR(pointer, offset) ((signed char*)pointer)[offset]
+#define SPRITE_STATUS_USHORT(pointer, offset) ((unsigned short*)pointer)[offset / 2]
+#define SPRITE_STATUS_SHORT(pointer, offset) ((short*)pointer)[offset / 2]
+#define SPRITE_STATUS_ULONG(pointer, offset) ((unsigned long*)pointer)[offset / 4]
+#define SPRITE_STATUS_LONG(pointer, offset) ((long*)pointer)[offset / 4]
+#define SPRITE_STATUS_PSCHAR(pointer, offset) ((unsigned char**)pointer)[offset / 4]
+#define SPRITE_STATUS_PHANDLER(pointer, offset) ((sprite_status_handler*)pointer)[offset / 4]
+
 #endif

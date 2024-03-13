@@ -82,15 +82,15 @@ void gost08_ctr(sprite_status* pActwk) {
     0, 1, 2, 2, 3, 3
   };
 
-  if (actwk[0].actfree[10] != KNUCKLES && markerno == 0) return;
+  if (SPRITE_STATUS_UCHAR(&actwk[0], 56) != KNUCKLES && markerno == 0) return;
   if (soz_darkness_level != 0) {
     unsigned char cnt = cnt_tbl[soz_darkness_level];
     if (soz_ghosts >= cnt) return; // unsigned
-    --((short*)pActwk)[29];
-    if (((short*)pActwk)[29] >= 0) return;
+    --SPRITE_STATUS_SHORT(pActwk, 58);
+    if (SPRITE_STATUS_SHORT(pActwk, 58) >= 0) return;
     ++soz_ghosts;
     if (soz_ghosts <= cnt) { // unsigned
-      ((short*)pActwk)[29] = 63;
+      SPRITE_STATUS_SHORT(pActwk, 58) = 63;
     }
     set_act05(pActwk, &gost08_body_set_tbl);
   }
@@ -130,7 +130,7 @@ void gost08_body(sprite_status* pActwk) {
       gost08_body__fout1(pActwk);
       return;
     }
-    if (((unsigned char*)pColiActwk)[52] == 0) {
+    if (SPRITE_STATUS_UCHAR(pColiActwk, 52) == 0) {
       set_pl_damage(pActwk, pColiActwk);
     }
   }
@@ -145,7 +145,7 @@ void gost08_body__fout0(sprite_status* pActwk) {
 
 void gost08_body__fout1(sprite_status* pActwk) {
   pActwk->r_ptr = &gost08_body_fout0;
-  ((sprite_status_handler*)pActwk)[13] = &gost08_body_fout0;
+  SPRITE_STATUS_PHANDLER(pActwk, 52) = &gost08_body_fout0;
   pg_init(pActwk, gost08_away_pg00);
   soundset(-118);
   actionsub(pActwk);
@@ -155,15 +155,15 @@ void gost08_init(sprite_status* pActwk) {
   emy_wrt_init(pActwk, &gost08_init_tbl);
   CLEAR_BIT_2(pActwk->actflg);
   SET_BIT_7(pActwk->actflg);
-  ((unsigned char*)pActwk)[66] = soz_darkness_level;
-  ((unsigned char*)pActwk)[67] = soz_ghosts;
+  SPRITE_STATUS_UCHAR(pActwk, 66) = soz_darkness_level;
+  SPRITE_STATUS_UCHAR(pActwk, 67) = soz_ghosts;
   set_body_init(pActwk);
   soundset(-110);
   gost08_wait0(pActwk);
 }
 
 void gost08_wait0(sprite_status* pActwk) {
-  int ret = time_pg(pActwk, ((signed char**)pActwk)[12]);
+  int ret = time_pg(pActwk, SPRITE_STATUS_PSCHAR(pActwk, 48));
   if (ret == 0) return;
   if (soz_darkness_level == 5) {
     gost08_atak_init(pActwk);

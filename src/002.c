@@ -14,7 +14,7 @@ void set_act05(sprite_status* pActwk, set_act05_data* pData) {
     bool created = Create_New_Sprite3(pActwk, &pNewActwk);
     if (!created) return;
 
-    ((unsigned short*)pNewActwk)[35] = pActwk - actwk; // oya (parent)
+    SPRITE_STATUS_USHORT(pNewActwk, OYA_ADR) = pActwk - actwk;
     pNewActwk->patbase = pActwk->patbase;
     pNewActwk->sproffset = pActwk->sproffset;
     pNewActwk->r_ptr = pData->act;
@@ -49,7 +49,7 @@ int chk_tpg_next(sprite_status* pActwk, signed char pg, signed char* pg_tbl, uns
     case 8:
       pg = pg_tbl[patcnt + 1];
       pg_tbl = &pg_tbl[pg];
-      ((signed char**)pActwk)[12] = pg_tbl;
+      SPRITE_STATUS_PSCHAR(pActwk, 48) = pg_tbl;
     case 4:
       pActwk->patno = pg_tbl[0];
       pActwk->pattim = pg_tbl[1];
@@ -57,7 +57,7 @@ int chk_tpg_next(sprite_status* pActwk, signed char pg, signed char* pg_tbl, uns
       break;
     case 12:
       pActwk->pattim = 0;
-      ((sprite_status_handler*)pActwk)[13](pActwk);
+      SPRITE_STATUS_PHANDLER(pActwk, 52)(pActwk);
       ret = -1;
       break;
   }
@@ -92,9 +92,9 @@ void emy_wrt_init(sprite_status* pActwk, wrt_init_data * pData) {
   return;
 
 ok:
-  emy_wrt_flg[pData->flg_index] |= 1 << bit);
-  ((unsigned char*)pActwk)[59] = bit;
-  ((unsigned short*)pActwk)[30] = pData->flg_index;
+  emy_wrt_flg[pData->flg_index] |= 1 << bit;
+  SPRITE_STATUS_UCHAR(pActwk, 59) = bit;
+  SPRITE_STATUS_USHORT(pActwk, 60) = pData->flg_index;
   pActwk->sproffset = sproffset;
   pActwk->patbase = pData->patbase;
   pActwk->sprpri = pData->sprpri;
@@ -103,15 +103,15 @@ ok:
   pActwk->patno = pData->patno;
   pActwk->colino = pData->colino;
   SET_BIT_2(pActwk->cddat1);
-  ((unsigned char*)pActwk)[58] = 255;
+  SPRITE_STATUS_UCHAR(pActwk, 58) = 255;
   SET_BIT_2(pActwk->actflg);
   pActwk->r_no += 2;
 }
 
 // skdisasm label: Perform_DPLC
 void set_emy_wchg(sprite_status* pActwk, wrt_tbl* pTbl) {
-  if (pActwk->patno == ((unsigned char*)pActwk)[58]) return;
-  ((unsigned char*)pActwk)[58] = pActwk->patno;
+  if (pActwk->patno == SPRITE_STATUS_UCHAR(pActwk, 58)) return;
+  SPRITE_STATUS_UCHAR(pActwk, 58) = pActwk->patno;
   unsigned long* a3 = pTbl->unknown;
   unsigned short vram_adr = (pActwk->sproffset & 0x7FF) << 5;
   unsigned short* tbl = pTbl->tbl[pActwk->patno];
@@ -145,8 +145,8 @@ void set_wchg_fout0(sprite_status* pActwk) {
 
 // skdisasm label: Remove_From_TrackingSlot
 void clr_wchg_bit(sprite_status* pActwk) {
-  unsigned char bit_string = ~(((unsigned char*)pActwk)[59]);
-  DAT_008549d4[((unsigned short*)pActwk)[30]] &= bit_string;
+  unsigned char bit_string = ~(SPRITE_STATUS_UCHAR(pActwk, 59));
+  DAT_008549d4[SPRITE_STATUS_USHORT(pActwk, 60)] &= bit_string;
 }
 
 // skdisasm label: HurtCharacter_Directly
@@ -163,7 +163,7 @@ bool chk_emy_col(sprite_status* pActwk, sprite_status** ppColiActwk) {
   if (pActwk->colicnt == 0) return false;
   pActwk->colicnt = 0;
   unsigned short coli_act_id = pl_wk_tbl[pActwk->colicnt & 3];
-  ((unsigned short*)pActwk)[34] = coli_act_id;
+  SPRITE_STATUS_USHORT(pActwk, 68) = coli_act_id;
   *ppColiActwk = &actwk[coli_act_id];
   return true;
 }

@@ -54,7 +54,7 @@ void playdamageset(sprite_status* pPlayerwk, sprite_status* pAttackActwk) {
   }
   if (BIT_0_IS_SET(pPlayerwk->cddat2)) goto LAB_00422c23;
   if (DAT_00831194 != 0) goto LAB_00422c23;
-  if (((signed char*)pPlayerwk)[55] < 0) goto LAB_00422c37;
+  if (SPRITE_STATUS_SCHAR(pPlayerwk, 55) < 0) goto LAB_00422c37;
   if (ring_cnt == 0) goto LAB_00422d50;
   sprite_status* pNewActwk;
   bool created = Create_New_Sprite(&pNewActwk);
@@ -62,7 +62,7 @@ void playdamageset(sprite_status* pPlayerwk, sprite_status* pAttackActwk) {
   pNewActwk->r_ptr = &flyring;
   pNewActwk->xposi = pPlayerwk->xposi;
   pNewActwk->yposi = pPlayerwk->yposi;
-  ((unsigned short*)pNewActwk)[31] = pPlayerwk - actwk;
+  SPRITE_STATUS_USHORT(pNewActwk, 62) = pPlayerwk - actwk;
 LAB_00422c23:
   pPlayerwk->cddat2 &= 0x8E;
 LAB_00422c37:
