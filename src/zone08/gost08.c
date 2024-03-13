@@ -88,7 +88,7 @@ void gost08_ctr(sprite_status* pActwk) {
 }
 
 void gost08_body(sprite_status* pActwk) {
-  static void(*act_tbl[9])(sprite_status*) = {
+  static sprite_status_handler act_tbl[9] = {
     &gost08_init,
     &gost08_wait0,
     &gost08_move0,
@@ -133,7 +133,7 @@ void gost08_body__fout0(sprite_status* pActwk) {
 
 void gost08_body__fout1(sprite_status* pActwk) {
   pActwk->r_ptr = &gost08_body_fout0;
-  ((void(*)(sprite_status*)pActwk)[13] = &gost08_body_fout0;
+  ((sprite_status_handler*)pActwk)[13] = &gost08_body_fout0;
   pg_init(pActwk, gost08_away_pg00);
   soundset(-118);
   actionsub(pActwk);

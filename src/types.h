@@ -2,10 +2,11 @@
 #define TYPES_H
 
 typedef struct sprite_status sprite_status;
+typedef void(*sprite_status_handler)(sprite_status*);
 
 typedef struct sprite_status {
   // 0x00
-  void(*r_ptr)(sprite_status*);
+  sprite_status_handler r_ptr;
   // 0x04
   unsigned char actflg;
   // 0x05
@@ -73,7 +74,7 @@ sprite_status;
 
 typedef struct set_act05_data {
   short cnt;
-  void(*act)(sprite_status*);
+  sprite_status_handler act;
 }
 set_act05_data;
 
