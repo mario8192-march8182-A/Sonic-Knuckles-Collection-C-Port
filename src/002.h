@@ -4,6 +4,9 @@
 #include <stdbool.h>
 
 void set_act05(sprite_status* pActwk, set_act05_data* pData);
+int time_pg(sprite_status* pActwk, signed char* pg_tbl);
+int chk_tpg_next(sprite_status* pActwk, signed char pg, signed char* pg_tbl, unsigned char patcnt);
+void emy_wrt_init(sprite_status* pActwk, wrt_init_data * pData);
 void set_emy_wchg(sprite_status* pActwk, wrt_tbl* pTbl);
 void set_wchg_fout0(sprite_status* pActwk);
 void clr_wchg_bit(sprite_status* pActwk);

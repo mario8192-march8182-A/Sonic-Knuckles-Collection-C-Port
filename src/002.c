@@ -26,6 +26,88 @@ void set_act05(sprite_status* pActwk, set_act05_data* pData) {
   } while (cnt != -1);
 }
 
+// skdisasm labels: Animate_RawMultiDelay, Animate_RawNoSSTMultiDelay
+int time_pg(sprite_status* pActwk, signed char* pg_tbl) {
+  --pActwk->pattim;
+  signed char pattim = pActwk->pattim; // conversion so it can be negative
+  if (pattim >= 0) return 0;
+  pActwk->patcnt += 2;
+  signed char pg = pg_tbl[pActwk->patcnt];
+  if (pg < 0) return chk_tpg_next(pActwk, pg, pg_tbl, pActwk->patcnt);
+  pActwk->patno = pg;
+  pActwk->pattim = pg_tbl[pActwk->patcnt + 1];
+  return 1;
+}
+
+int chk_tpg_next(sprite_status* pActwk, signed char pg, signed char* pg_tbl, unsigned char patcnt) {
+  int ret = 0;
+  pg = -pg;
+
+  switch (pg) {
+    case 0:
+      break;
+    case 8:
+      pg = pg_tbl[patcnt + 1];
+      pg_tbl = &pg_tbl[pg];
+      ((signed char**)pActwk)[12] = pg_tbl;
+    case 4:
+      pActwk->patno = pg_tbl[0];
+      pActwk->pattim = pg_tbl[1];
+      ret = 1;
+      break;
+    case 12:
+      pActwk->pattim = 0;
+      ((sprite_status_handler*)pActwk)[13](pActwk);
+      ret = -1;
+      break;
+  }
+
+  return ret;
+}
+
+// skdisasm label: SetUp_ObjAttributesSlotted
+void emy_wrt_init(sprite_status* pActwk, wrt_init_data * pData) {
+  unsigned char bit = 0;
+  short cnt = pData->cnt; // this conversion from unsigned to signed should be safe
+  unsigned short sproffset = pData->sproffset;
+  unsigned short offset_increase = pData->offset_increase;
+  unsigned char flags = emy_wrt_flg[pData->flg_index];
+  if (flags == 0) goto ok;
+
+  do {
+    bool bit_0_clear = !BIT_0_IS_SET(flags);
+    flags >>= 1;
+    if (bit_0_clear) goto ok;
+    ++bit;
+    sproffset += offset_increase;
+    --cnt;
+  } while (cnt != -1);
+
+  pActwk->r_ptr = 0;
+  pActwk->xposi = pActwk->xposi_sub = 0;
+  pActwk->yposi = pActwk->yposi_sub = 0;
+  pActwk->userflag1 = 0;
+  pActwk->actflg = 0;
+  pActwk->cddat1 = pActwk->cddat2 = 0;
+  return;
+
+ok:
+  emy_wrt_flg[pData->flg_index] |= 1 << bit);
+  ((unsigned char*)pActwk)[59] = bit;
+  ((unsigned short*)pActwk)[30] = pData->flg_index;
+  pActwk->sproffset = sproffset;
+  pActwk->patbase = pData->patbase;
+  pActwk->sprpri = pData->sprpri;
+  pActwk->sprhs = pData->sprhs;
+  pActwk->sprvs = pData->sprvs;
+  pActwk->patno = pData->patno;
+  pActwk->colino = pData->colino;
+  SET_BIT_2(pActwk->cddat1);
+  ((unsigned char*)pActwk)[58] = 255;
+  SET_BIT_2(pActwk->actflg);
+  pActwk->r_no += 2;
+}
+
 // skdisasm label: Perform_DPLC
 void set_emy_wchg(sprite_status* pActwk, wrt_tbl* pTbl) {
   if (pActwk->patno == ((unsigned char*)pActwk)[58]) return;

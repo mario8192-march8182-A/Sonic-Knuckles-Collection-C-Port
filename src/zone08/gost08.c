@@ -5,6 +5,18 @@
 #include "../002.h"
 #include "../091.h"
 
+wrt_init_data gost08_init_tbl = {
+  2,
+  42240,
+  18,
+  0,
+  gost08pat,
+  0,
+  16,
+  20,
+  0,
+  0
+};
 
 set_act05_data gost08_body_set_tbl = {
   0,
@@ -137,4 +149,26 @@ void gost08_body__fout1(sprite_status* pActwk) {
   pg_init(pActwk, gost08_away_pg00);
   soundset(-118);
   actionsub(pActwk);
+}
+
+void gost08_init(sprite_status* pActwk) {
+  emy_wrt_init(pActwk, &gost08_init_tbl);
+  CLEAR_BIT_2(pActwk->actflg);
+  SET_BIT_7(pActwk->actflg);
+  ((unsigned char*)pActwk)[66] = soz_darkness_level;
+  ((unsigned char*)pActwk)[67] = soz_ghosts;
+  set_body_init(pActwk);
+  soundset(-110);
+  gost08_wait0(pActwk);
+}
+
+void gost08_wait0(sprite_status* pActwk) {
+  int ret = time_pg(pActwk, ((signed char**)pActwk)[12]);
+  if (ret == 0) return;
+  if (soz_darkness_level == 5) {
+    gost08_atak_init(pActwk);
+  }
+  else {
+    pActwk->r_no = 4;
+  }
 }
