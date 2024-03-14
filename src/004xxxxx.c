@@ -21,6 +21,13 @@ void soundset(long id) {
   PlaySoundRegister(id);
 }
 
+// SONIC3K.EXE address: 0041e8f6
+// skdisasm label: MoveSprite2
+void speedset2(sprite_status* pActwk) {
+  pActwk->xposi += pActwk->xspeed * 256;
+  pActwk->yposi += pActwk->yspeed * 256;
+}
+
 // SONIC3K.EXE addresses: 0041eacf, 0041ead9
 // skdisasm labels: Delete_Current_Sprite, Delete_Referenced_Sprite
 void frameout(sprite_status* pActwk) {

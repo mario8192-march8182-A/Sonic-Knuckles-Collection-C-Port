@@ -172,3 +172,18 @@ void gost08_wait0(sprite_status* pActwk) {
     pActwk->r_no = 4;
   }
 }
+
+void gost08_atak_init(sprite_status* pActwk) {
+  pActwk->r_no = 12;
+  set_puka_init(pActwk);
+}
+
+void gost08_move0(sprite_status* pActwk) {
+  time_pg(pActwk, SPRITE_STATUS_PSCHAR(pActwk, 48));
+  puka_puka(pActwk);
+  speedset2(pActwk);
+  chk_gost08_limit(pActwk);
+  if (soz_darkness_level != SPRITE_STATUS_UCHAR(pActwk, 66)) {
+    pActwk->r_no = 6;
+  }
+}
