@@ -60,8 +60,8 @@ void playdamageset(sprite_status* pPlayerwk, sprite_status* pAttackActwk) {
   bool created = Create_New_Sprite(&pNewActwk);
   if (!created) goto LAB_00422c23;
   pNewActwk->r_ptr = &flyring;
-  pNewActwk->xposi = pPlayerwk->xposi;
-  pNewActwk->yposi = pPlayerwk->yposi;
+  pNewActwk->xposi = pPlayerwk->xposi / 65536 * 65536;
+  pNewActwk->yposi = pPlayerwk->yposi / 65536 * 65536;
   SPRITE_STATUS_USHORT(pNewActwk, 62) = pPlayerwk - actwk;
 LAB_00422c23:
   pPlayerwk->cddat2 &= 0x8E;

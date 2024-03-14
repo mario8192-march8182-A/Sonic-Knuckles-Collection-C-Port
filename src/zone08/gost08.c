@@ -72,8 +72,8 @@ wrt_tbl gost08_wrt_tbl = {
 
 void gost08(sprite_status* pActwk) {
   pActwk->r_ptr = &gost08_ctr;
-  pActwk->xposi = 288;
-  pActwk->yposi = 160;
+  pActwk->xposi = 288 * 65536;
+  pActwk->yposi = 160 * 65536;
   gost08_ctr(pActwk);
 }
 

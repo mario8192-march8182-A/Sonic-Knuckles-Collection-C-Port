@@ -22,13 +22,9 @@ typedef struct sprite_status {
   // 0x0C
   signed char** patbase;
   // 0x10
-  short xposi;
-  // 0x12
-  short xposi_sub;
+  long xposi;
   // 0x14
-  short yposi;
-  // 0x16
-  short yposi_sub;
+  long yposi;
   // 0x18
   short xspeed;
   // 0x1A

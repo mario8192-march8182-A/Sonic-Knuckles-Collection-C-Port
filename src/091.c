@@ -22,8 +22,8 @@ bool chk_pl_attack(sprite_status* pActwk, sprite_status* pPlayerwk) {
     case MILES: {
       if (SPRITE_STATUS_UCHAR(pPlayerwk, 47) == 0) return false;
       if (BIT_6_IS_SET(pPlayerwk->cddat1)) return false;
-      short xposi = pPlayerwk->xposi - pActwk->xposi;
-      short yposi = pPlayerwk->yposi - pActwk->yposi;
+      short xposi = pPlayerwk->xposi / 65536 - pActwk->xposi / 65536;
+      short yposi = pPlayerwk->yposi / 65536 - pActwk->yposi / 65536;
       unsigned short d0 = FUN_00411511(xposi, yposi) - 32;
       if (d0 >= 64) return false; // unsigned
       return true;

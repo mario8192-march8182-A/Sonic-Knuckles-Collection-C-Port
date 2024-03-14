@@ -19,8 +19,8 @@ void set_act05(sprite_status* pActwk, set_act05_data* pData) {
     pNewActwk->sproffset = pActwk->sproffset;
     pNewActwk->r_ptr = pData->act;
     pNewActwk->userflag1 = i;
-    pNewActwk->xposi = pActwk->xposi;
-    pNewActwk->yposi = pActwk->yposi;
+    pNewActwk->xposi = (pActwk->xposi / 65536) * 65536;
+    pNewActwk->yposi = (pActwk->yposi / 65536) * 65536;
     i += 2;
     --cnt;
   } while (cnt != -1);
@@ -84,8 +84,8 @@ void emy_wrt_init(sprite_status* pActwk, wrt_init_data * pData) {
   } while (cnt != -1);
 
   pActwk->r_ptr = 0;
-  pActwk->xposi = pActwk->xposi_sub = 0;
-  pActwk->yposi = pActwk->yposi_sub = 0;
+  pActwk->xposi = 0;
+  pActwk->yposi = 0;
   pActwk->userflag1 = 0;
   pActwk->actflg = 0;
   pActwk->cddat1 = pActwk->cddat2 = 0;
