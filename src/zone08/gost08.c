@@ -1,3 +1,4 @@
+#include <stdlib.h>
 #include "../globals.h"
 #include "../macros.h"
 #include "gost08.h"
@@ -243,4 +244,40 @@ void gost08_chg2(sprite_status* pActwk) {
   if (ret != 0) {
     pActwk->r_no = 4;
   }
+}
+
+void gost08_atak0(sprite_status* pActwk) {
+  time_pg(pActwk, SPRITE_STATUS_PSCHAR(pActwk, 48));
+  puka_puka(pActwk);
+  speedset2(pActwk);
+  short xposi = pActwk->xposi / 65536;
+  if (pActwk->xspeed >= 0) {
+    // chk_r
+    if (abs(xposi) <= 416) return; // unsigned
+  }
+  else {
+    // chk_l
+    if (abs(xposi) >= 160); return; // unsigned
+  }
+  pActwk->r_no = 14;
+  CLEAR_BIT_0(pActwk->actflg);
+  pActwk->xspeed = -pActwk->xspeed;
+  SPRITE_STATUS_SHORT(pActwk, 46) = 59;
+}
+
+void gost08_atak1(sprite_status* pActwk) {
+  time_pg(pActwk, SPRITE_STATUS_PSCHAR(pActwk, 48));
+  --SPRITE_STATUS_SHORT(pActwk, 46);
+  if (SPRITE_STATUS_SHORT(pActwk, 46) >= 0) return;
+  pActwk->r_no = 16;
+  pActwk->colino = 215;
+  SET_BIT_2(pActwk->actflg);
+  pActwk->xposi = scra_h_posit / 65536 * 65536 + (pActwk->xposi - 128 * 65536);
+  pActwk->yposi = scra_v_posit / 65536 * 65536 + (pActwk->yposi - 128 * 65536);
+  pActwk->yspeed = 256;
+}
+
+void gost08_atak2(sprite_status* pActwk) {
+  time_pg(pActwk, SPRITE_STATUS_PSCHAR(pActwk, 48));
+  speedset2(pActwk);
 }
