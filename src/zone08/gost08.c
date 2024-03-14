@@ -24,6 +24,8 @@ set_act05_data gost08_body_set_tbl = {
 };
 
 signed char gost08_away_pg00[13] = { 13, 4, 13, 4, 14, 4, 15, 4, 16, 3, 17, 3, -12 };
+signed char gost08_chg_pg00[8] = { 3, 7, 3, 7, 4, 7, -8, -41 };
+signed char gost08_chg_pg01[8] = { 8, 7, 8, 7, 9, 7, -8, -28 };
 
 unsigned short gost08_tbl00[2] = { 0, 8 };
 unsigned short gost08_tbl01[2] = { 0, 152 };
@@ -185,5 +187,60 @@ void gost08_move0(sprite_status* pActwk) {
   chk_gost08_limit(pActwk);
   if (soz_darkness_level != SPRITE_STATUS_UCHAR(pActwk, 66)) {
     pActwk->r_no = 6;
+  }
+}
+
+void gost08_chg0(sprite_status* pActwk) {
+  static unsigned char chk_puka_tbl[6] = {
+    0, 0, 0, 1, 0, 1
+  };
+
+  time_pg(pActwk, SPRITE_STATUS_PSCHAR(pActwk, 48));
+  bool axis_dir_changed = puka_puka(pActwk);
+  if (!axis_dir_changed) {
+    speedset2(pActwk);
+    chk_gost08_limit(pActwk);
+  }
+  else {
+    pActwk->r_no = 8;
+    if (chk_puka_tbl[soz_darkness_level] == 0) return;
+    SPRITE_STATUS_UCHAR(pActwk, 66) = soz_darkness_level;
+    if (soz_darkness_level == 5) {
+      gost08_atak_init(pActwk);
+    }
+    else {
+      pActwk->r_no = 4;
+      set_puka_init(pActwk);
+    }
+  }
+}
+
+void gost08_chg1(sprite_status* pActwk) {
+  static signed char* pg_tbl[3] = {
+    gost08_chg_pg00,
+    gost08_chg_pg00,
+    gost08_chg_pg01
+  };
+
+  puka_puka(pActwk);
+  speedset2(pActwk);
+  chk_gost08_limit(pActwk);
+  int ret = time_pg(pActwk, SPRITE_STATUS_PSCHAR(pActwk, 48));
+  if (ret != 0 && pActwk->patcnt == 2) {
+    pActwk->r_no = 10;
+    SPRITE_STATUS_UCHAR(pActwk, 66) = soz_darkness_level;
+    signed char* selected_pg_tbl = pg_tbl[(soz_darkness_level * 2 & 12) / 4];
+    pActwk->patno = selected_pg_tbl[0];
+    pg_init(pActwk, selected_pg_tbl);
+  }
+}
+
+void gost08_chg2(sprite_status* pActwk) {
+  puka_puka(pActwk);
+  speedset2(pActwk);
+  chk_gost08_limit(pActwk);
+  int ret = time_pg(pActwk, SPRITE_STATUS_PSCHAR(pActwk, 48));
+  if (ret != 0) {
+    pActwk->r_no = 4;
   }
 }
