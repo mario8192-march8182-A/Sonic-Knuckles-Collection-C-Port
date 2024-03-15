@@ -6,6 +6,9 @@
 #include "../002.h"
 #include "../091.h"
 
+short col_tbl_00[4] = { -16, 32, -64, 128 };
+short col_tbl_04[4] = { -16, 32, -128, 256 };
+
 wrt_init_data gost08_init_tbl = {
   2,
   42240,
@@ -280,4 +283,31 @@ void gost08_atak1(sprite_status* pActwk) {
 void gost08_atak2(sprite_status* pActwk) {
   time_pg(pActwk, SPRITE_STATUS_PSCHAR(pActwk, 48));
   speedset2(pActwk);
+}
+
+void gost08_body_fout0(sprite_status* pActwk) {
+  time_pg(pActwk, SPRITE_STATUS_PSCHAR(pActwk, 48));
+  set_emy_wchg(pActwk, &gost08_wrt_tbl);
+  actionsub(pActwk);
+}
+
+void setcg(sprite_status* pActwk) {
+  static short* col_tbl[2] = {
+    col_tbl_00,
+    col_tbl_04
+  };
+
+  sprite_status* pPlayerwk = chk_emy_colt(pActwk, col_tbl[pActwk->userflag1]);
+  if (pPlayerwk == 0) return;
+
+  switch (pActwk->userflag1) {
+    case 0:
+      set_openbox_cg(pActwk);
+      break;
+    case 4:
+      set_emy08_cg(pActwk);
+      break;
+  }
+
+  frameout(pActwk);
 }

@@ -2,6 +2,7 @@
 #include "macros.h"
 #include "002.h"
 #include "004xxxxx.h"
+#include <stdlib.h>
 
 
 // skdisasm label: CreateChild6_Simple
@@ -166,4 +167,32 @@ bool chk_emy_col(sprite_status* pActwk, sprite_status** ppColiActwk) {
   SPRITE_STATUS_USHORT(pActwk, 68) = coli_act_id;
   *ppColiActwk = &actwk[coli_act_id];
   return true;
+}
+
+// skdisasm label: Check_PlayerInRange
+sprite_status* chk_emy_colt(sprite_status* pActwk, short* col_tbl) {
+  sprite_status* pPlayerwk = 0;
+  short pl_xposi = LONG_HIGH_TO_SHORT(actwk[1].xposi);
+  short pl_yposi = LONG_HIGH_TO_SHORT(actwk[1].yposi);
+  short emy_range_left_x = LONG_HIGH_TO_SHORT(pActwk->xposi);
+  short emy_range_top_y = LONG_HIGH_TO_SHORT(pActwk->yposi);
+  emy_range_left_x += col_tbl[0];
+  short emy_range_right_x = emy_range_left_x;
+  emy_range_right_x += col_tbl[1];
+  emy_range_top_y += col_tbl[2];
+  short emy_range_bottom_y = emy_range_top_y;
+  emy_range_bottom_y += col_tbl[3];
+  pPlayerwk = chk_emy_colt__col(&actwk[1], pPlayerwk, pl_xposi, pl_yposi, emy_range_left_x, emy_range_top_y, emy_range_right_x, emy_range_bottom_y);
+  pl_xposi = LONG_HIGH_TO_SHORT(actwk[0].xposi);
+  pl_yposi = LONG_HIGH_TO_SHORT(actwk[0].yposi);
+  pPlayerwk = chk_emy_colt__col(&actwk[0], pPlayerwk, pl_xposi, pl_yposi, emy_range_left_x, emy_range_top_y, emy_range_right_x, emy_range_bottom_y);
+  return pPlayerwk;
+}
+
+sprite_status* chk_emy_colt__col(sprite_status* pPlayerwkChk, sprite_status* pPlayerwkPrevChk, short pl_xposi, short pl_yposi, short emy_range_left_x, short emy_range_top_y, short emy_range_right_x, short emy_range_bottom_y) {
+  if (abs(pl_xposi) < abs(emy_range_left_x)) return pPlayerwkPrevChk; // unsigned
+  if (abs(pl_xposi) >= abs(emy_range_right_x)) return pPlayerwkPrevChk; // unsigned
+  if (abs(pl_yposi) < abs(emy_range_top_y)) return pPlayerwkPrevChk; // unsigned
+  if (abs(pl_yposi) >= abs(emy_range_bottom_y)) return pPlayerwkPrevChk; // unsigned
+  return pPlayerwkChk;
 }
