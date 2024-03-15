@@ -75,8 +75,8 @@ wrt_tbl gost08_wrt_tbl = {
 
 void gost08(sprite_status* pActwk) {
   pActwk->r_ptr = &gost08_ctr;
-  pActwk->xposi = 288 * 65536;
-  pActwk->yposi = 160 * 65536;
+  pActwk->xposi = SHORT_TO_LONG_HIGH(288);
+  pActwk->yposi = SHORT_TO_LONG_HIGH(160);
   gost08_ctr(pActwk);
 }
 
@@ -250,7 +250,7 @@ void gost08_atak0(sprite_status* pActwk) {
   time_pg(pActwk, SPRITE_STATUS_PSCHAR(pActwk, 48));
   puka_puka(pActwk);
   speedset2(pActwk);
-  short xposi = pActwk->xposi / 65536;
+  short xposi = LONG_HIGH_TO_SHORT(pActwk->xposi);
   if (pActwk->xspeed >= 0) {
     // chk_r
     if (abs(xposi) <= 416) return; // unsigned
@@ -272,8 +272,8 @@ void gost08_atak1(sprite_status* pActwk) {
   pActwk->r_no = 16;
   pActwk->colino = 215;
   SET_BIT_2(pActwk->actflg);
-  pActwk->xposi = scra_h_posit / 65536 * 65536 + (pActwk->xposi - 128 * 65536);
-  pActwk->yposi = scra_v_posit / 65536 * 65536 + (pActwk->yposi - 128 * 65536);
+  pActwk->xposi = LONG_HIGH(scra_h_posit) + (pActwk->xposi - SHORT_TO_LONG_HIGH(128));
+  pActwk->yposi = LONG_HIGH(scra_v_posit) + (pActwk->yposi - SHORT_TO_LONG_HIGH(128));
   pActwk->yspeed = 256;
 }
 

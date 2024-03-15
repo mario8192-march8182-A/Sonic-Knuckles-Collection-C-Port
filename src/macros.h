@@ -37,4 +37,9 @@
 #define SPRITE_STATUS_PSCHAR(pointer, offset) ((unsigned char**)pointer)[offset / 4]
 #define SPRITE_STATUS_PHANDLER(pointer, offset) ((sprite_status_handler*)pointer)[offset / 4]
 
+#define LONG_HIGH(value) (value / 65536 * 65536)
+#define LONG_HIGH_TO_SHORT(value) (value / 65536)
+#define LONG_LOW(value) (value % 65536)
+#define SHORT_TO_LONG_HIGH(value) (value * 65536)
+
 #endif

@@ -19,8 +19,8 @@ void set_act05(sprite_status* pActwk, set_act05_data* pData) {
     pNewActwk->sproffset = pActwk->sproffset;
     pNewActwk->r_ptr = pData->act;
     pNewActwk->userflag1 = i;
-    pNewActwk->xposi = (pActwk->xposi / 65536) * 65536;
-    pNewActwk->yposi = (pActwk->yposi / 65536) * 65536;
+    pNewActwk->xposi = LONG_HIGH(pActwk->xposi) + LONG_LOW(pNewActwk->xposi);
+    pNewActwk->yposi = LONG_HIGH(pActwk->yposi) + LONG_LOW(pNewActwk->yposi);
     i += 2;
     --cnt;
   } while (cnt != -1);
