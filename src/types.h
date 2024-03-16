@@ -105,4 +105,38 @@ typedef struct cg_data {
   cg_data_entry data[];
 }
 cg_data;
+
+typedef struct enemy_init0_data {
+  signed char** patbase;
+  unsigned short sproffset;
+  unsigned short sprpri;
+  unsigned char sprhs;
+  unsigned char sprvs;
+  unsigned char patno;
+  unsigned char colino;
+}
+enemy_init0_data;
+
+typedef struct set_act00_data_entry {
+  sprite_status_handler r_ptr;
+  signed char xoffset;
+  signed char yoffset;
+}
+set_act00_data_entry;
+
+typedef struct set_act00_data {
+  unsigned short cnt;
+  set_act00_data_entry data[];
+}
+set_act00_data;
+
+typedef struct enemy_init2_data {
+  unsigned short sprpri;
+  unsigned char sprhs;
+  unsigned char sprvs;
+  unsigned char patno;
+  unsigned char colino;
+}
+enemy_init2_data;
+
 #endif

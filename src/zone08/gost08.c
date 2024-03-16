@@ -9,6 +9,21 @@
 short col_tbl_00[4] = { -16, 32, -64, 128 };
 short col_tbl_04[4] = { -16, 32, -128, 256 };
 
+enemy_init0_data obox08_init_tbl = {
+  openbox_pt,
+  34102,
+  384,
+  48,
+  64,
+  0,
+  0
+};
+
+set_act00_data obox08_switch_set_tbl = {
+  0,
+  { { &obox08_switch, 0, -36 } }
+};
+
 wrt_init_data gost08_init_tbl = {
   2,
   42240,
@@ -73,6 +88,14 @@ unsigned short* gost08_tbl[18] = {
 wrt_data gost08_wrt_tbl = {
   gost08_tiles,
   gost08_tbl
+};
+
+enemy_init2_data switch_init_tbl = {
+  512,
+  16,
+  8,
+  5,
+  0
 };
 
 
@@ -325,4 +348,24 @@ void set_openbox_cg(sprite_status* pActwk) {
 
 void set_emy08_cg(sprite_status* pActwk) {
   LoadEnemyArt();
+}
+
+void obox08(sprite_status* pActwk) {
+  enemy_init0(pActwk, &obox08_init_tbl);
+  pActwk->r_ptr = &obox04_wait0;
+  pActwk->userflag1 = 3;
+  set_act00(pActwk, &obox08_switch_set_tbl);
+  if (markerno == 0 && SPRITE_STATUS_UCHAR(&actwk[0], 56) != KNUCKLES) return;
+  pActwk->r_ptr = &obox04_wait1;
+  pActwk->patno = 1;
+  SET_BIT_5(SPRITE_STATUS_UCHAR(pActwk, 56));
+}
+
+void obox08_switch(sprite_status* pActwk) {
+  enemy_init2(pActwk, &switch_init_tbl);
+  pActwk->r_ptr = &switch_wait0;
+  if (markerno != 0) {
+    pActwk->r_ptr = &switch_wait1;
+    pActwk->patno = 12;
+  }
 }

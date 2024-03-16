@@ -1,7 +1,57 @@
 #include "globals.h"
 #include "macros.h"
 #include "091.h"
+#include "004xxxxx.h"
 
+
+// skdisasm label: SetUp_ObjAttributes
+void enemy_init0(sprite_status* pActwk, enemy_init0_data* pData) {
+  pActwk->patbase = pData->patbase;
+  pActwk->sproffset = pData->sproffset;
+  pActwk->sprpri = pData->sprpri;
+  pActwk->sprhs = pData->sprhs;
+  pActwk->sprvs = pData->sprvs;
+  pActwk->patno = pData->patno;
+  pActwk->colino = pData->colino;
+  SET_BIT_2(pActwk->actflg);
+  pActwk->r_no += 2;
+}
+
+// skdisasm label: SetUp_ObjAttributes3
+void enemy_init2(sprite_status* pActwk, enemy_init2_data* pData) {
+  pActwk->sprpri = pData->sprpri;
+  pActwk->sprhs = pData->sprhs;
+  pActwk->sprvs = pData->sprvs;
+  pActwk->patno = pData->patno;
+  pActwk->colino = pData->colino;
+  SET_BIT_2(pActwk->actflg);
+  pActwk->r_no += 2;
+}
+
+// skdisasm label: CreateChild1_Normal
+void set_act00(sprite_status* pActwk, set_act00_data* pData) {
+  sprite_status* pNewActwk;
+  unsigned short i = 0;
+  unsigned short cnt = pData->cnt;
+  ++cnt;
+
+  do {
+    bool created = Create_New_Sprite3(pActwk, &pNewActwk);
+    if (!created) return;
+
+    SPRITE_STATUS_USHORT(pNewActwk, OYA_ADR) = actwk - pActwk;
+    pNewActwk->patbase = pActwk->patbase;
+    pNewActwk->sproffset = pActwk->sproffset;
+    pNewActwk->r_ptr = pData->data[i / 2].r_ptr;
+    pNewActwk->userflag1 = i;
+    SPRITE_STATUS_SCHAR(pNewActwk, 66) = pData->data[i / 2].xoffset;
+    pNewActwk->xposi = LONG_HIGH(pActwk->xposi) + LONG_LOW(pNewActwk->xposi) + SHORT_TO_LONG_HIGH(pData->data[i / 2].xoffset);
+    SPRITE_STATUS_SCHAR(pNewActwk, 67) = pData->data[i / 2].yoffset;
+    pNewActwk->yposi = LONG_HIGH(pActwk->yposi) + LONG_LOW(pNewActwk->yposi) + SHORT_TO_LONG_HIGH(pData->data[i / 2].yoffset);
+    i += 2;
+    --cnt;
+  } while (cnt != 0);
+}
 
 // skdisasm label: Swing_UpAndDown
 bool puka_puka(sprite_status* pActwk) {

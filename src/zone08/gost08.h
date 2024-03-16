@@ -17,3 +17,5 @@ void gost08_body_fout0(sprite_status* pActwk);
 void setcg(sprite_status* pActwk);
 void set_openbox_cg(sprite_status* pActwk);
 void set_emy08_cg(sprite_status* pActwk);
+void obox08(sprite_status* pActwk);
+void obox08_switch(sprite_status* pActwk);
