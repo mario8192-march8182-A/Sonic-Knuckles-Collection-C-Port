@@ -34,6 +34,18 @@ set_act00_data obox08_switch_set_tbl = {
   { { &obox08_switch, 0, -36 } }
 };
 
+set_act00_data obox08_gost_set_tbl = {
+  5,
+  {
+    { &obox08_gost,  -8, -4 },
+    { &obox08_gost,   8, -4 },
+    { &obox08_gost,  16, -4 },
+    { &obox08_gost, -16, -4 },
+    { &obox08_gost,  24, -4 },
+    { &obox08_gost, -24, -4 }
+  }
+};
+
 wrt_init_data gost08_init_tbl = {
   2,
   42240,
@@ -423,4 +435,31 @@ void obox08_gost_init(sprite_status* pActwk) {
 void obox08_gost_move0(sprite_status* pActwk) {
   pt_chg0(pActwk, gost08_pg00);
   obox08_gost_move1(pActwk);
+}
+
+void obox08_gost_move1(sprite_status* pActwk) {
+  pActwk->yspeed += SPRITE_STATUS_SHORT(pActwk, 64);
+  speedset2(pActwk);
+}
+
+void chk_gost08_limit(sprite_status* pActwk) {
+  short xposi = LONG_HIGH_TO_SHORT(pActwk->xposi);
+  if (pActwk->xspeed >= 0) {
+    // chk_r
+    if (abs(xposi) <= 416) return; // unsigned
+  }
+  else {
+    // chk_l
+    if (abs(xposi) >= 160) return; // unsigned
+  }
+  CLEAR_BIT_0(pActwk->actflg);
+  pActwk->xspeed = -pActwk->xspeed;
+}
+
+void set_gost08(sprite_status* pActwk) {
+  markerno = 1;
+  plxposi_s = SOZ2_start[0];
+  plyposi_s = SOZ2_start[1];
+  playsave1(pActwk);
+  set_act00(pActwk, &obox08_gost_set_tbl);
 }

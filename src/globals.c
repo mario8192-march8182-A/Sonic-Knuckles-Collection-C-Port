@@ -13,5 +13,7 @@ unsigned char emy_wrt_flg[EMY_WRT_FLG_SLOTS];
 unsigned char soz_ghosts;
 short plring;
 unsigned char markerno;
+short plxposi_s;
+short plyposi_s;
 short pl2ring;
 unsigned short vs_flag;

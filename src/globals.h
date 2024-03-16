@@ -16,6 +16,8 @@ extern unsigned char emy_wrt_flg[EMY_WRT_FLG_SLOTS];
 extern unsigned char soz_ghosts;
 extern short plring;
 extern unsigned char markerno;
+extern short plxposi_s;
+extern short plyposi_s;
 extern short pl2ring;
 extern unsigned short vs_flag;
 

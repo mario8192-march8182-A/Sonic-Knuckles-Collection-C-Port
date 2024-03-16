@@ -22,3 +22,6 @@ void obox08_switch(sprite_status* pActwk);
 void obox08_gost(sprite_status* pActwk);
 void obox08_gost_init(sprite_status* pActwk);
 void obox08_gost_move0(sprite_status* pActwk);
+void obox08_gost_move1(sprite_status* pActwk);
+void chk_gost08_limit(sprite_status* pActwk);
+void set_gost08(sprite_status* pActwk);
