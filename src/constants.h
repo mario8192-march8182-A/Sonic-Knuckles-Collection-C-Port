@@ -30,4 +30,9 @@ character_id;
 
 #define EMY_WRT_FLG_SLOTS 8
 
+#define PG_CONTROL_NULL 0
+#define PG_CONTROL_LOOP 4
+#define PG_CONTROL_NEXT 8
+#define PG_CONTROL_END 12
+
 #endif

@@ -45,18 +45,18 @@ int chk_tpg_next(sprite_status* pActwk, signed char pg, signed char* pPgData, un
   pg = -pg;
 
   switch (pg) {
-    case 0:
+    case PG_CONTROL_NULL:
       break;
-    case 8:
+    case PG_CONTROL_NEXT:
       pg = pPgData[patcnt + 1];
       pPgData = &pPgData[pg];
       SPRITE_STATUS_PSCHAR(pActwk, 48) = pPgData;
-    case 4:
+    case PG_CONTROL_LOOP:
       pActwk->patno = pPgData[0];
       pActwk->pattim = pPgData[1];
       ret = 1;
       break;
-    case 12:
+    case PG_CONTROL_END:
       pActwk->pattim = 0;
       SPRITE_STATUS_PHANDLER(pActwk, 52)(pActwk);
       ret = -1;
