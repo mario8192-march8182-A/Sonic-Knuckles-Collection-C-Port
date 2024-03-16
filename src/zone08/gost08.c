@@ -19,6 +19,16 @@ enemy_init0_data obox08_init_tbl = {
   0
 };
 
+enemy_init0_data obox08_gost_init_tbl = {
+  gost08pat,
+  42240,
+  512,
+  48,
+  32,
+  0,
+  0
+};
+
 set_act00_data obox08_switch_set_tbl = {
   0,
   { { &obox08_switch, 0, -36 } }
@@ -89,6 +99,8 @@ wrt_data gost08_wrt_tbl = {
   gost08_tiles,
   gost08_tbl
 };
+
+signed char gost08_pg00[7] = { 0, 3, 1, 3, 2, 4, -4 };
 
 enemy_init2_data switch_init_tbl = {
   512,
@@ -385,4 +397,30 @@ void obox08_gost(sprite_status* pActwk) {
   else {
     chk_emy_fout0(pActwk);
   }
+}
+
+void obox08_gost_init(sprite_status* pActwk) {
+  static short spd_tbl[12] = {
+    -512, -32,
+     512, -32,
+    -640, -24,
+     640, -24,
+    -768, -16,
+     768, -16
+  };
+
+  pActwk->xspeed = spd_tbl[pActwk->userflag1];
+  SPRITE_STATUS_SHORT(pActwk, 64) = spd_tbl[pActwk->userflag1 + 1];
+  chk_emy_revs(pActwk);
+  if (pActwk->userflag1 == 0) {
+    emy_wrt_init(pActwk, &gost08_init_tbl);
+  }
+  else {
+    enemy_init0(pActwk, &obox08_gost_init_tbl);
+  }
+}
+
+void obox08_gost_move0(sprite_status* pActwk) {
+  pt_chg0(pActwk, gost08_pg00);
+  obox08_gost_move1(pActwk);
 }

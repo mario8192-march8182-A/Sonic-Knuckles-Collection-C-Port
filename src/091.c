@@ -85,6 +85,38 @@ bool puka_puka(sprite_status* pActwk) {
   return axis_dir_changed;
 }
 
+// skdisasm label: Animate_RawNoSSTCheckResult (?)
+void pt_chg0(sprite_status* pActwk, signed char* pPgData) {
+  --pActwk->pattim;
+  ++pActwk->patcnt;
+  signed char pg = pPgData[pActwk->patcnt + 1];
+  if (pg < 0) {
+    chk_pt_next(pActwk, pg, pPgData, pActwk->patcnt);
+  }
+  else {
+    pActwk->pattim = pPgData[0];
+    pActwk->patno = pg;
+  }
+}
+
+void chk_pt_next(sprite_status* pActwk, signed char pg, signed char* pPgData, unsigned char patcnt) {
+  pg = -pg;
+
+  switch (pg) {
+    case PG_CONTROL_NEXT:
+      pg = pPgData[patcnt + 2];
+      SPRITE_STATUS_PSCHAR(pActwk, 48) = &pPgData[pg];
+    case PG_CONTROL_LOOP:
+      pActwk->patno = pPgData[1];
+      pActwk->pattim = pPgData[0];
+      break;
+    case PG_CONTROL_END:
+      pActwk->pattim = 0;
+      SPRITE_STATUS_PHANDLER(pActwk, 52)(pActwk);
+      break;
+  }
+}
+
 // skdisasm label: Set_Raw_Animation
 void pg_init(sprite_status* pActwk, signed char* pPgData) {
   SPRITE_STATUS_PSCHAR(pActwk, 48) = pPgData;

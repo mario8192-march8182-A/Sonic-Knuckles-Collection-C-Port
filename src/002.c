@@ -66,6 +66,13 @@ int chk_tpg_next(sprite_status* pActwk, signed char pg, signed char* pPgData, un
   return ret;
 }
 
+// skdisasm label: Change_FlipXWithVelocity
+void chk_emy_revs(sprite_status* pActwk) {
+  CLEAR_BIT_0(pActwk->actflg);
+  if (pActwk->xspeed < 0) return;
+  SET_BIT_0(pActwk->actflg);
+}
+
 // skdisasm label: SetUp_ObjAttributesSlotted
 void emy_wrt_init(sprite_status* pActwk, wrt_init_data* pData) {
   unsigned short bit = 0;
