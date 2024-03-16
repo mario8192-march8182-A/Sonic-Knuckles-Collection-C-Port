@@ -137,6 +137,46 @@ void set_emy_wchg(sprite_status* pActwk, wrt_data* pData) {
   } while (cnt != -1);
 }
 
+// skdisasm label: Sprite_CheckDelete
+void chk_emy_fout0(sprite_status* pActwk) {
+  unsigned short scr_xposi = abs(LONG_HIGH_TO_SHORT(pActwk->xposi)) & 0xFF80;
+  scr_xposi -= scr_x_no;
+  if (scr_xposi > 640) { // unsigned
+    emy_fout(pActwk);
+  }
+  else {
+    actionsub(pActwk);
+  }
+}
+
+void emy_fout(sprite_status* pActwk) {
+  if (SPRITE_STATUS_USHORT(pActwk, 72) != 0) {
+    CLEAR_BIT_7(flagwork[SPRITE_STATUS_USHORT(pActwk, 72) - 1]);
+  }
+  SET_BIT_7(pActwk->cddat1);
+  pActwk->r_ptr = &frameout;
+}
+
+// skdisasm label: Sprite_CheckDelete2
+void chk_emy_foutw0(sprite_status* pActwk) {
+  unsigned short scr_xposi = abs(LONG_HIGH_TO_SHORT(pActwk->xposi)) & 0xFF80;
+  scr_xposi -= scr_x_no;
+  if (scr_xposi > 640) { // unsigned
+    wchg_fout(pActwk);
+  }
+  else {
+    actionsub(pActwk);
+  }
+}
+
+// skdisasm label: Go_Delete_SpriteSlotted
+void wchg_fout(sprite_status* pActwk) {
+  if (SPRITE_STATUS_USHORT(pActwk, 72) != 0) {
+    CLEAR_BIT_7(flagwork[SPRITE_STATUS_USHORT(pActwk, 72) - 1]);
+  }
+  set_wchg_fout0(pActwk);
+}
+
 // skdisasm label: Go_Delete_SpriteSlotted2
 void set_wchg_fout0(sprite_status* pActwk) {
   pActwk->r_ptr = &frameout;

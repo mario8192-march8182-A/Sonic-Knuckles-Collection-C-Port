@@ -369,3 +369,20 @@ void obox08_switch(sprite_status* pActwk) {
     pActwk->patno = 12;
   }
 }
+
+void obox08_gost(sprite_status* pActwk) {
+  static sprite_status_handler act_tbl[3] = {
+    &obox08_gost_init,
+    &obox08_gost_move0,
+    &obox08_gost_move1
+  };
+
+  act_tbl[pActwk->r_no / 2](pActwk);
+  if (pActwk->userflag1 == 0) {
+    set_emy_wchg(pActwk, &gost08_wrt_tbl);
+    chk_emy_foutw0(pActwk);
+  }
+  else {
+    chk_emy_fout0(pActwk);
+  }
+}

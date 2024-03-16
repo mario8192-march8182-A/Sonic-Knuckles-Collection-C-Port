@@ -26,6 +26,8 @@ character_id;
 #define COLBUFFER_SLOT_SIZE 2
 #define COLBUFFER_MAX_SIZE 126
 
+#define FLAGWORK_SLOTS 768
+
 #define EMY_WRT_FLG_SLOTS 8
 
 #endif
