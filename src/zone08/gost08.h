@@ -15,3 +15,5 @@ void gost08_atak1(sprite_status* pActwk);
 void gost08_atak2(sprite_status* pActwk);
 void gost08_body_fout0(sprite_status* pActwk);
 void setcg(sprite_status* pActwk);
+void set_openbox_cg(sprite_status* pActwk);
+void set_emy08_cg(sprite_status* pActwk);

@@ -311,3 +311,18 @@ void setcg(sprite_status* pActwk) {
 
   frameout(pActwk);
 }
+
+void set_openbox_cg(sprite_status* pActwk) {
+  static cg_data opnbox_cg_tbl = {
+    0,
+    {
+      { opnbox_tiles, 42688 }
+    }
+  };
+
+  Load_PLC_Raw(pActwk, &opnbox_cg_tbl);
+}
+
+void set_emy08_cg(sprite_status* pActwk) {
+  LoadEnemyArt();
+}

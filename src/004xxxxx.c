@@ -15,6 +15,18 @@ void Copy_Data_To_VRAM(unsigned short d1, unsigned short d2, unsigned short d3) 
   // TODO
 }
 
+// SONIC3K.EXE address: 0041149c
+// skdisasm label: Load_PLC_Raw
+void Load_PLC_Raw(sprite_status* pActwk, cg_data* pData) {
+  // TODO
+}
+
+// SONIC3K.EXE address: 0041a490
+// skdisasm label: LoadEnemyArt
+void LoadEnemyArt() {
+  // TODO
+}
+
 // SONIC3K.EXE address: 0041a82d
 // skdisasm label: Play_SFX
 void soundset(long id) {

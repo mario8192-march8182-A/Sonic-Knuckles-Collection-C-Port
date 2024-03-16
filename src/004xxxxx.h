@@ -5,6 +5,8 @@
 
 void PlaySoundRegister(long id);
 void Copy_Data_To_VRAM(unsigned short d1, unsigned short d2, unsigned short d3);
+void Load_PLC_Raw(sprite_status* pActwk, cg_data* pData);
+void LoadEnemyArt();
 void soundset(long id);
 void speedset2(sprite_status* pActwk);
 void frameout(sprite_status* pActwk);
