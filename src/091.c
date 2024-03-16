@@ -36,8 +36,8 @@ bool puka_puka(sprite_status* pActwk) {
 }
 
 // skdisasm label: Set_Raw_Animation
-void pg_init(sprite_status* pActwk, signed char* pg_tbl) {
-  SPRITE_STATUS_PSCHAR(pActwk, 48) = pg_tbl;
+void pg_init(sprite_status* pActwk, signed char* pPgData) {
+  SPRITE_STATUS_PSCHAR(pActwk, 48) = pPgData;
   pActwk->patcnt = pActwk->pattim = 0;
 }
 

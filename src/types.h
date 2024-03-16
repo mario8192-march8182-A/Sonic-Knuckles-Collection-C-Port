@@ -74,11 +74,11 @@ typedef struct set_act05_data {
 }
 set_act05_data;
 
-typedef struct wrt_tbl {
+typedef struct wrt_data {
   unsigned long* unknown;
   unsigned short** tbl;
 }
-wrt_tbl;
+wrt_data;
 
 typedef struct wrt_init_data {
   unsigned short cnt;

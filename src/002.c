@@ -28,19 +28,19 @@ void set_act05(sprite_status* pActwk, set_act05_data* pData) {
 }
 
 // skdisasm labels: Animate_RawMultiDelay, Animate_RawNoSSTMultiDelay
-int time_pg(sprite_status* pActwk, signed char* pg_tbl) {
+int time_pg(sprite_status* pActwk, signed char* pPgData) {
   --pActwk->pattim;
   signed char pattim = pActwk->pattim; // conversion so it can be negative
   if (pattim >= 0) return 0;
   pActwk->patcnt += 2;
-  signed char pg = pg_tbl[pActwk->patcnt];
-  if (pg < 0) return chk_tpg_next(pActwk, pg, pg_tbl, pActwk->patcnt);
+  signed char pg = pPgData[pActwk->patcnt];
+  if (pg < 0) return chk_tpg_next(pActwk, pg, pPgData, pActwk->patcnt);
   pActwk->patno = pg;
-  pActwk->pattim = pg_tbl[pActwk->patcnt + 1];
+  pActwk->pattim = pPgData[pActwk->patcnt + 1];
   return 1;
 }
 
-int chk_tpg_next(sprite_status* pActwk, signed char pg, signed char* pg_tbl, unsigned char patcnt) {
+int chk_tpg_next(sprite_status* pActwk, signed char pg, signed char* pPgData, unsigned char patcnt) {
   int ret = 0;
   pg = -pg;
 
@@ -48,12 +48,12 @@ int chk_tpg_next(sprite_status* pActwk, signed char pg, signed char* pg_tbl, uns
     case 0:
       break;
     case 8:
-      pg = pg_tbl[patcnt + 1];
-      pg_tbl = &pg_tbl[pg];
-      SPRITE_STATUS_PSCHAR(pActwk, 48) = pg_tbl;
+      pg = pPgData[patcnt + 1];
+      pPgData = &pPgData[pg];
+      SPRITE_STATUS_PSCHAR(pActwk, 48) = pPgData;
     case 4:
-      pActwk->patno = pg_tbl[0];
-      pActwk->pattim = pg_tbl[1];
+      pActwk->patno = pPgData[0];
+      pActwk->pattim = pPgData[1];
       ret = 1;
       break;
     case 12:
@@ -67,8 +67,8 @@ int chk_tpg_next(sprite_status* pActwk, signed char pg, signed char* pg_tbl, uns
 }
 
 // skdisasm label: SetUp_ObjAttributesSlotted
-void emy_wrt_init(sprite_status* pActwk, wrt_init_data * pData) {
-  unsigned char bit = 0;
+void emy_wrt_init(sprite_status* pActwk, wrt_init_data* pData) {
+  unsigned short bit = 0;
   short cnt = pData->cnt; // this conversion from unsigned to signed should be safe
   unsigned short sproffset = pData->sproffset;
   unsigned short offset_increase = pData->offset_increase;
@@ -110,12 +110,12 @@ ok:
 }
 
 // skdisasm label: Perform_DPLC
-void set_emy_wchg(sprite_status* pActwk, wrt_tbl* pTbl) {
+void set_emy_wchg(sprite_status* pActwk, wrt_data* pData) {
   if (pActwk->patno == SPRITE_STATUS_UCHAR(pActwk, 58)) return;
   SPRITE_STATUS_UCHAR(pActwk, 58) = pActwk->patno;
-  unsigned long* a3 = pTbl->unknown;
+  unsigned long* a3 = pData->unknown;
   unsigned short vram_adr = (pActwk->sproffset & 0x7FF) << 5;
-  unsigned short* tbl = pTbl->tbl[pActwk->patno];
+  unsigned short* tbl = pData->tbl[pActwk->patno];
   short cnt = *tbl++; // this conversion from unsigned to signed should be safe
   cnt = cnt >> 8 | cnt << 8; // rotate lower and upper 8 bits
   unsigned short d3 = 0;
@@ -170,18 +170,18 @@ bool chk_emy_col(sprite_status* pActwk, sprite_status** ppColiActwk) {
 }
 
 // skdisasm label: Check_PlayerInRange
-sprite_status* chk_emy_colt(sprite_status* pActwk, short* col_tbl) {
+sprite_status* chk_emy_colt(sprite_status* pActwk, short* pColData) {
   sprite_status* pPlayerwk = 0;
   short pl_xposi = LONG_HIGH_TO_SHORT(actwk[1].xposi);
   short pl_yposi = LONG_HIGH_TO_SHORT(actwk[1].yposi);
   short emy_range_left_x = LONG_HIGH_TO_SHORT(pActwk->xposi);
   short emy_range_top_y = LONG_HIGH_TO_SHORT(pActwk->yposi);
-  emy_range_left_x += col_tbl[0];
+  emy_range_left_x += pColData[0];
   short emy_range_right_x = emy_range_left_x;
-  emy_range_right_x += col_tbl[1];
-  emy_range_top_y += col_tbl[2];
+  emy_range_right_x += pColData[1];
+  emy_range_top_y += pColData[2];
   short emy_range_bottom_y = emy_range_top_y;
-  emy_range_bottom_y += col_tbl[3];
+  emy_range_bottom_y += pColData[3];
   pPlayerwk = chk_emy_colt__col(&actwk[1], pPlayerwk, pl_xposi, pl_yposi, emy_range_left_x, emy_range_top_y, emy_range_right_x, emy_range_bottom_y);
   pl_xposi = LONG_HIGH_TO_SHORT(actwk[0].xposi);
   pl_yposi = LONG_HIGH_TO_SHORT(actwk[0].yposi);

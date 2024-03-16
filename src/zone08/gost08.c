@@ -70,7 +70,7 @@ unsigned short* gost08_tbl[18] = {
   gost08_tbl17
 };
 
-wrt_tbl gost08_wrt_tbl = {
+wrt_data gost08_wrt_tbl = {
   gost08_tiles,
   gost08_tbl
 };
@@ -233,9 +233,9 @@ void gost08_chg1(sprite_status* pActwk) {
   if (ret != 0 && pActwk->patcnt == 2) {
     pActwk->r_no = 10;
     SPRITE_STATUS_UCHAR(pActwk, 66) = soz_darkness_level;
-    signed char* selected_pg_tbl = pg_tbl[(soz_darkness_level * 2 & 12) / 4];
-    pActwk->patno = selected_pg_tbl[0];
-    pg_init(pActwk, selected_pg_tbl);
+    signed char* pPgData = pg_tbl[(soz_darkness_level * 2 & 12) / 4];
+    pActwk->patno = pPgData[0];
+    pg_init(pActwk, pPgData);
   }
 }
 
