@@ -112,7 +112,12 @@ wrt_data gost08_wrt_tbl = {
   gost08_tbl
 };
 
+signed char gost08_apar_pg00[12] = { 17, 3, 17, 3, 16, 3, 15, 4, 14, 4, -8, 12 };
 signed char gost08_pg00[7] = { 0, 3, 1, 3, 2, 4, -4 };
+signed char gost08_apar_pg01[14] = { 17, 3, 17, 3, 16, 3, 15, 4, 14, 4, 13, 4, -8, 14 };
+signed char gost08_pg01[7] = { 5, 3, 6, 3, 7, 4, -4 };
+signed char gost08_apar_pg02[14] = { 17, 3, 17, 3, 16, 3, 15, 4, 14, 4, 13, 4, -8, 14 };
+signed char gost08_pg02[7] = { 10, 3, 11, 3, 12, 4, -4 };
 
 enemy_init2_data switch_init_tbl = {
   512,
@@ -462,4 +467,70 @@ void set_gost08(sprite_status* pActwk) {
   plyposi_s = SOZ2_start[1];
   playsave1(pActwk);
   set_act00(pActwk, &obox08_gost_set_tbl);
+}
+
+short gost08_init_spd_tbl[6] = {
+  -256, -256, -256, -384, -384, -512
+};
+
+void set_body_init(sprite_status* pActwk) {
+  signed char* pg_tbl[3] = {
+    gost08_apar_pg00,
+    gost08_apar_pg01,
+    gost08_apar_pg02
+  };
+
+  short number = random() & 255;
+  number -= 127;
+  pActwk->xposi += SHORT_TO_LONG_HIGH(number);
+  short xspeed = gost08_init_spd_tbl[soz_darkness_level];
+  if (util__to_unsigned(number) < 288) { // unsigned
+    SET_BIT_0(pActwk->actflg);
+    xspeed = -xspeed;
+  }
+  pActwk->xspeed = xspeed;
+  SPRITE_STATUS_PSCHAR(pActwk, 48) = pg_tbl[(soz_darkness_level * 2 & 12) / 4];
+  set_puka_init(pActwk);
+}
+
+void set_puka_init(sprite_status* pActwk) {
+  static sprite_status_handler puka_tbl[6] = {
+    &puka_init_00,
+    &puka_init_00,
+    &puka_init_00,
+    &puka_init_01,
+    &puka_init_01,
+    &puka_init_02
+  };
+
+  short xspeed = gost08_init_spd_tbl[soz_darkness_level];
+  if (pActwk->xspeed >= 0) {
+    xspeed = -xspeed;
+  }
+  pActwk->xspeed = xspeed;
+  CLEAR_BIT_0(SPRITE_STATUS_UCHAR(pActwk, 56));
+  puka_tbl[soz_darkness_level](pActwk);
+  short yspeed = soz_darkness_level * 4;
+  if (pActwk->yspeed < 0) {
+    SET_BIT_0(SPRITE_STATUS_UCHAR(pActwk, 56));
+    yspeed = -yspeed;
+  }
+  pActwk->yspeed = yspeed;
+}
+
+void puka_init_00(sprite_status* pActwk) {
+  SPRITE_STATUS_SHORT(pActwk, 62) = 64;
+  SPRITE_STATUS_SHORT(pActwk, 64) = 4;
+}
+
+void puka_init_01(sprite_status* pActwk) {
+  SPRITE_STATUS_SHORT(pActwk, 62) = 128;
+  SPRITE_STATUS_SHORT(pActwk, 64) = 8;
+  CLEAR_BIT_0(SPRITE_STATUS_UCHAR(pActwk, 56));
+}
+
+void puka_init_02(sprite_status* pActwk) {
+  SPRITE_STATUS_SHORT(pActwk, 62) = 192;
+  SPRITE_STATUS_SHORT(pActwk, 64) = 16;
+  CLEAR_BIT_0(SPRITE_STATUS_UCHAR(pActwk, 56));
 }

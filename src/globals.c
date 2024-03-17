@@ -7,6 +7,7 @@ unsigned short colibuffer[COLBUFFER_SLOTS];
 unsigned char flagwork[FLAGWORK_SLOTS];
 long scra_h_posit;
 long scra_v_posit;
+unsigned long ranum;
 unsigned char soz_darkness_level;
 unsigned short scr_x_no;
 unsigned char emy_wrt_flg[EMY_WRT_FLG_SLOTS];

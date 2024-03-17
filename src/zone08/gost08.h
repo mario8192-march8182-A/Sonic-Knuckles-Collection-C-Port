@@ -25,3 +25,8 @@ void obox08_gost_move0(sprite_status* pActwk);
 void obox08_gost_move1(sprite_status* pActwk);
 void chk_gost08_limit(sprite_status* pActwk);
 void set_gost08(sprite_status* pActwk);
+void set_body_init(sprite_status* pActwk);
+void set_puka_init(sprite_status* pActwk);
+void puka_init_00(sprite_status* pActwk);
+void puka_init_01(sprite_status* pActwk);
+void puka_init_02(sprite_status* pActwk);

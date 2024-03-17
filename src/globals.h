@@ -10,6 +10,7 @@ extern unsigned short colibuffer[COLBUFFER_SLOTS];
 extern unsigned char flagwork[FLAGWORK_SLOTS];
 extern long scra_h_posit;
 extern long scra_v_posit;
+extern unsigned long ranum;
 extern unsigned char soz_darkness_level;
 extern unsigned short scr_x_no;
 extern unsigned char emy_wrt_flg[EMY_WRT_FLG_SLOTS];

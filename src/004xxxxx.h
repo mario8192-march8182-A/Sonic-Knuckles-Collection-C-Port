@@ -13,6 +13,7 @@ void frameout(sprite_status* pActwk);
 void actionsub(sprite_status* pActwk);
 void playdamageset(sprite_status* pPlayerwk, sprite_status* pAttackActwk);
 void Add_Object_To_Collision_Response_List(sprite_status* pActwk);
+unsigned long random();
 bool Create_New_Sprite(sprite_status** ppNewActwk);
 bool Create_New_Sprite3(sprite_status* pActwk, sprite_status** ppNewActwk);
 bool Create_New_Sprite_Int(sprite_status** ppNewActwk, short slot_cnt);

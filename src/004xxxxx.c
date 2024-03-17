@@ -96,6 +96,27 @@ void Add_Object_To_Collision_Response_List(sprite_status* pActwk) {
   colibuffer[colibuffer[0] / COLBUFFER_SLOT_SIZE] = pActwk - actwk;
 }
 
+// SONIC3K.EXE address: 00426f24
+// skdisasm label: Random_Number
+unsigned long random() {
+  unsigned long d1 = ranum;
+  if (d1 == 0) {
+    d1 = 711800411;
+  }
+  unsigned long d0 = d1;
+  d1 = d1 << 2 & 0xFFFFFFFF;
+  d1 = d1 + d0 & 0xFFFFFFFF;
+  d1 = d1 << 3 & 0xFFFFFFFF;
+  d1 = d1 + d0 & 0xFFFFFFFF;
+  d0 = d0 & 0xFFFF0000 | d1 & 0x0000FFFF;
+  d1 = util__rotate(d1);
+  d0 = d0 & 0xFFFF0000 | ((d0 & 0x0000FFFF) + (d1 & 0x0000FFFF) & 0x0000FFFF);
+  d1 = d1 & 0xFFFF0000 | d0 & 0x0000FFFF;
+  d1 = util__rotate(d1);
+  ranum = d1;
+  return d0;
+}
+
 // SONIC3K.EXE address: 0042b8b8
 // skdisasm label: Create_New_Sprite
 bool Create_New_Sprite(sprite_status** ppNewActwk) {
