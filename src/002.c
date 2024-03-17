@@ -1,8 +1,8 @@
 #include "globals.h"
 #include "macros.h"
+#include "util.h"
 #include "002.h"
 #include "004xxxxx.h"
-#include <stdlib.h>
 
 
 // skdisasm label: CreateChild6_Simple
@@ -146,7 +146,7 @@ void set_emy_wchg(sprite_status* pActwk, wrt_data* pData) {
 
 // skdisasm label: Sprite_CheckDelete
 void chk_emy_fout0(sprite_status* pActwk) {
-  unsigned short scr_xposi = abs(LONG_HIGH_TO_SHORT(pActwk->xposi)) & 0xFF80;
+  unsigned short scr_xposi = util__to_unsigned(LONG_HIGH_TO_SHORT(pActwk->xposi)) & 0xFF80;
   scr_xposi -= scr_x_no;
   if (scr_xposi > 640) { // unsigned
     emy_fout(pActwk);
@@ -166,7 +166,7 @@ void emy_fout(sprite_status* pActwk) {
 
 // skdisasm label: Sprite_CheckDelete2
 void chk_emy_foutw0(sprite_status* pActwk) {
-  unsigned short scr_xposi = abs(LONG_HIGH_TO_SHORT(pActwk->xposi)) & 0xFF80;
+  unsigned short scr_xposi = util__to_unsigned(LONG_HIGH_TO_SHORT(pActwk->xposi)) & 0xFF80;
   scr_xposi -= scr_x_no;
   if (scr_xposi > 640) { // unsigned
     wchg_fout(pActwk);
@@ -237,9 +237,9 @@ sprite_status* chk_emy_colt(sprite_status* pActwk, short* pColData) {
 }
 
 sprite_status* chk_emy_colt__col(sprite_status* pPlayerwkChk, sprite_status* pPlayerwkPrevChk, short pl_xposi, short pl_yposi, short emy_range_left_x, short emy_range_top_y, short emy_range_right_x, short emy_range_bottom_y) {
-  if (abs(pl_xposi) < abs(emy_range_left_x)) return pPlayerwkPrevChk; // unsigned
-  if (abs(pl_xposi) >= abs(emy_range_right_x)) return pPlayerwkPrevChk; // unsigned
-  if (abs(pl_yposi) < abs(emy_range_top_y)) return pPlayerwkPrevChk; // unsigned
-  if (abs(pl_yposi) >= abs(emy_range_bottom_y)) return pPlayerwkPrevChk; // unsigned
+  if (util__to_unsigned(pl_xposi) < util__to_unsigned(emy_range_left_x)) return pPlayerwkPrevChk; // unsigned
+  if (util__to_unsigned(pl_xposi) >= util__to_unsigned(emy_range_right_x)) return pPlayerwkPrevChk; // unsigned
+  if (util__to_unsigned(pl_yposi) < util__to_unsigned(emy_range_top_y)) return pPlayerwkPrevChk; // unsigned
+  if (util__to_unsigned(pl_yposi) >= util__to_unsigned(emy_range_bottom_y)) return pPlayerwkPrevChk; // unsigned
   return pPlayerwkChk;
 }

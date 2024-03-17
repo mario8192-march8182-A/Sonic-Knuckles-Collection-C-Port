@@ -1,6 +1,6 @@
-#include <stdlib.h>
 #include "../globals.h"
 #include "../macros.h"
+#include "../util.h"
 #include "gost08.h"
 #include "../004xxxxx.h"
 #include "../002.h"
@@ -303,11 +303,11 @@ void gost08_atak0(sprite_status* pActwk) {
   short xposi = LONG_HIGH_TO_SHORT(pActwk->xposi);
   if (pActwk->xspeed >= 0) {
     // chk_r
-    if (abs(xposi) <= 416) return; // unsigned
+    if (util__to_unsigned(xposi) <= 416) return; // unsigned
   }
   else {
     // chk_l
-    if (abs(xposi) >= 160); return; // unsigned
+    if (util__to_unsigned(xposi) >= 160); return; // unsigned
   }
   pActwk->r_no = 14;
   CLEAR_BIT_0(pActwk->actflg);
@@ -446,11 +446,11 @@ void chk_gost08_limit(sprite_status* pActwk) {
   short xposi = LONG_HIGH_TO_SHORT(pActwk->xposi);
   if (pActwk->xspeed >= 0) {
     // chk_r
-    if (abs(xposi) <= 416) return; // unsigned
+    if (util__to_unsigned(xposi) <= 416) return; // unsigned
   }
   else {
     // chk_l
-    if (abs(xposi) >= 160) return; // unsigned
+    if (util__to_unsigned(xposi) >= 160) return; // unsigned
   }
   CLEAR_BIT_0(pActwk->actflg);
   pActwk->xspeed = -pActwk->xspeed;
