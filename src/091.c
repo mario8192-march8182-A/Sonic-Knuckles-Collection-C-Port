@@ -2,6 +2,7 @@
 #include "macros.h"
 #include "091.h"
 #include "004xxxxx.h"
+static void chk_pt_next(sprite_status* pActwk, signed char pg, signed char* pPgData, unsigned char patcnt);
 
 
 // skdisasm label: SetUp_ObjAttributes
@@ -104,7 +105,7 @@ void pt_chg0(sprite_status* pActwk, signed char* pPgData) {
 }
 
 
-void chk_pt_next(sprite_status* pActwk, signed char pg, signed char* pPgData, unsigned char patcnt) {
+static void chk_pt_next(sprite_status* pActwk, signed char pg, signed char* pPgData, unsigned char patcnt) {
   pg = -pg;
 
   switch (pg) {

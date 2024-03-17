@@ -6,6 +6,34 @@
 #include "../004xxxxx.h"
 #include "../002.h"
 #include "../091.h"
+static void gost08_ctr(sprite_status* pActwk);
+static void gost08_body(sprite_status* pActwk);
+static void gost08_body__fout0(sprite_status* pActwk);
+static void gost08_body__fout1(sprite_status* pActwk);
+static void gost08_init(sprite_status* pActwk);
+static void gost08_wait0(sprite_status* pActwk);
+static void gost08_atak_init(sprite_status* pActwk);
+static void gost08_move0(sprite_status* pActwk);
+static void gost08_chg0(sprite_status* pActwk);
+static void gost08_chg1(sprite_status* pActwk);
+static void gost08_chg2(sprite_status* pActwk);
+static void gost08_atak0(sprite_status* pActwk);
+static void gost08_atak1(sprite_status* pActwk);
+static void gost08_atak2(sprite_status* pActwk);
+static void gost08_body_fout0(sprite_status* pActwk);
+static void set_openbox_cg(sprite_status* pActwk);
+static void set_emy08_cg(sprite_status* pActwk);
+static void obox08_switch(sprite_status* pActwk);
+static void obox08_gost(sprite_status* pActwk);
+static void obox08_gost_init(sprite_status* pActwk);
+static void obox08_gost_move0(sprite_status* pActwk);
+static void obox08_gost_move1(sprite_status* pActwk);
+static void chk_gost08_limit(sprite_status* pActwk);
+static void set_body_init(sprite_status* pActwk);
+static void set_puka_init(sprite_status* pActwk);
+static void puka_init_00(sprite_status* pActwk);
+static void puka_init_01(sprite_status* pActwk);
+static void puka_init_02(sprite_status* pActwk);
 
 
 void gost08(sprite_status* pActwk) {
@@ -16,13 +44,13 @@ void gost08(sprite_status* pActwk) {
 }
 
 
-set_act05_data gost08_body_set_tbl = {
+static set_act05_data gost08_body_set_tbl = {
   0,
   &gost08_body
 };
 
 
-void gost08_ctr(sprite_status* pActwk) {
+static void gost08_ctr(sprite_status* pActwk) {
   static unsigned char cnt_tbl[6] = {
     0, 1, 2, 2, 3, 3
   };
@@ -45,7 +73,7 @@ void gost08_ctr(sprite_status* pActwk) {
 }
 
 
-void gost08_body(sprite_status* pActwk) {
+static void gost08_body(sprite_status* pActwk) {
   static sprite_status_handler act_tbl[9] = {
     &gost08_init,
     &gost08_wait0,
@@ -85,13 +113,13 @@ void gost08_body(sprite_status* pActwk) {
 }
 
 
-void gost08_body__fout0(sprite_status* pActwk) {
+static void gost08_body__fout0(sprite_status* pActwk) {
   --soz_ghosts;
   set_wchg_fout0(pActwk);
 }
 
 
-void gost08_body__fout1(sprite_status* pActwk) {
+static void gost08_body__fout1(sprite_status* pActwk) {
   pActwk->r_ptr = &gost08_body_fout0;
   SPRITE_STATUS_PHANDLER(pActwk, 52) = &gost08_body_fout0;
   pg_init(pActwk, gost08_away_pg00);
@@ -100,7 +128,7 @@ void gost08_body__fout1(sprite_status* pActwk) {
 }
 
 
-void gost08_init(sprite_status* pActwk) {
+static void gost08_init(sprite_status* pActwk) {
   emy_wrt_init(pActwk, &gost08_init_tbl);
   CLEAR_BIT_2(pActwk->actflg);
   SET_BIT_7(pActwk->actflg);
@@ -112,7 +140,7 @@ void gost08_init(sprite_status* pActwk) {
 }
 
 
-void gost08_wait0(sprite_status* pActwk) {
+static void gost08_wait0(sprite_status* pActwk) {
   int ret = time_pg(pActwk, SPRITE_STATUS_PSCHAR(pActwk, 48));
   if (ret == 0) return;
   if (soz_darkness_level == 5) {
@@ -124,13 +152,13 @@ void gost08_wait0(sprite_status* pActwk) {
 }
 
 
-void gost08_atak_init(sprite_status* pActwk) {
+static void gost08_atak_init(sprite_status* pActwk) {
   pActwk->r_no = 12;
   set_puka_init(pActwk);
 }
 
 
-void gost08_move0(sprite_status* pActwk) {
+static void gost08_move0(sprite_status* pActwk) {
   time_pg(pActwk, SPRITE_STATUS_PSCHAR(pActwk, 48));
   puka_puka(pActwk);
   speedset2(pActwk);
@@ -141,7 +169,7 @@ void gost08_move0(sprite_status* pActwk) {
 }
 
 
-void gost08_chg0(sprite_status* pActwk) {
+static void gost08_chg0(sprite_status* pActwk) {
   static unsigned char chk_puka_tbl[6] = {
     0, 0, 0, 1, 0, 1
   };
@@ -167,7 +195,7 @@ void gost08_chg0(sprite_status* pActwk) {
 }
 
 
-void gost08_chg1(sprite_status* pActwk) {
+static void gost08_chg1(sprite_status* pActwk) {
   static signed char* pg_tbl[3] = {
     gost08_chg_pg00,
     gost08_chg_pg00,
@@ -188,7 +216,7 @@ void gost08_chg1(sprite_status* pActwk) {
 }
 
 
-void gost08_chg2(sprite_status* pActwk) {
+static void gost08_chg2(sprite_status* pActwk) {
   puka_puka(pActwk);
   speedset2(pActwk);
   chk_gost08_limit(pActwk);
@@ -199,7 +227,7 @@ void gost08_chg2(sprite_status* pActwk) {
 }
 
 
-void gost08_atak0(sprite_status* pActwk) {
+static void gost08_atak0(sprite_status* pActwk) {
   time_pg(pActwk, SPRITE_STATUS_PSCHAR(pActwk, 48));
   puka_puka(pActwk);
   speedset2(pActwk);
@@ -219,7 +247,7 @@ void gost08_atak0(sprite_status* pActwk) {
 }
 
 
-void gost08_atak1(sprite_status* pActwk) {
+static void gost08_atak1(sprite_status* pActwk) {
   time_pg(pActwk, SPRITE_STATUS_PSCHAR(pActwk, 48));
   --SPRITE_STATUS_SHORT(pActwk, 46);
   if (SPRITE_STATUS_SHORT(pActwk, 46) >= 0) return;
@@ -232,13 +260,13 @@ void gost08_atak1(sprite_status* pActwk) {
 }
 
 
-void gost08_atak2(sprite_status* pActwk) {
+static void gost08_atak2(sprite_status* pActwk) {
   time_pg(pActwk, SPRITE_STATUS_PSCHAR(pActwk, 48));
   speedset2(pActwk);
 }
 
 
-void gost08_body_fout0(sprite_status* pActwk) {
+static void gost08_body_fout0(sprite_status* pActwk) {
   time_pg(pActwk, SPRITE_STATUS_PSCHAR(pActwk, 48));
   set_emy_wchg(pActwk, &gost08_wrt_tbl);
   actionsub(pActwk);
@@ -267,7 +295,7 @@ void setcg(sprite_status* pActwk) {
 }
 
 
-void set_openbox_cg(sprite_status* pActwk) {
+static void set_openbox_cg(sprite_status* pActwk) {
   static cg_data opnbox_cg_tbl = {
     0,
     {
@@ -279,12 +307,12 @@ void set_openbox_cg(sprite_status* pActwk) {
 }
 
 
-void set_emy08_cg(sprite_status* pActwk) {
+static void set_emy08_cg(sprite_status* pActwk) {
   LoadEnemyArt();
 }
 
 
-set_act00_data obox08_switch_set_tbl = {
+static set_act00_data obox08_switch_set_tbl = {
   0,
   {
     { &obox08_switch, 0, -36 }
@@ -304,7 +332,7 @@ void obox08(sprite_status* pActwk) {
 }
 
 
-void obox08_switch(sprite_status* pActwk) {
+static void obox08_switch(sprite_status* pActwk) {
   enemy_init2(pActwk, &switch_init_tbl);
   pActwk->r_ptr = &switch_wait0;
   if (markerno != 0) {
@@ -314,7 +342,7 @@ void obox08_switch(sprite_status* pActwk) {
 }
 
 
-void obox08_gost(sprite_status* pActwk) {
+static void obox08_gost(sprite_status* pActwk) {
   static sprite_status_handler act_tbl[3] = {
     &obox08_gost_init,
     &obox08_gost_move0,
@@ -332,7 +360,7 @@ void obox08_gost(sprite_status* pActwk) {
 }
 
 
-void obox08_gost_init(sprite_status* pActwk) {
+static void obox08_gost_init(sprite_status* pActwk) {
   static short spd_tbl[12] = {
     -512, -32,
      512, -32,
@@ -354,19 +382,19 @@ void obox08_gost_init(sprite_status* pActwk) {
 }
 
 
-void obox08_gost_move0(sprite_status* pActwk) {
+static void obox08_gost_move0(sprite_status* pActwk) {
   pt_chg0(pActwk, gost08_pg00);
   obox08_gost_move1(pActwk);
 }
 
 
-void obox08_gost_move1(sprite_status* pActwk) {
+static void obox08_gost_move1(sprite_status* pActwk) {
   pActwk->yspeed += SPRITE_STATUS_SHORT(pActwk, 64);
   speedset2(pActwk);
 }
 
 
-void chk_gost08_limit(sprite_status* pActwk) {
+static void chk_gost08_limit(sprite_status* pActwk) {
   short xposi = LONG_HIGH_TO_SHORT(pActwk->xposi);
   if (pActwk->xspeed >= 0) {
     // chk_r
@@ -381,7 +409,7 @@ void chk_gost08_limit(sprite_status* pActwk) {
 }
 
 
-set_act00_data obox08_gost_set_tbl = {
+static set_act00_data obox08_gost_set_tbl = {
   5,
   {
     { &obox08_gost,  -8, -4 },
@@ -403,7 +431,7 @@ void set_gost08(sprite_status* pActwk) {
 }
 
 
-void set_body_init(sprite_status* pActwk) {
+static void set_body_init(sprite_status* pActwk) {
   signed char* pg_tbl[3] = {
     gost08_apar_pg00,
     gost08_apar_pg01,
@@ -424,7 +452,7 @@ void set_body_init(sprite_status* pActwk) {
 }
 
 
-void set_puka_init(sprite_status* pActwk) {
+static void set_puka_init(sprite_status* pActwk) {
   static sprite_status_handler puka_tbl[6] = {
     &puka_init_00,
     &puka_init_00,
@@ -450,20 +478,20 @@ void set_puka_init(sprite_status* pActwk) {
 }
 
 
-void puka_init_00(sprite_status* pActwk) {
+static void puka_init_00(sprite_status* pActwk) {
   SPRITE_STATUS_SHORT(pActwk, 62) = 64;
   SPRITE_STATUS_SHORT(pActwk, 64) = 4;
 }
 
 
-void puka_init_01(sprite_status* pActwk) {
+static void puka_init_01(sprite_status* pActwk) {
   SPRITE_STATUS_SHORT(pActwk, 62) = 128;
   SPRITE_STATUS_SHORT(pActwk, 64) = 8;
   CLEAR_BIT_0(SPRITE_STATUS_UCHAR(pActwk, 56));
 }
 
 
-void puka_init_02(sprite_status* pActwk) {
+static void puka_init_02(sprite_status* pActwk) {
   SPRITE_STATUS_SHORT(pActwk, 62) = 192;
   SPRITE_STATUS_SHORT(pActwk, 64) = 16;
   CLEAR_BIT_0(SPRITE_STATUS_UCHAR(pActwk, 56));

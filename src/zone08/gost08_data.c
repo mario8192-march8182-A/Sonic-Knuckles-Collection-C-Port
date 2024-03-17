@@ -41,24 +41,24 @@ enemy_init0_data obox08_gost_init_tbl = {
   0
 };
 
-unsigned short gost08_tbl00[2] = {    0,    8 };
-unsigned short gost08_tbl01[2] = {    0,  152 };
-unsigned short gost08_tbl02[2] = {    0,  296 };
-unsigned short gost08_tbl03[2] = {    0,  440 };
-unsigned short gost08_tbl04[2] = {    0,  584 };
-unsigned short gost08_tbl05[2] = {    0,  728 };
-unsigned short gost08_tbl06[2] = {    0,  872 };
-unsigned short gost08_tbl07[2] = {    0, 1016 };
-unsigned short gost08_tbl08[2] = {    0, 1167 };
-unsigned short gost08_tbl09[3] = {  256, 1413, 1515 };
-unsigned short gost08_tbl10[3] = {  256, 1701, 1803 };
-unsigned short gost08_tbl11[3] = {  256, 1989, 2091 };
-unsigned short gost08_tbl12[3] = {  256, 1701, 2283 };
-unsigned short gost08_tbl13[2] = {    0, 2472 };
-unsigned short gost08_tbl14[2] = {    0, 2616 };
-unsigned short gost08_tbl15[2] = {    0, 2755 };
-unsigned short gost08_tbl16[2] = {    0, 2819 };
-unsigned short gost08_tbl17[2] = {    0, 2880 };
+static unsigned short gost08_tbl00[2] = {    0,    8 };
+static unsigned short gost08_tbl01[2] = {    0,  152 };
+static unsigned short gost08_tbl02[2] = {    0,  296 };
+static unsigned short gost08_tbl03[2] = {    0,  440 };
+static unsigned short gost08_tbl04[2] = {    0,  584 };
+static unsigned short gost08_tbl05[2] = {    0,  728 };
+static unsigned short gost08_tbl06[2] = {    0,  872 };
+static unsigned short gost08_tbl07[2] = {    0, 1016 };
+static unsigned short gost08_tbl08[2] = {    0, 1167 };
+static unsigned short gost08_tbl09[3] = {  256, 1413, 1515 };
+static unsigned short gost08_tbl10[3] = {  256, 1701, 1803 };
+static unsigned short gost08_tbl11[3] = {  256, 1989, 2091 };
+static unsigned short gost08_tbl12[3] = {  256, 1701, 2283 };
+static unsigned short gost08_tbl13[2] = {    0, 2472 };
+static unsigned short gost08_tbl14[2] = {    0, 2616 };
+static unsigned short gost08_tbl15[2] = {    0, 2755 };
+static unsigned short gost08_tbl16[2] = {    0, 2819 };
+static unsigned short gost08_tbl17[2] = {    0, 2880 };
 
 unsigned short* gost08_tbl[18] = {
   gost08_tbl00,

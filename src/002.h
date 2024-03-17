@@ -5,7 +5,6 @@
 
 void set_act05(sprite_status* pActwk, set_act05_data* pData);
 int time_pg(sprite_status* pActwk, signed char* pPgData);
-int chk_tpg_next(sprite_status* pActwk, signed char pg, signed char* pPgData, unsigned char patcnt);
 void chk_emy_revs(sprite_status* pActwk);
 void emy_wrt_init(sprite_status* pActwk, wrt_init_data* pData);
 void set_emy_wchg(sprite_status* pActwk, wrt_data* pData);

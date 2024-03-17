@@ -3,6 +3,7 @@
 #include "util.h"
 #include "002.h"
 #include "004xxxxx.h"
+static int chk_tpg_next(sprite_status* pActwk, signed char pg, signed char* pPgData, unsigned char patcnt);
 
 
 // skdisasm label: CreateChild6_Simple
@@ -42,7 +43,7 @@ int time_pg(sprite_status* pActwk, signed char* pPgData) {
 }
 
 
-int chk_tpg_next(sprite_status* pActwk, signed char pg, signed char* pPgData, unsigned char patcnt) {
+static int chk_tpg_next(sprite_status* pActwk, signed char pg, signed char* pPgData, unsigned char patcnt) {
   int ret = 0;
   pg = -pg;
 

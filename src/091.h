@@ -8,7 +8,6 @@ void enemy_init2(sprite_status* pActwk, enemy_init2_data* pData);
 void set_act00(sprite_status* pActwk, set_act00_data* pData);
 bool puka_puka(sprite_status* pActwk);
 void pt_chg0(sprite_status* pActwk, signed char* pPgData);
-void chk_pt_next(sprite_status* pActwk, signed char pg, signed char* pPgData, unsigned char patcnt);
 void pg_init(sprite_status* pActwk, signed char* pPgData);
 bool chk_pl_attack(sprite_status* pActwk, sprite_status* pPlayerwk);
 
