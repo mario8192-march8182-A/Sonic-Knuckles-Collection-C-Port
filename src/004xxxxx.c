@@ -12,7 +12,7 @@ void PlaySoundRegister(long id) {
 
 // SONIC3K.EXE address: 00410426
 // skdisasm label: Add_To_DMA_Queue
-void Copy_Data_To_VRAM(unsigned short d1, unsigned short d2, unsigned short d3) {
+void Copy_Data_To_VRAM(unsigned char* source, unsigned short destination, unsigned short words) {
   // TODO
 }
 

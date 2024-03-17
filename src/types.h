@@ -75,8 +75,8 @@ typedef struct set_act05_data {
 set_act05_data;
 
 typedef struct wrt_data {
-  unsigned long* unknown;
-  unsigned short** tbl;
+  unsigned char* pat;
+  unsigned short** wrtpat;
 }
 wrt_data;
 

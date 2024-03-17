@@ -126,26 +126,17 @@ ok:
 void set_emy_wchg(sprite_status* pActwk, wrt_data* pData) {
   if (pActwk->patno == SPRITE_STATUS_UCHAR(pActwk, 58)) return;
   SPRITE_STATUS_UCHAR(pActwk, 58) = pActwk->patno;
-  unsigned long* a3 = pData->unknown;
   unsigned short vram_adr = (pActwk->sproffset & 0x7FF) << 5;
-  unsigned short* tbl = pData->tbl[pActwk->patno];
-  short cnt = *tbl++; // this conversion from unsigned to signed should be safe
-  cnt = cnt >> 8 | cnt << 8; // rotate lower and upper 8 bits
-  unsigned short d3 = 0;
+  unsigned short* wrtpat = pData->wrtpat[pActwk->patno];
+  short cnt = *wrtpat++; // this conversion from unsigned to signed should be safe
 
   do {
-    d3 = *tbl++;
-    unsigned short d1 = d3;
-    d1 &= 0xFFF0;
-    d1 += d1;
-    d1 += *a3;
-    unsigned short d2 = vram_adr;
-    d3 &= 0xF;
-    ++d3;
-    d3 <<= 4;
-    vram_adr += d3;
-    vram_adr += d3;
-    Copy_Data_To_VRAM(d1, d2, d3);
+    unsigned short instruction = *wrtpat++;
+    unsigned char* source = pData->pat + ((instruction & 0xFFF0) << 1);
+    unsigned short word_cnt = ((instruction & 0xF) + 1) * 16;
+    unsigned short destination = vram_adr;
+    vram_adr += word_cnt * 2;
+    Copy_Data_To_VRAM(source, destination, word_cnt);
     --cnt;
   } while (cnt != -1);
 }
