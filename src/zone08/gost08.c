@@ -135,6 +135,7 @@ void gost08(sprite_status* pActwk) {
   gost08_ctr(pActwk);
 }
 
+
 void gost08_ctr(sprite_status* pActwk) {
   static unsigned char cnt_tbl[6] = {
     0, 1, 2, 2, 3, 3
@@ -156,6 +157,7 @@ void gost08_ctr(sprite_status* pActwk) {
     soz_ghosts = 0;
   }
 }
+
 
 void gost08_body(sprite_status* pActwk) {
   static sprite_status_handler act_tbl[9] = {
@@ -196,10 +198,12 @@ void gost08_body(sprite_status* pActwk) {
   actionsub(pActwk);
 }
 
+
 void gost08_body__fout0(sprite_status* pActwk) {
   --soz_ghosts;
   set_wchg_fout0(pActwk);
 }
+
 
 void gost08_body__fout1(sprite_status* pActwk) {
   pActwk->r_ptr = &gost08_body_fout0;
@@ -208,6 +212,7 @@ void gost08_body__fout1(sprite_status* pActwk) {
   soundset(-118);
   actionsub(pActwk);
 }
+
 
 void gost08_init(sprite_status* pActwk) {
   emy_wrt_init(pActwk, &gost08_init_tbl);
@@ -220,6 +225,7 @@ void gost08_init(sprite_status* pActwk) {
   gost08_wait0(pActwk);
 }
 
+
 void gost08_wait0(sprite_status* pActwk) {
   int ret = time_pg(pActwk, SPRITE_STATUS_PSCHAR(pActwk, 48));
   if (ret == 0) return;
@@ -231,10 +237,12 @@ void gost08_wait0(sprite_status* pActwk) {
   }
 }
 
+
 void gost08_atak_init(sprite_status* pActwk) {
   pActwk->r_no = 12;
   set_puka_init(pActwk);
 }
+
 
 void gost08_move0(sprite_status* pActwk) {
   time_pg(pActwk, SPRITE_STATUS_PSCHAR(pActwk, 48));
@@ -245,6 +253,7 @@ void gost08_move0(sprite_status* pActwk) {
     pActwk->r_no = 6;
   }
 }
+
 
 void gost08_chg0(sprite_status* pActwk) {
   static unsigned char chk_puka_tbl[6] = {
@@ -271,6 +280,7 @@ void gost08_chg0(sprite_status* pActwk) {
   }
 }
 
+
 void gost08_chg1(sprite_status* pActwk) {
   static signed char* pg_tbl[3] = {
     gost08_chg_pg00,
@@ -291,6 +301,7 @@ void gost08_chg1(sprite_status* pActwk) {
   }
 }
 
+
 void gost08_chg2(sprite_status* pActwk) {
   puka_puka(pActwk);
   speedset2(pActwk);
@@ -300,6 +311,7 @@ void gost08_chg2(sprite_status* pActwk) {
     pActwk->r_no = 4;
   }
 }
+
 
 void gost08_atak0(sprite_status* pActwk) {
   time_pg(pActwk, SPRITE_STATUS_PSCHAR(pActwk, 48));
@@ -320,6 +332,7 @@ void gost08_atak0(sprite_status* pActwk) {
   SPRITE_STATUS_SHORT(pActwk, 46) = 59;
 }
 
+
 void gost08_atak1(sprite_status* pActwk) {
   time_pg(pActwk, SPRITE_STATUS_PSCHAR(pActwk, 48));
   --SPRITE_STATUS_SHORT(pActwk, 46);
@@ -332,16 +345,19 @@ void gost08_atak1(sprite_status* pActwk) {
   pActwk->yspeed = 256;
 }
 
+
 void gost08_atak2(sprite_status* pActwk) {
   time_pg(pActwk, SPRITE_STATUS_PSCHAR(pActwk, 48));
   speedset2(pActwk);
 }
+
 
 void gost08_body_fout0(sprite_status* pActwk) {
   time_pg(pActwk, SPRITE_STATUS_PSCHAR(pActwk, 48));
   set_emy_wchg(pActwk, &gost08_wrt_tbl);
   actionsub(pActwk);
 }
+
 
 void setcg(sprite_status* pActwk) {
   static short* col_tbl[2] = {
@@ -364,6 +380,7 @@ void setcg(sprite_status* pActwk) {
   frameout(pActwk);
 }
 
+
 void set_openbox_cg(sprite_status* pActwk) {
   static cg_data opnbox_cg_tbl = {
     0,
@@ -375,9 +392,11 @@ void set_openbox_cg(sprite_status* pActwk) {
   Load_PLC_Raw(pActwk, &opnbox_cg_tbl);
 }
 
+
 void set_emy08_cg(sprite_status* pActwk) {
   LoadEnemyArt();
 }
+
 
 void obox08(sprite_status* pActwk) {
   enemy_init0(pActwk, &obox08_init_tbl);
@@ -390,6 +409,7 @@ void obox08(sprite_status* pActwk) {
   SET_BIT_5(SPRITE_STATUS_UCHAR(pActwk, 56));
 }
 
+
 void obox08_switch(sprite_status* pActwk) {
   enemy_init2(pActwk, &switch_init_tbl);
   pActwk->r_ptr = &switch_wait0;
@@ -398,6 +418,7 @@ void obox08_switch(sprite_status* pActwk) {
     pActwk->patno = 12;
   }
 }
+
 
 void obox08_gost(sprite_status* pActwk) {
   static sprite_status_handler act_tbl[3] = {
@@ -415,6 +436,7 @@ void obox08_gost(sprite_status* pActwk) {
     chk_emy_fout0(pActwk);
   }
 }
+
 
 void obox08_gost_init(sprite_status* pActwk) {
   static short spd_tbl[12] = {
@@ -437,15 +459,18 @@ void obox08_gost_init(sprite_status* pActwk) {
   }
 }
 
+
 void obox08_gost_move0(sprite_status* pActwk) {
   pt_chg0(pActwk, gost08_pg00);
   obox08_gost_move1(pActwk);
 }
 
+
 void obox08_gost_move1(sprite_status* pActwk) {
   pActwk->yspeed += SPRITE_STATUS_SHORT(pActwk, 64);
   speedset2(pActwk);
 }
+
 
 void chk_gost08_limit(sprite_status* pActwk) {
   short xposi = LONG_HIGH_TO_SHORT(pActwk->xposi);
@@ -461,6 +486,7 @@ void chk_gost08_limit(sprite_status* pActwk) {
   pActwk->xspeed = -pActwk->xspeed;
 }
 
+
 void set_gost08(sprite_status* pActwk) {
   markerno = 1;
   plxposi_s = SOZ2_start[0];
@@ -468,6 +494,7 @@ void set_gost08(sprite_status* pActwk) {
   playsave1(pActwk);
   set_act00(pActwk, &obox08_gost_set_tbl);
 }
+
 
 short gost08_init_spd_tbl[6] = {
   -256, -256, -256, -384, -384, -512
@@ -492,6 +519,7 @@ void set_body_init(sprite_status* pActwk) {
   SPRITE_STATUS_PSCHAR(pActwk, 48) = pg_tbl[(soz_darkness_level * 2 & 12) / 4];
   set_puka_init(pActwk);
 }
+
 
 void set_puka_init(sprite_status* pActwk) {
   static sprite_status_handler puka_tbl[6] = {
@@ -518,16 +546,19 @@ void set_puka_init(sprite_status* pActwk) {
   pActwk->yspeed = yspeed;
 }
 
+
 void puka_init_00(sprite_status* pActwk) {
   SPRITE_STATUS_SHORT(pActwk, 62) = 64;
   SPRITE_STATUS_SHORT(pActwk, 64) = 4;
 }
+
 
 void puka_init_01(sprite_status* pActwk) {
   SPRITE_STATUS_SHORT(pActwk, 62) = 128;
   SPRITE_STATUS_SHORT(pActwk, 64) = 8;
   CLEAR_BIT_0(SPRITE_STATUS_UCHAR(pActwk, 56));
 }
+
 
 void puka_init_02(sprite_status* pActwk) {
   SPRITE_STATUS_SHORT(pActwk, 62) = 192;

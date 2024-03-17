@@ -17,6 +17,7 @@ void enemy_init0(sprite_status* pActwk, enemy_init0_data* pData) {
   pActwk->r_no += 2;
 }
 
+
 // skdisasm label: SetUp_ObjAttributes3
 void enemy_init2(sprite_status* pActwk, enemy_init2_data* pData) {
   pActwk->sprpri = pData->sprpri;
@@ -27,6 +28,7 @@ void enemy_init2(sprite_status* pActwk, enemy_init2_data* pData) {
   SET_BIT_2(pActwk->actflg);
   pActwk->r_no += 2;
 }
+
 
 // skdisasm label: CreateChild1_Normal
 void set_act00(sprite_status* pActwk, set_act00_data* pData) {
@@ -52,6 +54,7 @@ void set_act00(sprite_status* pActwk, set_act00_data* pData) {
     --cnt;
   } while (cnt != 0);
 }
+
 
 // skdisasm label: Swing_UpAndDown
 bool puka_puka(sprite_status* pActwk) {
@@ -85,6 +88,7 @@ bool puka_puka(sprite_status* pActwk) {
   return axis_dir_changed;
 }
 
+
 // skdisasm label: Animate_RawNoSSTCheckResult (?)
 void pt_chg0(sprite_status* pActwk, signed char* pPgData) {
   --pActwk->pattim;
@@ -98,6 +102,7 @@ void pt_chg0(sprite_status* pActwk, signed char* pPgData) {
     pActwk->patno = pg;
   }
 }
+
 
 void chk_pt_next(sprite_status* pActwk, signed char pg, signed char* pPgData, unsigned char patcnt) {
   pg = -pg;
@@ -117,11 +122,13 @@ void chk_pt_next(sprite_status* pActwk, signed char pg, signed char* pPgData, un
   }
 }
 
+
 // skdisasm label: Set_Raw_Animation
 void pg_init(sprite_status* pActwk, signed char* pPgData) {
   SPRITE_STATUS_PSCHAR(pActwk, 48) = pPgData;
   pActwk->patcnt = pActwk->pattim = 0;
 }
+
 
 // skdisasm label: Check_PlayerAttack
 bool chk_pl_attack(sprite_status* pActwk, sprite_status* pPlayerwk) {

@@ -9,11 +9,13 @@ void PlaySoundRegister(long id) {
   // TODO
 }
 
+
 // SONIC3K.EXE address: 00410426
 // skdisasm label: Add_To_DMA_Queue
 void Copy_Data_To_VRAM(unsigned short d1, unsigned short d2, unsigned short d3) {
   // TODO
 }
+
 
 // SONIC3K.EXE address: 0041149c
 // skdisasm label: Load_PLC_Raw
@@ -21,17 +23,20 @@ void Load_PLC_Raw(sprite_status* pActwk, cg_data* pData) {
   // TODO
 }
 
+
 // SONIC3K.EXE address: 0041a490
 // skdisasm label: LoadEnemyArt
 void LoadEnemyArt() {
   // TODO
 }
 
+
 // SONIC3K.EXE address: 0041a82d
 // skdisasm label: Play_SFX
 void soundset(long id) {
   PlaySoundRegister(id);
 }
+
 
 // SONIC3K.EXE address: 0041e8f6
 // skdisasm label: MoveSprite2
@@ -40,11 +45,13 @@ void speedset2(sprite_status* pActwk) {
   pActwk->yposi += pActwk->yspeed * 256;
 }
 
+
 // SONIC3K.EXE addresses: 0041eacf, 0041ead9
 // skdisasm labels: Delete_Current_Sprite, Delete_Referenced_Sprite
 void frameout(sprite_status* pActwk) {
   memset(pActwk, 0, sizeof(*pActwk));
 }
+
 
 // SONIC3K.EXE address: 0041eb34
 // skdisasm label: Draw_Sprite
@@ -62,6 +69,7 @@ void actionsub(sprite_status* pActwk) {
     pri_level += PBUFFER_LEVEL_SLOTS;
   } while (1);
 }
+
 
 // SONIC3K.EXE address: 00422b67
 // skdisasm label: HurtCharacter
@@ -88,6 +96,7 @@ LAB_00422c37:
   // TODO
 }
 
+
 // SONIC3K.EXE address: 00422f11
 // skdisasm label: Add_SpriteToCollisionResponseList
 void Add_Object_To_Collision_Response_List(sprite_status* pActwk) {
@@ -95,6 +104,7 @@ void Add_Object_To_Collision_Response_List(sprite_status* pActwk) {
   colibuffer[0] += COLBUFFER_SLOT_SIZE;
   colibuffer[colibuffer[0] / COLBUFFER_SLOT_SIZE] = pActwk - actwk;
 }
+
 
 // SONIC3K.EXE address: 00426f24
 // skdisasm label: Random_Number
@@ -117,12 +127,14 @@ unsigned long random() {
   return d0;
 }
 
+
 // SONIC3K.EXE address: 0042b8b8
 // skdisasm label: Create_New_Sprite
 bool Create_New_Sprite(sprite_status** ppNewActwk) {
   *ppNewActwk = &actwk[ACTWK_DYNAMIC_START];
   return Create_New_Sprite_Int(ppNewActwk, ACTWK_RESERVED_START - ACTWK_DYNAMIC_START - 1);
 }
+
 
 // SONIC3K.EXE address: 0042b8cf
 // skdisasm label: Create_New_Sprite3
@@ -148,6 +160,7 @@ bool Create_New_Sprite3(sprite_status* pActwk, sprite_status** ppNewActwk) {
   if (slot_cnt < 0) return false;
   return Create_New_Sprite_Int(ppNewActwk, slot_cnt);
 }
+
 
 // Address: 0042b8ff
 bool Create_New_Sprite_Int(sprite_status** ppNewActwk, short slot_cnt) {

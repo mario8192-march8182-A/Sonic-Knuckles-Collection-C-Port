@@ -27,6 +27,7 @@ void set_act05(sprite_status* pActwk, set_act05_data* pData) {
   } while (cnt != -1);
 }
 
+
 // skdisasm labels: Animate_RawMultiDelay, Animate_RawNoSSTMultiDelay
 int time_pg(sprite_status* pActwk, signed char* pPgData) {
   --pActwk->pattim;
@@ -39,6 +40,7 @@ int time_pg(sprite_status* pActwk, signed char* pPgData) {
   pActwk->pattim = pPgData[pActwk->patcnt + 1];
   return 1;
 }
+
 
 int chk_tpg_next(sprite_status* pActwk, signed char pg, signed char* pPgData, unsigned char patcnt) {
   int ret = 0;
@@ -66,12 +68,14 @@ int chk_tpg_next(sprite_status* pActwk, signed char pg, signed char* pPgData, un
   return ret;
 }
 
+
 // skdisasm label: Change_FlipXWithVelocity
 void chk_emy_revs(sprite_status* pActwk) {
   CLEAR_BIT_0(pActwk->actflg);
   if (pActwk->xspeed < 0) return;
   SET_BIT_0(pActwk->actflg);
 }
+
 
 // skdisasm label: SetUp_ObjAttributesSlotted
 void emy_wrt_init(sprite_status* pActwk, wrt_init_data* pData) {
@@ -116,6 +120,7 @@ ok:
   pActwk->r_no += 2;
 }
 
+
 // skdisasm label: Perform_DPLC
 void set_emy_wchg(sprite_status* pActwk, wrt_data* pData) {
   if (pActwk->patno == SPRITE_STATUS_UCHAR(pActwk, 58)) return;
@@ -144,6 +149,7 @@ void set_emy_wchg(sprite_status* pActwk, wrt_data* pData) {
   } while (cnt != -1);
 }
 
+
 // skdisasm label: Sprite_CheckDelete
 void chk_emy_fout0(sprite_status* pActwk) {
   unsigned short scr_xposi = util__to_unsigned(LONG_HIGH_TO_SHORT(pActwk->xposi)) & 0xFF80;
@@ -156,6 +162,7 @@ void chk_emy_fout0(sprite_status* pActwk) {
   }
 }
 
+
 void emy_fout(sprite_status* pActwk) {
   if (SPRITE_STATUS_USHORT(pActwk, 72) != 0) {
     CLEAR_BIT_7(flagwork[SPRITE_STATUS_USHORT(pActwk, 72) - 1]);
@@ -163,6 +170,7 @@ void emy_fout(sprite_status* pActwk) {
   SET_BIT_7(pActwk->cddat1);
   pActwk->r_ptr = &frameout;
 }
+
 
 // skdisasm label: Sprite_CheckDelete2
 void chk_emy_foutw0(sprite_status* pActwk) {
@@ -176,6 +184,7 @@ void chk_emy_foutw0(sprite_status* pActwk) {
   }
 }
 
+
 // skdisasm label: Go_Delete_SpriteSlotted
 void wchg_fout(sprite_status* pActwk) {
   if (SPRITE_STATUS_USHORT(pActwk, 72) != 0) {
@@ -184,6 +193,7 @@ void wchg_fout(sprite_status* pActwk) {
   set_wchg_fout0(pActwk);
 }
 
+
 // skdisasm label: Go_Delete_SpriteSlotted2
 void set_wchg_fout0(sprite_status* pActwk) {
   pActwk->r_ptr = &frameout;
@@ -191,16 +201,19 @@ void set_wchg_fout0(sprite_status* pActwk) {
   clr_wchg_bit(pActwk);
 }
 
+
 // skdisasm label: Remove_From_TrackingSlot
 void clr_wchg_bit(sprite_status* pActwk) {
   unsigned char bit_string = ~(SPRITE_STATUS_UCHAR(pActwk, 59));
   DAT_008549d4[SPRITE_STATUS_USHORT(pActwk, 60)] &= bit_string;
 }
 
+
 // skdisasm label: HurtCharacter_Directly
 void set_pl_damage(sprite_status* pAttackActwk, sprite_status* pPlayerwk) {
   playdamageset(pPlayerwk, pAttackActwk);
 }
+
 
 unsigned short pl_wk_tbl[4] = {
   0, 0, 1, 1
@@ -215,6 +228,7 @@ bool chk_emy_col(sprite_status* pActwk, sprite_status** ppColiActwk) {
   *ppColiActwk = &actwk[coli_act_id];
   return true;
 }
+
 
 // skdisasm label: Check_PlayerInRange
 sprite_status* chk_emy_colt(sprite_status* pActwk, short* pColData) {
@@ -235,6 +249,7 @@ sprite_status* chk_emy_colt(sprite_status* pActwk, short* pColData) {
   pPlayerwk = chk_emy_colt__col(&actwk[0], pPlayerwk, pl_xposi, pl_yposi, emy_range_left_x, emy_range_top_y, emy_range_right_x, emy_range_bottom_y);
   return pPlayerwk;
 }
+
 
 sprite_status* chk_emy_colt__col(sprite_status* pPlayerwkChk, sprite_status* pPlayerwkPrevChk, short pl_xposi, short pl_yposi, short emy_range_left_x, short emy_range_top_y, short emy_range_right_x, short emy_range_bottom_y) {
   if (util__to_unsigned(pl_xposi) < util__to_unsigned(emy_range_left_x)) return pPlayerwkPrevChk; // unsigned
