@@ -9,6 +9,7 @@ static void savemove(sprite_status* pActwk);
 static void savemove__sub(sprite_status* p_actwk, sprite_status* p_playerwk);
 static void savemove2(sprite_status* pActwk);
 static void savemove3(sprite_status* p_actwk);
+static void playsave(sprite_status* p_actwk);
 static signed char* savechg[3];
 static signed char savechg0[3];
 static signed char savechg1[3];
@@ -132,6 +133,53 @@ static void savemove3(sprite_status* p_actwk) {
     p_actwk->yposi = SHORT_TO_LONG_HIGH(LONG_LOW(sin_l)) + LONG_LOW(p_actwk->yposi);
     frameoutchk(p_actwk);
   }
+}
+
+
+static void playsave(sprite_status* p_actwk) {
+  markerno = p_actwk->userflag1;
+  plxposi_s = LONG_HIGH_TO_SHORT(p_actwk->xposi);
+  plyposi_s = LONG_HIGH_TO_SHORT(p_actwk->yposi);
+  playsave1(p_actwk);
+}
+
+
+void playsave1(sprite_status* p_actwk) {
+  markerno_s = markerno;
+  stageno_s = stageno;
+  stageno_is = stageno_i;
+  plsproffset_s = actwk[0].sproffset;
+  plcolibits_s = SPRITE_STATUS_USHORT(&actwk[0], 70);
+  plring_s = plring;
+  plring_f2_s = plring_f2;
+  pltime_s = pltime;
+  scr_resize_no_s = scr_resize_no;
+  scralim_down_s = scralim_down;
+  scra_h_posit_s = LONG_HIGH_TO_SHORT(scra_h_posit);
+  scra_v_posit_s = LONG_HIGH_TO_SHORT(scra_v_posit);
+  waterposi_s = waterposi;
+  waterflag_s = waterflag;
+}
+
+
+void playsave2(sprite_status* p_actwk) {
+  markerno_s2 = markerno;
+  stageno_s2 = stageno;
+  stageno_is2 = stageno_i;
+  plxposi_s2 = LONG_HIGH_TO_SHORT(p_actwk->xposi);
+  plyposi_s2 = LONG_HIGH_TO_SHORT(p_actwk->yposi);
+  plsproffset_s2 = actwk[0].sproffset;
+  plcolibits_s2 = SPRITE_STATUS_USHORT(&actwk[0], 70);
+  plring_s2 = plring;
+  plring_f2_s2 = plring_f2;
+  pltime_s2 = pltime;
+  scr_resize_no_s2 = scr_resize_no;
+  scralim_down_s2 = scralim_down;
+  scra_h_posit_s2 = LONG_HIGH_TO_SHORT(scra_h_posit);
+  scra_v_posit_s2 = LONG_HIGH_TO_SHORT(scra_v_posit);
+  waterposi_s2 = waterposi;
+  waterflag_s2 = waterflag;
+  plcddat2_s2 = actwk[0].cddat2;
 }
 
 

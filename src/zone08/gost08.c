@@ -6,6 +6,7 @@
 #include "../004xxxxx.h"
 #include "../002.h"
 #include "../091.h"
+#include "../save.h"
 static void gost08_ctr(sprite_status* p_actwk);
 static void gost08_body(sprite_status* p_actwk);
 static void gost08_body__fout0(sprite_status* p_actwk);
