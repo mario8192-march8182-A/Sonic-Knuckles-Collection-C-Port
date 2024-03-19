@@ -1,0 +1,114 @@
+#include "globals.h"
+#include "macros.h"
+#include "util.h"
+#include "save.h"
+#include "004xxxxx.h"
+static sprite_status_handler save_move_tbl[5];
+static void saveinit(sprite_status* pActwk);
+static void savemove(sprite_status* pActwk);
+static void savemove__sub(sprite_status* p_actwk, sprite_status* p_playerwk);
+static signed char savesp00[26];
+static signed char savesp01[20];
+static signed char savesp02[8];
+static signed char savesp03[8];
+static signed char savesp04[26];
+
+
+void save(sprite_status* p_actwk) {
+  save_move_tbl[p_actwk->r_no / 2](p_actwk);
+}
+
+
+static sprite_status_handler save_move_tbl[5] = {
+  &saveinit,
+  &savemove,
+  &savemove2,
+  &savemove3,
+  &o_star
+};
+
+
+static void saveinit(sprite_status* p_actwk) {
+  p_actwk->r_no += 2;
+  p_actwk->patbase = savepat;
+  p_actwk->sproffset = 1516;
+  p_actwk->actflg = 4;
+  p_actwk->sprhs = 8;
+  p_actwk->sprvs = 40;
+  p_actwk->sprpri = 640;
+  if (BIT_0_IS_SET(flagwork[SPRITE_STATUS_USHORT(p_actwk, 72) - 1])
+      || (markerno & 0x7F) >= (p_actwk->userflag1 & 0x7F)) { // unsigned
+    SET_BIT_0(flagwork[SPRITE_STATUS_USHORT(p_actwk, 72) - 1]);
+    p_actwk->mstno = 2;
+  }
+  savemove(p_actwk);
+}
+
+
+static void savemove(sprite_status* p_actwk) {
+  if (edit_r_no == 0) {
+    savemove__sub(p_actwk, &actwk[0]);
+  }
+  savemove2(p_actwk);
+}
+
+
+static void savemove__sub(sprite_status* p_actwk, sprite_status* p_playerwk) {
+  if ((markerno & 0x7F) < (p_actwk->userflag1 & 0x7F)) {
+    short distance = LONG_HIGH_TO_SHORT(p_actwk->xposi) - LONG_HIGH_TO_SHORT(p_playerwk->xposi) + 8;
+    if (util__to_unsigned(distance) >= 16) return; // unsigned
+    distance = LONG_HIGH_TO_SHORT(p_actwk->yposi) - LONG_HIGH_TO_SHORT(p_playerwk->yposi) + 64;
+    if (util__to_unsigned(distance) >= 104) return; // unsigned
+    soundset(99);
+    sprite_status* p_new_actwk;
+    bool created = Create_New_Sprite(&p_new_actwk);
+    if (created) {
+      p_new_actwk->r_ptr = &save;
+      p_new_actwk->r_no = 6;
+      SPRITE_STATUS_SHORT(p_new_actwk, 48) = LONG_HIGH_TO_SHORT(p_actwk->xposi);
+      SPRITE_STATUS_SHORT(p_new_actwk, 50) = LONG_HIGH_TO_SHORT(p_actwk->yposi) - 20;
+      p_new_actwk->patbase = p_actwk->patbase;
+      p_new_actwk->sproffset = p_actwk->sproffset;
+      p_new_actwk->actflg = p_actwk->actflg;
+      p_new_actwk->sprhs = 8;
+      p_new_actwk->sprvs = 8;
+      p_new_actwk->sprpri = 512;
+      p_new_actwk->patno = 2;
+      SPRITE_STATUS_USHORT(p_new_actwk, 54) = 32;
+      SPRITE_STATUS_USHORT(p_new_actwk, 62) = p_actwk - actwk;
+      bool enough_rings = false;
+      if (Sonic_3_alone) {
+        enough_rings = plring >= 50;
+      }
+      else {
+        enough_rings = plring >= 20;
+      }
+      if (enough_rings) {
+        o_starinit(p_actwk);
+      }
+    }
+    p_actwk->mstno = 1;
+    playsave(p_actwk);
+    p_actwk->r_no = 4;
+    SET_BIT_0(flagwork[SPRITE_STATUS_USHORT(p_actwk, 72) - 1]);
+  }
+  else if (p_actwk->mstno == 0) {
+    p_actwk->mstno = 2;
+  }
+}
+
+
+signed char* savepat[5] = {
+  savesp00,
+  savesp01,
+  savesp02,
+  savesp03,
+  savesp04
+};
+
+
+static signed char savesp00[26] = { 0, 4, -24, 1, 14, 0, -4, -1, -8, 3, 16, 0, -8, -1, -8, 3, 16, 8, 0, 0, -40, 5, 6, 0, -8, -1 };
+static signed char savesp01[20] = { 0, 3, -24, 1, 14, 0, -4, -1, -8, 3, 16, 0, -8, -1, -8, 3, 16, 8, 0, 0 };
+static signed char savesp02[8] = { 0, 1, -8, 5, 6, 0, -8, -1 };
+static signed char savesp03[8] = { 0, 1, -8, 5, 10, 0, -8, -1 };
+static signed char savesp04[26] = { 0, 4, -24, 1, 14, 0, -4, -1, -8, 3, 16, 0, -8, -1, -8, 3, 16, 8, 0, 0, -40, 5, 10, 0, -8, -1 };

@@ -1,6 +1,8 @@
 #include "constants.h"
 #include "types.h"
 
+bool Sonic_3_alone;
+
 unsigned short pbuffer[PBUFFER_LEVELS][PBUFFER_LEVEL_SLOTS];
 sprite_status actwk[ACTWK_SLOTS];
 unsigned short colibuffer[COLBUFFER_SLOTS];
@@ -12,6 +14,7 @@ unsigned char soz_darkness_level;
 unsigned short scr_x_no;
 unsigned char emy_wrt_flg[EMY_WRT_FLG_SLOTS];
 unsigned char soz_ghosts;
+unsigned char edit_r_no;
 short plring;
 unsigned char markerno;
 short plxposi_s;
