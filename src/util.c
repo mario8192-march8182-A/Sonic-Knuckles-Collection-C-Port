@@ -8,6 +8,20 @@ unsigned long util__rotate(unsigned long value) {
 }
 
 
+unsigned char util__to_unsigned(signed char value) {
+  unsigned char result = 0;
+
+  if (value < 0) {
+    result = 255 - abs(value) + 1;
+  }
+  else {
+    result = value;
+  }
+
+  return result;
+}
+
+
 unsigned short util__to_unsigned(short value) {
   unsigned short result = 0;
 

@@ -7,6 +7,12 @@ static sprite_status_handler save_move_tbl[5];
 static void saveinit(sprite_status* pActwk);
 static void savemove(sprite_status* pActwk);
 static void savemove__sub(sprite_status* p_actwk, sprite_status* p_playerwk);
+static void savemove2(sprite_status* pActwk);
+static void savemove3(sprite_status* p_actwk);
+static signed char* savechg[3];
+static signed char savechg0[3];
+static signed char savechg1[3];
+static signed char savechg2[4];
 static signed char savesp00[26];
 static signed char savesp01[20];
 static signed char savesp02[8];
@@ -96,6 +102,49 @@ static void savemove__sub(sprite_status* p_actwk, sprite_status* p_playerwk) {
     p_actwk->mstno = 2;
   }
 }
+
+
+static void savemove2(sprite_status* p_actwk) {
+  patchg(p_actwk, savechg);
+  frameoutchk(p_actwk);
+}
+
+
+static void savemove3(sprite_status* p_actwk) {
+  --SPRITE_STATUS_SHORT(p_actwk, 54);
+  if (SPRITE_STATUS_SHORT(p_actwk, 54) < 0) {
+    sprite_status* p_sub_actwk = &actwk[SPRITE_STATUS_USHORT(p_actwk, 62)];
+    if (p_sub_actwk->r_ptr == &save) {
+      p_sub_actwk->mstno = 2;
+      p_sub_actwk->patno = 0;
+    }
+    frameout(p_actwk);
+  }
+  else {
+    p_actwk->direc1 -= 16;
+    short sin, cos;
+    sinset(util__to_unsigned(p_actwk->direc1 - 64), &sin, &cos);
+    long cos_l = cos * 3072;
+    cos_l = LONG_LOW(cos_l) + SPRITE_STATUS_SHORT(p_actwk, 48);
+    p_actwk->xposi = SHORT_TO_LONG_HIGH(LONG_LOW(cos_l)) + LONG_LOW(p_actwk->xposi);
+    long sin_l = sin * 3072;
+    sin_l = LONG_LOW(sin_l) + SPRITE_STATUS_SHORT(p_actwk, 50);
+    p_actwk->yposi = SHORT_TO_LONG_HIGH(LONG_LOW(sin_l)) + LONG_LOW(p_actwk->yposi);
+    frameoutchk(p_actwk);
+  }
+}
+
+
+static signed char* savechg[3] = {
+  savechg0,
+  savechg1,
+  savechg2
+};
+
+
+static signed char savechg0[3] = { 15, 0, -1 };
+static signed char savechg1[3] = { 15, 1, -1 };
+static signed char savechg2[4] = { 3, 0, 4, -1 };
 
 
 signed char* savepat[5] = {

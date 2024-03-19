@@ -1,6 +1,7 @@
 #include <string.h>
 #include "globals.h"
 #include "macros.h"
+#include "util.h"
 #include "004xxxxx.h"
 
 
@@ -71,6 +72,76 @@ void actionsub(sprite_status* p_actwk) {
 }
 
 
+// SONIC3K.EXE address: 0041ebc7
+// skdisasm label: Animate_Sprite
+void patchg(sprite_status* p_actwk, signed char** p_chg_data) {
+  if (p_actwk->mstno != p_actwk->restart) {
+    p_actwk->restart = p_actwk->mstno;
+    p_actwk->patcnt = 0;
+    p_actwk->pattim = 0;
+  }
+  --p_actwk->pattim;
+  if (p_actwk->pattim > 0) return;
+  signed char* p_sp_data = p_chg_data[p_actwk->mstno];
+  p_actwk->pattim = p_sp_data[0];
+  signed char sp = p_sp_data[p_actwk->patcnt + 1];
+  if (sp >= 0) {
+LAB_0041eca2:
+    p_actwk->patno = sp;
+    p_actwk->actflg &= 0xFC;
+    p_actwk->actflg |= p_actwk->cddat1 & 3;
+    ++p_actwk->patcnt;
+    return;
+  }
+  ++sp;
+  if (sp == 0) {
+    p_actwk->patcnt = 0;
+    sp = p_sp_data[1];
+    goto LAB_0041eca2;
+  }
+  ++sp;
+  if (sp == 0) {
+    sp = p_sp_data[p_actwk->patcnt + 2];
+    p_actwk->patcnt -= sp;
+    sp = p_sp_data[p_actwk->patcnt - sp + 1];
+    goto LAB_0041eca2;
+  }
+  ++sp;
+  if (sp == 0) {
+    p_actwk->mstno = p_sp_data[p_actwk->patcnt + 2];
+    return;
+  }
+  ++sp;
+  if (sp == 0) {
+    p_actwk->r_no += 2;
+    p_actwk->pattim = 0;
+    ++p_actwk->patcnt;
+    return;
+  }
+  ++sp;
+  if (sp == 0) {
+    p_actwk->xposi = SHORT_TO_LONG_HIGH(32512) + LONG_LOW(p_actwk->xposi);
+  }
+}
+
+
+// SONIC3K.EXE address: 00421b44
+// skdisasm label: Sprite_OnScreen_Test
+void frameoutchk(sprite_status* p_actwk) {
+  unsigned short scr_xposi = util__to_unsigned(LONG_HIGH_TO_SHORT(p_actwk->xposi)) & 0xFF80;
+  scr_xposi -= scr_x_no;
+  if (scr_xposi <= 640) {
+    actionsub(p_actwk);
+  }
+  else {
+    if (SPRITE_STATUS_USHORT(p_actwk, 72) != 0) {
+      CLEAR_BIT_7(flagwork[SPRITE_STATUS_USHORT(p_actwk, 72) - 1]);
+    }
+    frameout(p_actwk);
+  }
+}
+
+
 // SONIC3K.EXE address: 00422b67
 // skdisasm label: HurtCharacter
 void playdamageset(sprite_status* p_playerwk, sprite_status* p_attack_actwk) {
@@ -125,6 +196,41 @@ unsigned long random() {
   d1 = util__rotate(d1);
   ranum = d1;
   return d0;
+}
+
+
+short sintable[320] = {
+     0,    6,   12,   18,   25,   31,   37,   43,   49,   56,   62,   68,   74,   80,   86,   92,
+    97,  103,  109,  115,  120,  126,  131,  136,  142,  147,  152,  157,  162,  167,  171,  176,
+   181,  185,  189,  193,  197,  201,  205,  209,  212,  216,  219,  222,  225,  228,  231,  234,
+   236,  238,  241,  243,  244,  246,  248,  249,  251,  252,  253,  254,  254,  255,  255,  255,
+   256,  255,  255,  255,  254,  254,  253,  252,  251,  249,  248,  246,  244,  243,  241,  238,
+   236,  234,  231,  228,  225,  222,  219,  216,  212,  209,  205,  201,  197,  193,  189,  185,
+   181,  176,  171,  167,  162,  157,  152,  147,  142,  136,  131,  126,  120,  115,  109,  103,
+    97,   92,   86,   80,   74,   68,   62,   56,   49,   43,   37,   31,   25,   18,   12,    6,
+     0,   -6,  -12,  -18,  -25,  -31,  -37,  -43,  -49,  -56,  -62,  -68,  -74,  -80,  -86,  -92,
+   -97, -103, -109, -117, -120, -126, -131, -136, -142, -147, -152, -157, -162, -167, -171, -176,
+  -181, -185, -189, -193, -197, -201, -205, -209, -212, -216, -219, -222, -225, -228, -231, -234,
+  -236, -238, -241, -243, -244, -246, -248, -249, -251, -252, -253, -254, -254, -255, -255, -255,
+  -256, -255, -255, -255, -254, -254, -253, -252, -251, -249, -248, -246, -244, -243, -241, -238,
+  -236, -234, -231, -228, -225, -222, -219, -216, -212, -209, -205, -201, -197, -193, -189, -185,
+  -181, -176, -171, -167, -162, -157, -152, -147, -142, -136, -131, -126, -120, -117, -109, -103,
+   -97,  -92,  -86,  -80,  -74,  -68,  -62,  -56,  -49,  -43,  -37,  -31,  -25,  -18,  -12,   -6,
+     0,    6,   12,   18,   25,   31,   37,   43,   49,   56,   62,   68,   74,   80,   86,   92,
+    97,  103,  109,  115,  120,  126,  131,  136,  142,  147,  152,  157,  162,  167,  171,  176,
+   181,  185,  189,  193,  197,  201,  205,  209,  212,  216,  219,  222,  225,  228,  231,  234,
+   236,  238,  241,  243,  244,  246,  248,  249,  251,  252,  253,  254,  254,  255,  255,  255
+};
+
+
+// SONIC3K.EXE address: 00426fde
+// skdisasm label: GetSineCosine
+void sinset(unsigned char angle, short* sin, short* cos) {
+  unsigned short angle_w = angle * 2;
+  angle_w += 128;
+  *cos = sintable[angle_w];
+  angle_w -= 128;
+  *sin = sintable[angle_w];
 }
 
 
