@@ -10,6 +10,7 @@ static void savemove__sub(sprite_status* p_actwk, sprite_status* p_playerwk);
 static void savemove2(sprite_status* pActwk);
 static void savemove3(sprite_status* p_actwk);
 static void playsave(sprite_status* p_actwk);
+static void playload2(sprite_status* p_actwk);
 static signed char* savechg[3];
 static signed char savechg0[3];
 static signed char savechg1[3];
@@ -180,6 +181,64 @@ void playsave2(sprite_status* p_actwk) {
   waterposi_s2 = waterposi;
   waterflag_s2 = waterflag;
   plcddat2_s2 = actwk[0].cddat2;
+}
+
+
+void playload(sprite_status* p_actwk) {
+  if (marker_flag != 0) {
+    playload2(p_actwk);
+    return;
+  }
+  markerno = markerno_s;
+  stageno = stageno_s;
+  stageno_i = stageno_is;
+  actwk[0].xposi = SHORT_TO_LONG_HIGH(plxposi_s) + LONG_LOW(actwk[0].xposi);
+  actwk[0].yposi = SHORT_TO_LONG_HIGH(plyposi_s) + LONG_LOW(actwk[0].yposi);
+  plring = plring_s;
+  plring_f2 = plring_f2_s;
+  if (plresetflag == 0) {
+    plring = 0;
+    plring_f2 = 0;
+  }
+  pltime = pltime_s;
+  pltime = 59 << 24 | pltime & 0x00FFFFFF;
+  pltime = (pltime & 0x00FF0000) - (1 << 16) | pltime & 0xFF00FFFF;
+  actwk[0].sproffset = plsproffset_s;
+  SPRITE_STATUS_USHORT(&actwk[0], 70) = coli_mode_s;
+  scr_resize_no = scr_resize_no_s;
+  scralim_down = scralim_down_s;
+  scralim_n_down = scralim_down_s;
+  scra_h_posit = SHORT_TO_LONG_HIGH(scra_h_posit_s) + LONG_LOW(scra_v_posit);
+  scra_v_posit = SHORT_TO_LONG_HIGH(scra_v_posit_s) + LONG_LOW(scra_h_posit);
+  if (watermode != 0) {
+    waterposi = waterposi_s;
+    waterflag = waterflag_s;
+  }
+}
+
+
+static void playload2(sprite_status* p_actwk) {
+  marker_flag = 0;
+  stageno = stageno_s2;
+  stageno_i = stageno_is2;
+  actwk[0].xposi = SHORT_TO_LONG_HIGH(plxposi_s2) + LONG_LOW(actwk[0].xposi);
+  actwk[0].yposi = SHORT_TO_LONG_HIGH(plyposi_s2) + LONG_LOW(actwk[0].yposi);
+  plring = plring_s2;
+  plring_f2 = plring_f2_s2;
+  pltime = pltime_s2;
+  pltime = 59 << 24 | pltime & 0x00FFFFFF;
+  pltime = (pltime & 0x00FF0000) - (1 << 16) | pltime & 0xFF00FFFF;
+  actwk[0].sproffset = plsproffset_s2;
+  SPRITE_STATUS_USHORT(&actwk[0], 70) = coli_mode_s2;
+  scr_resize_no = scr_resize_no_s2;
+  scralim_down = scralim_down_s2;
+  scralim_n_down = scralim_down_s2;
+  scra_h_posit = SHORT_TO_LONG_HIGH(scra_h_posit_s2) + LONG_LOW(scra_v_posit);
+  scra_v_posit = SHORT_TO_LONG_HIGH(scra_v_posit_s2) + LONG_LOW(scra_h_posit);
+  if (watermode != 0) {
+    waterposi = waterposi_s2;
+    waterflag = waterflag_s2;
+  }
 }
 
 
