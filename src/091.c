@@ -136,9 +136,8 @@ bool chk_pl_attack(sprite_status* p_actwk, sprite_status* p_playerwk) {
   if (BIT_1_IS_SET(p_playerwk->cddat2)) return true;
   if (p_playerwk->mstno == 9) return true;
   if (p_playerwk->mstno == 2) return true;
-  character_id character = SPRITE_STATUS_UCHAR(p_playerwk, 56);
 
-  switch (character) {
+  switch (p_playerwk->actfree.player.character) {
     case SONIC:
       break;
     case MILES: {

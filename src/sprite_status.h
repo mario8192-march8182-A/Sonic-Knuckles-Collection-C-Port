@@ -1,6 +1,8 @@
 #ifndef SPRITE_STATUS_H
 #define SPRITE_STATUS_H
 
+#include "constants.h"
+
 typedef struct sprite_status sprite_status;
 typedef void(*sprite_status_handler)(sprite_status*);
 
@@ -64,7 +66,34 @@ typedef struct sprite_status {
   // 0x2D
   unsigned char userflag2;
   // 0x2E
-  unsigned char actfree[28];
+  union {
+    unsigned char generic[28];
+    struct {
+      unsigned char reserved1[6];
+      unsigned char invulnerability_timer;
+      unsigned char reserved2[3];
+      character_id character;
+      unsigned char reserved3[17];
+    } player;
+    struct {
+      short attack_countdown;
+      signed char* pg_data_ptr;
+      sprite_status_handler callback_ptr;
+      unsigned char puka_axis_dir;
+      unsigned char reserved1;
+      unsigned char reserved2[4];
+      short accel_max;
+      short accel;
+      unsigned char darkness_level;
+      unsigned char sequence_no;
+      unsigned char reserved3[6];
+    } gost08;
+    struct {
+      unsigned char reserved1[12];
+      short ghost_countdown;
+      unsigned char reserved2[14];
+    } gost08_ctr;
+  } actfree;
 }
 sprite_status;
 
