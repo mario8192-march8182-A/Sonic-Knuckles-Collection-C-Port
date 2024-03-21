@@ -25,6 +25,13 @@ void Load_PLC_Raw(sprite_status* p_actwk, cg_data* p_data) {
 }
 
 
+// SONIC3K.EXE address: 004114aa
+// skdisasm label: Queue_Kos_Module
+void Queue_Kos_Module(void* p_data, unsigned short act_id) {
+  // TODO
+}
+
+
 // SONIC3K.EXE address: 0041a490
 // skdisasm label: LoadEnemyArt
 void LoadEnemyArt() {

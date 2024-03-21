@@ -6,6 +6,7 @@
 void PlaySoundRegister(long id);
 void Copy_Data_To_VRAM(unsigned char* source, unsigned short destination, unsigned short words);
 void Load_PLC_Raw(sprite_status* p_actwk, cg_data* p_data);
+void Queue_Kos_Module(void* p_data, unsigned short act_id);
 void LoadEnemyArt();
 void soundset(long id);
 void speedset2(sprite_status* p_actwk);

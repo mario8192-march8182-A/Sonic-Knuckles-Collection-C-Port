@@ -67,6 +67,7 @@ extern unsigned char plcddat2_s2;
 extern unsigned char plresetflag;
 extern unsigned short stageno_is;
 extern unsigned short stageno_is2;
+extern unsigned short cartridge;
 extern unsigned short vs_flag;
 
 #endif

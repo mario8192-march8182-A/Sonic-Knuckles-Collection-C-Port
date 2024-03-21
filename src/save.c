@@ -20,6 +20,10 @@ static signed char savesp01[20];
 static signed char savesp02[8];
 static signed char savesp03[8];
 static signed char savesp04[26];
+static signed char* starpat[3];
+static signed char starsp00[8];
+static signed char starsp01[8];
+static signed char starsp02[8];
 
 
 void save(sprite_status* p_actwk) {
@@ -268,3 +272,66 @@ static signed char savesp01[20] = { 0, 3, -24, 1, 14, 0, -4, -1, -8, 3, 16, 0, -
 static signed char savesp02[8] = { 0, 1, -8, 5, 6, 0, -8, -1 };
 static signed char savesp03[8] = { 0, 1, -8, 5, 10, 0, -8, -1 };
 static signed char savesp04[26] = { 0, 4, -24, 1, 14, 0, -4, -1, -8, 3, 16, 0, -8, -1, -8, 3, 16, 8, 0, 0, -40, 5, 10, 0, -8, -1 };
+
+
+static signed char* starpat[3] = {
+  starsp00,
+  starsp01,
+  starsp02
+};
+
+
+static signed char starsp00[8] = { 0, 1, -8, 5, 0, 0, -8, -1 };
+static signed char starsp01[8] = { 0, 1, -4, 0, 4, 0, -4, -1 };
+static signed char starsp02[8] = { 0, 1, -4, 0, 5, 0, -4, -1 };
+
+
+void o_starinit(sprite_status* p_actwk) {
+  sprite_status* p_new_actwk;
+  short cnt = 3;
+  short unknown = 0;
+
+  do {
+    bool created = Create_New_Sprite(&p_new_actwk);
+    if (!created) break;
+    p_new_actwk->r_ptr = p_actwk->r_ptr;
+    p_new_actwk->patbase = starpat;
+    p_new_actwk->sproffset = 1516;
+    p_new_actwk->actflg = 4;
+    p_new_actwk->r_no = 8;
+    short xposi = LONG_HIGH_TO_SHORT(p_actwk->xposi);
+    p_new_actwk->xposi = SHORT_TO_LONG_HIGH(xposi) + LONG_LOW(p_new_actwk->xposi);
+    SPRITE_STATUS_SHORT(p_new_actwk, 48) = xposi;
+    short yposi = LONG_HIGH_TO_SHORT(p_actwk->yposi) - 48;
+    p_new_actwk->yposi = SHORT_TO_LONG_HIGH(yposi) + LONG_LOW(p_new_actwk->yposi);
+    SPRITE_STATUS_SHORT(p_new_actwk, 50) = yposi;
+    p_new_actwk->sprpri = p_actwk->sprpri;
+    p_new_actwk->sprhs = 8;
+    p_new_actwk->patno = 1;
+    p_new_actwk->xspeed = -1024;
+    p_new_actwk->yspeed = 0;
+    SPRITE_STATUS_USHORT(p_new_actwk, 52) = unknown;
+    unknown += 64;
+    --cnt;
+  } while (cnt != -1);
+
+  if (Sonic_3_alone) goto sonic3;
+  void* p_data = &orange_star_ring_tiles;
+  short bonus_stage_id = plring - 20;
+  bonus_stage_id /= 15;
+  unsigned char bonus_stage_cnt = 2;
+  if (cartridge == 0) {
+    bonus_stage_cnt = 3;
+  }
+  bonus_stage_id %= bonus_stage_cnt;
+  if (bonus_stage_id == 0) goto ring0;
+  p_data = &red_star_ring_tiles;
+  if (bonus_stage_id == 1) goto ring0;
+  if (cartridge != 0) goto ring0;
+
+sonic3:
+  p_data = &white_star_ring_tiles;
+
+ring0:
+  Queue_Kos_Module(p_data, 46);
+}

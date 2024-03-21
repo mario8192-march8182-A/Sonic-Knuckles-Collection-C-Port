@@ -63,4 +63,5 @@ unsigned char plcddat2_s2;
 unsigned char plresetflag;
 unsigned short stageno_is;
 unsigned short stageno_is2;
+unsigned short cartridge;
 unsigned short vs_flag;
