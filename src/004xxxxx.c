@@ -142,6 +142,24 @@ void frameoutchk(sprite_status* p_actwk) {
 }
 
 
+// SONIC3K.EXE address: 00421e38
+// skdisasm label: Sprite_CheckDeleteTouch3
+void frameoutchkc(sprite_status* p_actwk, short xposi) {
+  unsigned short scr_xposi = util__to_unsigned(LONG_HIGH_TO_SHORT(p_actwk->xposi)) & 0xFF80;
+  scr_xposi -= scr_x_no;
+  if (scr_xposi <= 640) {
+    Add_Object_To_Collision_Response_List(p_actwk);
+    actionsub(p_actwk);
+  }
+  else {
+    if (SPRITE_STATUS_USHORT(p_actwk, 72) != 0) {
+      CLEAR_BIT_7(flagwork[SPRITE_STATUS_USHORT(p_actwk, 72) - 1]);
+    }
+    frameout(p_actwk);
+  }
+}
+
+
 // SONIC3K.EXE address: 00422b67
 // skdisasm label: HurtCharacter
 void playdamageset(sprite_status* p_playerwk, sprite_status* p_attack_actwk) {
@@ -276,4 +294,35 @@ bool Create_New_Sprite_Int(sprite_status** pp_new_actwk, short slot_cnt) {
   }
 
   return false;
+}
+
+
+// SONIC3K.EXE address: 0042b998
+// skdisasm label: Clear_SpriteRingMem
+void Clear_SpriteRingMem() {
+  sprite_status* p_actwk = &actwk[ACTWK_DYNAMIC_START];
+  short cnt = ACTWK_RESERVED_START - ACTWK_DYNAMIC_START - 1;
+
+  do {
+    ++p_actwk;
+    if (p_actwk->r_ptr != 0) {
+      if (SPRITE_STATUS_USHORT(p_actwk, 72) != 0) {
+        CLEAR_BIT_7(flagwork[SPRITE_STATUS_USHORT(p_actwk, 72) - 1]);
+      }
+    }
+    --cnt;
+  } while (cnt != -1);
+
+  cnt = ringbuffer[0] - 1;
+  if (cnt < 1) return;
+
+  unsigned short* p_ringbuffer = &ringbuffer[1];
+  do {
+    unsigned short ringwk_id = *p_ringbuffer++;
+    if (ringwk_id == 0) continue;
+    ringwk[ringwk_id - 1] = -1;
+    *(p_ringbuffer - 1) = 0;
+    --ringbuffer[0];
+    --cnt;
+  } while (cnt != -1);
 }

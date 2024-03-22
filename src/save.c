@@ -335,3 +335,120 @@ sonic3:
 ring0:
   Queue_Kos_Module(p_data, 46);
 }
+
+
+void o_star(sprite_status* p_actwk) {
+  if (p_actwk->colicnt != 0) {
+    if (p_actwk->colicnt & 1) {
+      marker_flag = 2;
+      if (Sonic_3_alone) {
+        stageno = STAGENO_GUMBALL_MACHINE;
+        stageno_i = STAGENO_GUMBALL_MACHINE;
+        markerno = 0;
+        gameflag = 1;
+        plcddat2_s2 = actwk[0].cddat2;
+        plresetflag = 1;
+        Clear_SpriteRingMem();
+      }
+      else {
+        unsigned short bonus_stage_no = STAGENO_ROLLING_JUMP;
+        short bonus_stage_id = plring_s - 20;
+        bonus_stage_id /= 15;
+        unsigned char bonus_stage_cnt = 2;
+        if (cartridge == 0) {;
+          bonus_stage_cnt = 3;
+        }
+        bonus_stage_id %= bonus_stage_cnt;
+        if (bonus_stage_id != 0) {
+          bonus_stage_no = STAGENO_SLOT_MACHINE;
+          if (bonus_stage_id != 1) {
+            if (cartridge == 0) {
+              bonus_stage_no = STAGENO_GUMBALL_MACHINE;
+            }
+          }
+        }
+        stageno = bonus_stage_no;
+        stageno_i = bonus_stage_no;
+        plring_s = plring;
+        plring_f2_s = plring_f2;
+        markerno = 0;
+        gameflag = 1;
+        unsigned char cddat2 = actwk[0].cddat2 & 113;
+        plcddat2_s2 = cddat2;
+        plcddat2_s = cddat2;
+        plresetflag = 1;
+        Clear_SpriteRingMem();
+      }
+    }
+    p_actwk->colicnt = 0;
+  }
+  SPRITE_STATUS_USHORT(p_actwk, 52) += 10;
+  short sin, cos;
+  sinset(SPRITE_STATUS_USHORT(p_actwk, 52) & 0xFF, &sin, &cos);
+  sin /= 32;
+  cos /= 8;
+  short cos_tmp = cos;
+  short unknown1 = (SPRITE_STATUS_USHORT(p_actwk, 52) & 0x3E0) / 32;
+  short cnt = 2;
+  short sin_add = 0;
+  if (unknown1 > 16) {
+    cos_tmp = -cos_tmp;
+    unknown1 &= 0xF;
+  }
+  if (unknown1 > 8) {
+    unknown1 = -unknown1;
+    unknown1 %= 8;
+  }
+
+  do {
+    unknown1 /= 2;
+    if (unknown1 != 0) {
+      sin_add += cos_tmp;
+    }
+    cos_tmp *= 2;
+    --cnt;
+  }
+  while (cnt != -1);
+
+  sin_add /= 16;
+  sin += sin_add;
+  ++SPRITE_STATUS_SHORT(p_actwk, 54);
+  short unknown2 = SPRITE_STATUS_SHORT(p_actwk, 54);
+  if (unknown2 == 128) goto ostar03;
+  else if (unknown2 > 128) goto ostar04;
+
+  do {
+    sin = unknown2 * sin;
+    cos = unknown2 * cos;
+    sin /= 128;
+    cos /= 128;
+    break;
+
+ostar03:
+    p_actwk->colino = 216;
+
+ostar04:
+    if (unknown2 <= 384) break;
+    unknown2 = -unknown2;
+    unknown2 += 512;
+    if (unknown2 < 0) goto ostarend;
+  } while (1);
+
+  short xposi = SPRITE_STATUS_SHORT(p_actwk, 48);
+  xposi += cos;
+  p_actwk->xposi = SHORT_TO_LONG_HIGH(xposi) + LONG_LOW(p_actwk->xposi);
+  short yposi = SPRITE_STATUS_SHORT(p_actwk, 50);
+  yposi += sin;
+  p_actwk->yposi = SHORT_TO_LONG_HIGH(yposi) + LONG_LOW(p_actwk->yposi);
+  ++p_actwk->patcnt;
+  unsigned char patno = (p_actwk->patcnt & 6) / 2;
+  if (patno == 3) {
+    patno = 1;
+  }
+  p_actwk->patno = patno;
+  frameoutchkc(p_actwk, LONG_HIGH_TO_SHORT(p_actwk->xposi));
+  return;
+
+ostarend:
+  frameout(p_actwk);
+}

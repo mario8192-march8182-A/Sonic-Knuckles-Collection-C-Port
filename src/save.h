@@ -9,5 +9,6 @@ void playsave2(sprite_status* p_actwk);
 void playload(sprite_status* p_actwk);
 signed char* savepat[5];
 void o_starinit(sprite_status* p_actwk);
+void o_star(sprite_status* p_actwk);
 
 #endif

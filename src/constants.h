@@ -26,7 +26,11 @@ character_id;
 #define COLBUFFER_SLOT_SIZE 2
 #define COLBUFFER_MAX_SIZE 126
 
+#define RINGWK_SLOTS 512
+
 #define FLAGWORK_SLOTS 768
+
+#define RINGBUFFER_SLOTS 64
 
 #define EMY_WRT_FLG_SLOTS 8
 
@@ -40,5 +44,9 @@ character_id;
 #define PS_CONTROL_NEXT -3
 #define PS_CONTROL_ROUTINE -4
 #define PS_CONTROL_FOUT -5
+
+#define STAGENO_GUMBALL_MACHINE 0x1300
+#define STAGENO_SLOT_MACHINE 0x1400
+#define STAGENO_ROLLING_JUMP 0x1500
 
 #endif
