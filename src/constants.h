@@ -35,4 +35,10 @@ character_id;
 #define PG_CONTROL_NEXT 8
 #define PG_CONTROL_END 12
 
+#define PS_CONTROL_LOOP -1
+#define PS_CONTROL_REWIND -2
+#define PS_CONTROL_NEXT -3
+#define PS_CONTROL_ROUTINE -4
+#define PS_CONTROL_FOUT -5
+
 #endif

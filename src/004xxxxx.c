@@ -92,43 +92,36 @@ void patchg(sprite_status* p_actwk, signed char** p_chg_data) {
   signed char* p_sp_data = p_chg_data[p_actwk->mstno];
   p_actwk->pattim = p_sp_data[0];
   signed char sp = p_sp_data[p_actwk->patcnt + 1];
-  if (sp >= 0) {
-LAB_0041eca2:
-    p_actwk->patno = sp;
-    p_actwk->actflg &= 0xFC;
-    p_actwk->actflg |= p_actwk->cddat1 & 3;
-    ++p_actwk->patcnt;
-    return;
+  if (sp < 0) {
+    switch (sp) {
+      case PS_CONTROL_LOOP:
+        p_actwk->patcnt = 0;
+        sp = p_sp_data[1];
+        break;
+      case PS_CONTROL_REWIND:
+        sp = p_sp_data[p_actwk->patcnt + 2];
+        p_actwk->patcnt -= sp;
+        sp = p_sp_data[p_actwk->patcnt - sp + 1];
+        break;
+      case PS_CONTROL_NEXT:
+        p_actwk->mstno = p_sp_data[p_actwk->patcnt + 2];
+        return;
+      case PS_CONTROL_ROUTINE:
+        p_actwk->r_no += 2;
+        p_actwk->pattim = 0;
+        ++p_actwk->patcnt;
+        return;
+      case PS_CONTROL_FOUT:
+        p_actwk->xposi = SHORT_TO_LONG_HIGH(32512) + LONG_LOW(p_actwk->xposi);
+        return;
+      default:
+        return;
+    }
   }
-  ++sp;
-  if (sp == 0) {
-    p_actwk->patcnt = 0;
-    sp = p_sp_data[1];
-    goto LAB_0041eca2;
-  }
-  ++sp;
-  if (sp == 0) {
-    sp = p_sp_data[p_actwk->patcnt + 2];
-    p_actwk->patcnt -= sp;
-    sp = p_sp_data[p_actwk->patcnt - sp + 1];
-    goto LAB_0041eca2;
-  }
-  ++sp;
-  if (sp == 0) {
-    p_actwk->mstno = p_sp_data[p_actwk->patcnt + 2];
-    return;
-  }
-  ++sp;
-  if (sp == 0) {
-    p_actwk->r_no += 2;
-    p_actwk->pattim = 0;
-    ++p_actwk->patcnt;
-    return;
-  }
-  ++sp;
-  if (sp == 0) {
-    p_actwk->xposi = SHORT_TO_LONG_HIGH(32512) + LONG_LOW(p_actwk->xposi);
-  }
+  p_actwk->patno = sp;
+  p_actwk->actflg &= 0xFC;
+  p_actwk->actflg |= p_actwk->cddat1 & 3;
+  ++p_actwk->patcnt;
 }
 
 
