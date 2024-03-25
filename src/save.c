@@ -315,24 +315,30 @@ void o_starinit(sprite_status* p_actwk) {
     --cnt;
   } while (cnt != -1);
 
-  if (Sonic_3_alone) goto sonic3;
-  void* p_data = &orange_star_ring_tiles;
-  short bonus_stage_id = plring - 20;
-  bonus_stage_id /= 15;
-  unsigned char bonus_stage_cnt = 2;
-  if (cartridge == 0) {
-    bonus_stage_cnt = 3;
+  void* p_data = &white_star_ring_tiles;
+  if (!Sonic_3_alone) {
+    p_data = &orange_star_ring_tiles;
+    short bonus_stage_id = plring - 20;
+    bonus_stage_id /= 15;
+    unsigned char bonus_stage_cnt = 2;
+    if (cartridge == 0) {
+      bonus_stage_cnt = 3;
+    }
+    bonus_stage_id %= bonus_stage_cnt;
+
+    switch (bonus_stage_id) {
+      case BONUS_STAGE_ROLLING_JUMP:
+        p_data = &orange_star_ring_tiles;
+        break;
+      case BONUS_STAGE_SLOT_MACHINE:
+        p_data = &red_star_ring_tiles;
+        break;
+      case BONUS_STAGE_GUMBALL_MACHINE:
+        p_data = &white_star_ring_tiles;
+        break;
+    }
   }
-  bonus_stage_id %= bonus_stage_cnt;
-  if (bonus_stage_id == 0) goto ring0;
-  p_data = &red_star_ring_tiles;
-  if (bonus_stage_id == 1) goto ring0;
-  if (cartridge != 0) goto ring0;
 
-sonic3:
-  p_data = &white_star_ring_tiles;
-
-ring0:
   Queue_Kos_Module(p_data, 46);
 }
 
@@ -359,14 +365,19 @@ void o_star(sprite_status* p_actwk) {
           bonus_stage_cnt = 3;
         }
         bonus_stage_id %= bonus_stage_cnt;
-        if (bonus_stage_id != 0) {
-          bonus_stage_no = STAGENO_SLOT_MACHINE;
-          if (bonus_stage_id != 1) {
-            if (cartridge == 0) {
-              bonus_stage_no = STAGENO_GUMBALL_MACHINE;
-            }
-          }
+
+        switch (bonus_stage_id) {
+          case BONUS_STAGE_ROLLING_JUMP:
+            bonus_stage_no = STAGENO_ROLLING_JUMP;
+            break;
+          case BONUS_STAGE_SLOT_MACHINE:
+            bonus_stage_no = STAGENO_SLOT_MACHINE;
+            break;
+          case BONUS_STAGE_GUMBALL_MACHINE:
+            bonus_stage_no = STAGENO_GUMBALL_MACHINE;
+            break;
         }
+
         stageno = bonus_stage_no;
         stageno_i = bonus_stage_no;
         plring_s = plring;

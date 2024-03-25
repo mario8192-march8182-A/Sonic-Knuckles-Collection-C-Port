@@ -8,6 +8,13 @@ typedef enum character_id {
 }
 character_id;
 
+typedef enum bonus_stage_id {
+  BONUS_STAGE_ROLLING_JUMP = 0,
+  BONUS_STAGE_SLOT_MACHINE = 1,
+  BONUS_STAGE_GUMBALL_MACHINE = 2
+}
+bonus_stage_id;
+
 #define SPEEDUPTIMER 54
 #define FOOTDIR 58
 #define KO_ADR 68
