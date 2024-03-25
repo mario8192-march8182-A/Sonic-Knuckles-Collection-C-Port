@@ -3,6 +3,7 @@
 #include "macros.h"
 #include "util.h"
 #include "004xxxxx.h"
+#include "ring.h"
 
 
 // SONIC3K.EXE address: 0040a98e
@@ -39,6 +40,13 @@ void LoadEnemyArt() {
 }
 
 
+// SONIC3K.EXE address: 0041a81b
+// skdisasm label: Play_Music
+void bgmset(long id) {
+  // TODO
+}
+
+
 // SONIC3K.EXE address: 0041a82d
 // skdisasm label: Play_SFX
 void soundset(long id) {
@@ -51,6 +59,19 @@ void soundset(long id) {
 void speedset2(sprite_status* p_actwk) {
   p_actwk->xposi += p_actwk->xspeed * 256;
   p_actwk->yposi += p_actwk->yspeed * 256;
+}
+
+
+// SONIC3K.EXE address: 0041ea30
+// skdisasm label: MoveSprite_TestGravity2
+void speedset2g(sprite_status* p_actwk) {
+  if (reverse_gravity_flag == 0) {
+    speedset2(p_actwk);
+  }
+  else {
+    p_actwk->xposi += p_actwk->xspeed * 256;
+    p_actwk->yposi += -p_actwk->yspeed * 256;
+  }
 }
 
 
@@ -325,4 +346,18 @@ void Clear_SpriteRingMem() {
     --ringbuffer[0];
     --cnt;
   } while (cnt != -1);
+}
+
+
+// SONIC3K.EXE address: 004511b2
+// skdisasm label: RingCheckFloorDist
+short RingCheckFloorDist(sprite_status* p_actwk) {
+  // TODO
+}
+
+
+// SONIC3K.EXE address: 00451c46
+// skdisasm label: RingCheckFloorDist_ReverseGravity
+short RingCheckFloorDist_ReverseGravity(sprite_status* p_actwk) {
+  // TODO
 }

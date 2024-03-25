@@ -8,8 +8,10 @@ void Copy_Data_To_VRAM(unsigned char* source, unsigned short destination, unsign
 void Load_PLC_Raw(sprite_status* p_actwk, cg_data* p_data);
 void Queue_Kos_Module(void* p_data, unsigned short act_id);
 void LoadEnemyArt();
+void bgmset(long id);
 void soundset(long id);
 void speedset2(sprite_status* p_actwk);
+void speedset2g(sprite_status* p_actwk);
 void frameout(sprite_status* p_actwk);
 void actionsub(sprite_status* p_actwk);
 void patchg(sprite_status* p_actwk, signed char** p_chg_data);
@@ -23,5 +25,7 @@ bool Create_New_Sprite(sprite_status** pp_new_actwk);
 bool Create_New_Sprite3(sprite_status* p_actwk, sprite_status** pp_new_actwk);
 bool Create_New_Sprite_Int(sprite_status** pp_new_actwk, short slot_cnt);
 void Clear_SpriteRingMem();
+short RingCheckFloorDist(sprite_status* p_actwk);
+short RingCheckFloorDist_ReverseGravity(sprite_status* p_actwk);
 
 #endif

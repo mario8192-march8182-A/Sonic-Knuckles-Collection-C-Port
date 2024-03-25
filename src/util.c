@@ -8,6 +8,20 @@ unsigned long util__rotate(unsigned long value) {
 }
 
 
+char util__to_signed(unsigned char value) {
+  char result = 0;
+
+  if (value <= SCHAR_MAX) {
+    result = value;
+  }
+  else {
+    result = -(char)(UCHAR_MAX - value) - 1;
+  }
+
+  return result;
+}
+
+
 unsigned char util__to_unsigned(signed char value) {
   unsigned char result = 0;
 
