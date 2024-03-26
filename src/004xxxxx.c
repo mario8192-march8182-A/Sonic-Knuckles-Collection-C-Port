@@ -183,27 +183,80 @@ void frameoutchkc(sprite_status* p_actwk, short xposi) {
 
 // SONIC3K.EXE address: 00422b67
 // skdisasm label: HurtCharacter
-void playdamageset(sprite_status* p_playerwk, sprite_status* p_attack_actwk) {
+bool playdamageset(sprite_status* p_playerwk, sprite_status* p_attack_actwk) {
   short ring_cnt = plring;
   if (p_playerwk != &actwk[0]) {
-    if (vs_flag == 0) goto LAB_00422c37;
+    if (vs_flag == 0) goto jump0;
     ring_cnt = pl2ring;
   }
-  if (BIT_0_IS_SET(p_playerwk->cddat2)) goto LAB_00422c23;
-  if (DAT_00831194 != 0) goto LAB_00422c23;
-  if (SPRITE_STATUS_SCHAR(p_playerwk, 55) < 0) goto LAB_00422c37;
-  if (ring_cnt == 0) goto LAB_00422d50;
-  sprite_status* p_new_actwk;
-  bool created = Create_New_Sprite(&p_new_actwk);
-  if (!created) goto LAB_00422c23;
-  p_new_actwk->r_ptr = &flyring;
-  p_new_actwk->xposi = LONG_HIGH(p_playerwk->xposi) + LONG_LOW(p_new_actwk->xposi);
-  p_new_actwk->yposi = LONG_HIGH(p_playerwk->yposi) + LONG_LOW(p_new_actwk->yposi);
-  SPRITE_STATUS_USHORT(p_new_actwk, 62) = p_playerwk - actwk;
-LAB_00422c23:
+  if (!BIT_0_IS_SET(p_playerwk->cddat2)) {
+    if (!INI_DebugMode) {
+      if (SPRITE_STATUS_SCHAR(p_playerwk, 55) < 0) goto jump0;
+      if (ring_cnt == 0) goto die;
+      sprite_status* p_new_actwk;
+      bool created = Create_New_Sprite(&p_new_actwk);
+      if (created) {
+        p_new_actwk->r_ptr = &flyring;
+        p_new_actwk->xposi = LONG_HIGH(p_playerwk->xposi) + LONG_LOW(p_new_actwk->xposi);
+        p_new_actwk->yposi = LONG_HIGH(p_playerwk->yposi) + LONG_LOW(p_new_actwk->yposi);
+        SPRITE_STATUS_USHORT(p_new_actwk, 62) = p_playerwk - actwk;
+      }
+    }
+  }
   p_playerwk->cddat2 &= 0x8E;
-LAB_00422c37:
-  // TODO
+
+jump0:
+  p_playerwk->r_no = 4;
+  Player_TouchFloor(p_playerwk);
+  SET_BIT_1(p_playerwk->cddat1);
+  p_playerwk->yspeed = -1024;
+  p_playerwk->xspeed = -512;
+  if (BIT_6_IS_SET(p_playerwk->cddat1)) {
+    p_playerwk->yspeed = -512;
+    p_playerwk->xspeed = -256;
+  }
+  if (util__to_unsigned(LONG_HIGH_TO_SHORT(p_playerwk->xposi)) >= util__to_unsigned(LONG_HIGH_TO_SHORT(p_attack_actwk->xposi))) { // unsigned
+    p_playerwk->xspeed = -p_playerwk->xspeed;
+  }
+  p_playerwk->mspeed = 0;
+  p_playerwk->mstno = 26;
+  SPRITE_STATUS_USHORT(p_playerwk, 52) = 120;
+  long sound_id = 53;
+  if (p_attack_actwk->r_ptr >= &togeinit && p_attack_actwk->r_ptr < &togedamegesub) { // unsigned
+    sound_id = 55;
+  }
+  soundset(sound_id);
+  return true;
+
+die:
+  sound_id = 53;
+  if (p_attack_actwk->r_ptr >= &togeinit && p_attack_actwk->r_ptr < &togedamegesub) { // unsigned
+    sound_id = 55;
+  }
+  return playdieset(p_playerwk, sound_id);
+}
+
+
+// SONIC3K.EXE address: 00422d9d
+// skdisasm label: Kill_Character
+bool playdieset(sprite_status* p_playerwk, long sound_id) {
+  if (sound_id == 0) {
+    if (edit_r_no != 0) return true;
+    sound_id = 53;
+  }
+  p_playerwk->cddat2 = 0;
+  SPRITE_STATUS_UCHAR(p_playerwk, 55) = 0;
+  p_playerwk->r_no = 6;
+  Player_TouchFloor(p_playerwk);
+  SET_BIT_1(p_playerwk->cddat1);
+  p_playerwk->yspeed = -1792;
+  p_playerwk->xspeed = 0;
+  p_playerwk->mspeed = 0;
+  p_playerwk->mstno = 24;
+  plsproffset = p_playerwk->sproffset;
+  SET_BIT_7(p_playerwk->sproffset);
+  soundset(sound_id);
+  return true;
 }
 
 
@@ -346,6 +399,13 @@ void Clear_SpriteRingMem() {
     --ringbuffer[0];
     --cnt;
   } while (cnt != -1);
+}
+
+
+// SONIC3K.EXE address: 004380ba
+// skdisasm label: Player_TouchFloor
+void Player_TouchFloor(sprite_status* p_actwk) {
+  // TODO
 }
 
 

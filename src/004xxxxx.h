@@ -17,7 +17,8 @@ void actionsub(sprite_status* p_actwk);
 void patchg(sprite_status* p_actwk, signed char** p_chg_data);
 void frameoutchk(sprite_status* p_actwk);
 void frameoutchkc(sprite_status* p_actwk, short xposi);
-void playdamageset(sprite_status* p_playerwk, sprite_status* p_attack_actwk);
+bool playdamageset(sprite_status* p_playerwk, sprite_status* p_attack_actwk);
+bool playdieset(sprite_status* p_actwk, long sound_id);
 void Add_Object_To_Collision_Response_List(sprite_status* p_actwk);
 unsigned long random();
 void sinset(unsigned char angle, short* sin, short* cos);
@@ -25,6 +26,7 @@ bool Create_New_Sprite(sprite_status** pp_new_actwk);
 bool Create_New_Sprite3(sprite_status* p_actwk, sprite_status** pp_new_actwk);
 bool Create_New_Sprite_Int(sprite_status** pp_new_actwk, short slot_cnt);
 void Clear_SpriteRingMem();
+void Player_TouchFloor(sprite_status* p_actwk);
 short RingCheckFloorDist(sprite_status* p_actwk);
 short RingCheckFloorDist_ReverseGravity(sprite_status* p_actwk);
 

@@ -6,6 +6,7 @@
 #include "types.h"
 
 extern bool Sonic_3_alone;
+extern bool INI_DebugMode;
 
 extern unsigned short pbuffer[PBUFFER_LEVELS][PBUFFER_LEVEL_SLOTS];
 extern sprite_status actwk[ACTWK_SLOTS];
@@ -87,6 +88,7 @@ extern unsigned char plresetflag;
 extern unsigned short stageno_is;
 extern unsigned short stageno_is2;
 extern unsigned short cartridge;
+extern unsigned short plsproffset;
 extern unsigned short vs_flag;
 
 #endif
