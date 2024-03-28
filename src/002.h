@@ -3,7 +3,7 @@
 
 #include <stdbool.h>
 
-void set_act05(sprite_status* p_actwk, set_act05_data* p_data);
+sprite_status* set_act05(sprite_status* p_actwk, set_act05_data* p_data);
 int time_pg(sprite_status* p_actwk, signed char* p_pg_data);
 void chk_emy_revs(sprite_status* p_actwk);
 void emy_wrt_init(sprite_status* p_actwk, wrt_init_data* p_data);

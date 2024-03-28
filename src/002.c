@@ -7,14 +7,14 @@ static int chk_tpg_next(sprite_status* p_actwk, signed char pg, signed char* p_p
 
 
 // skdisasm label: CreateChild6_Simple
-void set_act05(sprite_status* p_actwk, set_act05_data* p_data) {
+sprite_status* set_act05(sprite_status* p_actwk, set_act05_data* p_data) {
   sprite_status* p_new_actwk;
   short i = 0;
   short cnt = p_data->cnt;
 
   do {
     bool created = Create_New_Sprite3(p_actwk, &p_new_actwk);
-    if (!created) return;
+    if (!created) return 0;
 
     SPRITE_STATUS_USHORT(p_new_actwk, OYA_ADR) = p_actwk - actwk;
     p_new_actwk->patbase = p_actwk->patbase;
@@ -26,6 +26,8 @@ void set_act05(sprite_status* p_actwk, set_act05_data* p_data) {
     i += 2;
     --cnt;
   } while (cnt != -1);
+
+  return p_new_actwk;
 }
 
 
