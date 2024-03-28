@@ -54,6 +54,16 @@ void soundset(long id) {
 }
 
 
+// SONIC3K.EXE address: 0041e85b
+// skdisasm label: MoveSprite
+void speedset(sprite_status* p_actwk) {
+  p_actwk->xposi += p_actwk->xspeed * 256;
+  short yspeed = p_actwk->yspeed;
+  p_actwk->yspeed += 56;
+  p_actwk->yposi += p_actwk->yspeed * 256;
+}
+
+
 // SONIC3K.EXE address: 0041e8f6
 // skdisasm label: MoveSprite2
 void speedset2(sprite_status* p_actwk) {
@@ -405,6 +415,13 @@ void Clear_SpriteRingMem() {
 // SONIC3K.EXE address: 004380ba
 // skdisasm label: Player_TouchFloor
 void Player_TouchFloor(sprite_status* p_actwk) {
+  // TODO
+}
+
+
+// SONIC3K.EXE address: 00451080
+// skdisasm label: ObjCheckFloorDist
+short ObjCheckFloorDist(sprite_status* p_actwk) {
   // TODO
 }
 

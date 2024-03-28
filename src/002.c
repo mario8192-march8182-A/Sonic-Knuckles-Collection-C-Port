@@ -80,6 +80,20 @@ void chk_emy_revs(sprite_status* p_actwk) {
 }
 
 
+// skdisasm label: MoveSprite_LightGravity
+void speedsetg20(sprite_status* p_actwk) {
+  speedsetg(p_actwk, 32);
+}
+
+
+void speedsetg(sprite_status* p_actwk, short gravity) {
+  p_actwk->xposi += p_actwk->xspeed * 256;
+  short yspeed = p_actwk->yspeed;
+  p_actwk->yspeed += gravity;
+  p_actwk->yposi += yspeed * 256;
+}
+
+
 // skdisasm label: SetUp_ObjAttributesSlotted
 void emy_wrt_init(sprite_status* p_actwk, wrt_init_data* p_data) {
   unsigned short bit = 0;
@@ -144,6 +158,20 @@ void set_emy_wchg(sprite_status* p_actwk, wrt_data* p_data) {
 }
 
 
+// skdisasm label: Sprite_CheckDeleteTouch
+void chk_emy_foutc0(sprite_status* p_actwk) {
+  unsigned short scr_xposi = util__to_unsigned(LONG_HIGH_TO_SHORT(p_actwk->xposi)) & 0xFF80;
+  scr_xposi -= scr_x_no;
+  if (scr_xposi > 640) { // unsigned
+    emy_fout(p_actwk);
+  }
+  else {
+    Add_Object_To_Collision_Response_List(p_actwk);
+    actionsub(p_actwk);
+  }
+}
+
+
 // skdisasm label: Sprite_CheckDelete
 void chk_emy_fout0(sprite_status* p_actwk) {
   unsigned short scr_xposi = util__to_unsigned(LONG_HIGH_TO_SHORT(p_actwk->xposi)) & 0xFF80;
@@ -163,6 +191,27 @@ void emy_fout(sprite_status* p_actwk) {
   }
   SET_BIT_7(p_actwk->cddat1);
   p_actwk->r_ptr = &frameout;
+}
+
+
+// skdisasm label: Obj_FlickerMove
+void chk_break_fout(sprite_status* p_actwk) {
+  speedset(p_actwk);
+  unsigned short scr_xposi = util__to_unsigned(LONG_HIGH_TO_SHORT(p_actwk->xposi)) & 0xFF80;
+  scr_xposi -= scr_x_no;
+  if (scr_xposi > 640) {
+    set_emy_fout01(p_actwk);
+    return;
+  }
+  if (util__to_unsigned(LONG_HIGH_TO_SHORT(p_actwk->xposi) - LONG_HIGH_TO_SHORT(scra_v_posit) + 128) > 512) {
+    set_emy_fout01(p_actwk);
+    return;
+  }
+  bool bit_6_set = BIT_6_IS_SET(SPRITE_STATUS_UCHAR(p_actwk, 56));
+  CLEAR_BIT_6(SPRITE_STATUS_UCHAR(p_actwk, 56));
+  if (bit_6_set) {
+    actionsub(p_actwk);
+  }
 }
 
 
@@ -200,6 +249,66 @@ void set_wchg_fout0(sprite_status* p_actwk) {
 void clr_wchg_bit(sprite_status* p_actwk) {
   unsigned char bit_string = ~(SPRITE_STATUS_UCHAR(p_actwk, 59));
   DAT_008549d4[SPRITE_STATUS_USHORT(p_actwk, 60)] &= bit_string;
+}
+
+
+// skdisasm label: Go_Delete_Sprite_3
+void set_emy_fout01(sprite_status* p_actwk) {
+  p_actwk->r_ptr = &frameout;
+  SET_BIT_7(p_actwk->cddat1);
+  SET_BIT_4(SPRITE_STATUS_UCHAR(p_actwk, 56));
+}
+
+
+// skdisasm label: Set_IndexedVelocity
+void set_break_spd(sprite_status* p_actwk, unsigned char unknown) {
+  static short speed_tbl[76] = {
+     -256,  -256,
+      256,  -256,
+     -512,  -512,
+      512,  -512,
+     -768,  -512,
+      768,  -512,
+     -512,  -512,
+        0,  -512,
+    -1024,  -768,
+     1024,  -768,
+      768,  -768,
+    -1024,  -768,
+     1024,  -768,
+     -512,  -512,
+      512,  -512,
+        0,  -256,
+      -64, -1792,
+     -128, -1792,
+     -384, -1792,
+     -256, -1792,
+     -512, -1792,
+     -640, -1792,
+     -768, -1792,
+        0,  -256,
+     -256,  -256,
+      256,  -256,
+     -512,  -256,
+      512,  -256,
+     -512,  -512,
+      512,  -512,
+     -768,  -512,
+      768,  -512,
+     -768,  -768,
+      768,  -768,
+    -1024,  -768,
+     1024,  -768,
+     -512,  -768,
+      512,  -768
+  };
+
+  unsigned char index = p_actwk->userflag1 * 2 + unknown;
+  p_actwk->xspeed = speed_tbl[index];
+  p_actwk->yspeed = speed_tbl[index + 1];
+  if (BIT_0_IS_SET(p_actwk->actflg)) {
+    p_actwk->xspeed = -p_actwk->xspeed;
+  }
 }
 
 
@@ -251,4 +360,15 @@ sprite_status* chk_emy_colt__col(sprite_status* p_playerwk_chk, sprite_status* p
   if (util__to_unsigned(pl_yposi) < util__to_unsigned(emy_range_top_y)) return p_playerwk_prev_chk; // unsigned
   if (util__to_unsigned(pl_yposi) >= util__to_unsigned(emy_range_bottom_y)) return p_playerwk_prev_chk; // unsigned
   return p_playerwk_chk;
+}
+
+
+void set_bane_jump(sprite_status* p_playerwk, short yspeed) {
+  p_playerwk->yspeed = yspeed;
+  CLEAR_BIT_3(p_playerwk->cddat1);
+  SPRITE_STATUS_UCHAR(p_playerwk, 64) = 0;
+  SPRITE_STATUS_UCHAR(p_playerwk, 61) = 0;
+  p_playerwk->mstno = 16;
+  p_playerwk->r_no = 2;
+  soundset(177);
 }

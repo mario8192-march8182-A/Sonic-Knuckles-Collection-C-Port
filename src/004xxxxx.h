@@ -10,6 +10,7 @@ void Queue_Kos_Module(void* p_data, unsigned short act_id);
 void LoadEnemyArt();
 void bgmset(long id);
 void soundset(long id);
+void speedset(sprite_status* p_actwk);
 void speedset2(sprite_status* p_actwk);
 void speedset2g(sprite_status* p_actwk);
 void frameout(sprite_status* p_actwk);
@@ -27,6 +28,7 @@ bool Create_New_Sprite3(sprite_status* p_actwk, sprite_status** pp_new_actwk);
 bool Create_New_Sprite_Int(sprite_status** pp_new_actwk, short slot_cnt);
 void Clear_SpriteRingMem();
 void Player_TouchFloor(sprite_status* p_actwk);
+short ObjCheckFloorDist(sprite_status* p_actwk);
 short RingCheckFloorDist(sprite_status* p_actwk);
 short RingCheckFloorDist_ReverseGravity(sprite_status* p_actwk);
 
