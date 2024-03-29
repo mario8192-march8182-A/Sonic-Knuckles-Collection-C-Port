@@ -1,5 +1,6 @@
 #include "globals.h"
 #include "macros.h"
+#include "util.h"
 #include "091.h"
 #include "004xxxxx.h"
 static void chk_pt_next(sprite_status* p_actwk, signed char pg, signed char* p_pg_data, unsigned char patcnt);
@@ -145,8 +146,8 @@ bool chk_pl_attack(sprite_status* p_actwk, sprite_status* p_playerwk) {
       if (BIT_6_IS_SET(p_playerwk->cddat1)) return false;
       short xposi = LONG_HIGH_TO_SHORT(p_playerwk->xposi) - LONG_HIGH_TO_SHORT(p_actwk->xposi);
       short yposi = LONG_HIGH_TO_SHORT(p_playerwk->yposi) - LONG_HIGH_TO_SHORT(p_actwk->yposi);
-      unsigned short d0 = FUN_00411511(xposi, yposi) - 32;
-      if (d0 >= 64) return false; // unsigned
+      unsigned short angle = util__to_unsigned(atan(xposi, yposi) - 32);
+      if (angle >= 64) return false; // unsigned
       return true;
     }
     case KNUCKLES:
