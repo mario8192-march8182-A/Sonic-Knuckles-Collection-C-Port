@@ -48,9 +48,9 @@ static void saveinit(sprite_status* p_actwk) {
   p_actwk->sprhs = 8;
   p_actwk->sprvs = 40;
   p_actwk->sprpri = 640;
-  if (BIT_0_IS_SET(flagwork[SPRITE_STATUS_USHORT(p_actwk, 72) - 1])
+  if (BIT_0_IS_SET(flagwork[p_actwk->actfree.save.flagwork_index - 1])
       || (markerno & 0x7F) >= (p_actwk->userflag1 & 0x7F)) { // unsigned
-    SET_BIT_0(flagwork[SPRITE_STATUS_USHORT(p_actwk, 72) - 1]);
+    SET_BIT_0(flagwork[p_actwk->actfree.save.flagwork_index - 1]);
     p_actwk->mstno = 2;
   }
   savemove(p_actwk);
@@ -77,8 +77,8 @@ static void savemove__sub(sprite_status* p_actwk, sprite_status* p_playerwk) {
     if (created) {
       p_new_actwk->r_ptr = &save;
       p_new_actwk->r_no = 6;
-      SPRITE_STATUS_SHORT(p_new_actwk, 48) = LONG_HIGH_TO_SHORT(p_actwk->xposi);
-      SPRITE_STATUS_SHORT(p_new_actwk, 50) = LONG_HIGH_TO_SHORT(p_actwk->yposi) - 20;
+      p_new_actwk->actfree.save.parent_xposi = LONG_HIGH_TO_SHORT(p_actwk->xposi);
+      p_new_actwk->actfree.save.parent_yposi = LONG_HIGH_TO_SHORT(p_actwk->yposi) - 20;
       p_new_actwk->patbase = p_actwk->patbase;
       p_new_actwk->sproffset = p_actwk->sproffset;
       p_new_actwk->actflg = p_actwk->actflg;
@@ -86,8 +86,8 @@ static void savemove__sub(sprite_status* p_actwk, sprite_status* p_playerwk) {
       p_new_actwk->sprvs = 8;
       p_new_actwk->sprpri = 512;
       p_new_actwk->patno = 2;
-      SPRITE_STATUS_USHORT(p_new_actwk, 54) = 32;
-      SPRITE_STATUS_USHORT(p_new_actwk, 62) = p_actwk - actwk;
+      p_new_actwk->actfree.save.counter = 32;
+      p_new_actwk->actfree.save.parent = p_actwk - actwk;
       bool enough_rings = false;
       if (Sonic_3_alone) {
         enough_rings = plring >= 50;
@@ -102,7 +102,7 @@ static void savemove__sub(sprite_status* p_actwk, sprite_status* p_playerwk) {
     p_actwk->mstno = 1;
     playsave(p_actwk);
     p_actwk->r_no = 4;
-    SET_BIT_0(flagwork[SPRITE_STATUS_USHORT(p_actwk, 72) - 1]);
+    SET_BIT_0(flagwork[p_actwk->actfree.save.flagwork_index - 1]);
   }
   else if (p_actwk->mstno == 0) {
     p_actwk->mstno = 2;
@@ -117,9 +117,9 @@ static void savemove2(sprite_status* p_actwk) {
 
 
 static void savemove3(sprite_status* p_actwk) {
-  --SPRITE_STATUS_SHORT(p_actwk, 54);
-  if (SPRITE_STATUS_SHORT(p_actwk, 54) < 0) {
-    sprite_status* p_sub_actwk = &actwk[SPRITE_STATUS_USHORT(p_actwk, 62)];
+  --p_actwk->actfree.save.counter;
+  if (p_actwk->actfree.save.counter < 0) {
+    sprite_status* p_sub_actwk = &actwk[p_actwk->actfree.save.parent];
     if (p_sub_actwk->r_ptr == &save) {
       p_sub_actwk->mstno = 2;
       p_sub_actwk->patno = 0;
@@ -131,10 +131,10 @@ static void savemove3(sprite_status* p_actwk) {
     short sin, cos;
     sinset(util__to_unsigned(p_actwk->direc1 - 64), &sin, &cos);
     long cos_l = cos * 3072;
-    cos_l = LONG_LOW(cos_l) + SPRITE_STATUS_SHORT(p_actwk, 48);
+    cos_l = LONG_LOW(cos_l) + p_actwk->actfree.save.parent_xposi;
     p_actwk->xposi = SHORT_TO_LONG_HIGH(LONG_LOW(cos_l)) + LONG_LOW(p_actwk->xposi);
     long sin_l = sin * 3072;
-    sin_l = LONG_LOW(sin_l) + SPRITE_STATUS_SHORT(p_actwk, 50);
+    sin_l = LONG_LOW(sin_l) + p_actwk->actfree.save.parent_yposi;
     p_actwk->yposi = SHORT_TO_LONG_HIGH(LONG_LOW(sin_l)) + LONG_LOW(p_actwk->yposi);
     frameoutchk(p_actwk);
   }
@@ -154,7 +154,7 @@ void playsave1(sprite_status* p_actwk) {
   stageno_s = stageno;
   stageno_is = stageno_i;
   plsproffset_s = actwk[0].sproffset;
-  plcolibits_s = SPRITE_STATUS_USHORT(&actwk[0], 70);
+  plcolibits_s = actwk[0].actfree.player.colibits;
   plring_s = plring;
   plring_f2_s = plring_f2;
   pltime_s = pltime;
@@ -174,7 +174,7 @@ void playsave2(sprite_status* p_actwk) {
   plxposi_s2 = LONG_HIGH_TO_SHORT(p_actwk->xposi);
   plyposi_s2 = LONG_HIGH_TO_SHORT(p_actwk->yposi);
   plsproffset_s2 = actwk[0].sproffset;
-  plcolibits_s2 = SPRITE_STATUS_USHORT(&actwk[0], 70);
+  plcolibits_s2 = actwk[0].actfree.player.colibits;
   plring_s2 = plring;
   plring_f2_s2 = plring_f2;
   pltime_s2 = pltime;
@@ -207,9 +207,9 @@ void playload(sprite_status* p_actwk) {
   pltime = pltime_s;
   pltime = 59 << 24 | pltime & 0x00FFFFFF;
   pltime = (pltime & 0x00FF0000) - (1 << 16) | pltime & 0xFF00FFFF;
-  actwk[0].sproffset = plsproffset_s;
-  SPRITE_STATUS_USHORT(&actwk[0], 70) = coli_mode_s;
-  scr_resize_no = scr_resize_no_s;
+  actwk[0].sproffset = sproffset_s;
+  actwk[0].actfree.player.colibits = colibits_s;
+  scr_resize_no = scr_resize_no_s;;
   scralim_down = scralim_down_s;
   scralim_n_down = scralim_down_s;
   scra_h_posit = SHORT_TO_LONG_HIGH(scra_h_posit_s) + LONG_LOW(scra_v_posit);
@@ -233,7 +233,7 @@ static void playload2(sprite_status* p_actwk) {
   pltime = 59 << 24 | pltime & 0x00FFFFFF;
   pltime = (pltime & 0x00FF0000) - (1 << 16) | pltime & 0xFF00FFFF;
   actwk[0].sproffset = plsproffset_s2;
-  SPRITE_STATUS_USHORT(&actwk[0], 70) = coli_mode_s2;
+  actwk[0].actfree.player.colibits = plcolibits_s2;
   scr_resize_no = scr_resize_no_s2;
   scralim_down = scralim_down_s2;
   scralim_n_down = scralim_down_s2;
@@ -301,16 +301,16 @@ void o_starinit(sprite_status* p_actwk) {
     p_new_actwk->r_no = 8;
     short xposi = LONG_HIGH_TO_SHORT(p_actwk->xposi);
     p_new_actwk->xposi = SHORT_TO_LONG_HIGH(xposi) + LONG_LOW(p_new_actwk->xposi);
-    SPRITE_STATUS_SHORT(p_new_actwk, 48) = xposi;
+    p_new_actwk->actfree.save.parent_xposi = xposi;
     short yposi = LONG_HIGH_TO_SHORT(p_actwk->yposi) - 48;
     p_new_actwk->yposi = SHORT_TO_LONG_HIGH(yposi) + LONG_LOW(p_new_actwk->yposi);
-    SPRITE_STATUS_SHORT(p_new_actwk, 50) = yposi;
+    p_new_actwk->actfree.save.parent_yposi = yposi;
     p_new_actwk->sprpri = p_actwk->sprpri;
     p_new_actwk->sprhs = 8;
     p_new_actwk->patno = 1;
     p_new_actwk->xspeed = -1024;
     p_new_actwk->yspeed = 0;
-    SPRITE_STATUS_USHORT(p_new_actwk, 52) = unknown;
+    p_actwk->actfree.save.angle = unknown;
     unknown += 64;
     --cnt;
   } while (cnt != -1);
@@ -393,13 +393,13 @@ void o_star(sprite_status* p_actwk) {
     }
     p_actwk->colicnt = 0;
   }
-  SPRITE_STATUS_USHORT(p_actwk, 52) += 10;
+  p_actwk->actfree.save.angle += 10;
   short sin, cos;
-  sinset(SPRITE_STATUS_USHORT(p_actwk, 52) & 0xFF, &sin, &cos);
+  sinset(p_actwk->actfree.save.angle & 0xFF, &sin, &cos);
   sin /= 32;
   cos /= 8;
   short cos_tmp = cos;
-  short unknown1 = (SPRITE_STATUS_USHORT(p_actwk, 52) & 0x3E0) / 32;
+  short unknown1 = (p_actwk->actfree.save.angle & 0x3E0) / 32;
   short cnt = 2;
   short sin_add = 0;
   if (unknown1 > 16) {
@@ -423,8 +423,8 @@ void o_star(sprite_status* p_actwk) {
 
   sin_add /= 16;
   sin += sin_add;
-  ++SPRITE_STATUS_SHORT(p_actwk, 54);
-  short unknown2 = SPRITE_STATUS_SHORT(p_actwk, 54);
+  ++p_actwk->actfree.save.counter;
+  short unknown2 = p_actwk->actfree.save.counter;
   if (unknown2 == 128) goto ostar03;
   else if (unknown2 > 128) goto ostar04;
 
@@ -445,10 +445,10 @@ ostar04:
     if (unknown2 < 0) goto ostarend;
   } while (1);
 
-  short xposi = SPRITE_STATUS_SHORT(p_actwk, 48);
+  short xposi = p_actwk->actfree.save.parent_xposi;
   xposi += cos;
   p_actwk->xposi = SHORT_TO_LONG_HIGH(xposi) + LONG_LOW(p_actwk->xposi);
-  short yposi = SPRITE_STATUS_SHORT(p_actwk, 50);
+  short yposi = p_actwk->actfree.save.parent_yposi;
   yposi += sin;
   p_actwk->yposi = SHORT_TO_LONG_HIGH(yposi) + LONG_LOW(p_actwk->yposi);
   ++p_actwk->patcnt;

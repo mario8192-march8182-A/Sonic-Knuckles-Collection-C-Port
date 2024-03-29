@@ -73,7 +73,9 @@ typedef struct sprite_status {
       unsigned char invulnerability_timer;
       unsigned char reserved2[3];
       character_id character;
-      unsigned char reserved3[17];
+      unsigned char reserved3[13];
+      unsigned short colibits;
+      unsigned char reserved4[2];
     } player;
     struct {
       short attack_countdown;
@@ -93,6 +95,17 @@ typedef struct sprite_status {
       short ghost_countdown;
       unsigned char reserved2[14];
     } gost08_ctr;
+    struct {
+      unsigned char reserved1[2];
+      short parent_xposi;
+      short parent_yposi;
+      unsigned short angle;
+      short counter;
+      unsigned char reserved2[6];
+      unsigned short parent;
+      unsigned char reserved3[8];
+      unsigned short flagwork_index;
+    } save;
   } actfree;
 }
 sprite_status;
