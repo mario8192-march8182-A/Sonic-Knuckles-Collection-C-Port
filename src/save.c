@@ -289,7 +289,7 @@ static signed char starsp02[8] = { 0, 1, -4, 0, 5, 0, -4, -1 };
 void o_starinit(sprite_status* p_actwk) {
   sprite_status* p_new_actwk;
   short cnt = 3;
-  short unknown = 0;
+  unsigned short angle = 0;
 
   do {
     bool created = Create_New_Sprite(&p_new_actwk);
@@ -310,8 +310,8 @@ void o_starinit(sprite_status* p_actwk) {
     p_new_actwk->patno = 1;
     p_new_actwk->xspeed = -1024;
     p_new_actwk->yspeed = 0;
-    p_actwk->actfree.save.angle = unknown;
-    unknown += 64;
+    p_actwk->actfree.save.angle = angle;
+    angle += 64;
     --cnt;
   } while (cnt != -1);
 
@@ -445,12 +445,8 @@ ostar04:
     if (unknown2 < 0) goto ostarend;
   } while (1);
 
-  short xposi = p_actwk->actfree.save.parent_xposi;
-  xposi += cos;
-  p_actwk->xposi = SHORT_TO_LONG_HIGH(xposi) + LONG_LOW(p_actwk->xposi);
-  short yposi = p_actwk->actfree.save.parent_yposi;
-  yposi += sin;
-  p_actwk->yposi = SHORT_TO_LONG_HIGH(yposi) + LONG_LOW(p_actwk->yposi);
+  p_actwk->xposi = SHORT_TO_LONG_HIGH(p_actwk->actfree.save.parent_xposi + cos) + LONG_LOW(p_actwk->xposi);
+  p_actwk->yposi = SHORT_TO_LONG_HIGH(p_actwk->actfree.save.parent_yposi + sin) + LONG_LOW(p_actwk->yposi);
   ++p_actwk->patcnt;
   unsigned char patno = (p_actwk->patcnt & 6) / 2;
   if (patno == 3) {
