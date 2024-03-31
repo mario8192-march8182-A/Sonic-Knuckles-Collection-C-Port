@@ -72,6 +72,47 @@ static int chk_tpg_next(sprite_status* p_actwk, signed char pg, signed char* p_p
 }
 
 
+// skdisasm label: Child_Draw_Sprite
+void chk_oya_die0(sprite_status* p_actwk) {
+  sprite_status* p_parentwk = &actwk[SPRITE_STATUS_USHORT(p_actwk, 70)];
+  if (BIT_7_IS_SET(p_parentwk->cddat1)) {
+    set_emy_fout0(p_actwk);
+  }
+  else {
+    actionsub(p_actwk);
+  }
+}
+
+
+// skdisasm label: Find_SonicTails
+void chk_distance(sprite_status* p_actwk, bool* pl_is_right, bool* pl_is_below, short* pl_x_distance, short* pl_y_distance) {
+  *pl_is_right = false;
+  *pl_is_below = false;
+  *pl_x_distance = LONG_HIGH_TO_SHORT(p_actwk->xposi) - LONG_HIGH_TO_SHORT(actwk[0].xposi);
+  if (*pl_x_distance < 0) {
+    *pl_x_distance = -*pl_x_distance;
+    *pl_is_right = true;
+  }
+  short pl2_x_distance = LONG_HIGH_TO_SHORT(p_actwk->xposi) - LONG_HIGH_TO_SHORT(actwk[1].xposi);
+  bool pl2_is_right = false;
+  if (pl2_x_distance < 0) {
+    pl2_x_distance = -pl2_x_distance;
+    pl2_is_right = true;
+  }
+  sprite_status* p_playerwk = &actwk[0];
+  if (*pl_x_distance > pl2_x_distance) {
+    p_playerwk = &actwk[1];
+    *pl_is_right = pl2_is_right;
+    *pl_x_distance = pl2_x_distance;
+  }
+  *pl_y_distance = LONG_HIGH_TO_SHORT(p_actwk->yposi) - LONG_HIGH_TO_SHORT(p_playerwk->yposi);
+  if (*pl_y_distance < 0) {
+    *pl_y_distance = -*pl_y_distance;
+    *pl_is_below = true;
+  }
+}
+
+
 // skdisasm label: Change_FlipXWithVelocity
 void chk_emy_revs(sprite_status* p_actwk) {
   CLEAR_BIT_0(p_actwk->actflg);
@@ -249,6 +290,13 @@ void set_wchg_fout0(sprite_status* p_actwk) {
 void clr_wchg_bit(sprite_status* p_actwk) {
   unsigned char bit_string = ~(SPRITE_STATUS_UCHAR(p_actwk, 59));
   DAT_008549d4[SPRITE_STATUS_USHORT(p_actwk, 60)] &= bit_string;
+}
+
+
+// skdisasm label: Go_Delete_Sprite
+void set_emy_fout0(sprite_status* p_actwk) {
+  p_actwk->r_ptr = &frameout;
+  SET_BIT_7(p_actwk->cddat1);
 }
 
 

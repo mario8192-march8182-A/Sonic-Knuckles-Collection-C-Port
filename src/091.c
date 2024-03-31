@@ -58,6 +58,13 @@ sprite_status* set_act00(sprite_status* p_actwk, set_act00_data* p_data) {
 
   return p_new_actwk;
 }
+
+
+// skdisasm label: Refresh_ChildPosition
+void ko_offset0(sprite_status* p_actwk) {
+  sprite_status* p_parentwk = &actwk[SPRITE_STATUS_USHORT(p_actwk, 70)];
+  p_actwk->xposi = LONG_HIGH(p_parentwk->xposi) + SHORT_TO_LONG_HIGH(SPRITE_STATUS_SCHAR(p_actwk, 66)) + LONG_LOW(p_actwk->xposi);
+  p_actwk->yposi = LONG_HIGH(p_parentwk->yposi) + SHORT_TO_LONG_HIGH(SPRITE_STATUS_SCHAR(p_actwk, 67)) + LONG_LOW(p_actwk->yposi);
 }
 
 

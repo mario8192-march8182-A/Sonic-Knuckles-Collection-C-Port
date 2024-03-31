@@ -5,6 +5,7 @@
 #include "../004xxxxx.h"
 #include "../002.h"
 #include "../091.h"
+#include "../opnbox.h"
 #include "../ring.h"
 #include "../zone08/gost08.h"
 static void obox04_switch(sprite_status* p_actwk);
