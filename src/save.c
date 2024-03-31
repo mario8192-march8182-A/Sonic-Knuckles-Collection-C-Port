@@ -425,25 +425,32 @@ void o_star(sprite_status* p_actwk) {
   sin += sin_add;
   ++p_actwk->actfree.save.counter;
   short unknown2 = p_actwk->actfree.save.counter;
-  if (unknown2 == 128) goto ostar03;
-  else if (unknown2 > 128) goto ostar04;
+  int compare_result = -1;
+  if (unknown2 == 128) {
+    compare_result = 0;
+  }
+  else if (unknown2 > 128) {
+    compare_result = 1;
+  }
 
-  do {
-    sin = unknown2 * sin;
-    cos = unknown2 * cos;
-    sin /= 128;
-    cos /= 128;
-    break;
-
-ostar03:
-    p_actwk->colino = 216;
-
-ostar04:
-    if (unknown2 <= 384) break;
-    unknown2 = -unknown2;
-    unknown2 += 512;
-    if (unknown2 < 0) goto ostarend;
-  } while (1);
+  switch (compare_result) {
+    case 0:
+      p_actwk->colino = 216;
+    case 1:
+      if (unknown2 <= 384) break;
+      unknown2 = -unknown2;
+      unknown2 += 512;
+      if (unknown2 < 0) {
+        frameout(p_actwk);
+        return;
+      }
+    case -1:
+      sin = unknown2 * sin;
+      cos = unknown2 * cos;
+      sin /= 128;
+      cos /= 128;
+      break;
+  }
 
   p_actwk->xposi = SHORT_TO_LONG_HIGH(p_actwk->actfree.save.parent_xposi + cos) + LONG_LOW(p_actwk->xposi);
   p_actwk->yposi = SHORT_TO_LONG_HIGH(p_actwk->actfree.save.parent_yposi + sin) + LONG_LOW(p_actwk->yposi);
@@ -454,8 +461,4 @@ ostar04:
   }
   p_actwk->patno = patno;
   frameoutchkc(p_actwk, LONG_HIGH_TO_SHORT(p_actwk->xposi));
-  return;
-
-ostarend:
-  frameout(p_actwk);
 }
