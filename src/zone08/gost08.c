@@ -7,6 +7,7 @@
 #include "../002.h"
 #include "../091.h"
 #include "../save.h"
+#include "../zone_data.h"
 #include "../zone04/obox04.h"
 static void gost08_ctr(sprite_status* p_actwk);
 static void gost08_body(sprite_status* p_actwk);
