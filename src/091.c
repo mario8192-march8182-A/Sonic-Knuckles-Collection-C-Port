@@ -33,7 +33,7 @@ void enemy_init2(sprite_status* p_actwk, enemy_init2_data* p_data) {
 
 
 // skdisasm label: CreateChild1_Normal
-void set_act00(sprite_status* p_actwk, set_act00_data* p_data) {
+sprite_status* set_act00(sprite_status* p_actwk, set_act00_data* p_data) {
   sprite_status* p_new_actwk;
   unsigned short i = 0;
   unsigned short cnt = p_data->cnt;
@@ -41,7 +41,7 @@ void set_act00(sprite_status* p_actwk, set_act00_data* p_data) {
 
   do {
     bool created = Create_New_Sprite3(p_actwk, &p_new_actwk);
-    if (!created) return;
+    if (!created) return 0;
 
     SPRITE_STATUS_USHORT(p_new_actwk, OYA_ADR) = actwk - p_actwk;
     p_new_actwk->patbase = p_actwk->patbase;
@@ -55,6 +55,9 @@ void set_act00(sprite_status* p_actwk, set_act00_data* p_data) {
     i += 2;
     --cnt;
   } while (cnt != 0);
+
+  return p_new_actwk;
+}
 }
 
 
