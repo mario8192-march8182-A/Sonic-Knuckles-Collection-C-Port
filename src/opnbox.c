@@ -170,7 +170,6 @@ add:
   p_actwk->yposi += yspeed;
   if (BIT_1_IS_SET(SPRITE_STATUS_UCHAR(p_actwk, 56))) {
     p_actwk->r_no = rno_tbl[stageno >> 8];
-    SPRITE_STATUS_USHORT(p_actwk, 68) = a1 - actwk;
     set_break(p_actwk);
   }
   puka_puka(p_actwk);
