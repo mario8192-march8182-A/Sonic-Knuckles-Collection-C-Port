@@ -495,7 +495,6 @@ void set_obox_break_pt(sprite_status* p_actwk) {
 }
 
 
-// There are multiple unknown arrays. Indexing is very likely to be off.
 static void set_friend_init(sprite_status* p_actwk) {
   static short spd_tbl[4] = {
     -896, -768, -640, -512
@@ -518,10 +517,9 @@ static void set_friend_init(sprite_status* p_actwk) {
     ofs_index += 4;
   }
   p_actwk->sproffset = ofs_tbl[ofs_index * 2];
-  a1 = DAT_00820946[stageno >> 8];
-  unsigned char unknown = a1[p_actwk->userflag1 & 2];
-  unknown *= 8;
-  p_actwk->patbase = DAT_00820976[unknown + 1];
+  unsigned char* friends = &zone_friend_data[stageno >> 8][0];
+  unsigned char friend_id = friends[(p_actwk->userflag1 & 2) / 2];
+  p_actwk->patbase = friend_data[friend_id].patbase;
   SPRITE_STATUS_SHORT(p_actwk, 46) = p_actwk->userflag1 * 4;
   short xspeed = 512;
   if (util__to_unsigned(LONG_HIGH_TO_SHORT(p_actwk->xposi)) < util__to_unsigned(LONG_HIGH_TO_SHORT(p_parentwk->xposi))) { // unsigned
