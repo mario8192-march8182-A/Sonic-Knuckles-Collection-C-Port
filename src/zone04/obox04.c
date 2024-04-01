@@ -116,7 +116,7 @@ static void obox04_friend_wait0(sprite_status* p_actwk) {
   --SPRITE_STATUS_SHORT(p_actwk, 46);
   if (SPRITE_STATUS_SHORT(p_actwk, 46) < 0) {
     p_actwk->r_ptr = &obox04_friend_move0;
-    p_actwk->sprpri = 128;
+    p_actwk->sprpri = PRI_1;
   }
   chk_emy_fout0(p_actwk);
 }
@@ -232,7 +232,7 @@ static void set_obox04_friend_init(sprite_status* p_actwk) {
 enemy_init0_data obox04_init_tbl = {
   obox04pat,
   0,
-  512,
+  PRI_4,
   32,
   40,
   0,
@@ -243,7 +243,7 @@ enemy_init0_data obox04_init_tbl = {
 enemy_init0_data swit04_init_tbl = {
   obox04pat,
   0,
-  384,
+  PRI_3,
   16,
   8,
   5,
@@ -252,7 +252,7 @@ enemy_init0_data swit04_init_tbl = {
 
 
 static enemy_init2_data obox04_break_init_tbl = {
-  256,
+  PRI_2,
   8,
   8,
   2,
@@ -261,7 +261,7 @@ static enemy_init2_data obox04_break_init_tbl = {
 
 
 static enemy_init2_data obox04_friend_init_tbl = {
-  640,
+  PRI_5,
   32,
   40,
   0,
@@ -272,7 +272,7 @@ static enemy_init2_data obox04_friend_init_tbl = {
 static enemy_init0_data obox04_ring_init_tbl = {
   ringpat,
   42684,
-  384,
+  PRI_3,
   8,
   8,
   0,

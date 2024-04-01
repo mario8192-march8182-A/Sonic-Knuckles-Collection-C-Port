@@ -61,7 +61,7 @@ static void ringinit(sprite_status* p_actwk) {
   p_actwk->patbase = ringpat;
   p_actwk->sproffset = 42684;
   p_actwk->actflg = 4;
-  p_actwk->sprpri = 512;
+  p_actwk->sprpri = PRI_4;
   p_actwk->colino = 71;
   p_actwk->sprhs = 8;
   if (vs_flag != 0) {
@@ -80,7 +80,7 @@ static void ringmove(sprite_status* p_actwk) {
 static void ringget(sprite_status* p_actwk) {
   p_actwk->r_no += 2;
   p_actwk->colino = 0;
-  p_actwk->sprpri = 128;
+  p_actwk->sprpri = PRI_1;
   ringgetsub(p_actwk);
   ringdie(p_actwk);
 }
@@ -221,7 +221,7 @@ jump:
     p_new_actwk->patbase = ringpat;
     p_new_actwk->sproffset = 42684;
     p_new_actwk->actflg = 132;
-    p_new_actwk->sprpri = 384;
+    p_new_actwk->sprpri = PRI_3;
     p_new_actwk->colino = 71;
     p_new_actwk->sprhs = 8;
     flyring_patcnt = 255;
@@ -296,7 +296,7 @@ static void flyringmove(sprite_status* p_actwk) {
 static void flyringget(sprite_status* p_actwk) {
   p_actwk->r_no += 2;
   p_actwk->colino = 0;
-  p_actwk->sprpri = 128;
+  p_actwk->sprpri = PRI_1;
   ringgetsub(p_actwk);
   flyringdie(p_actwk);
 }
@@ -347,7 +347,7 @@ void tring(sprite_status* p_actwk) {
   p_actwk->patbase = ringpat;
   p_actwk->sproffset = 42684;
   p_actwk->actflg = 4;
-  p_actwk->sprpri = 256;
+  p_actwk->sprpri = PRI_2;
   p_actwk->colino = 71;
   p_actwk->sprhs = 8;
   p_actwk->sprvs = 8;
@@ -390,7 +390,7 @@ static void tringmove(sprite_status* p_actwk) {
   }
   else {
     p_actwk->colino = 0;
-    p_actwk->sprpri = 128;
+    p_actwk->sprpri = PRI_1;
     --actring;
     ringgetsub(p_actwk);
     p_actwk->r_ptr = &tringdie;

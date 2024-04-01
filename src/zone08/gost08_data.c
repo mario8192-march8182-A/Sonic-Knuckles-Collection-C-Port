@@ -14,7 +14,7 @@ wrt_init_data gost08_init_tbl = {
   18,
   0,
   gost08pat,
-  0,
+  PRI_0,
   16,
   20,
   0,
@@ -24,7 +24,7 @@ wrt_init_data gost08_init_tbl = {
 enemy_init0_data obox08_init_tbl = {
   openbox_pt,
   34102,
-  384,
+  PRI_3,
   48,
   64,
   0,
@@ -34,7 +34,7 @@ enemy_init0_data obox08_init_tbl = {
 enemy_init0_data obox08_gost_init_tbl = {
   gost08pat,
   42240,
-  512,
+  PRI_4,
   48,
   32,
   0,

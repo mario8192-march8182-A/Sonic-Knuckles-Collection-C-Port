@@ -47,7 +47,7 @@ static void saveinit(sprite_status* p_actwk) {
   p_actwk->actflg = 4;
   p_actwk->sprhs = 8;
   p_actwk->sprvs = 40;
-  p_actwk->sprpri = 640;
+  p_actwk->sprpri = PRI_5;
   if (BIT_0_IS_SET(flagwork[p_actwk->actfree.save.flagwork_index - 1])
       || (markerno & 0x7F) >= (p_actwk->userflag1 & 0x7F)) { // unsigned
     SET_BIT_0(flagwork[p_actwk->actfree.save.flagwork_index - 1]);
@@ -84,7 +84,7 @@ static void savemove__sub(sprite_status* p_actwk, sprite_status* p_playerwk) {
       p_new_actwk->actflg = p_actwk->actflg;
       p_new_actwk->sprhs = 8;
       p_new_actwk->sprvs = 8;
-      p_new_actwk->sprpri = 512;
+      p_new_actwk->sprpri = PRI_4;
       p_new_actwk->patno = 2;
       p_new_actwk->actfree.save.counter = 32;
       p_new_actwk->actfree.save.parent = p_actwk - actwk;

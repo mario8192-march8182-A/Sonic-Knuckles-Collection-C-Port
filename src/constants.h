@@ -43,6 +43,18 @@ typedef enum zone_id {
 }
 zone_id;
 
+typedef enum sprite_priority {
+  PRI_0 = 0,
+  PRI_1 = 128,
+  PRI_2 = 256,
+  PRI_3 = 384,
+  PRI_4 = 512,
+  PRI_5 = 640,
+  PRI_6 = 768,
+  PRI_7 = 896
+}
+sprite_priority;
+
 #define SPEEDUPTIMER 54
 #define FOOTDIR 58
 #define KO_ADR 68
