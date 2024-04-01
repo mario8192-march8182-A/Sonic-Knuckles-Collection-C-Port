@@ -212,9 +212,9 @@ static void set_obox04_friend_init(sprite_status* p_actwk) {
   SPRITE_STATUS_SHORT(p_actwk, 62) = spd_tbl[spd_index];
   unsigned char ofs_index = (p_actwk->userflag1 & 2) / 2;
   p_actwk->sproffset = ofs_tbl[ofs_index];
-  unsigned char* a1 = DAT_00820946[stageno >> 8];
-  unsigned char unknown1 = a1[ofs_index] * 2;
-  p_actwk->patbase = DAT_00820976[unknown1 + 1];
+  unsigned char* friends = &zone_friend_data[stageno >> 8][0];
+  unsigned char friend_id = friends[ofs_index];
+  p_actwk->patbase = friend_data[friend_id].patbase;
   SPRITE_STATUS_SHORT(p_actwk, 46) = p_actwk->userflag1 * 4;
   sprite_status* p_parentwk = &actwk[SPRITE_STATUS_USHORT(p_actwk, 70)];
   short xspeed = 512;
