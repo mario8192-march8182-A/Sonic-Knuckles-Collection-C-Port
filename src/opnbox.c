@@ -108,7 +108,7 @@ static void opnbox_wait0(sprite_status* p_actwk) {
 
 
 static void set_break(sprite_status* p_actwk) {
-  if (stageno >> 8 == 2) {
+  if (stageno.zone == MARBLE_GARDEN) {
     pl2_lock_flag = 255;
   }
   p_actwk->patno = 1;
@@ -160,7 +160,7 @@ add:
   SPRITE_STATUS_SHORT(p_actwk, 58) = xspeed;
   p_actwk->xposi += SHORT_TO_LONG_HIGH(xspeed);
   short vposi = LONG_HIGH_TO_SHORT(scra_v_posit) + 64;
-  if (stageno >> 8 == 2) {
+  if (stageno.zone == MARBLE_GARDEN) {
     vposi -= 32;
   }
   short yspeed = 16384;
@@ -169,7 +169,7 @@ add:
   }
   p_actwk->yposi += yspeed;
   if (BIT_1_IS_SET(SPRITE_STATUS_UCHAR(p_actwk, 56))) {
-    p_actwk->r_no = rno_tbl[stageno >> 8];
+    p_actwk->r_no = rno_tbl[stageno.zone];
     set_break(p_actwk);
   }
   puka_puka(p_actwk);
@@ -284,7 +284,7 @@ static void switchud_wait1(sprite_status* p_actwk) {
 
 static void break_(sprite_status* p_actwk) {
   enemy_init0(p_actwk, &break_init_tbl);
-  if (stageno == 1024) {
+  if (stageno.zone == FLYING_BATTERY && stageno.act == 0) {
     p_actwk->sproffset = 1102;
   }
   p_actwk->r_ptr = chk_break_fout;
@@ -403,7 +403,7 @@ void chk_pl_pause(sprite_status* p_actwk, unsigned char r_no) {
 
 void chk_pl2_pause(sprite_status* p_actwk) {
   if (act_clear_flag == 0) return;
-  if (stageno >> 8 == 3) {
+  if (stageno.zone == CARNIVAL_NIGHT) {
     set_pl_pause(p_actwk, &actwk[0]);
   }
   if (BIT_7_IS_SET(SPRITE_STATUS_UCHAR(p_actwk, 56))) return;
@@ -512,11 +512,11 @@ static void set_friend_init(sprite_status* p_actwk) {
     p_actwk->yspeed = 0;
   }
   unsigned short ofs_index = p_actwk->userflag1 & 2;
-  if (stageno == 1024) {
+  if (stageno.zone == FLYING_BATTERY && stageno.act == 0) {
     ofs_index += 4;
   }
   p_actwk->sproffset = ofs_tbl[ofs_index * 2];
-  unsigned char* friends = &zone_friend_data[stageno >> 8][0];
+  unsigned char* friends = &zone_friend_data[stageno.zone][0];
   unsigned char friend_id = friends[(p_actwk->userflag1 & 2) / 2];
   p_actwk->patbase = friend_data[friend_id].patbase;
   SPRITE_STATUS_SHORT(p_actwk, 46) = p_actwk->userflag1 * 4;

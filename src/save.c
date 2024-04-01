@@ -348,8 +348,8 @@ void o_star(sprite_status* p_actwk) {
     if (p_actwk->colicnt & 1) {
       marker_flag = 2;
       if (Sonic_3_alone) {
-        stageno = STAGENO_GUMBALL_MACHINE;
-        stageno_i = STAGENO_GUMBALL_MACHINE;
+        stageno.zone = ZONE_GUMBALL_MACHINE, stageno.act = 0;
+        stageno_i.zone = ZONE_GUMBALL_MACHINE, stageno_i.act = 0;
         markerno = 0;
         gameflag = 1;
         plcddat2_s2 = actwk[0].cddat2;
@@ -357,7 +357,7 @@ void o_star(sprite_status* p_actwk) {
         Clear_SpriteRingMem();
       }
       else {
-        unsigned short bonus_stage_no = STAGENO_ROLLING_JUMP;
+        zone_act bonus_stage_no = { ZONE_ROLLING_JUMP, 0 };
         short bonus_stage_id = plring_s - 20;
         bonus_stage_id /= 15;
         unsigned char bonus_stage_cnt = 2;
@@ -368,13 +368,13 @@ void o_star(sprite_status* p_actwk) {
 
         switch (bonus_stage_id) {
           case BONUS_STAGE_ROLLING_JUMP:
-            bonus_stage_no = STAGENO_ROLLING_JUMP;
+            bonus_stage_no.zone = ZONE_ROLLING_JUMP, bonus_stage_no.act = 0;
             break;
           case BONUS_STAGE_SLOT_MACHINE:
-            bonus_stage_no = STAGENO_SLOT_MACHINE;
+            bonus_stage_no.zone = ZONE_SLOT_MACHINE, bonus_stage_no.act = 0;
             break;
           case BONUS_STAGE_GUMBALL_MACHINE:
-            bonus_stage_no = STAGENO_GUMBALL_MACHINE;
+            bonus_stage_no.zone = ZONE_GUMBALL_MACHINE, bonus_stage_no.act = 0;
             break;
         }
 

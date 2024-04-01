@@ -1,6 +1,7 @@
 #ifndef TYPES_H
 #define TYPES_H
 
+#include "constants.h"
 #include "sprite_status.h"
 
 typedef struct set_act05_data {
@@ -73,5 +74,11 @@ typedef struct enemy_init2_data {
   unsigned char colino;
 }
 enemy_init2_data;
+
+typedef struct zone_act {
+  zone_id zone;
+  unsigned char act;
+}
+zone_act;
 
 #endif

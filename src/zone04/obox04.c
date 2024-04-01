@@ -212,7 +212,7 @@ static void set_obox04_friend_init(sprite_status* p_actwk) {
   SPRITE_STATUS_SHORT(p_actwk, 62) = spd_tbl[spd_index];
   unsigned char ofs_index = (p_actwk->userflag1 & 2) / 2;
   p_actwk->sproffset = ofs_tbl[ofs_index];
-  unsigned char* friends = &zone_friend_data[stageno >> 8][0];
+  unsigned char* friends = &zone_friend_data[stageno.zone][0];
   unsigned char friend_id = friends[ofs_index];
   p_actwk->patbase = friend_data[friend_id].patbase;
   SPRITE_STATUS_SHORT(p_actwk, 46) = p_actwk->userflag1 * 4;
