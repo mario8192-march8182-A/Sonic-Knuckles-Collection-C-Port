@@ -81,4 +81,12 @@ typedef struct zone_act {
 }
 zone_act;
 
+typedef struct act_timer {
+  unsigned char hours;
+  unsigned char minutes;
+  unsigned char seconds;
+  unsigned char frames;
+}
+act_timer;
+
 #endif

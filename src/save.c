@@ -205,11 +205,11 @@ void playload(sprite_status* p_actwk) {
     plring_f2 = 0;
   }
   pltime = pltime_s;
-  pltime = 59 << 24 | pltime & 0x00FFFFFF;
-  pltime = (pltime & 0x00FF0000) - (1 << 16) | pltime & 0xFF00FFFF;
-  actwk[0].sproffset = sproffset_s;
-  actwk[0].actfree.player.colibits = colibits_s;
-  scr_resize_no = scr_resize_no_s;;
+  pltime.frames = 59;
+  --pltime.seconds;
+  actwk[0].sproffset = plsproffset_s;
+  actwk[0].actfree.player.colibits = plcolibits_s;
+  scr_resize_no = scr_resize_no_s;
   scralim_down = scralim_down_s;
   scralim_n_down = scralim_down_s;
   scra_h_posit = SHORT_TO_LONG_HIGH(scra_h_posit_s) + LONG_LOW(scra_v_posit);
@@ -230,8 +230,8 @@ static void playload2(sprite_status* p_actwk) {
   plring = plring_s2;
   plring_f2 = plring_f2_s2;
   pltime = pltime_s2;
-  pltime = 59 << 24 | pltime & 0x00FFFFFF;
-  pltime = (pltime & 0x00FF0000) - (1 << 16) | pltime & 0xFF00FFFF;
+  pltime.frames = 59;
+  --pltime.seconds;
   actwk[0].sproffset = plsproffset_s2;
   actwk[0].actfree.player.colibits = plcolibits_s2;
   scr_resize_no = scr_resize_no_s2;
