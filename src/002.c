@@ -289,7 +289,7 @@ void set_wchg_fout0(sprite_status* p_actwk) {
 // skdisasm label: Remove_From_TrackingSlot
 void clr_wchg_bit(sprite_status* p_actwk) {
   unsigned char bit_string = ~(SPRITE_STATUS_UCHAR(p_actwk, 59));
-  DAT_008549d4[SPRITE_STATUS_USHORT(p_actwk, 60)] &= bit_string;
+  emy_wrt_flg[SPRITE_STATUS_USHORT(p_actwk, 60)] &= bit_string;
 }
 
 
