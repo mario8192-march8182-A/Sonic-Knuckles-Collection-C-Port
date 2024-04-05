@@ -16,7 +16,7 @@ sprite_status* set_act05(sprite_status* p_actwk, set_act05_data* p_data) {
     bool created = Create_New_Sprite3(p_actwk, &p_new_actwk);
     if (!created) return 0;
 
-    SPRITE_STATUS_USHORT(p_new_actwk, OYA_ADR) = p_actwk - actwk;
+    p_new_actwk->actfree.dynamic.oya = p_actwk - actwk;
     p_new_actwk->patbase = p_actwk->patbase;
     p_new_actwk->sproffset = p_actwk->sproffset;
     p_new_actwk->r_ptr = p_data->act;
@@ -55,7 +55,7 @@ static int chk_tpg_next(sprite_status* p_actwk, signed char pg, signed char* p_p
     case PG_CONTROL_NEXT:
       pg = p_pg_data[patcnt + 1];
       p_pg_data = &p_pg_data[pg];
-      SPRITE_STATUS_PSCHAR(p_actwk, 48) = p_pg_data;
+      p_actwk->actfree.dynamic.pg_data_ptr = p_pg_data;
     case PG_CONTROL_LOOP:
       p_actwk->patno = p_pg_data[0];
       p_actwk->pattim = p_pg_data[1];
@@ -63,7 +63,7 @@ static int chk_tpg_next(sprite_status* p_actwk, signed char pg, signed char* p_p
       break;
     case PG_CONTROL_END:
       p_actwk->pattim = 0;
-      SPRITE_STATUS_PHANDLER(p_actwk, 52)(p_actwk);
+      p_actwk->actfree.dynamic.callback_ptr(p_actwk);
       ret = -1;
       break;
   }
@@ -74,7 +74,7 @@ static int chk_tpg_next(sprite_status* p_actwk, signed char pg, signed char* p_p
 
 // skdisasm label: Child_Draw_Sprite
 void chk_oya_die0(sprite_status* p_actwk) {
-  sprite_status* p_parentwk = &actwk[SPRITE_STATUS_USHORT(p_actwk, 70)];
+  sprite_status* p_parentwk = &actwk[p_actwk->actfree.dynamic.oya];
   if (BIT_7_IS_SET(p_parentwk->cddat1)) {
     set_emy_fout0(p_actwk);
   }
@@ -163,8 +163,8 @@ void emy_wrt_init(sprite_status* p_actwk, wrt_init_data* p_data) {
 
 ok:
   SET_BIT(emy_wrt_flg[p_data->flg_index], bit);
-  SPRITE_STATUS_UCHAR(p_actwk, 59) = bit;
-  SPRITE_STATUS_USHORT(p_actwk, 60) = p_data->flg_index;
+  p_actwk->actfree.dynamic.wchg_bit = bit;
+  p_actwk->actfree.dynamic.wrt_flg_index = p_data->flg_index;
   p_actwk->sproffset = sproffset;
   p_actwk->patbase = p_data->patbase;
   p_actwk->sprpri = p_data->sprpri;
@@ -181,8 +181,8 @@ ok:
 
 // skdisasm label: Perform_DPLC
 void set_emy_wchg(sprite_status* p_actwk, wrt_data* p_data) {
-  if (p_actwk->patno == SPRITE_STATUS_UCHAR(p_actwk, 58)) return;
-  SPRITE_STATUS_UCHAR(p_actwk, 58) = p_actwk->patno;
+  if (p_actwk->patno == p_actwk->actfree.dynamic.prev_patno) return;
+  p_actwk->actfree.dynamic.prev_patno = p_actwk->patno;
   unsigned short vram_adr = (p_actwk->sproffset & 0x7FF) << 5;
   unsigned short* wrtpat = p_data->wrtpat[p_actwk->patno];
   short cnt = *wrtpat++; // this conversion from unsigned to signed should be safe
@@ -227,8 +227,8 @@ void chk_emy_fout0(sprite_status* p_actwk) {
 
 
 void emy_fout(sprite_status* p_actwk) {
-  if (SPRITE_STATUS_USHORT(p_actwk, 72) != 0) {
-    CLEAR_BIT_7(flagwork[SPRITE_STATUS_USHORT(p_actwk, 72) - 1]);
+  if (p_actwk->actfree.dynamic.flagwork_index != 0) {
+    CLEAR_BIT_7(flagwork[p_actwk->actfree.dynamic.flagwork_index - 1]);
   }
   SET_BIT_7(p_actwk->cddat1);
   p_actwk->r_ptr = &frameout;
@@ -271,8 +271,8 @@ void chk_emy_foutw0(sprite_status* p_actwk) {
 
 // skdisasm label: Go_Delete_SpriteSlotted
 void wchg_fout(sprite_status* p_actwk) {
-  if (SPRITE_STATUS_USHORT(p_actwk, 72) != 0) {
-    CLEAR_BIT_7(flagwork[SPRITE_STATUS_USHORT(p_actwk, 72) - 1]);
+  if (p_actwk->actfree.dynamic.flagwork_index != 0) {
+    CLEAR_BIT_7(flagwork[p_actwk->actfree.dynamic.flagwork_index - 1]);
   }
   set_wchg_fout0(p_actwk);
 }
@@ -288,7 +288,7 @@ void set_wchg_fout0(sprite_status* p_actwk) {
 
 // skdisasm label: Remove_From_TrackingSlot
 void clr_wchg_bit(sprite_status* p_actwk) {
-  CLEAR_BIT(emy_wrt_flg[SPRITE_STATUS_USHORT(p_actwk, 60)], SPRITE_STATUS_UCHAR(p_actwk, 59));
+  CLEAR_BIT(emy_wrt_flg[p_actwk->actfree.dynamic.wrt_flg_index], p_actwk->actfree.dynamic.wchg_bit);
 }
 
 
@@ -374,7 +374,7 @@ bool chk_emy_col(sprite_status* p_actwk, sprite_status** pp_coli_actwk) {
   if (p_actwk->colicnt == 0) return false;
   p_actwk->colicnt = 0;
   unsigned short coli_act_id = pl_wk_tbl[p_actwk->colicnt & 3];
-  SPRITE_STATUS_USHORT(p_actwk, 68) = coli_act_id;
+  p_actwk->actfree.dynamic.ko = coli_act_id;
   *pp_coli_actwk = &actwk[coli_act_id];
   return true;
 }
@@ -413,8 +413,8 @@ sprite_status* chk_emy_colt__col(sprite_status* p_playerwk_chk, sprite_status* p
 void set_bane_jump(sprite_status* p_playerwk, short yspeed) {
   p_playerwk->yspeed = yspeed;
   CLEAR_BIT_3(p_playerwk->cddat1);
-  SPRITE_STATUS_UCHAR(p_playerwk, 64) = 0;
-  SPRITE_STATUS_UCHAR(p_playerwk, 61) = 0;
+  p_playerwk->actfree.player.jump_status = 0;
+  p_playerwk->actfree.player.roll_status = 0;
   p_playerwk->mstno = 16;
   p_playerwk->r_no = 2;
   soundset(177);

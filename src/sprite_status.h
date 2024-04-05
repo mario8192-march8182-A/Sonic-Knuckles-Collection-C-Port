@@ -73,10 +73,27 @@ typedef struct sprite_status {
       unsigned char invulnerability_timer;
       unsigned char reserved2[3];
       character_id character;
-      unsigned char reserved3[13];
-      unsigned short colibits;
+      unsigned char reserved3[4];
+      unsigned char roll_status;
       unsigned char reserved4[2];
+      unsigned char jump_status;
+      unsigned char reserved5[5];
+      unsigned short colibits;
+      unsigned char reserved6[2];
     } player;
+    struct {
+      unsigned char reserved1[2];
+      signed char* pg_data_ptr;
+      sprite_status_handler callback_ptr;
+      unsigned char reserved2[2];
+      unsigned char prev_patno;
+      unsigned char wchg_bit;
+      unsigned short wrt_flg_index;
+      unsigned char reserved3[6];
+      unsigned short ko;
+      unsigned short oya;
+      unsigned short flagwork_index;
+    } dynamic;
     struct {
       short attack_countdown;
       signed char* pg_data_ptr;
