@@ -9,6 +9,7 @@
 #define SET_BIT_5(value) (value |= 32)
 #define SET_BIT_6(value) (value |= 64)
 #define SET_BIT_7(value) (value |= 128)
+#define SET_BIT(value, bit) (value |= 1 << (bit))
 
 #define CLEAR_BIT_0(value) (value &= 0xFE)
 #define CLEAR_BIT_1(value) (value &= 0xFD)
@@ -18,6 +19,7 @@
 #define CLEAR_BIT_5(value) (value &= 0xDF)
 #define CLEAR_BIT_6(value) (value &= 0xBF)
 #define CLEAR_BIT_7(value) (value &= 0x7F)
+#define CLEAR_BIT(value, bit) (value &= ~(bit))
 
 #define BIT_0_IS_SET(value) (value & 1)
 #define BIT_1_IS_SET(value) (value & 2)

@@ -162,7 +162,7 @@ void emy_wrt_init(sprite_status* p_actwk, wrt_init_data* p_data) {
   return;
 
 ok:
-  emy_wrt_flg[p_data->flg_index] |= 1 << bit;
+  SET_BIT(emy_wrt_flg[p_data->flg_index], bit);
   SPRITE_STATUS_UCHAR(p_actwk, 59) = bit;
   SPRITE_STATUS_USHORT(p_actwk, 60) = p_data->flg_index;
   p_actwk->sproffset = sproffset;
@@ -288,8 +288,7 @@ void set_wchg_fout0(sprite_status* p_actwk) {
 
 // skdisasm label: Remove_From_TrackingSlot
 void clr_wchg_bit(sprite_status* p_actwk) {
-  unsigned char bit_string = ~(SPRITE_STATUS_UCHAR(p_actwk, 59));
-  emy_wrt_flg[SPRITE_STATUS_USHORT(p_actwk, 60)] &= bit_string;
+  CLEAR_BIT(emy_wrt_flg[SPRITE_STATUS_USHORT(p_actwk, 60)], SPRITE_STATUS_UCHAR(p_actwk, 59));
 }
 
 
