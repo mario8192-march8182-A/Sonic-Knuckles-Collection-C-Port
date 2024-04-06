@@ -89,4 +89,15 @@ typedef struct act_timer {
 }
 act_timer;
 
+typedef struct actclear_init_data {
+  sprite_status_handler r_ptr;
+  short x_destination;
+  short xposi;
+  short yposi;
+  unsigned char patno;
+  unsigned char sprhs;
+  unsigned short exit_no;
+}
+actclear_init_data;
+
 #endif

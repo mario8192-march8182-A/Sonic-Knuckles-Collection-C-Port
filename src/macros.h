@@ -1,6 +1,8 @@
 #ifndef MACROS_H
 #define MACROS_H
 
+#include "constants.h"
+
 #define SET_BIT_0(value) (value |= 1)
 #define SET_BIT_1(value) (value |= 2)
 #define SET_BIT_2(value) (value |= 4)
@@ -43,5 +45,7 @@
 #define LONG_HIGH_TO_SHORT(value) (value / 65536)
 #define LONG_LOW(value) (value % 65536)
 #define SHORT_TO_LONG_HIGH(value) (value * 65536)
+
+#define IS_LAVA_REEF_BOSS(structure) (structure.zone == LAVA_REEF_BOSS_AND_HIDDEN_PALACE && structure.act == 0)
 
 #endif

@@ -85,6 +85,23 @@ short atan(long x, long y) {
 }
 
 
+// SONIC3K.EXE address: 00412519
+// skdisasm label: HUD_AddToScore
+void scoreup(unsigned int updata) {
+  plscore_f = 1;
+  plscore += updata;
+  if (999999 <= plscore) {
+    plscore = 999999;
+  }
+  if (plscore >= extrascore) {
+    extrascore += 5000;
+    ++pl_suu;
+    ++pl_suu_f;
+    bgmset(42);
+  }
+}
+
+
 // SONIC3K.EXE address: 0041a490
 // skdisasm label: LoadEnemyArt
 void LoadEnemyArt() {
@@ -386,6 +403,18 @@ void sinset(unsigned char angle, short* sin, short* cos) {
   *cos = sintable[angle_w];
   angle_w -= 128;
   *sin = sintable[angle_w];
+}
+
+
+// SONIC3K.EXE address: 0042b87a
+// skdisasm label: CreateNewSprite4
+bool Create_New_Sprite4(sprite_status** pp_new_actwk, short remaining_slot_cnt) {
+  for (--remaining_slot_cnt ; remaining_slot_cnt >= 0; --remaining_slot_cnt) {
+    ++*pp_new_actwk;
+    if ((*pp_new_actwk)->r_ptr == 0) return true;
+  }
+
+  return false;
 }
 
 

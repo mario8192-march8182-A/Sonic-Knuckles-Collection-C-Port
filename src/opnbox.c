@@ -5,6 +5,7 @@
 #include "004xxxxx.h"
 #include "002.h"
 #include "091.h"
+#include "actclear.h"
 static void opnbox_init(sprite_status* p_actwk);
 static void opnbox_wait0(sprite_status* p_actwk);
 static void set_break(sprite_status* p_actwk);
