@@ -393,8 +393,9 @@ void chk_pl_pause(sprite_status* p_actwk, unsigned char r_no) {
   if (actwk[0].r_no >= 6) return; // unsigned
   p_actwk->r_no = r_no;
   set_pl_pause(p_actwk, &actwk[0]);
+  short slot_cnt;
   sprite_status* p_new_actwk;
-  bool created = Create_New_Sprite(&p_new_actwk);
+  bool created = Create_New_Sprite(&p_new_actwk, &slot_cnt);
   if (created) {
     p_new_actwk->r_ptr = &actclear;
   }
@@ -426,8 +427,9 @@ static bool chk_pl_pausez02(sprite_status* p_actwk, unsigned char r_no) {
   }
   p_actwk->xspeed = -256;
   p_actwk->r_no = r_no;
+  short slot_cnt;
   sprite_status* p_new_actwk;
-  bool created = Create_New_Sprite(&p_new_actwk);
+  bool created = Create_New_Sprite(&p_new_actwk, &slot_cnt);
   if (created) {
     p_new_actwk->r_ptr = &actclear;
   }

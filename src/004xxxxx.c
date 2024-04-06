@@ -256,7 +256,8 @@ bool playdamageset(sprite_status* p_playerwk, sprite_status* p_attack_actwk) {
       if (SPRITE_STATUS_SCHAR(p_playerwk, 55) < 0) goto jump0;
       if (ring_cnt == 0) goto die;
       sprite_status* p_new_actwk;
-      bool created = Create_New_Sprite(&p_new_actwk);
+      short slot_cnt;
+      bool created = Create_New_Sprite(&p_new_actwk, &slot_cnt);
       if (created) {
         p_new_actwk->r_ptr = &flyring;
         p_new_actwk->xposi = LONG_HIGH(p_playerwk->xposi) + LONG_LOW(p_new_actwk->xposi);
@@ -390,21 +391,21 @@ void sinset(unsigned char angle, short* sin, short* cos) {
 
 // SONIC3K.EXE address: 0042b8b8
 // skdisasm label: Create_New_Sprite
-bool Create_New_Sprite(sprite_status** pp_new_actwk) {
+bool Create_New_Sprite(sprite_status** pp_new_actwk, short* p_slot_cnt) {
   *pp_new_actwk = &actwk[ACTWK_DYNAMIC_START];
-  return Create_New_Sprite_Int(pp_new_actwk, ACTWK_RESERVED_START - ACTWK_DYNAMIC_START - 1);
+  *p_slot_cnt = ACTWK_RESERVED_START - ACTWK_DYNAMIC_START - 1;
+  return Create_New_Sprite_Int(pp_new_actwk, p_slot_cnt);
 }
 
 
 // SONIC3K.EXE address: 0042b8cf
 // skdisasm label: Create_New_Sprite3
-bool Create_New_Sprite3(sprite_status* p_actwk, sprite_status** pp_new_actwk) {
+bool Create_New_Sprite3(sprite_status* p_actwk, sprite_status** pp_new_actwk, short* p_slot_cnt) {
   *pp_new_actwk = p_actwk;
 
   /* BUGFIX:
-    The original code uses a lookup table to determine the value of the
-    variable 'slot_cnt'. However, there's a bug in the generation of this
-    table. As a result:
+    The original code uses a lookup table to determine the amount of slots.
+    However, there's a bug in the generation of this table. As a result:
     - it thinks there are no eligible slots if p_actwk is the first dynamic
       sprite
     - it considers the slot for the first reserved sprite an eligible slot
@@ -413,18 +414,18 @@ bool Create_New_Sprite3(sprite_status* p_actwk, sprite_status** pp_new_actwk) {
   /* WHY:
     We decrement the result by one because we want to know how many slots
     there are between p_actwk and &actwk[93]. We decrement it another time
-    because 'slot_cnt' is zero-based.
+    because the amount of slots is zero-based.
   */
 
-  short slot_cnt = (&actwk[ACTWK_RESERVED_START] - p_actwk) - 1 - 1;
-  if (slot_cnt < 0) return false;
-  return Create_New_Sprite_Int(pp_new_actwk, slot_cnt);
+  *p_slot_cnt = (&actwk[ACTWK_RESERVED_START] - p_actwk) - 1 - 1;
+  if (*p_slot_cnt < 0) return false;
+  return Create_New_Sprite_Int(pp_new_actwk, p_slot_cnt);
 }
 
 
 // Address: 0042b8ff
-bool Create_New_Sprite_Int(sprite_status** pp_new_actwk, short slot_cnt) {
-  for ( ; slot_cnt != -1; --slot_cnt) {
+bool Create_New_Sprite_Int(sprite_status** pp_new_actwk, short* p_slot_cnt) {
+  for ( ; *p_slot_cnt != -1; --*p_slot_cnt) {
     ++*pp_new_actwk;
     if ((*pp_new_actwk)->r_ptr == 0) return true;
   }

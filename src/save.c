@@ -73,7 +73,8 @@ static void savemove__sub(sprite_status* p_actwk, sprite_status* p_playerwk) {
     if (util__to_unsigned(distance) >= 104) return; // unsigned
     soundset(99);
     sprite_status* p_new_actwk;
-    bool created = Create_New_Sprite(&p_new_actwk);
+    short slot_cnt;
+    bool created = Create_New_Sprite(&p_new_actwk, &slot_cnt);
     if (created) {
       p_new_actwk->r_ptr = &save;
       p_new_actwk->r_no = 6;
@@ -292,7 +293,8 @@ void o_starinit(sprite_status* p_actwk) {
   unsigned short angle = 0;
 
   do {
-    bool created = Create_New_Sprite(&p_new_actwk);
+    short slot_cnt;
+    bool created = Create_New_Sprite(&p_new_actwk, &slot_cnt);
     if (!created) break;
     p_new_actwk->r_ptr = p_actwk->r_ptr;
     p_new_actwk->patbase = starpat;

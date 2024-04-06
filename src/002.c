@@ -13,7 +13,8 @@ sprite_status* set_act05(sprite_status* p_actwk, set_act05_data* p_data) {
   short cnt = p_data->cnt;
 
   do {
-    bool created = Create_New_Sprite3(p_actwk, &p_new_actwk);
+    short slot_cnt;
+    bool created = Create_New_Sprite3(p_actwk, &p_new_actwk, &slot_cnt);
     if (!created) return 0;
 
     p_new_actwk->actfree.dynamic.oya = p_actwk - actwk;

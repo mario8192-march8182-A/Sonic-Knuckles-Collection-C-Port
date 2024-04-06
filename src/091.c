@@ -40,7 +40,8 @@ sprite_status* set_act00(sprite_status* p_actwk, set_act00_data* p_data) {
   ++cnt;
 
   do {
-    bool created = Create_New_Sprite3(p_actwk, &p_new_actwk);
+    short slot_cnt;
+    bool created = Create_New_Sprite3(p_actwk, &p_new_actwk, &slot_cnt);
     if (!created) return 0;
 
     SPRITE_STATUS_USHORT(p_new_actwk, OYA_ADR) = actwk - p_actwk;

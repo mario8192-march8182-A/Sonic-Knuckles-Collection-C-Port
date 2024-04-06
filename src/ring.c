@@ -208,7 +208,8 @@ static void flyringinit(sprite_status* p_actwk) {
   goto jump;
 
   do {
-    bool created = Create_New_Sprite3(p_actwk, &p_new_actwk);
+    short slot_cnt;
+    bool created = Create_New_Sprite3(p_actwk, &p_new_actwk, &slot_cnt);
     if (!created) break;
 
 jump:
