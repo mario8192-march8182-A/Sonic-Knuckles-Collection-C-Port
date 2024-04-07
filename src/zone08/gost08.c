@@ -2,7 +2,6 @@
 #include "../macros.h"
 #include "../util.h"
 #include "gost08.h"
-#include "gost08_data.h"
 #include "../004xxxxx.h"
 #include "../002.h"
 #include "../091.h"
@@ -25,6 +24,8 @@ static void gost08_atak0(sprite_status* p_actwk);
 static void gost08_atak1(sprite_status* p_actwk);
 static void gost08_atak2(sprite_status* p_actwk);
 static void gost08_body_fout0(sprite_status* p_actwk);
+static short col_tbl_00[4];
+static short col_tbl_04[4];
 static void set_openbox_cg(sprite_status* p_actwk);
 static void set_emy08_cg(sprite_status* p_actwk);
 static void obox08_switch(sprite_status* p_actwk);
@@ -34,10 +35,46 @@ static void obox08_gost_move0(sprite_status* p_actwk);
 static void obox08_gost_move1(sprite_status* p_actwk);
 static void chk_gost08_limit(sprite_status* p_actwk);
 static void set_body_init(sprite_status* p_actwk);
+static short gost08_init_spd_tbl[6];
 static void set_puka_init(sprite_status* p_actwk);
 static void puka_init_00(sprite_status* p_actwk);
 static void puka_init_01(sprite_status* p_actwk);
 static void puka_init_02(sprite_status* p_actwk);
+static wrt_init_data gost08_init_tbl;
+static enemy_init0_data obox08_init_tbl;
+static enemy_init0_data obox08_gost_init_tbl;
+static set_act00_data obox08_switch_set_tbl;
+static set_act00_data obox08_gost_set_tbl;
+static set_act05_data gost08_body_set_tbl;
+static wrt_data gost08_wrt_tbl;
+static signed char gost08_apar_pg00[12];
+static signed char gost08_pg00[7];
+static signed char gost08_apar_pg01[14];
+static signed char gost08_pg01[7];
+static signed char gost08_apar_pg02[14];
+static signed char gost08_pg02[7];
+static signed char gost08_away_pg00[13];
+static signed char gost08_chg_pg00[8];
+static signed char gost08_chg_pg01[8];
+static unsigned short* gost08_tbl[18];
+static unsigned short gost08_tbl00[2];
+static unsigned short gost08_tbl01[2];
+static unsigned short gost08_tbl02[2];
+static unsigned short gost08_tbl03[2];
+static unsigned short gost08_tbl04[2];
+static unsigned short gost08_tbl05[2];
+static unsigned short gost08_tbl06[2];
+static unsigned short gost08_tbl07[2];
+static unsigned short gost08_tbl08[2];
+static unsigned short gost08_tbl09[3];
+static unsigned short gost08_tbl10[3];
+static unsigned short gost08_tbl11[3];
+static unsigned short gost08_tbl12[3];
+static unsigned short gost08_tbl13[2];
+static unsigned short gost08_tbl14[2];
+static unsigned short gost08_tbl15[2];
+static unsigned short gost08_tbl16[2];
+static unsigned short gost08_tbl17[2];
 
 
 void gost08(sprite_status* p_actwk) {
@@ -46,12 +83,6 @@ void gost08(sprite_status* p_actwk) {
   p_actwk->yposi = SHORT_TO_LONG_HIGH(160);
   gost08_ctr(p_actwk);
 }
-
-
-static set_act05_data gost08_body_set_tbl = {
-  0,
-  &gost08_body
-};
 
 
 static void gost08_ctr(sprite_status* p_actwk) {
@@ -299,6 +330,10 @@ void setcg(sprite_status* p_actwk) {
 }
 
 
+static short col_tbl_00[4] = { -16, 32, -64, 128 };
+static short col_tbl_04[4] = { -16, 32, -128, 256 };
+
+
 static void set_openbox_cg(sprite_status* p_actwk) {
   static cg_data opnbox_cg_tbl = {
     0,
@@ -314,14 +349,6 @@ static void set_openbox_cg(sprite_status* p_actwk) {
 static void set_emy08_cg(sprite_status* p_actwk) {
   LoadEnemyArt();
 }
-
-
-static set_act00_data obox08_switch_set_tbl = {
-  0,
-  {
-    { &obox08_switch, 0, -36 }
-  }
-};
 
 
 void obox08(sprite_status* p_actwk) {
@@ -413,19 +440,6 @@ static void chk_gost08_limit(sprite_status* p_actwk) {
 }
 
 
-static set_act00_data obox08_gost_set_tbl = {
-  5,
-  {
-    { &obox08_gost,  -8, -4 },
-    { &obox08_gost,   8, -4 },
-    { &obox08_gost,  16, -4 },
-    { &obox08_gost, -16, -4 },
-    { &obox08_gost,  24, -4 },
-    { &obox08_gost, -24, -4 }
-  }
-};
-
-
 void set_gost08(sprite_status* p_actwk) {
   markerno = 1;
   plxposi_s = SOZ2_start[0];
@@ -454,6 +468,11 @@ static void set_body_init(sprite_status* p_actwk) {
   p_actwk->actfree.gost08.pg_data_ptr = pg_tbl[(soz_darkness_level * 2 & 12) / 4];
   set_puka_init(p_actwk);
 }
+
+
+static short gost08_init_spd_tbl[6] = {
+  -256, -256, -256, -384, -384, -512
+};
 
 
 static void set_puka_init(sprite_status* p_actwk) {
@@ -500,3 +519,125 @@ static void puka_init_02(sprite_status* p_actwk) {
   p_actwk->actfree.gost08.accel = 16;
   CLEAR_BIT_0(p_actwk->actfree.gost08.puka_axis_dir);
 }
+
+
+static wrt_init_data gost08_init_tbl = {
+  2,
+  42240,
+  18,
+  0,
+  gost08pat,
+  PRI_0,
+  16,
+  20,
+  0,
+  0
+};
+
+
+static enemy_init0_data obox08_init_tbl = {
+  openbox_pt,
+  34102,
+  PRI_3,
+  48,
+  64,
+  0,
+  0
+};
+
+
+static enemy_init0_data obox08_gost_init_tbl = {
+  gost08pat,
+  42240,
+  PRI_4,
+  48,
+  32,
+  0,
+  0
+};
+
+
+static set_act00_data obox08_switch_set_tbl = {
+  0,
+  {
+    { &obox08_switch, 0, -36 }
+  }
+};
+
+
+static set_act00_data obox08_gost_set_tbl = {
+  5,
+  {
+    { &obox08_gost,  -8, -4 },
+    { &obox08_gost,   8, -4 },
+    { &obox08_gost,  16, -4 },
+    { &obox08_gost, -16, -4 },
+    { &obox08_gost,  24, -4 },
+    { &obox08_gost, -24, -4 }
+  }
+};
+
+
+static set_act05_data gost08_body_set_tbl = {
+  0,
+  &gost08_body
+};
+
+
+static wrt_data gost08_wrt_tbl = {
+  gost08_tiles,
+  gost08_tbl
+};
+
+
+static signed char gost08_apar_pg00[12] = { 17,  3, 17,  3, 16,  3, 15,  4, 14,  4, -8, 12 };
+static signed char gost08_pg00[7] =       {  0,  3,  1,  3,  2,  4, -4 };
+static signed char gost08_apar_pg01[14] = { 17,  3, 17,  3, 16,  3, 15,  4, 14,  4, 13,  4, -8, 14 };
+static signed char gost08_pg01[7] =       {  5,  3,  6,  3,  7,  4, -4 };
+static signed char gost08_apar_pg02[14] = { 17,  3, 17,  3, 16,  3, 15,  4, 14,  4, 13,  4, -8, 14 };
+static signed char gost08_pg02[7] =       { 10,  3, 11,  3, 12,  4, -4 };
+static signed char gost08_away_pg00[13] = { 13,  4, 13,  4, 14,  4, 15,  4, 16,  3, 17,  3, -12 };
+static signed char gost08_chg_pg00[8] =   {  3,  7,  3,  7,  4,  7, -8, -41 };
+static signed char gost08_chg_pg01[8] =   {  8,  7,  8,  7,  9,  7, -8, -28 };
+
+
+static unsigned short* gost08_tbl[18] = {
+  gost08_tbl00,
+  gost08_tbl01,
+  gost08_tbl02,
+  gost08_tbl03,
+  gost08_tbl04,
+  gost08_tbl05,
+  gost08_tbl06,
+  gost08_tbl07,
+  gost08_tbl08,
+  gost08_tbl09,
+  gost08_tbl10,
+  gost08_tbl11,
+  gost08_tbl12,
+  gost08_tbl13,
+  gost08_tbl14,
+  gost08_tbl15,
+  gost08_tbl16,
+  gost08_tbl17
+};
+
+
+static unsigned short gost08_tbl00[2] = { 0,    8 };
+static unsigned short gost08_tbl01[2] = { 0,  152 };
+static unsigned short gost08_tbl02[2] = { 0,  296 };
+static unsigned short gost08_tbl03[2] = { 0,  440 };
+static unsigned short gost08_tbl04[2] = { 0,  584 };
+static unsigned short gost08_tbl05[2] = { 0,  728 };
+static unsigned short gost08_tbl06[2] = { 0,  872 };
+static unsigned short gost08_tbl07[2] = { 0, 1016 };
+static unsigned short gost08_tbl08[2] = { 0, 1167 };
+static unsigned short gost08_tbl09[3] = { 1, 1413, 1515 };
+static unsigned short gost08_tbl10[3] = { 1, 1701, 1803 };
+static unsigned short gost08_tbl11[3] = { 1, 1989, 2091 };
+static unsigned short gost08_tbl12[3] = { 1, 1701, 2283 };
+static unsigned short gost08_tbl13[2] = { 0, 2472 };
+static unsigned short gost08_tbl14[2] = { 0, 2616 };
+static unsigned short gost08_tbl15[2] = { 0, 2755 };
+static unsigned short gost08_tbl16[2] = { 0, 2819 };
+static unsigned short gost08_tbl17[2] = { 0, 2880 };
