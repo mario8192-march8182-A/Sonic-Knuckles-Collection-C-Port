@@ -32,6 +32,7 @@ bool Create_New_Sprite_Int(sprite_status** pp_new_actwk, short* p_slot_cnt);
 void Clear_SpriteRingMem();
 void Player_TouchFloor(sprite_status* p_actwk);
 short ObjCheckFloorDist(sprite_status* p_actwk);
+short ObjCheckFloorDist2(sprite_status* p_actwk, short xposi);
 short RingCheckFloorDist(sprite_status* p_actwk);
 short RingCheckFloorDist_ReverseGravity(sprite_status* p_actwk);
 

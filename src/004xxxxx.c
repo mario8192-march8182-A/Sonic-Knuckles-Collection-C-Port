@@ -508,6 +508,13 @@ short ObjCheckFloorDist(sprite_status* p_actwk) {
 }
 
 
+// SONIC3K.EXE address: 00451090
+// skdisasm label: ObjCheckFloorDist2
+short ObjCheckFloorDist2(sprite_status* p_actwk, short xposi) {
+  // TODO
+}
+
+
 // SONIC3K.EXE address: 004511b2
 // skdisasm label: RingCheckFloorDist
 short RingCheckFloorDist(sprite_status* p_actwk) {

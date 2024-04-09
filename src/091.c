@@ -69,6 +69,26 @@ void ko_offset0(sprite_status* p_actwk) {
 }
 
 
+// skdisasm label: Refresh_ChildPositionAdjusted
+void ko_offset1(sprite_status* p_actwk) {
+  sprite_status* p_parentwk = &actwk[p_actwk->actfree.dynamic.oya];
+  signed char xoffset = p_actwk->actfree.dynamic.xoffset;
+  CLEAR_BIT_0(p_actwk->actflg);
+  if (BIT_0_IS_SET(p_parentwk->actflg)) {
+    xoffset = -xoffset;
+    SET_BIT_0(p_parentwk->actflg);
+  }
+  p_actwk->xposi = SHORT_TO_LONG_HIGH(LONG_HIGH_TO_SHORT(p_parentwk->xposi) + xoffset) + LONG_LOW(p_actwk->xposi);
+  signed char yoffset = p_actwk->actfree.dynamic.yoffset;
+  CLEAR_BIT_1(p_actwk->actflg);
+  if (BIT_1_IS_SET(p_parentwk->actflg)) {
+    yoffset = -yoffset;
+    SET_BIT_1(p_parentwk->actflg);
+  }
+  p_actwk->yposi = SHORT_TO_LONG_HIGH(LONG_HIGH_TO_SHORT(p_parentwk->yposi) + yoffset) + LONG_LOW(p_actwk->yposi);
+}
+
+
 // skdisasm label: Swing_UpAndDown
 bool puka_puka(sprite_status* p_actwk) {
   bool axis_dir_changed = false;
@@ -99,6 +119,23 @@ bool puka_puka(sprite_status* p_actwk) {
   // d1 = yspeed;
   // d3 = axis_dir_changed;
   return axis_dir_changed;
+}
+
+
+// skdisasm label: Animate_Raw
+void pt_chg(sprite_status* p_actwk) {
+  --p_actwk->pattim;
+  if (util__to_signed(p_actwk->pattim) < 0) {
+    ++p_actwk->patcnt;
+    signed char pg = p_actwk->actfree.dynamic.pg_data_ptr[p_actwk->patcnt + 1];
+    if (pg < 0) {
+      chk_pt_next(p_actwk, pg, p_actwk->actfree.dynamic.pg_data_ptr, p_actwk->patcnt);
+    }
+    else {
+      p_actwk->pattim = p_actwk->actfree.dynamic.pg_data_ptr[0];
+      p_actwk->patno = pg;
+    }
+  }
 }
 
 

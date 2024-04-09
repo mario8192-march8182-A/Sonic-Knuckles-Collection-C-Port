@@ -97,11 +97,11 @@ typedef struct sprite_status {
           unsigned char reserved7[2];
         } player;
         struct {
-          unsigned char reserved1[2];
+          short timer;
           signed char* pg_data_ptr;
           sprite_status_handler callback_ptr;
           unsigned char status_bitfield;
-          unsigned char reserved2[1];
+          unsigned char reserved1[1];
           unsigned char prev_patno;
           unsigned char wchg_bit;
           unsigned short wrt_flg_index;
@@ -142,6 +142,22 @@ typedef struct sprite_status {
           short ghost_countdown;
           unsigned char reserved2[14];
         } gost08_ctr;
+        struct {
+          short attack_countdown;
+          unsigned char reserved1[4];
+          sprite_status_handler callback_ptr;
+          unsigned char status_bitfield;
+          unsigned char reserved2[5];
+          short accel_max;
+          short accel;
+          unsigned char reserved3[8];
+        } sai00;
+        struct {
+          unsigned char reserved1[2];
+          signed char* pg_data_ptr;
+          sprite_status_handler callback_ptr;
+          unsigned char reserved2[18];
+        } sai00_kemuri;
         struct {
           unsigned char reserved1[2];
           short parent_xposi;

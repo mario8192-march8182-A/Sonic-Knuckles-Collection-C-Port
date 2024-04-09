@@ -23,6 +23,15 @@
 #define CLEAR_BIT_7(value) (value &= 0x7F)
 #define CLEAR_BIT(value, bit) (value &= ~(bit))
 
+#define TOGGLE_BIT_0(value) (value ^= 1)
+#define TOGGLE_BIT_1(value) (value ^= 2)
+#define TOGGLE_BIT_2(value) (value ^= 4)
+#define TOGGLE_BIT_3(value) (value ^= 8)
+#define TOGGLE_BIT_4(value) (value ^= 16)
+#define TOGGLE_BIT_5(value) (value ^= 32)
+#define TOGGLE_BIT_6(value) (value ^= 64)
+#define TOGGLE_BIT_7(value) (value ^= 128)
+
 #define BIT_0_IS_SET(value) (value & 1)
 #define BIT_1_IS_SET(value) (value & 2)
 #define BIT_2_IS_SET(value) (value & 4)

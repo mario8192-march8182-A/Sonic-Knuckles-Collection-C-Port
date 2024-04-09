@@ -4,6 +4,7 @@
 #include "002.h"
 #include "004xxxxx.h"
 static int chk_tpg_next(sprite_status* p_actwk, signed char pg, signed char* p_pg_data, unsigned char patcnt);
+static void chk_framein__chk(sprite_status* p_actwk);
 
 
 // skdisasm label: CreateChild6_Simple
@@ -73,6 +74,14 @@ static int chk_tpg_next(sprite_status* p_actwk, signed char pg, signed char* p_p
 }
 
 
+void dec_timer(sprite_status* p_actwk) {
+  --p_actwk->actfree.dynamic.timer;
+  if (p_actwk->actfree.dynamic.timer < 0) {
+    p_actwk->actfree.dynamic.callback_ptr(p_actwk);
+  }
+}
+
+
 // skdisasm label: Child_Draw_Sprite
 void chk_oya_die0(sprite_status* p_actwk) {
   sprite_status* p_parentwk = &actwk[p_actwk->actfree.dynamic.oya];
@@ -81,6 +90,19 @@ void chk_oya_die0(sprite_status* p_actwk) {
   }
   else {
     actionsub(p_actwk);
+  }
+}
+
+
+// skdisasm label: Child_Remember_Draw_Sprite
+void chk_oya_diew0(sprite_status* p_actwk) {
+  sprite_status* p_parentwk = &actwk[p_actwk->actfree.dynamic.oya];
+  if (!BIT_7_IS_SET(p_parentwk->cddat1)) {
+    actionsub(p_actwk);
+  }
+  else {
+    clr_wchg_bit(p_actwk);
+    set_emy_fout0(p_actwk);
   }
 }
 
@@ -293,6 +315,33 @@ void clr_wchg_bit(sprite_status* p_actwk) {
 }
 
 
+// skdisasm label: Sprite_CheckDeleteTouchSlotted
+void chk_emy_foutwc0(sprite_status* p_actwk) {
+  if (!BIT_7_IS_SET(p_actwk->actflg)) {
+    unsigned short scr_xposi = util__to_unsigned(LONG_HIGH_TO_SHORT(p_actwk->xposi)) & 0xFF80;
+    scr_xposi -= scr_x_no;
+    if (scr_xposi > 640) { // unsigned
+      wchg_fout(p_actwk);
+    }
+    else {
+      Add_Object_To_Collision_Response_List(p_actwk);
+      actionsub(p_actwk);
+    }
+  }
+  else {
+    p_actwk->r_ptr = &frameout;
+    clr_wchg_bit(p_actwk);
+  }
+}
+
+
+// skdisasm label: Go_Delete_SpriteSlotted3
+void wchg_die(sprite_status* p_actwk) {
+  p_actwk->r_ptr = &frameout;
+  clr_wchg_bit(p_actwk);
+}
+
+
 // skdisasm label: Go_Delete_Sprite
 void set_emy_fout0(sprite_status* p_actwk) {
   p_actwk->r_ptr = &frameout;
@@ -408,6 +457,38 @@ sprite_status* chk_emy_colt__col(sprite_status* p_playerwk_chk, sprite_status* p
   if (util__to_unsigned(pl_yposi) < util__to_unsigned(emy_range_top_y)) return p_playerwk_prev_chk; // unsigned
   if (util__to_unsigned(pl_yposi) >= util__to_unsigned(emy_range_bottom_y)) return p_playerwk_prev_chk; // unsigned
   return p_playerwk_chk;
+}
+
+
+// skdisasm: Obj_WaitOffscreen
+void chk_framein(sprite_status* p_actwk, sprite_status_handler p_callback) {
+  p_actwk->patbase = space_pt;
+  SET_BIT_2(p_actwk->actflg);
+  p_actwk->sprhs = 32;
+  p_actwk->sprvs = 32;
+  p_actwk->actfree.dynamic.callback_ptr = p_callback;
+  p_actwk->r_ptr = &chk_framein__chk;
+  chk_framein__chk(p_actwk);
+}
+
+
+static void chk_framein__chk(sprite_status* p_actwk) {
+  if (!BIT_7_IS_SET(p_actwk->actflg)) {
+    unsigned short scr_xposi = util__to_unsigned(LONG_HIGH_TO_SHORT(p_actwk->xposi)) & 0xFF80;
+    scr_xposi -= scr_x_no;
+    if (scr_xposi <= 640) { // unsigned
+      actionsub(p_actwk);
+    }
+    else {
+      if (p_actwk->actfree.dynamic.flagwork_index != 0) {
+        CLEAR_BIT_7(flagwork[p_actwk->actfree.dynamic.flagwork_index - 1]);
+      }
+      frameout(p_actwk);
+    }
+  }
+  else {
+    p_actwk->r_ptr = p_actwk->actfree.dynamic.callback_ptr;
+  }
 }
 
 
