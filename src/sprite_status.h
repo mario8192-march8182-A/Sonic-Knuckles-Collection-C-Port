@@ -86,7 +86,8 @@ typedef struct sprite_status {
           unsigned char talent_status;
           unsigned char reserved2[4];
           unsigned char invulnerability_timer;
-          unsigned char reserved3[3];
+          unsigned char reserved3[2];
+          unsigned char eventflag;
           character_id character;
           unsigned char reserved4[4];
           unsigned char roll_status;

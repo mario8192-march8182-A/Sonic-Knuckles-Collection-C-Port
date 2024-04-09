@@ -234,8 +234,8 @@ void frameoutchk(sprite_status* p_actwk) {
     actionsub(p_actwk);
   }
   else {
-    if (SPRITE_STATUS_USHORT(p_actwk, 72) != 0) {
-      CLEAR_BIT_7(flagwork[SPRITE_STATUS_USHORT(p_actwk, 72) - 1]);
+    if (p_actwk->actfree.dynamic.flagwork_index != 0) {
+      CLEAR_BIT_7(flagwork[p_actwk->actfree.dynamic.flagwork_index - 1]);
     }
     frameout(p_actwk);
   }
@@ -252,8 +252,8 @@ void frameoutchkc(sprite_status* p_actwk, short xposi) {
     actionsub(p_actwk);
   }
   else {
-    if (SPRITE_STATUS_USHORT(p_actwk, 72) != 0) {
-      CLEAR_BIT_7(flagwork[SPRITE_STATUS_USHORT(p_actwk, 72) - 1]);
+    if (p_actwk->actfree.dynamic.flagwork_index != 0) {
+      CLEAR_BIT_7(flagwork[p_actwk->actfree.dynamic.flagwork_index - 1]);
     }
     frameout(p_actwk);
   }
@@ -270,7 +270,7 @@ bool playdamageset(sprite_status* p_playerwk, sprite_status* p_attack_actwk) {
   }
   if (!BIT_0_IS_SET(p_playerwk->cddat2)) {
     if (!INI_DebugMode) {
-      if (SPRITE_STATUS_SCHAR(p_playerwk, 55) < 0) goto jump0;
+      if (BIT_7_IS_SET(p_playerwk->actfree.player.eventflag)) goto jump0;
       if (ring_cnt == 0) goto die;
       sprite_status* p_new_actwk;
       short slot_cnt;
@@ -300,7 +300,7 @@ jump0:
   }
   p_playerwk->mspeed = 0;
   p_playerwk->mstno = 26;
-  SPRITE_STATUS_USHORT(p_playerwk, 52) = 120;
+  p_playerwk->actfree.player.invulnerability_timer = 120;
   long sound_id = 53;
   if (p_attack_actwk->r_ptr >= &togeinit && p_attack_actwk->r_ptr < &togedamegesub) { // unsigned
     sound_id = 55;
@@ -325,7 +325,7 @@ bool playdieset(sprite_status* p_playerwk, long sound_id) {
     sound_id = 53;
   }
   p_playerwk->cddat2 = 0;
-  SPRITE_STATUS_UCHAR(p_playerwk, 55) = 0;
+  p_playerwk->actfree.player.eventflag = 0;
   p_playerwk->r_no = 6;
   Player_TouchFloor(p_playerwk);
   SET_BIT_1(p_playerwk->cddat1);
@@ -472,8 +472,8 @@ void Clear_SpriteRingMem() {
   do {
     ++p_actwk;
     if (p_actwk->r_ptr != 0) {
-      if (SPRITE_STATUS_USHORT(p_actwk, 72) != 0) {
-        CLEAR_BIT_7(flagwork[SPRITE_STATUS_USHORT(p_actwk, 72) - 1]);
+      if (p_actwk->actfree.dynamic.flagwork_index != 0) {
+        CLEAR_BIT_7(flagwork[p_actwk->actfree.dynamic.flagwork_index - 1]);
       }
     }
     --cnt;
