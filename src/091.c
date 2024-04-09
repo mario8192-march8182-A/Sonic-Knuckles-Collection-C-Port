@@ -44,14 +44,14 @@ sprite_status* set_act00(sprite_status* p_actwk, set_act00_data* p_data) {
     bool created = Create_New_Sprite3(p_actwk, &p_new_actwk, &slot_cnt);
     if (!created) return 0;
 
-    SPRITE_STATUS_USHORT(p_new_actwk, OYA_ADR) = actwk - p_actwk;
+    p_new_actwk->actfree.dynamic.oya = actwk - p_actwk;
     p_new_actwk->patbase = p_actwk->patbase;
     p_new_actwk->sproffset = p_actwk->sproffset;
     p_new_actwk->r_ptr = p_data->data[i / 2].r_ptr;
     p_new_actwk->userflag1 = i;
-    SPRITE_STATUS_SCHAR(p_new_actwk, 66) = p_data->data[i / 2].xoffset;
+    p_new_actwk->actfree.dynamic.xoffset = p_data->data[i / 2].xoffset;
     p_new_actwk->xposi = LONG_HIGH(p_actwk->xposi) + LONG_LOW(p_new_actwk->xposi) + SHORT_TO_LONG_HIGH(p_data->data[i / 2].xoffset);
-    SPRITE_STATUS_SCHAR(p_new_actwk, 67) = p_data->data[i / 2].yoffset;
+    p_new_actwk->actfree.dynamic.yoffset = p_data->data[i / 2].yoffset;
     p_new_actwk->yposi = LONG_HIGH(p_actwk->yposi) + LONG_LOW(p_new_actwk->yposi) + SHORT_TO_LONG_HIGH(p_data->data[i / 2].yoffset);
     i += 2;
     --cnt;
@@ -63,24 +63,24 @@ sprite_status* set_act00(sprite_status* p_actwk, set_act00_data* p_data) {
 
 // skdisasm label: Refresh_ChildPosition
 void ko_offset0(sprite_status* p_actwk) {
-  sprite_status* p_parentwk = &actwk[SPRITE_STATUS_USHORT(p_actwk, 70)];
-  p_actwk->xposi = LONG_HIGH(p_parentwk->xposi) + SHORT_TO_LONG_HIGH(SPRITE_STATUS_SCHAR(p_actwk, 66)) + LONG_LOW(p_actwk->xposi);
-  p_actwk->yposi = LONG_HIGH(p_parentwk->yposi) + SHORT_TO_LONG_HIGH(SPRITE_STATUS_SCHAR(p_actwk, 67)) + LONG_LOW(p_actwk->yposi);
+  sprite_status* p_parentwk = &actwk[p_actwk->actfree.dynamic.oya];
+  p_actwk->xposi = LONG_HIGH(p_parentwk->xposi) + SHORT_TO_LONG_HIGH(p_actwk->actfree.dynamic.xoffset) + LONG_LOW(p_actwk->xposi);
+  p_actwk->yposi = LONG_HIGH(p_parentwk->yposi) + SHORT_TO_LONG_HIGH(p_actwk->actfree.dynamic.yoffset) + LONG_LOW(p_actwk->yposi);
 }
 
 
 // skdisasm label: Swing_UpAndDown
 bool puka_puka(sprite_status* p_actwk) {
   bool axis_dir_changed = false;
-  short accel = SPRITE_STATUS_SHORT(p_actwk, 64);
+  short accel = p_actwk->actfree.dynamic.accel;
   short yspeed = p_actwk->yspeed;
-  short accel_max = SPRITE_STATUS_SHORT(p_actwk, 62);
-  if (!BIT_0_IS_SET(SPRITE_STATUS_UCHAR(p_actwk, 56))) {
+  short accel_max = p_actwk->actfree.dynamic.accel_max;
+  if (!BIT_0_IS_SET(p_actwk->actfree.dynamic.status_bitfield)) {
     accel = -accel;
     yspeed += accel;
     accel_max = -accel_max;
     if (yspeed <= accel_max) { // signed
-      SET_BIT_0(SPRITE_STATUS_UCHAR(p_actwk, 56));
+      SET_BIT_0(p_actwk->actfree.dynamic.status_bitfield);
       accel = -accel;
       accel_max = -accel_max;
       axis_dir_changed = true;
@@ -89,7 +89,7 @@ bool puka_puka(sprite_status* p_actwk) {
   else {
     yspeed += accel;
     if (yspeed >= accel_max) { // signed
-      CLEAR_BIT_0(SPRITE_STATUS_UCHAR(p_actwk, 56));
+      CLEAR_BIT_0(p_actwk->actfree.dynamic.status_bitfield);
       accel = -accel;
       yspeed += accel;
       axis_dir_changed = true;
@@ -123,14 +123,14 @@ static void chk_pt_next(sprite_status* p_actwk, signed char pg, signed char* p_p
   switch (pg) {
     case PG_CONTROL_NEXT:
       pg = p_pg_data[patcnt + 2];
-      SPRITE_STATUS_PSCHAR(p_actwk, 48) = &p_pg_data[pg];
+      p_actwk->actfree.dynamic.pg_data_ptr = &p_pg_data[pg];
     case PG_CONTROL_LOOP:
       p_actwk->patno = p_pg_data[1];
       p_actwk->pattim = p_pg_data[0];
       break;
     case PG_CONTROL_END:
       p_actwk->pattim = 0;
-      SPRITE_STATUS_PHANDLER(p_actwk, 52)(p_actwk);
+      p_actwk->actfree.dynamic.callback_ptr(p_actwk);
       break;
   }
 }
@@ -138,7 +138,7 @@ static void chk_pt_next(sprite_status* p_actwk, signed char pg, signed char* p_p
 
 // skdisasm label: Set_Raw_Animation
 void pg_init(sprite_status* p_actwk, signed char* p_pg_data) {
-  SPRITE_STATUS_PSCHAR(p_actwk, 48) = p_pg_data;
+  p_actwk->actfree.dynamic.pg_data_ptr = p_pg_data;
   p_actwk->patcnt = p_actwk->pattim = 0;
 }
 
@@ -153,7 +153,7 @@ bool chk_pl_attack(sprite_status* p_actwk, sprite_status* p_playerwk) {
     case SONIC:
       break;
     case MILES: {
-      if (SPRITE_STATUS_UCHAR(p_playerwk, 47) == 0) return false;
+      if (p_playerwk->actfree.player.talent_status == 0) return false;
       if (BIT_6_IS_SET(p_playerwk->cddat1)) return false;
       short xposi = LONG_HIGH_TO_SHORT(p_playerwk->xposi) - LONG_HIGH_TO_SHORT(p_actwk->xposi);
       short yposi = LONG_HIGH_TO_SHORT(p_playerwk->yposi) - LONG_HIGH_TO_SHORT(p_actwk->yposi);
@@ -162,8 +162,8 @@ bool chk_pl_attack(sprite_status* p_actwk, sprite_status* p_playerwk) {
       return true;
     }
     case KNUCKLES:
-      if (SPRITE_STATUS_UCHAR(p_playerwk, 47) == 1) return true;
-      if (SPRITE_STATUS_UCHAR(p_playerwk, 47) == 3) return true;
+      if (p_playerwk->actfree.player.talent_status == 1) return true;
+      if (p_playerwk->actfree.player.talent_status == 3) return true;
       break;
   }
 
