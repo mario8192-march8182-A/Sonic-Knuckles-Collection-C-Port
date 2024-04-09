@@ -196,7 +196,7 @@ ok:
   p_actwk->patno = p_data->patno;
   p_actwk->colino = p_data->colino;
   SET_BIT_2(p_actwk->cddat1);
-  SPRITE_STATUS_UCHAR(p_actwk, 58) = 255;
+  p_actwk->actfree.dynamic.prev_patno = 255;
   SET_BIT_2(p_actwk->actflg);
   p_actwk->r_no += 2;
 }
@@ -271,8 +271,8 @@ void chk_break_fout(sprite_status* p_actwk) {
     set_emy_fout01(p_actwk);
     return;
   }
-  bool bit_6_set = BIT_6_IS_SET(SPRITE_STATUS_UCHAR(p_actwk, 56));
-  CLEAR_BIT_6(SPRITE_STATUS_UCHAR(p_actwk, 56));
+  bool bit_6_set = BIT_6_IS_SET(p_actwk->actfree.dynamic.status_bitfield);
+  CLEAR_BIT_6(p_actwk->actfree.dynamic.status_bitfield);
   if (bit_6_set) {
     actionsub(p_actwk);
   }
@@ -353,7 +353,7 @@ void set_emy_fout0(sprite_status* p_actwk) {
 void set_emy_fout01(sprite_status* p_actwk) {
   p_actwk->r_ptr = &frameout;
   SET_BIT_7(p_actwk->cddat1);
-  SET_BIT_4(SPRITE_STATUS_UCHAR(p_actwk, 56));
+  SET_BIT_4(p_actwk->actfree.dynamic.status_bitfield);
 }
 
 
