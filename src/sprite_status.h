@@ -125,6 +125,14 @@ typedef struct sprite_status {
           unsigned short oya;
         } actclear_part;
         struct {
+          short move_countdown;
+          unsigned char reserved1[14];
+          short yspeed;
+          unsigned char reserved2[6];
+          unsigned short oya;
+          unsigned char reserved3[2];
+        } friend;
+        struct {
           short attack_countdown;
           signed char* pg_data_ptr;
           sprite_status_handler callback_ptr;
@@ -142,6 +150,13 @@ typedef struct sprite_status {
           short ghost_countdown;
           unsigned char reserved2[14];
         } gost08_ctr;
+        struct {
+          unsigned char reserved1[10];
+          unsigned char status_bitfield;
+          unsigned char reserved2[13];
+          unsigned short oya;
+          unsigned short flagwork_index;
+        } obox04;
         struct {
           short attack_countdown;
           unsigned char reserved1[4];

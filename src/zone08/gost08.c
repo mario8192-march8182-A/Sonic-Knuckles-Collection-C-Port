@@ -359,7 +359,7 @@ void obox08(sprite_status* p_actwk) {
   if (markerno == 0 && actwk[0].actfree.player.character != KNUCKLES) return;
   p_actwk->r_ptr = &obox04_wait1;
   p_actwk->patno = 1;
-  SET_BIT_5(SPRITE_STATUS_UCHAR(p_actwk, 56));
+  SET_BIT_5(p_actwk->actfree.obox04.status_bitfield);
 }
 
 
