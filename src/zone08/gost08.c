@@ -6,6 +6,7 @@
 #include "../002.h"
 #include "../091.h"
 #include "../opnbox.h"
+#include "../resources.h"
 #include "../save.h"
 #include "../zone_data.h"
 #include "../zone04/obox04.h"

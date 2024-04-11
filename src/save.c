@@ -3,6 +3,7 @@
 #include "util.h"
 #include "save.h"
 #include "004xxxxx.h"
+#include "resources.h"
 static sprite_status_handler save_move_tbl[5];
 static void saveinit(sprite_status* pActwk);
 static void savemove(sprite_status* pActwk);

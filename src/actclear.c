@@ -2,6 +2,7 @@
 #include "macros.h"
 #include "actclear.h"
 #include "004xxxxx.h"
+#include "resources.h"
 static void actclear_init(sprite_status* p_actwk);
 static void actclear_move0(sprite_status* p_actwk);
 static void actclear_move1(sprite_status* p_actwk);

@@ -4,6 +4,7 @@
 #include "../004xxxxx.h"
 #include "../002.h"
 #include "../091.h"
+#include "../resources.h"
 static void sai00_framein(sprite_status* p_actwk);
 static void sai00_init(sprite_status* p_actwk);
 static void sai00_wait(sprite_status* p_actwk);
