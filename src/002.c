@@ -273,7 +273,7 @@ void chk_break_fout(sprite_status* p_actwk) {
     return;
   }
   bool bit_6_set = BIT_6_IS_SET(p_actwk->actfree.dynamic.status_bitfield);
-  CLEAR_BIT_6(p_actwk->actfree.dynamic.status_bitfield);
+  TOGGLE_BIT_6(p_actwk->actfree.dynamic.status_bitfield);
   if (bit_6_set) {
     actionsub(p_actwk);
   }

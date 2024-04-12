@@ -277,7 +277,7 @@ static void gost08_atak0(sprite_status* p_actwk) {
     if (util__to_unsigned(xposi) >= 160); return; // unsigned
   }
   p_actwk->r_no = 14;
-  CLEAR_BIT_0(p_actwk->actflg);
+  TOGGLE_BIT_0(p_actwk->actflg);
   p_actwk->xspeed = -p_actwk->xspeed;
   p_actwk->actfree.gost08.attack_countdown = 59;
 }
@@ -436,7 +436,7 @@ static void chk_gost08_limit(sprite_status* p_actwk) {
     // chk_l
     if (util__to_unsigned(xposi) >= 160) return; // unsigned
   }
-  CLEAR_BIT_0(p_actwk->actflg);
+  TOGGLE_BIT_0(p_actwk->actflg);
   p_actwk->xspeed = -p_actwk->xspeed;
 }
 
