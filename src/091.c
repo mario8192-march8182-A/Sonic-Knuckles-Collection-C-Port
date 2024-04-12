@@ -161,6 +161,7 @@ static void chk_pt_next(sprite_status* p_actwk, signed char pg, signed char* p_p
     case PG_CONTROL_NEXT:
       pg = p_pg_data[patcnt + 2];
       p_actwk->actfree.dynamic.pg_data_ptr = &p_pg_data[pg];
+      // fall-through
     case PG_CONTROL_LOOP:
       p_actwk->patno = p_pg_data[1];
       p_actwk->pattim = p_pg_data[0];

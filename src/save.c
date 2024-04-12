@@ -439,6 +439,7 @@ void o_star(sprite_status* p_actwk) {
   switch (compare_result) {
     case 0:
       p_actwk->colino = 216;
+      // fall-through
     case 1:
       if (unknown2 <= 384) break;
       unknown2 = -unknown2;
@@ -447,6 +448,7 @@ void o_star(sprite_status* p_actwk) {
         frameout(p_actwk);
         return;
       }
+      // fall-through
     case -1:
       sin = unknown2 * sin;
       cos = unknown2 * cos;
