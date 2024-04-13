@@ -1,6 +1,19 @@
 #ifndef TYPES_H
 #define TYPES_H
 
+typedef struct set_act05_data set_act05_data;
+typedef struct wrt_data wrt_data;
+typedef struct wrt_init_data wrt_init_data;
+typedef struct cg_data_entry cg_data_entry;
+typedef struct cg_data cg_data;
+typedef struct enemy_init0_data enemy_init0_data;
+typedef struct set_act00_data_entry set_act00_data_entry;
+typedef struct set_act00_data set_act00_data;
+typedef struct enemy_init2_data enemy_init2_data;
+typedef struct zone_act zone_act;
+typedef struct act_timer act_timer;
+typedef struct actclear_init_data actclear_init_data;
+
 #include "constants.h"
 #include "sprite_status.h"
 

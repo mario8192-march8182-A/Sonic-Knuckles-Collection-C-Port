@@ -1,10 +1,12 @@
 #ifndef SPRITE_STATUS_H
 #define SPRITE_STATUS_H
 
-#include "constants.h"
-
 typedef struct sprite_status sprite_status;
 typedef void(*sprite_status_handler)(sprite_status*);
+typedef struct sprite_status_child sprite_status_child;
+typedef struct sprite_family_status sprite_family_status;
+
+#include "constants.h"
 
 typedef struct sprite_status {
   // 0x00
