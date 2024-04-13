@@ -7,6 +7,7 @@ typedef struct sprite_status_child sprite_status_child;
 typedef struct sprite_family_status sprite_family_status;
 
 #include "constants.h"
+#include "types.h"
 
 typedef struct sprite_status {
   // 0x00
@@ -104,6 +105,11 @@ typedef struct sprite_status {
       unsigned short flagwork_index;
     } dynamic;
     struct {
+      unsigned char reserved1[16];
+      enemy_init0_data* init_data_ptr;
+      unsigned char reserved2[8];
+    } enemy_uninit_0;
+    struct {
       unsigned short delay_timer;
       unsigned short part_cnt;
       unsigned short current_exit_no;
@@ -140,6 +146,14 @@ typedef struct sprite_status {
       short ghost_countdown;
       unsigned char reserved2[14];
     } gost08_ctr;
+    struct {
+      short shot_countdown;
+      signed char* pg_data_ptr;
+      void(*callback_ptr)(sprite_status*);
+      unsigned char reserved1[5];
+      unsigned char counter;
+      unsigned char reserved2[17];
+    } hana00;
     struct {
       unsigned char reserved1[10];
       unsigned char status_bitfield;

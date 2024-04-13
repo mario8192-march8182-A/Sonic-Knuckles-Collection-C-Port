@@ -61,6 +61,40 @@ sprite_status* set_act00(sprite_status* p_actwk, set_act00_data* p_data) {
 }
 
 
+// skdisasm label: CreateChild2_Complex
+sprite_status* set_act01(sprite_status* p_actwk, set_act01_data* p_data) {
+  sprite_status* p_new_actwk;
+  unsigned short i = 0;
+  unsigned short cnt = p_data->cnt;
+  ++cnt;
+
+  do {
+    short slot_cnt;
+    bool created = Create_New_Sprite3(p_actwk, &p_new_actwk, &slot_cnt);
+    if (!created) return 0;
+
+    p_new_actwk->actfree.dynamic.oya = actwk - p_actwk;
+    p_new_actwk->patbase = p_actwk->patbase;
+    p_new_actwk->sproffset = p_actwk->sproffset;
+    p_new_actwk->r_ptr = p_data->data[i / 2].r_ptr;
+    p_new_actwk->actfree.enemy_uninit_0.init_data_ptr = p_data->data[i / 2].enemy_init0_data_ptr;
+    p_new_actwk->actfree.dynamic.pg_data_ptr = p_data->data[i / 2].pg_data_ptr;
+    p_new_actwk->actfree.dynamic.callback_ptr = p_data->data[i / 2].callback_ptr;
+    p_new_actwk->userflag1 = i;
+    p_new_actwk->actfree.dynamic.xoffset = p_data->data[i / 2].xoffset;
+    p_new_actwk->xposi = LONG_HIGH(p_actwk->xposi) + LONG_LOW(p_new_actwk->xposi) + SHORT_TO_LONG_HIGH(p_data->data[i / 2].xoffset);
+    p_new_actwk->actfree.dynamic.yoffset = p_data->data[i / 2].yoffset;
+    p_new_actwk->yposi = LONG_HIGH(p_actwk->yposi) + LONG_LOW(p_new_actwk->yposi) + SHORT_TO_LONG_HIGH(p_data->data[i / 2].yoffset);
+    p_new_actwk->xspeed = p_data->data[i / 2].xspeed;
+    p_new_actwk->yspeed = p_data->data[i / 2].yspeed;
+    i += 2;
+    --cnt;
+  } while (cnt != 0);
+
+  return p_new_actwk;
+}
+
+
 // skdisasm label: Refresh_ChildPosition
 void ko_offset0(sprite_status* p_actwk) {
   sprite_status* p_parentwk = &actwk[p_actwk->actfree.dynamic.oya];

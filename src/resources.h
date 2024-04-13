@@ -10,6 +10,7 @@ unsigned char white_star_ring_tiles[98]; // 0050b508
 unsigned char orange_star_ring_tiles[98]; // 0050b56a
 unsigned short* sai00_tbl[8]; // 005121fe
 signed char* sai00pat[8]; // 00512238
+signed char* hana00pat[5]; // 00512350
 unsigned char sai00_tiles[2720]; // 00517e44
 unsigned char opnbox_tiles[1187]; // 00532cf8
 unsigned char actclear_miles_tiles[338]; // 0054b5c4
