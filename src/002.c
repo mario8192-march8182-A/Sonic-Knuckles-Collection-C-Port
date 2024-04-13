@@ -237,6 +237,26 @@ void chk_emy_foutc0(sprite_status* p_actwk) {
 }
 
 
+void chk_emy_foutc3(sprite_status* p_actwk) {
+  unsigned short scr_xposi = util__to_unsigned(LONG_HIGH_TO_SHORT(p_actwk->xposi)) & 0xFF80;
+  scr_xposi -= scr_x_no;
+  if (scr_xposi > 640) { // unsigned
+    set_emy_fout0(p_actwk);
+  }
+  else {
+    unsigned short scr_yposi = util__to_unsigned(LONG_HIGH_TO_SHORT(p_actwk->yposi));
+    scr_yposi -= LONG_HIGH_TO_SHORT(scra_v_posit);
+    if (scr_yposi > 512) { // unsigned
+      set_emy_fout0(p_actwk);
+    }
+    else {
+      Add_Object_To_Collision_Response_List(p_actwk);
+      actionsub(p_actwk);
+    }
+  }
+}
+
+
 // skdisasm label: Sprite_CheckDelete
 void chk_emy_fout0(sprite_status* p_actwk) {
   unsigned short scr_xposi = util__to_unsigned(LONG_HIGH_TO_SHORT(p_actwk->xposi)) & 0xFF80;

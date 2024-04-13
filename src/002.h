@@ -15,6 +15,7 @@ void speedsetg(sprite_status* p_actwk, short gravity);
 void emy_wrt_init(sprite_status* p_actwk, wrt_init_data* p_data);
 void set_emy_wchg(sprite_status* p_actwk, wrt_data* p_data);
 void chk_emy_foutc0(sprite_status* p_actwk);
+void chk_emy_foutc3(sprite_status* p_actwk);
 void chk_emy_fout0(sprite_status* p_actwk);
 void emy_fout(sprite_status* p_actwk);
 void chk_break_fout(sprite_status* p_actwk);

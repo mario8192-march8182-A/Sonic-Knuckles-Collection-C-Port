@@ -4,6 +4,7 @@
 #include "../004xxxxx.h"
 #include "../002.h"
 #include "../091.h"
+#include "../emyshot.h"
 #include "../resources.h"
 static void hana00_framein(sprite_status* p_actwk);
 static void hana00_init(sprite_status* p_actwk);
