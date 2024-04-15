@@ -13,6 +13,8 @@ typedef struct enemy_init2_data enemy_init2_data;
 typedef struct zone_act zone_act;
 typedef struct act_timer act_timer;
 typedef struct actclear_init_data actclear_init_data;
+typedef struct set_act03_data set_act03_data;
+typedef struct enemy_init1_data enemy_init1_data;
 
 #include "constants.h"
 #include "sprite_status.h"
@@ -130,5 +132,21 @@ typedef struct set_act01_data {
   set_act01_data_entry data[];
 }
 set_act01_data;
+
+typedef struct set_act03_data {
+  unsigned short cnt;
+  sprite_status_handler r_ptr;
+}
+set_act03_data;
+
+typedef struct enemy_init1_data {
+  unsigned short sproffset;
+  unsigned short sprpri;
+  unsigned char sprhs;
+  unsigned char sprvs;
+  unsigned char patno;
+  unsigned char colino;
+}
+enemy_init1_data;
 
 #endif

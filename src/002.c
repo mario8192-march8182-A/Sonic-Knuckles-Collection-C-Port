@@ -3,6 +3,7 @@
 #include "util.h"
 #include "002.h"
 #include "004xxxxx.h"
+#include "091.h"
 static int chk_tpg_next(sprite_status* p_actwk, signed char pg, signed char* p_pg_data, unsigned char patcnt);
 static void chk_framein__chk(sprite_status* p_actwk);
 
@@ -83,6 +84,16 @@ void dec_timer(sprite_status* p_actwk) {
 }
 
 
+// skdisasm label: Sprite_CheckDeleteTouch3
+void emy_fall_col(sprite_status* p_actwk) {
+  if (p_actwk->yspeed < 0) return;
+  short unknown = ObjCheckFloorDist(p_actwk);
+  if (unknown > 0) return;
+  p_actwk->yposi += SHORT_TO_LONG_HIGH(unknown);
+  p_actwk->actfree.dynamic.callback_ptr(p_actwk);
+}
+
+
 // skdisasm label: Child_Draw_Sprite
 void chk_oya_die0(sprite_status* p_actwk) {
   sprite_status* p_parentwk = &actwk[p_actwk->actfree.dynamic.oya];
@@ -156,6 +167,20 @@ void speedsetg(sprite_status* p_actwk, short gravity) {
   short yspeed = p_actwk->yspeed;
   p_actwk->yspeed += gravity;
   p_actwk->yposi += yspeed * 256;
+}
+
+
+// skdisasm label: MoveSprite_CircularSimple
+void circle_move(sprite_status* p_actwk, unsigned char offset) {
+  short sin, cos;
+  sinset(p_actwk->actfree.saru00.arm_other_angle, &sin, &cos);
+  long sin_l = SHORT_TO_LONG_HIGH(sin);
+  long cos_l = SHORT_TO_LONG_HIGH(cos);
+  sin_l /= 1 << offset;
+  cos_l /= 1 << offset;
+  sprite_status* p_parentwk = &actwk[p_actwk->actfree.dynamic.oya];
+  p_actwk->xposi = p_parentwk->xposi += sin_l;
+  p_actwk->yposi = p_parentwk->yposi += cos_l;
 }
 
 
@@ -427,6 +452,12 @@ void set_break_spd(sprite_status* p_actwk, unsigned char unknown) {
   if (BIT_0_IS_SET(p_actwk->actflg)) {
     p_actwk->xspeed = -p_actwk->xspeed;
   }
+}
+
+
+void pt_tim(sprite_status* p_actwk) {
+  pt_chg(p_actwk);
+  dec_timer(p_actwk);
 }
 
 

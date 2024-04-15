@@ -108,6 +108,14 @@ signed char hana00sp01[38];
 signed char hana00sp02[50];
 signed char hana00sp03[38];
 signed char hana00sp04[8];
+signed char* saru00pat[7];
+signed char saru00sp00[26];
+signed char saru00sp01[26];
+signed char saru00sp02[26];
+signed char saru00sp03[8];
+signed char saru00sp04[8];
+signed char saru00sp05[8];
+signed char saru00sp06[8];
 unsigned char zone_friend_data[24][2];
 
 
@@ -663,6 +671,46 @@ signed char hana00sp03[38] = {
 };
 signed char hana00sp04[8] = {
     0,   1,  -8,   5,  26,   0,  -8,  -1
+};
+
+
+signed char* saru00pat[7] = {
+  saru00sp00,
+  saru00sp01,
+  saru00sp02,
+  saru00sp03,
+  saru00sp04,
+  saru00sp05,
+  saru00sp06
+};
+
+
+signed char saru00sp00[26] = {
+     0,    4,   -2,    0,   13,    0,   -9,   -1,  -21,   10,
+     0,    0,  -16,   -1,   -8,    5,    9,    0,   -8,   -1,
+     0,    4,   14, -128,   16,    0
+};
+signed char saru00sp01[26] = {
+     0,    4,   -3,    0,   13,    0,   -9,   -1,  -23,   10,
+     0,    0,  -16,   -1,   -8,    5,    9,    0,   -8,   -1,
+     0,    4,   14, -128,   16,    0
+};
+signed char saru00sp02[26] = {
+     0,    4,   -2,    0,   13,    0,   -9,   -1,  -21,   10,
+     0,    0,  -16,   -1,   -8,    5,    9,    0,   -8,   -1,
+     8,    4,   14, -128,   16,    0
+};
+signed char saru00sp03[8] = {
+    0,   1,  -4,   0,  16,   0,  -4,  -1
+};
+signed char saru00sp04[8] = {
+    0,   1,  -4,   0,  17,  16,  -4,  -1
+};
+signed char saru00sp05[8] = {
+    0,   1,  -4,   0,  18,   0,  -4,  -1
+};
+signed char saru00sp05[8] = {
+    0,   1,  -8,   5,  19,   0,  -8,  -1
 };
 
 

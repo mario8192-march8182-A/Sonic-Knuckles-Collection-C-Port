@@ -178,6 +178,29 @@ typedef struct sprite_status {
       unsigned char reserved2[18];
     } sai00_kemuri;
     struct {
+      short timer;
+      signed char* pg_data_ptr;
+      sprite_status_handler callback_ptr;
+      unsigned char status_bitfield;
+      unsigned char wait_countdown;
+      unsigned char reserved1;
+      unsigned char arm_other_countdown;
+      unsigned char arm_other_angle;
+      unsigned char reserved2[1];
+      unsigned short arm_other;
+      signed char dir;
+      unsigned char reserved3[3];
+      unsigned short ko;
+      unsigned short oya;
+      unsigned char reserved4[2];
+    } saru00;
+    struct {
+      unsigned char reserved1[2];
+      signed char* pg_data_ptr;
+      sprite_status_handler callback_ptr;
+      unsigned char reserved2[18];
+    } saru00_banana;
+    struct {
       unsigned char reserved1[2];
       short parent_xposi;
       short parent_yposi;

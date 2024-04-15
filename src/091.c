@@ -20,6 +20,18 @@ void enemy_init0(sprite_status* p_actwk, enemy_init0_data* p_data) {
 }
 
 
+// skdisasm label: SetUp_ObjAttributes2
+void enemy_init1(sprite_status* p_actwk, enemy_init1_data* p_data) {
+  p_actwk->sproffset = p_data->sproffset;
+  p_actwk->sprpri = p_data->sprpri;
+  p_actwk->sprhs = p_data->sprhs;
+  p_actwk->sprvs = p_data->sprvs;
+  p_actwk->patno = p_data->patno;
+  p_actwk->colino = p_data->colino;
+  SET_BIT_2(p_actwk->actflg);
+  p_actwk->r_no += 2;
+}
+
 // skdisasm label: SetUp_ObjAttributes3
 void enemy_init2(sprite_status* p_actwk, enemy_init2_data* p_data) {
   p_actwk->sprpri = p_data->sprpri;
@@ -87,6 +99,36 @@ sprite_status* set_act01(sprite_status* p_actwk, set_act01_data* p_data) {
     p_new_actwk->yposi = LONG_HIGH(p_actwk->yposi) + LONG_LOW(p_new_actwk->yposi) + SHORT_TO_LONG_HIGH(p_data->data[i / 2].yoffset);
     p_new_actwk->xspeed = p_data->data[i / 2].xspeed;
     p_new_actwk->yspeed = p_data->data[i / 2].yspeed;
+    i += 2;
+    --cnt;
+  } while (cnt != 0);
+
+  return p_new_actwk;
+}
+
+
+// skdisasm: CreateChild4_LinkListRepeated
+sprite_status* set_act03(sprite_status* p_actwk, set_act03_data* p_data) {
+  sprite_status* p_new_actwk;
+  sprite_status* p_prev_actwk = p_actwk;
+  unsigned short i = 0;
+  unsigned short cnt = p_data->cnt;
+  ++cnt;
+
+  do {
+    short slot_cnt;
+    bool created = Create_New_Sprite3(p_actwk, &p_new_actwk, &slot_cnt);
+    if (!created) return;
+
+    p_new_actwk->actfree.dynamic.oya = p_prev_actwk - actwk;
+    p_prev_actwk->actfree.dynamic.ko = p_new_actwk - actwk;
+    p_prev_actwk = p_new_actwk;
+    p_new_actwk->patbase = p_actwk->patbase;
+    p_new_actwk->sproffset = p_actwk->sproffset;
+    p_new_actwk->r_ptr = p_data->r_ptr;
+    p_new_actwk->userflag1 = i;
+    p_new_actwk->xposi = LONG_HIGH(p_actwk->xposi) + LONG_LOW(p_new_actwk->xposi);
+    p_new_actwk->yposi = LONG_HIGH(p_actwk->yposi) + LONG_LOW(p_new_actwk->yposi);
     i += 2;
     --cnt;
   } while (cnt != 0);
