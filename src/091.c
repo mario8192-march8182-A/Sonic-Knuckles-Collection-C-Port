@@ -107,6 +107,35 @@ sprite_status* set_act01(sprite_status* p_actwk, set_act01_data* p_data) {
 }
 
 
+// skdisasm: CreateChild3_NormalRepeated
+sprite_status* set_act02(sprite_status* p_actwk, set_act02_data* p_data) {
+  sprite_status* p_new_actwk;
+  unsigned short i = 0;
+  unsigned short cnt = p_data->cnt;
+  ++cnt;
+
+  do {
+    short slot_cnt;
+    bool created = Create_New_Sprite3(p_actwk, &p_new_actwk, &slot_cnt);
+    if (!created) return 0;
+
+    p_new_actwk->actfree.dynamic.oya = p_actwk - actwk;
+    p_new_actwk->patbase = p_actwk->patbase;
+    p_new_actwk->sproffset = p_actwk->sproffset;
+    p_new_actwk->r_ptr = p_data->r_ptr;
+    p_new_actwk->userflag1 = i;
+    p_new_actwk->actfree.dynamic.xoffset = p_data->xoffset;
+    p_new_actwk->xposi = LONG_HIGH(p_actwk->xposi) + LONG_LOW(p_new_actwk->xposi) + SHORT_TO_LONG_HIGH(p_data->xoffset);
+    p_new_actwk->actfree.dynamic.yoffset = p_data->yoffset;
+    p_new_actwk->yposi = LONG_HIGH(p_actwk->yposi) + LONG_LOW(p_new_actwk->yposi) + SHORT_TO_LONG_HIGH(p_data->yoffset);
+    i += 2;
+    --cnt;
+  } while (cnt != 0);
+
+  return p_new_actwk;
+}
+
+
 // skdisasm: CreateChild4_LinkListRepeated
 sprite_status* set_act03(sprite_status* p_actwk, set_act03_data* p_data) {
   sprite_status* p_new_actwk;
@@ -118,7 +147,7 @@ sprite_status* set_act03(sprite_status* p_actwk, set_act03_data* p_data) {
   do {
     short slot_cnt;
     bool created = Create_New_Sprite3(p_actwk, &p_new_actwk, &slot_cnt);
-    if (!created) return;
+    if (!created) return 0;
 
     p_new_actwk->actfree.dynamic.oya = p_prev_actwk - actwk;
     p_prev_actwk->actfree.dynamic.ko = p_new_actwk - actwk;

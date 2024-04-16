@@ -12,6 +12,7 @@ unsigned short* sai00_tbl[8]; // 005121fe
 signed char* sai00pat[8]; // 00512238
 signed char* hana00pat[5]; // 00512350
 signed char* saru00pat[7]; // 00512406
+signed char* snak00pat[6]; // 005126a8
 unsigned char sai00_tiles[2720]; // 00517e44
 unsigned char opnbox_tiles[1187]; // 00532cf8
 unsigned char actclear_miles_tiles[338]; // 0054b5c4

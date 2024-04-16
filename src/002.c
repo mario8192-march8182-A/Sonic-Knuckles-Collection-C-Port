@@ -76,6 +76,15 @@ static int chk_tpg_next(sprite_status* p_actwk, signed char pg, signed char* p_p
 }
 
 
+bool puka_count(sprite_status* p_actwk) {
+  bool axis_dir_changed = puka_puka(p_actwk);
+  if (!axis_dir_changed) return false;
+  --p_actwk->actfree.dynamic.puka_cnt;
+  if (p_actwk->actfree.dynamic.puka_cnt >= 0) return false;
+  return true;
+}
+
+
 void dec_timer(sprite_status* p_actwk) {
   --p_actwk->actfree.dynamic.timer;
   if (p_actwk->actfree.dynamic.timer < 0) {
@@ -115,6 +124,27 @@ void chk_oya_diew0(sprite_status* p_actwk) {
   else {
     clr_wchg_bit(p_actwk);
     set_emy_fout0(p_actwk);
+  }
+}
+
+
+void set_emy_tobi(sprite_status* p_actwk, unsigned char unknown) {
+  SET_BIT_7(p_actwk->cddat1);
+  p_actwk->r_ptr = &chk_break_fout;
+  p_actwk->colino = 0;
+  set_break_spd(p_actwk, 0);
+}
+
+
+// skdisasm label: Child_DrawTouch_Sprite_FlickerMove
+void chk_tobi_diec0(sprite_status* p_actwk, unsigned char unknown) {
+  sprite_status* p_parentwk = &actwk[p_actwk->actfree.dynamic.oya];
+  if (BIT_7_IS_SET(p_parentwk->cddat1)) {
+    set_emy_tobi(p_actwk, unknown);
+  }
+  else {
+    Add_Object_To_Collision_Response_List(p_actwk);
+    actionsub(p_actwk);
   }
 }
 

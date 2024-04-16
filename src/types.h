@@ -15,6 +15,7 @@ typedef struct act_timer act_timer;
 typedef struct actclear_init_data actclear_init_data;
 typedef struct set_act03_data set_act03_data;
 typedef struct enemy_init1_data enemy_init1_data;
+typedef struct set_act02_data set_act02_data;
 
 #include "constants.h"
 #include "sprite_status.h"
@@ -148,5 +149,13 @@ typedef struct enemy_init1_data {
   unsigned char colino;
 }
 enemy_init1_data;
+
+typedef struct set_act02_data {
+  unsigned short cnt;
+  sprite_status_handler r_ptr;
+  signed char xoffset;
+  signed char yoffset;
+}
+set_act02_data;
 
 #endif

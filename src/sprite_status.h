@@ -92,7 +92,7 @@ typedef struct sprite_status {
       signed char* pg_data_ptr;
       sprite_status_handler callback_ptr;
       unsigned char status_bitfield;
-      unsigned char reserved1[1];
+      signed char puka_cnt;
       unsigned char prev_patno;
       unsigned char wchg_bit;
       unsigned short wrt_flg_index;
@@ -211,6 +211,17 @@ typedef struct sprite_status {
       unsigned char reserved4[8];
       unsigned short flagwork_index;
     } save;
+    struct {
+      short timer;
+      unsigned char reserved1[4];
+      sprite_status_handler callback_ptr;
+      unsigned char status_bitfield;
+      signed char puka_cnt;
+      unsigned char reserved2[4];
+      short accel_max;
+      short accel;
+      unsigned char reserved3[8];
+    } snak00;
   } actfree;
 }
 sprite_status;

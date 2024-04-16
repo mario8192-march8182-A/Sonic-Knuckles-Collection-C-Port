@@ -5,10 +5,13 @@
 
 sprite_status* set_act05(sprite_status* p_actwk, set_act05_data* p_data);
 int time_pg(sprite_status* p_actwk, signed char* p_pg_data);
+bool puka_count(sprite_status* p_actwk);
 void dec_timer(sprite_status* p_actwk);
 void emy_fall_col(sprite_status* p_actwk);
 void chk_oya_die0(sprite_status* p_actwk);
 void chk_oya_diew0(sprite_status* p_actwk);
+void set_emy_tobi(sprite_status* p_actwk, unsigned char unknown);
+void chk_tobi_diec0(sprite_status* p_actwk, unsigned char unknown);
 void chk_distance(sprite_status* p_actwk, bool* pl_is_right, bool* pl_is_below, short* pl_x_distance, short* pl_y_distance);
 void chk_emy_revs(sprite_status* p_actwk);
 void speedsetg20(sprite_status* p_actwk);
