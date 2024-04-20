@@ -39,6 +39,8 @@ bool chk_emy_col(sprite_status* p_actwk, sprite_status** pp_coli_actwk);
 sprite_status* chk_emy_colt(sprite_status* p_actwk, short* p_col_data);
 sprite_status* chk_emy_colt__col(sprite_status* p_playerwk_chk, sprite_status* p_playerwk_prev_chk, short pl_xposi, short pl_yposi, short emy_range_left_x, short emy_range_top_y, short emy_range_right_x, short emy_range_bottom_y);
 void chk_framein(sprite_status* p_actwk, sprite_status_handler p_callback);
+void reset_bgm(sprite_status* p_actwk);
+void set_friend_cg(sprite_status* p_actwk);
 void set_bane_jump(sprite_status* p_playerwk, short yspeed);
 
 #endif

@@ -16,6 +16,7 @@ typedef struct actclear_init_data actclear_init_data;
 typedef struct set_act03_data set_act03_data;
 typedef struct enemy_init1_data enemy_init1_data;
 typedef struct set_act02_data set_act02_data;
+typedef struct title_zones_init_data title_zones_init_data;
 
 #include "constants.h"
 #include "sprite_status.h"
@@ -157,5 +158,16 @@ typedef struct set_act02_data {
   signed char yoffset;
 }
 set_act02_data;
+
+typedef struct title_zones_init_data {
+  sprite_status_handler r_ptr;
+  short x_destination;
+  short xposi;
+  short yposi;
+  unsigned char patno;
+  unsigned char sprhs;
+  unsigned short colino;
+}
+title_zones_init_data;
 
 #endif

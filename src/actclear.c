@@ -3,6 +3,7 @@
 #include "actclear.h"
 #include "004xxxxx.h"
 #include "resources.h"
+#include "title.h"
 static void actclear_init(sprite_status* p_actwk);
 static void actclear_move0(sprite_status* p_actwk);
 static void actclear_move1(sprite_status* p_actwk);
@@ -183,7 +184,7 @@ static void actclear_move2(sprite_status* p_actwk) {
     if (stageno.zone != SANDOPOLIS && stageno.zone != DEATH_EGG) {
       p_actwk->r_ptr = &title;
       p_actwk->r_no = 0;
-      SPRITE_STATUS_UCHAR(p_actwk, 62) = 255;
+      p_actwk->actfree.title.act_start_flag = 255;
     }
     else {
       frameout(p_actwk);

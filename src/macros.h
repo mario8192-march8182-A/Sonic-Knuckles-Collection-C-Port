@@ -55,6 +55,9 @@
 #define LONG_LOW(value) (value % 65536)
 #define SHORT_TO_LONG_HIGH(value) (value * 65536)
 
+#define IS_ENDING(structure) (structure.zone == ANGEL_ISLAND_DUMMY_AND_ENDING && structure.act == 1)
 #define IS_LAVA_REEF_BOSS(structure) (structure.zone == LAVA_REEF_BOSS_AND_HIDDEN_PALACE && structure.act == 0)
+#define IS_HIDDEN_PALACE(structure) (structure.zone == LAVA_REEF_BOSS_AND_HIDDEN_PALACE && structure.act == 1)
+#define IS_DEATH_EGG_BOSS(structure) (structure.zone == DEATH_EGG_BOSS_AND_MASTER_EMERALD_SHRINE && structure.act == 0)
 
 #endif

@@ -4,6 +4,7 @@
 #include "002.h"
 #include "004xxxxx.h"
 #include "091.h"
+#include "resources.h"
 static int chk_tpg_next(sprite_status* p_actwk, signed char pg, signed char* p_pg_data, unsigned char patcnt);
 static void chk_framein__chk(sprite_status* p_actwk);
 
@@ -571,6 +572,142 @@ static void chk_framein__chk(sprite_status* p_actwk) {
   else {
     p_actwk->r_ptr = p_actwk->actfree.dynamic.callback_ptr;
   }
+}
+
+
+void reset_bgm(sprite_status* p_actwk) {
+  // TODO
+}
+
+
+void set_friend_cg(sprite_status* p_actwk) {
+  static cg_data z00 = {
+    1,
+    {
+      { flicky_tiles, 45056 },
+      { cucky_tiles, 45632 }
+    }
+  };
+  static cg_data z01 = {
+    1,
+    {
+      { pocky_tiles, 45056 },
+      { rocky_tiles, 45632 }
+    }
+  };
+  static cg_data z02 = {
+    1,
+    {
+      { flicky_tiles, 45056 },
+      { cucky_tiles, 45632 }
+    }
+  };
+  static cg_data z03 = {
+    1,
+    {
+      { pocky_tiles, 45056 },
+      { flicky_tiles, 45632 }
+    }
+  };
+  static cg_data z04 = {
+    1,
+    {
+      { ricky_tiles, 45056 },
+      { flicky_tiles, 45632 }
+    }
+  };
+  static cg_data z05 = {
+    1,
+    {
+      { pecky_tiles, 45056 },
+      { rocky_tiles, 45632 }
+    }
+  };
+  static cg_data z06 = {
+    1,
+    {
+      { flicky_tiles, 45056 },
+      { cucky_tiles, 45632 }
+    }
+  };
+  static cg_data z07 = {
+    1,
+    {
+      { ricky_tiles, 45056 },
+      { cucky_tiles, 45632 }
+    }
+  };
+  static cg_data z08 = {
+    1,
+    {
+      { pocky_tiles, 45056 },
+      { cucky_tiles, 45632 }
+    }
+  };
+  static cg_data z09 = {
+    1,
+    {
+      { flicky_tiles, 45056 },
+      { cucky_tiles, 45632 }
+    }
+  };
+  static cg_data z0a = {
+    1,
+    {
+      { pocky_tiles, 45056 },
+      { cucky_tiles, 45632 }
+    }
+  };
+  static cg_data z0b = {
+    1,
+    {
+      { ricky_tiles, 45056 },
+      { cucky_tiles, 45632 }
+    }
+  };
+  static cg_data z0c = {
+    1,
+    {
+      { ricky_tiles, 45056 },
+      { cucky_tiles, 45632 }
+    }
+  };
+  static cg_data z0d_z17 = {
+    1,
+    {
+      { flicky_tiles, 45056 },
+      { cucky_tiles, 45632 }
+    }
+  };
+  static cg_data* cg_tbl[24] = {
+    &z00,
+    &z01,
+    &z02,
+    &z03,
+    &z04,
+    &z05,
+    &z06,
+    &z07,
+    &z08,
+    &z09,
+    &z0a,
+    &z0b,
+    &z0c,
+    &z0d_z17,
+    &z0d_z17,
+    &z0d_z17,
+    &z0d_z17,
+    &z0d_z17,
+    &z0d_z17,
+    &z0d_z17,
+    &z0d_z17,
+    &z0d_z17,
+    &z0d_z17,
+    &z0d_z17
+  };
+
+  Load_PLC_Raw(p_actwk, &bakuhatu_cg_tbl);
+  Load_PLC_Raw(p_actwk, cg_tbl[stageno.zone]);
 }
 
 

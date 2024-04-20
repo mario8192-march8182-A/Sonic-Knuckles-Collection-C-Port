@@ -93,6 +93,7 @@ unsigned char pl2_suu;
 short plring_act;
 short pl2ring_act;
 short pl2ring;
+unsigned long DAT_08fffed2;
 short actring;
 unsigned short plmode;
 unsigned char divdev_modules;

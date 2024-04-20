@@ -1,13 +1,30 @@
 #ifndef RESOURCES_H
 
+signed char* titlepat[21]; // 00419b24
 signed char* actclearpat[59]; // 00419f7e
 unsigned char actclear_sonic_tiles[354]; // 004df1f6
+unsigned char title_sk_tiles[194]; // 004dfb7a
+unsigned char title_s3k_tiles[178]; // 004dfc3c
+unsigned char title_mushroom_hill_tiles[386]; // 004dfcee
+unsigned char title_sandopolis_tiles[274]; // 004dfe70
+unsigned char title_lava_reef_tiles[274]; // 004dff82
+unsigned char title_sky_sanctuary_tiles[450]; // 004e0094
+unsigned char title_death_egg_tiles[226]; // 004e0256
+unsigned char title_doomsday_tiles[402]; // 004e0338
+unsigned char title_hidden_palace_tiles[306]; // 004e04ca
 unsigned char gost08_tiles[5792]; // 004eed98
 signed char* obox04pat[13]; // 0050ab04
 signed char* gost08pat[18]; // 0050abd2
 unsigned char red_star_ring_tiles[98]; // 0050b4a6
 unsigned char white_star_ring_tiles[98]; // 0050b508
 unsigned char orange_star_ring_tiles[98]; // 0050b56a
+unsigned char rocky_tiles[284]; // 005109a4
+unsigned char picky_tiles[332]; // 00510ac0
+unsigned char flicky_tiles[308]; // 00510c0c
+unsigned char cucky_tiles[336]; // 00510d40
+unsigned char pecky_tiles[340]; // 00510e90
+unsigned char ricky_tiles[352]; // 00510fe4
+unsigned char pocky_tiles[340]; // 00511144
 unsigned short* sai00_tbl[8]; // 005121fe
 signed char* sai00pat[8]; // 00512238
 signed char* hana00pat[5]; // 00512350
@@ -21,6 +38,20 @@ unsigned char actclear_knuckles_tiles[626]; // 0054b858
 unsigned char actclear_tiles[802]; // 0054baca
 unsigned char title_act1_tiles[194]; // 0054bdec
 unsigned char title_act2_tiles[226]; // 0054beae
+unsigned char title_red_banner_tiles[482]; // 0054c792
+unsigned char title_angel_island_tiles[274]; // 0054c974
+unsigned char title_hydrocity_tiles[338]; // 0054ca86
+unsigned char title_marble_garden_tiles[450]; // 0054cbd8
+unsigned char title_carnival_night_tiles[402]; // 0054cd9a
+unsigned char title_flying_battery_tiles[354]; // 0054cf2c
+unsigned char title_icecap_tiles[210]; // 0054d08e
+unsigned char title_launch_base_tiles[338]; // 0054d160
+unsigned char title_azure_lake_tiles[434]; // 0054d2b2
+unsigned char title_balloon_park_tiles[546]; // 0054d464
+unsigned char title_desert_palace_tiles[578]; // 0054d686
+unsigned char title_chrome_gadget_tiles[514]; // 0054d8c8
+unsigned char title_endless_mine_tiles[482]; // 0054daca
+unsigned char title_bonus_stage_tiles[354]; // 0054dcac
 unsigned char zone_friend_data[24][2]; // 00820946
 
 #endif

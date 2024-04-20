@@ -19,6 +19,13 @@ void Copy_Data_To_VRAM(unsigned char* source, unsigned short destination, unsign
 }
 
 
+// SONIC3K.EXE address: 0041144b
+// skdisasm label: Load_PLC
+void Load_PLC(sprite_status* p_actwk, unsigned short id) {
+  // TODO
+}
+
+
 // SONIC3K.EXE address: 0041149c
 // skdisasm label: Load_PLC_Raw
 void Load_PLC_Raw(sprite_status* p_actwk, cg_data* p_data) {

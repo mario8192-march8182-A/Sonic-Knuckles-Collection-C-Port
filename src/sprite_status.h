@@ -222,6 +222,24 @@ typedef struct sprite_status {
       short accel;
       unsigned char reserved3[8];
     } snak00;
+    struct {
+      short delay_timer;
+      unsigned short part_cnt;
+      unsigned short current_exit_no;
+      unsigned char wait_flag;
+      unsigned char reserved1[9];
+      unsigned char act_start_flag;
+      unsigned char reserved2[5];
+      unsigned char vs_flag;
+      unsigned char reserved3[3];
+      unsigned char unknown_flag;
+      unsigned char reserved4[1];
+    } title;
+    struct {
+      unsigned char reserved[24];
+      short x_destination;
+      unsigned short oya;
+    } title_part;
   } actfree;
 }
 sprite_status;
