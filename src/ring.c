@@ -196,7 +196,7 @@ static void flyringinit(sprite_status* p_actwk) {
   }
   sprite_status* p_new_actwk = p_actwk;
   short flyring_cnt = plring;
-  if (SPRITE_STATUS_UCHAR(p_actwk, 62) != 0) {
+  if (p_actwk->actfree.ring.player != 0) {
     flyring_cnt = pl2ring;
   }
   if (flyring_cnt >= 32) {
@@ -380,11 +380,11 @@ static void tringmove(sprite_status* p_actwk) {
       actionsub(p_actwk);
     }
     else {
-      if (SPRITE_STATUS_USHORT(p_actwk, 72) != 0) {
-        CLEAR_BIT_7(flagwork[SPRITE_STATUS_USHORT(p_actwk, 72) - 1]);
+      if (p_actwk->actfree.ring.flagwork_index != 0) {
+        CLEAR_BIT_7(flagwork[p_actwk->actfree.ring.flagwork_index - 1]);
       }
-      if (SPRITE_STATUS_USHORT(p_actwk, 48) != 0) {
-        ringwk[SPRITE_STATUS_USHORT(p_actwk, 48) - 1] = 0;
+      if (p_actwk->actfree.ring.ringwk_index != 0) {
+        ringwk[p_actwk->actfree.ring.ringwk_index - 1] = 0;
       }
       frameout(p_actwk);
     }
@@ -489,25 +489,23 @@ static sprite_status_handler slot_ring_move_tbl[3] = {
 
 
 static void slot_ring_move(sprite_status* p_actwk) {
-  long unknown1 = SHORT_TO_LONG_HIGH(SPRITE_STATUS_SHORT(p_actwk, 60));
-  long unknown2 = SPRITE_STATUS_LONG(p_actwk, 52);
-  unknown2 -= unknown1;
-  unknown2 /= 16;
-  SPRITE_STATUS_LONG(p_actwk, 52) -= unknown2;
-  p_actwk->xposi = LONG_HIGH(SPRITE_STATUS_LONG(p_actwk, 52)) + LONG_LOW(p_actwk->xposi);
-  unknown1 = SHORT_TO_LONG_HIGH(SPRITE_STATUS_SHORT(p_actwk, 62));
-  unknown2 = SPRITE_STATUS_LONG(p_actwk, 56);
-  unknown2 -= unknown1;
-  unknown2 /= 16;
-  SPRITE_STATUS_LONG(p_actwk, 56) -= unknown2;
-  p_actwk->yposi = LONG_HIGH(SPRITE_STATUS_LONG(p_actwk, 56)) + LONG_LOW(p_actwk->yposi);
+  long xposi = p_actwk->actfree.slotring.xposi;
+  xposi -= SHORT_TO_LONG_HIGH(p_actwk->actfree.slotring.xspeed);
+  xposi /= 16;
+  p_actwk->actfree.slotring.xposi -= xposi;
+  p_actwk->xposi = LONG_HIGH(p_actwk->actfree.slotring.xposi) + LONG_LOW(p_actwk->xposi);
+  long yposi = p_actwk->actfree.slotring.yposi;
+  yposi -= SHORT_TO_LONG_HIGH(p_actwk->actfree.slotring.yspeed);
+  yposi /= 16;
+  p_actwk->actfree.slotring.yposi -= yposi;
+  p_actwk->yposi = LONG_HIGH(p_actwk->actfree.slotring.yposi) + LONG_LOW(p_actwk->yposi);
   patchg(p_actwk, sringchg);
-  --SPRITE_STATUS_USHORT(p_actwk, 64);
-  if (SPRITE_STATUS_USHORT(p_actwk, 64) != 0) {
+  --p_actwk->actfree.slotring.countdown;
+  if (p_actwk->actfree.slotring.countdown != 0) {
     actionsub(p_actwk);
   }
   else {
-    --SPRITE_STATUS_USHORT(p_actwk, 46);
+    --p_actwk->actfree.slotring.unknown;
     ringgetsub(p_actwk);
     p_actwk->r_no += 2;
     slot_ring_get(p_actwk);

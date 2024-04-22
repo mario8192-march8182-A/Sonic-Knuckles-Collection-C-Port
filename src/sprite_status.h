@@ -162,6 +162,14 @@ typedef struct sprite_status {
       unsigned short flagwork_index;
     } obox04;
     struct {
+      unsigned char reserved1[2];
+      unsigned short ringwk_index;
+      unsigned char reserved2[12];
+      unsigned short player;
+      unsigned char reserved3[8];
+      unsigned short flagwork_index;
+    } ring;
+    struct {
       short attack_countdown;
       unsigned char reserved1[4];
       sprite_status_handler callback_ptr;
@@ -211,6 +219,15 @@ typedef struct sprite_status {
       unsigned char reserved4[8];
       unsigned short flagwork_index;
     } save;
+    struct {
+      unsigned short unknown;
+      long xposi;
+      long yposi;
+      short xspeed;
+      short yspeed;
+      unsigned short countdown;
+      unsigned char reserved1[8];
+    } slotring;
     struct {
       short timer;
       unsigned char reserved1[4];

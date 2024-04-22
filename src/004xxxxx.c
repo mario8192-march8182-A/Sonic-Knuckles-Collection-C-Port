@@ -286,7 +286,7 @@ bool playdamageset(sprite_status* p_playerwk, sprite_status* p_attack_actwk) {
         p_new_actwk->r_ptr = &flyring;
         p_new_actwk->xposi = LONG_HIGH(p_playerwk->xposi) + LONG_LOW(p_new_actwk->xposi);
         p_new_actwk->yposi = LONG_HIGH(p_playerwk->yposi) + LONG_LOW(p_new_actwk->yposi);
-        SPRITE_STATUS_USHORT(p_new_actwk, 62) = p_playerwk - actwk;
+        p_new_actwk->actfree.ring.player = p_playerwk - actwk;
       }
     }
   }
