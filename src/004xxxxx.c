@@ -219,7 +219,7 @@ void patchg(sprite_status* p_actwk, signed char** p_chg_data) {
         ++p_actwk->patcnt;
         return;
       case PS_CONTROL_FOUT:
-        p_actwk->xposi = SHORT_TO_LONG_HIGH(32512) + LONG_LOW(p_actwk->xposi);
+        util__assign_high(&p_actwk->xposi, 32512);
         return;
       default:
         return;

@@ -1,5 +1,6 @@
 #include "../globals.h"
 #include "../macros.h"
+#include "../util.h"
 #include "saru00.h"
 #include "../004xxxxx.h"
 #include "../002.h"
@@ -428,7 +429,7 @@ static void saru00_chk_ofs(sprite_status* p_actwk) {
   if (p_parentwk->patno != 0) {
     yposi -= 2;
   }
-  p_actwk->yposi = SHORT_TO_LONG_HIGH(yposi) + LONG_LOW(p_actwk->yposi);
+  util__assign_high(&p_actwk->yposi, yposi);
 }
 
 

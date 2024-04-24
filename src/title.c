@@ -1,5 +1,6 @@
 #include "globals.h"
 #include "macros.h"
+#include "util.h"
 #include "title.h"
 #include "004xxxxx.h"
 #include "002.h"
@@ -97,8 +98,8 @@ loop:
     ++p_actwk->actfree.title.part_cnt;
     p_new_actwk->r_ptr = p_init_data->r_ptr;
     p_new_actwk->actfree.title_part.x_destination = p_init_data->x_destination;
-    p_new_actwk->xposi = SHORT_TO_LONG_HIGH(p_init_data->xposi) + LONG_LOW(p_new_actwk->xposi);
-    p_new_actwk->yposi = SHORT_TO_LONG_HIGH(p_init_data->yposi) + LONG_LOW(p_new_actwk->yposi);
+    util__assign_high(&p_new_actwk->xposi, p_init_data->xposi);
+    util__assign_high(&p_new_actwk->yposi, p_init_data->yposi);
     p_new_actwk->patno = p_init_data->patno;
     p_new_actwk->sprhs = p_init_data->sprhs;
     p_new_actwk->colino = p_init_data->colino;

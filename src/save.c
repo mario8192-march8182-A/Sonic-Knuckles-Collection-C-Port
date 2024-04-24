@@ -134,10 +134,10 @@ static void savemove3(sprite_status* p_actwk) {
     sinset(util__to_unsigned(p_actwk->direc1 - 64), &sin, &cos);
     long cos_l = cos * 3072;
     cos_l = LONG_LOW(cos_l) + p_actwk->actfree.save.parent_xposi;
-    p_actwk->xposi = SHORT_TO_LONG_HIGH(LONG_LOW(cos_l)) + LONG_LOW(p_actwk->xposi);
+    util__assign_high(&p_actwk->xposi, LONG_LOW(cos_l));
     long sin_l = sin * 3072;
     sin_l = LONG_LOW(sin_l) + p_actwk->actfree.save.parent_yposi;
-    p_actwk->yposi = SHORT_TO_LONG_HIGH(LONG_LOW(sin_l)) + LONG_LOW(p_actwk->yposi);
+    util__assign_high(&p_actwk->yposi, LONG_LOW(sin_l));
     frameoutchk(p_actwk);
   }
 }
@@ -198,8 +198,8 @@ void playload(sprite_status* p_actwk) {
   markerno = markerno_s;
   stageno = stageno_s;
   stageno_i = stageno_is;
-  actwk[0].xposi = SHORT_TO_LONG_HIGH(plxposi_s) + LONG_LOW(actwk[0].xposi);
-  actwk[0].yposi = SHORT_TO_LONG_HIGH(plyposi_s) + LONG_LOW(actwk[0].yposi);
+  util__assign_high(&actwk[0].xposi, plxposi_s);
+  util__assign_high(&actwk[0].yposi, plyposi_s);
   plring = plring_s;
   plring_f2 = plring_f2_s;
   if (plresetflag == 0) {
@@ -214,8 +214,8 @@ void playload(sprite_status* p_actwk) {
   scr_resize_no = scr_resize_no_s;
   scralim_down = scralim_down_s;
   scralim_n_down = scralim_down_s;
-  scra_h_posit = SHORT_TO_LONG_HIGH(scra_h_posit_s) + LONG_LOW(scra_v_posit);
-  scra_v_posit = SHORT_TO_LONG_HIGH(scra_v_posit_s) + LONG_LOW(scra_h_posit);
+  util__assign_high(&scra_h_posit, scra_h_posit_s);
+  util__assign_high(&scra_v_posit, scra_v_posit_s);
   if (watermode != 0) {
     waterposi = waterposi_s;
     waterflag = waterflag_s;
@@ -227,8 +227,8 @@ static void playload2(sprite_status* p_actwk) {
   marker_flag = 0;
   stageno = stageno_s2;
   stageno_i = stageno_is2;
-  actwk[0].xposi = SHORT_TO_LONG_HIGH(plxposi_s2) + LONG_LOW(actwk[0].xposi);
-  actwk[0].yposi = SHORT_TO_LONG_HIGH(plyposi_s2) + LONG_LOW(actwk[0].yposi);
+  util__assign_high(&actwk[0].xposi, plxposi_s2);
+  util__assign_high(&actwk[0].yposi, plyposi_s2);
   plring = plring_s2;
   plring_f2 = plring_f2_s2;
   pltime = pltime_s2;
@@ -239,8 +239,8 @@ static void playload2(sprite_status* p_actwk) {
   scr_resize_no = scr_resize_no_s2;
   scralim_down = scralim_down_s2;
   scralim_n_down = scralim_down_s2;
-  scra_h_posit = SHORT_TO_LONG_HIGH(scra_h_posit_s2) + LONG_LOW(scra_v_posit);
-  scra_v_posit = SHORT_TO_LONG_HIGH(scra_v_posit_s2) + LONG_LOW(scra_h_posit);
+  util__assign_high(&scra_h_posit, scra_h_posit_s2);
+  util__assign_high(&scra_v_posit, scra_v_posit_s2);
   if (watermode != 0) {
     waterposi = waterposi_s2;
     waterflag = waterflag_s2;
@@ -303,10 +303,10 @@ void o_starinit(sprite_status* p_actwk) {
     p_new_actwk->actflg = 4;
     p_new_actwk->r_no = 8;
     short xposi = LONG_HIGH_TO_SHORT(p_actwk->xposi);
-    p_new_actwk->xposi = SHORT_TO_LONG_HIGH(xposi) + LONG_LOW(p_new_actwk->xposi);
+    util__assign_high(&p_new_actwk->xposi, xposi);
     p_new_actwk->actfree.save.parent_xposi = xposi;
     short yposi = LONG_HIGH_TO_SHORT(p_actwk->yposi) - 48;
-    p_new_actwk->yposi = SHORT_TO_LONG_HIGH(yposi) + LONG_LOW(p_new_actwk->yposi);
+    util__assign_high(&p_new_actwk->yposi, yposi);
     p_new_actwk->actfree.save.parent_yposi = yposi;
     p_new_actwk->sprpri = p_actwk->sprpri;
     p_new_actwk->sprhs = 8;
@@ -457,8 +457,10 @@ void o_star(sprite_status* p_actwk) {
       break;
   }
 
-  p_actwk->xposi = SHORT_TO_LONG_HIGH(p_actwk->actfree.save.parent_xposi + cos) + LONG_LOW(p_actwk->xposi);
-  p_actwk->yposi = SHORT_TO_LONG_HIGH(p_actwk->actfree.save.parent_yposi + sin) + LONG_LOW(p_actwk->yposi);
+  short xposi = p_actwk->actfree.save.parent_xposi + cos;
+  util__assign_high(&p_actwk->xposi, xposi);
+  short yposi = p_actwk->actfree.save.parent_yposi + sin;
+  util__assign_high(&p_actwk->yposi, yposi);
   ++p_actwk->patcnt;
   unsigned char patno = (p_actwk->patcnt & 6) / 2;
   if (patno == 3) {

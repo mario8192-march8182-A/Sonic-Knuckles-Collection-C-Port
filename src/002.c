@@ -205,8 +205,9 @@ void speedsetg(sprite_status* p_actwk, short gravity) {
 void circle_move(sprite_status* p_actwk, unsigned char offset) {
   short sin, cos;
   sinset(p_actwk->actfree.saru00.arm_other_angle, &sin, &cos);
-  long sin_l = SHORT_TO_LONG_HIGH(sin);
-  long cos_l = SHORT_TO_LONG_HIGH(cos);
+  long sin_l = 0, cos_l = 0;
+  util__assign_high(&sin_l, sin);
+  util__assign_high(&cos_l, cos);
   sin_l /= 1 << offset;
   cos_l /= 1 << offset;
   sprite_status* p_parentwk = &actwk[p_actwk->actfree.dynamic.oya];

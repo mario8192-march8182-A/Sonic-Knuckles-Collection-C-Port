@@ -80,8 +80,8 @@ static unsigned short gost08_tbl17[2];
 
 void gost08(sprite_status* p_actwk) {
   p_actwk->r_ptr = &gost08_ctr;
-  p_actwk->xposi = SHORT_TO_LONG_HIGH(288);
-  p_actwk->yposi = SHORT_TO_LONG_HIGH(160);
+  util__assign_high(&p_actwk->xposi, 288);
+  util__assign_high(&p_actwk->yposi, 160);
   gost08_ctr(p_actwk);
 }
 
@@ -290,8 +290,10 @@ static void gost08_atak1(sprite_status* p_actwk) {
   p_actwk->r_no = 16;
   p_actwk->colino = 215;
   SET_BIT_2(p_actwk->actflg);
-  p_actwk->xposi = LONG_HIGH(scra_h_posit) + (p_actwk->xposi - SHORT_TO_LONG_HIGH(128));
-  p_actwk->yposi = LONG_HIGH(scra_v_posit) + (p_actwk->yposi - SHORT_TO_LONG_HIGH(128));
+  short xposi = LONG_HIGH_TO_SHORT(scra_h_posit) + (LONG_HIGH_TO_SHORT(p_actwk->xposi) - 128);
+  util__assign_high(&p_actwk->xposi, xposi);
+  short yposi = LONG_HIGH_TO_SHORT(scra_v_posit) + (LONG_HIGH_TO_SHORT(p_actwk->yposi) - 128);
+  util__assign_high(&p_actwk->yposi, yposi);
   p_actwk->yspeed = 256;
 }
 

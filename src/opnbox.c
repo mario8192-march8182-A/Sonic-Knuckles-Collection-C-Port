@@ -90,10 +90,10 @@ static void opnbox_init(sprite_status* p_actwk) {
   else {
     p_actwk->r_no = 8;
     short xposi = LONG_HIGH_TO_SHORT(scra_h_posit) + 160;
-    p_actwk->xposi = SHORT_TO_LONG_HIGH(xposi) + LONG_LOW(p_actwk->xposi);
+    util__assign_high(&p_actwk->xposi, xposi);
     p_actwk->actfree.opnbox.xposi = xposi;
     short yposi = LONG_HIGH_TO_SHORT(scra_v_posit) - 64;
-    p_actwk->yposi = SHORT_TO_LONG_HIGH(yposi) + LONG_LOW(p_actwk->yposi);
+    util__assign_high(&p_actwk->yposi, yposi);
     p_actwk->actfree.opnbox.xspeed = 1;
     bs00m0_puka_init(p_actwk);
     set_act00(p_actwk, &switch_set_tblud);

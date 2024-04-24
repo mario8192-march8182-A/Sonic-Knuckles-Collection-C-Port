@@ -2,6 +2,11 @@
 #include "util.h"
 
 
+void util__assign_high(long* dest, short src) {
+  *dest = src * 65536 + *dest % 65536;
+}
+
+
 void util__copy_high(long* dest, long* src) {
   *dest = *src / 65536 * 65536 + *dest % 65536;
 }

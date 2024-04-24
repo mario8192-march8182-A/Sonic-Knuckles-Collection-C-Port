@@ -61,10 +61,14 @@ sprite_status* set_act00(sprite_status* p_actwk, set_act00_data* p_data) {
     p_new_actwk->sproffset = p_actwk->sproffset;
     p_new_actwk->r_ptr = p_data->data[i / 2].r_ptr;
     p_new_actwk->userflag1 = i;
-    p_new_actwk->actfree.dynamic.xoffset = p_data->data[i / 2].xoffset;
-    p_new_actwk->xposi = LONG_HIGH(p_actwk->xposi) + LONG_LOW(p_new_actwk->xposi) + SHORT_TO_LONG_HIGH(p_data->data[i / 2].xoffset);
-    p_new_actwk->actfree.dynamic.yoffset = p_data->data[i / 2].yoffset;
-    p_new_actwk->yposi = LONG_HIGH(p_actwk->yposi) + LONG_LOW(p_new_actwk->yposi) + SHORT_TO_LONG_HIGH(p_data->data[i / 2].yoffset);
+    signed char xoffset = p_data->data[i / 2].xoffset;
+    p_new_actwk->actfree.dynamic.xoffset = xoffset;
+    short xposi = LONG_HIGH_TO_SHORT(p_actwk->xposi) + xoffset;
+    util__assign_high(&p_new_actwk->xposi, xposi);
+    signed char yoffset = p_data->data[i / 2].yoffset;
+    p_new_actwk->actfree.dynamic.yoffset = yoffset;
+    short yposi = LONG_HIGH_TO_SHORT(p_actwk->yposi) + yoffset;
+    util__assign_high(&p_new_actwk->yposi, yposi);
     i += 2;
     --cnt;
   } while (cnt != 0);
@@ -93,10 +97,14 @@ sprite_status* set_act01(sprite_status* p_actwk, set_act01_data* p_data) {
     p_new_actwk->actfree.dynamic.pg_data_ptr = p_data->data[i / 2].pg_data_ptr;
     p_new_actwk->actfree.dynamic.callback_ptr = p_data->data[i / 2].callback_ptr;
     p_new_actwk->userflag1 = i;
-    p_new_actwk->actfree.dynamic.xoffset = p_data->data[i / 2].xoffset;
-    p_new_actwk->xposi = LONG_HIGH(p_actwk->xposi) + LONG_LOW(p_new_actwk->xposi) + SHORT_TO_LONG_HIGH(p_data->data[i / 2].xoffset);
-    p_new_actwk->actfree.dynamic.yoffset = p_data->data[i / 2].yoffset;
-    p_new_actwk->yposi = LONG_HIGH(p_actwk->yposi) + LONG_LOW(p_new_actwk->yposi) + SHORT_TO_LONG_HIGH(p_data->data[i / 2].yoffset);
+    signed char xoffset = p_data->data[i / 2].xoffset;
+    p_new_actwk->actfree.dynamic.xoffset = xoffset;
+    short xposi = LONG_HIGH_TO_SHORT(p_actwk->xposi) + xoffset;
+    util__assign_high(&p_new_actwk->xposi, xposi);
+    signed char yoffset = p_data->data[i / 2].yoffset;
+    p_new_actwk->actfree.dynamic.yoffset = yoffset;
+    short yposi = LONG_HIGH_TO_SHORT(p_actwk->yposi) + yoffset;
+    util__assign_high(&p_new_actwk->yposi, yposi);
     p_new_actwk->xspeed = p_data->data[i / 2].xspeed;
     p_new_actwk->yspeed = p_data->data[i / 2].yspeed;
     i += 2;
@@ -125,9 +133,11 @@ sprite_status* set_act02(sprite_status* p_actwk, set_act02_data* p_data) {
     p_new_actwk->r_ptr = p_data->r_ptr;
     p_new_actwk->userflag1 = i;
     p_new_actwk->actfree.dynamic.xoffset = p_data->xoffset;
-    p_new_actwk->xposi = LONG_HIGH(p_actwk->xposi) + LONG_LOW(p_new_actwk->xposi) + SHORT_TO_LONG_HIGH(p_data->xoffset);
+    short xposi = LONG_HIGH_TO_SHORT(p_actwk->xposi) + p_data->xoffset;
+    util__assign_high(&p_new_actwk->xposi, xposi);
     p_new_actwk->actfree.dynamic.yoffset = p_data->yoffset;
-    p_new_actwk->yposi = LONG_HIGH(p_actwk->yposi) + LONG_LOW(p_new_actwk->yposi) + SHORT_TO_LONG_HIGH(p_data->yoffset);
+    short yposi = LONG_HIGH_TO_SHORT(p_actwk->yposi) + p_data->yoffset;
+    util__assign_high(&p_new_actwk->yposi, yposi);
     i += 2;
     --cnt;
   } while (cnt != 0);
@@ -169,8 +179,10 @@ sprite_status* set_act03(sprite_status* p_actwk, set_act03_data* p_data) {
 // skdisasm label: Refresh_ChildPosition
 void ko_offset0(sprite_status* p_actwk) {
   sprite_status* p_parentwk = &actwk[p_actwk->actfree.dynamic.oya];
-  p_actwk->xposi = LONG_HIGH(p_parentwk->xposi) + SHORT_TO_LONG_HIGH(p_actwk->actfree.dynamic.xoffset) + LONG_LOW(p_actwk->xposi);
-  p_actwk->yposi = LONG_HIGH(p_parentwk->yposi) + SHORT_TO_LONG_HIGH(p_actwk->actfree.dynamic.yoffset) + LONG_LOW(p_actwk->yposi);
+  short xposi = LONG_HIGH_TO_SHORT(p_parentwk->xposi) + p_actwk->actfree.dynamic.xoffset;
+  util__assign_high(&p_actwk->xposi, xposi);
+  short yposi = LONG_HIGH_TO_SHORT(p_parentwk->yposi) + p_actwk->actfree.dynamic.yoffset;
+  util__assign_high(&p_actwk->yposi, yposi);
 }
 
 
@@ -183,14 +195,16 @@ void ko_offset1(sprite_status* p_actwk) {
     xoffset = -xoffset;
     SET_BIT_0(p_parentwk->actflg);
   }
-  p_actwk->xposi = SHORT_TO_LONG_HIGH(LONG_HIGH_TO_SHORT(p_parentwk->xposi) + xoffset) + LONG_LOW(p_actwk->xposi);
+  short xposi = LONG_HIGH_TO_SHORT(p_parentwk->xposi) + xoffset;
+  util__assign_high(&p_actwk->xposi, xposi);
   signed char yoffset = p_actwk->actfree.dynamic.yoffset;
   CLEAR_BIT_1(p_actwk->actflg);
   if (BIT_1_IS_SET(p_parentwk->actflg)) {
     yoffset = -yoffset;
     SET_BIT_1(p_parentwk->actflg);
   }
-  p_actwk->yposi = SHORT_TO_LONG_HIGH(LONG_HIGH_TO_SHORT(p_parentwk->yposi) + yoffset) + LONG_LOW(p_actwk->yposi);
+  short yposi = LONG_HIGH_TO_SHORT(p_parentwk->yposi) + yoffset;
+  util__assign_high(&p_actwk->yposi, yposi);
 }
 
 
