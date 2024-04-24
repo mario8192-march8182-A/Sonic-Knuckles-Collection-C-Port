@@ -267,7 +267,7 @@ static void gost08_atak0(sprite_status* p_actwk) {
   time_pg(p_actwk, p_actwk->actfree.gost08.pg_data_ptr);
   puka_puka(p_actwk);
   speedset2(p_actwk);
-  short xposi = LONG_HIGH_TO_SHORT(p_actwk->xposi);
+  short xposi = LONG_HIGH(p_actwk->xposi);
   if (p_actwk->xspeed >= 0) {
     // chk_r
     if (util__to_unsigned(xposi) <= 416) return; // unsigned
@@ -290,9 +290,9 @@ static void gost08_atak1(sprite_status* p_actwk) {
   p_actwk->r_no = 16;
   p_actwk->colino = 215;
   SET_BIT_2(p_actwk->actflg);
-  short xposi = LONG_HIGH_TO_SHORT(scra_h_posit) + (LONG_HIGH_TO_SHORT(p_actwk->xposi) - 128);
+  short xposi = LONG_HIGH(scra_h_posit) + (LONG_HIGH(p_actwk->xposi) - 128);
   util__assign_high(&p_actwk->xposi, xposi);
-  short yposi = LONG_HIGH_TO_SHORT(scra_v_posit) + (LONG_HIGH_TO_SHORT(p_actwk->yposi) - 128);
+  short yposi = LONG_HIGH(scra_v_posit) + (LONG_HIGH(p_actwk->yposi) - 128);
   util__assign_high(&p_actwk->yposi, yposi);
   p_actwk->yspeed = 256;
 }
@@ -429,7 +429,7 @@ static void obox08_gost_move1(sprite_status* p_actwk) {
 
 
 static void chk_gost08_limit(sprite_status* p_actwk) {
-  short xposi = LONG_HIGH_TO_SHORT(p_actwk->xposi);
+  short xposi = LONG_HIGH(p_actwk->xposi);
   if (p_actwk->xspeed >= 0) {
     // chk_r
     if (util__to_unsigned(xposi) <= 416) return; // unsigned

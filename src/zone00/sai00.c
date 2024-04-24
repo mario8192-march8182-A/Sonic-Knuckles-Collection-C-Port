@@ -264,7 +264,7 @@ static bool sai00_down_col(sprite_status* p_actwk, sprite_status_handler p_callb
   if (!BIT_3_IS_SET(p_actwk->actfree.sai00.status_bitfield)) {
     offset = -offset;
   }
-  short xposi = LONG_HIGH_TO_SHORT(p_actwk->xposi) + offset;
+  short xposi = LONG_HIGH(p_actwk->xposi) + offset;
   short unknown = ObjCheckFloorDist2(p_actwk, xposi);
   if (unknown >= -1 && unknown < 12) {
     p_actwk->yposi += SHORT_TO_LONG_HIGH(unknown);

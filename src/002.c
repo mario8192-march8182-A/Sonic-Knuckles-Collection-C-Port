@@ -154,12 +154,12 @@ void chk_tobi_diec0(sprite_status* p_actwk, unsigned char unknown) {
 void chk_distance(sprite_status* p_actwk, bool* pl_is_right, bool* pl_is_below, short* pl_x_distance, short* pl_y_distance) {
   *pl_is_right = false;
   *pl_is_below = false;
-  *pl_x_distance = LONG_HIGH_TO_SHORT(p_actwk->xposi) - LONG_HIGH_TO_SHORT(actwk[0].xposi);
+  *pl_x_distance = LONG_HIGH(p_actwk->xposi) - LONG_HIGH(actwk[0].xposi);
   if (*pl_x_distance < 0) {
     *pl_x_distance = -*pl_x_distance;
     *pl_is_right = true;
   }
-  short pl2_x_distance = LONG_HIGH_TO_SHORT(p_actwk->xposi) - LONG_HIGH_TO_SHORT(actwk[1].xposi);
+  short pl2_x_distance = LONG_HIGH(p_actwk->xposi) - LONG_HIGH(actwk[1].xposi);
   bool pl2_is_right = false;
   if (pl2_x_distance < 0) {
     pl2_x_distance = -pl2_x_distance;
@@ -171,7 +171,7 @@ void chk_distance(sprite_status* p_actwk, bool* pl_is_right, bool* pl_is_below, 
     *pl_is_right = pl2_is_right;
     *pl_x_distance = pl2_x_distance;
   }
-  *pl_y_distance = LONG_HIGH_TO_SHORT(p_actwk->yposi) - LONG_HIGH_TO_SHORT(p_playerwk->yposi);
+  *pl_y_distance = LONG_HIGH(p_actwk->yposi) - LONG_HIGH(p_playerwk->yposi);
   if (*pl_y_distance < 0) {
     *pl_y_distance = -*pl_y_distance;
     *pl_is_below = true;
@@ -282,7 +282,7 @@ void set_emy_wchg(sprite_status* p_actwk, wrt_data* p_data) {
 
 // skdisasm label: Sprite_CheckDeleteTouch
 void chk_emy_foutc0(sprite_status* p_actwk) {
-  unsigned short scr_xposi = util__to_unsigned(LONG_HIGH_TO_SHORT(p_actwk->xposi)) & 0xFF80;
+  unsigned short scr_xposi = util__to_unsigned(LONG_HIGH(p_actwk->xposi)) & 0xFF80;
   scr_xposi -= scr_x_no;
   if (scr_xposi > 640) { // unsigned
     emy_fout(p_actwk);
@@ -295,14 +295,14 @@ void chk_emy_foutc0(sprite_status* p_actwk) {
 
 
 void chk_emy_foutc3(sprite_status* p_actwk) {
-  unsigned short scr_xposi = util__to_unsigned(LONG_HIGH_TO_SHORT(p_actwk->xposi)) & 0xFF80;
+  unsigned short scr_xposi = util__to_unsigned(LONG_HIGH(p_actwk->xposi)) & 0xFF80;
   scr_xposi -= scr_x_no;
   if (scr_xposi > 640) { // unsigned
     set_emy_fout0(p_actwk);
   }
   else {
-    unsigned short scr_yposi = util__to_unsigned(LONG_HIGH_TO_SHORT(p_actwk->yposi));
-    scr_yposi -= LONG_HIGH_TO_SHORT(scra_v_posit);
+    unsigned short scr_yposi = util__to_unsigned(LONG_HIGH(p_actwk->yposi));
+    scr_yposi -= LONG_HIGH(scra_v_posit);
     if (scr_yposi > 512) { // unsigned
       set_emy_fout0(p_actwk);
     }
@@ -316,7 +316,7 @@ void chk_emy_foutc3(sprite_status* p_actwk) {
 
 // skdisasm label: Sprite_CheckDelete
 void chk_emy_fout0(sprite_status* p_actwk) {
-  unsigned short scr_xposi = util__to_unsigned(LONG_HIGH_TO_SHORT(p_actwk->xposi)) & 0xFF80;
+  unsigned short scr_xposi = util__to_unsigned(LONG_HIGH(p_actwk->xposi)) & 0xFF80;
   scr_xposi -= scr_x_no;
   if (scr_xposi > 640) { // unsigned
     emy_fout(p_actwk);
@@ -339,13 +339,13 @@ void emy_fout(sprite_status* p_actwk) {
 // skdisasm label: Obj_FlickerMove
 void chk_break_fout(sprite_status* p_actwk) {
   speedset(p_actwk);
-  unsigned short scr_xposi = util__to_unsigned(LONG_HIGH_TO_SHORT(p_actwk->xposi)) & 0xFF80;
+  unsigned short scr_xposi = util__to_unsigned(LONG_HIGH(p_actwk->xposi)) & 0xFF80;
   scr_xposi -= scr_x_no;
   if (scr_xposi > 640) {
     set_emy_fout01(p_actwk);
     return;
   }
-  if (util__to_unsigned(LONG_HIGH_TO_SHORT(p_actwk->xposi) - LONG_HIGH_TO_SHORT(scra_v_posit) + 128) > 512) {
+  if (util__to_unsigned(LONG_HIGH(p_actwk->xposi) - LONG_HIGH(scra_v_posit) + 128) > 512) {
     set_emy_fout01(p_actwk);
     return;
   }
@@ -359,7 +359,7 @@ void chk_break_fout(sprite_status* p_actwk) {
 
 // skdisasm label: Sprite_CheckDelete2
 void chk_emy_foutw0(sprite_status* p_actwk) {
-  unsigned short scr_xposi = util__to_unsigned(LONG_HIGH_TO_SHORT(p_actwk->xposi)) & 0xFF80;
+  unsigned short scr_xposi = util__to_unsigned(LONG_HIGH(p_actwk->xposi)) & 0xFF80;
   scr_xposi -= scr_x_no;
   if (scr_xposi > 640) { // unsigned
     wchg_fout(p_actwk);
@@ -396,7 +396,7 @@ void clr_wchg_bit(sprite_status* p_actwk) {
 // skdisasm label: Sprite_CheckDeleteTouchSlotted
 void chk_emy_foutwc0(sprite_status* p_actwk) {
   if (!BIT_7_IS_SET(p_actwk->actflg)) {
-    unsigned short scr_xposi = util__to_unsigned(LONG_HIGH_TO_SHORT(p_actwk->xposi)) & 0xFF80;
+    unsigned short scr_xposi = util__to_unsigned(LONG_HIGH(p_actwk->xposi)) & 0xFF80;
     scr_xposi -= scr_x_no;
     if (scr_xposi > 640) { // unsigned
       wchg_fout(p_actwk);
@@ -517,10 +517,10 @@ bool chk_emy_col(sprite_status* p_actwk, sprite_status** pp_coli_actwk) {
 // skdisasm label: Check_PlayerInRange
 sprite_status* chk_emy_colt(sprite_status* p_actwk, short* p_col_data) {
   sprite_status* p_playerwk = 0;
-  short pl_xposi = LONG_HIGH_TO_SHORT(actwk[1].xposi);
-  short pl_yposi = LONG_HIGH_TO_SHORT(actwk[1].yposi);
-  short emy_range_left_x = LONG_HIGH_TO_SHORT(p_actwk->xposi);
-  short emy_range_top_y = LONG_HIGH_TO_SHORT(p_actwk->yposi);
+  short pl_xposi = LONG_HIGH(actwk[1].xposi);
+  short pl_yposi = LONG_HIGH(actwk[1].yposi);
+  short emy_range_left_x = LONG_HIGH(p_actwk->xposi);
+  short emy_range_top_y = LONG_HIGH(p_actwk->yposi);
   emy_range_left_x += p_col_data[0];
   short emy_range_right_x = emy_range_left_x;
   emy_range_right_x += p_col_data[1];
@@ -528,8 +528,8 @@ sprite_status* chk_emy_colt(sprite_status* p_actwk, short* p_col_data) {
   short emy_range_bottom_y = emy_range_top_y;
   emy_range_bottom_y += p_col_data[3];
   p_playerwk = chk_emy_colt__col(&actwk[1], p_playerwk, pl_xposi, pl_yposi, emy_range_left_x, emy_range_top_y, emy_range_right_x, emy_range_bottom_y);
-  pl_xposi = LONG_HIGH_TO_SHORT(actwk[0].xposi);
-  pl_yposi = LONG_HIGH_TO_SHORT(actwk[0].yposi);
+  pl_xposi = LONG_HIGH(actwk[0].xposi);
+  pl_yposi = LONG_HIGH(actwk[0].yposi);
   p_playerwk = chk_emy_colt__col(&actwk[0], p_playerwk, pl_xposi, pl_yposi, emy_range_left_x, emy_range_top_y, emy_range_right_x, emy_range_bottom_y);
   return p_playerwk;
 }
@@ -558,7 +558,7 @@ void chk_framein(sprite_status* p_actwk, sprite_status_handler p_callback) {
 
 static void chk_framein__chk(sprite_status* p_actwk) {
   if (!BIT_7_IS_SET(p_actwk->actflg)) {
-    unsigned short scr_xposi = util__to_unsigned(LONG_HIGH_TO_SHORT(p_actwk->xposi)) & 0xFF80;
+    unsigned short scr_xposi = util__to_unsigned(LONG_HIGH(p_actwk->xposi)) & 0xFF80;
     scr_xposi -= scr_x_no;
     if (scr_xposi <= 640) { // unsigned
       actionsub(p_actwk);

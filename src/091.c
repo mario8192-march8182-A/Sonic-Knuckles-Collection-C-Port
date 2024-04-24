@@ -63,11 +63,11 @@ sprite_status* set_act00(sprite_status* p_actwk, set_act00_data* p_data) {
     p_new_actwk->userflag1 = i;
     signed char xoffset = p_data->data[i / 2].xoffset;
     p_new_actwk->actfree.dynamic.xoffset = xoffset;
-    short xposi = LONG_HIGH_TO_SHORT(p_actwk->xposi) + xoffset;
+    short xposi = LONG_HIGH(p_actwk->xposi) + xoffset;
     util__assign_high(&p_new_actwk->xposi, xposi);
     signed char yoffset = p_data->data[i / 2].yoffset;
     p_new_actwk->actfree.dynamic.yoffset = yoffset;
-    short yposi = LONG_HIGH_TO_SHORT(p_actwk->yposi) + yoffset;
+    short yposi = LONG_HIGH(p_actwk->yposi) + yoffset;
     util__assign_high(&p_new_actwk->yposi, yposi);
     i += 2;
     --cnt;
@@ -99,11 +99,11 @@ sprite_status* set_act01(sprite_status* p_actwk, set_act01_data* p_data) {
     p_new_actwk->userflag1 = i;
     signed char xoffset = p_data->data[i / 2].xoffset;
     p_new_actwk->actfree.dynamic.xoffset = xoffset;
-    short xposi = LONG_HIGH_TO_SHORT(p_actwk->xposi) + xoffset;
+    short xposi = LONG_HIGH(p_actwk->xposi) + xoffset;
     util__assign_high(&p_new_actwk->xposi, xposi);
     signed char yoffset = p_data->data[i / 2].yoffset;
     p_new_actwk->actfree.dynamic.yoffset = yoffset;
-    short yposi = LONG_HIGH_TO_SHORT(p_actwk->yposi) + yoffset;
+    short yposi = LONG_HIGH(p_actwk->yposi) + yoffset;
     util__assign_high(&p_new_actwk->yposi, yposi);
     p_new_actwk->xspeed = p_data->data[i / 2].xspeed;
     p_new_actwk->yspeed = p_data->data[i / 2].yspeed;
@@ -133,10 +133,10 @@ sprite_status* set_act02(sprite_status* p_actwk, set_act02_data* p_data) {
     p_new_actwk->r_ptr = p_data->r_ptr;
     p_new_actwk->userflag1 = i;
     p_new_actwk->actfree.dynamic.xoffset = p_data->xoffset;
-    short xposi = LONG_HIGH_TO_SHORT(p_actwk->xposi) + p_data->xoffset;
+    short xposi = LONG_HIGH(p_actwk->xposi) + p_data->xoffset;
     util__assign_high(&p_new_actwk->xposi, xposi);
     p_new_actwk->actfree.dynamic.yoffset = p_data->yoffset;
-    short yposi = LONG_HIGH_TO_SHORT(p_actwk->yposi) + p_data->yoffset;
+    short yposi = LONG_HIGH(p_actwk->yposi) + p_data->yoffset;
     util__assign_high(&p_new_actwk->yposi, yposi);
     i += 2;
     --cnt;
@@ -179,9 +179,9 @@ sprite_status* set_act03(sprite_status* p_actwk, set_act03_data* p_data) {
 // skdisasm label: Refresh_ChildPosition
 void ko_offset0(sprite_status* p_actwk) {
   sprite_status* p_parentwk = &actwk[p_actwk->actfree.dynamic.oya];
-  short xposi = LONG_HIGH_TO_SHORT(p_parentwk->xposi) + p_actwk->actfree.dynamic.xoffset;
+  short xposi = LONG_HIGH(p_parentwk->xposi) + p_actwk->actfree.dynamic.xoffset;
   util__assign_high(&p_actwk->xposi, xposi);
-  short yposi = LONG_HIGH_TO_SHORT(p_parentwk->yposi) + p_actwk->actfree.dynamic.yoffset;
+  short yposi = LONG_HIGH(p_parentwk->yposi) + p_actwk->actfree.dynamic.yoffset;
   util__assign_high(&p_actwk->yposi, yposi);
 }
 
@@ -195,7 +195,7 @@ void ko_offset1(sprite_status* p_actwk) {
     xoffset = -xoffset;
     SET_BIT_0(p_parentwk->actflg);
   }
-  short xposi = LONG_HIGH_TO_SHORT(p_parentwk->xposi) + xoffset;
+  short xposi = LONG_HIGH(p_parentwk->xposi) + xoffset;
   util__assign_high(&p_actwk->xposi, xposi);
   signed char yoffset = p_actwk->actfree.dynamic.yoffset;
   CLEAR_BIT_1(p_actwk->actflg);
@@ -203,7 +203,7 @@ void ko_offset1(sprite_status* p_actwk) {
     yoffset = -yoffset;
     SET_BIT_1(p_parentwk->actflg);
   }
-  short yposi = LONG_HIGH_TO_SHORT(p_parentwk->yposi) + yoffset;
+  short yposi = LONG_HIGH(p_parentwk->yposi) + yoffset;
   util__assign_high(&p_actwk->yposi, yposi);
 }
 
@@ -312,8 +312,8 @@ bool chk_pl_attack(sprite_status* p_actwk, sprite_status* p_playerwk) {
     case MILES: {
       if (p_playerwk->actfree.player.talent_status == 0) return false;
       if (BIT_6_IS_SET(p_playerwk->cddat1)) return false;
-      short xposi = LONG_HIGH_TO_SHORT(p_playerwk->xposi) - LONG_HIGH_TO_SHORT(p_actwk->xposi);
-      short yposi = LONG_HIGH_TO_SHORT(p_playerwk->yposi) - LONG_HIGH_TO_SHORT(p_actwk->yposi);
+      short xposi = LONG_HIGH(p_playerwk->xposi) - LONG_HIGH(p_actwk->xposi);
+      short yposi = LONG_HIGH(p_playerwk->yposi) - LONG_HIGH(p_actwk->yposi);
       unsigned short angle = util__to_unsigned(atan(xposi, yposi) - 32);
       if (angle >= 64) return false; // unsigned
       return true;

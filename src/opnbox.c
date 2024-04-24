@@ -75,7 +75,7 @@ void opnbox(sprite_status* p_actwk) {
     &opnbox_fly5
   };
 
-  short xposi = LONG_HIGH_TO_SHORT(p_actwk->xposi);
+  short xposi = LONG_HIGH(p_actwk->xposi);
   act_tbl[p_actwk->r_no / 2](p_actwk);
   SolidObjectFull(p_actwk, 43, 24, 24, xposi);
   actionsub(p_actwk);
@@ -89,10 +89,10 @@ static void opnbox_init(sprite_status* p_actwk) {
   }
   else {
     p_actwk->r_no = 8;
-    short xposi = LONG_HIGH_TO_SHORT(scra_h_posit) + 160;
+    short xposi = LONG_HIGH(scra_h_posit) + 160;
     util__assign_high(&p_actwk->xposi, xposi);
     p_actwk->actfree.opnbox.xposi = xposi;
-    short yposi = LONG_HIGH_TO_SHORT(scra_v_posit) - 64;
+    short yposi = LONG_HIGH(scra_v_posit) - 64;
     util__assign_high(&p_actwk->yposi, yposi);
     p_actwk->actfree.opnbox.xspeed = 1;
     bs00m0_puka_init(p_actwk);
@@ -146,13 +146,13 @@ static void opnbox_fly0(sprite_status* p_actwk) {
   short xspeed = p_actwk->actfree.opnbox.xspeed;
   if (xspeed >= 0) {
     // p_chk
-    unsigned short hposi = util__to_unsigned(LONG_HIGH_TO_SHORT(scra_h_posit) + 272);
-    if (hposi >= util__to_unsigned(LONG_HIGH_TO_SHORT(p_actwk->xposi))) goto add; // unsigned
+    unsigned short hposi = util__to_unsigned(LONG_HIGH(scra_h_posit) + 272);
+    if (hposi >= util__to_unsigned(LONG_HIGH(p_actwk->xposi))) goto add; // unsigned
   }
   else {
     // m_chk
-    unsigned short hposi = util__to_unsigned(LONG_HIGH_TO_SHORT(scra_h_posit) + 48);
-    if (hposi < util__to_unsigned(LONG_HIGH_TO_SHORT(p_actwk->xposi))) goto add; // unsigned
+    unsigned short hposi = util__to_unsigned(LONG_HIGH(scra_h_posit) + 48);
+    if (hposi < util__to_unsigned(LONG_HIGH(p_actwk->xposi))) goto add; // unsigned
   }
 
 neg:
@@ -161,12 +161,12 @@ neg:
 add:
   p_actwk->actfree.opnbox.xspeed = xspeed;
   p_actwk->xposi += SHORT_TO_LONG_HIGH(xspeed);
-  short vposi = LONG_HIGH_TO_SHORT(scra_v_posit) + 64;
+  short vposi = LONG_HIGH(scra_v_posit) + 64;
   if (stageno.zone == MARBLE_GARDEN) {
     vposi -= 32;
   }
   short yspeed = 16384;
-  if (vposi >= util__to_unsigned(LONG_HIGH_TO_SHORT(p_actwk->yposi))) { // unsigned
+  if (vposi >= util__to_unsigned(LONG_HIGH(p_actwk->yposi))) { // unsigned
     yspeed = -yspeed;
   }
   p_actwk->yposi += yspeed;
@@ -208,8 +208,8 @@ static void opnbox_fly4(sprite_status* p_actwk) {
 
 static void opnbox_fly40(sprite_status* p_actwk) {
   puka_puka(p_actwk);
-  unsigned short hposi = util__to_unsigned(LONG_HIGH_TO_SHORT(scra_h_posit) - 96);
-  if (hposi >= util__to_unsigned(LONG_HIGH_TO_SHORT(p_actwk->xposi))) {
+  unsigned short hposi = util__to_unsigned(LONG_HIGH(scra_h_posit) - 96);
+  if (hposi >= util__to_unsigned(LONG_HIGH(p_actwk->xposi))) {
     DAT_08fffaa2 = 255;
   }
   else {
@@ -455,7 +455,7 @@ void set_pl_pause(sprite_status* p_actwk, sprite_status* p_playerwk) {
 static void get_closero(sprite_status* p_actwk, sprite_status* p_other_actwk, short x_unknown, short y_unknown, short speed_add, short xposi_add, short yposi_add) {
   short xspeed_add = speed_add;
   short yspeed_add = speed_add;
-  if (LONG_HIGH_TO_SHORT(p_other_actwk->xposi) + xposi_add < LONG_HIGH_TO_SHORT(p_actwk->xposi)) {
+  if (LONG_HIGH(p_other_actwk->xposi) + xposi_add < LONG_HIGH(p_actwk->xposi)) {
     xspeed_add = -xspeed_add;
   }
   short xspeed = p_actwk->xspeed + xspeed_add;
@@ -467,7 +467,7 @@ static void get_closero(sprite_status* p_actwk, sprite_status* p_other_actwk, sh
   }
   short yspeed = 0;
   do {
-    if (LONG_HIGH_TO_SHORT(p_other_actwk->yposi) + yposi_add < LONG_HIGH_TO_SHORT(p_actwk->yposi)) {
+    if (LONG_HIGH(p_other_actwk->yposi) + yposi_add < LONG_HIGH(p_actwk->yposi)) {
       yspeed_add = -yspeed_add;
     }
     yspeed = p_actwk->yspeed + yspeed_add;
@@ -480,12 +480,12 @@ static void get_closero(sprite_status* p_actwk, sprite_status* p_other_actwk, sh
 
 
 void chk_switch_ride(sprite_status* p_actwk) {
-  SolidObjectFull(p_actwk, 27, 4, 6, LONG_HIGH_TO_SHORT(p_actwk->xposi));
+  SolidObjectFull(p_actwk, 27, 4, 6, LONG_HIGH(p_actwk->xposi));
 }
 
 
 static void chk_switchu_ride(sprite_status* p_actwk) {
-  SolidObjectFull(p_actwk, 27, 5, 9, LONG_HIGH_TO_SHORT(p_actwk->xposi));
+  SolidObjectFull(p_actwk, 27, 5, 9, LONG_HIGH(p_actwk->xposi));
 }
 
 
@@ -525,7 +525,7 @@ static void set_friend_init(sprite_status* p_actwk) {
   p_actwk->patbase = friend_data[friend_id].patbase;
   p_actwk->actfree.friend.move_countdown = p_actwk->userflag1 * 4;
   short xspeed = 512;
-  if (util__to_unsigned(LONG_HIGH_TO_SHORT(p_actwk->xposi)) < util__to_unsigned(LONG_HIGH_TO_SHORT(p_parentwk->xposi))) { // unsigned
+  if (util__to_unsigned(LONG_HIGH(p_actwk->xposi)) < util__to_unsigned(LONG_HIGH(p_parentwk->xposi))) { // unsigned
     xspeed = -xspeed;
   }
   p_actwk->xspeed = xspeed;

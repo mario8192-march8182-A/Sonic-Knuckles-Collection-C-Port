@@ -68,9 +68,9 @@ static void savemove(sprite_status* p_actwk) {
 
 static void savemove__sub(sprite_status* p_actwk, sprite_status* p_playerwk) {
   if ((markerno & 0x7F) < (p_actwk->userflag1 & 0x7F)) {
-    short distance = LONG_HIGH_TO_SHORT(p_actwk->xposi) - LONG_HIGH_TO_SHORT(p_playerwk->xposi) + 8;
+    short distance = LONG_HIGH(p_actwk->xposi) - LONG_HIGH(p_playerwk->xposi) + 8;
     if (util__to_unsigned(distance) >= 16) return; // unsigned
-    distance = LONG_HIGH_TO_SHORT(p_actwk->yposi) - LONG_HIGH_TO_SHORT(p_playerwk->yposi) + 64;
+    distance = LONG_HIGH(p_actwk->yposi) - LONG_HIGH(p_playerwk->yposi) + 64;
     if (util__to_unsigned(distance) >= 104) return; // unsigned
     soundset(99);
     sprite_status* p_new_actwk;
@@ -79,8 +79,8 @@ static void savemove__sub(sprite_status* p_actwk, sprite_status* p_playerwk) {
     if (created) {
       p_new_actwk->r_ptr = &save;
       p_new_actwk->r_no = 6;
-      p_new_actwk->actfree.save.parent_xposi = LONG_HIGH_TO_SHORT(p_actwk->xposi);
-      p_new_actwk->actfree.save.parent_yposi = LONG_HIGH_TO_SHORT(p_actwk->yposi) - 20;
+      p_new_actwk->actfree.save.parent_xposi = LONG_HIGH(p_actwk->xposi);
+      p_new_actwk->actfree.save.parent_yposi = LONG_HIGH(p_actwk->yposi) - 20;
       p_new_actwk->patbase = p_actwk->patbase;
       p_new_actwk->sproffset = p_actwk->sproffset;
       p_new_actwk->actflg = p_actwk->actflg;
@@ -145,8 +145,8 @@ static void savemove3(sprite_status* p_actwk) {
 
 static void playsave(sprite_status* p_actwk) {
   markerno = p_actwk->userflag1;
-  plxposi_s = LONG_HIGH_TO_SHORT(p_actwk->xposi);
-  plyposi_s = LONG_HIGH_TO_SHORT(p_actwk->yposi);
+  plxposi_s = LONG_HIGH(p_actwk->xposi);
+  plyposi_s = LONG_HIGH(p_actwk->yposi);
   playsave1(p_actwk);
 }
 
@@ -162,8 +162,8 @@ void playsave1(sprite_status* p_actwk) {
   pltime_s = pltime;
   scr_resize_no_s = scr_resize_no;
   scralim_down_s = scralim_down;
-  scra_h_posit_s = LONG_HIGH_TO_SHORT(scra_h_posit);
-  scra_v_posit_s = LONG_HIGH_TO_SHORT(scra_v_posit);
+  scra_h_posit_s = LONG_HIGH(scra_h_posit);
+  scra_v_posit_s = LONG_HIGH(scra_v_posit);
   waterposi_s = waterposi;
   waterflag_s = waterflag;
 }
@@ -173,8 +173,8 @@ void playsave2(sprite_status* p_actwk) {
   markerno_s2 = markerno;
   stageno_s2 = stageno;
   stageno_is2 = stageno_i;
-  plxposi_s2 = LONG_HIGH_TO_SHORT(p_actwk->xposi);
-  plyposi_s2 = LONG_HIGH_TO_SHORT(p_actwk->yposi);
+  plxposi_s2 = LONG_HIGH(p_actwk->xposi);
+  plyposi_s2 = LONG_HIGH(p_actwk->yposi);
   plsproffset_s2 = actwk[0].sproffset;
   plcolibits_s2 = actwk[0].actfree.player.colibits;
   plring_s2 = plring;
@@ -182,8 +182,8 @@ void playsave2(sprite_status* p_actwk) {
   pltime_s2 = pltime;
   scr_resize_no_s2 = scr_resize_no;
   scralim_down_s2 = scralim_down;
-  scra_h_posit_s2 = LONG_HIGH_TO_SHORT(scra_h_posit);
-  scra_v_posit_s2 = LONG_HIGH_TO_SHORT(scra_v_posit);
+  scra_h_posit_s2 = LONG_HIGH(scra_h_posit);
+  scra_v_posit_s2 = LONG_HIGH(scra_v_posit);
   waterposi_s2 = waterposi;
   waterflag_s2 = waterflag;
   plcddat2_s2 = actwk[0].cddat2;
@@ -302,10 +302,10 @@ void o_starinit(sprite_status* p_actwk) {
     p_new_actwk->sproffset = 1516;
     p_new_actwk->actflg = 4;
     p_new_actwk->r_no = 8;
-    short xposi = LONG_HIGH_TO_SHORT(p_actwk->xposi);
+    short xposi = LONG_HIGH(p_actwk->xposi);
     util__assign_high(&p_new_actwk->xposi, xposi);
     p_new_actwk->actfree.save.parent_xposi = xposi;
-    short yposi = LONG_HIGH_TO_SHORT(p_actwk->yposi) - 48;
+    short yposi = LONG_HIGH(p_actwk->yposi) - 48;
     util__assign_high(&p_new_actwk->yposi, yposi);
     p_new_actwk->actfree.save.parent_yposi = yposi;
     p_new_actwk->sprpri = p_actwk->sprpri;
@@ -467,5 +467,5 @@ void o_star(sprite_status* p_actwk) {
     patno = 1;
   }
   p_actwk->patno = patno;
-  frameoutchkc(p_actwk, LONG_HIGH_TO_SHORT(p_actwk->xposi));
+  frameoutchkc(p_actwk, LONG_HIGH(p_actwk->xposi));
 }

@@ -200,7 +200,7 @@ static void title_red_banner(sprite_status* p_actwk) {
     }
   }
   else {
-    if (LONG_HIGH_TO_SHORT(p_actwk->yposi) != p_actwk->actfree.title_part.x_destination) {
+    if (LONG_HIGH(p_actwk->yposi) != p_actwk->actfree.title_part.x_destination) {
       p_actwk->yposi += SHORT_TO_LONG_HIGH(16);
       p_parentwk->actfree.title.wait_flag = 255;
     }
@@ -239,7 +239,7 @@ static void title_element(sprite_status* p_actwk) {
       p_actwk->xposi += SHORT_TO_LONG_HIGH(32);
     }
   }
-  else if (LONG_HIGH_TO_SHORT(p_actwk->xposi) != p_actwk->actfree.title_part.x_destination) {
+  else if (LONG_HIGH(p_actwk->xposi) != p_actwk->actfree.title_part.x_destination) {
     p_actwk->xposi -= SHORT_TO_LONG_HIGH(16);
     p_parentwk->actfree.title.wait_flag = 255;
   }
@@ -266,7 +266,7 @@ static void title_element2(sprite_status* p_actwk) {
   p_actwk->actflg = 0;
   sprite_status* p_parentwk = &actwk[p_actwk->actfree.title_part.oya];
   if (p_parentwk->actfree.title.current_exit_no != 0) {
-    if (LONG_HIGH_TO_SHORT(p_actwk->xposi) >= 524) { // unsigned
+    if (LONG_HIGH(p_actwk->xposi) >= 524) { // unsigned
       --p_parentwk->actfree.title.part_cnt;
       frameout(p_actwk);
       return;
@@ -275,7 +275,7 @@ static void title_element2(sprite_status* p_actwk) {
       p_actwk->xposi += SHORT_TO_LONG_HIGH(32);
     }
   }
-  else if (LONG_HIGH_TO_SHORT(p_actwk->xposi) != p_actwk->actfree.title_part.x_destination) {
+  else if (LONG_HIGH(p_actwk->xposi) != p_actwk->actfree.title_part.x_destination) {
     p_actwk->xposi -= SHORT_TO_LONG_HIGH(16);
     p_parentwk->actfree.title.wait_flag = 255;
   }

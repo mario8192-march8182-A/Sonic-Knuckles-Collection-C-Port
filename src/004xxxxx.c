@@ -235,7 +235,7 @@ void patchg(sprite_status* p_actwk, signed char** p_chg_data) {
 // SONIC3K.EXE address: 00421b44
 // skdisasm label: Sprite_OnScreen_Test
 void frameoutchk(sprite_status* p_actwk) {
-  unsigned short scr_xposi = util__to_unsigned(LONG_HIGH_TO_SHORT(p_actwk->xposi)) & 0xFF80;
+  unsigned short scr_xposi = util__to_unsigned(LONG_HIGH(p_actwk->xposi)) & 0xFF80;
   scr_xposi -= scr_x_no;
   if (scr_xposi <= 640) {
     actionsub(p_actwk);
@@ -252,7 +252,7 @@ void frameoutchk(sprite_status* p_actwk) {
 // SONIC3K.EXE address: 00421e38
 // skdisasm label: Sprite_CheckDeleteTouch3
 void frameoutchkc(sprite_status* p_actwk, short xposi) {
-  unsigned short scr_xposi = util__to_unsigned(LONG_HIGH_TO_SHORT(p_actwk->xposi)) & 0xFF80;
+  unsigned short scr_xposi = util__to_unsigned(LONG_HIGH(p_actwk->xposi)) & 0xFF80;
   scr_xposi -= scr_x_no;
   if (scr_xposi <= 640) {
     Add_Object_To_Collision_Response_List(p_actwk);
@@ -302,7 +302,7 @@ jump0:
     p_playerwk->yspeed = -512;
     p_playerwk->xspeed = -256;
   }
-  if (util__to_unsigned(LONG_HIGH_TO_SHORT(p_playerwk->xposi)) >= util__to_unsigned(LONG_HIGH_TO_SHORT(p_attack_actwk->xposi))) { // unsigned
+  if (util__to_unsigned(LONG_HIGH(p_playerwk->xposi)) >= util__to_unsigned(LONG_HIGH(p_attack_actwk->xposi))) { // unsigned
     p_playerwk->xspeed = -p_playerwk->xspeed;
   }
   p_playerwk->mspeed = 0;

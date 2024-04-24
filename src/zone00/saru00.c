@@ -152,7 +152,7 @@ void saru00_arm(sprite_status* p_actwk) {
     }
     p_actwk->xposi += SHORT_TO_LONG_HIGH(xoffset);
     p_actwk->yposi -= SHORT_TO_LONG_HIGH(2);
-    SPRITE_STATUS_SHORT(p_actwk, 62) = LONG_HIGH_TO_SHORT(p_actwk->yposi);
+    SPRITE_STATUS_SHORT(p_actwk, 62) = LONG_HIGH(p_actwk->yposi);
     chk_oya_die0(p_actwk);
   }
   else {
@@ -388,7 +388,7 @@ void saru00_banana(sprite_status* p_actwk) {
   p_actwk->sprvsize = 8;
   p_actwk->xspeed = -512;
   p_actwk->yspeed = -1024;
-  frameoutchkc(p_actwk, LONG_HIGH_TO_SHORT(p_actwk->xposi));
+  frameoutchkc(p_actwk, LONG_HIGH(p_actwk->xposi));
 }
 
 
@@ -396,7 +396,7 @@ static void banana_move(sprite_status* p_actwk) {
   speedsetg20(p_actwk);
   time_pg(p_actwk, p_actwk->actfree.saru00_banana.pg_data_ptr);
   emy_fall_col(p_actwk);
-  frameoutchkc(p_actwk, LONG_HIGH_TO_SHORT(p_actwk->xposi));
+  frameoutchkc(p_actwk, LONG_HIGH(p_actwk->xposi));
 }
 
 
@@ -406,7 +406,7 @@ static void land_init(sprite_status* p_actwk) {
 
 
 static void banana_land(sprite_status* p_actwk) {
-  frameoutchkc(p_actwk, LONG_HIGH_TO_SHORT(p_actwk->xposi));
+  frameoutchkc(p_actwk, LONG_HIGH(p_actwk->xposi));
 }
 
 
@@ -425,7 +425,7 @@ static void saru00_chk_rev(sprite_status* p_actwk) {
 
 static void saru00_chk_ofs(sprite_status* p_actwk) {
   sprite_status* p_parentwk = &actwk[p_actwk->actfree.saru00.oya];
-  short yposi = LONG_HIGH_TO_SHORT(p_parentwk->yposi) - 2;
+  short yposi = LONG_HIGH(p_parentwk->yposi) - 2;
   if (p_parentwk->patno != 0) {
     yposi -= 2;
   }

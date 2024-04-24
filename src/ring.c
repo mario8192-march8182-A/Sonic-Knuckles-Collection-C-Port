@@ -73,7 +73,7 @@ static void ringinit(sprite_status* p_actwk) {
 
 static void ringmove(sprite_status* p_actwk) {
   p_actwk->patno = ring_patno;
-  frameoutchkc(p_actwk, LONG_HIGH_TO_SHORT(p_actwk->xposi));
+  frameoutchkc(p_actwk, LONG_HIGH(p_actwk->xposi));
 }
 
 
@@ -282,7 +282,7 @@ static void flyringmove(sprite_status* p_actwk) {
         flyringerase(p_actwk);
         return;
       }
-      if (scralim_down + 224 < LONG_HIGH_TO_SHORT(p_actwk->yposi)) {
+      if (scralim_down + 224 < LONG_HIGH(p_actwk->yposi)) {
         flyringerase(p_actwk);
         return;
       }
@@ -332,7 +332,7 @@ static void flyringmoveg(sprite_status* p_actwk) {
         flyringerase(p_actwk);
         return;
       }
-      if (scralim_down + 224 < LONG_HIGH_TO_SHORT(p_actwk->yposi)) {
+      if (scralim_down + 224 < LONG_HIGH(p_actwk->yposi)) {
         flyringerase(p_actwk);
         return;
       }
@@ -373,7 +373,7 @@ static void tringmove(sprite_status* p_actwk) {
       ++p_actwk->patno;
       p_actwk->patno &= 3;
     }
-    unsigned short screen_xposi = util__to_unsigned(LONG_HIGH_TO_SHORT(p_actwk->xposi)) & 0xFF80;
+    unsigned short screen_xposi = util__to_unsigned(LONG_HIGH(p_actwk->xposi)) & 0xFF80;
     screen_xposi -= scr_x_no;
     if (screen_xposi <= 640) { // unsigned
       Add_Object_To_Collision_Response_List(p_actwk);
@@ -419,7 +419,7 @@ static void tringerase(sprite_status* p_actwk) {
 
 static void tringspdset(sprite_status* p_actwk) {
   short accel = 48;
-  if (LONG_HIGH_TO_SHORT(actwk[0].xposi) < LONG_HIGH_TO_SHORT(p_actwk->xposi)) {
+  if (LONG_HIGH(actwk[0].xposi) < LONG_HIGH(p_actwk->xposi)) {
     accel = -accel;
     if (p_actwk->xspeed < 0) goto jump2;
     accel *= 3;
@@ -430,7 +430,7 @@ static void tringspdset(sprite_status* p_actwk) {
 jump2:
   p_actwk->xspeed += accel;
   accel = 48;
-  if (LONG_HIGH_TO_SHORT(actwk[0].yposi) < LONG_HIGH_TO_SHORT(p_actwk->yposi)) {
+  if (LONG_HIGH(actwk[0].yposi) < LONG_HIGH(p_actwk->yposi)) {
     accel = -accel;
     if (p_actwk->yspeed < 0) goto jump4;
     accel *= 3;

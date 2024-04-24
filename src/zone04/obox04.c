@@ -161,7 +161,7 @@ static void obox04_break(sprite_status* p_actwk) {
 
 
 static void chk_opnbox_ride(sprite_status* p_actwk) {
-  SolidObjectFull(p_actwk, 43, 24, 24, LONG_HIGH_TO_SHORT(p_actwk->xposi));
+  SolidObjectFull(p_actwk, 43, 24, 24, LONG_HIGH(p_actwk->xposi));
 }
 
 
@@ -219,7 +219,7 @@ static void set_obox04_friend_init(sprite_status* p_actwk) {
   p_actwk->actfree.friend.move_countdown = p_actwk->userflag1 * 4;
   sprite_status* p_parentwk = &actwk[p_actwk->actfree.friend.oya];
   short xspeed = 512;
-  if (util__to_unsigned(LONG_HIGH_TO_SHORT(p_actwk->xposi)) < util__to_unsigned(LONG_HIGH_TO_SHORT(p_parentwk->xposi))) { // unsigned
+  if (util__to_unsigned(LONG_HIGH(p_actwk->xposi)) < util__to_unsigned(LONG_HIGH(p_parentwk->xposi))) { // unsigned
     xspeed = -xspeed;
   }
   p_actwk->xspeed = xspeed;
