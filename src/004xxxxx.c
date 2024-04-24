@@ -284,8 +284,8 @@ bool playdamageset(sprite_status* p_playerwk, sprite_status* p_attack_actwk) {
       bool created = Create_New_Sprite(&p_new_actwk, &slot_cnt);
       if (created) {
         p_new_actwk->r_ptr = &flyring;
-        p_new_actwk->xposi = LONG_HIGH(p_playerwk->xposi) + LONG_LOW(p_new_actwk->xposi);
-        p_new_actwk->yposi = LONG_HIGH(p_playerwk->yposi) + LONG_LOW(p_new_actwk->yposi);
+        util__copy_high(&p_new_actwk->xposi, &p_playerwk->xposi);
+        util__copy_high(&p_new_actwk->yposi, &p_playerwk->yposi);
         p_new_actwk->actfree.ring.player = p_playerwk - actwk;
       }
     }

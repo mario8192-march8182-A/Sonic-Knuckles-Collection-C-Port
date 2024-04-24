@@ -217,8 +217,8 @@ jump:
     p_new_actwk->r_no += 2;
     p_new_actwk->sprvsize = 8;
     p_new_actwk->sprhsize = 8;
-    p_new_actwk->xposi = LONG_HIGH(p_actwk->xposi) + LONG_LOW(p_new_actwk->xposi);
-    p_new_actwk->yposi = LONG_HIGH(p_actwk->xposi) + LONG_LOW(p_new_actwk->yposi);
+    util__copy_high(&p_new_actwk->xposi, &p_actwk->xposi);
+    util__copy_high(&p_new_actwk->yposi, &p_actwk->xposi);
     p_new_actwk->patbase = ringpat;
     p_new_actwk->sproffset = 42684;
     p_new_actwk->actflg = 132;
@@ -493,12 +493,12 @@ static void slot_ring_move(sprite_status* p_actwk) {
   xposi -= SHORT_TO_LONG_HIGH(p_actwk->actfree.slotring.xspeed);
   xposi /= 16;
   p_actwk->actfree.slotring.xposi -= xposi;
-  p_actwk->xposi = LONG_HIGH(p_actwk->actfree.slotring.xposi) + LONG_LOW(p_actwk->xposi);
+  util__copy_high(&p_actwk->xposi, &p_actwk->actfree.slotring.xposi);
   long yposi = p_actwk->actfree.slotring.yposi;
   yposi -= SHORT_TO_LONG_HIGH(p_actwk->actfree.slotring.yspeed);
   yposi /= 16;
   p_actwk->actfree.slotring.yposi -= yposi;
-  p_actwk->yposi = LONG_HIGH(p_actwk->actfree.slotring.yposi) + LONG_LOW(p_actwk->yposi);
+  util__copy_high(&p_actwk->yposi, &p_actwk->actfree.slotring.yposi);
   patchg(p_actwk, sringchg);
   --p_actwk->actfree.slotring.countdown;
   if (p_actwk->actfree.slotring.countdown != 0) {

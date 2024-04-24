@@ -2,6 +2,11 @@
 #include "util.h"
 
 
+void util__copy_high(long* dest, long* src) {
+  *dest = *src / 65536 * 65536 + *dest % 65536;
+}
+
+
 unsigned long util__rotate(unsigned long value) {
   unsigned long result = value << 16 & 0xFFFF0000 | value >> 16 & 0x0000FFFF;
   return result;

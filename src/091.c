@@ -156,8 +156,8 @@ sprite_status* set_act03(sprite_status* p_actwk, set_act03_data* p_data) {
     p_new_actwk->sproffset = p_actwk->sproffset;
     p_new_actwk->r_ptr = p_data->r_ptr;
     p_new_actwk->userflag1 = i;
-    p_new_actwk->xposi = LONG_HIGH(p_actwk->xposi) + LONG_LOW(p_new_actwk->xposi);
-    p_new_actwk->yposi = LONG_HIGH(p_actwk->yposi) + LONG_LOW(p_new_actwk->yposi);
+    util__copy_high(&p_new_actwk->xposi, &p_actwk->xposi);
+    util__copy_high(&p_new_actwk->yposi, &p_actwk->yposi);
     i += 2;
     --cnt;
   } while (cnt != 0);
