@@ -195,24 +195,28 @@ static void actclear_move2(sprite_status* p_actwk) {
 
 static void actclear_name(sprite_status* p_actwk) {
   sprite_family_status* p_familywk = (sprite_family_status*)p_actwk;
-  if (plmode == 2) goto plmode_2;
-  if (plmode != 3) goto plmode_not_3;
-  p_actwk->patno += 3;
-  p_familywk->eldest_xposi -= 48;
-  p_actwk->actfree.actclear_part.x_destination -= 48;
-  p_actwk->sprhs += 48;
-  goto plmode_not_3;
 
-plmode_2:
-  ++p_actwk->patno;
-  if (!BIT_7_IS_SET(mdstatus)) {
-    ++p_actwk->patno;
-    p_familywk->eldest_xposi += 8;
-    p_actwk->actfree.actclear_part.x_destination += 8;
-    p_actwk->sprhs -= 8;
+  switch (plmode) {
+    case TEAM_KNUCKLES:
+      p_actwk->patno += 3;
+      p_familywk->eldest_xposi -= 48;
+      p_actwk->actfree.actclear_part.x_destination -= 48;
+      p_actwk->sprhs += 48;
+      break;
+    case TEAM_MILES:
+      ++p_actwk->patno;
+      if (!BIT_7_IS_SET(mdstatus)) {
+        ++p_actwk->patno;
+        p_familywk->eldest_xposi += 8;
+        p_actwk->actfree.actclear_part.x_destination += 8;
+        p_actwk->sprhs -= 8;
+      }
+      break;
+    case TEAM_SONIC:
+    case TEAM_SONIC_AND_MILES:
+      break;
   }
 
-plmode_not_3:
   unsigned short sproffset = 0;
   sprite_status* p_parentwk = &actwk[p_actwk->actfree.actclear_part.oya];
   if (p_parentwk->userflag1 != 0 || p_parentwk->userflag2 != 0) {

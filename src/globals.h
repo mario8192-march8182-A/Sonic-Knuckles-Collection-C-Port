@@ -99,7 +99,7 @@ extern short pl2ring_act;
 extern short pl2ring;
 extern unsigned long DAT_08fffed2;
 extern short actring;
-extern unsigned short plmode;
+extern character_team_id plmode;
 extern unsigned char divdev_modules;
 extern unsigned short frame_bonus;
 extern unsigned char plcddat2_s2;

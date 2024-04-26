@@ -95,7 +95,7 @@ short pl2ring_act;
 short pl2ring;
 unsigned long DAT_08fffed2;
 short actring;
-unsigned short plmode;
+character_team_id plmode;
 unsigned char divdev_modules;
 unsigned short frame_bonus;
 unsigned char plcddat2_s2;

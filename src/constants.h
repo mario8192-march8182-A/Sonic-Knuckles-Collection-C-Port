@@ -55,6 +55,14 @@ typedef enum sprite_priority {
 }
 sprite_priority;
 
+typedef enum character_team_id {
+  TEAM_SONIC_AND_MILES = 0,
+  TEAM_SONIC = 1,
+  TEAM_MILES = 2,
+  TEAM_KNUCKLES = 3
+}
+character_team_id;
+
 #define SPEEDUPTIMER 54
 #define FOOTDIR 58
 #define KO_ADR 68
