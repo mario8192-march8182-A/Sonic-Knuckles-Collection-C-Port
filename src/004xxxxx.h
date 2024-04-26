@@ -20,6 +20,7 @@ void frameout(sprite_status* p_actwk);
 void actionsub(sprite_status* p_actwk);
 void patchg(sprite_status* p_actwk, signed char** p_chg_data);
 void frameoutchk(sprite_status* p_actwk);
+void frameoutchk2(sprite_status* p_actwk, short xposi);
 void frameoutchkc(sprite_status* p_actwk, short xposi);
 bool playdamageset(sprite_status* p_playerwk, sprite_status* p_attack_actwk);
 bool playdieset(sprite_status* p_actwk, long sound_id);

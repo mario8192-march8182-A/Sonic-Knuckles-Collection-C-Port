@@ -4,6 +4,7 @@
 #include "util.h"
 #include "004xxxxx.h"
 #include "ring.h"
+#include "toge.h"
 
 
 // SONIC3K.EXE address: 0040a98e
@@ -249,6 +250,23 @@ void frameoutchk(sprite_status* p_actwk) {
 }
 
 
+// SONIC3K.EXE address: 00421bd2
+// skdisasm label: Sprite_OnScreen_Test2
+void frameoutchk2(sprite_status* p_actwk, short xposi) {
+  unsigned short scr_xposi = util__to_unsigned(xposi) & 0xFF80;
+  scr_xposi -= scr_x_no;
+  if (scr_xposi <= 640) { // unsigned
+    actionsub(p_actwk);
+  }
+  else {
+    if (p_actwk->actfree.dynamic.flagwork_index != 0) {
+      CLEAR_BIT_7(flagwork[p_actwk->actfree.dynamic.flagwork_index - 1]);
+    }
+    frameout(p_actwk);
+  }
+}
+
+
 // SONIC3K.EXE address: 00421e38
 // skdisasm label: Sprite_CheckDeleteTouch3
 void frameoutchkc(sprite_status* p_actwk, short xposi) {
@@ -309,7 +327,12 @@ jump0:
   p_playerwk->mstno = 26;
   p_playerwk->actfree.player.invulnerability_timer = 120;
   long sound_id = 53;
-  if (p_attack_actwk->r_ptr >= &togeinit && p_attack_actwk->r_ptr < &togedamegesub) { // unsigned
+  /* WHY:
+    togedamegesub does not conform to the signature of sprite_status_handler,
+    so we need a cast. As we don't need to call it, this is okay.
+  */
+  if (p_attack_actwk->r_ptr >= &toge // unsigned
+      && p_attack_actwk->r_ptr < (sprite_status_handler)&togedamegesub) { // unsigned
     sound_id = 55;
   }
   soundset(sound_id);
@@ -317,7 +340,12 @@ jump0:
 
 die:
   sound_id = 53;
-  if (p_attack_actwk->r_ptr >= &togeinit && p_attack_actwk->r_ptr < &togedamegesub) { // unsigned
+  /* WHY:
+    togedamegesub does not conform to the signature of sprite_status_handler,
+    so we need a cast. As we don't need to call it, this is okay.
+  */
+  if (p_attack_actwk->r_ptr >= &toge // unsigned
+      && p_attack_actwk->r_ptr < (sprite_status_handler)&togedamegesub) { // unsigned
     sound_id = 55;
   }
   return playdieset(p_playerwk, sound_id);

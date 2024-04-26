@@ -40,6 +40,7 @@
 #define BIT_5_IS_SET(value) (value & 32)
 #define BIT_6_IS_SET(value) (value & 64)
 #define BIT_7_IS_SET(value) (value & 128)
+#define BIT_IS_SET(value, bit) (value &= 1 << (bit))
 
 #define SPRITE_STATUS_UCHAR(pointer, offset) ((unsigned char*)pointer)[offset]
 #define SPRITE_STATUS_SCHAR(pointer, offset) ((signed char*)pointer)[offset]

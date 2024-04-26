@@ -269,6 +269,19 @@ typedef struct sprite_status {
       short x_destination;
       unsigned short oya;
     } title_part;
+    struct {
+      unsigned char reserved1[2];
+      short orig_xposi;
+      short orig_yposi;
+      short offset;
+      unsigned short move_dir;
+      unsigned short move_countdown;
+      short push_delay;
+      unsigned short push_distance;
+      unsigned char plcddat1;
+      unsigned char pl2cddat1;
+      unsigned char reserved3[10];
+    } toge;
   } actfree;
 }
 sprite_status;
