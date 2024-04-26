@@ -313,13 +313,25 @@ static bool actclear_part_move(sprite_status* p_actwk) {
   else {
     short xspeed = 16;
     xposi = p_familywk->eldest_xposi;
-    if (xposi == p_actwk->actfree.actclear_part.x_destination) goto equal;
-    if (xposi < p_actwk->actfree.actclear_part.x_destination) goto less_than;
-    xspeed = -xspeed;
-less_than:
-    xposi += xspeed;
+    int compare_result = 1;
+    if (xposi == p_actwk->actfree.actclear_part.x_destination) {
+      compare_result = 0;
+    }
+    else if (xposi < p_actwk->actfree.actclear_part.x_destination) {
+      compare_result = -1;
+    }
+
+    switch (compare_result) {
+      case 1:
+        xspeed = -xspeed;
+        // fall-through
+      case -1:
+        xposi += xspeed;
+        break;
+      case 0:
+        break;
+    }
   }
-equal:
   p_familywk->eldest_xposi = xposi;
 
   return false;
