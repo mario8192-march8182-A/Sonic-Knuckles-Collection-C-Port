@@ -223,9 +223,9 @@ static void set_obox04_friend_init(sprite_status* p_actwk) {
     xspeed = -xspeed;
   }
   p_actwk->xspeed = xspeed;
-  CLEAR_BIT_0(p_actwk->actflg);
+  CLEAR_HFLIP(p_actwk->actflg);
   if (p_actwk->xspeed < 0) {
-    SET_BIT_0(p_actwk->actflg);
+    SET_HFLIP(p_actwk->actflg);
   }
 }
 

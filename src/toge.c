@@ -57,7 +57,7 @@ static unsigned char togetbl[8][2] = {
 
 
 void toge(sprite_status* p_actwk) {
-  SET_BIT_2(p_actwk->actflg);
+  SET_USE_LEVEL_COORDS(p_actwk->actflg);
   p_actwk->sprpri = PRI_4;
   unsigned char userflag = (p_actwk->userflag1 & 0xF0) / 8;
   if (vs_flag != 0) {
@@ -274,7 +274,7 @@ static void toge_sub(sprite_status* p_actwk) {
   if (p_actwk->actfree.toge.move_countdown != 0) {
     --p_actwk->actfree.toge.move_countdown;
     if (p_actwk->actfree.toge.move_countdown != 0) return;
-    if (!BIT_7_IS_SET(p_actwk->actflg)) return;
+    if (!IS_ONSCREEN(p_actwk->actflg)) return;
     soundset(82);
   }
   else if (p_actwk->actfree.toge.move_dir != 0) {
@@ -349,7 +349,7 @@ static void vstoge_sub(sprite_status* p_actwk) {
   if (p_actwk->actfree.toge.move_countdown != 0) {
     --p_actwk->actfree.toge.move_countdown;
     if (p_actwk->actfree.toge.move_countdown != 0) return;
-    if (!BIT_7_IS_SET(p_actwk->actflg)) return;
+    if (!IS_ONSCREEN(p_actwk->actflg)) return;
     soundset(82);
   }
   else if (p_actwk->actfree.toge.move_dir != 0) {

@@ -84,7 +84,7 @@ void opnbox(sprite_status* p_actwk) {
 
 static void opnbox_init(sprite_status* p_actwk) {
   enemy_init0(p_actwk, &opnbox_init_tbl);
-  if (!BIT_1_IS_SET(p_actwk->actflg)) {
+  if (!IS_VFLIP(p_actwk->actflg)) {
     set_act00(p_actwk, &switch_set_tbl);
   }
   else {
@@ -251,7 +251,7 @@ void switch_wait1(sprite_status* p_actwk) {
 
 static void switchud(sprite_status* p_actwk) {
   p_actwk->r_ptr = &switchud_wait0;
-  SET_BIT_1(p_actwk->actflg);
+  SET_VFLIP(p_actwk->actflg);
   enemy_init2(p_actwk, &switch_init_tbl);
 }
 
@@ -376,7 +376,7 @@ static void friend_move1(sprite_status* p_actwk) {
   chk_spd_pt(p_actwk);
   if (act_clear_flag == 0) {
     p_actwk->r_ptr = &friend_move2;
-    SET_BIT_0(p_actwk->actflg);
+    SET_HFLIP(p_actwk->actflg);
   }
   friend_pg(p_actwk);
 }
@@ -423,7 +423,7 @@ static bool chk_pl_pausez02(sprite_status* p_actwk, unsigned char r_no) {
   --p_actwk->actfree.opnbox.timer;
   if (p_actwk->actfree.opnbox.timer >= 0) return false;
   if (actwk[0].r_no >= 6) return false; // unsigned
-  if (!BIT_7_IS_SET(actwk[0].actflg)) return false;
+  if (!IS_ONSCREEN(actwk[0].actflg)) return false;
   if (actwk[0].actfree.player.character != SONIC) {
     if (miles_carry_flag == 0) return false;
   }
@@ -510,7 +510,7 @@ static void set_friend_init(sprite_status* p_actwk) {
   p_actwk->yspeed = yspeed;
   p_actwk->actfree.friend.yspeed = yspeed;
   sprite_status* p_parentwk = &actwk[p_actwk->actfree.friend.oya];
-  if (BIT_1_IS_SET(p_parentwk->actflg)) {
+  if (IS_VFLIP(p_parentwk->actflg)) {
     p_actwk->r_ptr = &friend_wait1;
     SPRITE_STATUS_UCHAR(p_actwk, 67) += 8;
     p_actwk->yspeed = 0;
@@ -534,9 +534,9 @@ static void set_friend_init(sprite_status* p_actwk) {
 
 
 static void chk_spd_pt(sprite_status* p_actwk) {
-  CLEAR_BIT_0(p_actwk->actflg);
+  CLEAR_HFLIP(p_actwk->actflg);
   if (p_actwk->xspeed < 0) {
-    SET_BIT_0(p_actwk->actflg);
+    SET_HFLIP(p_actwk->actflg);
   }
 }
 

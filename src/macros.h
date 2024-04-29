@@ -42,6 +42,25 @@
 #define BIT_7_IS_SET(value) (value & 128)
 #define BIT_IS_SET(value, bit) (value &= 1 << (bit))
 
+
+// actflg bits
+
+#define SET_HFLIP(value) (SET_BIT_0(value))
+#define SET_VFLIP(value) (SET_BIT_1(value))
+#define SET_USE_LEVEL_COORDS(value) (SET_BIT_2(value))
+#define SET_ONSCREEN(value) (SET_BIT_7(value))
+
+#define CLEAR_HFLIP(value) (CLEAR_BIT_0(value))
+#define CLEAR_VFLIP(value) (CLEAR_BIT_1(value))
+#define SET_USE_SCREEN_COORDS(value) (CLEAR_BIT_2(value))
+
+#define TOGGLE_HFLIP(value) (TOGGLE_BIT_0(value))
+
+#define IS_HFLIP(value) (BIT_0_IS_SET(value))
+#define IS_VFLIP(value) (BIT_1_IS_SET(value))
+#define IS_ONSCREEN(value) (BIT_7_IS_SET(value))
+
+
 #define SPRITE_STATUS_UCHAR(pointer, offset) ((unsigned char*)pointer)[offset]
 #define SPRITE_STATUS_SCHAR(pointer, offset) ((signed char*)pointer)[offset]
 #define SPRITE_STATUS_USHORT(pointer, offset) ((unsigned short*)pointer)[offset / 2]

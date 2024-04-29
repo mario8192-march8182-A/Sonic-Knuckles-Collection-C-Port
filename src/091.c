@@ -15,7 +15,7 @@ void enemy_init0(sprite_status* p_actwk, enemy_init0_data* p_data) {
   p_actwk->sprvs = p_data->sprvs;
   p_actwk->patno = p_data->patno;
   p_actwk->colino = p_data->colino;
-  SET_BIT_2(p_actwk->actflg);
+  SET_USE_LEVEL_COORDS(p_actwk->actflg);
   p_actwk->r_no += 2;
 }
 
@@ -28,7 +28,7 @@ void enemy_init1(sprite_status* p_actwk, enemy_init1_data* p_data) {
   p_actwk->sprvs = p_data->sprvs;
   p_actwk->patno = p_data->patno;
   p_actwk->colino = p_data->colino;
-  SET_BIT_2(p_actwk->actflg);
+  SET_USE_LEVEL_COORDS(p_actwk->actflg);
   p_actwk->r_no += 2;
 }
 
@@ -39,7 +39,7 @@ void enemy_init2(sprite_status* p_actwk, enemy_init2_data* p_data) {
   p_actwk->sprvs = p_data->sprvs;
   p_actwk->patno = p_data->patno;
   p_actwk->colino = p_data->colino;
-  SET_BIT_2(p_actwk->actflg);
+  SET_USE_LEVEL_COORDS(p_actwk->actflg);
   p_actwk->r_no += 2;
 }
 
@@ -190,18 +190,18 @@ void ko_offset0(sprite_status* p_actwk) {
 void ko_offset1(sprite_status* p_actwk) {
   sprite_status* p_parentwk = &actwk[p_actwk->actfree.dynamic.oya];
   signed char xoffset = p_actwk->actfree.dynamic.xoffset;
-  CLEAR_BIT_0(p_actwk->actflg);
-  if (BIT_0_IS_SET(p_parentwk->actflg)) {
+  CLEAR_HFLIP(p_actwk->actflg);
+  if (IS_HFLIP(p_parentwk->actflg)) {
     xoffset = -xoffset;
-    SET_BIT_0(p_parentwk->actflg);
+    SET_HFLIP(p_parentwk->actflg);
   }
   short xposi = LONG_HIGH(p_parentwk->xposi) + xoffset;
   util__assign_high(&p_actwk->xposi, xposi);
   signed char yoffset = p_actwk->actfree.dynamic.yoffset;
-  CLEAR_BIT_1(p_actwk->actflg);
-  if (BIT_1_IS_SET(p_parentwk->actflg)) {
+  CLEAR_VFLIP(p_actwk->actflg);
+  if (IS_VFLIP(p_parentwk->actflg)) {
     yoffset = -yoffset;
-    SET_BIT_1(p_parentwk->actflg);
+    SET_VFLIP(p_parentwk->actflg);
   }
   short yposi = LONG_HIGH(p_parentwk->yposi) + yoffset;
   util__assign_high(&p_actwk->yposi, yposi);

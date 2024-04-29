@@ -190,7 +190,7 @@ LAB_frameout:
 static void title_red_banner(sprite_status* p_actwk) {
   sprite_status* p_parentwk = &actwk[p_actwk->actfree.title_part.oya];
   if (p_parentwk->actfree.title.current_exit_no != 0) {
-    if (!BIT_7_IS_SET(p_actwk->actflg)) {
+    if (!IS_ONSCREEN(p_actwk->actflg)) {
       --p_parentwk->actfree.title.part_cnt;
       frameout(p_actwk);
       return;
@@ -230,7 +230,7 @@ LAB_00416aab:
 static void title_element(sprite_status* p_actwk) {
   sprite_status* p_parentwk = &actwk[p_actwk->actfree.title_part.oya];
   if (p_parentwk->actfree.title.current_exit_no != 0) {
-    if (!BIT_0_IS_SET(p_actwk->actflg)) {
+    if (!IS_HFLIP(p_actwk->actflg)) {
       --p_parentwk->actfree.title.part_cnt;
       frameout(p_actwk);
       return;

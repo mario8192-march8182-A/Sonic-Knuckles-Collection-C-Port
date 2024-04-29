@@ -299,7 +299,7 @@ static bool actclear_part_move(sprite_status* p_actwk) {
   sprite_status* p_parentwk = &actwk[p_actwk->actfree.actclear_part.oya];
   short xposi = p_parentwk->actfree.actclear.current_exit_no;
   if (p_parentwk->actfree.actclear.current_exit_no != 0) {
-    if (!BIT_7_IS_SET(p_actwk->actflg)) {
+    if (!IS_ONSCREEN(p_actwk->actflg)) {
       --p_parentwk->actfree.actclear.part_cnt;
       frameout(p_actwk);
       return true;

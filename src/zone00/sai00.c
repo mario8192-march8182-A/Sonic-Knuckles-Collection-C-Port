@@ -58,7 +58,7 @@ static void sai00_init(sprite_status* p_actwk) {
   p_actwk->sprvsize = 16;
   short accel = -16;
   short accel_max = -768;
-  if (BIT_0_IS_SET(p_actwk->actflg)) {
+  if (IS_HFLIP(p_actwk->actflg)) {
     accel = -accel;
     accel_max = -accel_max;
     SET_BIT_3(p_actwk->actfree.sai00.status_bitfield);
@@ -136,7 +136,7 @@ static void sai00_wait_init0(sprite_status* p_actwk) {
 
 static void sai00_wait_init1(sprite_status* p_actwk) {
   TOGGLE_BIT_3(p_actwk->actfree.sai00.status_bitfield);
-  TOGGLE_BIT_0(p_actwk->actflg);
+  TOGGLE_HFLIP(p_actwk->actflg);
   CLEAR_BIT_1(p_actwk->actfree.sai00.status_bitfield);
   p_actwk->actfree.sai00.callback_ptr = &sai00_wait_init0;
 }

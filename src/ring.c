@@ -270,7 +270,7 @@ static void flyringmove(sprite_status* p_actwk) {
   p_actwk->yspeed += 24;
   if (p_actwk->yspeed >= 0) {
     if (!((systemtimer % 256 + (p_actwk - actwk - 1)) % 8)) {
-      if (BIT_7_IS_SET(p_actwk->actflg)) {
+      if (IS_ONSCREEN(p_actwk->actflg)) {
         short unknown1 = RingCheckFloorDist(p_actwk);
         if (unknown1 < 0) {
           p_actwk->yposi += SHORT_TO_LONG_HIGH(unknown1);
@@ -320,7 +320,7 @@ static void flyringmoveg(sprite_status* p_actwk) {
   p_actwk->yspeed += 24;
   if (p_actwk->yspeed >= 0) {
     if (!((systemtimer % 256 + (p_actwk - actwk - 1)) % 8)) {
-      if (BIT_7_IS_SET(p_actwk->actflg)) {
+      if (IS_ONSCREEN(p_actwk->actflg)) {
         short unknown1 = RingCheckFloorDist_ReverseGravity(p_actwk);
         if (unknown1 < 0) {
           p_actwk->yposi += SHORT_TO_LONG_HIGH(unknown1);
