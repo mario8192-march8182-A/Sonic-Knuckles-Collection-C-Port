@@ -5,6 +5,7 @@
 #include "../004xxxxx.h"
 #include "../002.h"
 #include "../091.h"
+#include "../hitchk.h"
 #include "../opnbox.h"
 #include "../resources.h"
 #include "../ring.h"
@@ -161,7 +162,8 @@ static void obox04_break(sprite_status* p_actwk) {
 
 
 static void chk_opnbox_ride(sprite_status* p_actwk) {
-  SolidObjectFull(p_actwk, 43, 24, 24, LONG_HIGH(p_actwk->xposi));
+  hitchk_data data = { 43, 24, 24, LONG_HIGH(p_actwk->xposi) };
+  hitchk(p_actwk, data);
 }
 
 

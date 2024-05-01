@@ -6,6 +6,7 @@
 #include "002.h"
 #include "091.h"
 #include "actclear.h"
+#include "hitchk.h"
 #include "resources.h"
 static void opnbox_init(sprite_status* p_actwk);
 static void opnbox_wait0(sprite_status* p_actwk);
@@ -77,7 +78,8 @@ void opnbox(sprite_status* p_actwk) {
 
   short xposi = LONG_HIGH(p_actwk->xposi);
   act_tbl[p_actwk->r_no / 2](p_actwk);
-  SolidObjectFull(p_actwk, 43, 24, 24, xposi);
+  hitchk_data data = { 43, 24, 24, xposi };
+  hitchk(p_actwk, data);
   actionsub(p_actwk);
 }
 
@@ -480,12 +482,14 @@ static void get_closero(sprite_status* p_actwk, sprite_status* p_other_actwk, sh
 
 
 void chk_switch_ride(sprite_status* p_actwk) {
-  SolidObjectFull(p_actwk, 27, 4, 6, LONG_HIGH(p_actwk->xposi));
+  hitchk_data data = { 27, 4, 6, LONG_HIGH(p_actwk->xposi) };
+  hitchk(p_actwk, data);
 }
 
 
 static void chk_switchu_ride(sprite_status* p_actwk) {
-  SolidObjectFull(p_actwk, 27, 5, 9, LONG_HIGH(p_actwk->xposi));
+  hitchk_data data = { 27, 5, 9, LONG_HIGH(p_actwk->xposi) };
+  hitchk(p_actwk, data);
 }
 
 

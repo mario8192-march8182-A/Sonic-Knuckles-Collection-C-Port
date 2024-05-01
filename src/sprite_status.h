@@ -83,9 +83,11 @@ typedef struct sprite_status {
       unsigned char roll_status;
       unsigned char reserved4[2];
       unsigned char jump_status;
-      unsigned char reserved5[5];
+      unsigned char reserved5[3];
+      unsigned char height;
+      unsigned char reserved6[1];
       unsigned short colibits;
-      unsigned char reserved6[2];
+      unsigned char reserved7[2];
     } player;
     struct {
       short timer;

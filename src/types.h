@@ -17,6 +17,10 @@ typedef struct set_act03_data set_act03_data;
 typedef struct enemy_init1_data enemy_init1_data;
 typedef struct set_act02_data set_act02_data;
 typedef struct title_zones_init_data title_zones_init_data;
+typedef struct hitchk_data hitchk_data;
+typedef struct hitchk_distances hitchk_distances;
+typedef struct hitchk_edge_distances hitchk_edge_distances;
+typedef struct hitchk_results hitchk_results;
 
 #include "constants.h"
 #include "sprite_status.h"
@@ -169,5 +173,35 @@ typedef struct title_zones_init_data {
   unsigned short colino;
 }
 title_zones_init_data;
+
+typedef struct hitchk_data {
+  unsigned char sprhs;
+  unsigned char sprvs_air;
+  unsigned char sprvs_ground;
+  short xposi;
+}
+hitchk_data;
+
+typedef struct hitchk_distances {
+  short left_edge;
+  unsigned char max_top;
+  unsigned char min_bottom;
+  short max_top_coli;
+}
+hitchk_distances;
+
+typedef struct hitchk_edge_distances {
+  short horizontal;
+  short abs_horizontal;
+  short vertical;
+  short abs_vertical;
+}
+hitchk_edge_distances;
+
+typedef struct hitchk_results {
+  signed char plcoli;
+  signed char colitype;
+}
+hitchk_results;
 
 #endif

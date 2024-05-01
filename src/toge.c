@@ -3,6 +3,7 @@
 #include "util.h"
 #include "toge.h"
 #include "004xxxxx.h"
+#include "hitchk.h"
 static unsigned char togetbl[8][2];
 static void togeinit(sprite_status* p_actwk, unsigned char d0);
 static unsigned char vstogetbl[8][2];
@@ -134,7 +135,13 @@ static void vstogeinit(sprite_status* p_actwk, unsigned char userflag) {
 
 static void togemove(sprite_status* p_actwk) {
   togekind(p_actwk);
-  SolidObjectFull(p_actwk, p_actwk->sprhs + 11, p_actwk->sprvs, p_actwk->sprvs + 1, LONG_HIGH(p_actwk->xposi));
+  hitchk_data data = {
+    p_actwk->sprhs + 11,
+    p_actwk->sprvs,
+    p_actwk->sprvs + 1,
+    LONG_HIGH(p_actwk->xposi)
+  };
+  hitchk(p_actwk, data);
   if (p_actwk->cddat1 & 0x18) {
     if (BIT_3_IS_SET(p_actwk->cddat1)) {
       togedamegesub(p_actwk, &actwk[0]);
@@ -149,14 +156,19 @@ static void togemove(sprite_status* p_actwk) {
 
 static void togemove2(sprite_status* p_actwk) {
   togekind(p_actwk);
-  unsigned long result = SolidObjectFull(p_actwk, p_actwk->sprhs, p_actwk->sprvs, p_actwk->sprvs + 1, LONG_HIGH(p_actwk->xposi));
-  result = util__rotate(result);
-  if (result & 3) {
-    if (BIT_0_IS_SET(result)) {
+  hitchk_data data = {
+    p_actwk->sprhs,
+    p_actwk->sprvs,
+    p_actwk->sprvs + 1,
+    LONG_HIGH(p_actwk->xposi)
+  };
+  hitchk_results results = hitchk(p_actwk, data);
+  if (results.plcoli & 3) {
+    if (BIT_0_IS_SET(results.plcoli)) {
       togedamegesub(p_actwk, &actwk[0]);
       CLEAR_BIT_5(p_actwk->cddat1);
     }
-    if (BIT_1_IS_SET(result)) {
+    if (BIT_1_IS_SET(results.plcoli)) {
       togedamegesub(p_actwk, &actwk[1]);
       CLEAR_BIT_6(p_actwk->cddat1);
     }
@@ -167,13 +179,18 @@ static void togemove2(sprite_status* p_actwk) {
 
 static void togemove3(sprite_status* p_actwk) {
   togekind(p_actwk);
-  unsigned long result = SolidObjectFull(p_actwk, p_actwk->sprhs + 11, p_actwk->sprvs, p_actwk->sprvs + 1, LONG_HIGH(p_actwk->xposi));
-  result = util__rotate(result);
-  if (result & 0xC) {
-    if (BIT_2_IS_SET(result)) {
+  hitchk_data data = {
+    p_actwk->sprhs + 11,
+    p_actwk->sprvs,
+    p_actwk->sprvs + 1,
+    LONG_HIGH(p_actwk->xposi)
+  };
+  hitchk_results results = hitchk(p_actwk, data);
+  if (results.plcoli & 0xC) {
+    if (BIT_2_IS_SET(results.plcoli)) {
       togedamegesub(p_actwk, &actwk[0]);
     }
-    if (BIT_3_IS_SET(result)) {
+    if (BIT_3_IS_SET(results.plcoli)) {
       togedamegesub(p_actwk, &actwk[1]);
     }
   }
@@ -183,7 +200,13 @@ static void togemove3(sprite_status* p_actwk) {
 
 static void vstogemove(sprite_status* p_actwk) {
   vstogekind(p_actwk);
-  SolidObjectFull(p_actwk, p_actwk->sprhs + 7, p_actwk->sprvs, p_actwk->sprvs + 1, LONG_HIGH(p_actwk->xposi));
+  hitchk_data data = {
+    p_actwk->sprhs + 7,
+    p_actwk->sprvs,
+    p_actwk->sprvs + 1,
+    LONG_HIGH(p_actwk->xposi)
+  };
+  hitchk(p_actwk, data);
   if (p_actwk->cddat1 & 0x18) {
     if (BIT_3_IS_SET(p_actwk->cddat1)) {
       togedamegesub(p_actwk, &actwk[0]);
@@ -198,14 +221,19 @@ static void vstogemove(sprite_status* p_actwk) {
 
 static void vstogemove2(sprite_status* p_actwk) {
   vstogekind(p_actwk);
-  unsigned long result = SolidObjectFull(p_actwk, p_actwk->sprhs + 7, p_actwk->sprvs, p_actwk->sprvs + 1, LONG_HIGH(p_actwk->xposi));
-  result = util__rotate(result);
-  if (result & 3) {
-    if (BIT_0_IS_SET(result)) {
+  hitchk_data data = {
+    p_actwk->sprhs + 7,
+    p_actwk->sprvs,
+    p_actwk->sprvs + 1,
+    LONG_HIGH(p_actwk->xposi)
+  };
+  hitchk_results results = hitchk(p_actwk, data);
+  if (results.plcoli & 3) {
+    if (BIT_0_IS_SET(results.plcoli)) {
       togedamegesub(p_actwk, &actwk[0]);
       CLEAR_BIT_5(p_actwk->cddat1);
     }
-    if (BIT_1_IS_SET(result)) {
+    if (BIT_1_IS_SET(results.plcoli)) {
       togedamegesub(p_actwk, &actwk[1]);
       CLEAR_BIT_6(p_actwk->cddat1);
     }
@@ -216,13 +244,18 @@ static void vstogemove2(sprite_status* p_actwk) {
 
 static void vstogemove3(sprite_status* p_actwk) {
   vstogekind(p_actwk);
-  unsigned long result = SolidObjectFull(p_actwk, p_actwk->sprhs + 7, p_actwk->sprvs, p_actwk->sprvs + 1, LONG_HIGH(p_actwk->xposi));
-  result = util__rotate(result);
-  if (result & 0xC) {
-    if (BIT_2_IS_SET(result)) {
+  hitchk_data data = {
+    p_actwk->sprhs + 7,
+    p_actwk->sprvs,
+    p_actwk->sprvs + 1,
+    LONG_HIGH(p_actwk->xposi)
+  };
+  hitchk_results results = hitchk(p_actwk, data);
+  if (results.plcoli & 0xC) {
+    if (BIT_2_IS_SET(results.plcoli)) {
       togedamegesub(p_actwk, &actwk[0]);
     }
-    if (BIT_3_IS_SET(result)) {
+    if (BIT_3_IS_SET(results.plcoli)) {
       togedamegesub(p_actwk, &actwk[1]);
     }
   }
