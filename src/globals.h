@@ -3,6 +3,7 @@
 
 #include <stdbool.h>
 #include "constants.h"
+#include "sprite_status.h"
 #include "types.h"
 
 extern bool Sonic_3_alone;

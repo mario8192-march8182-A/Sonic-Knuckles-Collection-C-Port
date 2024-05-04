@@ -1,4 +1,5 @@
 #include "constants.h"
+#include "sprite_status.h"
 #include "types.h"
 
 bool Sonic_3_alone;

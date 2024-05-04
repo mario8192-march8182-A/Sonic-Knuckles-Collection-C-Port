@@ -23,7 +23,7 @@ typedef struct hitchk_edge_distances hitchk_edge_distances;
 typedef struct hitchk_results hitchk_results;
 
 #include "constants.h"
-#include "sprite_status.h"
+#include "sprite_status_handler.h"
 
 typedef struct set_act05_data {
   short cnt;
