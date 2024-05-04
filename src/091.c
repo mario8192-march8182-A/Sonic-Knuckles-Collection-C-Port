@@ -311,7 +311,7 @@ bool chk_pl_attack(sprite_status* p_actwk, sprite_status* p_playerwk) {
       break;
     case MILES: {
       if (p_playerwk->actfree.player.talent_status == 0) return false;
-      if (BIT_6_IS_SET(p_playerwk->cddat1)) return false;
+      if (BIT_IS_SET(p_playerwk->cddat1, CD_UNDERWATER)) return false;
       short xposi = LONG_HIGH(p_playerwk->xposi) - LONG_HIGH(p_actwk->xposi);
       short yposi = LONG_HIGH(p_playerwk->yposi) - LONG_HIGH(p_actwk->yposi);
       unsigned short angle = util__to_unsigned(atan(xposi, yposi) - 32);

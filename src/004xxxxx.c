@@ -313,10 +313,10 @@ bool playdamageset(sprite_status* p_playerwk, sprite_status* p_attack_actwk) {
 jump0:
   p_playerwk->r_no = 4;
   Player_TouchFloor(p_playerwk);
-  SET_BIT_1(p_playerwk->cddat1);
+  SET_BIT(p_playerwk->cddat1, CD_JUMP);
   p_playerwk->yspeed = -1024;
   p_playerwk->xspeed = -512;
-  if (BIT_6_IS_SET(p_playerwk->cddat1)) {
+  if (BIT_IS_SET(p_playerwk->cddat1, CD_UNDERWATER)) {
     p_playerwk->yspeed = -512;
     p_playerwk->xspeed = -256;
   }
@@ -363,7 +363,7 @@ bool playdieset(sprite_status* p_playerwk, long sound_id) {
   p_playerwk->actfree.player.eventflag = 0;
   p_playerwk->r_no = 6;
   Player_TouchFloor(p_playerwk);
-  SET_BIT_1(p_playerwk->cddat1);
+  SET_BIT(p_playerwk->cddat1, CD_JUMP);
   p_playerwk->yspeed = -1792;
   p_playerwk->xspeed = 0;
   p_playerwk->mspeed = 0;

@@ -714,7 +714,7 @@ void set_friend_cg(sprite_status* p_actwk) {
 
 void set_bane_jump(sprite_status* p_playerwk, short yspeed) {
   p_playerwk->yspeed = yspeed;
-  CLEAR_BIT_3(p_playerwk->cddat1);
+  CLEAR_BIT(p_playerwk->cddat1, CD_RIDE);
   p_playerwk->actfree.player.jump_status = 0;
   p_playerwk->actfree.player.roll_status = 0;
   p_playerwk->mstno = 16;

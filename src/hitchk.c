@@ -38,15 +38,15 @@ hitchk_results plhitchk(sprite_status* p_actwk, sprite_status* p_playerwk, hitch
   }
   unsigned char width = data.sprhs * 2;
   bool on_platform = false;
-  if (!BIT_1_IS_SET(p_playerwk->cddat1)) {
+  if (!BIT_IS_SET(p_playerwk->cddat1, CD_JUMP)) {
     short distance = LONG_HIGH(p_playerwk->xposi) - LONG_HIGH(p_actwk->xposi) + data.sprhs;
     if (distance >= 0 && distance < width) { // unsigned
       on_platform = true;
     }
   }
   if (!on_platform) {
-    CLEAR_BIT_3(p_playerwk->cddat1);
-    SET_BIT_1(p_playerwk->cddat1);
+    CLEAR_BIT(p_playerwk->cddat1, CD_RIDE);
+    SET_BIT(p_playerwk->cddat1, CD_JUMP);
     CLEAR_BIT(p_actwk->cddat1, cddatbit);
   }
   else {
@@ -71,15 +71,15 @@ hitchk_results plhitchk2(sprite_status* p_actwk, sprite_status* p_playerwk, hitc
   }
   unsigned char width = data.sprhs * 2;
   bool on_platform = false;
-  if (!BIT_1_IS_SET(p_playerwk->cddat1)) {
+  if (!BIT_IS_SET(p_playerwk->cddat1, CD_JUMP)) {
     short distance = LONG_HIGH(p_playerwk->xposi) - LONG_HIGH(p_actwk->xposi) + data.sprhs;
     if (distance >= 0 && distance < width) { // unsigned
       on_platform = true;
     }
   }
   if (!on_platform) {
-    CLEAR_BIT_3(p_playerwk->cddat1);
-    SET_BIT_1(p_playerwk->cddat1);
+    CLEAR_BIT(p_playerwk->cddat1, CD_RIDE);
+    SET_BIT(p_playerwk->cddat1, CD_JUMP);
     CLEAR_BIT(p_actwk->cddat1, cddatbit);
   }
   else {
@@ -104,7 +104,7 @@ hitchk_results plhitchk_slope(sprite_status* p_actwk, sprite_status* p_playerwk,
   }
   unsigned char width = data.sprhs * 2;
   bool on_slope = false;
-  if (!BIT_1_IS_SET(p_playerwk->cddat1)) {
+  if (!BIT_IS_SET(p_playerwk->cddat1, CD_JUMP)) {
     short distance = LONG_HIGH(p_playerwk->xposi) - LONG_HIGH(p_actwk->xposi) + data.sprhs;
     if (distance >= 0 && distance < width) { // unsigned
       on_slope = true;
@@ -112,8 +112,8 @@ hitchk_results plhitchk_slope(sprite_status* p_actwk, sprite_status* p_playerwk,
   }
   hitchk_results results = { 0, 0 };
   if (!on_slope) {
-    CLEAR_BIT_3(p_playerwk->cddat1);
-    SET_BIT_1(p_playerwk->cddat1);
+    CLEAR_BIT(p_playerwk->cddat1, CD_RIDE);
+    SET_BIT(p_playerwk->cddat1, CD_JUMP);
     CLEAR_BIT(p_actwk->cddat1, cddatbit);
   }
   else {
@@ -138,15 +138,15 @@ static hitchk_results plhitchk_doubleslope(sprite_status* p_actwk, sprite_status
   }
   unsigned char width = data.sprhs * 2;
   bool on_slope = false;
-  if (!BIT_1_IS_SET(p_playerwk->cddat1)) {
+  if (!BIT_IS_SET(p_playerwk->cddat1, CD_JUMP)) {
     short distance = LONG_HIGH(p_playerwk->xposi) - LONG_HIGH(p_actwk->xposi) + data.sprhs;
     if (distance >= 0 && distance < width) { // unsigned
       on_slope = true;
     }
   }
   if (!on_slope) {
-    CLEAR_BIT_3(p_playerwk->cddat1);
-    SET_BIT_1(p_playerwk->cddat1);
+    CLEAR_BIT(p_playerwk->cddat1, CD_RIDE);
+    SET_BIT(p_playerwk->cddat1, CD_JUMP);
     CLEAR_BIT(p_actwk->cddat1, cddatbit);
   }
   else {
@@ -171,7 +171,7 @@ static hitchk_results plhitchk_bryuka(sprite_status* p_actwk, sprite_status* p_p
   }
   unsigned char width = data.sprhs * 2;
   bool on_slope = false;
-  if (!BIT_1_IS_SET(p_playerwk->cddat1)) {
+  if (!BIT_IS_SET(p_playerwk->cddat1, CD_JUMP)) {
     short distance = LONG_HIGH(p_playerwk->xposi) - LONG_HIGH(p_actwk->xposi) + data.sprhs;
     if (distance >= 0 && distance < width) { // unsigned
       on_slope = true;
@@ -179,7 +179,7 @@ static hitchk_results plhitchk_bryuka(sprite_status* p_actwk, sprite_status* p_p
   }
   hitchk_results results = { 0, 0 };
   if (!on_slope) {
-    CLEAR_BIT_3(p_playerwk->cddat1);
+    CLEAR_BIT(p_playerwk->cddat1, CD_RIDE);
     CLEAR_BIT(p_actwk->cddat1, cddatbit);
   }
   else {
@@ -203,7 +203,7 @@ static hitchk_results plhitchk_offset(sprite_status* p_actwk, sprite_status* p_p
     return plhitchk_offset_chk_coli(p_actwk, p_playerwk, data, cddatbit);
   }
   bool on_platform = false;
-  if (!BIT_1_IS_SET(p_playerwk->cddat1)) {
+  if (!BIT_IS_SET(p_playerwk->cddat1, CD_JUMP)) {
     short distance = LONG_HIGH(p_playerwk->xposi) - LONG_HIGH(p_actwk->xposi) + data.sprhs;
     if (distance >= 0) {
       unsigned char width = data.sprhs * 2;
@@ -213,8 +213,8 @@ static hitchk_results plhitchk_offset(sprite_status* p_actwk, sprite_status* p_p
     }
   }
   if (!on_platform) {
-    CLEAR_BIT_3(p_playerwk->cddat1);
-    SET_BIT_1(p_playerwk->cddat1);
+    CLEAR_BIT(p_playerwk->cddat1, CD_RIDE);
+    SET_BIT(p_playerwk->cddat1, CD_JUMP);
     CLEAR_BIT(p_actwk->cddat1, cddatbit);
   }
   else {
@@ -407,9 +407,9 @@ static hitchk_results plhitchk_chk_sides(sprite_status* p_actwk, sprite_status* 
   }
   p_playerwk->xposi -= SHORT_TO_LONG_HIGH(edge_distances.horizontal);
   hitchk_results results = { 0, 0 };
-  if (!BIT_1_IS_SET(p_playerwk->cddat1)) {
+  if (!BIT_IS_SET(p_playerwk->cddat1, CD_JUMP)) {
     SET_BIT(p_actwk->cddat1, cddatbit + 2);
-    SET_BIT_5(p_playerwk->cddat1);
+    SET_BIT(p_playerwk->cddat1, CD_PUSH);
     SET_BIT(results.plcoli, cddatbit - 3);
     results.colitype = 1;
   }
@@ -436,7 +436,7 @@ static hitchk_results plhitchk_chk_push(sprite_status* p_actwk, sprite_status* p
 
 static hitchk_results plhitchk_clear_push(sprite_status* p_actwk, sprite_status* p_playerwk, unsigned char cddatbit) {
   CLEAR_BIT(p_actwk->cddat1, cddatbit + 2);
-  CLEAR_BIT_5(p_playerwk->cddat1);
+  CLEAR_BIT(p_playerwk->cddat1, CD_PUSH);
   return plhitchk_no_coli(p_actwk);
 }
 
@@ -454,7 +454,7 @@ static hitchk_results plhitchk_chk_planes(sprite_status* p_actwk, sprite_status*
     }
     return plhitchk_chk_push(p_actwk, p_playerwk, cddatbit);
   }
-  if (!BIT_1_IS_SET(p_playerwk->cddat1)) {
+  if (!BIT_IS_SET(p_playerwk->cddat1, CD_JUMP)) {
     if (p_playerwk->yspeed == 0) {
       return plhitchk_crush(p_actwk, p_playerwk, edge_distances, cddatbit);
     }
@@ -491,7 +491,7 @@ static hitchk_results plhitchk_no_pop(sprite_status* p_actwk, sprite_status* p_p
 
 
 static hitchk_results plhitchk_crush(sprite_status* p_actwk, sprite_status* p_playerwk, hitchk_edge_distances edge_distances, unsigned char cddatbit) {
-  if (BIT_1_IS_SET(p_playerwk->cddat1)) {
+  if (BIT_IS_SET(p_playerwk->cddat1, CD_JUMP)) {
     return plhitchk_no_pop(p_actwk, p_playerwk, edge_distances, cddatbit);
   }
   if (edge_distances.abs_horizontal < 16) { // unsigned

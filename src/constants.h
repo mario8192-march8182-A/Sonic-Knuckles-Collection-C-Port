@@ -75,6 +75,17 @@ typedef enum object_cddat1_bits {
 }
 object_cddat1_bits;
 
+typedef enum player_cddat1_bits {
+  CD_LEFT = 0,
+  CD_JUMP = 1,
+  CD_BALL = 2,
+  CD_RIDE = 3,
+  CD_BALLJ = 4,
+  CD_PUSH = 5,
+  CD_UNDERWATER = 6
+}
+player_cddat1_bits;
+
 #define SPEEDUPTIMER 54
 #define FOOTDIR 58
 #define KO_ADR 68

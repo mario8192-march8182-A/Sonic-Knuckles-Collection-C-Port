@@ -450,7 +450,7 @@ void set_pl_pause(sprite_status* p_actwk, sprite_status* p_playerwk) {
   p_playerwk->mspeed = 0;
   CLEAR_BIT(p_actwk->cddat1, CD_PLPUSH);
   CLEAR_BIT(p_actwk->cddat1, CD_PL2PUSH);
-  CLEAR_BIT_5(p_playerwk->cddat1);
+  CLEAR_BIT(p_playerwk->cddat1, CD_PUSH);
 }
 
 
