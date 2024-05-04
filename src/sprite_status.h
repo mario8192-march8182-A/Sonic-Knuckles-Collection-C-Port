@@ -85,7 +85,7 @@ typedef struct sprite_status {
       unsigned char reserved5[3];
       unsigned char height;
       unsigned char reserved6[1];
-      unsigned short colibits;
+      block_coli_bits colibits;
       unsigned char reserved7[2];
     } player;
     struct {
