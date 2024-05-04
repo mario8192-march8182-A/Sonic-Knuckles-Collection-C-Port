@@ -1,6 +1,9 @@
 #ifndef TYPES_H
 #define TYPES_H
 
+#include "constants.h"
+#include "sprite_status_handler.h"
+
 typedef struct set_act05_data set_act05_data;
 typedef struct wrt_data wrt_data;
 typedef struct wrt_init_data wrt_init_data;
@@ -21,9 +24,6 @@ typedef struct hitchk_data hitchk_data;
 typedef struct hitchk_distances hitchk_distances;
 typedef struct hitchk_edge_distances hitchk_edge_distances;
 typedef struct hitchk_results hitchk_results;
-
-#include "constants.h"
-#include "sprite_status_handler.h"
 
 typedef struct set_act05_data {
   short cnt;
