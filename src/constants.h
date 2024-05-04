@@ -63,6 +63,18 @@ typedef enum character_team_id {
 }
 character_team_id;
 
+typedef enum object_cddat1_bits {
+  CD_RIGHT = 0,
+  CD_DOWN = 1,
+  CD_WRT = 2,
+  CD_PLRIDE = 3,
+  CD_PL2RIDE = 4,
+  CD_PLPUSH = 5,
+  CD_PL2PUSH = 6,
+  CD_DIE = 7
+}
+object_cddat1_bits;
+
 #define SPEEDUPTIMER 54
 #define FOOTDIR 58
 #define KO_ADR 68

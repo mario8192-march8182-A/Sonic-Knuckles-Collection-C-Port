@@ -92,11 +92,11 @@ void swit04_wait0(sprite_status* p_actwk) {
   chk_switch_ride(p_actwk);
   if (p_actwk->cddat1 & 0x18) {
     p_actwk->patno = 6;
-    if (BIT_3_IS_SET(p_actwk->cddat1)) {
+    if (BIT_IS_SET(p_actwk->cddat1, CD_PLRIDE)) {
       p_actwk->patno = 12;
       set_bane_jump(&actwk[0], -2560);
     }
-    if (BIT_4_IS_SET(p_actwk->cddat1)) {
+    if (BIT_IS_SET(p_actwk->cddat1, CD_PL2RIDE)) {
       p_actwk->patno = 12;
       set_bane_jump(&actwk[1], -2560);
     }

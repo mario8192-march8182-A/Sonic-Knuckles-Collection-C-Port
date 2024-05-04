@@ -31,6 +31,7 @@
 #define TOGGLE_BIT_5(value) (value ^= 32)
 #define TOGGLE_BIT_6(value) (value ^= 64)
 #define TOGGLE_BIT_7(value) (value ^= 128)
+#define TOGGLE_BIT(value, bit) (value ^= 1 << (bit))
 
 #define BIT_0_IS_SET(value) (value & 1)
 #define BIT_1_IS_SET(value) (value & 2)

@@ -185,7 +185,7 @@ static void sdash_init(sprite_status* p_actwk) {
 
 static void sjumpr_init(sprite_status* p_actwk) {
   if (reverse_gravity_flag == 0) {
-    SET_BIT_1(p_actwk->cddat1);
+    SET_BIT(p_actwk->cddat1, CD_DOWN);
   }
   sjumpr_initg(p_actwk);
 }
@@ -223,7 +223,7 @@ static void sjump45r_init(sprite_status* p_actwk) {
   if (stageno.zone == MARBLE_GARDEN || stageno.zone == MUSHROOM_HILL) {
     p_actwk->sproffset = 1144;
   }
-  SET_BIT_1(p_actwk->cddat1);
+  SET_BIT(p_actwk->cddat1, CD_DOWN);
   p_actwk->r_ptr = &sjump45rmove;
   sjumpinit_end(p_actwk);
 }
@@ -270,11 +270,11 @@ static unsigned short sjumptbl[2] = { -4096, -2560 };
 static void sjumpmove(sprite_status* p_actwk) {
   hitchk_data data = { 27, 8, 16, LONG_HIGH(p_actwk->xposi) };
   plhitchk2(p_actwk, &actwk[0], data, 3);
-  if (BIT_3_IS_SET(p_actwk->cddat1)) {
+  if (BIT_IS_SET(p_actwk->cddat1, CD_PLRIDE)) {
     sjumpsub(p_actwk, &actwk[0]);
   }
   plhitchk2(p_actwk, &actwk[1], data, 4);
-  if (BIT_4_IS_SET(p_actwk->cddat1)) {
+  if (BIT_IS_SET(p_actwk->cddat1, CD_PL2RIDE)) {
     sjumpsub(p_actwk, &actwk[1]);
   }
   patchg(p_actwk, sjumpchg);
@@ -285,11 +285,11 @@ static void sjumpmove(sprite_status* p_actwk) {
 static void vssjumpmove(sprite_status* p_actwk) {
   hitchk_data data = { 19, 8, 16, LONG_HIGH(p_actwk->xposi) };
   plhitchk2(p_actwk, &actwk[0], data, 3);
-  if (BIT_3_IS_SET(p_actwk->cddat1)) {
+  if (BIT_IS_SET(p_actwk->cddat1, CD_PLRIDE)) {
     sjumpsub(p_actwk, &actwk[0]);
   }
   plhitchk2(p_actwk, &actwk[1], data, 4);
-  if (BIT_4_IS_SET(p_actwk->cddat1)) {
+  if (BIT_IS_SET(p_actwk->cddat1, CD_PL2RIDE)) {
     sjumpsub(p_actwk, &actwk[1]);
   }
   patchg(p_actwk, sjumpchg);
@@ -347,7 +347,7 @@ static void sdashmove(sprite_status* p_actwk) {
     if (util__to_unsigned(LONG_HIGH(p_actwk->xposi)) < util__to_unsigned(actwk[0].xposi)) { // unsigned
       cddat1 ^= 1;
     }
-    if (!BIT_0_IS_SET(cddat1)) {
+    if (!BIT_IS_SET(cddat1, CD_RIGHT)) {
       sdashsub(p_actwk, &actwk[0]);
     }
   }
@@ -357,7 +357,7 @@ static void sdashmove(sprite_status* p_actwk) {
     if (util__to_unsigned(LONG_HIGH(p_actwk->xposi)) < util__to_unsigned(actwk[1].xposi)) { // unsigned
       cddat1 ^= 1;
     }
-    if (!BIT_0_IS_SET(cddat1)) {
+    if (!BIT_IS_SET(cddat1, CD_RIGHT)) {
       sdashsub(p_actwk, &actwk[1]);
     }
   }
@@ -375,7 +375,7 @@ static void vssdashmove(sprite_status* p_actwk) {
     if (util__to_unsigned(LONG_HIGH(p_actwk->xposi)) < util__to_unsigned(LONG_HIGH(actwk[0].xposi))) { // unsigned
       cddat1 ^= 1;
     }
-    if (!BIT_0_IS_SET(cddat1)) {
+    if (!BIT_IS_SET(cddat1, CD_RIGHT)) {
       vssdashsub(p_actwk, &actwk[0]);
     }
   }
@@ -385,7 +385,7 @@ static void vssdashmove(sprite_status* p_actwk) {
     if (util__to_unsigned(LONG_HIGH(p_actwk->xposi)) < util__to_unsigned(LONG_HIGH(actwk[1].xposi))) { // unsigned
       cddat1 ^= 1;
     }
-    if (!BIT_0_IS_SET(cddat1)) {
+    if (!BIT_IS_SET(cddat1, CD_RIGHT)) {
       vssdashsub(p_actwk, &actwk[1]);
     }
   }
@@ -399,7 +399,7 @@ static void vssdashsub(sprite_status* p_actwk, sprite_status* p_playerwk) {
   p_playerwk->xspeed = p_actwk->actfree.spring.recoil;
   p_playerwk->xposi += SHORT_TO_LONG_HIGH(4);
   SET_BIT_0(p_playerwk->cddat1);
-  if (BIT_0_IS_SET(p_actwk->cddat1)) {
+  if (BIT_IS_SET(p_actwk->cddat1, CD_RIGHT)) {
     CLEAR_BIT_0(p_playerwk->cddat1);
     p_playerwk->xposi -= SHORT_TO_LONG_HIGH(8);
     p_playerwk->xspeed = -p_playerwk->xspeed;
@@ -413,7 +413,7 @@ static void sdashsub(sprite_status* p_actwk, sprite_status* p_playerwk) {
   p_playerwk->xspeed = p_actwk->actfree.spring.recoil;
   p_playerwk->xposi += SHORT_TO_LONG_HIGH(8);
   SET_BIT_0(p_playerwk->cddat1);
-  if (BIT_0_IS_SET(p_actwk->cddat1)) {
+  if (BIT_IS_SET(p_actwk->cddat1, CD_RIGHT)) {
     CLEAR_BIT_0(p_playerwk->cddat1);
     p_playerwk->xposi -= SHORT_TO_LONG_HIGH(16);
     p_playerwk->xspeed = -p_playerwk->xspeed;
@@ -453,8 +453,8 @@ static void sdashsub2(sprite_status* p_actwk, sprite_status* p_playerwk) {
     p_playerwk->actfree.player.colibits.top_bit = 14;
     p_playerwk->actfree.player.colibits.not_top_bit = 15;
   }
-  CLEAR_BIT_5(p_actwk->cddat1);
-  CLEAR_BIT_6(p_actwk->cddat1);
+  CLEAR_BIT(p_actwk->cddat1, CD_PLPUSH);
+  CLEAR_BIT(p_actwk->cddat1, CD_PL2PUSH);
   CLEAR_BIT_5(p_playerwk->cddat1);
   p_playerwk->actfree.player.talent_status = 0;
   soundset(177);
@@ -465,7 +465,7 @@ static void sdashcolichk(sprite_status* p_actwk) {
   if (p_actwk->mstno == 3) return;
   unsigned short xposi1 = util__to_unsigned(LONG_HIGH(p_actwk->xposi));
   unsigned short xposi2 = xposi1 + 40;
-  if (BIT_0_IS_SET(p_actwk->cddat1)) {
+  if (BIT_IS_SET(p_actwk->cddat1, CD_RIGHT)) {
     xposi2 = xposi1;
     xposi1 -= 40;
   }
@@ -474,7 +474,7 @@ static void sdashcolichk(sprite_status* p_actwk) {
   yposi1 -= 24;
   if (!BIT_1_IS_SET(actwk[0].cddat1)) {
     short mspeed = actwk[0].mspeed;
-    if (BIT_0_IS_SET(p_actwk->cddat1)) {
+    if (BIT_IS_SET(p_actwk->cddat1, CD_RIGHT)) {
       mspeed = -mspeed;
     }
     if (mspeed >= 0) {
@@ -491,7 +491,7 @@ static void sdashcolichk(sprite_status* p_actwk) {
   }
   if (!BIT_1_IS_SET(actwk[1].cddat1)) {
     short mspeed = actwk[1].mspeed;
-    if (BIT_0_IS_SET(p_actwk->cddat1)) {
+    if (BIT_IS_SET(p_actwk->cddat1, CD_RIGHT)) {
       mspeed = -mspeed;
     }
     if (mspeed >= 0) {
@@ -592,11 +592,11 @@ static void sjumprsub2(sprite_status* p_actwk, sprite_status* p_playerwk) {
 static void sjump45move(sprite_status* p_actwk) {
   hitchk_data data = { 27, 16, 0, LONG_HIGH(p_actwk->xposi) };
   plhitchk_slope(p_actwk, &actwk[0], data, sjump45tbl, 3);
-  if (BIT_3_IS_SET(p_actwk->cddat1)) {
+  if (BIT_IS_SET(p_actwk->cddat1, CD_PLRIDE)) {
     sjump45move__sub(p_actwk, &actwk[0]);
   }
   plhitchk_slope(p_actwk, &actwk[1], data, sjump45tbl, 4);
-  if (BIT_4_IS_SET(p_actwk->cddat1)) {
+  if (BIT_IS_SET(p_actwk->cddat1, CD_PL2RIDE)) {
     sjump45move__sub(p_actwk, &actwk[1]);
   }
   patchg(p_actwk, sjumpchg);
@@ -605,7 +605,7 @@ static void sjump45move(sprite_status* p_actwk) {
 
 
 static void sjump45move__sub(sprite_status* p_actwk, sprite_status* p_playerwk) {
-  if (!BIT_0_IS_SET(p_actwk->cddat1)) {
+  if (!BIT_IS_SET(p_actwk->cddat1, CD_RIGHT)) {
     if (LONG_HIGH(p_actwk->xposi) - 4 >= LONG_HIGH(p_playerwk->xposi)) return;
   }
   else {
@@ -617,7 +617,7 @@ static void sjump45move__sub(sprite_status* p_actwk, sprite_status* p_playerwk) 
   p_playerwk->yposi += SHORT_TO_LONG_HIGH(6);
   p_playerwk->xposi += SHORT_TO_LONG_HIGH(6);
   SET_BIT_0(p_playerwk->cddat1);
-  if (!BIT_0_IS_SET(p_actwk->cddat1)) {
+  if (!BIT_IS_SET(p_actwk->cddat1, CD_RIGHT)) {
     CLEAR_BIT_0(p_playerwk->cddat1);
     p_playerwk->xposi -= SHORT_TO_LONG_HIGH(12);
     p_playerwk->xspeed = -p_playerwk->xspeed;
@@ -675,7 +675,7 @@ static void sjump45rmove__sub(sprite_status* p_actwk, sprite_status* p_playerwk)
   p_playerwk->yposi -= SHORT_TO_LONG_HIGH(6);
   p_playerwk->xposi += SHORT_TO_LONG_HIGH(6);
   SET_BIT_0(p_playerwk->cddat1);
-  if (!BIT_0_IS_SET(p_actwk->cddat1)) {
+  if (!BIT_IS_SET(p_actwk->cddat1, CD_RIGHT)) {
     CLEAR_BIT_0(p_playerwk->cddat1);
     p_playerwk->xposi -= SHORT_TO_LONG_HIGH(12);
     p_playerwk->xspeed = -p_playerwk->xspeed;
@@ -1043,7 +1043,7 @@ static void sjumpmv_xymove1(sprite_status* p_actwk) {
   sjumpmv_sub(p_actwk);
   short xposi = p_actwk->actfree.spring.offset / 256;
   short yposi = xposi;
-  if (!BIT_0_IS_SET(p_actwk->cddat1)) {
+  if (!BIT_IS_SET(p_actwk->cddat1, CD_RIGHT)) {
     xposi = -xposi;
   }
   xposi += p_actwk->actfree.spring.orig_xposi;
@@ -1064,7 +1064,7 @@ static void sjumpmv_xymove3(sprite_status* p_actwk) {
   sjumpmv_sub(p_actwk);
   short xposi = p_actwk->actfree.spring.offset / 256;
   short yposi = xposi;
-  if (BIT_0_IS_SET(p_actwk->cddat1)) {
+  if (BIT_IS_SET(p_actwk->cddat1, CD_RIGHT)) {
     xposi = -xposi;
   }
   xposi += p_actwk->actfree.spring.orig_xposi;
@@ -1138,7 +1138,7 @@ void sjumpsw(sprite_status* p_actwk) {
     short xoffset = 0, yoffset = 0;
     if (p_new_actwk->patno == 1) {
       xoffset = 12;
-      if (!BIT_0_IS_SET(p_actwk->cddat1)) {
+      if (!BIT_IS_SET(p_actwk->cddat1, CD_RIGHT)) {
         xoffset = -xoffset;
       }
       p_new_actwk->xposi += SHORT_TO_LONG_HIGH(xoffset);
@@ -1153,7 +1153,7 @@ void sjumpsw(sprite_status* p_actwk) {
     }
     p_new_actwk->actfree.springsw.xoffset = xoffset;
     p_new_actwk->actfree.springsw.yoffset = yoffset;
-    CLEAR_BIT_1(p_actwk->cddat1);
+    CLEAR_BIT(p_actwk->cddat1, CD_DOWN);
     if (p_actwk->cddat1 != 0) {
       p_actwk->actfree.spring.unknown_flag = 1;
     }
@@ -1317,7 +1317,7 @@ static void sjumpsw_sub2(sprite_status* p_actwk) {
     unsigned char userflag = p_actwk->userflag1 & 0xF0;
     if (userflag == 224) {
       p_actwk->yposi += SHORT_TO_LONG_HIGH(22);
-      TOGGLE_BIT_1(p_actwk->cddat1);
+      TOGGLE_BIT(p_actwk->cddat1, CD_DOWN);
       TOGGLE_VFLIP(p_actwk->actflg);
       p_actwk->userflag1 &= 0xF;
       p_actwk->userflag1 |= 0xF0;
@@ -1327,7 +1327,7 @@ static void sjumpsw_sub2(sprite_status* p_actwk) {
     }
     if (userflag == 240) {
       p_actwk->yposi -= SHORT_TO_LONG_HIGH(22);
-      TOGGLE_BIT_1(p_actwk->cddat1);
+      TOGGLE_BIT(p_actwk->cddat1, CD_DOWN);
       TOGGLE_VFLIP(p_actwk->actflg);
       p_actwk->userflag1 &= 0xF;
       p_actwk->userflag1 |= 0xE0;
@@ -1365,7 +1365,7 @@ static void sjumpsw_sub3(sprite_status* p_actwk) {
     unsigned char userflag = p_actwk->userflag1 & 0xF0;
     if (userflag == 224) {
       p_actwk->yposi += SHORT_TO_LONG_HIGH(22);
-      TOGGLE_BIT_1(p_actwk->cddat1);
+      TOGGLE_BIT(p_actwk->cddat1, CD_DOWN);
       TOGGLE_VFLIP(p_actwk->actflg);
       p_actwk->userflag1 &= 0xF;
       p_actwk->userflag1 |= 0xF0;
@@ -1375,7 +1375,7 @@ static void sjumpsw_sub3(sprite_status* p_actwk) {
     }
     if (userflag == 240) {
       p_actwk->yposi -= SHORT_TO_LONG_HIGH(22);
-      TOGGLE_BIT_1(p_actwk->cddat1);
+      TOGGLE_BIT(p_actwk->cddat1, CD_DOWN);
       TOGGLE_VFLIP(p_actwk->actflg);
       p_actwk->userflag1 &= 0xF;
       p_actwk->userflag1 |= 0xE0;

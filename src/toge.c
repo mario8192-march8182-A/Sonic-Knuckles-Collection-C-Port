@@ -90,7 +90,7 @@ static void togeinit(sprite_status* p_actwk, unsigned char userflag) {
   if (reverse_gravity_flag != 0) {
     cddat1 ^= 2;
   }
-  if (BIT_1_IS_SET(cddat1)) {
+  if (BIT_IS_SET(cddat1, CD_DOWN)) {
     p_actwk->r_ptr = &togemove3;
   }
   p_actwk->actfree.toge.push_distance = 32;
@@ -124,7 +124,7 @@ static void vstogeinit(sprite_status* p_actwk, unsigned char userflag) {
   if (userflag >= 4) { // unsigned
     p_actwk->r_ptr = &vstogemove2;
   }
-  if (BIT_1_IS_SET(p_actwk->cddat1)) {
+  if (BIT_IS_SET(p_actwk->cddat1, CD_DOWN)) {
     p_actwk->r_ptr = &vstogemove3;
   }
   p_actwk->actfree.toge.orig_xposi = LONG_HIGH(p_actwk->xposi);
@@ -143,10 +143,10 @@ static void togemove(sprite_status* p_actwk) {
   };
   hitchk(p_actwk, data);
   if (p_actwk->cddat1 & 0x18) {
-    if (BIT_3_IS_SET(p_actwk->cddat1)) {
+    if (BIT_IS_SET(p_actwk->cddat1, CD_PLRIDE)) {
       togedamegesub(p_actwk, &actwk[0]);
     }
-    if (BIT_4_IS_SET(p_actwk->cddat1)) {
+    if (BIT_IS_SET(p_actwk->cddat1, CD_PL2RIDE)) {
       togedamegesub(p_actwk, &actwk[1]);
     }
   }
@@ -166,11 +166,11 @@ static void togemove2(sprite_status* p_actwk) {
   if (results.plcoli & 3) {
     if (BIT_0_IS_SET(results.plcoli)) {
       togedamegesub(p_actwk, &actwk[0]);
-      CLEAR_BIT_5(p_actwk->cddat1);
+      CLEAR_BIT(p_actwk->cddat1, CD_PLPUSH);
     }
     if (BIT_1_IS_SET(results.plcoli)) {
       togedamegesub(p_actwk, &actwk[1]);
-      CLEAR_BIT_6(p_actwk->cddat1);
+      CLEAR_BIT(p_actwk->cddat1, CD_PL2PUSH);
     }
   }
   frameoutchk2(p_actwk, p_actwk->actfree.toge.orig_xposi);
@@ -208,10 +208,10 @@ static void vstogemove(sprite_status* p_actwk) {
   };
   hitchk(p_actwk, data);
   if (p_actwk->cddat1 & 0x18) {
-    if (BIT_3_IS_SET(p_actwk->cddat1)) {
+    if (BIT_IS_SET(p_actwk->cddat1, CD_PLRIDE)) {
       togedamegesub(p_actwk, &actwk[0]);
     }
-    if (BIT_4_IS_SET(p_actwk->cddat1)) {
+    if (BIT_IS_SET(p_actwk->cddat1, CD_PL2RIDE)) {
       togedamegesub(p_actwk, &actwk[1]);
     }
   }
@@ -231,11 +231,11 @@ static void vstogemove2(sprite_status* p_actwk) {
   if (results.plcoli & 3) {
     if (BIT_0_IS_SET(results.plcoli)) {
       togedamegesub(p_actwk, &actwk[0]);
-      CLEAR_BIT_5(p_actwk->cddat1);
+      CLEAR_BIT(p_actwk->cddat1, CD_PLPUSH);
     }
     if (BIT_1_IS_SET(results.plcoli)) {
       togedamegesub(p_actwk, &actwk[1]);
-      CLEAR_BIT_6(p_actwk->cddat1);
+      CLEAR_BIT(p_actwk->cddat1, CD_PL2PUSH);
     }
   }
   actionsub(p_actwk);

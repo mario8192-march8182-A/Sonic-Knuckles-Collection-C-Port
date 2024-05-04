@@ -107,7 +107,7 @@ void emy_fall_col(sprite_status* p_actwk) {
 // skdisasm label: Child_Draw_Sprite
 void chk_oya_die0(sprite_status* p_actwk) {
   sprite_status* p_parentwk = &actwk[p_actwk->actfree.dynamic.oya];
-  if (BIT_7_IS_SET(p_parentwk->cddat1)) {
+  if (BIT_IS_SET(p_parentwk->cddat1, CD_DIE)) {
     set_emy_fout0(p_actwk);
   }
   else {
@@ -119,7 +119,7 @@ void chk_oya_die0(sprite_status* p_actwk) {
 // skdisasm label: Child_Remember_Draw_Sprite
 void chk_oya_diew0(sprite_status* p_actwk) {
   sprite_status* p_parentwk = &actwk[p_actwk->actfree.dynamic.oya];
-  if (!BIT_7_IS_SET(p_parentwk->cddat1)) {
+  if (!BIT_IS_SET(p_parentwk->cddat1, CD_DIE)) {
     actionsub(p_actwk);
   }
   else {
@@ -130,7 +130,7 @@ void chk_oya_diew0(sprite_status* p_actwk) {
 
 
 void set_emy_tobi(sprite_status* p_actwk, unsigned char unknown) {
-  SET_BIT_7(p_actwk->cddat1);
+  SET_BIT(p_actwk->cddat1, CD_DIE);
   p_actwk->r_ptr = &chk_break_fout;
   p_actwk->colino = 0;
   set_break_spd(p_actwk, 0);
@@ -140,7 +140,7 @@ void set_emy_tobi(sprite_status* p_actwk, unsigned char unknown) {
 // skdisasm label: Child_DrawTouch_Sprite_FlickerMove
 void chk_tobi_diec0(sprite_status* p_actwk, unsigned char unknown) {
   sprite_status* p_parentwk = &actwk[p_actwk->actfree.dynamic.oya];
-  if (BIT_7_IS_SET(p_parentwk->cddat1)) {
+  if (BIT_IS_SET(p_parentwk->cddat1, CD_DIE)) {
     set_emy_tobi(p_actwk, unknown);
   }
   else {
@@ -253,7 +253,7 @@ ok:
   p_actwk->sprvs = p_data->sprvs;
   p_actwk->patno = p_data->patno;
   p_actwk->colino = p_data->colino;
-  SET_BIT_2(p_actwk->cddat1);
+  SET_BIT(p_actwk->cddat1, CD_WRT);
   p_actwk->actfree.dynamic.prev_patno = 255;
   SET_USE_LEVEL_COORDS(p_actwk->actflg);
   p_actwk->r_no += 2;
@@ -331,7 +331,7 @@ void emy_fout(sprite_status* p_actwk) {
   if (p_actwk->actfree.dynamic.flagwork_index != 0) {
     CLEAR_BIT_7(flagwork[p_actwk->actfree.dynamic.flagwork_index - 1]);
   }
-  SET_BIT_7(p_actwk->cddat1);
+  SET_BIT(p_actwk->cddat1, CD_DIE);
   p_actwk->r_ptr = &frameout;
 }
 
@@ -382,7 +382,7 @@ void wchg_fout(sprite_status* p_actwk) {
 // skdisasm label: Go_Delete_SpriteSlotted2
 void set_wchg_fout0(sprite_status* p_actwk) {
   p_actwk->r_ptr = &frameout;
-  SET_BIT_7(p_actwk->cddat1);
+  SET_BIT(p_actwk->cddat1, CD_DIE);
   clr_wchg_bit(p_actwk);
 }
 
@@ -423,14 +423,14 @@ void wchg_die(sprite_status* p_actwk) {
 // skdisasm label: Go_Delete_Sprite
 void set_emy_fout0(sprite_status* p_actwk) {
   p_actwk->r_ptr = &frameout;
-  SET_BIT_7(p_actwk->cddat1);
+  SET_BIT(p_actwk->cddat1, CD_DIE);
 }
 
 
 // skdisasm label: Go_Delete_Sprite_3
 void set_emy_fout01(sprite_status* p_actwk) {
   p_actwk->r_ptr = &frameout;
-  SET_BIT_7(p_actwk->cddat1);
+  SET_BIT(p_actwk->cddat1, CD_DIE);
   SET_BIT_4(p_actwk->actfree.dynamic.status_bitfield);
 }
 
