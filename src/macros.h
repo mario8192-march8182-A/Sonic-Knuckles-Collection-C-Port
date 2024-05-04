@@ -55,6 +55,7 @@
 #define SET_USE_SCREEN_COORDS(value) (CLEAR_BIT_2(value))
 
 #define TOGGLE_HFLIP(value) (TOGGLE_BIT_0(value))
+#define TOGGLE_VFLIP(value) (TOGGLE_BIT_1(value))
 
 #define IS_HFLIP(value) (BIT_0_IS_SET(value))
 #define IS_VFLIP(value) (BIT_1_IS_SET(value))

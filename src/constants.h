@@ -87,6 +87,8 @@ character_team_id;
 
 #define RINGBUFFER_SLOTS 64
 
+#define LEVEL_TRIGGERS_SLOTS 16
+
 #define EMY_WRT_FLG_SLOTS 8
 
 #define PG_CONTROL_NULL 0

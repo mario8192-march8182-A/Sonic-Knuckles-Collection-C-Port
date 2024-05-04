@@ -36,6 +36,7 @@ extern unsigned char pl2_lock_flag;
 extern unsigned short timebonus;
 extern unsigned short ringbonus;
 extern unsigned short scr_x_no;
+extern unsigned char level_triggers[LEVEL_TRIGGERS_SLOTS];
 extern unsigned char emy_wrt_flg[EMY_WRT_FLG_SLOTS];
 extern unsigned char DAT_08fffaa2;
 extern unsigned char act_clear_flag;

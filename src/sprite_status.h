@@ -73,20 +73,22 @@ typedef struct sprite_status {
     struct {
       unsigned char control_bitfield;
       unsigned char talent_status;
-      unsigned char reserved1[4];
+      unsigned char flip_rev_cnt;
+      unsigned char flip_rev_frame_cnt;
+      unsigned short hlock_timer;
       unsigned char invulnerability_timer;
-      unsigned char reserved2[2];
+      unsigned char reserved1[2];
       unsigned char eventflag;
       character_id character;
-      unsigned char reserved3[4];
+      unsigned char reserved2[4];
       unsigned char roll_status;
-      unsigned char reserved4[2];
+      unsigned char reserved3[2];
       unsigned char jump_status;
-      unsigned char reserved5[3];
+      unsigned char reserved4[3];
       unsigned char height;
-      unsigned char reserved6[1];
+      unsigned char reserved5[1];
       block_coli_bits colibits;
-      unsigned char reserved7[2];
+      unsigned char reserved6[2];
     } player;
     struct {
       short timer;
@@ -252,6 +254,27 @@ typedef struct sprite_status {
       short accel;
       unsigned char reserved3[8];
     } snak00;
+    struct {
+      unsigned char reserved1[2];
+      short recoil;
+      short orig_xposi;
+      short orig_yposi;
+      short offset;
+      unsigned short move_dir;
+      unsigned short move_countdown;
+      unsigned char unknown_flag;
+      unsigned char reserved2[1];
+      unsigned short child;
+      unsigned char reserved3[10];
+    } spring;
+    struct {
+      unsigned char reserved1[2];
+      short xoffset;
+      short yoffset;
+      unsigned char reserved2[10];
+      unsigned short parent;
+      unsigned char reserved3[10];
+    } springsw;
     struct {
       short delay_timer;
       unsigned short part_cnt;

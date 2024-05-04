@@ -32,6 +32,7 @@ unsigned char pl2_lock_flag;
 unsigned short timebonus;
 unsigned short ringbonus;
 unsigned short scr_x_no;
+unsigned char level_triggers[LEVEL_TRIGGERS_SLOTS];
 unsigned char emy_wrt_flg[EMY_WRT_FLG_SLOTS];
 unsigned char DAT_08fffaa2;
 unsigned char act_clear_flag;
