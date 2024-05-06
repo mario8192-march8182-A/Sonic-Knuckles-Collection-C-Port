@@ -367,11 +367,13 @@ static hitchk_results plhitchk_chk_bounds(sprite_status* p_actwk, sprite_status*
     distances.max_top_coli
   };
   if (data.sprhs < util__to_unsigned(edge_distances.horizontal)) { // unsigned
+    // Player is to the right of the object.
     edge_distances.horizontal -= data.sprhs * 2;
     edge_distances.abs_horizontal = edge_distances.horizontal;
     edge_distances.abs_horizontal = -edge_distances.abs_horizontal;
   }
   if (distances.max_top < util__to_unsigned(edge_distances.vertical)) { // unsigned
+    // Player is below the object.
     edge_distances.vertical -= 4;
     edge_distances.vertical -= distances.min_bottom;
     edge_distances.abs_vertical = edge_distances.vertical;
@@ -388,11 +390,13 @@ static hitchk_results plhitchk_chk_sides(sprite_status* p_actwk, sprite_status* 
   if (edge_distances.horizontal != 0) {
     bool stop = false;
     if (edge_distances.horizontal >= 0) {
+      // Player is inside the left side of the object.
       if (p_playerwk->xspeed >= 0) {
         stop = true;
       }
     }
     else {
+      // Player is inside the right side of the object.
       if (p_playerwk->xspeed < 0) {
         stop = true;
       }
@@ -449,11 +453,13 @@ static hitchk_results plhitchk_no_coli(sprite_status* p_actwk) {
 
 static hitchk_results plhitchk_chk_planes(sprite_status* p_actwk, sprite_status* p_playerwk, hitchk_edge_distances edge_distances, unsigned char plridebit) {
   if (edge_distances.vertical >= 0) {
+    // Player is inside the top of the object.
     if (util__to_unsigned(edge_distances.vertical) < 16) { // unsigned
       return plhitchk_pop_up(p_actwk, p_playerwk, edge_distances, plridebit);
     }
     return plhitchk_chk_push(p_actwk, p_playerwk, plridebit);
   }
+  // Player is inside the bottom of the object.
   if (!BIT_IS_SET(p_playerwk->cddat1, CD_JUMP)) {
     if (p_playerwk->yspeed == 0) {
       return plhitchk_crush(p_actwk, p_playerwk, edge_distances, plridebit);
