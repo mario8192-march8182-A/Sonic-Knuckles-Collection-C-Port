@@ -146,21 +146,24 @@ static void opnbox_fly0(sprite_status* p_actwk) {
   };
 
   short xspeed = p_actwk->actfree.opnbox.xspeed;
+  bool neg = false;
   if (xspeed >= 0) {
     // p_chk
     unsigned short hposi = util__to_unsigned(LONG_HIGH(scra_h_posit) + 272);
-    if (hposi >= util__to_unsigned(LONG_HIGH(p_actwk->xposi))) goto add; // unsigned
+    if (hposi < util__to_unsigned(LONG_HIGH(p_actwk->xposi))) { // unsigned
+      neg = true;
+    }
   }
   else {
     // m_chk
     unsigned short hposi = util__to_unsigned(LONG_HIGH(scra_h_posit) + 48);
-    if (hposi < util__to_unsigned(LONG_HIGH(p_actwk->xposi))) goto add; // unsigned
+    if (hposi >= util__to_unsigned(LONG_HIGH(p_actwk->xposi))) { // unsigned
+      neg = true;
+    }
   }
-
-neg:
-  xspeed = -xspeed;
-
-add:
+  if (neg) {
+    xspeed = -xspeed;
+  }
   p_actwk->actfree.opnbox.xspeed = xspeed;
   p_actwk->xposi += SHORT_TO_LONG_HIGH(xspeed);
   short vposi = LONG_HIGH(scra_v_posit) + 64;
