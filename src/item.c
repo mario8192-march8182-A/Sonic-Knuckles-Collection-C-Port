@@ -452,26 +452,29 @@ static void item2_09(sprite_status* p_actwk, sprite_status* p_playerwk, unsigned
   pladdspdwk = 24;
   plretspdwk = 192;
   actwk[0].mstno = 31;
-  if (plmode == TEAM_MILES) {
-    ssonicflag = 0;
-    smilesflag = 1;
-    actwk[0].mstno = 41;
-    pl2maxspdwk = 2048;
-    pl2addspdwk = 24;
-    pl2retspdwk = 192;
-    actwk[102].r_ptr = &smilesflickies;
-  }
-  else if (plmode < TEAM_MILES) {
-    actwk[0].patbase = ssonicpat;
-    ssonicflag = 255;
-    plmaxspdwk = 2560;
-    pladdspdwk = 48;
-    plretspdwk = 256;
-    actwk[102].r_ptr = &hsonicstars;
-    actwk[96].r_ptr = &hypertrail;
-  }
-  else {
-    actwk[96].r_ptr = &hypertrail;
+  switch (plmode) {
+    case TEAM_MILES:
+      ssonicflag = 0;
+      smilesflag = 1;
+      actwk[0].mstno = 41;
+      pl2maxspdwk = 2048;
+      pl2addspdwk = 24;
+      pl2retspdwk = 192;
+      actwk[102].r_ptr = &smilesflickies;
+      break;
+    case TEAM_SONIC_AND_MILES:
+    case TEAM_SONIC:
+      actwk[0].patbase = ssonicpat;
+      ssonicflag = 255;
+      plmaxspdwk = 2560;
+      pladdspdwk = 48;
+      plretspdwk = 256;
+      actwk[102].r_ptr = &hsonicstars;
+      actwk[96].r_ptr = &hypertrail;
+      break;
+    case TEAM_KNUCKLES:
+      actwk[96].r_ptr = &hypertrail;
+      break;
   }
   actwk[0].actfree.player.control_bitfield = 129;
   actwk[0].actfree.player.muteki_timer = 0;
