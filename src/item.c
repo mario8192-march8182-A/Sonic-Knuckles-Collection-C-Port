@@ -11,9 +11,9 @@ static void itemmove(sprite_status* p_actwk);
 static void itemmove3(sprite_status* p_actwk);
 static void itemmove2(sprite_status* p_actwk);
 static void itemdownsub(sprite_status* p_actwk);
-static void itemsub(sprite_status* p_actwk, sprite_status* p_playerwk, hitchk_data data, unsigned char cddatbit);
-static void itemsub1(sprite_status* p_actwk, sprite_status* p_playerwk, hitchk_data data, unsigned char cddatbit);
-static hitchk_results itemsub2(sprite_status* p_actwk, sprite_status* p_playerwk, hitchk_data data, unsigned char cddatbit);
+static void itemsub(sprite_status* p_actwk, sprite_status* p_playerwk, hitchk_data data, unsigned char plridebit);
+static void itemsub1(sprite_status* p_actwk, sprite_status* p_playerwk, hitchk_data data, unsigned char plridebit);
+static hitchk_results itemsub2(sprite_status* p_actwk, sprite_status* p_playerwk, hitchk_data data, unsigned char plridebit);
 static void itemget(sprite_status* p_actwk);
 static sprite_status_handler item2_move_tbl[3];
 static void item2init(sprite_status* p_actwk);
@@ -142,9 +142,9 @@ static void itemdownsub(sprite_status* p_actwk) {
 }
 
 
-static void itemsub(sprite_status* p_actwk, sprite_status* p_playerwk, hitchk_data data, unsigned char cddatbit) {
-  if (BIT_IS_SET(p_actwk->cddat1, cddatbit)) {
-    itemsub2(p_actwk, p_playerwk, data, cddatbit);
+static void itemsub(sprite_status* p_actwk, sprite_status* p_playerwk, hitchk_data data, unsigned char plridebit) {
+  if (BIT_IS_SET(p_actwk->cddat1, plridebit)) {
+    itemsub2(p_actwk, p_playerwk, data, plridebit);
     return;
   }
   if (p_playerwk->mstno == 2) return;
@@ -152,22 +152,22 @@ static void itemsub(sprite_status* p_actwk, sprite_status* p_playerwk, hitchk_da
     if (p_playerwk->actfree.player.talent_status == 1) return;
     if (p_playerwk->actfree.player.talent_status == 3) return;
   }
-  plhitchk_chk_coli2(p_actwk, p_playerwk, data, cddatbit);
+  plhitchk_chk_coli2(p_actwk, p_playerwk, data, plridebit);
 }
 
 
-static void itemsub1(sprite_status* p_actwk, sprite_status* p_playerwk, hitchk_data data, unsigned char cddatbit) {
-  if (BIT_IS_SET(p_actwk->cddat1, cddatbit)) {
-    itemsub2(p_actwk, p_playerwk, data, cddatbit);
+static void itemsub1(sprite_status* p_actwk, sprite_status* p_playerwk, hitchk_data data, unsigned char plridebit) {
+  if (BIT_IS_SET(p_actwk->cddat1, plridebit)) {
+    itemsub2(p_actwk, p_playerwk, data, plridebit);
     return;
   }
   if (vs_flag == 0 || p_actwk->mstno != 2) {
-    plhitchk_chk_coli2(p_actwk, p_playerwk, data, cddatbit);
+    plhitchk_chk_coli2(p_actwk, p_playerwk, data, plridebit);
   }
 }
 
 
-static hitchk_results itemsub2(sprite_status* p_actwk, sprite_status* p_playerwk, hitchk_data data, unsigned char cddatbit) {
+static hitchk_results itemsub2(sprite_status* p_actwk, sprite_status* p_playerwk, hitchk_data data, unsigned char plridebit) {
   unsigned char width = data.sprhs * 2;
   bool on_box = false;
   if (!BIT_IS_SET(p_playerwk->cddat1, CD_JUMP)) {
@@ -179,7 +179,7 @@ static hitchk_results itemsub2(sprite_status* p_actwk, sprite_status* p_playerwk
   if (!on_box) {
     CLEAR_BIT(p_playerwk->cddat1, CD_RIDE);
     SET_BIT(p_playerwk->cddat1, CD_JUMP);
-    CLEAR_BIT(p_playerwk->cddat1, cddatbit);
+    CLEAR_BIT(p_playerwk->cddat1, plridebit);
   }
   else {
     MvSonicOnPtfm(data.xposi);

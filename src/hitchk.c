@@ -3,23 +3,23 @@
 #include "util.h"
 #include "hitchk.h"
 #include "004xxxxx.h"
-static hitchk_results plhitchk_doubleslope(sprite_status* p_actwk, sprite_status* p_playerwk, hitchk_data data, signed char* slope_heights, unsigned char cddatbit);
-static hitchk_results plhitchk_bryuka(sprite_status* p_actwk, sprite_status* p_playerwk, hitchk_data data, signed char* slope_heights, unsigned char cddatbit);
-static hitchk_results plhitchk_offset(sprite_status* p_actwk, sprite_status* p_playerwk, hitchk_data data, unsigned char cddatbit);
-static hitchk_results plhitchk_offset_chk_coli(sprite_status* p_actwk, sprite_status* p_playerwk, hitchk_data data, unsigned char cddatbit);
-static hitchk_results plhitchk_chk_slope_coli(sprite_status* p_actwk, sprite_status* p_playerwk, hitchk_data data, signed char* slope_heights, unsigned char cddatbit);
-static hitchk_results plhitchk_chk_doubleslope_coli(sprite_status* p_actwk, sprite_status* p_playerwk, hitchk_data data, signed char* slope_heights, unsigned char cddatbit);
-static hitchk_results plhitchk_chk_coli(sprite_status* p_actwk, sprite_status* p_playerwk, hitchk_data data, unsigned char cddatbit);
-static hitchk_results plhitchk_chk_bounds(sprite_status* p_actwk, sprite_status* p_playerwk, hitchk_data data, hitchk_distances distances, unsigned char cddatbit);
-static hitchk_results plhitchk_chk_sides(sprite_status* p_actwk, sprite_status* p_playerwk, hitchk_edge_distances edge_distances, unsigned char cddatbit);
-static hitchk_results plhitchk_chk_push(sprite_status* p_actwk, sprite_status* p_playerwk, unsigned char cddatbit);
-static hitchk_results plhitchk_clear_push(sprite_status* p_actwk, sprite_status* p_playerwk, unsigned char cddatbit);
+static hitchk_results plhitchk_doubleslope(sprite_status* p_actwk, sprite_status* p_playerwk, hitchk_data data, signed char* slope_heights, unsigned char plridebit);
+static hitchk_results plhitchk_bryuka(sprite_status* p_actwk, sprite_status* p_playerwk, hitchk_data data, signed char* slope_heights, unsigned char plridebit);
+static hitchk_results plhitchk_offset(sprite_status* p_actwk, sprite_status* p_playerwk, hitchk_data data, unsigned char plridebit);
+static hitchk_results plhitchk_offset_chk_coli(sprite_status* p_actwk, sprite_status* p_playerwk, hitchk_data data, unsigned char plridebit);
+static hitchk_results plhitchk_chk_slope_coli(sprite_status* p_actwk, sprite_status* p_playerwk, hitchk_data data, signed char* slope_heights, unsigned char plridebit);
+static hitchk_results plhitchk_chk_doubleslope_coli(sprite_status* p_actwk, sprite_status* p_playerwk, hitchk_data data, signed char* slope_heights, unsigned char plridebit);
+static hitchk_results plhitchk_chk_coli(sprite_status* p_actwk, sprite_status* p_playerwk, hitchk_data data, unsigned char plridebit);
+static hitchk_results plhitchk_chk_bounds(sprite_status* p_actwk, sprite_status* p_playerwk, hitchk_data data, hitchk_distances distances, unsigned char plridebit);
+static hitchk_results plhitchk_chk_sides(sprite_status* p_actwk, sprite_status* p_playerwk, hitchk_edge_distances edge_distances, unsigned char plridebit);
+static hitchk_results plhitchk_chk_push(sprite_status* p_actwk, sprite_status* p_playerwk, unsigned char plridebit);
+static hitchk_results plhitchk_clear_push(sprite_status* p_actwk, sprite_status* p_playerwk, unsigned char plridebit);
 static hitchk_results plhitchk_no_coli(sprite_status* p_actwk);
-static hitchk_results plhitchk_chk_planes(sprite_status* p_actwk, sprite_status* p_playerwk, hitchk_edge_distances edge_distances, unsigned char cddatbit);
-static hitchk_results plhitchk_pop_down(sprite_status* p_actwk, sprite_status* p_playerwk, hitchk_edge_distances edge_distances, unsigned char cddatbit);
-static hitchk_results plhitchk_no_pop(sprite_status* p_actwk, sprite_status* p_playerwk, hitchk_edge_distances edge_distances, unsigned char cddatbit);
-static hitchk_results plhitchk_crush(sprite_status* p_actwk, sprite_status* p_playerwk, hitchk_edge_distances edge_distances, unsigned char cddatbit);
-static hitchk_results plhitchk_pop_up(sprite_status* p_actwk, sprite_status* p_playerwk, hitchk_edge_distances edge_distances, unsigned char cddatbit);
+static hitchk_results plhitchk_chk_planes(sprite_status* p_actwk, sprite_status* p_playerwk, hitchk_edge_distances edge_distances, unsigned char plridebit);
+static hitchk_results plhitchk_pop_down(sprite_status* p_actwk, sprite_status* p_playerwk, hitchk_edge_distances edge_distances, unsigned char plridebit);
+static hitchk_results plhitchk_no_pop(sprite_status* p_actwk, sprite_status* p_playerwk, hitchk_edge_distances edge_distances, unsigned char plridebit);
+static hitchk_results plhitchk_crush(sprite_status* p_actwk, sprite_status* p_playerwk, hitchk_edge_distances edge_distances, unsigned char plridebit);
+static hitchk_results plhitchk_pop_up(sprite_status* p_actwk, sprite_status* p_playerwk, hitchk_edge_distances edge_distances, unsigned char plridebit);
 
 
 hitchk_results hitchk(sprite_status* p_actwk, hitchk_data data) {
@@ -32,9 +32,9 @@ hitchk_results hitchk(sprite_status* p_actwk, hitchk_data data) {
 }
 
 
-hitchk_results plhitchk(sprite_status* p_actwk, sprite_status* p_playerwk, hitchk_data data, unsigned char cddatbit) {
-  if (!BIT_IS_SET(p_actwk->cddat1, cddatbit)) {
-    return plhitchk_chk_coli(p_actwk, p_playerwk, data, cddatbit);
+hitchk_results plhitchk(sprite_status* p_actwk, sprite_status* p_playerwk, hitchk_data data, unsigned char plridebit) {
+  if (!BIT_IS_SET(p_actwk->cddat1, plridebit)) {
+    return plhitchk_chk_coli(p_actwk, p_playerwk, data, plridebit);
   }
   unsigned char width = data.sprhs * 2;
   bool on_platform = false;
@@ -47,7 +47,7 @@ hitchk_results plhitchk(sprite_status* p_actwk, sprite_status* p_playerwk, hitch
   if (!on_platform) {
     CLEAR_BIT(p_playerwk->cddat1, CD_RIDE);
     SET_BIT(p_playerwk->cddat1, CD_JUMP);
-    CLEAR_BIT(p_actwk->cddat1, cddatbit);
+    CLEAR_BIT(p_actwk->cddat1, plridebit);
   }
   else {
     MvSonicOnPtfm(data.xposi);
@@ -65,9 +65,9 @@ hitchk_results hitchk2(sprite_status* p_actwk, hitchk_data data) {
 }
 
 
-hitchk_results plhitchk2(sprite_status* p_actwk, sprite_status* p_playerwk, hitchk_data data, unsigned char cddatbit) {
-  if (!BIT_IS_SET(p_actwk->cddat1, cddatbit)) {
-    return plhitchk_chk_coli2(p_actwk, p_playerwk, data, cddatbit);
+hitchk_results plhitchk2(sprite_status* p_actwk, sprite_status* p_playerwk, hitchk_data data, unsigned char plridebit) {
+  if (!BIT_IS_SET(p_actwk->cddat1, plridebit)) {
+    return plhitchk_chk_coli2(p_actwk, p_playerwk, data, plridebit);
   }
   unsigned char width = data.sprhs * 2;
   bool on_platform = false;
@@ -80,7 +80,7 @@ hitchk_results plhitchk2(sprite_status* p_actwk, sprite_status* p_playerwk, hitc
   if (!on_platform) {
     CLEAR_BIT(p_playerwk->cddat1, CD_RIDE);
     SET_BIT(p_playerwk->cddat1, CD_JUMP);
-    CLEAR_BIT(p_actwk->cddat1, cddatbit);
+    CLEAR_BIT(p_actwk->cddat1, plridebit);
   }
   else {
     MvSonicOnPtfm(data.xposi);
@@ -98,9 +98,9 @@ hitchk_results hitchk_slope(sprite_status* p_actwk, hitchk_data data, signed cha
 }
 
 
-hitchk_results plhitchk_slope(sprite_status* p_actwk, sprite_status* p_playerwk, hitchk_data data, signed char* slope_heights, unsigned char cddatbit) {
-  if (!BIT_IS_SET(p_actwk->cddat1, cddatbit)) {
-    return plhitchk_chk_slope_coli(p_actwk, p_playerwk, data, slope_heights, cddatbit);
+hitchk_results plhitchk_slope(sprite_status* p_actwk, sprite_status* p_playerwk, hitchk_data data, signed char* slope_heights, unsigned char plridebit) {
+  if (!BIT_IS_SET(p_actwk->cddat1, plridebit)) {
+    return plhitchk_chk_slope_coli(p_actwk, p_playerwk, data, slope_heights, plridebit);
   }
   unsigned char width = data.sprhs * 2;
   bool on_slope = false;
@@ -114,11 +114,11 @@ hitchk_results plhitchk_slope(sprite_status* p_actwk, sprite_status* p_playerwk,
   if (!on_slope) {
     CLEAR_BIT(p_playerwk->cddat1, CD_RIDE);
     SET_BIT(p_playerwk->cddat1, CD_JUMP);
-    CLEAR_BIT(p_actwk->cddat1, cddatbit);
+    CLEAR_BIT(p_actwk->cddat1, plridebit);
   }
   else {
     MvSonicOnSlope(data.xposi);
-    SET_BIT(results.plcoli, cddatbit + 1);
+    SET_BIT(results.plcoli, plridebit + 1);
   }
   return results;
 }
@@ -132,9 +132,9 @@ hitchk_results hitchk_doubleslope(sprite_status* p_actwk, hitchk_data data, sign
 }
 
 
-static hitchk_results plhitchk_doubleslope(sprite_status* p_actwk, sprite_status* p_playerwk, hitchk_data data, signed char* slope_heights, unsigned char cddatbit) {
-  if (!BIT_IS_SET(p_actwk->cddat1, cddatbit)) {
-    return plhitchk_chk_doubleslope_coli(p_actwk, p_playerwk, data, slope_heights, cddatbit);
+static hitchk_results plhitchk_doubleslope(sprite_status* p_actwk, sprite_status* p_playerwk, hitchk_data data, signed char* slope_heights, unsigned char plridebit) {
+  if (!BIT_IS_SET(p_actwk->cddat1, plridebit)) {
+    return plhitchk_chk_doubleslope_coli(p_actwk, p_playerwk, data, slope_heights, plridebit);
   }
   unsigned char width = data.sprhs * 2;
   bool on_slope = false;
@@ -147,7 +147,7 @@ static hitchk_results plhitchk_doubleslope(sprite_status* p_actwk, sprite_status
   if (!on_slope) {
     CLEAR_BIT(p_playerwk->cddat1, CD_RIDE);
     SET_BIT(p_playerwk->cddat1, CD_JUMP);
-    CLEAR_BIT(p_actwk->cddat1, cddatbit);
+    CLEAR_BIT(p_actwk->cddat1, plridebit);
   }
   else {
     MvSonicOnDoubleSlope(data.xposi);
@@ -165,9 +165,9 @@ hitchk_results hitchk_bryuka(sprite_status* p_actwk, hitchk_data data, signed ch
 }
 
 
-static hitchk_results plhitchk_bryuka(sprite_status* p_actwk, sprite_status* p_playerwk, hitchk_data data, signed char* slope_heights, unsigned char cddatbit) {
-  if (!BIT_IS_SET(p_actwk->cddat1, cddatbit)) {
-    return plhitchk_chk_slope_coli(p_actwk, p_playerwk, data, slope_heights, cddatbit);
+static hitchk_results plhitchk_bryuka(sprite_status* p_actwk, sprite_status* p_playerwk, hitchk_data data, signed char* slope_heights, unsigned char plridebit) {
+  if (!BIT_IS_SET(p_actwk->cddat1, plridebit)) {
+    return plhitchk_chk_slope_coli(p_actwk, p_playerwk, data, slope_heights, plridebit);
   }
   unsigned char width = data.sprhs * 2;
   bool on_slope = false;
@@ -180,11 +180,11 @@ static hitchk_results plhitchk_bryuka(sprite_status* p_actwk, sprite_status* p_p
   hitchk_results results = { 0, 0 };
   if (!on_slope) {
     CLEAR_BIT(p_playerwk->cddat1, CD_RIDE);
-    CLEAR_BIT(p_actwk->cddat1, cddatbit);
+    CLEAR_BIT(p_actwk->cddat1, plridebit);
   }
   else {
     MvSonicOnSlope(data.xposi);
-    SET_BIT(cddatbit, results.plcoli + 1);
+    SET_BIT(plridebit, results.plcoli + 1);
   }
   return results;
 }
@@ -198,9 +198,9 @@ hitchk_results hitchk_offset(sprite_status* p_actwk, hitchk_data data) {
 }
 
 
-static hitchk_results plhitchk_offset(sprite_status* p_actwk, sprite_status* p_playerwk, hitchk_data data, unsigned char cddatbit) {
-  if (!BIT_IS_SET(p_actwk->cddat1, cddatbit)) {
-    return plhitchk_offset_chk_coli(p_actwk, p_playerwk, data, cddatbit);
+static hitchk_results plhitchk_offset(sprite_status* p_actwk, sprite_status* p_playerwk, hitchk_data data, unsigned char plridebit) {
+  if (!BIT_IS_SET(p_actwk->cddat1, plridebit)) {
+    return plhitchk_offset_chk_coli(p_actwk, p_playerwk, data, plridebit);
   }
   bool on_platform = false;
   if (!BIT_IS_SET(p_playerwk->cddat1, CD_JUMP)) {
@@ -215,7 +215,7 @@ static hitchk_results plhitchk_offset(sprite_status* p_actwk, sprite_status* p_p
   if (!on_platform) {
     CLEAR_BIT(p_playerwk->cddat1, CD_RIDE);
     SET_BIT(p_playerwk->cddat1, CD_JUMP);
-    CLEAR_BIT(p_actwk->cddat1, cddatbit);
+    CLEAR_BIT(p_actwk->cddat1, plridebit);
   }
   else {
     short yposi = LONG_HIGH(p_actwk->yposi) - data.sprvs_air + data.sprvs_ground - p_playerwk->sprvsize;
@@ -227,38 +227,38 @@ static hitchk_results plhitchk_offset(sprite_status* p_actwk, sprite_status* p_p
   return results;
 }
 
-static hitchk_results plhitchk_offset_chk_coli(sprite_status* p_actwk, sprite_status* p_playerwk, hitchk_data data, unsigned char cddatbit) {
+static hitchk_results plhitchk_offset_chk_coli(sprite_status* p_actwk, sprite_status* p_playerwk, hitchk_data data, unsigned char plridebit) {
   short left_edge_distance = LONG_HIGH(p_playerwk->xposi) - LONG_HIGH(p_actwk->xposi) + data.sprhs;
   if (left_edge_distance < 0) {
-    return plhitchk_chk_push(p_actwk, p_playerwk, cddatbit);
+    return plhitchk_chk_push(p_actwk, p_playerwk, plridebit);
   }
   unsigned char width = data.sprhs * 2;
   if (left_edge_distance > width) { // unsigned
-    return plhitchk_chk_push(p_actwk, p_playerwk, cddatbit);
+    return plhitchk_chk_push(p_actwk, p_playerwk, plridebit);
   }
   hitchk_distances distances = { left_edge_distance, 0, 0, 0 };
   short yposi = LONG_HIGH(p_actwk->yposi) + data.sprvs_ground;
   distances.max_top = data.sprvs_air + p_playerwk->sprvsize;
   distances.max_top_coli = LONG_HIGH(p_playerwk->yposi) - yposi + 4 + distances.max_top;
   if (distances.max_top_coli < 0) {
-    return plhitchk_chk_push(p_actwk, p_playerwk, cddatbit);
+    return plhitchk_chk_push(p_actwk, p_playerwk, plridebit);
   }
   distances.min_bottom = distances.max_top * 2;
   if (distances.max_top_coli >= distances.min_bottom) { // unsigned
-    return plhitchk_chk_push(p_actwk, p_playerwk, cddatbit);
+    return plhitchk_chk_push(p_actwk, p_playerwk, plridebit);
   }
-  return plhitchk_chk_bounds(p_actwk, p_playerwk, data, distances, cddatbit);
+  return plhitchk_chk_bounds(p_actwk, p_playerwk, data, distances, plridebit);
 }
 
 
-static hitchk_results plhitchk_chk_slope_coli(sprite_status* p_actwk, sprite_status* p_playerwk, hitchk_data data, signed char* slope_heights, unsigned char cddatbit) {
+static hitchk_results plhitchk_chk_slope_coli(sprite_status* p_actwk, sprite_status* p_playerwk, hitchk_data data, signed char* slope_heights, unsigned char plridebit) {
   short left_edge_distance = p_playerwk->xposi - p_actwk->xposi + data.sprhs;
   if (left_edge_distance < 0) {
-    return plhitchk_chk_push(p_actwk, p_playerwk, cddatbit);
+    return plhitchk_chk_push(p_actwk, p_playerwk, plridebit);
   }
   unsigned char width = data.sprhs * 2;
   if (left_edge_distance > width) { // unsigned
-    return plhitchk_chk_push(p_actwk, p_playerwk, cddatbit);
+    return plhitchk_chk_push(p_actwk, p_playerwk, plridebit);
   }
   hitchk_distances distances = { left_edge_distance, 0, 0, 0 };
   short unknown_distance = distances.left_edge;
@@ -272,24 +272,24 @@ static hitchk_results plhitchk_chk_slope_coli(sprite_status* p_actwk, sprite_sta
   distances.max_top = data.sprvs_air + p_playerwk->sprvsize;
   distances.max_top_coli = LONG_HIGH(p_playerwk->yposi) - yposi + 4 + distances.max_top;
   if (distances.max_top_coli < 0) {
-    return plhitchk_chk_push(p_actwk, p_playerwk, cddatbit);
+    return plhitchk_chk_push(p_actwk, p_playerwk, plridebit);
   }
   distances.min_bottom = distances.max_top * 2;
   if (distances.max_top_coli >= distances.min_bottom) { // unsigned
-    return plhitchk_chk_push(p_actwk, p_playerwk, cddatbit);
+    return plhitchk_chk_push(p_actwk, p_playerwk, plridebit);
   }
-  return plhitchk_chk_bounds(p_actwk, p_playerwk, data, distances, cddatbit);
+  return plhitchk_chk_bounds(p_actwk, p_playerwk, data, distances, plridebit);
 }
 
 
-static hitchk_results plhitchk_chk_doubleslope_coli(sprite_status* p_actwk, sprite_status* p_playerwk, hitchk_data data, signed char* slope_heights, unsigned char cddatbit) {
+static hitchk_results plhitchk_chk_doubleslope_coli(sprite_status* p_actwk, sprite_status* p_playerwk, hitchk_data data, signed char* slope_heights, unsigned char plridebit) {
   short left_edge_distance = LONG_HIGH(p_playerwk->xposi) - LONG_HIGH(p_actwk->xposi) + data.sprhs;
   if (left_edge_distance < 0) {
-    return plhitchk_chk_push(p_actwk, p_playerwk, cddatbit);
+    return plhitchk_chk_push(p_actwk, p_playerwk, plridebit);
   }
   unsigned char width = data.sprhs * 2;
   if (left_edge_distance > width) { // unsigned
-    return plhitchk_chk_push(p_actwk, p_playerwk, cddatbit);
+    return plhitchk_chk_push(p_actwk, p_playerwk, plridebit);
   }
   hitchk_distances distances = { left_edge_distance, 0, 0, 0 };
   short unknown_distance = distances.left_edge;
@@ -301,30 +301,30 @@ static hitchk_results plhitchk_chk_doubleslope_coli(sprite_status* p_actwk, spri
   short yposi = LONG_HIGH(p_actwk->yposi) - slope_heights[unknown_distance];
   distances.max_top_coli = LONG_HIGH(p_playerwk->yposi) - yposi + p_playerwk->sprvsize + 4;
   if (distances.max_top_coli < 0) {
-    return plhitchk_chk_push(p_actwk, p_playerwk, cddatbit);
+    return plhitchk_chk_push(p_actwk, p_playerwk, plridebit);
   }
   distances.max_top = slope_heights[unknown_distance + 1] + p_playerwk->sprvsize;
   distances.min_bottom = distances.max_top + p_playerwk->sprvsize;
   if (distances.max_top_coli >= util__to_unsigned(distances.min_bottom)) { // unsigned
-    return plhitchk_chk_push(p_actwk, p_playerwk, cddatbit);
+    return plhitchk_chk_push(p_actwk, p_playerwk, plridebit);
   }
-  return plhitchk_chk_bounds(p_actwk, p_playerwk, data, distances, cddatbit);
+  return plhitchk_chk_bounds(p_actwk, p_playerwk, data, distances, plridebit);
 }
 
 
-static hitchk_results plhitchk_chk_coli(sprite_status* p_actwk, sprite_status* p_playerwk, hitchk_data data, unsigned char cddatbit) {
+static hitchk_results plhitchk_chk_coli(sprite_status* p_actwk, sprite_status* p_playerwk, hitchk_data data, unsigned char plridebit) {
   if (!IS_ONSCREEN(p_actwk->actflg)) {
-    return plhitchk_chk_push(p_actwk, p_playerwk, cddatbit);
+    return plhitchk_chk_push(p_actwk, p_playerwk, plridebit);
   }
-  return plhitchk_chk_coli2(p_actwk, p_playerwk, data, cddatbit);
+  return plhitchk_chk_coli2(p_actwk, p_playerwk, data, plridebit);
 }
 
 
-hitchk_results plhitchk_chk_coli2(sprite_status* p_actwk, sprite_status* p_playerwk, hitchk_data data, unsigned char cddatbit) {
+hitchk_results plhitchk_chk_coli2(sprite_status* p_actwk, sprite_status* p_playerwk, hitchk_data data, unsigned char plridebit) {
   short left_edge_distance = LONG_HIGH(p_playerwk->xposi) - LONG_HIGH(p_actwk->xposi) + data.sprhs;
   unsigned char width = data.sprhs * 2;
   if (util__to_unsigned(left_edge_distance) > width) { // unsigned
-    return plhitchk_chk_push(p_actwk, p_playerwk, cddatbit);
+    return plhitchk_chk_push(p_actwk, p_playerwk, plridebit);
   }
   hitchk_distances distances = { left_edge_distance, 0, 0, 0 };
   unsigned char min_bottom_distance = 0;
@@ -336,7 +336,7 @@ hitchk_results plhitchk_chk_coli2(sprite_status* p_actwk, sprite_status* p_playe
     distances.max_top_coli %= 4096;
     distances.min_bottom = p_playerwk->actfree.player.height + data.sprvs_air + distances.max_top;
     if (util__to_unsigned(distances.max_top_coli) >= util__to_unsigned(distances.min_bottom)) { // unsigned
-      return plhitchk_chk_push(p_actwk, p_playerwk, cddatbit);
+      return plhitchk_chk_push(p_actwk, p_playerwk, plridebit);
     }
   }
   else {
@@ -346,16 +346,16 @@ hitchk_results plhitchk_chk_coli2(sprite_status* p_actwk, sprite_status* p_playe
     distances.max_top_coli %= 4096;
     distances.min_bottom = p_playerwk->actfree.player.height + data.sprvs_air + distances.max_top;
     if (util__to_unsigned(distances.max_top_coli) >= util__to_unsigned(distances.min_bottom)) { // unsigned
-      return plhitchk_chk_push(p_actwk, p_playerwk, cddatbit);
+      return plhitchk_chk_push(p_actwk, p_playerwk, plridebit);
     }
   }
-  return plhitchk_chk_bounds(p_actwk, p_playerwk, data, distances, cddatbit);
+  return plhitchk_chk_bounds(p_actwk, p_playerwk, data, distances, plridebit);
 }
 
 
-static hitchk_results plhitchk_chk_bounds(sprite_status* p_actwk, sprite_status* p_playerwk, hitchk_data data, hitchk_distances distances, unsigned char cddatbit) {
+static hitchk_results plhitchk_chk_bounds(sprite_status* p_actwk, sprite_status* p_playerwk, hitchk_data data, hitchk_distances distances, unsigned char plridebit) {
   if (BIT_7_IS_SET(p_actwk->actfree.player.control_bitfield)) {
-    return plhitchk_chk_push(p_actwk, p_playerwk, cddatbit);
+    return plhitchk_chk_push(p_actwk, p_playerwk, plridebit);
   }
   if (p_playerwk->r_no >= 6 || edit_r_no != 0) { // unsigned
     return plhitchk_no_coli(p_actwk);
@@ -378,13 +378,13 @@ static hitchk_results plhitchk_chk_bounds(sprite_status* p_actwk, sprite_status*
     edge_distances.abs_vertical = -edge_distances.abs_vertical;
   }
   if (edge_distances.abs_horizontal > edge_distances.abs_vertical || edge_distances.abs_vertical <= 4) { // unsigned
-    plhitchk_chk_planes(p_actwk, p_playerwk, edge_distances, cddatbit);
+    plhitchk_chk_planes(p_actwk, p_playerwk, edge_distances, plridebit);
   }
-  return plhitchk_chk_sides(p_actwk, p_playerwk, edge_distances, cddatbit);
+  return plhitchk_chk_sides(p_actwk, p_playerwk, edge_distances, plridebit);
 }
 
 
-static hitchk_results plhitchk_chk_sides(sprite_status* p_actwk, sprite_status* p_playerwk, hitchk_edge_distances edge_distances, unsigned char cddatbit) {
+static hitchk_results plhitchk_chk_sides(sprite_status* p_actwk, sprite_status* p_playerwk, hitchk_edge_distances edge_distances, unsigned char plridebit) {
   if (edge_distances.horizontal != 0) {
     bool stop = false;
     if (edge_distances.horizontal >= 0) {
@@ -408,34 +408,34 @@ static hitchk_results plhitchk_chk_sides(sprite_status* p_actwk, sprite_status* 
   p_playerwk->xposi -= SHORT_TO_LONG_HIGH(edge_distances.horizontal);
   hitchk_results results = { 0, 0 };
   if (!BIT_IS_SET(p_playerwk->cddat1, CD_JUMP)) {
-    SET_BIT(p_actwk->cddat1, cddatbit + 2);
+    SET_BIT(p_actwk->cddat1, plridebit + 2);
     SET_BIT(p_playerwk->cddat1, CD_PUSH);
-    SET_BIT(results.plcoli, cddatbit - 3);
+    SET_BIT(results.plcoli, plridebit - 3);
     results.colitype = 1;
   }
   else {
-    plhitchk_clear_push(p_actwk, p_playerwk, cddatbit);
-    SET_BIT(results.plcoli, cddatbit - 3);
+    plhitchk_clear_push(p_actwk, p_playerwk, plridebit);
+    SET_BIT(results.plcoli, plridebit - 3);
     results.colitype = 1;
   }
   return results;
 }
 
 
-static hitchk_results plhitchk_chk_push(sprite_status* p_actwk, sprite_status* p_playerwk, unsigned char cddatbit) {
-  if (!BIT_IS_SET(p_actwk->cddat1, cddatbit + 2)) {
+static hitchk_results plhitchk_chk_push(sprite_status* p_actwk, sprite_status* p_playerwk, unsigned char plridebit) {
+  if (!BIT_IS_SET(p_actwk->cddat1, plridebit + 2)) {
     return plhitchk_no_coli(p_actwk);
   }
   if (p_playerwk->mstno != 2 && p_playerwk->mstno != 9) {
     p_playerwk->mstno = 0;
     p_playerwk->restart = 1;
   }
-  return plhitchk_clear_push(p_actwk, p_playerwk, cddatbit);
+  return plhitchk_clear_push(p_actwk, p_playerwk, plridebit);
 }
 
 
-static hitchk_results plhitchk_clear_push(sprite_status* p_actwk, sprite_status* p_playerwk, unsigned char cddatbit) {
-  CLEAR_BIT(p_actwk->cddat1, cddatbit + 2);
+static hitchk_results plhitchk_clear_push(sprite_status* p_actwk, sprite_status* p_playerwk, unsigned char plridebit) {
+  CLEAR_BIT(p_actwk->cddat1, plridebit + 2);
   CLEAR_BIT(p_playerwk->cddat1, CD_PUSH);
   return plhitchk_no_coli(p_actwk);
 }
@@ -447,65 +447,65 @@ static hitchk_results plhitchk_no_coli(sprite_status* p_actwk) {
 }
 
 
-static hitchk_results plhitchk_chk_planes(sprite_status* p_actwk, sprite_status* p_playerwk, hitchk_edge_distances edge_distances, unsigned char cddatbit) {
+static hitchk_results plhitchk_chk_planes(sprite_status* p_actwk, sprite_status* p_playerwk, hitchk_edge_distances edge_distances, unsigned char plridebit) {
   if (edge_distances.vertical >= 0) {
     if (util__to_unsigned(edge_distances.vertical) < 16) { // unsigned
-      return plhitchk_pop_up(p_actwk, p_playerwk, edge_distances, cddatbit);
+      return plhitchk_pop_up(p_actwk, p_playerwk, edge_distances, plridebit);
     }
-    return plhitchk_chk_push(p_actwk, p_playerwk, cddatbit);
+    return plhitchk_chk_push(p_actwk, p_playerwk, plridebit);
   }
   if (!BIT_IS_SET(p_playerwk->cddat1, CD_JUMP)) {
     if (p_playerwk->yspeed == 0) {
-      return plhitchk_crush(p_actwk, p_playerwk, edge_distances, cddatbit);
+      return plhitchk_crush(p_actwk, p_playerwk, edge_distances, plridebit);
     }
     if (p_playerwk->yspeed >= 0 || edge_distances.vertical >= 0) {
-      return plhitchk_no_pop(p_actwk, p_playerwk, edge_distances, cddatbit);
+      return plhitchk_no_pop(p_actwk, p_playerwk, edge_distances, plridebit);
     }
   }
   else {
     p_playerwk->mspeed = 0;
   }
-  return plhitchk_pop_down(p_actwk, p_playerwk, edge_distances, cddatbit);
+  return plhitchk_pop_down(p_actwk, p_playerwk, edge_distances, plridebit);
 }
 
 
-static hitchk_results plhitchk_pop_down(sprite_status* p_actwk, sprite_status* p_playerwk, hitchk_edge_distances edge_distances, unsigned char cddatbit) {
+static hitchk_results plhitchk_pop_down(sprite_status* p_actwk, sprite_status* p_playerwk, hitchk_edge_distances edge_distances, unsigned char plridebit) {
   if (reverse_gravity_flag != 0) {
     edge_distances.vertical = -edge_distances.vertical;
   }
   p_playerwk->yposi -= SHORT_TO_LONG_HIGH(edge_distances.vertical);
   p_playerwk->yspeed = 0;
-  return plhitchk_no_pop(p_actwk, p_playerwk, edge_distances, cddatbit);
+  return plhitchk_no_pop(p_actwk, p_playerwk, edge_distances, plridebit);
 }
 
 
-static hitchk_results plhitchk_no_pop(sprite_status* p_actwk, sprite_status* p_playerwk, hitchk_edge_distances edge_distances, unsigned char cddatbit) {
+static hitchk_results plhitchk_no_pop(sprite_status* p_actwk, sprite_status* p_playerwk, hitchk_edge_distances edge_distances, unsigned char plridebit) {
   if (BIT_7_IS_SET(p_playerwk->actfree.player.eventflag)) {
     SET_BIT_5(p_playerwk->actfree.player.eventflag);
   }
   hitchk_results results = { 0, 0 };
-  SET_BIT(results.plcoli, cddatbit - 1);
+  SET_BIT(results.plcoli, plridebit - 1);
   results.colitype = -2;
   return results;
 }
 
 
-static hitchk_results plhitchk_crush(sprite_status* p_actwk, sprite_status* p_playerwk, hitchk_edge_distances edge_distances, unsigned char cddatbit) {
+static hitchk_results plhitchk_crush(sprite_status* p_actwk, sprite_status* p_playerwk, hitchk_edge_distances edge_distances, unsigned char plridebit) {
   if (BIT_IS_SET(p_playerwk->cddat1, CD_JUMP)) {
-    return plhitchk_no_pop(p_actwk, p_playerwk, edge_distances, cddatbit);
+    return plhitchk_no_pop(p_actwk, p_playerwk, edge_distances, plridebit);
   }
   if (edge_distances.abs_horizontal < 16) { // unsigned
-    return plhitchk_chk_sides(p_actwk, p_playerwk, edge_distances, cddatbit);
+    return plhitchk_chk_sides(p_actwk, p_playerwk, edge_distances, plridebit);
   }
   playdieset(p_playerwk, 0);
   hitchk_results results = { 0, 0 };
-  SET_BIT(results.plcoli, cddatbit - 1);
+  SET_BIT(results.plcoli, plridebit - 1);
   results.colitype = -2;
   return results;
 }
 
 
-static hitchk_results plhitchk_pop_up(sprite_status* p_actwk, sprite_status* p_playerwk, hitchk_edge_distances edge_distances, unsigned char cddatbit) {
+static hitchk_results plhitchk_pop_up(sprite_status* p_actwk, sprite_status* p_playerwk, hitchk_edge_distances edge_distances, unsigned char plridebit) {
   hitchk_results results = { 0, 0 };
   edge_distances.vertical -= 4;
   unsigned char width = p_actwk->sprhs * 2;
@@ -519,7 +519,7 @@ static hitchk_results plhitchk_pop_up(sprite_status* p_actwk, sprite_status* p_p
     p_playerwk->yposi -= SHORT_TO_LONG_HIGH(edge_distances.vertical);
     if (p_playerwk->yspeed >= 0) {
       RideObject_SetRide(p_actwk, p_playerwk);
-      SET_BIT(results.plcoli, cddatbit + 1);
+      SET_BIT(results.plcoli, plridebit + 1);
       results.colitype = -1;
       return results;
     }
