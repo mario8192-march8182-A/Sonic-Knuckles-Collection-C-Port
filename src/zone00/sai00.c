@@ -197,6 +197,7 @@ static void chk_max_speed(sprite_status* p_actwk) {
 
 static void set_spd_pt(sprite_status* p_actwk) {
   unsigned char patno = 0;
+  bool set_kemuri = false;
   if (BIT_3_IS_SET(p_actwk->actfree.sai00.status_bitfield)) {
     // move_right
     if (BIT_2_IS_SET(p_actwk->actfree.sai00.status_bitfield)) {
@@ -208,7 +209,9 @@ static void set_spd_pt(sprite_status* p_actwk) {
         patno = 2;
         bool bit_1_set = BIT_1_IS_SET(p_actwk->actfree.sai00.status_bitfield);
         SET_BIT_1(p_actwk->actfree.sai00.status_bitfield);
-        if (!bit_1_set) goto set_kemuri;
+        if (!bit_1_set) {
+          set_kemuri = true;
+        }
       }
     }
   }
@@ -224,20 +227,20 @@ static void set_spd_pt(sprite_status* p_actwk) {
           patno = 2;
           bool bit_1_set = BIT_1_IS_SET(p_actwk->actfree.sai00.status_bitfield);
           SET_BIT_1(p_actwk->actfree.sai00.status_bitfield);
-          if (!bit_1_set) goto set_kemuri;
+          if (!bit_1_set) {
+            set_kemuri = true;
+          }
         }
       }
     }
   }
   p_actwk->patno = patno;
-  return;
-
-set_kemuri:
-  p_actwk->patno = patno;
-  soundset(72);
-  sprite_status* p_new_actwk = set_act00(p_actwk, &sai00_kemuri_set_tbl0);
-  if (p_new_actwk != 0) {
-    p_new_actwk->actfree.sai00_kemuri.pg_data_ptr = sai00_pg01;
+  if (set_kemuri) {
+    soundset(72);
+    sprite_status* p_new_actwk = set_act00(p_actwk, &sai00_kemuri_set_tbl0);
+    if (p_new_actwk != 0) {
+      p_new_actwk->actfree.sai00_kemuri.pg_data_ptr = sai00_pg01;
+    }
   }
 }
 
