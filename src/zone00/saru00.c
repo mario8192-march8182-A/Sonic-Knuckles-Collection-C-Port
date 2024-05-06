@@ -107,29 +107,35 @@ static void saru00_move_init(sprite_status* p_actwk) {
 static void saru00_move(sprite_status* p_actwk) {
   int ret = time_pg(p_actwk, p_actwk->actfree.saru00.pg_data_ptr);
   if (ret == 0) return;
+  bool goto_wait = false;
   if (!BIT_2_IS_SET(p_actwk->actfree.saru00.status_bitfield)) {
     if (p_actwk->patno != 0) return;
     p_actwk->yposi += SHORT_TO_LONG_HIGH(8);
     --p_actwk->actfree.saru00.wait_countdown;
-    if (p_actwk->actfree.saru00.wait_countdown == 1) goto goto_wait;
+    if (p_actwk->actfree.saru00.wait_countdown == 1) {
+      goto_wait = true;
+    }
   }
   else {
     if (p_actwk->patno != 2) return;
     --p_actwk->actfree.saru00.wait_countdown;
-    if (p_actwk->actfree.saru00.wait_countdown == 0) goto goto_wait;
-    p_actwk->yposi -= SHORT_TO_LONG_HIGH(8);
+    if (p_actwk->actfree.saru00.wait_countdown == 0) {
+      goto_wait = true;
+    }
+    else {
+      p_actwk->yposi -= SHORT_TO_LONG_HIGH(8);
+    }
   }
-  return;
-
-goto_wait:
-  p_actwk->r_no = 2;
-  p_actwk->actfree.saru00.wait_countdown = p_actwk->userflag1;
-  TOGGLE_BIT_2(p_actwk->actfree.saru00.status_bitfield);
-  p_actwk->actfree.saru00.timer = 59;
-  p_actwk->actfree.saru00.pg_data_ptr = saru00_pg00;
-  p_actwk->patno = 0;
-  p_actwk->patcnt = 0;
-  p_actwk->pattim = 0;
+  if (goto_wait) {
+    p_actwk->r_no = 2;
+    p_actwk->actfree.saru00.wait_countdown = p_actwk->userflag1;
+    TOGGLE_BIT_2(p_actwk->actfree.saru00.status_bitfield);
+    p_actwk->actfree.saru00.timer = 59;
+    p_actwk->actfree.saru00.pg_data_ptr = saru00_pg00;
+    p_actwk->patno = 0;
+    p_actwk->patcnt = 0;
+    p_actwk->pattim = 0;
+  }
 }
 
 
