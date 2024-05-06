@@ -510,13 +510,21 @@ void Clear_SpriteRingMem() {
   sprite_status* p_actwk = &actwk[ACTWK_DYNAMIC_START];
   short cnt = ACTWK_RESERVED_START - ACTWK_DYNAMIC_START - 1;
 
+  /* BUGFIX
+    The first thing the original loop's code does is increment p_actwk.
+    As a result:
+    - the first dynamic sprite is skipped
+    - the first reserved sprite is cleared
+    This is fixed by incrementing p_actwk at the end of the loop.
+  */
+
   do {
-    ++p_actwk;
     if (p_actwk->r_ptr != 0) {
       if (p_actwk->actfree.dynamic.flagwork_index != 0) {
         CLEAR_BIT_7(flagwork[p_actwk->actfree.dynamic.flagwork_index - 1]);
       }
     }
+    ++p_actwk;
     --cnt;
   } while (cnt != -1);
 
