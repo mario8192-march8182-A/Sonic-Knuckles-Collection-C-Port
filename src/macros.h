@@ -63,6 +63,16 @@
 #define IS_ONSCREEN(value) (BIT_7_IS_SET(value))
 
 
+// player cddat2 bits
+
+#define SET_BARIA(value) SET_BIT_0(value)
+#define SET_MUTEKI(value) SET_BIT_1(value)
+#define SET_SPEEDUP(value) SET_BIT_2(value)
+#define SET_FLAME_BARIA(value) SET_BIT_4(value)
+#define SET_THUNDER_BARIA(value) SET_BIT_5(value)
+#define SET_AQUA_BARIA(value) SET_BIT_6(value)
+
+
 #define SPRITE_STATUS_UCHAR(pointer, offset) ((unsigned char*)pointer)[offset]
 #define SPRITE_STATUS_SCHAR(pointer, offset) ((signed char*)pointer)[offset]
 #define SPRITE_STATUS_USHORT(pointer, offset) ((unsigned short*)pointer)[offset / 2]

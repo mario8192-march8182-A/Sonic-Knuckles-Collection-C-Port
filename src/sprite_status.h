@@ -77,18 +77,19 @@ typedef struct sprite_status {
       unsigned char flip_rev_frame_cnt;
       unsigned short hlock_timer;
       unsigned char invulnerability_timer;
-      unsigned char reserved1[2];
+      unsigned char muteki_timer;
+      unsigned char speedup_timer;
       unsigned char eventflag;
       character_id character;
-      unsigned char reserved2[4];
+      unsigned char reserved1[4];
       unsigned char roll_status;
-      unsigned char reserved3[2];
+      unsigned char reserved2[2];
       unsigned char jump_status;
-      unsigned char reserved4[3];
+      unsigned char reserved3[3];
       unsigned char height;
-      unsigned char reserved5[1];
+      unsigned char reserved4[1];
       block_coli_bits colibits;
-      unsigned char reserved6[2];
+      unsigned char reserved5[2];
     } player;
     struct {
       short timer;
@@ -157,6 +158,14 @@ typedef struct sprite_status {
       unsigned char counter;
       unsigned char reserved2[17];
     } hana00;
+    struct {
+      unsigned char reserved1[14];
+      unsigned char unknown;
+      unsigned char reserved2[5];
+      unsigned short player;
+      unsigned char reserved3[4];
+      unsigned short flagwork_index;
+    } item;
     struct {
       unsigned char reserved1[10];
       unsigned char status_bitfield;

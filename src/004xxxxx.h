@@ -4,6 +4,7 @@
 #include <stdbool.h>
 
 void PlaySoundRegister(long id);
+void SpeedUpMusic(long tempo);
 void Copy_Data_To_VRAM(unsigned char* source, unsigned short destination, unsigned short words);
 void Load_PLC(sprite_status* p_actwk, unsigned short id);
 void Load_PLC_Raw(sprite_status* p_actwk, cg_data* p_data);
@@ -36,6 +37,7 @@ void Player_TouchFloor(sprite_status* p_actwk);
 short ObjCheckFloorDist(sprite_status* p_actwk);
 short ObjCheckFloorDist2(sprite_status* p_actwk, short xposi);
 short RingCheckFloorDist(sprite_status* p_actwk);
+short ObjCheckCeilingDist(sprite_status* p_actwk);
 short RingCheckFloorDist_ReverseGravity(sprite_status* p_actwk);
 
 #endif

@@ -13,6 +13,12 @@ void PlaySoundRegister(long id) {
 }
 
 
+// SONIC3K.EXE address: 0040b72b
+void SpeedUpMusic(long tempo) {
+  // TODO
+}
+
+
 // SONIC3K.EXE address: 00410426
 // skdisasm label: Add_To_DMA_Queue
 void Copy_Data_To_VRAM(unsigned char* source, unsigned short destination, unsigned short words) {
@@ -553,6 +559,13 @@ short ObjCheckFloorDist2(sprite_status* p_actwk, short xposi) {
 // SONIC3K.EXE address: 004511b2
 // skdisasm label: RingCheckFloorDist
 short RingCheckFloorDist(sprite_status* p_actwk) {
+  // TODO
+}
+
+
+// SONIC3K.EXE address: 00451a95
+// skdisasm label: ObjCheckCeilingDist
+short ObjCheckCeilingDist(sprite_status* p_actwk) {
   // TODO
 }
 
