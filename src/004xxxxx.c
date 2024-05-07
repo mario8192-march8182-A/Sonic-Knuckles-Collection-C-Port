@@ -273,6 +273,20 @@ void frameoutchk2(sprite_status* p_actwk, short xposi) {
 }
 
 
+// SONIC3K.EXE address: 00421c50
+// skdisasm label: Delete_Sprite_If_Not_In_Range
+void frameoutchk3(sprite_status* p_actwk) {
+  unsigned short scr_xposi = util__to_unsigned(p_actwk->xposi) & 0xFF80;
+  scr_xposi -= scr_x_no;
+  if (scr_xposi > 640) { // unsigned
+    if (p_actwk->actfree.dynamic.flagwork_index != 0) {
+      CLEAR_BIT_7(flagwork[p_actwk->actfree.dynamic.flagwork_index - 1]);
+    }
+    frameout(p_actwk);
+  }
+}
+
+
 // SONIC3K.EXE address: 00421e38
 // skdisasm label: Sprite_CheckDeleteTouch3
 void frameoutchkc(sprite_status* p_actwk, short xposi) {
@@ -546,6 +560,13 @@ void Clear_SpriteRingMem() {
 // SONIC3K.EXE address: 004380ba
 // skdisasm label: Player_TouchFloor
 void Player_TouchFloor(sprite_status* p_actwk) {
+  // TODO
+}
+
+
+// SONIC3K.EXE address: 00439f69
+// skdisasm label: Perform_Player_DPLC
+void Perform_Player_DPLC(sprite_status* p_playerwk, unsigned char patno) {
   // TODO
 }
 

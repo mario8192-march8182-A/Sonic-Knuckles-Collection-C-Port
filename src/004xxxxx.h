@@ -22,6 +22,7 @@ void actionsub(sprite_status* p_actwk);
 void patchg(sprite_status* p_actwk, signed char** p_chg_data);
 void frameoutchk(sprite_status* p_actwk);
 void frameoutchk2(sprite_status* p_actwk, short xposi);
+void frameoutchk3(sprite_status* p_actwk);
 void frameoutchkc(sprite_status* p_actwk, short xposi);
 bool playdamageset(sprite_status* p_playerwk, sprite_status* p_attack_actwk);
 bool playdieset(sprite_status* p_actwk, long sound_id);
@@ -34,6 +35,7 @@ bool Create_New_Sprite3(sprite_status* p_actwk, sprite_status** pp_new_actwk, sh
 bool Create_New_Sprite_Int(sprite_status** pp_new_actwk, short* p_slot_cnt);
 void Clear_SpriteRingMem();
 void Player_TouchFloor(sprite_status* p_actwk);
+void Perform_Player_DPLC(sprite_status* p_playerwk, unsigned char patno);
 short ObjCheckFloorDist(sprite_status* p_actwk);
 short ObjCheckFloorDist2(sprite_status* p_actwk, short xposi);
 short RingCheckFloorDist(sprite_status* p_actwk);

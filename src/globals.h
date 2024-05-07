@@ -15,6 +15,8 @@ extern unsigned short colibuffer[COLBUFFER_SLOTS];
 extern short ringwk[RINGWK_SLOTS];
 extern unsigned char flagwork[FLAGWORK_SLOTS];
 extern short scralim_n_down;
+extern short scralim_left;
+extern short scralim_right;
 extern short scralim_down;
 extern unsigned char scr_resize_no;
 extern zone_act stageno_i;

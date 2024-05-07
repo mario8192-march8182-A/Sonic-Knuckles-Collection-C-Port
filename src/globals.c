@@ -11,6 +11,8 @@ unsigned short colibuffer[COLBUFFER_SLOTS];
 short ringwk[RINGWK_SLOTS];
 unsigned char flagwork[FLAGWORK_SLOTS];
 short scralim_n_down;
+short scralim_left;
+short scralim_right;
 short scralim_down;
 unsigned char scr_resize_no;
 zone_act stageno_i;

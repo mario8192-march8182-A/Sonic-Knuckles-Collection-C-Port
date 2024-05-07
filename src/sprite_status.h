@@ -303,6 +303,12 @@ typedef struct sprite_status {
       unsigned short oya;
     } title_part;
     struct {
+      long pldir_counter;
+      long pl2dir_counter;
+      short countdown;
+      unsigned char reserved1[16];
+    } tloop;
+    struct {
       unsigned char reserved1[2];
       short orig_xposi;
       short orig_yposi;
