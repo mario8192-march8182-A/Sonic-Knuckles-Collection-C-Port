@@ -1,0 +1,13 @@
+void break_(sprite_status* p_actwk);
+void break2(sprite_status* p_actwk);
+signed char* break000pat[4];
+signed char* break001pat[4];
+signed char* break060pat[3];
+signed char* break061pat[3];
+signed char* break010pat[12];
+signed char* break020pat[9];
+signed char* break050pat[6];
+signed char* break091pat[3];
+signed char* break093pat[3];
+signed char* break041pat[3];
+signed char* break081pat[3];

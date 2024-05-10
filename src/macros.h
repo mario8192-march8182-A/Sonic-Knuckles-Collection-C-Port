@@ -49,6 +49,7 @@
 #define SET_HFLIP(value) (SET_BIT_0(value))
 #define SET_VFLIP(value) (SET_BIT_1(value))
 #define SET_USE_LEVEL_COORDS(value) (SET_BIT_2(value))
+#define SET_STATIC_PATTERN(value) (SET_BIT_5(value))
 #define SET_ONSCREEN(value) (SET_BIT_7(value))
 
 #define CLEAR_HFLIP(value) (CLEAR_BIT_0(value))

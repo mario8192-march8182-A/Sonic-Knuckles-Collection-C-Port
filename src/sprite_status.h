@@ -125,6 +125,19 @@ typedef struct sprite_status {
       unsigned short oya;
     } actclear_part;
     struct {
+      unsigned char reserved1[2];
+      unsigned char* breakgo_data1;
+      unsigned char* breakgo_data2;
+      unsigned char countdown;
+      unsigned char reserved2[1];
+      unsigned char break_flag;
+      unsigned char reserved3[1];
+      unsigned char* breakmove_data;
+      unsigned char level_trigger_no;
+      unsigned char reserved4[7];
+      unsigned short flagwork_index;
+    } break_;
+    struct {
       short move_countdown;
       unsigned char reserved1[14];
       short yspeed;
