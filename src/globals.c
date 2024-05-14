@@ -39,6 +39,7 @@ unsigned char bossstart;
 unsigned char soz_darkness_level;
 unsigned char reverse_gravity_flag;
 unsigned char pl2_lock_flag;
+unsigned short emyscorecnt;
 unsigned short timebonus;
 unsigned short ringbonus;
 unsigned short scr_x_no;

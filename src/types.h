@@ -25,6 +25,7 @@ typedef struct hitchk_distances hitchk_distances;
 typedef struct hitchk_edge_distances hitchk_edge_distances;
 typedef struct hitchk_results hitchk_results;
 typedef struct block_coli_bits block_coli_bits;
+typedef struct iwabreak_data iwabreak_data;
 
 typedef struct set_act05_data {
   short cnt;
@@ -210,5 +211,11 @@ typedef struct block_coli_bits {
   unsigned char not_top_bit;
 }
 block_coli_bits;
+
+typedef struct iwabreak_data {
+  unsigned short cnt;
+  signed char data[];
+}
+iwabreak_data;
 
 #endif

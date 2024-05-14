@@ -43,6 +43,7 @@ extern unsigned char bossstart;
 extern unsigned char soz_darkness_level;
 extern unsigned char reverse_gravity_flag;
 extern unsigned char pl2_lock_flag;
+extern unsigned short emyscorecnt;
 extern unsigned short timebonus;
 extern unsigned short ringbonus;
 extern unsigned short scr_x_no;

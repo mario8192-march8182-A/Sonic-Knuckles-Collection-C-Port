@@ -180,6 +180,23 @@ typedef struct sprite_status {
       unsigned short flagwork_index;
     } item;
     struct {
+      short orig_xposi;
+      short plspeed;
+      unsigned char plmstno;
+      unsigned char pl2mstno;
+      unsigned char reserved1[2];
+      short pl2speed;
+      unsigned short emyscorecnt;
+      unsigned char plcddat1;
+      unsigned char pl2cddat1;
+      unsigned char patno_part;
+      unsigned char reserved2[3];
+      short countdown;
+      short countdown2;
+      sprite_status_handler parent_r_ptr;
+      unsigned short flagwork_index;
+    } iwa;
+    struct {
       unsigned char reserved1[10];
       unsigned char status_bitfield;
       unsigned char reserved2[13];
