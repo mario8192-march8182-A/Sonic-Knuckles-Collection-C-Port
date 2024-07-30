@@ -1,6 +1,7 @@
 #include <windows.h>
 #include <commctrl.h>
 #include <mbstring.h>
+#include "imidi.h"
 #include "classes\cfile.h"
 #include "classes\cgame.h"
 #include "classes\cgraphics.h"
@@ -46,7 +47,7 @@ void initControls();
 };
 /* 0082bb40 */ HRESULT(*g_pDdrawCreate)(GUID*, LPDIRECTDRAW*, IUnknown*) = 0;
 /* 0082c868 */ HMODULE g_hMusicDll = 0;
-/* 0082c86c */ FARPROC g_pMidiInterface = 0;
+/* 0082c86c */ IMidi* g_pMidiInterface = 0;
 /* 0082c870 */ HRESULT(*g_pDSoundCreate)(GUID*, LPDIRECTSOUND*, LPUNKNOWN*) = 0;
 /* 0082ed48 */ int g_defaultKbKeys[2][5] = {
   {
@@ -297,7 +298,7 @@ void initSound(HWND hWnd) {
     }
   }
   if (g_hMusicDll != 0) {
-    FARPROC pGetMidiInterface = GetProcAddress(g_hMusicDll, "GetMidiInterface");
+    IMidi*(*pGetMidiInterface)() = (IMidi*(*)())GetProcAddress(g_hMusicDll, "GetMidiInterface");
     if (pGetMidiInterface != 0) {
       g_pMidiInterface = (*pGetMidiInterface)();
     }
@@ -316,7 +317,7 @@ void initSound(HWND hWnd) {
 // 0040b5bb
 void initMidiInterface(HWND hWnd) {
   if (g_pMidiInterface != 0) {
-    (*g_pMidiInterface)(hWnd);
+    g_pMidiInterface->init(hWnd);
   }
 }
 
