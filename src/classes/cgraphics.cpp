@@ -4,8 +4,22 @@
 #include <mbstring.h>
 #include "cgraphics.h"
 
+extern char* g_pausedText[4];
 extern HRESULT(*g_pDdrawCreate)(GUID*, LPDIRECTDRAW*, IUnknown*);
 extern int g_useModeX;
+extern int g_langMode;
+
+
+// 00404330
+BOOL CGraphics::getUnknown2168() {
+  return m_bUnknown2168;
+}
+
+
+// 00404370
+ULONG CGraphics::getVideoMode() {
+  return m_videoMode;
+}
 
 
 // 0040656c
@@ -38,18 +52,18 @@ CGraphics::CGraphics() {
   }
   m_unknown80 = 768;
   m_unknown82 = 256;
-  memset(m_paletteEntries, 0, sizeof(m_paletteEntries));
+  memset(m_palette, 0, sizeof(m_palette));
   if (m_bPaletteSupport) {
-    GetSystemPaletteEntries(hDc, 0, 256, m_paletteEntries);
+    GetSystemPaletteEntries(hDc, 0, 256, m_palette);
   }
   for (int i = 0; i < 10; ++i) {
-    m_paletteEntries[i].peFlags = 0;
+    m_palette[i].peFlags = 0;
   }
   for (int i = 10; i < 246; ++i) {
-    m_paletteEntries[i].peFlags = PC_NOCOLLAPSE;
+    m_palette[i].peFlags = PC_NOCOLLAPSE;
   }
   for (int i = 246; i < 256; ++i) {
-    m_paletteEntries[i].peFlags = 0;
+    m_palette[i].peFlags = 0;
   }
   ReleaseDC(0, hDc);
 
@@ -65,6 +79,41 @@ CGraphics::~CGraphics() {
   resetVideo();
   if (m_hDdraw != 0) {
     FreeLibrary(m_hDdraw);
+  }
+}
+
+
+// 004067d9
+BOOL CGraphics::canCreateDdrawInstance() {
+  if (g_pDdrawCreate == 0) {
+    return FALSE;
+  }
+
+  return TRUE;
+}
+
+
+// 00406808
+BOOL CGraphics::stubbedMethod() {
+  return TRUE;
+}
+
+
+// 00406899
+void CGraphics::updatePalette() {
+  if (memcmp(m_colorwk, m_colorwk3, 256) != 0) {
+    memcpy(m_colorwk, m_colorwk3, 256);
+    if (updateDevicePalette(m_colorwk, 16, 64) != 0) {
+      showMessage();
+      return;
+    }
+  }
+
+  if (memcmp(m_colorwk2, m_colorwk4, 256) != 0) {
+    memcpy(m_colorwk2, m_colorwk4, 256);
+    if (updateDevicePalette(m_colorwk2, 144, 64) != 0) {
+      showMessage();
+    }
   }
 }
 
@@ -127,13 +176,13 @@ retry:
     memcpy(pBitmapInfo, &m_bitmapInfoHeader, sizeof(m_bitmapInfoHeader));
 
     for (int i = 0; i < 256; ++i) {
-      pRgbQuad[i].rgbBlue = m_paletteEntries[i].peBlue;
-      pRgbQuad[i].rgbGreen = m_paletteEntries[i].peGreen;
-      pRgbQuad[i].rgbRed = m_paletteEntries[i].peRed;
+      pRgbQuad[i].rgbBlue = m_palette[i].peBlue;
+      pRgbQuad[i].rgbGreen = m_palette[i].peGreen;
+      pRgbQuad[i].rgbRed = m_palette[i].peRed;
     }
 
     HDC hDc = GetDC(0);
-    m_hBitmap = CreateDIBSection(hDc, pBitmapInfo, 0, &m_pDibBitValues, 0, 0);
+    m_hBitmap = CreateDIBSection(hDc, pBitmapInfo, DIB_RGB_COLORS, &m_pDibBitValues, 0, 0);
     m_hCompatibleDc = CreateCompatibleDC(hDc);
     m_hPrevBitmap = (HBITMAP)SelectObject(m_hCompatibleDc, m_hBitmap);
     delete pBitmapInfo;
@@ -158,7 +207,7 @@ retry:
     if (windowRect.top < workAreaRect.top) {
       windowRect.top = workAreaRect.top;
     }
-    SetWindowPos(hWnd, 0, windowRect.left, windowRect.top, 0, 0, SWP_NOSIZE | SWP_NOZORDER | SWP_NOACTIVATE);
+    SetWindowPos(hWnd, HWND_TOP, windowRect.left, windowRect.top, 0, 0, SWP_NOSIZE | SWP_NOZORDER | SWP_NOACTIVATE);
     m_bUnknown2168 = FALSE;
 
     return 0;
@@ -268,7 +317,7 @@ retry:
     long windowStyle = GetWindowLong(hWnd, GWL_STYLE) & 0x7FFFFFFF | WS_MINIMIZEBOX | WS_THICKFRAME | WS_SYSMENU | WS_CAPTION;
     RECT windowRect;
     SetRect(&windowRect, 0, 0, m_videoWidth, m_videoHeight);
-    AdjustWindowRectEx(&windowRect, GetWindowLong(hWnd, GWL_STYLE), GetMenu(hWnd) != 0, GetWindowLongA(hWnd, GWL_EXSTYLE));
+    AdjustWindowRectEx(&windowRect, GetWindowLong(hWnd, GWL_STYLE), GetMenu(hWnd) != 0, GetWindowLong(hWnd, GWL_EXSTYLE));
     if (m_windowX == -32768 && m_windowY == -32768) {
       SetWindowPos(hWnd, HWND_NOTOPMOST, 0, 0, windowRect.right - windowRect.left, windowRect.bottom - windowRect.top, SWP_NOMOVE | SWP_NOACTIVATE);
     }
@@ -285,7 +334,7 @@ retry:
     if (windowRect.top < workAreaRect.top) {
       windowRect.top = workAreaRect.top;
     }
-    SetWindowPos(hWnd, 0, windowRect.left, windowRect.top, 0, 0, SWP_NOSIZE | SWP_NOZORDER | SWP_NOACTIVATE);
+    SetWindowPos(hWnd, HWND_TOP, windowRect.left, windowRect.top, 0, 0, SWP_NOSIZE | SWP_NOZORDER | SWP_NOACTIVATE);
 
     DDSURFACEDESC ddSurfaceDesc;
     memset(&ddSurfaceDesc,0, sizeof(ddSurfaceDesc));
@@ -332,7 +381,7 @@ retry:
     }
   }
 
-  m_ddrawResult = m_pDdraw->CreatePalette(DDPCAPS_8BIT, m_paletteEntries, &m_pDdrawPalette, 0);
+  m_ddrawResult = m_pDdraw->CreatePalette(DDPCAPS_8BIT, m_palette, &m_pDdrawPalette, 0);
   if (m_ddrawResult != DD_OK) {
     if (((UCHAR*)m_videoMode)[1] & 64) {
       _mbscpy((UCHAR*)m_message, (const UCHAR*)"CreatePalette DDPCAPS_8BIT");
@@ -442,7 +491,7 @@ int CGraphics::clearBuffers() {
   else {
     RECT screenRect;
     GetClientRect(m_hWnd, &screenRect);
-    ClientToScreen(m_hWnd, (LPPOINT)&screenRect);
+    ClientToScreen(m_hWnd, (POINT*)&screenRect);
     screenRect.bottom = screenRect.bottom + screenRect.top;
     screenRect.right = screenRect.right + screenRect.left;
     m_ddrawResult = m_pFrontBuffer->Blt(&screenRect, 0, 0, DDBLT_COLORFILL | DDBLT_WAIT, &ddBltFx);
@@ -461,6 +510,153 @@ int CGraphics::clearBuffers() {
 }
 
 
+// 00408270
+int CGraphics::getBackBufferDc(HDC* phDc) {
+  if (((UCHAR*)m_videoMode)[1] & 16) {
+    *phDc = m_hCompatibleDc;
+    return 0;
+  }
+
+  m_ddrawResult = m_pBackBuffer->GetDC(phDc);
+  if (m_ddrawResult != DD_OK) {
+    _mbscpy((UCHAR*)m_message, (const UCHAR*)"DIRECTDRAWSURFACE::GetDC");
+    return 1;
+  }
+
+  return 0;
+}
+
+
+// 004082fb
+int CGraphics::releaseBackBufferDc(HDC hDc) {
+  if (((UCHAR*)m_videoMode)[1] & 16) {
+    return 0;
+  }
+
+  m_ddrawResult = m_pBackBuffer->ReleaseDC(hDc);
+  if (m_ddrawResult != DD_OK) {
+    _mbscpy((UCHAR*)m_message, (const UCHAR*)"DIRECTDRAWSURFACE::ReleaseDC");
+    return 1;
+  }
+
+  return 0;
+}
+
+
+// 00408397
+int CGraphics::blit() {
+  updatePalette();
+
+  if (((UCHAR*)m_videoMode)[1] & 16) {
+    GdiFlush();
+    RECT rect;
+    GetClientRect(m_hWnd, &rect);
+    HDC hDc = GetDC(m_hWnd);
+    if (m_videoRect.bottom - m_videoRect.top == rect.bottom && m_videoRect.right - m_videoRect.left == rect.right) {
+      BitBlt(hDc, 0, 0, rect.right, rect.bottom, m_hCompatibleDc, m_videoRect.left, m_videoRect.top, SRCCOPY);
+    }
+    else {
+      StretchBlt(hDc, 0, 0, rect.right, rect.bottom, m_hCompatibleDc, m_videoRect.left, m_videoRect.top, m_videoRect.right - m_videoRect.left, m_videoRect.bottom - m_videoRect.top, SRCCOPY);
+    }
+    ReleaseDC(m_hWnd, hDc);
+    return 0;
+  }
+
+  if (((UCHAR*)m_videoMode)[0] & 4) {
+    m_ddrawResult = m_pFrontBuffer->Flip(0, DDFLIP_WAIT);
+    if (m_ddrawResult != DD_OK) {
+      _mbscpy((UCHAR*)m_message, (const UCHAR*)" Blt1x : lpFrontBuffer->Flip");
+      char buffer[128];
+      readMessage(buffer);
+      return 1;
+    }
+  }
+  else {
+    RECT rect;
+    GetClientRect(m_hWnd, &rect);
+    ClientToScreen(m_hWnd,(POINT*)&rect);
+    rect.bottom = rect.bottom + rect.top;
+    rect.right = rect.right + rect.left;
+    if (m_videoRect.bottom - m_videoRect.top == rect.bottom && m_videoRect.right - m_videoRect.left == rect.right) {
+      m_ddrawResult = m_pFrontBuffer->BltFast(0, 0, m_pBackBuffer, &m_videoRect, DDBLTFAST_WAIT | DDBLTFAST_NOCOLORKEY);
+      if (m_ddrawResult != DD_OK) {
+        _mbscpy((UCHAR*)m_message, (const UCHAR*)"lpFrontBuffer->BltFast lpBackBuffer DDBLTFAST_WAIT | DDBLTFAST_NOCOLORKEY");
+        return 1;
+      }
+    }
+    else {
+      m_ddrawResult = m_pFrontBuffer->Blt(&rect, m_pBackBuffer, &m_videoRect, DDBLT_WAIT, 0);
+      if (m_ddrawResult != DD_OK) {
+        _mbscpy((UCHAR*)m_message, (const UCHAR*)"lpFrontBuffer->Blt lpBackBuffer DDBLT_WAIT");
+        return 1;
+      }
+    }
+  }
+
+  return 0;
+}
+
+
+// 00408730
+int CGraphics::restoreBuffers() {
+  if (((UCHAR*)m_videoMode)[1] & 16) {
+    return 0;
+  }
+
+  if (m_pFrontBuffer != 0 && m_pFrontBuffer->IsLost() == DDERR_SURFACELOST) {
+    m_ddrawResult = m_pFrontBuffer->Restore();
+    if (m_ddrawResult != DD_OK) {
+      _mbscpy((UCHAR*)m_message, (const UCHAR*)" lpFrontBuffer->Restore");
+      return 1;
+    }
+  }
+  if (m_pBackBuffer != 0 && m_pBackBuffer->IsLost() == DDERR_SURFACELOST) {
+    m_ddrawResult = m_pBackBuffer->Restore();
+    if (m_ddrawResult != DD_OK) {
+      _mbscpy((UCHAR*)m_message, (const UCHAR*)" lpBackBuffer->Restore");
+      return 1;
+    }
+  }
+
+  return 0;
+}
+
+
+// 00408849
+int CGraphics::updateDevicePalette(RGBQUAD* pQuads, UINT paletteStart, UINT quadCnt) {
+  for (int i = 0; i < quadCnt; ++i) {
+    m_palette[paletteStart + i].peRed = pQuads[i].rgbRed;
+    m_palette[paletteStart + i].peGreen = pQuads[i].rgbGreen;
+    m_palette[paletteStart + i].peBlue = pQuads[i].rgbBlue;
+  }
+
+  if (((UCHAR*)m_videoMode)[1] & 16) {
+    SetDIBColorTable(m_hCompatibleDc, paletteStart, quadCnt, pQuads);
+    return 0;
+  }
+
+  m_ddrawResult = m_pDdrawPalette->SetEntries(0, paletteStart, quadCnt, &m_palette[paletteStart]);
+  if (m_ddrawResult == DDERR_SURFACELOST) {
+    m_ddrawResult = m_pFrontBuffer->Restore();
+    if (m_ddrawResult != DD_OK) {
+      _mbscpy((UCHAR*)m_message, (const UCHAR*)"lpFrontBuffer->Restore");
+      return 1;
+    }
+    m_ddrawResult = m_pDdrawPalette->SetEntries(0, paletteStart, quadCnt, &m_palette[paletteStart]);
+    if (m_ddrawResult != DD_OK) {
+      _mbscpy((UCHAR*)m_message, (const UCHAR*)" lpDDPalette->SetEntries");
+      return 1;
+    }
+  }
+  else if (m_ddrawResult != DD_OK) {
+    _mbscpy((UCHAR*)m_message, (const UCHAR*)" lpDDPalette->SetEntries");
+    return 1;
+  }
+
+  return 0;
+}
+
+
 // 004093fa
 int CGraphics::readMessage(char* pBuffer) {
   if (m_ddrawResult == DD_OK) {
@@ -472,6 +668,56 @@ int CGraphics::readMessage(char* pBuffer) {
   _mbscpy((UCHAR*)pBuffer, (const UCHAR*)m_message);
   strcat(pBuffer, hResultString);
   OutputDebugString(pBuffer);
+
+  return 0;
+}
+
+
+// 00409487
+int CGraphics::showMessage() {
+  char buffer[256];
+  if (readMessage(buffer) != 0) {
+    return 1;
+  }
+
+  MessageBox(0, buffer, "Direct Draw Error", MB_OK);
+
+  return 0;
+}
+
+
+// 004094df
+int CGraphics::blitPausedMessage() {
+  if (restoreBuffers() != 0) {
+    return 1;
+  }
+  if (clearBuffers() != 0) {
+    return 1;
+  }
+
+  int width, height;
+  if (g_useModeX != 0) {
+    width = 320;
+    height = 240;
+  }
+  else {
+    width = 640;
+    height = 480;
+  }
+  char* pPausedText = g_pausedText[g_langMode];
+  HDC hDc;
+  if (getBackBufferDc(&hDc) != 0) {
+    return 1;
+  }
+
+  SIZE size;
+  GetTextExtentPoint32(hDc, pPausedText, strlen(pPausedText), &size);
+  SetTextColor(hDc, RGB(255, 255, 255));
+  SetBkColor(hDc, RGB(0, 0, 0));
+  SetBkMode(hDc, TRANSPARENT);
+  TextOut(hDc, (width - size.cx) / 2, (height - size.cy) / 2, pPausedText, strlen(pPausedText));
+  releaseBackBufferDc(hDc);
+  blit();
 
   return 0;
 }

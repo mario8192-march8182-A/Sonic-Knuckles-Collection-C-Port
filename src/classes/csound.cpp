@@ -175,6 +175,18 @@ int CSound::unlockSoundBuffer(void* pAudioBlock1, ULONG audioBlock1ByteCnt, void
 }
 
 
+// 00409f33
+int CSound::stopBuffer(int id) {
+  m_dsoundResult = m_buffers[id]->Stop();
+  if (m_dsoundResult != DS_OK) {
+    _mbscpy((UCHAR*)m_message, (const UCHAR*)"DIRECTSOUNDBUFFER Stop");
+    return 1;
+  }
+
+  return 0;
+}
+
+
 // 0040a25f
 int CSound::loadSoundEffects(const char* pFileName, UCHAR formatFlag, int idModifier, ULONG cnt) {
   CFile file(pFileName);
@@ -227,6 +239,33 @@ end:
   delete[] pSizes;
 
   return ret;
+}
+
+
+// 0040a4f8
+BOOL CSound::isBufferPlaying(int id) {
+  if (m_buffers[id] == 0) {
+    return FALSE;
+  }
+
+  ULONG status;
+  m_buffers[id]->GetStatus(&status);
+  if (status & DSBSTATUS_PLAYING) {
+    return TRUE;
+  }
+
+  return FALSE;
+}
+
+
+// 0040a563
+int CSound::stopSoundEffects() {
+  for (int i = 0; i < 256; ++i) {
+    if (isBufferPlaying(i)) {
+      stopBuffer(i);
+    }
+  }
+  return 0;
 }
 
 

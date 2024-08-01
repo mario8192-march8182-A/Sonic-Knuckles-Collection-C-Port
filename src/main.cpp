@@ -8,7 +8,11 @@
 #include "classes\csound.h"
 #include "classes\cwinregistry.h"
 
+BOOL loadBgm(int id);
 void initControls();
+void playBgm();
+void stopBgm();
+void pauseBgm();
 
 /* 0082b198 */ char g_s3kWindowTitle[19] = "Sonic 3 & Knuckles";
 /* 0082b1ac */ char g_skWindowTitle[17] = "Sonic & Knuckles";
@@ -22,6 +26,10 @@ void initControls();
 /* 0082b24c */ char g_s3kDebugWindowTitle[27] = "Sonic 3 & Knuckles (Debug)";
 /* 0082b268 */ char g_skDebugWindowTitle[25] = "Sonic & Knuckles (Debug)";
 /* 0082b284 */ char g_s3DebugWindowTitle[16] = "Sonic 3 (Debug)";
+/* 0082b2a0 */ char g_englishPausedText[26] = "<Pause> Push F3 to Resume";
+/* 0082b2bc */ char g_frenchPausedText[30] = "Appuyez sur F3 pour continuer";
+/* 0082b2dc */ char g_germanPausedText[25] =  "Drücke F3 für Neustart";
+/* 0082b2f4 */ char g_spanishPausedText[33] = "<Pausa> Pulse F3  para Continuar";
 
 /* 0082bad0 */ void* g_region8fe8000 = 0;
 /* 0082bad4 */ void* g_region7ff8000 = 0;
@@ -45,6 +53,12 @@ void initControls();
   g_skDebugWindowTitle,
   g_s3DebugWindowTitle
 };
+/* 0082b0f0 */ char* g_pausedText[4] = {
+  g_englishPausedText,
+  g_frenchPausedText,
+  g_germanPausedText,
+  g_spanishPausedText
+};
 /* 0082bb40 */ HRESULT(*g_pDdrawCreate)(GUID*, LPDIRECTDRAW*, IUnknown*) = 0;
 /* 0082c868 */ HMODULE g_hMusicDll = 0;
 /* 0082c86c */ IMidi* g_pMidiInterface = 0;
@@ -65,14 +79,14 @@ void initControls();
     0x41, /* A */
   }
 };
-/* 00831164 */ BOOL BOOL_00831164 = FALSE;
+/* 00831164 */ BOOL g_bLaunchRunSonic = FALSE;
 /* 00831168 */ HACCEL g_hAccel = 0;
 /* 00831170 */ int g_nCmdShow = 0;
 /* 00831174 */ int g_useModeX = 0;
 /* 00831178 */ int g_noSoundEffect = 0;
 /* 0083117c */ int g_midiFlag = 0;
 /* 00831180 */ int g_sonic3Alone = 0;
-/* 00831184 */ int DAT_00831184 = 0;
+/* 00831184 */ int g_startGameMode = 0;
 /* 0083118c */ BOOL g_bTrial = FALSE;
 /* 00831188 */ int g_sonicGameMode = 0;
 /* 00831190 */ int g_langMode = 0;
@@ -86,13 +100,14 @@ void initControls();
 /* 00831370 */ HINSTANCE g_hInstance;
 /* 00831378 */ char* g_lpCmdLine;
 /* 0085475c */ ULONG g_createFileError;
+/* 008549a4 */ ULONG g_mdRegisterD0;
 /* 008549d4 */ ULONG g_supplementaryMdRamAddress;
 /* 008549e8 */ BYTE g_saveFile[1024];
 /* 00856e0c */ CGraphics* g_pGraphics;
 /* 00856e10 */ BOOL BOOL_00856e10;
 /* 00856e18 */ CRITICAL_SECTION g_CriticalSectionObj;
 /* 00856e34 */ CSound* g_pSound;
-/* 00856e3c */ long DAT_00856e3c;
+/* 00856e3c */ int g_bgmId;
 /* 00856e40 */ CSound* g_pSound2;
 /* 00856e58 */ int g_kbKeys[2][5];
 /* 00856e88 */ int g_joystickId[2];
@@ -163,7 +178,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, char* lpCmdLine
   delete g_pSound;
   delete g_pGraphics;
 
-  if (BOOL_00831164) {
+  if (g_bLaunchRunSonic) {
     WinExec("RunSonic.exe", SW_SHOWNORMAL);
   }
 
@@ -249,6 +264,21 @@ int allocRamAndVram() {
 }
 
 
+// 004044d4
+void freeRamAndVram() {
+  if (g_region8fe8000 != 0) {
+    VirtualFree(g_region8fe8000, 0x20000, MEM_DECOMMIT);
+    VirtualFree(g_region8fe8000, 0, MEM_RELEASE);
+    g_region8fe8000 = 0;
+  }
+  if (g_region7ff8000 != 0) {
+    VirtualFree(g_region7ff8000, 0x20000, MEM_DECOMMIT);
+    VirtualFree(g_region7ff8000, 0, MEM_RELEASE);
+    g_region7ff8000 = 0;
+  }
+}
+
+
 // 00404e0c
 void readSaveFile() {
   memset(g_saveFile, 0, sizeof(g_saveFile));
@@ -267,6 +297,27 @@ void readSaveFile() {
 }
 
 
+// 00404ece
+void writeSaveFile() {
+  char fileName[256];
+  GetModuleFileName(0, fileName, sizeof(fileName));
+  _mbscpy((UCHAR*)&fileName[strlen(fileName - 3)], (UCHAR*)"BIN");
+  HANDLE hFile = CreateFile(fileName, GENERIC_WRITE, 0, 0, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, 0);
+  if (hFile == INVALID_HANDLE_VALUE) {
+    MessageBox(0, "Cannot Open Save Data File", "Error", MB_OK);
+    g_createFileError = GetLastError();
+  }
+  else {
+    ULONG byteWriteCnt;
+    WriteFile(hFile, g_saveFile, sizeof(g_saveFile), &byteWriteCnt, 0);
+    if (byteWriteCnt != sizeof(g_saveFile)) {
+      MessageBox(0, "Cannot Write Save Data File", "Error", MB_OK);
+    }
+    CloseHandle(hFile);
+  }
+}
+
+
 // 004063cd
 void loadControlsConfig(const char* pPublisherKeyName, const char* pGameKeyName, const char* pControllerKeyName, int* pConfig, ULONG size) {
   CWinRegistry registry(pPublisherKeyName);
@@ -278,8 +329,23 @@ void loadControlsConfig(const char* pPublisherKeyName, const char* pGameKeyName,
 // 0040ac1d
 void FUN_0040ac1d() {
   BOOL_00856e10 = FALSE;
-  DAT_00856e3c = -1;
+  g_bgmId = -1;
   getSoundPtr()->FUN_0040a697();
+}
+
+
+// 0040aee7
+void restartBgm() {
+  if (BOOL_00856e10) {
+    if (g_bgmId > 0) {
+      EnterCriticalSection(&g_CriticalSectionObj);
+      if (loadBgm((g_bgmId & 0xFF) + 1)) {
+        playBgm();
+      }
+      LeaveCriticalSection(&g_CriticalSectionObj);
+    }
+    BOOL_00856e10 = FALSE;
+  }
 }
 
 
@@ -314,10 +380,69 @@ void initSound(HWND hWnd) {
 }
 
 
+// 0040b54c
+int openSoundTestDialog(HWND hWnd) {
+  BOOL_00856e10 = FALSE;
+  stopBgm();
+  ULONG mdRegisterD0Backup = g_mdRegisterD0;
+  int ret = DialogBoxParam(g_hInstance, MAKEINTRESOURCE(112 + g_langMode), hWnd, FUN_0040b099, 0);
+  BOOL_00856e10 = TRUE;
+  restartBgm();
+  pauseBgm();
+  g_mdRegisterD0 = mdRegisterD0Backup;
+
+  return ret;
+}
+
+
 // 0040b5bb
 void initMidiInterface(HWND hWnd) {
   if (g_pMidiInterface != 0) {
     g_pMidiInterface->init(hWnd);
+  }
+}
+
+
+// 0040b5eb
+BOOL loadBgm(int id) {
+  if (g_pMidiInterface != 0) {
+    g_pMidiInterface->loadSong(id, g_bgmMode != 1);
+  }
+
+  return TRUE;
+}
+
+
+// 0040b62e
+void playBgm() {
+  if (g_pMidiInterface != 0) {
+    g_pMidiInterface->playSong();
+  }
+}
+
+
+// 0040b65b
+void stopBgm() {
+  EnterCriticalSection(&g_CriticalSectionObj);
+  if (g_pMidiInterface != 0) {
+    g_pMidiInterface->stopSong();
+  }
+  LeaveCriticalSection(&g_CriticalSectionObj);
+}
+
+
+// 0040b69e
+void pauseBgm() {
+  if (g_pMidiInterface != 0) {
+    g_pMidiInterface->pauseSong();
+  }
+}
+
+
+// 0040b6cb
+void resumeBgm() {
+  if (g_pMidiInterface != 0) {
+    g_pMidiInterface->resumeSong();
   }
 }
 
@@ -375,4 +500,15 @@ void initControls() {
   loadControlsConfig("SEGA", "Sonic3K", "PadBind", g_joystickId, sizeof(g_joystickId));
   configureJoystick(0);
   configureJoystick(1);
+}
+
+
+// 0040d20d
+void openChangeControlsDialog(HWND hWnd) {
+  DialogBoxParam(g_hInstance, MAKEINTRESOURCE(104 + g_langMode), hWnd, FUN_0040cddc, 0);
+}
+
+// 0040d802
+void openUseJoyStickDialog(HWND hWnd) {
+  DialogBoxParam(g_hInstance, MAKEINTRESOURCE(108 + g_langMode), hWnd, FUN_0040d240, 0);
 }
