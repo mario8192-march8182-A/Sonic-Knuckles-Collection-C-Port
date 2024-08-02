@@ -14,16 +14,19 @@ class CSound {
   int lockSoundBuffer(ULONG size, void** ppAudioBlock1, ULONG *pAudioBlock1ByteCnt, void** ppAudioBlock2, ULONG *pAudioBlock2ByteCnt, int id);
   int unlockSoundBuffer(void* pAudioBlock1, ULONG audioBlock1ByteCnt, void* pAudioBlock2, ULONG audioBlock2ByteCnt, int id);
   int stopBuffer(int id);
+  int playBuffer(int id);
   int loadSoundEffects(const char* pFileName, UCHAR formatFlag, int idModifier, ULONG cnt);
   BOOL isBufferPlaying(int id);
   int stopSoundEffects();
   int FUN_0040a697();
+  ULONG getUnknown2060();
+  LPDIRECTSOUNDBUFFER getSoundBuffer(int id);
 
   private:
   HMODULE m_hDSound;
   LPDIRECTSOUND m_pDsound;
   LPDIRECTSOUNDBUFFER m_buffers[256];
-  long m_unknown1032[256];
+  long m_sampleSizes[256];
   HWND m_hWnd;
   ULONG m_unknown2060;
   UCHAR* m_unknown2064;

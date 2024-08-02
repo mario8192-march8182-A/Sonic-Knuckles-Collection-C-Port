@@ -187,6 +187,34 @@ int CSound::stopBuffer(int id) {
 }
 
 
+// 00409f9f
+int CSound::playBuffer(int id) {
+  LPDIRECTSOUNDBUFFER buffer = m_buffers[id];
+  ULONG status = 0;
+  long unknown = m_sampleSizes[id];
+  buffer->GetStatus(&status);
+
+  if (status & DSBSTATUS_PLAYING) {
+    ULONG playPos, writePos;
+    buffer->GetCurrentPosition(&playPos,&writePos);
+    if (playPos > unknown) {
+      buffer->Stop();
+      buffer->SetCurrentPosition(0);
+      buffer->Play(0, 0, 0);
+    }
+    else {
+      buffer->SetCurrentPosition(0);
+    }
+  }
+  else {
+    buffer->SetCurrentPosition(0);
+    buffer->Play(0, 0, 0);
+  }
+
+  return 0;
+}
+
+
 // 0040a25f
 int CSound::loadSoundEffects(const char* pFileName, UCHAR formatFlag, int idModifier, ULONG cnt) {
   CFile file(pFileName);
@@ -207,11 +235,11 @@ int CSound::loadSoundEffects(const char* pFileName, UCHAR formatFlag, int idModi
     ULONG bufferSize;
     if (i < cnt && i != 59) {
       bufferSize = pSizes[i] + 11050;
-      m_unknown1032[i + idModifier] = pSizes[i] + 5525;
+      m_sampleSizes[i + idModifier] = pSizes[i] + 5525;
     }
     else {
       bufferSize = pSizes[i];
-      m_unknown1032[i + idModifier] = -1;
+      m_sampleSizes[i + idModifier] = -1;
     }
 
     if (createSoundBuffer(formatFlag, bufferSize, i + idModifier) != 0) goto end;
@@ -274,4 +302,16 @@ int CSound::FUN_0040a697() {
   memset(m_unknown2064, 0, sizeof(m_unknown2064));
 
   return 0;
+}
+
+
+// 0040b8e0
+ULONG CSound::getUnknown2060() {
+  return m_unknown2060;
+}
+
+
+// 0040b8b0
+LPDIRECTSOUNDBUFFER CSound::getSoundBuffer(int id) {
+  return m_buffers[id];
 }

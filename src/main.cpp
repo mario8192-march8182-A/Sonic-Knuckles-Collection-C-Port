@@ -1,6 +1,7 @@
 #include <windows.h>
 #include <commctrl.h>
 #include <mbstring.h>
+#include "winresource.h"
 #include "imidi.h"
 #include "classes\cfile.h"
 #include "classes\cgame.h"
@@ -63,6 +64,31 @@ void pauseBgm();
 /* 0082c868 */ HMODULE g_hMusicDll = 0;
 /* 0082c86c */ IMidi* g_pMidiInterface = 0;
 /* 0082c870 */ HRESULT(*g_pDSoundCreate)(GUID*, LPDIRECTSOUND*, LPUNKNOWN*) = 0;
+/* 0082c878 */ int g_soundBufferMapping[224] = {
+   -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,
+   -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,
+   -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,
+   -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,
+   -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,
+   -1,   1,  -1,   2,   3,   4,   5,   6,   7,   8,
+    9,  10,  11,  12,  13,  14,  15,  16,  17,  18,
+   19,  20,  21,  22,  23,  24,  25,  26,  27,  28,
+   29,  30,  31,  32,  33,  34,  35,  36,  37,  38,
+   39,  40,  41,  42,  43,  44,  45,  46,  47,  48,
+   49,  50,  51,  52,  53,  54,  55,  56,  57,  58,
+   59,  60,  61,  62,  63,  64,  65,  66,  67,  68,
+   69,  70,  71,  72,  73,  74,  75,  76,  77,  78,
+   79,  80,  81,  82,  83,  84,  85,  86,  87,  88,
+   89,  90,  91,  92,  93,  94,  95,  96,  97,  98,
+   99, 100, 101, 102, 103, 104, 105, 106, 107, 108,
+  109, 110, 111, 112, 113, 114, 115, 116, 117, 118,
+  119, 120, 121, 122, 123, 124, 125, 126, 127, 128,
+  129, 130, 131, 132, 133, 134, 135, 136, 137, 138,
+  139, 140, 141, 142, 143, 144, 145, 146, 147, 148,
+  150, 151, 152, 153, 154, 155, 156, 157, 158, 159,
+  160, 161, 162, 163, 164, 165, 166, 167, 168, 169,
+   -1,  -1,  -1,   0
+};
 /* 0082ed48 */ int g_defaultKbKeys[2][5] = {
   {
     VK_UP,
@@ -106,7 +132,9 @@ void pauseBgm();
 /* 00856e0c */ CGraphics* g_pGraphics;
 /* 00856e10 */ BOOL BOOL_00856e10;
 /* 00856e18 */ CRITICAL_SECTION g_CriticalSectionObj;
+/* 00856e30 */ ULONG g_soundTest_bgmId;
 /* 00856e34 */ CSound* g_pSound;
+/* 00856e38 */ ULONG g_soundTest_seId;
 /* 00856e3c */ int g_bgmId;
 /* 00856e40 */ CSound* g_pSound2;
 /* 00856e58 */ int g_kbKeys[2][5];
@@ -326,11 +354,42 @@ void loadControlsConfig(const char* pPublisherKeyName, const char* pGameKeyName,
 }
 
 
+// 0040ab4e
+void playSoundEffect() {
+  short mdRegisterD0 = g_mdRegisterD0 & 0xFFFF;
+  if (mdRegisterD0 < 0) {
+    mdRegisterD0 += 256;
+  }
+  if (mdRegisterD0 < 0 || mdRegisterD0 > 223) return;
+
+  int bufferId = g_soundBufferMapping[mdRegisterD0];
+  if (bufferId < 1) return;
+
+  CSound* pSound = getSoundPtr();
+  if (pSound == 0) return;
+  if (pSound->getUnknown2060() != 0) return;
+
+  int zeroBasedBufferId = bufferId - 1;
+  if (pSound->getSoundBuffer(zeroBasedBufferId) == 0) return;
+  pSound->playBuffer(zeroBasedBufferId);
+}
+
+
 // 0040ac1d
 void FUN_0040ac1d() {
   BOOL_00856e10 = FALSE;
   g_bgmId = -1;
   getSoundPtr()->FUN_0040a697();
+}
+
+
+// 0040aea5
+void startBgm(char id) {
+  EnterCriticalSection(&g_CriticalSectionObj);
+  if (loadBgm(id + 1) != 0) {
+    playBgm();
+  }
+  LeaveCriticalSection(&g_CriticalSectionObj);
 }
 
 
@@ -380,12 +439,103 @@ void initSound(HWND hWnd) {
 }
 
 
+// 0040b099
+LRESULT CALLBACK soundTestDlgProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) {
+  switch (msg) {
+    case WM_INITDIALOG: {
+      g_soundTest_seId = 0;
+      g_soundTest_bgmId = 0;
+      POINT topLeft;
+      topLeft.x = 0;
+      topLeft.y = 0;
+      ClientToScreen(hWnd, &topLeft);
+      RECT windowRect;
+      GetWindowRect(GetDlgItem(hWnd, ID_SOUNDTEST_SE_UPDOWN), &windowRect);
+      DestroyWindow(GetDlgItem(hWnd, ID_SOUNDTEST_SE_UPDOWN));
+      CreateUpDownControl(UDS_WRAP | UDS_ARROWKEYS | UDS_HORZ | UDS_NOTHOUSANDS | WS_VISIBLE | WS_CHILD, windowRect.left - topLeft.x,windowRect.top - topLeft.y, windowRect.right - windowRect.left, windowRect.bottom - windowRect.top, hWnd, ID_SOUNDTEST_SE_UPDOWN, g_hInstance, 0, 0, 100, 0);
+      GetWindowRect(GetDlgItem(hWnd, ID_SOUNDTEST_BGM_UPDOWN), &windowRect);
+      DestroyWindow(GetDlgItem(hWnd, ID_SOUNDTEST_BGM_UPDOWN));
+      CreateUpDownControl(UDS_WRAP | UDS_ARROWKEYS | UDS_HORZ | UDS_NOTHOUSANDS | WS_VISIBLE | WS_CHILD, windowRect.left - topLeft.x,windowRect.top - topLeft.y, windowRect.right - windowRect.left, windowRect.bottom - windowRect.top, hWnd, ID_SOUNDTEST_BGM_UPDOWN, g_hInstance, 0, 0, 100, 0);
+      SendMessage(GetDlgItem(hWnd, ID_SOUNDTEST_SE_UPDOWN), UDM_SETRANGE, 0, 168);
+      SendMessage(GetDlgItem(hWnd, ID_SOUNDTEST_SE_UPDOWN), UDM_SETPOS, 0, 0);
+      SendMessage(GetDlgItem(hWnd, ID_SOUNDTEST_BGM_UPDOWN), UDM_SETRANGE, 0, 55);
+      SendMessage(GetDlgItem(hWnd, ID_SOUNDTEST_BGM_UPDOWN), UDM_SETPOS, 0, 0);
+      return TRUE;
+    }
+    case WM_COMMAND: {
+      HWND hControlWnd = (HWND)lParam;
+      ULONG id = LOWORD(wParam);
+      ULONG code = HIWORD(wParam);
+
+      switch (id) {
+        case ID_SOUNDTEST_SE_PLAY:
+          if (code & 0xFFFF) {
+            return 0;
+          }
+          g_mdRegisterD0 = g_soundTest_seId + 51;
+          playSoundEffect();
+          return 1;
+        case ID_SOUNDTEST_BGM_PLAY:
+          if (code & 0xFFFF) {
+            return 0;
+          }
+          startBgm(g_soundTest_bgmId);
+          return 1;
+        case ID_SOUNDTEST_BGM_STOP:
+          if (code & 0xFFFF) {
+            return 0;
+          }
+          stopBgm();
+          return 1;
+        case ID_SOUNDTEST_OK:
+          if (code & 0xFFFF) {
+            return 0;
+          }
+          EndDialog(hWnd, 1);
+          return 1;
+        case 2:
+          if (code & 0xFFFF) {
+            return 0;
+          }
+          EndDialog(hWnd, 2);
+          return 1;
+      }
+    }
+    case WM_HSCROLL: {
+      ULONG request = LOWORD(wParam);
+      ULONG pos = HIWORD(wParam);
+      HWND hScrollBar = (HWND)lParam;
+      if (GetDlgItem(hWnd, ID_SOUNDTEST_SE_UPDOWN) == hScrollBar) {
+        if (request == SB_THUMBPOSITION || request == SB_THUMBTRACK) {
+          g_soundTest_seId = pos;
+          char buffer[64];
+          wsprintf(buffer, "No. %03d", g_soundTest_seId);
+          SetDlgItemText(hWnd, ID_SOUNDTEST_SE_NO, buffer);
+        }
+        return 1;
+      }
+      if (GetDlgItem(hWnd, ID_SOUNDTEST_BGM_UPDOWN) == hScrollBar) {
+        if (request == SB_THUMBPOSITION || request == SB_THUMBTRACK) {
+          g_soundTest_bgmId = pos;
+          char buffer[64];
+          wsprintf(buffer, "No. %03d", g_soundTest_bgmId);
+          SetDlgItemText(hWnd, ID_SOUNDTEST_BGM_NO, buffer);
+        }
+        return 1;
+      }
+    }
+  }
+
+  return 0;
+}
+
+
 // 0040b54c
 int openSoundTestDialog(HWND hWnd) {
   BOOL_00856e10 = FALSE;
   stopBgm();
   ULONG mdRegisterD0Backup = g_mdRegisterD0;
-  int ret = DialogBoxParam(g_hInstance, MAKEINTRESOURCE(112 + g_langMode), hWnd, FUN_0040b099, 0);
+  int ret = DialogBoxParam(g_hInstance, MAKEINTRESOURCE(IDD_SOUNDTEST_BASE + g_langMode), hWnd, (DLGPROC)soundTestDlgProc, 0);
   BOOL_00856e10 = TRUE;
   restartBgm();
   pauseBgm();
