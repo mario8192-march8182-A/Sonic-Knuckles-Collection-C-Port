@@ -9,6 +9,7 @@
 
 extern DWORD WINAPI gameThreadStartRoutine(void* pParameter);
 extern int checkCd();
+extern LRESULT CALLBACK thanksForPlayingDlgProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 extern CGraphics* getGraphicsPtr();
 extern CSound* getSoundPtr();
 extern int allocRamAndVram();
@@ -290,7 +291,7 @@ LRESULT CGame::realWndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) {
       if (fullScreenBackup != 0) {
         switchToWindowed();
       }
-      DialogBoxParam(g_hInstance, MAKEINTRESOURCE(122), m_hWnd, FUN_004040ba, 0);
+      DialogBoxParam(g_hInstance, MAKEINTRESOURCE(122), m_hWnd, (DLGPROC)thanksForPlayingDlgProc, 0);
       if (fullScreenBackup != 0) {
         switchToFullScreen();
       }
