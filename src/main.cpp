@@ -970,10 +970,90 @@ void readKeyName(char* pKeyName, int key) {
 }
 
 
+// 0040c932
+int getKey(char* pKeyName) {
+  for (int i = 0; g_kbKeyNames[g_langMode][i][0] != 0; ++i) {
+    if (strcmp(pKeyName, g_kbKeyNames[g_langMode][i]) == 0) {
+      return g_kbKeyCodes[i];
+    }
+  }
+
+  if (pKeyName[1] != 0) {
+    return -1;
+  }
+
+  int key = (int)pKeyName[0];
+  if ((key >= 48 && key <= 57) || (key >= 65 && key <= 90)) {
+    return key;
+  }
+
+  return -1;
+}
+
+
+// 0040ca13
+LRESULT CALLBACK selectKeyDlgProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) {
+  switch (msg) {
+    case WM_INITDIALOG: {
+      ULONG listIndex = 0;
+      ULONG currentKeyListIndex = 0;
+      HWND hList = GetDlgItem(hWnd, ID_SELECTKEY_LIST);
+      SendMessage(hList, LB_RESETCONTENT, 0, 0);
+      char keyName[32];
+      for (int key = 48; key < 58; ++key) {
+        readKeyName(keyName, key);
+        if (g_selectKeyDialogCurrentKey == key) {
+          currentKeyListIndex = listIndex;
+        }
+        SendMessage(hList, LB_ADDSTRING, 0, (LPARAM)keyName);
+        ++listIndex;
+      }
+      for (int key = 65; key < 91; ++key) {
+        readKeyName(keyName, key);
+        if (g_selectKeyDialogCurrentKey == key) {
+          currentKeyListIndex = listIndex;
+        }
+        SendMessage(hList, LB_ADDSTRING, 0, (LPARAM)keyName);
+        ++listIndex;
+      }
+      for (int i = 0; g_kbKeyCodes[i] >= 0; ++i) {
+        readKeyName(keyName,g_kbKeyCodes[i]);
+        if (g_kbKeyCodes[i] == g_selectKeyDialogCurrentKey) {
+          currentKeyListIndex = listIndex;
+        }
+        SendMessage(hList, LB_ADDSTRING, 0, (LPARAM)keyName);
+        ++listIndex;
+      }
+      SendMessage(hList, LB_SETCURSEL, currentKeyListIndex, 0);
+      return TRUE;
+    }
+    case WM_COMMAND: {
+      ULONG id = LOWORD(wParam);
+      ULONG code = HIWORD(wParam);
+      if ((id == ID_SELECTKEY_OK && !(code & 0xFFFF)) || (id == ID_SELECTKEY_LIST && (code & 0xFFFF) == 2)) {
+        HWND hList = GetDlgItem(hWnd, ID_SELECTKEY_LIST);
+        long selectedIndex = SendMessage(hList, LB_GETCURSEL, 0, 0);
+        char keyName[32];
+        SendMessage(hList, LB_GETTEXT, selectedIndex, (LPARAM)keyName);
+        int key = getKey(keyName);
+        EndDialog(hWnd, key);
+        return 1;
+      }
+      if (id == ID_SELECTKEY_CANCEL && !(code & 0xFFFF)) {
+        EndDialog(hWnd, -1);
+        return 1;
+      }
+    }
+  }
+
+  return 0;
+}
+
+
 // 0040ccc3
 int openSelectKeyDialog(HWND hWnd, int currentKey) {
   g_selectKeyDialogCurrentKey = currentKey;
-  return DialogBoxParam(g_hInstance, 116 + g_langMode, hWnd, FUN_0040ca13, 0);
+  return DialogBoxParam(g_hInstance, MAKEINTRESOURCE(IDD_SELECTKEY_BASE + g_langMode), hWnd, (DLGPROC)selectKeyDlgProc, 0);
 }
 
 
