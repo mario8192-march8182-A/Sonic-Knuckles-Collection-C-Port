@@ -22,7 +22,7 @@ extern void initSound(HWND hWnd);
 extern int openSoundTestDialog(HWND hWnd);
 extern void pauseBgm();
 extern void resumeBgm();
-extern void openChangeControlsDialog(HWND hWnd);
+extern void openKeyBindDialog(HWND hWnd);
 extern void openUseJoyStickDialog(HWND hWnd);
 
 extern char* g_windowTitles[3];
@@ -420,7 +420,7 @@ void CGame::onCommand(HWND hWnd, ULONG id, HWND hControlWnd, ULONG code) {
     case ID_OPTIONS_CHANGECONTROLS:
       if (m_options[OPTIONS_FULLSCREEN] == 0) {
         pause(TRUE);
-        ::openChangeControlsDialog(hWnd);
+        ::openKeyBindDialog(hWnd);
       }
       break;
     case ID_OPTIONS_USEJOYSTICK:

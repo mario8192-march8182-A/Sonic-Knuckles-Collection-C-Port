@@ -163,6 +163,168 @@ void pauseBgm();
   160, 161, 162, 163, 164, 165, 166, 167, 168, 169,
    -1,  -1,  -1,   0
 };
+/* 0082ddd0 */ char g_kbKeyNames[4][30][32] = {
+  {
+    "Num0",
+    "Num1",
+    "Num2",
+    "Num3",
+    "Num4",
+    "Num5",
+    "Num6",
+    "Num7",
+    "Num8",
+    "Num9",
+    "Num.",
+    "Num+",
+    "Num-",
+    "Num*",
+    "Num/",
+    "Up",
+    "Left",
+    "Right",
+    "Down",
+    "Ins",
+    "Del",
+    "Home",
+    "End",
+    "PUp",
+    "PDown",
+    "Enter",
+    "BS",
+    "Tab",
+    "Space",
+    ""
+  },
+  {
+    "Num0",
+    "Num1",
+    "Num2",
+    "Num3",
+    "Num4",
+    "Num5",
+    "Num6",
+    "Num7",
+    "Num8",
+    "Num9",
+    "Num.",
+    "Num+",
+    "Num-",
+    "Num*",
+    "Num/",
+    "Haut",
+    "Gauche",
+    "Droite",
+    "Bas",
+    "Inser",
+    "Suppr",
+    "Début",
+    "Fin",
+    "Mont page",
+    "Desc Page",
+    "Entrer",
+    "Retour arrière",
+    "Touche de Tabulation",
+    "Barre d'espacement",
+    ""
+  },
+  {
+    "Num0",
+    "Num1",
+    "Num2",
+    "Num3",
+    "Num4",
+    "Num5",
+    "Num6",
+    "Num7",
+    "Num8",
+    "Num9",
+    "Num.",
+    "Num+",
+    "Num-",
+    "Num*",
+    "Num/",
+    "Hoch",
+    "Links",
+    "Rechts",
+    "Runter",
+    "Einfg",
+    "Entf",
+    "Pos1",
+    "Ende",
+    "PUp",
+    "PDown",
+    "Enter",
+    "BS",
+    "Tab",
+    "Leertaste",
+    ""
+  },
+  {
+    "Núm0",
+    "Núm1",
+    "Núm2",
+    "Núm3",
+    "Núm4",
+    "Núm5",
+    "Núm6",
+    "Núm7",
+    "Núm8",
+    "Núm9",
+    "Núm.",
+    "Núm+",
+    "Núm-",
+    "Núm*",
+    "Núm/",
+    "Arriba",
+    "Izquierda",
+    "Derecha",
+    "Abajo",
+    "Insert",
+    "SUPR",
+    "Inicio",
+    "Fin",
+    "Re Pág.",
+    "Av. Pág.",
+    "Enter",
+    "Borrar",
+    "Tab",
+    "Espacio",
+    ""
+  }
+};
+/* 0082ecd0 */ int g_kbKeyCodes[30] = {
+  VK_NUMPAD0,
+  VK_NUMPAD1,
+  VK_NUMPAD2,
+  VK_NUMPAD3,
+  VK_NUMPAD4,
+  VK_NUMPAD5,
+  VK_NUMPAD6,
+  VK_NUMPAD7,
+  VK_NUMPAD8,
+  VK_NUMPAD9,
+  VK_DECIMAL,
+  VK_ADD,
+  VK_SUBTRACT,
+  VK_MULTIPLY,
+  VK_DIVIDE,
+  VK_UP,
+  VK_LEFT,
+  VK_RIGHT,
+  VK_DOWN,
+  VK_INSERT,
+  VK_DELETE,
+  VK_HOME,
+  VK_END,
+  VK_PRIOR,
+  VK_NEXT,
+  VK_RETURN,
+  VK_BACK,
+  VK_TAB,
+  VK_SPACE,
+  -1
+};
 /* 0082ed48 */ int g_defaultKbKeys[2][5] = {
   {
     VK_UP,
@@ -218,6 +380,8 @@ void pauseBgm();
 /* 00856ea0 */ UINT g_joystickXCenter2[2];
 /* 00856ea8 */ BOOL g_joystickEnoughButtons[2];
 /* 00856eb0 */ UINT g_joystickYCenter1[2];
+/* 00856eb8 */ int g_selectKeyDialogCurrentKey;
+/* 00856f40 */ int g_kbKeysEdit[2][5];
 /* 08000000 */ BYTE g_mdVram[65536];
 /* 00831758 */ BYTE g_mdSystemRam[143360];
 /* 08ff0000 */ BYTE g_mdRam[65536];
@@ -469,6 +633,14 @@ void writeSaveFile() {
     }
     CloseHandle(hFile);
   }
+}
+
+
+// 0040632a
+void saveControlsConfig(const char* pPublisherKeyName, const char* pGameKeyName, const char* pControllerKeyName, int* pConfig, ULONG size) {
+  CWinRegistry registry(pPublisherKeyName);
+  registry.openSubKey(pGameKeyName);
+  registry.setKeyBinary(pControllerKeyName, (BYTE*)pConfig, size);
 }
 
 
@@ -779,9 +951,139 @@ void initControls() {
 }
 
 
+// 0040c86d
+void readKeyName(char* pKeyName, int key) {
+  for (int i = 0; g_kbKeyCodes[i] >= 0; ++i) {
+    if (g_kbKeyCodes[i] == key) {
+      _mbscpy((UCHAR*)pKeyName, (const UCHAR*)g_kbKeyNames[g_langMode][i]);
+      return;
+    }
+  }
+
+  if ((key >= 48 && key <= 57) || (key >= 65 && key <= 90)) {
+    pKeyName[0] = (char)key;
+    pKeyName[1] = 0;
+  }
+  else {
+    _mbscpy((UCHAR*)pKeyName, (const UCHAR*)"NoKey");
+  }
+}
+
+
+// 0040ccc3
+int openSelectKeyDialog(HWND hWnd, int currentKey) {
+  g_selectKeyDialogCurrentKey = currentKey;
+  return DialogBoxParam(g_hInstance, 116 + g_langMode, hWnd, FUN_0040ca13, 0);
+}
+
+
+// 0040ccfe
+int validateKeyBinding() {
+  for (int i = 0; i < 5; ++i) {
+    for (int j = 0; j < 5; ++j) {
+      if (g_kbKeysEdit[1][j] == g_kbKeysEdit[0][i] || g_kbKeysEdit[1][i] == g_kbKeysEdit[0][j]) {
+        return 1;
+      }
+      if (i == j) continue;
+      if (g_kbKeysEdit[0][j] == g_kbKeysEdit[0][i] || g_kbKeysEdit[1][j] == g_kbKeysEdit[1][i]) {
+        return 1;
+      }
+    }
+  }
+
+  return 0;
+}
+
+
+// 0040cddc
+LRESULT CALLBACK keyBindDlgProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) {
+  switch (msg) {
+    case WM_INITDIALOG: {
+      char keyName[32];
+      for (int i = 0; i < 5; ++i) {
+        g_kbKeysEdit[0][i] = g_kbKeys[0][i];
+        readKeyName(keyName, g_kbKeysEdit[0][i]);
+        SetDlgItemText(hWnd, ID_KEYBIND_PL1_BUTTON_FIRST + i, keyName);
+        g_kbKeysEdit[1][i] = g_kbKeys[1][i];
+        readKeyName(keyName, g_kbKeysEdit[1][i]);
+        SetDlgItemText(hWnd, ID_KEYBIND_PL2_BUTTON_FIRST + i, keyName);
+      }
+      return TRUE;
+    }
+    case WM_COMMAND: {
+      HWND hControlWnd = (HWND)lParam;
+      ULONG id = LOWORD(wParam);
+      ULONG code = HIWORD(wParam);
+
+      switch (id) {
+        case ID_KEYBIND_OK:
+          if (code & 0xFFFF) {
+            return 0;
+          }
+          if (validateKeyBinding() != 0) {
+            MessageBox(hWnd, "Illegal Key Binding", "Key Bind", MB_OK);
+            return 1;
+          }
+          for (int i = 0; i < 5; ++i) {
+            g_kbKeys[0][i] = g_kbKeysEdit[0][i];
+            g_kbKeys[1][i] = g_kbKeysEdit[1][i];
+          }
+          saveControlsConfig("SEGA", "Sonic3K", "KeyBind", (int*)g_kbKeys, sizeof(g_kbKeys));
+          EndDialog(hWnd, ID_KEYBIND_OK);
+          return 1;
+        case ID_KEYBIND_CANCEL:
+          if (code & 0xFFFF) {
+            return 0;
+          }
+          EndDialog(hWnd, ID_KEYBIND_CANCEL);
+          return 1;
+        case ID_KEYBIND_RESTORE: {
+          if (code & 0xFFFF) {
+            return 0;
+          }
+          char keyName[32];
+          for (int i = 0; i < 5; ++i) {
+            g_kbKeysEdit[0][i] = g_kbKeys[0][i];
+            readKeyName(keyName, g_kbKeysEdit[0][i]);
+            SetDlgItemText(hWnd , ID_KEYBIND_PL1_BUTTON_FIRST + i, keyName);
+            g_kbKeysEdit[1][i] = g_kbKeys[1][i];
+            readKeyName(keyName, g_kbKeysEdit[1][i]);
+            SetDlgItemText(hWnd, ID_KEYBIND_PL2_BUTTON_FIRST + i, keyName);
+          }
+          return 1;
+        }
+        default:
+          if (id >= ID_KEYBIND_PL1_BUTTON_FIRST && id <= ID_KEYBIND_PL1_BUTTON_LAST) {
+            int selectedKey = openSelectKeyDialog(hWnd, ((int*)g_kbKeysEdit)[id - 1000]);
+            if (selectedKey >= 0) {
+              ((int*)g_kbKeysEdit)[id - 1000] = selectedKey;
+              char keyName[32];
+              readKeyName(keyName, ((int*)g_kbKeysEdit)[id - 1000]);
+              SetDlgItemText(hWnd, id, keyName);
+            }
+            return 1;
+          }
+          if (id >= ID_KEYBIND_PL2_BUTTON_FIRST && id <= ID_KEYBIND_PL2_BUTTON_LAST) {
+            int selectedKey = openSelectKeyDialog(hWnd, ((int*)g_kbKeysEdit)[id - 1000]);
+            if (selectedKey >= 0) {
+              ((int*)g_kbKeysEdit)[id - 1000] = selectedKey;
+              char keyName[32];
+              readKeyName(keyName, ((int*)g_kbKeysEdit)[id - 1000]);
+              SetDlgItemText(hWnd, id, keyName);
+            }
+            return 1;
+          }
+      }
+    }
+  }
+
+  return 0;
+}
+
+
 // 0040d20d
-void openChangeControlsDialog(HWND hWnd) {
-  DialogBoxParam(g_hInstance, MAKEINTRESOURCE(104 + g_langMode), hWnd, FUN_0040cddc, 0);
+void openKeyBindDialog(HWND hWnd) {
+  DialogBoxParam(g_hInstance, MAKEINTRESOURCE(IDD_KEYBIND_BASE + g_langMode), hWnd, (DLGPROC)soundTestDlgProc, 0);
 }
 
 // 0040d802
