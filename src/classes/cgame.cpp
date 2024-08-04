@@ -23,7 +23,7 @@ extern int openSoundTestDialog(HWND hWnd);
 extern void pauseBgm();
 extern void resumeBgm();
 extern void openKeyBindDialog(HWND hWnd);
-extern void openUseJoyStickDialog(HWND hWnd);
+extern void openJoyStickDialog(HWND hWnd);
 
 extern char* g_windowTitles[3];
 extern char* g_trialWindowTitles[3];
@@ -426,7 +426,7 @@ void CGame::onCommand(HWND hWnd, ULONG id, HWND hControlWnd, ULONG code) {
     case ID_OPTIONS_USEJOYSTICK:
       if (m_options[OPTIONS_FULLSCREEN] == 0) {
         pause(TRUE);
-        ::openUseJoyStickDialog(hWnd);
+        ::openJoyStickDialog(hWnd);
       }
       break;
     case ID_OPTIONS_SOUNDTEST:

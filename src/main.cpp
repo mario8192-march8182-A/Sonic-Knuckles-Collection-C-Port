@@ -65,6 +65,10 @@ void pauseBgm();
 /* 0082b7e0 */ UCHAR g_thanksForPlayingJpText17[38] = { 0x81, 0x40, 0x81, 0x40, 0x81, 0x40, 0x81, 0x40, 0x81, 0x40, 0x81, 0x40, 0x81, 0x69, 0x83, 0x51, 0x83, 0x58, 0x83, 0x67, 0x49, 0x44, 0x81, 0x46, 0x82, 0x66, 0x82, 0x74, 0x82, 0x64, 0x82, 0x72, 0x82, 0x73, 0x81, 0x6A, 0x00 };
 /* 0082b808 */ UCHAR g_thanksForPlayingJpText18[1] = "";
 /* 0082b80c */ UCHAR g_thanksForPlayingJpText19[78] = { 0x83, 0x5A, 0x83, 0x4B, 0x82, 0x6F, 0x82, 0x62, 0x83, 0x5C, 0x83, 0x74, 0x83, 0x67, 0x82, 0xCD, 0x92, 0xCA, 0x94, 0xCC, 0x82, 0xC5, 0x82, 0xE0, 0x82, 0xA8, 0x8B, 0x81, 0x82, 0xDF, 0x82, 0xA2, 0x82, 0xBD, 0x82, 0xBE, 0x82, 0xAF, 0x82, 0xDC, 0x82, 0xB7, 0x81, 0x42, 0x93, 0x64, 0x98, 0x62, 0x94, 0xD4, 0x8D, 0x86, 0x81, 0x46, 0x82, 0x4F, 0x82, 0x50, 0x82, 0x51, 0x82, 0x4F, 0x81, 0x7C, 0x82, 0x54, 0x82, 0x54, 0x82, 0x55, 0x82, 0x4F, 0x82, 0x54, 0x82, 0x54, 0x00 };
+/* 0082ed88 */ char g_dontUseEnText[7] = "No Use";
+/* 0082ed90 */ char g_dontUseFrText[13] = "Pas utiliser";
+/* 0082eda0 */ char g_dontUseDeText[7] = "No Use";
+/* 0082eda8 */ char g_dontUseEsText[9] = "Sin usar";
 
 /* 0082bad0 */ void* g_region8fe8000 = 0;
 /* 0082bad4 */ void* g_region7ff8000 = 0;
@@ -341,6 +345,12 @@ void pauseBgm();
     0x41, /* A */
   }
 };
+/* 0082ed78 */ char* g_dontUseText[4] = {
+  g_dontUseEnText,
+  g_dontUseFrText,
+  g_dontUseDeText,
+  g_dontUseEsText
+};
 /* 00831164 */ BOOL g_bLaunchRunSonic = FALSE;
 /* 00831168 */ HACCEL g_hAccel = 0;
 /* 00831170 */ int g_nCmdShow = 0;
@@ -381,7 +391,9 @@ void pauseBgm();
 /* 00856ea8 */ BOOL g_joystickEnoughButtons[2];
 /* 00856eb0 */ UINT g_joystickYCenter1[2];
 /* 00856eb8 */ int g_selectKeyDialogCurrentKey;
+/* 00856ec0 */ BOOL g_joystickAvailability[32];
 /* 00856f40 */ int g_kbKeysEdit[2][5];
+/* 00856f68 */ UINT g_joystickCnt;
 /* 08000000 */ BYTE g_mdVram[65536];
 /* 00831758 */ BYTE g_mdSystemRam[143360];
 /* 08ff0000 */ BYTE g_mdRam[65536];
@@ -1166,7 +1178,131 @@ void openKeyBindDialog(HWND hWnd) {
   DialogBoxParam(g_hInstance, MAKEINTRESOURCE(IDD_KEYBIND_BASE + g_langMode), hWnd, (DLGPROC)soundTestDlgProc, 0);
 }
 
+
+// 0040d240
+LRESULT CALLBACK joyStickDlgProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) {
+  char* pDontUseText = g_dontUseText[g_langMode];
+
+  switch (msg) {
+    case WM_INITDIALOG: {
+      g_joystickCnt = joyGetNumDevs();
+      if (g_joystickCnt > 32) {
+        g_joystickCnt = 32;
+      }
+      HWND hJoystickP1 = GetDlgItem(hWnd, ID_JOYSTICK_P1);
+      HWND hJoystickP2 = GetDlgItem(hWnd, ID_JOYSTICK_P2);
+      SendMessage(hJoystickP1, CB_RESETCONTENT, 0, 0);
+      SendMessage(hJoystickP2, CB_RESETCONTENT, 0, 0);
+      SendMessage(hJoystickP1, CB_ADDSTRING, 0, (WPARAM)pDontUseText);
+      SendMessage(hJoystickP2, CB_ADDSTRING, 0, (WPARAM)pDontUseText);
+      JOYCAPS joycaps;
+      char buffer[64];
+      for (int i = 0; i < g_joystickCnt; ++i) {
+        memset(&joycaps, 0, sizeof(joycaps));
+        if (joyGetDevCaps(i, &joycaps, sizeof(joycaps)) != JOYERR_NOERROR) {
+          g_joystickAvailability[i] = FALSE;
+        }
+        else {
+          g_joystickAvailability[i] = TRUE;
+          wsprintf(buffer, "Joystick%d", i + 1);
+          SendMessage(hJoystickP1, CB_ADDSTRING, 0, (LPARAM)buffer);
+          SendMessage(hJoystickP2, CB_ADDSTRING, 0, (LPARAM)buffer);
+        }
+      }
+      if (g_joystickId[0] == -1) {
+        SendMessage(hJoystickP1, CB_SETCURSEL, 0, 0);
+      }
+      else {
+        ULONG comboIndex = 0;
+        for (int i = 0; i < g_joystickCnt; ++i) {
+          if (g_joystickAvailability[i]) {
+            ++comboIndex;
+            if (g_joystickId[0] == i) {
+              SendMessage(hJoystickP1, CB_SETCURSEL, comboIndex, 0);
+              break;
+            }
+          }
+        }
+      }
+      if (g_joystickId[1] == -1) {
+        SendMessage(hJoystickP2, CB_SETCURSEL, 0, 0);
+      }
+      else {
+        ULONG comboIndex = 0;
+        for (int i = 0; i < g_joystickCnt; ++i) {
+          if (g_joystickAvailability[i]) {
+            ++comboIndex;
+            if (g_joystickId[1] == i) {
+              SendMessage(hJoystickP2, CB_SETCURSEL, comboIndex, 0);
+              break;
+            }
+          }
+        }
+      }
+      return TRUE;
+    }
+    case WM_COMMAND: {
+      HWND hControlWnd = (HWND)lParam;
+      ULONG id = LOWORD(wParam);
+      ULONG code = HIWORD(wParam);
+
+      switch (id) {
+        case ID_JOYSTICK_OK: {
+          HWND hJoystickP1 = GetDlgItem(hWnd, ID_JOYSTICK_P1);
+          HWND hJoystickP2 = GetDlgItem(hWnd, ID_JOYSTICK_P2);
+          long selectedIndexP1 = SendMessage(hJoystickP1, CB_GETCURSEL, 0, 0);
+          long selectedIndexP2 = SendMessage(hJoystickP2, CB_GETCURSEL, 0, 0);
+          int newJoystickIdP1 = -1;
+          if (selectedIndexP1 > 0) {
+            for (int i = 0; i < g_joystickCnt; ++i) {
+              if (g_joystickAvailability[i]) {
+                --selectedIndexP1;
+                if (selectedIndexP1 == 0) {
+                  newJoystickIdP1 = i;
+                  break;
+                }
+              }
+            }
+          }
+          int newJoystickIdP2 = -1;
+          if (selectedIndexP2 > 0) {
+            for (int i = 0; i < g_joystickCnt; ++i) {
+              if (g_joystickAvailability[i]) {
+                --selectedIndexP1;
+                if (selectedIndexP1 == 0) {
+                  newJoystickIdP2 = i;
+                  break;
+                }
+              }
+            }
+          }
+          if ((newJoystickIdP1 != -1 || newJoystickIdP2 != -1) && newJoystickIdP1 == newJoystickIdP2) {
+            MessageBox(hWnd, "Illegal Joystick Assignment", "Joystick", MB_OK);
+            return 1;
+          }
+          g_joystickId[0] = newJoystickIdP1;
+          g_joystickId[1] = newJoystickIdP2;
+          saveControlsConfig("SEGA", "Sonic3K", "PadBind", g_joystickId, sizeof(g_joystickId));
+          configureJoystick(0);
+          configureJoystick(1);
+          EndDialog(hWnd, ID_JOYSTICK_OK);
+          return 1;
+        }
+        case ID_JOYSTICK_CANCEL:
+          if (code & 0xFFFF) {
+            return 0;
+          }
+          EndDialog(hWnd, ID_JOYSTICK_CANCEL);
+          return 1;
+      }
+    }
+  }
+
+  return 0;
+}
+
+
 // 0040d802
-void openUseJoyStickDialog(HWND hWnd) {
-  DialogBoxParam(g_hInstance, MAKEINTRESOURCE(108 + g_langMode), hWnd, FUN_0040d240, 0);
+void openJoyStickDialog(HWND hWnd) {
+  DialogBoxParam(g_hInstance, MAKEINTRESOURCE(IDD_JOYSTICK_BASE + g_langMode), hWnd, (DLGPROC)joyStickDlgProc, 0);
 }
