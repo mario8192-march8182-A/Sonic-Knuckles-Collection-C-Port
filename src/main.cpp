@@ -443,7 +443,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, char* lpCmdLine
   g_lpCmdLine = lpCmdLine;
   g_nCmdShow = nCmdShow;
   WPARAM ret = 1;
-  g_hAccel = LoadAccelerators(hInstance, MAKEINTRESOURCE(120));
+  g_hAccel = LoadAccelerators(hInstance, MAKEINTRESOURCE(IDA_MENU));
   g_pGraphics = new CGraphics();
   g_pSound = new CSound();
   initControls();
