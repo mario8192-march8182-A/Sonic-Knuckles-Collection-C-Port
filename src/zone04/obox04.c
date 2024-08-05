@@ -115,8 +115,8 @@ static void obox04_friend(sprite_status* p_actwk) {
 
 
 static void obox04_friend_wait0(sprite_status* p_actwk) {
-  --p_actwk->actfree.friend.move_countdown;
-  if (p_actwk->actfree.friend.move_countdown < 0) {
+  --p_actwk->actfree.friend_.move_countdown;
+  if (p_actwk->actfree.friend_.move_countdown < 0) {
     p_actwk->r_ptr = &obox04_friend_move0;
     p_actwk->sprpri = PRI_1;
   }
@@ -129,7 +129,7 @@ static void obox04_friend_move0(sprite_status* p_actwk) {
   short unknown = ObjCheckFloorDist(p_actwk);
   if (unknown < 0) {
     p_actwk->yposi += SHORT_TO_LONG_HIGH(unknown);
-    p_actwk->yspeed = p_actwk->actfree.friend.yspeed;
+    p_actwk->yspeed = p_actwk->actfree.friend_.yspeed;
   }
   unsigned char patno = 0;
   if (!BIT_3_IS_SET(systemtimer)) {
@@ -212,14 +212,14 @@ static void set_obox04_friend_init(sprite_status* p_actwk) {
 
   unsigned char spd_index = (p_actwk->userflag1 & 6) / 2;
   p_actwk->yspeed = spd_tbl[spd_index];
-  p_actwk->actfree.friend.yspeed = spd_tbl[spd_index];
+  p_actwk->actfree.friend_.yspeed = spd_tbl[spd_index];
   unsigned char ofs_index = (p_actwk->userflag1 & 2) / 2;
   p_actwk->sproffset = ofs_tbl[ofs_index];
   unsigned char* friends = &zone_friend_data[stageno.zone][0];
   unsigned char friend_id = friends[ofs_index];
   p_actwk->patbase = friend_data[friend_id].patbase;
-  p_actwk->actfree.friend.move_countdown = p_actwk->userflag1 * 4;
-  sprite_status* p_parentwk = &actwk[p_actwk->actfree.friend.oya];
+  p_actwk->actfree.friend_.move_countdown = p_actwk->userflag1 * 4;
+  sprite_status* p_parentwk = &actwk[p_actwk->actfree.friend_.oya];
   short xspeed = 512;
   if (util__to_unsigned(LONG_HIGH(p_actwk->xposi)) < util__to_unsigned(LONG_HIGH(p_parentwk->xposi))) { // unsigned
     xspeed = -xspeed;

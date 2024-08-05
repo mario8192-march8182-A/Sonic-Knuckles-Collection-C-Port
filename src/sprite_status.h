@@ -144,7 +144,7 @@ typedef struct sprite_status {
       unsigned char reserved2[6];
       unsigned short oya;
       unsigned char reserved3[2];
-    } friend;
+    } friend_;
     struct {
       short attack_countdown;
       signed char* pg_data_ptr;

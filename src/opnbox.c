@@ -325,8 +325,8 @@ void friend(sprite_status* p_actwk) {
 
 
 static void friend_wait0(sprite_status* p_actwk) {
-  --p_actwk->actfree.friend.move_countdown;
-  if (p_actwk->actfree.friend.move_countdown < 0) {
+  --p_actwk->actfree.friend_.move_countdown;
+  if (p_actwk->actfree.friend_.move_countdown < 0) {
     p_actwk->r_ptr = &friend_move0;
     p_actwk->sprpri = PRI_1;
   }
@@ -339,7 +339,7 @@ static void friend_move0(sprite_status* p_actwk) {
   short unknown = ObjCheckFloorDist(p_actwk);
   if (unknown < 0) {
     p_actwk->yposi += SHORT_TO_LONG_HIGH(unknown);
-    p_actwk->yspeed = p_actwk->actfree.friend.yspeed;
+    p_actwk->yspeed = p_actwk->actfree.friend_.yspeed;
     bool pl_is_right, pl_is_below;
     short pl_x_distance, pl_y_distance;
     chk_distance(p_actwk, &pl_is_right, &pl_is_below, &pl_x_distance, &pl_y_distance);
@@ -366,8 +366,8 @@ static void friend_pg(sprite_status* p_actwk) {
 
 static void friend_wait1(sprite_status* p_actwk) {
   ko_offset0(p_actwk);
-  --p_actwk->actfree.friend.move_countdown;
-  if (p_actwk->actfree.friend.move_countdown < 0) {
+  --p_actwk->actfree.friend_.move_countdown;
+  if (p_actwk->actfree.friend_.move_countdown < 0) {
     p_actwk->r_ptr = &friend_move1;
     p_actwk->sprpri = PRI_1;
   }
@@ -515,8 +515,8 @@ static void set_friend_init(sprite_status* p_actwk) {
 
   short yspeed = spd_tbl[(p_actwk->userflag1 & 6) / 2];
   p_actwk->yspeed = yspeed;
-  p_actwk->actfree.friend.yspeed = yspeed;
-  sprite_status* p_parentwk = &actwk[p_actwk->actfree.friend.oya];
+  p_actwk->actfree.friend_.yspeed = yspeed;
+  sprite_status* p_parentwk = &actwk[p_actwk->actfree.friend_.oya];
   if (IS_VFLIP(p_parentwk->actflg)) {
     p_actwk->r_ptr = &friend_wait1;
     SPRITE_STATUS_UCHAR(p_actwk, 67) += 8;
@@ -530,7 +530,7 @@ static void set_friend_init(sprite_status* p_actwk) {
   unsigned char* friends = &zone_friend_data[stageno.zone][0];
   unsigned char friend_id = friends[(p_actwk->userflag1 & 2) / 2];
   p_actwk->patbase = friend_data[friend_id].patbase;
-  p_actwk->actfree.friend.move_countdown = p_actwk->userflag1 * 4;
+  p_actwk->actfree.friend_.move_countdown = p_actwk->userflag1 * 4;
   short xspeed = 512;
   if (util__to_unsigned(LONG_HIGH(p_actwk->xposi)) < util__to_unsigned(LONG_HIGH(p_parentwk->xposi))) { // unsigned
     xspeed = -xspeed;

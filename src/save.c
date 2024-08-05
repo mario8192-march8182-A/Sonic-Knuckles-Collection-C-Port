@@ -91,7 +91,7 @@ static void savemove__sub(sprite_status* p_actwk, sprite_status* p_playerwk) {
       p_new_actwk->actfree.save.counter = 32;
       p_new_actwk->actfree.save.parent = p_actwk - actwk;
       bool enough_rings = false;
-      if (Sonic_3_alone) {
+      if (g_sonic3Alone != 0) {
         enough_rings = plring >= 50;
       }
       else {
@@ -319,7 +319,7 @@ void o_starinit(sprite_status* p_actwk) {
   } while (cnt != -1);
 
   void* p_data = &white_star_ring_tiles;
-  if (!Sonic_3_alone) {
+  if (g_sonic3Alone == 0) {
     p_data = &orange_star_ring_tiles;
     short bonus_stage_id = plring - 20;
     bonus_stage_id /= 15;
@@ -350,7 +350,7 @@ void o_star(sprite_status* p_actwk) {
   if (p_actwk->colicnt != 0) {
     if (p_actwk->colicnt & 1) {
       marker_flag = 2;
-      if (Sonic_3_alone) {
+      if (g_sonic3Alone != 0) {
         stageno.zone = ZONE_GUMBALL_MACHINE, stageno.act = 0;
         stageno_i.zone = ZONE_GUMBALL_MACHINE, stageno_i.act = 0;
         markerno = 0;
