@@ -306,7 +306,7 @@ LRESULT CGame::realWndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) {
 
 // 00401f9b
 BOOL CGame::loadMenu(HWND hWnd, LPARAM lParam) {
-  m_hMenu = LoadMenu(g_hInstance, MAKEINTRESOURCE(100 + g_langMode));
+  m_hMenu = LoadMenu(g_hInstance, MAKEINTRESOURCE(IDM_BASE + g_langMode));
 
   if (g_debugMode == 0) {
     HMENU hSubMenu = GetSubMenu(m_hMenu, 1);

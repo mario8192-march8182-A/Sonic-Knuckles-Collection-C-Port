@@ -1,3 +1,8 @@
+#define IDM_BASE 100
+#define IDM_EN 100
+#define IDM_FR 101
+#define IDM_DE 102
+#define IDM_ES 103
 #define IDD_KEYBIND_BASE 104
 #define IDD_KEYBIND_EN 104
 #define IDD_KEYBIND_FR 105

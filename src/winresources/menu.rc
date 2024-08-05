@@ -1,0 +1,126 @@
+#include <windows.h>
+#include "..\winresource.h"
+
+IDM_EN MENU
+BEGIN
+  POPUP "&Game"
+  BEGIN
+    MENUITEM "&Restart Game\tAlt+R", ID_RESTARTGAME
+    MENUITEM "&Pause\tF3", ID_PAUSE
+    MENUITEM "R&eset\tAlt+F2", ID_RESET
+    MENUITEM "&Special Stage Mode", ID_SPECIALSTAGEMODE
+    MENUITEM "&Exit\tAlt+F4", ID_EXIT
+  END
+  POPUP "&Options"
+  BEGIN
+    MENUITEM "&Full Screen\tF4", ID_OPTIONS_FULLSCREEN
+    MENUITEM "&Menu Bar\tF5", ID_OPTIONS_MENUBAR
+    MENUITEM "&Change Controls...\tF7", ID_OPTIONS_CHANGECONTROLS
+    MENUITEM "&Use JoyStick...\tF8", ID_OPTIONS_USEJOYSTICK
+    MENUITEM "&Sound Test...", ID_OPTIONS_SOUNDTEST
+    MENUITEM SEPARATOR
+    MENUITEM "&Enable Frame Drop", ID_OPTIONS_ENABLEFRAMEDROP
+    MENUITEM "S&how Frame Rate", ID_OPTIONS_SHOWFRAMERATE
+  END
+  POPUP "&Help"
+  BEGIN
+    MENUITEM "&Contents\tF1", ID_HELP_CONTENTS
+    MENUITEM "How to &play the Game", ID_HELP_HOWTOPLAY
+    MENUITEM "&Keyboard and Joystick Controls", ID_HELP_CONTROLS
+    MENUITEM "&Gameplay Hotline", ID_HELP_HOTLINE
+    MENUITEM "&How to use Help", ID_HELP_HOWTOUSE
+  END
+END
+
+IDM_FR MENU
+BEGIN
+  POPUP "&Jeu"
+  BEGIN
+    MENUITEM "&Recommencer le jeu\tAlt+R", ID_RESTARTGAME
+    MENUITEM "&Pause\tF3", ID_PAUSE
+    MENUITEM "R&eset\tAlt+F2", ID_RESET
+    MENUITEM "&Mode Stage Spécial", ID_SPECIALSTAGEMODE
+    MENUITEM "&Quitter\tAlt+F4", ID_EXIT
+  END
+  POPUP "&Options"
+  BEGIN
+    MENUITEM "&Plein Ecran\tF4", ID_OPTIONS_FULLSCREEN
+    MENUITEM "&Menu\tF5", ID_OPTIONS_MENUBAR
+    MENUITEM "&Changer les Contrôles...\tF7", ID_OPTIONS_CHANGECONTROLS
+    MENUITEM "&Utilisez manche à balai...\tF8", ID_OPTIONS_USEJOYSTICK
+    MENUITEM "&Test Sonore...", ID_OPTIONS_SOUNDTEST
+    MENUITEM SEPARATOR
+    MENUITEM "&Enable Frame Drop", ID_OPTIONS_ENABLEFRAMEDROP
+    MENUITEM "S&how Frame Rate", ID_OPTIONS_SHOWFRAMERATE
+  END
+  POPUP "&Aide"
+  BEGIN
+    MENUITEM "&Contenu\tF1", ID_HELP_CONTENTS
+    MENUITEM "Comment &Jouer au Jeu", ID_HELP_HOWTOPLAY
+    MENUITEM "&Touches de clavier/Manche à balai", ID_HELP_CONTROLS
+    MENUITEM "&Ligne 24 sur 24 pour le jeu", ID_HELP_HOTLINE
+    MENUITEM "Comment utiliser l'&Aide", ID_HELP_HOWTOUSE
+  END
+END
+
+IDM_DE MENU
+BEGIN
+  POPUP "&Spiel"
+  BEGIN
+    MENUITEM "&Neustart\tAlt+R", ID_RESTARTGAME
+    MENUITEM "&Pause\tF3", ID_PAUSE
+    MENUITEM "&Zurücksetzen\tAlt+F2", ID_RESET
+    MENUITEM "&Bonus-Runden-Modus", ID_SPECIALSTAGEMODE
+    MENUITEM "&Exit\tAlt+F4", ID_EXIT
+  END
+  POPUP "&Optionen"
+  BEGIN
+    MENUITEM "&Voll-Bildschirm\tF4", ID_OPTIONS_FULLSCREEN
+    MENUITEM "&Spiel-Menü\tF5", ID_OPTIONS_MENUBAR
+    MENUITEM "&Tastatur-und Joystick-Belegung...\tF7", ID_OPTIONS_CHANGECONTROLS
+    MENUITEM "&Joystick...\tF8", ID_OPTIONS_USEJOYSTICK
+    MENUITEM "&Klang-Einstellung..", ID_OPTIONS_SOUNDTEST
+    MENUITEM SEPARATOR
+    MENUITEM "&Enable Frame Drop", ID_OPTIONS_ENABLEFRAMEDROP
+    MENUITEM "S&how Frame Rate", ID_OPTIONS_SHOWFRAMERATE
+  END
+  POPUP "&Hilfe"
+  BEGIN
+    MENUITEM "&Inhalt\tF1", ID_HELP_CONTENTS
+    MENUITEM "Hinweise zum &Spiel", ID_HELP_HOWTOPLAY
+    MENUITEM "&Tastatur- und Joystick-Belegung", ID_HELP_CONTROLS
+    MENUITEM "&Kundenberatung", ID_HELP_HOTLINE
+    MENUITEM "Hinweise zum &Hilfsmenü", ID_HELP_HOWTOUSE
+  END
+END
+
+IDM_ES MENU
+BEGIN
+  POPUP "&Juego"
+  BEGIN
+    MENUITEM "&Comenzar el Juego de Nuevo\tAlt+R", ID_RESTARTGAME
+    MENUITEM "&Pausa\tF3", ID_PAUSE
+    MENUITEM "&Reset\tAlt+F2", ID_RESET
+    MENUITEM "&Modo de Fase Especial", ID_SPECIALSTAGEMODE
+    MENUITEM "&Salir\tAlt+F4", ID_EXIT
+  END
+  POPUP "&Opciones"
+  BEGIN
+    MENUITEM "&Pantalla Completa\tF4", ID_OPTIONS_FULLSCREEN
+    MENUITEM "&Barra de Menú\tF5", ID_OPTIONS_MENUBAR
+    MENUITEM "&Cambiar Controles...\tF7", ID_OPTIONS_CHANGECONTROLS
+    MENUITEM "&Usar Joystick...\tF8", ID_OPTIONS_USEJOYSTICK
+    MENUITEM "P&robar Sonido...", ID_OPTIONS_SOUNDTEST
+    MENUITEM SEPARATOR
+    MENUITEM "&Enable Frame Drop", ID_OPTIONS_ENABLEFRAMEDROP
+    MENUITEM "S&how Frame Rate", ID_OPTIONS_SHOWFRAMERATE
+  END
+  POPUP "&Ayuda"
+  BEGIN
+    MENUITEM "&Contenidos\tF1", ID_HELP_CONTENTS
+    MENUITEM "Cómo &Jugar", ID_HELP_HOWTOPLAY
+    MENUITEM "C&ontroles del Joystick y del Teclado", ID_HELP_CONTROLS
+    MENUITEM "&Línea directa de juego", ID_HELP_HOTLINE
+    MENUITEM "Cómo usar la &ayuda", ID_HELP_HOWTOUSE
+  END
+END
