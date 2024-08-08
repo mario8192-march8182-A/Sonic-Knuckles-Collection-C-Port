@@ -39,7 +39,7 @@ char util__to_signed(unsigned char value) {
 }
 
 
-unsigned char util__to_unsigned(signed char value) {
+unsigned char util__char_to_unsigned(signed char value) {
   unsigned char result = 0;
 
   if (value < 0) {

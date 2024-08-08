@@ -131,7 +131,7 @@ static void savemove3(sprite_status* p_actwk) {
   else {
     p_actwk->direc1 -= 16;
     short sin, cos;
-    sinset(util__to_unsigned(p_actwk->direc1 - 64), &sin, &cos);
+    sinset(util__char_to_unsigned(p_actwk->direc1 - 64), &sin, &cos);
     long cos_l = cos * 3072;
     cos_l = LONG_LOW(cos_l) + p_actwk->actfree.save.parent_xposi;
     util__assign_high(&p_actwk->xposi, LONG_LOW(cos_l));

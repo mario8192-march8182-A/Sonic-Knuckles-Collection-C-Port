@@ -307,7 +307,7 @@ static hitchk_results plhitchk_chk_doubleslope_coli(sprite_status* p_actwk, spri
   }
   distances.max_top = slope_heights[unknown_distance + 1] + p_playerwk->sprvsize;
   distances.min_bottom = distances.max_top + p_playerwk->sprvsize;
-  if (distances.max_top_coli >= util__to_unsigned(distances.min_bottom)) { // unsigned
+  if (distances.max_top_coli >= util__char_to_unsigned(distances.min_bottom)) { // unsigned
     return plhitchk_chk_push(p_actwk, p_playerwk, plridebit);
   }
   return plhitchk_chk_bounds(p_actwk, p_playerwk, data, distances, plridebit);
@@ -337,7 +337,7 @@ hitchk_results plhitchk_chk_coli2(sprite_status* p_actwk, sprite_status* p_playe
     distances.max_top_coli = relative_position + 4 + distances.max_top;
     distances.max_top_coli %= 4096;
     distances.min_bottom = p_playerwk->actfree.player.height + data.sprvs_air + distances.max_top;
-    if (util__to_unsigned(distances.max_top_coli) >= util__to_unsigned(distances.min_bottom)) { // unsigned
+    if (util__to_unsigned(distances.max_top_coli) >= util__char_to_unsigned(distances.min_bottom)) { // unsigned
       return plhitchk_chk_push(p_actwk, p_playerwk, plridebit);
     }
   }
@@ -347,7 +347,7 @@ hitchk_results plhitchk_chk_coli2(sprite_status* p_actwk, sprite_status* p_playe
     distances.max_top_coli = relative_position + 4 + distances.max_top;
     distances.max_top_coli %= 4096;
     distances.min_bottom = p_playerwk->actfree.player.height + data.sprvs_air + distances.max_top;
-    if (util__to_unsigned(distances.max_top_coli) >= util__to_unsigned(distances.min_bottom)) { // unsigned
+    if (util__to_unsigned(distances.max_top_coli) >= util__char_to_unsigned(distances.min_bottom)) { // unsigned
       return plhitchk_chk_push(p_actwk, p_playerwk, plridebit);
     }
   }
