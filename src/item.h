@@ -1,7 +1,7 @@
 #ifndef ITEM_H
 #define ITEM_H
 
-#include "sprite_status.h"
+#include "types/spritestatus.h"
 
 void item(sprite_status* p_actwk);
 void item2(sprite_status* p_actwk);

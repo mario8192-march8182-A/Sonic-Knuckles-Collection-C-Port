@@ -1,7 +1,7 @@
 #ifndef SPRING_H
 #define SPRING_H
 
-#include "sprite_status.h"
+#include "types/spritestatus.h"
 
 void sjump(sprite_status* p_actwk);
 void sjumpsub(sprite_status* p_actwk, sprite_status* p_playerwk);

@@ -1,7 +1,7 @@
 #ifndef RING_H
 #define RING_H
 
-#include "sprite_status.h"
+#include "types/spritestatus.h"
 
 void ring(sprite_status* p_actwk);
 void ringgetsub(sprite_status* p_actwk);

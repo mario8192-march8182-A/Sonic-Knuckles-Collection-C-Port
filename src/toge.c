@@ -1,6 +1,8 @@
 #include "globals.h"
 #include "macros.h"
 #include "util.h"
+#include "types/hitchkdata.h"
+#include "types/hitchkresults.h"
 #include "toge.h"
 #include "004xxxxx.h"
 #include "hitchk.h"

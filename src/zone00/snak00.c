@@ -1,5 +1,8 @@
 #include "../globals.h"
 #include "../macros.h"
+#include "../types/enemyinit2data.h"
+#include "../types/setact00data.h"
+#include "../types/setact02data.h"
 #include "snak00.h"
 #include "../004xxxxx.h"
 #include "../002.h"

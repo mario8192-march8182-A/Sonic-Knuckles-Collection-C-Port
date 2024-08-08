@@ -1,6 +1,7 @@
 #include "globals.h"
 #include "macros.h"
 #include "util.h"
+#include "types/hitchkdata.h"
 #include "break.h"
 #include "004xxxxx.h"
 static void break_init(sprite_status* p_actwk);

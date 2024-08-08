@@ -1,5 +1,6 @@
 #include "../globals.h"
 #include "../macros.h"
+#include "../types/setact01data.h"
 #include "hana00.h"
 #include "../004xxxxx.h"
 #include "../002.h"

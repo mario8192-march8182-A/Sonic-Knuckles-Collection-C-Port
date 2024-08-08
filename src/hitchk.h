@@ -1,8 +1,9 @@
 #ifndef HITCHK_H
 #define HITCHK_H
 
-#include "sprite_status.h"
-#include "types.h"
+#include "types/hitchkdata.h"
+#include "types/hitchkresults.h"
+#include "types/spritestatus.h"
 
 hitchk_results hitchk(sprite_status* p_actwk, hitchk_data data);
 hitchk_results plhitchk(sprite_status* p_actwk, sprite_status* p_playerwk, hitchk_data data, unsigned char plridebit);

@@ -2,6 +2,10 @@
 #define F002_H
 
 #include <stdbool.h>
+#include "types/cgdata.h"
+#include "types/setact05data.h"
+#include "types/wrtdata.h"
+#include "types/wrtinitdata.h"
 
 sprite_status* set_act05(sprite_status* p_actwk, set_act05_data* p_data);
 int time_pg(sprite_status* p_actwk, signed char* p_pg_data);

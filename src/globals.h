@@ -6,8 +6,10 @@
 #include <ddraw.h>
 #include <dsound.h>
 #include "constants.h"
-#include "sprite_status.h"
-#include "types.h"
+#include "types/acttimer.h"
+#include "types/blockcolibits.h"
+#include "types/zoneact.h"
+#include "types/spritestatus.h"
 
 extern char* g_windowTitles[3];
 extern char* g_trialWindowTitles[3];

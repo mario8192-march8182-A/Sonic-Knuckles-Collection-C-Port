@@ -2,6 +2,7 @@
 #define A004xxxxx_H
 
 #include <stdbool.h>
+#include "types/cgdata.h"
 
 void PlaySoundRegister(long id);
 void SpeedUpMusic(long tempo);

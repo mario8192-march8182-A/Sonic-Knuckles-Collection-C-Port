@@ -2,6 +2,13 @@
 #define F091_H
 
 #include <stdbool.h>
+#include "types/enemyinit0data.h"
+#include "types/enemyinit1data.h"
+#include "types/enemyinit2data.h"
+#include "types/setact00data.h"
+#include "types/setact01data.h"
+#include "types/setact02data.h"
+#include "types/setact03data.h"
 
 void enemy_init0(sprite_status* p_actwk, enemy_init0_data* p_data);
 void enemy_init1(sprite_status* p_actwk, enemy_init1_data* p_data);

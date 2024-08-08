@@ -1,7 +1,7 @@
 #ifndef SARU00_H
 #define SARU00_H
 
-#include "../sprite_status.h"
+#include "../types/spritestatus.h"
 
 void saru00(sprite_status* p_actwk);
 void saru00_arm(sprite_status* p_actwk);

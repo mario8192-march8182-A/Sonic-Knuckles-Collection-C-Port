@@ -1,6 +1,7 @@
 #include "globals.h"
 #include "macros.h"
 #include "util.h"
+#include "types/titlezonesinitdata.h"
 #include "title.h"
 #include "004xxxxx.h"
 #include "002.h"

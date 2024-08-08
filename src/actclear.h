@@ -1,7 +1,7 @@
 #ifndef ACTCLEAR_H
 #define ACTCLEAR_H
 
-#include "sprite_status.h"
+#include "types/spritestatus.h"
 
 void actclear(sprite_status* p_actwk);
 

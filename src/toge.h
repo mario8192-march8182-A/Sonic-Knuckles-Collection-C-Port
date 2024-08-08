@@ -1,7 +1,7 @@
 #ifndef TOGE_H
 #define TOGE_H
 
-#include "sprite_status.h"
+#include "types/spritestatus.h"
 
 void toge(sprite_status* p_actwk);
 void togedamegesub(sprite_status* p_actwk, sprite_status* p_playerwk);

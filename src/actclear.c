@@ -1,5 +1,6 @@
 #include "globals.h"
 #include "macros.h"
+#include "types/actclearinitdata.h"
 #include "actclear.h"
 #include "004xxxxx.h"
 #include "resources.h"

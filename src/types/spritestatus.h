@@ -1,9 +1,10 @@
-#ifndef SPRITE_STATUS_H
-#define SPRITE_STATUS_H
+#ifndef SPRITESTATUS_H
+#define SPRITESTATUS_H
 
-#include "constants.h"
-#include "sprite_status_handler.h"
-#include "types.h"
+#include "../constants.h"
+#include "blockcolibits.h"
+#include "enemyinit0data.h"
+#include "spritestatushandler.h"
 
 typedef struct sprite_status_child sprite_status_child;
 typedef struct sprite_family_status sprite_family_status;

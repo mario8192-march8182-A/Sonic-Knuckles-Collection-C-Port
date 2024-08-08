@@ -1,6 +1,8 @@
 #include "globals.h"
 #include "macros.h"
 #include "util.h"
+#include "types/hitchkdistances.h"
+#include "types/hitchkedgedistances.h"
 #include "hitchk.h"
 #include "004xxxxx.h"
 static hitchk_results plhitchk_doubleslope(sprite_status* p_actwk, sprite_status* p_playerwk, hitchk_data data, signed char* slope_heights, unsigned char plridebit);

@@ -1,5 +1,8 @@
 #include "../globals.h"
 #include "../macros.h"
+#include "../types/setact00data.h"
+#include "../types/wrtdata.h"
+#include "../types/wrtinitdata.h"
 #include "sai00.h"
 #include "../004xxxxx.h"
 #include "../002.h"

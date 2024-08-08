@@ -1,8 +1,7 @@
 #ifndef OBOX04_H
 #define OBOX04_H
 
-#include "../sprite_status.h"
-#include "../types.h"
+#include "../types/spritestatus.h"
 
 void obox04(sprite_status* p_actwk);
 void obox04_wait0(sprite_status* p_actwk);

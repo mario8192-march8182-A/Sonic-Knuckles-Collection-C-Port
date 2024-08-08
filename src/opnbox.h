@@ -1,8 +1,9 @@
 #ifndef OPNBOX_H
 #define OPNBOX_H
 
-#include "sprite_status.h"
-#include "types.h"
+#include "types/enemyinit2data.h"
+#include "types/setact00data.h"
+#include "types/spritestatus.h"
 
 void opnbox(sprite_status* p_actwk);
 void switch_wait0(sprite_status* p_actwk);
