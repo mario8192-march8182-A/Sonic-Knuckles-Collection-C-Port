@@ -8,6 +8,7 @@
 #include "zoneact.h"
 
 typedef struct sonic3_ram {
+  /* 08ffaa00 */ unsigned char bitdevwk[512];
   /* 08ffac00 */ unsigned short pbuffer[PBUFFER_LEVELS][PBUFFER_LEVEL_SLOTS];
   /* 08ffb000 */ sprite_status actwk[ACTWK_SLOTS];
   /* 08ffe380 */ unsigned short colibuffer[COLBUFFER_SLOTS];
