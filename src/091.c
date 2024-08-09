@@ -56,7 +56,7 @@ sprite_status* set_act00(sprite_status* p_actwk, set_act00_data* p_data) {
     bool created = Create_New_Sprite3(p_actwk, &p_new_actwk, &slot_cnt);
     if (!created) return 0;
 
-    p_new_actwk->actfree.dynamic.oya = actwk - p_actwk;
+    p_new_actwk->actfree.dynamic.oya = p_actwk - actwk;
     p_new_actwk->patbase = p_actwk->patbase;
     p_new_actwk->sproffset = p_actwk->sproffset;
     p_new_actwk->r_ptr = p_data->data[i / 2].r_ptr;
@@ -89,7 +89,7 @@ sprite_status* set_act01(sprite_status* p_actwk, set_act01_data* p_data) {
     bool created = Create_New_Sprite3(p_actwk, &p_new_actwk, &slot_cnt);
     if (!created) return 0;
 
-    p_new_actwk->actfree.dynamic.oya = actwk - p_actwk;
+    p_new_actwk->actfree.dynamic.oya = p_actwk - actwk;
     p_new_actwk->patbase = p_actwk->patbase;
     p_new_actwk->sproffset = p_actwk->sproffset;
     p_new_actwk->r_ptr = p_data->data[i / 2].r_ptr;
