@@ -11,6 +11,8 @@ typedef struct sonic3_ram {
   /* 08ffac00 */ unsigned short pbuffer[PBUFFER_LEVELS][PBUFFER_LEVEL_SLOTS];
   /* 08ffb000 */ sprite_status actwk[ACTWK_SLOTS];
   /* 08ffe380 */ unsigned short colibuffer[COLBUFFER_SLOTS];
+  /* 08ffe600 */ unsigned char competitionmode_savedata[84];
+  /* 08ffe6ac */ unsigned char main_savedata[84];
   /* 08ffe700 */ short ringwk[RINGWK_SLOTS];
   /* 08ffeb00 */ unsigned char flagwork[FLAGWORK_SLOTS];
   /* 08ffee12 */ short scralim_n_down;
@@ -24,7 +26,9 @@ typedef struct sonic3_ram {
   /* 08ffeebc */ short frame_offset_x;
   /* 08ffeec6 */ unsigned char event_flag_3;
   /* 08ffef40 */ unsigned long DAT_08ffef40;
-  /* 08ffef56 */ unsigned short disable_interrupts_flag;
+  /* 08ffef4b */ unsigned char dataselect_selection;
+  /* 08ffef4c */ character_team_id nosave_plmode;
+  /* 08ffef56 */ unsigned short disable_interrupts_sram;
   /* 08ffef80 */ unsigned short ringbuffer[RINGBUFFER_SLOTS];
   /* 08fff636 */ unsigned long ranum;
   /* 08fff648 */ short waterposi;

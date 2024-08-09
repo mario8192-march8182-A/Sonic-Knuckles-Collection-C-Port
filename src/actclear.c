@@ -152,7 +152,7 @@ static void actclear_move1(sprite_status* p_actwk) {
       soundset(176);
       if ((g_mdRam.stageno.zone == SKY_SANCTUARY && g_mdRam.stageno.act == 0)
           || (p_actwk->userflag1 != 0 || p_actwk->userflag2 != 0)) {
-        g_mdRam.disable_interrupts_flag = 255;
+        g_mdRam.disable_interrupts_sram = 255;
         SaveGame();
       }
       p_actwk->actfree.actclear.delay_timer = 90;
