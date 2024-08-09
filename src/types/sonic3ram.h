@@ -1,0 +1,135 @@
+#ifndef SONIC3RAM_H
+#define SONIC3RAM_H
+
+#include "../constants.h"
+#include "acttimer.h"
+#include "blockcolibits.h"
+#include "spritestatus.h"
+#include "zoneact.h"
+
+typedef struct sonic3_ram {
+  /* 08ffac00 */ unsigned short pbuffer[PBUFFER_LEVELS][PBUFFER_LEVEL_SLOTS];
+  /* 08ffb000 */ sprite_status actwk[ACTWK_SLOTS];
+  /* 08ffe380 */ unsigned short colibuffer[COLBUFFER_SLOTS];
+  /* 08ffe700 */ short ringwk[RINGWK_SLOTS];
+  /* 08ffeb00 */ unsigned char flagwork[FLAGWORK_SLOTS];
+  /* 08ffee12 */ short scralim_n_down;
+  /* 08ffee14 */ short scralim_left;
+  /* 08ffee16 */ short scralim_right;
+  /* 08ffee1a */ short scralim_down;
+  /* 08ffee33 */ unsigned char scr_resize_no;
+  /* 08ffee4e */ zone_act stageno_i;
+  /* 08ffee78 */ long scra_h_posit;
+  /* 08ffee7c */ long scra_v_posit;
+  /* 08ffeebc */ short frame_offset_x;
+  /* 08ffeec6 */ unsigned char event_flag_3;
+  /* 08ffef40 */ unsigned long DAT_08ffef40;
+  /* 08ffef56 */ unsigned short disable_interrupts_flag;
+  /* 08ffef80 */ unsigned short ringbuffer[RINGBUFFER_SLOTS];
+  /* 08fff636 */ unsigned long ranum;
+  /* 08fff648 */ short waterposi;
+  /* 08fff64e */ unsigned char waterflag;
+  /* 08fff65e */ unsigned char ssonicpallet_next;
+  /* 08fff65f */ unsigned char ssonicpallet;
+  /* 08fff667 */ unsigned char smilesflag;
+  /* 08fff670 */ unsigned short ssonicring_timer;
+  /* 08fff730 */ unsigned char watermode;
+  /* 08fff73e */ unsigned char miles_carry_flag;
+  /* 08fff760 */ short plmaxspdwk;
+  /* 08fff762 */ short pladdspdwk;
+  /* 08fff764 */ short plretspdwk;
+  /* 08fff7aa */ unsigned char bossstart;
+  /* 08fff7c3 */ unsigned char soz_darkness_level;
+  /* 08fff7c6 */ unsigned char reverse_gravity_flag;
+  /* 08fff7cb */ unsigned char pl2_lock_flag;
+  /* 08fff7d0 */ unsigned short emyscorecnt;
+  /* 08fff7d2 */ unsigned short timebonus;
+  /* 08fff7d4 */ unsigned short ringbonus;
+  /* 08fff7da */ unsigned short scr_x_no;
+  /* 08fff7e0 */ unsigned char level_triggers[LEVEL_TRIGGERS_SLOTS];
+  /* 08fffa9a */ unsigned char emy_wrt_flg[EMY_WRT_FLG_SLOTS];
+  /* 08fffaa2 */ unsigned char DAT_08fffaa2;
+  /* 08fffaa8 */ unsigned char act_clear_flag;
+  /* 08fffaaa */ unsigned char act_start_flag;
+  /* 08fffaad */ unsigned char soz_ghosts;
+  /* 08fffacd */ unsigned char DAT_08fffacd;
+  /* 08fffe02 */ unsigned short gameflag;
+  /* 08fffe04 */ unsigned short gametimer;
+  /* 08fffe08 */ unsigned char edit_r_no;
+  /* 08fffe0c */ unsigned long systemtimer;
+  /* 08fffe10 */ zone_act stageno;
+  /* 08fffe12 */ unsigned char pl_suu;
+  /* 08fffe19 */ unsigned char ssonicflag;
+  /* 08fffe1b */ unsigned char plring_f2;
+  /* 08fffe1c */ unsigned char pl_suu_f;
+  /* 08fffe1d */ unsigned char plring_f;
+  /* 08fffe1e */ unsigned char pltime_f;
+  /* 08fffe1f */ unsigned char plscore_f;
+  /* 08fffe20 */ short plring;
+  /* 08fffe22 */ act_timer pltime;
+  /* 08fffe26 */ unsigned long plscore;
+  /* 08fffe2a */ unsigned char markerno;
+  /* 08fffe2b */ unsigned char markerno_s;
+  /* 08fffe2c */ zone_act stageno_s;
+  /* 08fffe2e */ short plxposi_s;
+  /* 08fffe30 */ short plyposi_s;
+  /* 08fffe32 */ short plring_s;
+  /* 08fffe34 */ act_timer pltime_s;
+  /* 08fffe38 */ unsigned short plsproffset_s;
+  /* 08fffe3a */ block_coli_bits plcolibits_s;
+  /* 08fffe3c */ short scra_h_posit_s;
+  /* 08fffe3e */ short scra_v_posit_s;
+  /* 08fffe40 */ short waterposi_s;
+  /* 08fffe42 */ unsigned char waterflag_s;
+  /* 08fffe43 */ unsigned char plring_f2_s;
+  /* 08fffe44 */ short scralim_down_s;
+  /* 08fffe46 */ unsigned char scr_resize_no_s;
+  /* 08fffe47 */ unsigned char plcddat2_s;
+  /* 08fffe48 */ unsigned char marker_flag;
+  /* 08fffe49 */ unsigned char markerno_s2;
+  /* 08fffe4a */ zone_act stageno_s2;
+  /* 08fffe4c */ short plxposi_s2;
+  /* 08fffe4e */ short plyposi_s2;
+  /* 08fffe50 */ short plring_s2;
+  /* 08fffe52 */ act_timer pltime_s2;
+  /* 08fffe56 */ unsigned short plsproffset_s2;
+  /* 08fffe58 */ block_coli_bits plcolibits_s2;
+  /* 08fffe5a */ short scra_h_posit_s2;
+  /* 08fffe5c */ short scra_v_posit_s2;
+  /* 08fffe5e */ short waterposi_s2;
+  /* 08fffe60 */ unsigned char waterflag_s2;
+  /* 08fffe61 */ unsigned char plring_f2_s2;
+  /* 08fffe62 */ short scralim_down_s2;
+  /* 08fffe64 */ unsigned char scr_resize_no_s2;
+  /* 08fffeb3 */ unsigned char ring_patno;
+  /* 08fffeb6 */ unsigned char flyring_patcnt;
+  /* 08fffeb7 */ unsigned char flyring_patno;
+  /* 08fffebe */ unsigned char pl2ring_f;
+  /* 08fffebf */ unsigned char pl2ring_f2;
+  /* 08fffec0 */ short pl2maxspdwk;
+  /* 08fffec2 */ short pl2addspdwk;
+  /* 08fffec4 */ short pl2retspdwk;
+  /* 08fffec6 */ unsigned char pl2_suu;
+  /* 08fffec8 */ short plring_act;
+  /* 08fffeca */ short pl2ring_act;
+  /* 08fffecc */ unsigned short DAT_08fffecc;
+  /* 08fffece */ unsigned short DAT_08fffece;
+  /* 08fffed0 */ short pl2ring;
+  /* 08fffed2 */ unsigned long DAT_08fffed2;
+  /* 08ffff04 */ short actring;
+  /* 08ffff08 */ character_team_id plmode;
+  /* 08ffff60 */ unsigned char divdev_modules;
+  /* 08ffff8e */ unsigned short frame_bonus;
+  /* 08ffff96 */ unsigned char plcddat2_s2;
+  /* 08ffff97 */ unsigned char plresetflag;
+  /* 08ffff9a */ zone_act stageno_is;
+  /* 08ffff9c */ zone_act stageno_is2;
+  /* 08ffffae */ unsigned short cartridge;
+  /* 08ffffc0 */ unsigned long extrascore;
+  /* 08ffffce */ unsigned short plsproffset;
+  /* 08ffffd8 */ unsigned char mdstatus;
+  /* 08ffffe8 */ unsigned short vs_flag;
+}
+sonic3_ram;
+
+#endif

@@ -96,20 +96,20 @@ static void gost08_ctr(sprite_status* p_actwk) {
     0, 1, 2, 2, 3, 3
   };
 
-  if (actwk[0].actfree.player.character != KNUCKLES && markerno == 0) return;
-  if (soz_darkness_level != 0) {
-    unsigned char cnt = cnt_tbl[soz_darkness_level];
-    if (soz_ghosts >= cnt) return; // unsigned
+  if (g_mdRam.actwk[0].actfree.player.character != KNUCKLES && g_mdRam.markerno == 0) return;
+  if (g_mdRam.soz_darkness_level != 0) {
+    unsigned char cnt = cnt_tbl[g_mdRam.soz_darkness_level];
+    if (g_mdRam.soz_ghosts >= cnt) return; // unsigned
     --p_actwk->actfree.gost08_ctr.ghost_countdown;
     if (p_actwk->actfree.gost08_ctr.ghost_countdown >= 0) return;
-    ++soz_ghosts;
-    if (soz_ghosts <= cnt) { // unsigned
+    ++g_mdRam.soz_ghosts;
+    if (g_mdRam.soz_ghosts <= cnt) { // unsigned
       p_actwk->actfree.gost08_ctr.ghost_countdown = 63;
     }
     set_act05(p_actwk, &gost08_body_set_tbl);
   }
   else {
-    soz_ghosts = 0;
+    g_mdRam.soz_ghosts = 0;
   }
 }
 
@@ -133,7 +133,7 @@ static void gost08_body(sprite_status* p_actwk) {
     gost08_body__fout0(p_actwk);
     return;
   }
-  if (soz_darkness_level == 0) {
+  if (g_mdRam.soz_darkness_level == 0) {
     gost08_body__fout1(p_actwk);
     return;
   }
@@ -155,7 +155,7 @@ static void gost08_body(sprite_status* p_actwk) {
 
 
 static void gost08_body__fout0(sprite_status* p_actwk) {
-  --soz_ghosts;
+  --g_mdRam.soz_ghosts;
   set_wchg_fout0(p_actwk);
 }
 
@@ -173,8 +173,8 @@ static void gost08_init(sprite_status* p_actwk) {
   emy_wrt_init(p_actwk, &gost08_init_tbl);
   SET_USE_SCREEN_COORDS(p_actwk->actflg);
   SET_ONSCREEN(p_actwk->actflg);
-  p_actwk->actfree.gost08.darkness_level = soz_darkness_level;
-  p_actwk->actfree.gost08.sequence_no = soz_ghosts;
+  p_actwk->actfree.gost08.darkness_level = g_mdRam.soz_darkness_level;
+  p_actwk->actfree.gost08.sequence_no = g_mdRam.soz_ghosts;
   set_body_init(p_actwk);
   soundset(-110);
   gost08_wait0(p_actwk);
@@ -184,7 +184,7 @@ static void gost08_init(sprite_status* p_actwk) {
 static void gost08_wait0(sprite_status* p_actwk) {
   int ret = time_pg(p_actwk, p_actwk->actfree.gost08.pg_data_ptr);
   if (ret == 0) return;
-  if (soz_darkness_level == 5) {
+  if (g_mdRam.soz_darkness_level == 5) {
     gost08_atak_init(p_actwk);
   }
   else {
@@ -204,7 +204,7 @@ static void gost08_move0(sprite_status* p_actwk) {
   puka_puka(p_actwk);
   speedset2(p_actwk);
   chk_gost08_limit(p_actwk);
-  if (soz_darkness_level != p_actwk->actfree.gost08.darkness_level) {
+  if (g_mdRam.soz_darkness_level != p_actwk->actfree.gost08.darkness_level) {
     p_actwk->r_no = 6;
   }
 }
@@ -223,9 +223,9 @@ static void gost08_chg0(sprite_status* p_actwk) {
   }
   else {
     p_actwk->r_no = 8;
-    if (chk_puka_tbl[soz_darkness_level] == 0) return;
-    p_actwk->actfree.gost08.darkness_level = soz_darkness_level;
-    if (soz_darkness_level == 5) {
+    if (chk_puka_tbl[g_mdRam.soz_darkness_level] == 0) return;
+    p_actwk->actfree.gost08.darkness_level = g_mdRam.soz_darkness_level;
+    if (g_mdRam.soz_darkness_level == 5) {
       gost08_atak_init(p_actwk);
     }
     else {
@@ -249,8 +249,8 @@ static void gost08_chg1(sprite_status* p_actwk) {
   int ret = time_pg(p_actwk, p_actwk->actfree.gost08.pg_data_ptr);
   if (ret != 0 && p_actwk->patcnt == 2) {
     p_actwk->r_no = 10;
-    p_actwk->actfree.gost08.darkness_level = soz_darkness_level;
-    signed char* p_pg_data = pg_tbl[(soz_darkness_level * 2 & 12) / 4];
+    p_actwk->actfree.gost08.darkness_level = g_mdRam.soz_darkness_level;
+    signed char* p_pg_data = pg_tbl[(g_mdRam.soz_darkness_level * 2 & 12) / 4];
     p_actwk->patno = p_pg_data[0];
     pg_init(p_actwk, p_pg_data);
   }
@@ -295,9 +295,9 @@ static void gost08_atak1(sprite_status* p_actwk) {
   p_actwk->r_no = 16;
   p_actwk->colino = 215;
   SET_USE_LEVEL_COORDS(p_actwk->actflg);
-  short xposi = LONG_HIGH(scra_h_posit) + (LONG_HIGH(p_actwk->xposi) - 128);
+  short xposi = LONG_HIGH(g_mdRam.scra_h_posit) + (LONG_HIGH(p_actwk->xposi) - 128);
   util__assign_high(&p_actwk->xposi, xposi);
-  short yposi = LONG_HIGH(scra_v_posit) + (LONG_HIGH(p_actwk->yposi) - 128);
+  short yposi = LONG_HIGH(g_mdRam.scra_v_posit) + (LONG_HIGH(p_actwk->yposi) - 128);
   util__assign_high(&p_actwk->yposi, yposi);
   p_actwk->yspeed = 256;
 }
@@ -364,7 +364,7 @@ void obox08(sprite_status* p_actwk) {
   p_actwk->r_ptr = &obox04_wait0;
   p_actwk->userflag1 = 3;
   set_act00(p_actwk, &obox08_switch_set_tbl);
-  if (markerno == 0 && actwk[0].actfree.player.character != KNUCKLES) return;
+  if (g_mdRam.markerno == 0 && g_mdRam.actwk[0].actfree.player.character != KNUCKLES) return;
   p_actwk->r_ptr = &obox04_wait1;
   p_actwk->patno = 1;
   SET_BIT_5(p_actwk->actfree.obox04.status_bitfield);
@@ -374,7 +374,7 @@ void obox08(sprite_status* p_actwk) {
 static void obox08_switch(sprite_status* p_actwk) {
   enemy_init2(p_actwk, &switch_init_tbl);
   p_actwk->r_ptr = &switch_wait0;
-  if (markerno != 0) {
+  if (g_mdRam.markerno != 0) {
     p_actwk->r_ptr = &switch_wait1;
     p_actwk->patno = 12;
   }
@@ -449,9 +449,9 @@ static void chk_gost08_limit(sprite_status* p_actwk) {
 
 
 void set_gost08(sprite_status* p_actwk) {
-  markerno = 1;
-  plxposi_s = SOZ2_start[0];
-  plyposi_s = SOZ2_start[1];
+  g_mdRam.markerno = 1;
+  g_mdRam.plxposi_s = SOZ2_start[0];
+  g_mdRam.plyposi_s = SOZ2_start[1];
   playsave1(p_actwk);
   set_act00(p_actwk, &obox08_gost_set_tbl);
 }
@@ -467,13 +467,13 @@ static void set_body_init(sprite_status* p_actwk) {
   short number = random() & 255;
   number -= 127;
   p_actwk->xposi += SHORT_TO_LONG_HIGH(number);
-  short xspeed = gost08_init_spd_tbl[soz_darkness_level];
+  short xspeed = gost08_init_spd_tbl[g_mdRam.soz_darkness_level];
   if (util__to_unsigned(number) < 288) { // unsigned
     SET_HFLIP(p_actwk->actflg);
     xspeed = -xspeed;
   }
   p_actwk->xspeed = xspeed;
-  p_actwk->actfree.gost08.pg_data_ptr = pg_tbl[(soz_darkness_level * 2 & 12) / 4];
+  p_actwk->actfree.gost08.pg_data_ptr = pg_tbl[(g_mdRam.soz_darkness_level * 2 & 12) / 4];
   set_puka_init(p_actwk);
 }
 
@@ -493,14 +493,14 @@ static void set_puka_init(sprite_status* p_actwk) {
     &puka_init_02
   };
 
-  short xspeed = gost08_init_spd_tbl[soz_darkness_level];
+  short xspeed = gost08_init_spd_tbl[g_mdRam.soz_darkness_level];
   if (p_actwk->xspeed >= 0) {
     xspeed = -xspeed;
   }
   p_actwk->xspeed = xspeed;
   CLEAR_BIT_0(p_actwk->actfree.gost08.puka_axis_dir);
-  puka_tbl[soz_darkness_level](p_actwk);
-  short yspeed = soz_darkness_level * 4;
+  puka_tbl[g_mdRam.soz_darkness_level](p_actwk);
+  short yspeed = g_mdRam.soz_darkness_level * 4;
   if (p_actwk->yspeed < 0) {
     SET_BIT_0(p_actwk->actfree.gost08.puka_axis_dir);
     yspeed = -yspeed;

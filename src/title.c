@@ -33,8 +33,8 @@ void title(sprite_status* p_actwk) {
 
 
 static void title_init(sprite_status* p_actwk) {
-  if (IS_ENDING(stageno)) goto LAB_frameout;
-  if (stageno.zone >= AZURE_LAKE && stageno.zone <= ENDLESS_MINE) { // unsigned
+  if (IS_ENDING(g_mdRam.stageno)) goto LAB_frameout;
+  if (g_mdRam.stageno.zone >= AZURE_LAKE && g_mdRam.stageno.zone <= ENDLESS_MINE) { // unsigned
     p_actwk->actfree.title.vs_flag = 255;
 LAB_frameout:
     frameout(p_actwk);
@@ -44,25 +44,25 @@ LAB_frameout:
   unsigned char* p_tiles = 0;
   if (g_sonic3Alone == 0) {
     p_tiles = title_sk_tiles;
-    if (cartridge == 0) {
+    if (g_mdRam.cartridge == 0) {
       p_tiles = title_s3k_tiles;
     }
     Queue_Kos_Module(p_tiles, 41472);
   }
   p_tiles = title_act2_tiles;
-  if (!IS_LAVA_REEF_BOSS(stageno)
-      && !IS_DEATH_EGG_BOSS(stageno)
-      && stageno_i.act == 0) {
+  if (!IS_LAVA_REEF_BOSS(g_mdRam.stageno)
+      && !IS_DEATH_EGG_BOSS(g_mdRam.stageno)
+      && g_mdRam.stageno_i.act == 0) {
     p_tiles = title_act1_tiles;
   }
   Queue_Kos_Module(p_tiles, 42912);
   unsigned char title_zones_index = LAVA_REEF;
-  if (!IS_LAVA_REEF_BOSS(stageno)) {
+  if (!IS_LAVA_REEF_BOSS(g_mdRam.stageno)) {
     title_zones_index = 13;
-    if (!IS_HIDDEN_PALACE(stageno)) {
+    if (!IS_HIDDEN_PALACE(g_mdRam.stageno)) {
       title_zones_index = DEATH_EGG;
-      if (!IS_DEATH_EGG_BOSS(stageno)) {
-        title_zones_index = stageno_i.zone;
+      if (!IS_DEATH_EGG_BOSS(g_mdRam.stageno)) {
+        title_zones_index = g_mdRam.stageno_i.zone;
       }
     }
   }
@@ -75,17 +75,17 @@ LAB_frameout:
 
 
 static void title_move0(sprite_status* p_actwk) {
-  if (divdev_modules != 0) return;
+  if (g_mdRam.divdev_modules != 0) return;
   sprite_status* p_new_actwk;
   short slot_cnt;
   bool created = Create_New_Sprite3(p_actwk, &p_new_actwk, &slot_cnt);
   if (!created) return;
   title_zones_init_data* p_init_data = 0;
   short cnt = 0;
-  if (stageno.zone != LAVA_REEF_BOSS_AND_HIDDEN_PALACE && !IS_DEATH_EGG_BOSS(stageno)) {
+  if (g_mdRam.stageno.zone != LAVA_REEF_BOSS_AND_HIDDEN_PALACE && !IS_DEATH_EGG_BOSS(g_mdRam.stageno)) {
     p_init_data = &title_zones_init_tbl[5];
     cnt = 1;
-    if (stageno.zone >= ZONE_GUMBALL_MACHINE) goto loop;
+    if (g_mdRam.stageno.zone >= ZONE_GUMBALL_MACHINE) goto loop;
   }
   p_init_data = &title_zones_init_tbl[0];
   cnt = 3;
@@ -106,14 +106,14 @@ loop:
     p_new_actwk->colino = p_init_data->colino;
     p_new_actwk->actflg = 64;
     p_new_actwk->patbase = titlepat;
-    p_new_actwk->actfree.title_part.oya = p_actwk - actwk;
+    p_new_actwk->actfree.title_part.oya = p_actwk - g_mdRam.actwk;
     bool created = Create_New_Sprite4(&p_new_actwk, slot_cnt);
     if (!created) break;
     --cnt;
   } while (cnt != -1);
 
   if (p_actwk->actfree.title.act_start_flag != 0) {
-    if (stageno.zone == LAUNCH_BASE) {
+    if (g_mdRam.stageno.zone == LAUNCH_BASE) {
       Load_PLC(p_actwk, 37);
     }
   }
@@ -127,20 +127,20 @@ static void title_move1(sprite_status* p_actwk) {
     return;
   }
   if (p_actwk->actfree.title.act_start_flag != 0) {
-    pltime.hours = 0;
-    pltime.minutes = 0;
-    pltime.seconds = 0;
-    pltime.frames = 0;
-    plring = 0;
-    plring_act = 0;
-    plring_f2 = 0;
-    DAT_08fffed2 = 0;
-    pl2ring = 0;
-    pl2ring_act = 0;
-    pltime_f = 255;
-    plring_f = 255;
-    actwk[0].userflag1 = 30;
-    actwk[1].userflag1 = 30;
+    g_mdRam.pltime.hours = 0;
+    g_mdRam.pltime.minutes = 0;
+    g_mdRam.pltime.seconds = 0;
+    g_mdRam.pltime.frames = 0;
+    g_mdRam.plring = 0;
+    g_mdRam.plring_act = 0;
+    g_mdRam.plring_f2 = 0;
+    g_mdRam.DAT_08fffed2 = 0;
+    g_mdRam.pl2ring = 0;
+    g_mdRam.pl2ring_act = 0;
+    g_mdRam.pltime_f = 255;
+    g_mdRam.plring_f = 255;
+    g_mdRam.actwk[0].userflag1 = 30;
+    g_mdRam.actwk[1].userflag1 = 30;
     reset_bgm(p_actwk);
   }
   p_actwk->actfree.title.unknown_flag = 0;
@@ -158,7 +158,7 @@ static void title_move2(sprite_status* p_actwk) {
     return;
   }
   if (p_actwk->actfree.title.vs_flag != 0) goto LAB_frameout;
-  if (stageno.zone == SANDOPOLIS && stageno.act == 1) {
+  if (g_mdRam.stageno.zone == SANDOPOLIS && g_mdRam.stageno.act == 1) {
     sprite_status* p_new_actwk;
     short slot_cnt;
     bool created = Create_New_Sprite(&p_new_actwk, &slot_cnt);
@@ -166,20 +166,20 @@ static void title_move2(sprite_status* p_actwk) {
       p_new_actwk->r_ptr = &gost08;
     }
   }
-  if (stageno.zone != LAVA_REEF_BOSS_AND_HIDDEN_PALACE
-      && IS_DEATH_EGG_BOSS(stageno)
-      && stageno.zone >= ZONE_GUMBALL_MACHINE) {
+  if (g_mdRam.stageno.zone != LAVA_REEF_BOSS_AND_HIDDEN_PALACE
+      && IS_DEATH_EGG_BOSS(g_mdRam.stageno)
+      && g_mdRam.stageno.zone >= ZONE_GUMBALL_MACHINE) {
     goto LAB_frameout;
   }
   if (p_actwk->actfree.title.act_start_flag != 0) {
-    act_start_flag = 255;
+    g_mdRam.act_start_flag = 255;
   }
-  else if (stageno.zone == DOOMSDAY) goto LAB_frameout;
-  else if (IS_DEATH_EGG_BOSS(stageno)) goto LAB_frameout;
+  else if (g_mdRam.stageno.zone == DOOMSDAY) goto LAB_frameout;
+  else if (IS_DEATH_EGG_BOSS(g_mdRam.stageno)) goto LAB_frameout;
   else {
     Load_PLC_Raw(p_actwk, &toge_cg_tbl);
   }
-  if (IS_DEATH_EGG_BOSS(stageno)) goto LAB_frameout;
+  if (IS_DEATH_EGG_BOSS(g_mdRam.stageno)) goto LAB_frameout;
   LoadEnemyArt();
   set_friend_cg(p_actwk);
 
@@ -189,7 +189,7 @@ LAB_frameout:
 
 
 static void title_red_banner(sprite_status* p_actwk) {
-  sprite_status* p_parentwk = &actwk[p_actwk->actfree.title_part.oya];
+  sprite_status* p_parentwk = &g_mdRam.actwk[p_actwk->actfree.title_part.oya];
   if (p_parentwk->actfree.title.current_exit_no != 0) {
     if (!IS_ONSCREEN(p_actwk->actflg)) {
       --p_parentwk->actfree.title.part_cnt;
@@ -212,13 +212,13 @@ static void title_red_banner(sprite_status* p_actwk) {
 
 
 static void title_name(sprite_status* p_actwk) {
-  p_actwk->patno += stageno.zone;
+  p_actwk->patno += g_mdRam.stageno.zone;
   unsigned char patno = 13;
-  if (!IS_LAVA_REEF_BOSS(stageno)) {
+  if (!IS_LAVA_REEF_BOSS(g_mdRam.stageno)) {
     patno = 17;
-    if (!IS_HIDDEN_PALACE(stageno)) {
+    if (!IS_HIDDEN_PALACE(g_mdRam.stageno)) {
       patno = 15;
-      if (!IS_DEATH_EGG_BOSS(stageno)) goto LAB_00416aab;
+      if (!IS_DEATH_EGG_BOSS(g_mdRam.stageno)) goto LAB_00416aab;
     }
   }
   p_actwk->patno = patno;
@@ -229,7 +229,7 @@ LAB_00416aab:
 
 
 static void title_element(sprite_status* p_actwk) {
-  sprite_status* p_parentwk = &actwk[p_actwk->actfree.title_part.oya];
+  sprite_status* p_parentwk = &g_mdRam.actwk[p_actwk->actfree.title_part.oya];
   if (p_parentwk->actfree.title.current_exit_no != 0) {
     if (!IS_HFLIP(p_actwk->actflg)) {
       --p_parentwk->actfree.title.part_cnt;
@@ -250,13 +250,13 @@ static void title_element(sprite_status* p_actwk) {
 
 static void title_act(sprite_status* p_actwk) {
   p_actwk->r_ptr = &title_element;
-  if (stageno.zone != SKY_SANCTUARY
-      && stageno.zone != DOOMSDAY
-      && !IS_HIDDEN_PALACE(stageno)) {
+  if (g_mdRam.stageno.zone != SKY_SANCTUARY
+      && g_mdRam.stageno.zone != DOOMSDAY
+      && !IS_HIDDEN_PALACE(g_mdRam.stageno)) {
     title_element(p_actwk);
   }
   else {
-    sprite_status* p_parentwk = &actwk[p_actwk->actfree.title_part.oya];
+    sprite_status* p_parentwk = &g_mdRam.actwk[p_actwk->actfree.title_part.oya];
     --p_parentwk->actfree.title.part_cnt;
     frameout(p_actwk);
   }
@@ -265,7 +265,7 @@ static void title_act(sprite_status* p_actwk) {
 
 static void title_element2(sprite_status* p_actwk) {
   p_actwk->actflg = 0;
-  sprite_status* p_parentwk = &actwk[p_actwk->actfree.title_part.oya];
+  sprite_status* p_parentwk = &g_mdRam.actwk[p_actwk->actfree.title_part.oya];
   if (p_parentwk->actfree.title.current_exit_no != 0) {
     if (LONG_HIGH(p_actwk->xposi) >= 524) { // unsigned
       --p_parentwk->actfree.title.part_cnt;

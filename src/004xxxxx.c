@@ -102,15 +102,15 @@ short atan(long x, long y) {
 // SONIC3K.EXE address: 00412519
 // skdisasm label: HUD_AddToScore
 void scoreup(unsigned int updata) {
-  plscore_f = 1;
-  plscore += updata;
-  if (999999 <= plscore) {
-    plscore = 999999;
+  g_mdRam.plscore_f = 1;
+  g_mdRam.plscore += updata;
+  if (999999 <= g_mdRam.plscore) {
+    g_mdRam.plscore = 999999;
   }
-  if (plscore >= extrascore) {
-    extrascore += 5000;
-    ++pl_suu;
-    ++pl_suu_f;
+  if (g_mdRam.plscore >= g_mdRam.extrascore) {
+    g_mdRam.extrascore += 5000;
+    ++g_mdRam.pl_suu;
+    ++g_mdRam.pl_suu_f;
     bgmset(42);
   }
 }
@@ -158,7 +158,7 @@ void speedset2(sprite_status* p_actwk) {
 // SONIC3K.EXE address: 0041ea30
 // skdisasm label: MoveSprite_TestGravity2
 void speedset2g(sprite_status* p_actwk) {
-  if (reverse_gravity_flag == 0) {
+  if (g_mdRam.reverse_gravity_flag == 0) {
     speedset2(p_actwk);
   }
   else {
@@ -179,15 +179,15 @@ void frameout(sprite_status* p_actwk) {
 // skdisasm label: Draw_Sprite
 void actionsub(sprite_status* p_actwk) {
   unsigned char level_no = p_actwk->sprpri / (PBUFFER_LEVEL_SLOTS * PBUFFER_LEVEL_SLOT_SIZE);
-  unsigned short* pri_level = &pbuffer[level_no][0];
+  unsigned short* pri_level = &g_mdRam.pbuffer[level_no][0];
 
   do {
     if (pri_level[0] < PBUFFER_LEVEL_MAX_SIZE) { // unsigned
       pri_level[0] += PBUFFER_LEVEL_SLOT_SIZE;
-      pri_level[pri_level[0] / PBUFFER_LEVEL_SLOT_SIZE] = p_actwk - actwk;
+      pri_level[pri_level[0] / PBUFFER_LEVEL_SLOT_SIZE] = p_actwk - g_mdRam.actwk;
       return;
     }
-    if (pri_level == &pbuffer[PBUFFER_LEVELS - 1][0]) return;
+    if (pri_level == &g_mdRam.pbuffer[PBUFFER_LEVELS - 1][0]) return;
     pri_level += PBUFFER_LEVEL_SLOTS;
   } while (1);
 }
@@ -243,13 +243,13 @@ void patchg(sprite_status* p_actwk, signed char** p_chg_data) {
 // skdisasm label: Sprite_OnScreen_Test
 void frameoutchk(sprite_status* p_actwk) {
   unsigned short scr_xposi = util__to_unsigned(LONG_HIGH(p_actwk->xposi)) & 0xFF80;
-  scr_xposi -= scr_x_no;
+  scr_xposi -= g_mdRam.scr_x_no;
   if (scr_xposi <= 640) {
     actionsub(p_actwk);
   }
   else {
     if (p_actwk->actfree.dynamic.flagwork_index != 0) {
-      CLEAR_BIT_7(flagwork[p_actwk->actfree.dynamic.flagwork_index - 1]);
+      CLEAR_BIT_7(g_mdRam.flagwork[p_actwk->actfree.dynamic.flagwork_index - 1]);
     }
     frameout(p_actwk);
   }
@@ -260,13 +260,13 @@ void frameoutchk(sprite_status* p_actwk) {
 // skdisasm label: Sprite_OnScreen_Test2
 void frameoutchk2(sprite_status* p_actwk, short xposi) {
   unsigned short scr_xposi = util__to_unsigned(xposi) & 0xFF80;
-  scr_xposi -= scr_x_no;
+  scr_xposi -= g_mdRam.scr_x_no;
   if (scr_xposi <= 640) { // unsigned
     actionsub(p_actwk);
   }
   else {
     if (p_actwk->actfree.dynamic.flagwork_index != 0) {
-      CLEAR_BIT_7(flagwork[p_actwk->actfree.dynamic.flagwork_index - 1]);
+      CLEAR_BIT_7(g_mdRam.flagwork[p_actwk->actfree.dynamic.flagwork_index - 1]);
     }
     frameout(p_actwk);
   }
@@ -277,10 +277,10 @@ void frameoutchk2(sprite_status* p_actwk, short xposi) {
 // skdisasm label: Delete_Sprite_If_Not_In_Range
 void frameoutchk3(sprite_status* p_actwk) {
   unsigned short scr_xposi = util__to_unsigned(p_actwk->xposi) & 0xFF80;
-  scr_xposi -= scr_x_no;
+  scr_xposi -= g_mdRam.scr_x_no;
   if (scr_xposi > 640) { // unsigned
     if (p_actwk->actfree.dynamic.flagwork_index != 0) {
-      CLEAR_BIT_7(flagwork[p_actwk->actfree.dynamic.flagwork_index - 1]);
+      CLEAR_BIT_7(g_mdRam.flagwork[p_actwk->actfree.dynamic.flagwork_index - 1]);
     }
     frameout(p_actwk);
   }
@@ -291,14 +291,14 @@ void frameoutchk3(sprite_status* p_actwk) {
 // skdisasm label: Sprite_CheckDeleteTouch3
 void frameoutchkc(sprite_status* p_actwk, short xposi) {
   unsigned short scr_xposi = util__to_unsigned(LONG_HIGH(p_actwk->xposi)) & 0xFF80;
-  scr_xposi -= scr_x_no;
+  scr_xposi -= g_mdRam.scr_x_no;
   if (scr_xposi <= 640) {
     Add_Object_To_Collision_Response_List(p_actwk);
     actionsub(p_actwk);
   }
   else {
     if (p_actwk->actfree.dynamic.flagwork_index != 0) {
-      CLEAR_BIT_7(flagwork[p_actwk->actfree.dynamic.flagwork_index - 1]);
+      CLEAR_BIT_7(g_mdRam.flagwork[p_actwk->actfree.dynamic.flagwork_index - 1]);
     }
     frameout(p_actwk);
   }
@@ -308,10 +308,10 @@ void frameoutchkc(sprite_status* p_actwk, short xposi) {
 // SONIC3K.EXE address: 00422b67
 // skdisasm label: HurtCharacter
 bool playdamageset(sprite_status* p_playerwk, sprite_status* p_attack_actwk) {
-  short ring_cnt = plring;
-  if (p_playerwk != &actwk[0]) {
-    if (vs_flag == 0) goto jump0;
-    ring_cnt = pl2ring;
+  short ring_cnt = g_mdRam.plring;
+  if (p_playerwk != &g_mdRam.actwk[0]) {
+    if (g_mdRam.vs_flag == 0) goto jump0;
+    ring_cnt = g_mdRam.pl2ring;
   }
   if (!BIT_0_IS_SET(p_playerwk->cddat2)) {
     if (g_debugMode == 0) {
@@ -324,7 +324,7 @@ bool playdamageset(sprite_status* p_playerwk, sprite_status* p_attack_actwk) {
         p_new_actwk->r_ptr = &flyring;
         util__copy_high(&p_new_actwk->xposi, &p_playerwk->xposi);
         util__copy_high(&p_new_actwk->yposi, &p_playerwk->yposi);
-        p_new_actwk->actfree.ring.player = p_playerwk - actwk;
+        p_new_actwk->actfree.ring.player = p_playerwk - g_mdRam.actwk;
       }
     }
   }
@@ -376,7 +376,7 @@ die:
 // skdisasm label: Kill_Character
 bool playdieset(sprite_status* p_playerwk, long sound_id) {
   if (sound_id == 0) {
-    if (edit_r_no != 0) return true;
+    if (g_mdRam.edit_r_no != 0) return true;
     sound_id = 53;
   }
   p_playerwk->cddat2 = 0;
@@ -388,7 +388,7 @@ bool playdieset(sprite_status* p_playerwk, long sound_id) {
   p_playerwk->xspeed = 0;
   p_playerwk->mspeed = 0;
   p_playerwk->mstno = 24;
-  plsproffset = p_playerwk->sproffset;
+  g_mdRam.plsproffset = p_playerwk->sproffset;
   SET_BIT_7(p_playerwk->sproffset);
   soundset(sound_id);
   return true;
@@ -398,16 +398,16 @@ bool playdieset(sprite_status* p_playerwk, long sound_id) {
 // SONIC3K.EXE address: 00422f11
 // skdisasm label: Add_SpriteToCollisionResponseList
 void Add_Object_To_Collision_Response_List(sprite_status* p_actwk) {
-  if (colibuffer[0] >= COLBUFFER_MAX_SIZE) return; // unsigned
-  colibuffer[0] += COLBUFFER_SLOT_SIZE;
-  colibuffer[colibuffer[0] / COLBUFFER_SLOT_SIZE] = p_actwk - actwk;
+  if (g_mdRam.colibuffer[0] >= COLBUFFER_MAX_SIZE) return; // unsigned
+  g_mdRam.colibuffer[0] += COLBUFFER_SLOT_SIZE;
+  g_mdRam.colibuffer[g_mdRam.colibuffer[0] / COLBUFFER_SLOT_SIZE] = p_actwk - g_mdRam.actwk;
 }
 
 
 // SONIC3K.EXE address: 00426f24
 // skdisasm label: Random_Number
 unsigned long random() {
-  unsigned long d1 = ranum;
+  unsigned long d1 = g_mdRam.ranum;
   if (d1 == 0) {
     d1 = 711800411;
   }
@@ -421,7 +421,7 @@ unsigned long random() {
   d0 = d0 & 0xFFFF0000 | ((d0 & 0x0000FFFF) + (d1 & 0x0000FFFF) & 0x0000FFFF);
   d1 = d1 & 0xFFFF0000 | d0 & 0x0000FFFF;
   d1 = util__rotate(d1);
-  ranum = d1;
+  g_mdRam.ranum = d1;
   return d0;
 }
 
@@ -476,7 +476,7 @@ bool Create_New_Sprite4(sprite_status** pp_new_actwk, short remaining_slot_cnt) 
 // SONIC3K.EXE address: 0042b8b8
 // skdisasm label: Create_New_Sprite
 bool Create_New_Sprite(sprite_status** pp_new_actwk, short* p_slot_cnt) {
-  *pp_new_actwk = &actwk[ACTWK_DYNAMIC_START];
+  *pp_new_actwk = &g_mdRam.actwk[ACTWK_DYNAMIC_START];
   *p_slot_cnt = ACTWK_RESERVED_START - ACTWK_DYNAMIC_START - 1;
   return Create_New_Sprite_Int(pp_new_actwk, p_slot_cnt);
 }
@@ -501,7 +501,7 @@ bool Create_New_Sprite3(sprite_status* p_actwk, sprite_status** pp_new_actwk, sh
     because the amount of slots is zero-based.
   */
 
-  *p_slot_cnt = (&actwk[ACTWK_RESERVED_START] - p_actwk) - 1 - 1;
+  *p_slot_cnt = (&g_mdRam.actwk[ACTWK_RESERVED_START] - p_actwk) - 1 - 1;
   if (*p_slot_cnt < 0) return false;
   return Create_New_Sprite_Int(pp_new_actwk, p_slot_cnt);
 }
@@ -521,7 +521,7 @@ bool Create_New_Sprite_Int(sprite_status** pp_new_actwk, short* p_slot_cnt) {
 // SONIC3K.EXE address: 0042b998
 // skdisasm label: Clear_SpriteRingMem
 void Clear_SpriteRingMem() {
-  sprite_status* p_actwk = &actwk[ACTWK_DYNAMIC_START];
+  sprite_status* p_actwk = &g_mdRam.actwk[ACTWK_DYNAMIC_START];
   short cnt = ACTWK_RESERVED_START - ACTWK_DYNAMIC_START - 1;
 
   /* BUGFIX
@@ -535,23 +535,23 @@ void Clear_SpriteRingMem() {
   do {
     if (p_actwk->r_ptr != 0) {
       if (p_actwk->actfree.dynamic.flagwork_index != 0) {
-        CLEAR_BIT_7(flagwork[p_actwk->actfree.dynamic.flagwork_index - 1]);
+        CLEAR_BIT_7(g_mdRam.flagwork[p_actwk->actfree.dynamic.flagwork_index - 1]);
       }
     }
     ++p_actwk;
     --cnt;
   } while (cnt != -1);
 
-  cnt = ringbuffer[0] - 1;
+  cnt = g_mdRam.ringbuffer[0] - 1;
   if (cnt < 1) return;
 
-  unsigned short* p_ringbuffer = &ringbuffer[1];
+  unsigned short* p_ringbuffer = &g_mdRam.ringbuffer[1];
   do {
     unsigned short ringwk_id = *p_ringbuffer++;
     if (ringwk_id == 0) continue;
-    ringwk[ringwk_id - 1] = -1;
+    g_mdRam.ringwk[ringwk_id - 1] = -1;
     *(p_ringbuffer - 1) = 0;
-    --ringbuffer[0];
+    --g_mdRam.ringbuffer[0];
     --cnt;
   } while (cnt != -1);
 }

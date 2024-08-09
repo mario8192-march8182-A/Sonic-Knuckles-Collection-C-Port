@@ -114,20 +114,20 @@ static void iwainit(sprite_status* p_actwk) {
   p_actwk->sprpri = PRI_4;
   p_actwk->actfree.iwa.orig_xposi = LONG_HIGH(p_actwk->xposi);
   p_actwk->actfree.iwa.countdown2 = 64;
-  if (stageno.act == 1) {
+  if (g_mdRam.stageno.act == 1) {
     p_actwk->patbase = iwapat2;
     p_actwk->sproffset = 17129;
   }
-  if (stageno.zone == ENDLESS_MINE && stageno.act == 0) {
+  if (g_mdRam.stageno.zone == ENDLESS_MINE && g_mdRam.stageno.act == 0) {
     p_actwk->patbase = vsiwapat;
     p_actwk->sproffset = 58112;
     p_actwk->patno = 0;
   }
-  if (stageno.zone == LAVA_REEF) {
+  if (g_mdRam.stageno.zone == LAVA_REEF) {
     p_actwk->patbase = iwapat9;
     p_actwk->sproffset = 16595;
     p_actwk->patno += 4;
-    if (stageno.act != 0) {
+    if (g_mdRam.stageno.act != 0) {
       p_actwk->patbase = iwapat92;
       p_actwk->sproffset = 25613;
     }
@@ -148,7 +148,7 @@ static void iwainit(sprite_status* p_actwk) {
     }
     else {
       if (p_actwk->actfree.iwa.flagwork_index != 0) {
-        unsigned char flag = flagwork[p_actwk->actfree.iwa.flagwork_index - 1];
+        unsigned char flag = g_mdRam.flagwork[p_actwk->actfree.iwa.flagwork_index - 1];
         if (flag & 0x7F) {
           p_actwk->xposi -= SHORT_TO_LONG_HIGH(flag);
           short flag_s = flag;
@@ -164,11 +164,11 @@ static void iwainit(sprite_status* p_actwk) {
 
 
 static void iwamove(sprite_status* p_actwk) {
-  p_actwk->actfree.iwa.emyscorecnt = emyscorecnt;
-  p_actwk->actfree.iwa.plmstno = actwk[0].mstno;
-  p_actwk->actfree.iwa.pl2mstno = actwk[1].mstno;
-  p_actwk->actfree.iwa.plcddat1 = actwk[0].cddat1;
-  p_actwk->actfree.iwa.pl2cddat1 = actwk[1].cddat1;
+  p_actwk->actfree.iwa.emyscorecnt = g_mdRam.emyscorecnt;
+  p_actwk->actfree.iwa.plmstno = g_mdRam.actwk[0].mstno;
+  p_actwk->actfree.iwa.pl2mstno = g_mdRam.actwk[1].mstno;
+  p_actwk->actfree.iwa.plcddat1 = g_mdRam.actwk[0].cddat1;
+  p_actwk->actfree.iwa.pl2cddat1 = g_mdRam.actwk[1].cddat1;
   hitchk_data data = {
     p_actwk->sprhs + 11,
     p_actwk->sprvs,
@@ -190,7 +190,7 @@ static void iwamove(sprite_status* p_actwk) {
 
 
 static void iwamove__end(sprite_status* p_actwk) {
-  if (vs_flag == 0) {
+  if (g_mdRam.vs_flag == 0) {
     frameoutchk2(p_actwk, p_actwk->actfree.iwa.orig_xposi);
   }
   else {
@@ -206,8 +206,8 @@ static void iwamove__jump(sprite_status* p_actwk) {
       iwamove__end(p_actwk);
       return;
     }
-    iwamove__sub2(p_actwk, &actwk[0], p_actwk->actfree.iwa.plmstno);
-    iwamove__sub2(p_actwk, &actwk[1], p_actwk->actfree.iwa.pl2mstno);
+    iwamove__sub2(p_actwk, &g_mdRam.actwk[0], p_actwk->actfree.iwa.plmstno);
+    iwamove__sub2(p_actwk, &g_mdRam.actwk[1], p_actwk->actfree.iwa.pl2mstno);
   }
   else {
     if (!BIT_IS_SET(p_actwk->cddat1, CD_PLRIDE)) {
@@ -218,7 +218,7 @@ static void iwamove__jump(sprite_status* p_actwk) {
       iwamove__end(p_actwk);
       return;
     }
-    iwamove__sub(p_actwk, &actwk[0]);
+    iwamove__sub(p_actwk, &g_mdRam.actwk[0]);
   }
   iwamove__jump3(p_actwk);
 }
@@ -257,16 +257,16 @@ static void iwamove__jump2(sprite_status* p_actwk) {
     iwamove__end(p_actwk);
   }
   else {
-    iwamove__sub(p_actwk, &actwk[1]);
+    iwamove__sub(p_actwk, &g_mdRam.actwk[1]);
     iwamove__jump3(p_actwk);
   }
 }
 
 
 static void iwamove__jump3(sprite_status* p_actwk) {
-  emyscorecnt = p_actwk->actfree.iwa.emyscorecnt;
+  g_mdRam.emyscorecnt = p_actwk->actfree.iwa.emyscorecnt;
   p_actwk->cddat1 &= 0xE7;
-  if (vs_flag != 0) {
+  if (g_mdRam.vs_flag != 0) {
     vsiwamove(p_actwk);
   }
   else {
@@ -278,7 +278,7 @@ static void iwamove__jump3(sprite_status* p_actwk) {
 
 
 static void iwamove2(sprite_status* p_actwk) {
-  if (stageno.zone == LAVA_REEF) {
+  if (g_mdRam.stageno.zone == LAVA_REEF) {
     iwamove21(p_actwk);
   }
   else {
@@ -375,8 +375,8 @@ static void vsiwamove3(sprite_status* p_actwk) {
 
 
 static void iwamove3(sprite_status* p_actwk) {
-  p_actwk->actfree.iwa.plspeed = actwk[0].xspeed;
-  p_actwk->actfree.iwa.pl2speed = actwk[1].xspeed;
+  p_actwk->actfree.iwa.plspeed = g_mdRam.actwk[0].xspeed;
+  p_actwk->actfree.iwa.pl2speed = g_mdRam.actwk[1].xspeed;
   hitchk_data data = {
     p_actwk->sprhs + 11,
     p_actwk->sprvs,
@@ -387,7 +387,7 @@ static void iwamove3(sprite_status* p_actwk) {
   if (results.plcoli & 3) goto jump;
 
 end:
-  if (vs_flag == 0) {
+  if (g_mdRam.vs_flag == 0) {
     frameoutchk2(p_actwk, p_actwk->actfree.iwa.orig_xposi);
   }
   else {
@@ -398,14 +398,14 @@ end:
 jump:
   if (!BIT_0_IS_SET(results.plcoli)) goto jump2;
   if (BIT_7_IS_SET(p_actwk->userflag1)) {
-    if (actwk[0].actfree.player.character == KNUCKLES) goto brgo;
+    if (g_mdRam.actwk[0].actfree.player.character == KNUCKLES) goto brgo;
     goto jump2;
   }
-  if (ssonicflag != 0 || actwk[0].actfree.player.character == KNUCKLES) {
+  if (g_mdRam.ssonicflag != 0 || g_mdRam.actwk[0].actfree.player.character == KNUCKLES) {
     goto brgo;
   }
-  if ((!BIT_4_IS_SET(actwk[0].cddat2) && !BIT_IS_SET(p_actwk->cddat1, CD_PLPUSH))
-      || actwk[0].mstno != 2) {
+  if ((!BIT_4_IS_SET(g_mdRam.actwk[0].cddat2) && !BIT_IS_SET(p_actwk->cddat1, CD_PLPUSH))
+      || g_mdRam.actwk[0].mstno != 2) {
     goto jump2;
   }
   short xspeed = p_actwk->actfree.iwa.plspeed;
@@ -416,10 +416,10 @@ jump:
 
 brgo:
   CLEAR_BIT(p_actwk->cddat1, CD_PLPUSH);
-  iwamove3__break(p_actwk, &actwk[0], p_actwk->actfree.iwa.plspeed);
+  iwamove3__break(p_actwk, &g_mdRam.actwk[0], p_actwk->actfree.iwa.plspeed);
   if (BIT_IS_SET(p_actwk->cddat1, CD_PL2PUSH)
-      && (actwk[1].actfree.player.character == KNUCKLES || actwk[1].mstno == 2)) {
-    actwk[1].mspeed = actwk[1].xspeed = p_actwk->actfree.iwa.pl2speed;
+      && (g_mdRam.actwk[1].actfree.player.character == KNUCKLES || g_mdRam.actwk[1].mstno == 2)) {
+    g_mdRam.actwk[1].mspeed = g_mdRam.actwk[1].xspeed = p_actwk->actfree.iwa.pl2speed;
     CLEAR_BIT(p_actwk->cddat1, CD_PL2PUSH);
     CLEAR_BIT(p_actwk->cddat1, CD_PUSH);
   }
@@ -428,10 +428,10 @@ brgo:
 jump2:
   if (!BIT_IS_SET(p_actwk->cddat1, CD_PL2PUSH)) goto end;
   if (BIT_7_IS_SET(p_actwk->userflag1)) {
-    if (actwk[1].actfree.player.character != KNUCKLES) goto end;
+    if (g_mdRam.actwk[1].actfree.player.character != KNUCKLES) goto end;
   }
-  else if (actwk[1].actfree.player.character != KNUCKLES) {
-    if (actwk[1].mstno != 2) goto end;
+  else if (g_mdRam.actwk[1].actfree.player.character != KNUCKLES) {
+    if (g_mdRam.actwk[1].mstno != 2) goto end;
     short xspeed = p_actwk->actfree.iwa.pl2speed;
     if (xspeed < 0) {
       xspeed = -xspeed;
@@ -439,13 +439,13 @@ jump2:
     if (xspeed < 1152) goto end;
   }
   CLEAR_BIT(p_actwk->cddat1, CD_PL2PUSH);
-  iwamove3__break(p_actwk, &actwk[1], p_actwk->actfree.iwa.pl2speed);
+  iwamove3__break(p_actwk, &g_mdRam.actwk[1], p_actwk->actfree.iwa.pl2speed);
 }
 
 
 static void iwamove3__break(sprite_status* p_actwk, sprite_status* p_playerwk, short xspeed) {
   iwamove3__ridechk(p_actwk);
-  if (vs_flag == 0) {
+  if (g_mdRam.vs_flag == 0) {
     p_playerwk->xspeed = xspeed;
     p_playerwk->xposi += SHORT_TO_LONG_HIGH(4);
     short* p_speed_data = iwaspdtbl0;
@@ -464,7 +464,7 @@ static void iwamove3__break(sprite_status* p_actwk, sprite_status* p_playerwk, s
         SET_BIT(p_playerwk->cddat1, CD_LEFT);
       }
     }
-    if (stageno.zone == LAVA_REEF) {
+    if (g_mdRam.stageno.zone == LAVA_REEF) {
       p_actwk->r_ptr = &iwamove22;
       iwabreakgosub4(p_actwk, p_speed_data, p_actwk->patno - 4);
       iwamove22(p_actwk);
@@ -498,21 +498,21 @@ static void iwamove3__ridechk(sprite_status* p_actwk) {
   bool plride_set = BIT_IS_SET(p_actwk->cddat1, CD_PLRIDE);
   CLEAR_BIT(p_actwk->cddat1, CD_PLRIDE);
   if (plride_set) {
-    SET_BIT(actwk[0].cddat1, CD_JUMP);
-    CLEAR_BIT(actwk[0].cddat1, CD_RIDE);
+    SET_BIT(g_mdRam.actwk[0].cddat1, CD_JUMP);
+    CLEAR_BIT(g_mdRam.actwk[0].cddat1, CD_RIDE);
   }
   plride_set = BIT_IS_SET(p_actwk->cddat1, CD_PL2RIDE);
   CLEAR_BIT(p_actwk->cddat1, CD_PL2RIDE);
   if (plride_set) {
-    SET_BIT(actwk[1].cddat1, CD_JUMP);
-    CLEAR_BIT(actwk[1].cddat1, CD_RIDE);
+    SET_BIT(g_mdRam.actwk[1].cddat1, CD_JUMP);
+    CLEAR_BIT(g_mdRam.actwk[1].cddat1, CD_RIDE);
   }
 }
 
 
 static void iwamove4(sprite_status* p_actwk) {
-  p_actwk->actfree.iwa.plspeed = actwk[0].yspeed;
-  p_actwk->actfree.iwa.pl2speed = actwk[1].yspeed;
+  p_actwk->actfree.iwa.plspeed = g_mdRam.actwk[0].yspeed;
+  p_actwk->actfree.iwa.pl2speed = g_mdRam.actwk[1].yspeed;
   hitchk_data data = {
     p_actwk->sprhs + 11,
     p_actwk->sprvs,
@@ -525,14 +525,14 @@ static void iwamove4(sprite_status* p_actwk) {
     return;
   }
   if (BIT_2_IS_SET(results.plcoli)) {
-    actwk[0].yspeed = p_actwk->actfree.iwa.plspeed;
+    g_mdRam.actwk[0].yspeed = p_actwk->actfree.iwa.plspeed;
     if (BIT_3_IS_SET(results.plcoli)) {
-      actwk[1].yspeed = p_actwk->actfree.iwa.pl2speed;
+      g_mdRam.actwk[1].yspeed = p_actwk->actfree.iwa.pl2speed;
     }
   }
   else {
     if (BIT_3_IS_SET(results.plcoli)) {
-      actwk[1].yspeed = p_actwk->actfree.iwa.pl2speed;
+      g_mdRam.actwk[1].yspeed = p_actwk->actfree.iwa.pl2speed;
     }
     else {
       frameoutchk2(p_actwk, p_actwk->actfree.iwa.orig_xposi);
@@ -540,12 +540,12 @@ static void iwamove4(sprite_status* p_actwk) {
     }
   }
   if (BIT_IS_SET(p_actwk->cddat1, CD_PLRIDE)) {
-    SET_BIT(actwk[0].cddat1, CD_JUMP);
-    CLEAR_BIT(actwk[0].cddat1, CD_RIDE);
+    SET_BIT(g_mdRam.actwk[0].cddat1, CD_JUMP);
+    CLEAR_BIT(g_mdRam.actwk[0].cddat1, CD_RIDE);
   }
   if (BIT_IS_SET(p_actwk->cddat1, CD_PL2RIDE)) {
-    SET_BIT(actwk[1].cddat1, CD_JUMP);
-    CLEAR_BIT(actwk[1].cddat1, CD_RIDE);
+    SET_BIT(g_mdRam.actwk[1].cddat1, CD_JUMP);
+    CLEAR_BIT(g_mdRam.actwk[1].cddat1, CD_RIDE);
   }
   p_actwk->r_ptr = &iwamove2;
   iwabreakgosub(p_actwk);
@@ -554,7 +554,7 @@ static void iwamove4(sprite_status* p_actwk) {
 
 
 static void iwamovek(sprite_status* p_actwk) {
-  p_actwk->actfree.iwa.emyscorecnt = emyscorecnt;
+  p_actwk->actfree.iwa.emyscorecnt = g_mdRam.emyscorecnt;
   hitchk_data data = {
     p_actwk->sprhs + 11,
     p_actwk->sprvs,
@@ -562,15 +562,15 @@ static void iwamovek(sprite_status* p_actwk) {
     LONG_HIGH(p_actwk->xposi)
   };
   if (!BIT_IS_SET(p_actwk->cddat1, CD_PLRIDE)
-      || actwk[0].actfree.player.character != KNUCKLES) {
+      || g_mdRam.actwk[0].actfree.player.character != KNUCKLES) {
     frameoutchk(p_actwk);
     return;
   }
-  iwamovek__sub(p_actwk, &actwk[0]);
+  iwamovek__sub(p_actwk, &g_mdRam.actwk[0]);
   if (BIT_IS_SET(p_actwk->cddat1, CD_PL2RIDE)) {
-    iwamovek__sub(p_actwk, &actwk[1]);
+    iwamovek__sub(p_actwk, &g_mdRam.actwk[1]);
   }
-  iwamovek__jump3(p_actwk, &actwk[1]);
+  iwamovek__jump3(p_actwk, &g_mdRam.actwk[1]);
 }
 
 
@@ -587,7 +587,7 @@ static void iwamovek__sub(sprite_status* p_actwk, sprite_status* p_playerwk) {
 
 
 static void iwamovek__jump3(sprite_status* p_actwk, sprite_status* p_playerwk) {
-  emyscorecnt = p_actwk->actfree.iwa.emyscorecnt;
+  g_mdRam.emyscorecnt = p_actwk->actfree.iwa.emyscorecnt;
   p_playerwk->cddat1 &= 0xE7;
   p_playerwk->r_ptr = &iwamove2;
   iwabreakgosub(p_actwk);
@@ -597,8 +597,8 @@ static void iwamovek__jump3(sprite_status* p_actwk, sprite_status* p_playerwk) {
 
 static void iwamovepush(sprite_status* p_actwk) {
   if (!(p_actwk->cddat1 & 0x60)) return;
-  iwamovepush__sub(p_actwk, &actwk[0], LONG_HIGH(p_actwk->xposi), p_actwk->actfree.iwa.plcddat1, 5);
-  iwamovepush__sub(p_actwk, &actwk[1], LONG_HIGH(p_actwk->xposi), p_actwk->actfree.iwa.pl2cddat1, 6);
+  iwamovepush__sub(p_actwk, &g_mdRam.actwk[0], LONG_HIGH(p_actwk->xposi), p_actwk->actfree.iwa.plcddat1, 5);
+  iwamovepush__sub(p_actwk, &g_mdRam.actwk[1], LONG_HIGH(p_actwk->xposi), p_actwk->actfree.iwa.pl2cddat1, 6);
 }
 
 
@@ -618,14 +618,14 @@ static void iwamovepush__sub(sprite_status* p_actwk, sprite_status* p_playerwk, 
   if (p_actwk->actfree.iwa.flagwork_index != 0) {
     short flag_s = p_actwk->actfree.iwa.countdown2;
     flag_s = -(flag_s - 64);
-    flagwork[p_actwk->actfree.iwa.flagwork_index - 1] = flag_s;
-    SET_BIT_7(flagwork[p_actwk->actfree.iwa.flagwork_index - 1]);
+    g_mdRam.flagwork[p_actwk->actfree.iwa.flagwork_index - 1] = flag_s;
+    SET_BIT_7(g_mdRam.flagwork[p_actwk->actfree.iwa.flagwork_index - 1]);
   }
 }
 
 
 static void iwabreakgosub(sprite_status* p_actwk) {
-  if (stageno.zone == LAVA_REEF) {
+  if (g_mdRam.stageno.zone == LAVA_REEF) {
     iwabreakgosub3(p_actwk);
   }
   else {

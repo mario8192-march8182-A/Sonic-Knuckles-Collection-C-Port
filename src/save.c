@@ -49,9 +49,9 @@ static void saveinit(sprite_status* p_actwk) {
   p_actwk->sprhs = 8;
   p_actwk->sprvs = 40;
   p_actwk->sprpri = PRI_5;
-  if (BIT_0_IS_SET(flagwork[p_actwk->actfree.save.flagwork_index - 1])
-      || (markerno & 0x7F) >= (p_actwk->userflag1 & 0x7F)) { // unsigned
-    SET_BIT_0(flagwork[p_actwk->actfree.save.flagwork_index - 1]);
+  if (BIT_0_IS_SET(g_mdRam.flagwork[p_actwk->actfree.save.flagwork_index - 1])
+      || (g_mdRam.markerno & 0x7F) >= (p_actwk->userflag1 & 0x7F)) { // unsigned
+    SET_BIT_0(g_mdRam.flagwork[p_actwk->actfree.save.flagwork_index - 1]);
     p_actwk->mstno = 2;
   }
   savemove(p_actwk);
@@ -59,15 +59,15 @@ static void saveinit(sprite_status* p_actwk) {
 
 
 static void savemove(sprite_status* p_actwk) {
-  if (edit_r_no == 0) {
-    savemove__sub(p_actwk, &actwk[0]);
+  if (g_mdRam.edit_r_no == 0) {
+    savemove__sub(p_actwk, &g_mdRam.actwk[0]);
   }
   savemove2(p_actwk);
 }
 
 
 static void savemove__sub(sprite_status* p_actwk, sprite_status* p_playerwk) {
-  if ((markerno & 0x7F) < (p_actwk->userflag1 & 0x7F)) {
+  if ((g_mdRam.markerno & 0x7F) < (p_actwk->userflag1 & 0x7F)) {
     short distance = LONG_HIGH(p_actwk->xposi) - LONG_HIGH(p_playerwk->xposi) + 8;
     if (util__to_unsigned(distance) >= 16) return; // unsigned
     distance = LONG_HIGH(p_actwk->yposi) - LONG_HIGH(p_playerwk->yposi) + 64;
@@ -89,13 +89,13 @@ static void savemove__sub(sprite_status* p_actwk, sprite_status* p_playerwk) {
       p_new_actwk->sprpri = PRI_4;
       p_new_actwk->patno = 2;
       p_new_actwk->actfree.save.counter = 32;
-      p_new_actwk->actfree.save.parent = p_actwk - actwk;
+      p_new_actwk->actfree.save.parent = p_actwk - g_mdRam.actwk;
       bool enough_rings = false;
       if (g_sonic3Alone != 0) {
-        enough_rings = plring >= 50;
+        enough_rings = g_mdRam.plring >= 50;
       }
       else {
-        enough_rings = plring >= 20;
+        enough_rings = g_mdRam.plring >= 20;
       }
       if (enough_rings) {
         o_starinit(p_actwk);
@@ -104,7 +104,7 @@ static void savemove__sub(sprite_status* p_actwk, sprite_status* p_playerwk) {
     p_actwk->mstno = 1;
     playsave(p_actwk);
     p_actwk->r_no = 4;
-    SET_BIT_0(flagwork[p_actwk->actfree.save.flagwork_index - 1]);
+    SET_BIT_0(g_mdRam.flagwork[p_actwk->actfree.save.flagwork_index - 1]);
   }
   else if (p_actwk->mstno == 0) {
     p_actwk->mstno = 2;
@@ -121,7 +121,7 @@ static void savemove2(sprite_status* p_actwk) {
 static void savemove3(sprite_status* p_actwk) {
   --p_actwk->actfree.save.counter;
   if (p_actwk->actfree.save.counter < 0) {
-    sprite_status* p_sub_actwk = &actwk[p_actwk->actfree.save.parent];
+    sprite_status* p_sub_actwk = &g_mdRam.actwk[p_actwk->actfree.save.parent];
     if (p_sub_actwk->r_ptr == &save) {
       p_sub_actwk->mstno = 2;
       p_sub_actwk->patno = 0;
@@ -144,106 +144,106 @@ static void savemove3(sprite_status* p_actwk) {
 
 
 static void playsave(sprite_status* p_actwk) {
-  markerno = p_actwk->userflag1;
-  plxposi_s = LONG_HIGH(p_actwk->xposi);
-  plyposi_s = LONG_HIGH(p_actwk->yposi);
+  g_mdRam.markerno = p_actwk->userflag1;
+  g_mdRam.plxposi_s = LONG_HIGH(p_actwk->xposi);
+  g_mdRam.plyposi_s = LONG_HIGH(p_actwk->yposi);
   playsave1(p_actwk);
 }
 
 
 void playsave1(sprite_status* p_actwk) {
-  markerno_s = markerno;
-  stageno_s = stageno;
-  stageno_is = stageno_i;
-  plsproffset_s = actwk[0].sproffset;
-  plcolibits_s = actwk[0].actfree.player.colibits;
-  plring_s = plring;
-  plring_f2_s = plring_f2;
-  pltime_s = pltime;
-  scr_resize_no_s = scr_resize_no;
-  scralim_down_s = scralim_down;
-  scra_h_posit_s = LONG_HIGH(scra_h_posit);
-  scra_v_posit_s = LONG_HIGH(scra_v_posit);
-  waterposi_s = waterposi;
-  waterflag_s = waterflag;
+  g_mdRam.markerno_s = g_mdRam.markerno;
+  g_mdRam.stageno_s = g_mdRam.stageno;
+  g_mdRam.stageno_is = g_mdRam.stageno_i;
+  g_mdRam.plsproffset_s = g_mdRam.actwk[0].sproffset;
+  g_mdRam.plcolibits_s = g_mdRam.actwk[0].actfree.player.colibits;
+  g_mdRam.plring_s = g_mdRam.plring;
+  g_mdRam.plring_f2_s = g_mdRam.plring_f2;
+  g_mdRam.pltime_s = g_mdRam.pltime;
+  g_mdRam.scr_resize_no_s = g_mdRam.scr_resize_no;
+  g_mdRam.scralim_down_s = g_mdRam.scralim_down;
+  g_mdRam.scra_h_posit_s = LONG_HIGH(g_mdRam.scra_h_posit);
+  g_mdRam.scra_v_posit_s = LONG_HIGH(g_mdRam.scra_v_posit);
+  g_mdRam.waterposi_s = g_mdRam.waterposi;
+  g_mdRam.waterflag_s = g_mdRam.waterflag;
 }
 
 
 void playsave2(sprite_status* p_actwk) {
-  markerno_s2 = markerno;
-  stageno_s2 = stageno;
-  stageno_is2 = stageno_i;
-  plxposi_s2 = LONG_HIGH(p_actwk->xposi);
-  plyposi_s2 = LONG_HIGH(p_actwk->yposi);
-  plsproffset_s2 = actwk[0].sproffset;
-  plcolibits_s2 = actwk[0].actfree.player.colibits;
-  plring_s2 = plring;
-  plring_f2_s2 = plring_f2;
-  pltime_s2 = pltime;
-  scr_resize_no_s2 = scr_resize_no;
-  scralim_down_s2 = scralim_down;
-  scra_h_posit_s2 = LONG_HIGH(scra_h_posit);
-  scra_v_posit_s2 = LONG_HIGH(scra_v_posit);
-  waterposi_s2 = waterposi;
-  waterflag_s2 = waterflag;
-  plcddat2_s2 = actwk[0].cddat2;
+  g_mdRam.markerno_s2 = g_mdRam.markerno;
+  g_mdRam.stageno_s2 = g_mdRam.stageno;
+  g_mdRam.stageno_is2 = g_mdRam.stageno_i;
+  g_mdRam.plxposi_s2 = LONG_HIGH(p_actwk->xposi);
+  g_mdRam.plyposi_s2 = LONG_HIGH(p_actwk->yposi);
+  g_mdRam.plsproffset_s2 = g_mdRam.actwk[0].sproffset;
+  g_mdRam.plcolibits_s2 = g_mdRam.actwk[0].actfree.player.colibits;
+  g_mdRam.plring_s2 = g_mdRam.plring;
+  g_mdRam.plring_f2_s2 = g_mdRam.plring_f2;
+  g_mdRam.pltime_s2 = g_mdRam.pltime;
+  g_mdRam.scr_resize_no_s2 = g_mdRam.scr_resize_no;
+  g_mdRam.scralim_down_s2 = g_mdRam.scralim_down;
+  g_mdRam.scra_h_posit_s2 = LONG_HIGH(g_mdRam.scra_h_posit);
+  g_mdRam.scra_v_posit_s2 = LONG_HIGH(g_mdRam.scra_v_posit);
+  g_mdRam.waterposi_s2 = g_mdRam.waterposi;
+  g_mdRam.waterflag_s2 = g_mdRam.waterflag;
+  g_mdRam.plcddat2_s2 = g_mdRam.actwk[0].cddat2;
 }
 
 
 void playload(sprite_status* p_actwk) {
-  if (marker_flag != 0) {
+  if (g_mdRam.marker_flag != 0) {
     playload2(p_actwk);
     return;
   }
-  markerno = markerno_s;
-  stageno = stageno_s;
-  stageno_i = stageno_is;
-  util__assign_high(&actwk[0].xposi, plxposi_s);
-  util__assign_high(&actwk[0].yposi, plyposi_s);
-  plring = plring_s;
-  plring_f2 = plring_f2_s;
-  if (plresetflag == 0) {
-    plring = 0;
-    plring_f2 = 0;
+  g_mdRam.markerno = g_mdRam.markerno_s;
+  g_mdRam.stageno = g_mdRam.stageno_s;
+  g_mdRam.stageno_i = g_mdRam.stageno_is;
+  util__assign_high(&g_mdRam.actwk[0].xposi, g_mdRam.plxposi_s);
+  util__assign_high(&g_mdRam.actwk[0].yposi, g_mdRam.plyposi_s);
+  g_mdRam.plring = g_mdRam.plring_s;
+  g_mdRam.plring_f2 = g_mdRam.plring_f2_s;
+  if (g_mdRam.plresetflag == 0) {
+    g_mdRam.plring = 0;
+    g_mdRam.plring_f2 = 0;
   }
-  pltime = pltime_s;
-  pltime.frames = 59;
-  --pltime.seconds;
-  actwk[0].sproffset = plsproffset_s;
-  actwk[0].actfree.player.colibits = plcolibits_s;
-  scr_resize_no = scr_resize_no_s;
-  scralim_down = scralim_down_s;
-  scralim_n_down = scralim_down_s;
-  util__assign_high(&scra_h_posit, scra_h_posit_s);
-  util__assign_high(&scra_v_posit, scra_v_posit_s);
-  if (watermode != 0) {
-    waterposi = waterposi_s;
-    waterflag = waterflag_s;
+  g_mdRam.pltime = g_mdRam.pltime_s;
+  g_mdRam.pltime.frames = 59;
+  --g_mdRam.pltime.seconds;
+  g_mdRam.actwk[0].sproffset = g_mdRam.plsproffset_s;
+  g_mdRam.actwk[0].actfree.player.colibits = g_mdRam.plcolibits_s;
+  g_mdRam.scr_resize_no = g_mdRam.scr_resize_no_s;
+  g_mdRam.scralim_down = g_mdRam.scralim_down_s;
+  g_mdRam.scralim_n_down = g_mdRam.scralim_down_s;
+  util__assign_high(&g_mdRam.scra_h_posit, g_mdRam.scra_h_posit_s);
+  util__assign_high(&g_mdRam.scra_v_posit, g_mdRam.scra_v_posit_s);
+  if (g_mdRam.watermode != 0) {
+    g_mdRam.waterposi = g_mdRam.waterposi_s;
+    g_mdRam.waterflag = g_mdRam.waterflag_s;
   }
 }
 
 
 static void playload2(sprite_status* p_actwk) {
-  marker_flag = 0;
-  stageno = stageno_s2;
-  stageno_i = stageno_is2;
-  util__assign_high(&actwk[0].xposi, plxposi_s2);
-  util__assign_high(&actwk[0].yposi, plyposi_s2);
-  plring = plring_s2;
-  plring_f2 = plring_f2_s2;
-  pltime = pltime_s2;
-  pltime.frames = 59;
-  --pltime.seconds;
-  actwk[0].sproffset = plsproffset_s2;
-  actwk[0].actfree.player.colibits = plcolibits_s2;
-  scr_resize_no = scr_resize_no_s2;
-  scralim_down = scralim_down_s2;
-  scralim_n_down = scralim_down_s2;
-  util__assign_high(&scra_h_posit, scra_h_posit_s2);
-  util__assign_high(&scra_v_posit, scra_v_posit_s2);
-  if (watermode != 0) {
-    waterposi = waterposi_s2;
-    waterflag = waterflag_s2;
+  g_mdRam.marker_flag = 0;
+  g_mdRam.stageno = g_mdRam.stageno_s2;
+  g_mdRam.stageno_i = g_mdRam.stageno_is2;
+  util__assign_high(&g_mdRam.actwk[0].xposi, g_mdRam.plxposi_s2);
+  util__assign_high(&g_mdRam.actwk[0].yposi, g_mdRam.plyposi_s2);
+  g_mdRam.plring = g_mdRam.plring_s2;
+  g_mdRam.plring_f2 = g_mdRam.plring_f2_s2;
+  g_mdRam.pltime = g_mdRam.pltime_s2;
+  g_mdRam.pltime.frames = 59;
+  --g_mdRam.pltime.seconds;
+  g_mdRam.actwk[0].sproffset = g_mdRam.plsproffset_s2;
+  g_mdRam.actwk[0].actfree.player.colibits = g_mdRam.plcolibits_s2;
+  g_mdRam.scr_resize_no = g_mdRam.scr_resize_no_s2;
+  g_mdRam.scralim_down = g_mdRam.scralim_down_s2;
+  g_mdRam.scralim_n_down = g_mdRam.scralim_down_s2;
+  util__assign_high(&g_mdRam.scra_h_posit, g_mdRam.scra_h_posit_s2);
+  util__assign_high(&g_mdRam.scra_v_posit, g_mdRam.scra_v_posit_s2);
+  if (g_mdRam.watermode != 0) {
+    g_mdRam.waterposi = g_mdRam.waterposi_s2;
+    g_mdRam.waterflag = g_mdRam.waterflag_s2;
   }
 }
 
@@ -321,10 +321,10 @@ void o_starinit(sprite_status* p_actwk) {
   void* p_data = &white_star_ring_tiles;
   if (g_sonic3Alone == 0) {
     p_data = &orange_star_ring_tiles;
-    short bonus_stage_id = plring - 20;
+    short bonus_stage_id = g_mdRam.plring - 20;
     bonus_stage_id /= 15;
     unsigned char bonus_stage_cnt = 2;
-    if (cartridge == 0) {
+    if (g_mdRam.cartridge == 0) {
       bonus_stage_cnt = 3;
     }
     bonus_stage_id %= bonus_stage_cnt;
@@ -349,22 +349,22 @@ void o_starinit(sprite_status* p_actwk) {
 void o_star(sprite_status* p_actwk) {
   if (p_actwk->colicnt != 0) {
     if (p_actwk->colicnt & 1) {
-      marker_flag = 2;
+      g_mdRam.marker_flag = 2;
       if (g_sonic3Alone != 0) {
-        stageno.zone = ZONE_GUMBALL_MACHINE, stageno.act = 0;
-        stageno_i.zone = ZONE_GUMBALL_MACHINE, stageno_i.act = 0;
-        markerno = 0;
-        gameflag = 1;
-        plcddat2_s2 = actwk[0].cddat2;
-        plresetflag = 1;
+        g_mdRam.stageno.zone = ZONE_GUMBALL_MACHINE, g_mdRam.stageno.act = 0;
+        g_mdRam.stageno_i.zone = ZONE_GUMBALL_MACHINE, g_mdRam.stageno_i.act = 0;
+        g_mdRam.markerno = 0;
+        g_mdRam.gameflag = 1;
+        g_mdRam.plcddat2_s2 = g_mdRam.actwk[0].cddat2;
+        g_mdRam.plresetflag = 1;
         Clear_SpriteRingMem();
       }
       else {
         zone_act bonus_stage_no = { ZONE_ROLLING_JUMP, 0 };
-        short bonus_stage_id = plring_s - 20;
+        short bonus_stage_id = g_mdRam.plring_s - 20;
         bonus_stage_id /= 15;
         unsigned char bonus_stage_cnt = 2;
-        if (cartridge == 0) {;
+        if (g_mdRam.cartridge == 0) {;
           bonus_stage_cnt = 3;
         }
         bonus_stage_id %= bonus_stage_cnt;
@@ -381,16 +381,16 @@ void o_star(sprite_status* p_actwk) {
             break;
         }
 
-        stageno = bonus_stage_no;
-        stageno_i = bonus_stage_no;
-        plring_s = plring;
-        plring_f2_s = plring_f2;
-        markerno = 0;
-        gameflag = 1;
-        unsigned char cddat2 = actwk[0].cddat2 & 113;
-        plcddat2_s2 = cddat2;
-        plcddat2_s = cddat2;
-        plresetflag = 1;
+        g_mdRam.stageno = bonus_stage_no;
+        g_mdRam.stageno_i = bonus_stage_no;
+        g_mdRam.plring_s = g_mdRam.plring;
+        g_mdRam.plring_f2_s = g_mdRam.plring_f2;
+        g_mdRam.markerno = 0;
+        g_mdRam.gameflag = 1;
+        unsigned char cddat2 = g_mdRam.actwk[0].cddat2 & 113;
+        g_mdRam.plcddat2_s2 = cddat2;
+        g_mdRam.plcddat2_s = cddat2;
+        g_mdRam.plresetflag = 1;
         Clear_SpriteRingMem();
       }
     }

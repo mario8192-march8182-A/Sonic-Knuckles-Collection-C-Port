@@ -25,9 +25,9 @@ static hitchk_results plhitchk_pop_up(sprite_status* p_actwk, sprite_status* p_p
 
 
 hitchk_results hitchk(sprite_status* p_actwk, hitchk_data data) {
-  hitchk_results results = plhitchk(p_actwk, &actwk[0], data, 3);
-  if (BIT_7_IS_SET(actwk[1].actflg)) {
-    hitchk_results results2 = plhitchk(p_actwk, &actwk[1], data, 4);
+  hitchk_results results = plhitchk(p_actwk, &g_mdRam.actwk[0], data, 3);
+  if (BIT_7_IS_SET(g_mdRam.actwk[1].actflg)) {
+    hitchk_results results2 = plhitchk(p_actwk, &g_mdRam.actwk[1], data, 4);
     results.plcoli += results2.plcoli;
   }
   return results;
@@ -60,8 +60,8 @@ hitchk_results plhitchk(sprite_status* p_actwk, sprite_status* p_playerwk, hitch
 
 
 hitchk_results hitchk2(sprite_status* p_actwk, hitchk_data data) {
-  hitchk_results results = plhitchk2(p_actwk, &actwk[0], data, 3);
-  hitchk_results results2 = plhitchk2(p_actwk, &actwk[1], data, 4);
+  hitchk_results results = plhitchk2(p_actwk, &g_mdRam.actwk[0], data, 3);
+  hitchk_results results2 = plhitchk2(p_actwk, &g_mdRam.actwk[1], data, 4);
   results.plcoli += results2.plcoli;
   return results;
 }
@@ -93,8 +93,8 @@ hitchk_results plhitchk2(sprite_status* p_actwk, sprite_status* p_playerwk, hitc
 
 
 hitchk_results hitchk_slope(sprite_status* p_actwk, hitchk_data data, signed char* slope_heights) {
-  hitchk_results results = plhitchk_slope(p_actwk, &actwk[0], data, slope_heights, 3);
-  hitchk_results results2 = plhitchk_slope(p_actwk, &actwk[1], data, slope_heights, 4);
+  hitchk_results results = plhitchk_slope(p_actwk, &g_mdRam.actwk[0], data, slope_heights, 3);
+  hitchk_results results2 = plhitchk_slope(p_actwk, &g_mdRam.actwk[1], data, slope_heights, 4);
   results.plcoli += results2.plcoli;
   return results;
 }
@@ -127,8 +127,8 @@ hitchk_results plhitchk_slope(sprite_status* p_actwk, sprite_status* p_playerwk,
 
 
 hitchk_results hitchk_doubleslope(sprite_status* p_actwk, hitchk_data data, signed char* slope_heights) {
-  hitchk_results results = plhitchk_doubleslope(p_actwk, &actwk[0], data, slope_heights, 3);
-  hitchk_results results2 = plhitchk_doubleslope(p_actwk, &actwk[1], data, slope_heights, 4);
+  hitchk_results results = plhitchk_doubleslope(p_actwk, &g_mdRam.actwk[0], data, slope_heights, 3);
+  hitchk_results results2 = plhitchk_doubleslope(p_actwk, &g_mdRam.actwk[1], data, slope_heights, 4);
   results.plcoli += results2.plcoli;
   return results;
 }
@@ -160,8 +160,8 @@ static hitchk_results plhitchk_doubleslope(sprite_status* p_actwk, sprite_status
 
 
 hitchk_results hitchk_bryuka(sprite_status* p_actwk, hitchk_data data, signed char* slope_heights) {
-  hitchk_results results = plhitchk_bryuka(p_actwk, &actwk[0], data, slope_heights, 3);
-  hitchk_results results2 = plhitchk_bryuka(p_actwk, &actwk[1], data, slope_heights, 4);
+  hitchk_results results = plhitchk_bryuka(p_actwk, &g_mdRam.actwk[0], data, slope_heights, 3);
+  hitchk_results results2 = plhitchk_bryuka(p_actwk, &g_mdRam.actwk[1], data, slope_heights, 4);
   results.plcoli += results2.plcoli;
   return results;
 }
@@ -193,8 +193,8 @@ static hitchk_results plhitchk_bryuka(sprite_status* p_actwk, sprite_status* p_p
 
 
 hitchk_results hitchk_offset(sprite_status* p_actwk, hitchk_data data) {
-  hitchk_results results = plhitchk_offset(p_actwk, &actwk[0], data, 3);
-  hitchk_results results2 = plhitchk_offset(p_actwk, &actwk[0], data, 4);
+  hitchk_results results = plhitchk_offset(p_actwk, &g_mdRam.actwk[0], data, 3);
+  hitchk_results results2 = plhitchk_offset(p_actwk, &g_mdRam.actwk[0], data, 4);
   results.plcoli += results2.plcoli;
   return results;
 }
@@ -330,7 +330,7 @@ hitchk_results plhitchk_chk_coli2(sprite_status* p_actwk, sprite_status* p_playe
   }
   hitchk_distances distances = { left_edge_distance, 0, 0, 0 };
   unsigned char min_bottom_distance = 0;
-  if (reverse_gravity_flag != 0) {
+  if (g_mdRam.reverse_gravity_flag != 0) {
     distances.max_top = data.sprvs_air + p_playerwk->sprvsize;
     short relative_position = LONG_HIGH(p_playerwk->yposi) - LONG_HIGH(p_actwk->yposi);
     relative_position = -relative_position;
@@ -359,7 +359,7 @@ static hitchk_results plhitchk_chk_bounds(sprite_status* p_actwk, sprite_status*
   if (BIT_7_IS_SET(p_actwk->actfree.player.control_bitfield)) {
     return plhitchk_chk_push(p_actwk, p_playerwk, plridebit);
   }
-  if (p_playerwk->r_no >= 6 || edit_r_no != 0) { // unsigned
+  if (p_playerwk->r_no >= 6 || g_mdRam.edit_r_no != 0) { // unsigned
     return plhitchk_no_coli(p_actwk);
   }
   hitchk_edge_distances edge_distances = {
@@ -478,7 +478,7 @@ static hitchk_results plhitchk_chk_planes(sprite_status* p_actwk, sprite_status*
 
 
 static hitchk_results plhitchk_pop_down(sprite_status* p_actwk, sprite_status* p_playerwk, hitchk_edge_distances edge_distances, unsigned char plridebit) {
-  if (reverse_gravity_flag != 0) {
+  if (g_mdRam.reverse_gravity_flag != 0) {
     edge_distances.vertical = -edge_distances.vertical;
   }
   p_playerwk->yposi -= SHORT_TO_LONG_HIGH(edge_distances.vertical);
@@ -520,7 +520,7 @@ static hitchk_results plhitchk_pop_up(sprite_status* p_actwk, sprite_status* p_p
   short relative_pos = p_actwk->sprhs + LONG_HIGH(p_playerwk->xposi) - LONG_HIGH(p_actwk->xposi);
   if (relative_pos >= 0 && relative_pos >= width) { // unsigned
     p_playerwk->yposi -= SHORT_TO_LONG_HIGH(1);
-    if (reverse_gravity_flag != 0) {
+    if (g_mdRam.reverse_gravity_flag != 0) {
       edge_distances.vertical = -edge_distances.vertical;
       p_playerwk->yposi += SHORT_TO_LONG_HIGH(2);
     }

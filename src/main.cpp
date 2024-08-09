@@ -206,7 +206,7 @@ int allocRamAndVram() {
     return 1;
   }
 
-  memset(g_mdRam, 0, 65536);
+  memset(&g_mdRam, 0, 65536);
   memset(g_mdVram, 0, 65536);
   memset(g_mdSystemRam, 0, 143360);
 

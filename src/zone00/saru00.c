@@ -174,12 +174,12 @@ void saru00_arm(sprite_status* p_actwk) {
     else {
       p_actwk->r_ptr = &saru00_hand;
       p_actwk->patno = 6;
-      sprite_status* p_parentwk = &actwk[p_actwk->actfree.saru00.oya];
-      p_parentwk = &actwk[p_actwk->actfree.dynamic.oya];
-      p_actwk->actfree.saru00.arm_other = p_parentwk - actwk;
-      p_parentwk = &actwk[p_actwk->actfree.dynamic.oya];
-      p_parentwk = &actwk[p_actwk->actfree.dynamic.oya];
-      p_actwk->actfree.saru00.ko = p_parentwk - actwk;
+      sprite_status* p_parentwk = &g_mdRam.actwk[p_actwk->actfree.saru00.oya];
+      p_parentwk = &g_mdRam.actwk[p_actwk->actfree.dynamic.oya];
+      p_actwk->actfree.saru00.arm_other = p_parentwk - g_mdRam.actwk;
+      p_parentwk = &g_mdRam.actwk[p_actwk->actfree.dynamic.oya];
+      p_parentwk = &g_mdRam.actwk[p_actwk->actfree.dynamic.oya];
+      p_actwk->actfree.saru00.ko = p_parentwk - g_mdRam.actwk;
       chk_oya_die0(p_actwk);
     }
   }
@@ -422,7 +422,7 @@ static void banana_land(sprite_status* p_actwk) {
 
 
 static void saru00_chk_rev(sprite_status* p_actwk) {
-  sprite_status* p_parentwk = &actwk[p_actwk->actfree.saru00.oya];
+  sprite_status* p_parentwk = &g_mdRam.actwk[p_actwk->actfree.saru00.oya];
   unsigned char actflg = p_parentwk->actflg;
   if (BIT_3_IS_SET(p_parentwk->actfree.saru00.status_bitfield)) {
     TOGGLE_HFLIP(actflg);
@@ -435,7 +435,7 @@ static void saru00_chk_rev(sprite_status* p_actwk) {
 
 
 static void saru00_chk_ofs(sprite_status* p_actwk) {
-  sprite_status* p_parentwk = &actwk[p_actwk->actfree.saru00.oya];
+  sprite_status* p_parentwk = &g_mdRam.actwk[p_actwk->actfree.saru00.oya];
   short yposi = LONG_HIGH(p_parentwk->yposi) - 2;
   if (p_parentwk->patno != 0) {
     yposi -= 2;
@@ -445,7 +445,7 @@ static void saru00_chk_ofs(sprite_status* p_actwk) {
 
 
 static void saru00_chk_pri(sprite_status* p_actwk) {
-  sprite_status* p_parentwk = &actwk[p_actwk->actfree.saru00.oya];
+  sprite_status* p_parentwk = &g_mdRam.actwk[p_actwk->actfree.saru00.oya];
   p_actwk->sprpri = p_parentwk->sprpri;
 }
 
@@ -471,7 +471,7 @@ static void other_move(sprite_status* p_actwk) {
   --p_actwk->actfree.saru00.arm_other_countdown;
   if (p_actwk->actfree.saru00.arm_other_countdown == 0) {
     p_actwk->actfree.saru00.arm_other_countdown = SPRITE_STATUS_UCHAR(p_actwk, 58);
-    sprite_status* p_parentwk = &actwk[p_actwk->actfree.saru00.oya];
+    sprite_status* p_parentwk = &g_mdRam.actwk[p_actwk->actfree.saru00.oya];
     p_actwk->actfree.saru00.arm_other_angle = p_parentwk->actfree.saru00.arm_other_angle;
   }
   circle_move(p_actwk, 5);
@@ -479,7 +479,7 @@ static void other_move(sprite_status* p_actwk) {
 
 
 static void chk_arm_shot(sprite_status* p_actwk, unsigned char r_no) {
-  sprite_status* p_parentwk = &actwk[p_actwk->actfree.saru00.oya];
+  sprite_status* p_parentwk = &g_mdRam.actwk[p_actwk->actfree.saru00.oya];
   if (!BIT_1_IS_SET(p_actwk->actfree.saru00.status_bitfield)) return;
   p_actwk->r_no = r_no;
   SET_BIT_1(p_actwk->actfree.saru00.status_bitfield);
@@ -489,7 +489,7 @@ static void chk_arm_shot(sprite_status* p_actwk, unsigned char r_no) {
 
 
 static void chk_arm_ura(sprite_status* p_actwk, unsigned char r_no) {
-  sprite_status* p_parentwk = &actwk[p_actwk->actfree.saru00.oya];
+  sprite_status* p_parentwk = &g_mdRam.actwk[p_actwk->actfree.saru00.oya];
   if (BIT_1_IS_SET(p_actwk->actfree.saru00.status_bitfield)) return;
   p_actwk->r_no = r_no;
   SPRITE_STATUS_UCHAR(p_actwk, 58) *= 2;
@@ -501,17 +501,17 @@ static void chk_hand_shot(sprite_status* p_actwk) {
   if (BIT_3_IS_SET(p_actwk->actfree.saru00.status_bitfield)) {
     // right
     if (BIT_0_IS_SET(p_actwk->actfree.saru00.status_bitfield)) return;
-    sprite_status* p_childwk = &actwk[p_actwk->actfree.saru00.ko];
+    sprite_status* p_childwk = &g_mdRam.actwk[p_actwk->actfree.saru00.ko];
     if (!BIT_2_IS_SET(p_childwk->actfree.saru00.status_bitfield)) return;
-    sprite_status* p_arm_otherwk = &actwk[p_actwk->actfree.saru00.arm_other];
+    sprite_status* p_arm_otherwk = &g_mdRam.actwk[p_actwk->actfree.saru00.arm_other];
     if (p_arm_otherwk->actfree.saru00.arm_other_angle >= 132) return; // unsigned
   }
   else {
     // left
     if (BIT_0_IS_SET(p_actwk->actfree.saru00.status_bitfield)) return;
-    sprite_status* p_childwk = &actwk[p_actwk->actfree.saru00.ko];
+    sprite_status* p_childwk = &g_mdRam.actwk[p_actwk->actfree.saru00.ko];
     if (!BIT_2_IS_SET(p_childwk->actfree.saru00.status_bitfield)) return;
-    sprite_status* p_arm_otherwk = &actwk[p_actwk->actfree.saru00.arm_other];
+    sprite_status* p_arm_otherwk = &g_mdRam.actwk[p_actwk->actfree.saru00.arm_other];
     if (p_arm_otherwk->actfree.saru00.arm_other_angle < 124) return; // unsigned
     p_actwk->sproffset = 9604;
   }
@@ -528,11 +528,11 @@ static void chk_hand_shot(sprite_status* p_actwk) {
 static void set_arm_timer(sprite_status* p_actwk) {
   random();
   signed char dir = 1;
-  if (BIT_0_IS_SET(ranum)) {
+  if (BIT_0_IS_SET(g_mdRam.ranum)) {
     dir = -dir;
   }
   p_actwk->actfree.saru00.dir = dir;
-  p_actwk->actfree.saru00.timer = ranum & 60;
+  p_actwk->actfree.saru00.timer = g_mdRam.ranum & 60;
 }
 
 
