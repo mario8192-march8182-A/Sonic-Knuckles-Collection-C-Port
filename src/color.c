@@ -1,0 +1,165 @@
+#include "globals.h"
+#include "macros.h"
+#include <string.h>
+#include "types/colortblentry.h"
+#include "color.h"
+#include "colortbl.h"
+static void fadein1();
+static void fadein2(unsigned short* p_destination, unsigned short* p_source);
+static void fadein0();
+static void fadeout1();
+static void fadeout2(unsigned short* pPalette);
+static void fadein0_alt();
+
+extern void vInt();
+
+
+// 00426210
+void fadein() {
+  g_mdRam.colorcnt = 63;
+  fadein0();
+  unsigned short cnt = 21;
+
+  do {
+    g_mdRam.int_flg = 18;
+    vInt();
+    fadein1();
+  } while (cnt-- != 0);
+}
+
+
+// 00426258
+static void fadein1() {
+  unsigned short* p_destination = &g_mdRam.colorwk[g_mdRam.startcolor / 2];
+  unsigned short* p_source = &g_mdRam.colorwk2[g_mdRam.startcolor / 2];
+  unsigned char cnt = g_mdRam.colorcnt;
+
+  do {
+    fadein2(p_destination, p_source);
+    ++p_destination;
+    ++p_source;
+  } while (cnt-- != 0);
+
+  if (g_mdRam.watermode != 0) {
+    p_destination = &g_mdRam.colorwk3[g_mdRam.startcolor / 2];
+    p_source = &g_mdRam.colorwk4[g_mdRam.startcolor / 2];
+    cnt = g_mdRam.colorcnt;
+
+    do {
+      fadein2(p_destination, p_source);
+      ++p_destination;
+      ++p_source;
+    } while (cnt-- != 0);
+  }
+}
+
+
+// 0042634e
+static void fadein2(unsigned short* p_destination, unsigned short* p_source) {
+  if (*p_destination == *p_source) return;
+
+  unsigned short color = *p_destination + 0x200;
+  if (color <= *p_source) {
+    *p_destination = color;
+    return;
+  }
+
+  color = *p_destination + 0x20;
+  if (color <= *p_source) {
+    *p_destination = color;
+    return;
+  }
+
+  *p_destination += 2;
+}
+
+
+// 00426447
+static void fadein0() {
+  if (IS_ENDING(g_mdRam.stageno) || IS_MASTER_EMERALD_SHRINE(g_mdRam.stageno)) {
+    fadein0_alt();
+    return;
+  }
+
+  unsigned short* p_palette = &g_mdRam.colorwk[g_mdRam.startcolor / 2];
+  unsigned char cnt = g_mdRam.colorcnt * 2;
+  memset(p_palette, 0, cnt);
+  if (g_mdRam.watermode != 0) {
+    p_palette = &g_mdRam.colorwk3[g_mdRam.startcolor / 2];
+    memset(p_palette, 0, cnt);
+  }
+}
+
+
+// 0042653f
+void fadeout() {
+  g_mdRam.startcolor = 0;
+  g_mdRam.colorcnt = 63;
+
+  for (int fadecount = 21; fadecount > 0; --fadecount) {
+    g_mdRam.int_flg = 18;
+    vInt();
+    fadeout1();
+  }
+}
+
+
+// 00426580
+static void fadeout1() {
+  unsigned short* pPalette = &g_mdRam.colorwk[g_mdRam.startcolor / 2];
+  for (int i = 0; g_mdRam.colorcnt >= i; ++i) {
+    fadeout2(pPalette);
+    ++pPalette;
+  }
+
+  pPalette = &g_mdRam.colorwk3[g_mdRam.startcolor / 2];
+  for (int i = 0; g_mdRam.colorcnt >= i; ++i) {
+    fadeout2(pPalette);
+    ++pPalette;
+  }
+}
+
+
+// 0042662d
+static void fadeout2(unsigned short* pPalette) {
+  unsigned short color = *pPalette;
+  if (color == 0) return;
+
+  unsigned short red = color & 0xE;
+  if (red != 0) {
+    *pPalette -= 0x2;
+    return;
+  }
+
+  unsigned short green = color & 0xE0;
+  if (green != 0) {
+    *pPalette -= 0x20;
+    return;
+  }
+
+  unsigned short blue = color & 0xE00;
+  if (blue != 0) {
+    *pPalette -= 0x200;
+    return;
+  }
+}
+
+
+// 0042670d
+static void fadein0_alt() {
+  unsigned short* p_palette = &g_mdRam.colorwk[g_mdRam.startcolor / 2];
+  unsigned char cnt = g_mdRam.colorcnt;
+
+  do {
+    *p_palette++ = 0xEEE;
+  } while (cnt-- != 0);
+
+  g_mdRam.DAT_08ffface = 0;
+}
+
+
+// 00426c05
+void colorset(unsigned short colorno) {
+  colortbl_entry* p_entry = &colortbl[colorno];
+  memcpy(&g_systemPalette[p_entry->offset / 2], p_entry->p_palette, p_entry->cnt * 4);
+}

@@ -31,6 +31,11 @@ typedef struct sonic3_ram {
   /* 08ffef4c */ character_team_id nosave_plmode;
   /* 08ffef56 */ unsigned short disable_interrupts_sram;
   /* 08ffef80 */ unsigned short ringbuffer[RINGBUFFER_SLOTS];
+  /* 08fff000 */ unsigned short colorwk4[64];
+  /* 08fff080 */ unsigned short colorwk3[64];
+  /* 08fff626 */ unsigned char startcolor;
+  /* 08fff627 */ unsigned char colorcnt;
+  /* 08fff62a */ unsigned char int_flg;
   /* 08fff636 */ unsigned long ranum;
   /* 08fff648 */ short waterposi;
   /* 08fff64e */ unsigned char waterflag;
@@ -58,6 +63,9 @@ typedef struct sonic3_ram {
   /* 08fffaaa */ unsigned char act_start_flag;
   /* 08fffaad */ unsigned char soz_ghosts;
   /* 08fffacd */ unsigned char DAT_08fffacd;
+  /* 08ffface */ unsigned short DAT_08ffface;
+  /* 08fffc00 */ unsigned short colorwk[64];
+  /* 08fffc80 */ unsigned short colorwk2[64];
   /* 08fffe02 */ unsigned short gameflag;
   /* 08fffe04 */ unsigned short gametimer;
   /* 08fffe08 */ unsigned char edit_r_no;

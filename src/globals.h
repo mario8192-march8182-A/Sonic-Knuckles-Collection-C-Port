@@ -67,5 +67,6 @@ extern UINT g_joystickCnt;
 extern BYTE g_mdVram[0x10000];
 extern BYTE g_mdSystemRam[0x23000];
 extern sonic3_ram g_mdRam;
+extern USHORT g_systemPalette[64];
 
 #endif

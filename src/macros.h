@@ -91,5 +91,6 @@
 #define IS_LAVA_REEF_BOSS(structure) (structure.zone == LAVA_REEF_BOSS_AND_HIDDEN_PALACE && structure.act == 0)
 #define IS_HIDDEN_PALACE(structure) (structure.zone == LAVA_REEF_BOSS_AND_HIDDEN_PALACE && structure.act == 1)
 #define IS_DEATH_EGG_BOSS(structure) (structure.zone == DEATH_EGG_BOSS_AND_MASTER_EMERALD_SHRINE && structure.act == 0)
+#define IS_MASTER_EMERALD_SHRINE(structure) (structure.zone == DEATH_EGG_BOSS_AND_MASTER_EMERALD_SHRINE && structure.act == 1)
 
 #endif
