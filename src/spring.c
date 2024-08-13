@@ -210,7 +210,7 @@ static void sjump45_init(sprite_status* p_actwk) {
   p_actwk->patno = 7;
   p_actwk->sproffset = 1082;
 
-  if (g_mdRam.stageno.zone == MARBLE_GARDEN || g_mdRam.stageno.zone == MUSHROOM_HILL) {
+  if (GET_ZONE(g_mdRam.stageno) == MARBLE_GARDEN || GET_ZONE(g_mdRam.stageno) == MUSHROOM_HILL) {
     p_actwk->sproffset = 1144;
   }
   p_actwk->r_ptr = &sjump45move;
@@ -222,7 +222,7 @@ static void sjump45r_init(sprite_status* p_actwk) {
   p_actwk->mstno = 4;
   p_actwk->patno = 10;
   p_actwk->sproffset = 1082;
-  if (g_mdRam.stageno.zone == MARBLE_GARDEN || g_mdRam.stageno.zone == MUSHROOM_HILL) {
+  if (GET_ZONE(g_mdRam.stageno) == MARBLE_GARDEN || GET_ZONE(g_mdRam.stageno) == MUSHROOM_HILL) {
     p_actwk->sproffset = 1144;
   }
   SET_BIT(p_actwk->cddat1, CD_DOWN);
@@ -247,7 +247,7 @@ static void sjump_initg(sprite_status* p_actwk) {
     p_actwk->r_ptr = &vssjumpmove;
     p_actwk->patbase = vsbanepat;
     p_actwk->sproffset = 913;
-    if (g_mdRam.stageno.zone == ENDLESS_MINE) {
+    if (GET_ZONE(g_mdRam.stageno) == ENDLESS_MINE) {
       p_actwk->sproffset |= 0x8000;
     }
   }
@@ -1122,7 +1122,7 @@ void sjumpsw(sprite_status* p_actwk) {
     p_new_actwk->r_ptr = &sjumpswmove;
     p_new_actwk->patbase = banedaipat;
     p_new_actwk->sproffset = 913;
-    if (g_mdRam.stageno.zone == ENDLESS_MINE) {
+    if (GET_ZONE(g_mdRam.stageno) == ENDLESS_MINE) {
       p_new_actwk->patbase = banedaipat2;
     }
     p_new_actwk->userflag1 = p_actwk->userflag1;

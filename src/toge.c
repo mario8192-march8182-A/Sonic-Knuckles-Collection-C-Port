@@ -79,7 +79,7 @@ static void togeinit(sprite_status* p_actwk, unsigned char userflag) {
   p_actwk->r_ptr = &togemove;
   p_actwk->patbase = togepat;
   p_actwk->sproffset = 1180;
-  if (g_mdRam.stageno.zone == FLYING_BATTERY) {
+  if (GET_ZONE(g_mdRam.stageno) == FLYING_BATTERY) {
     p_actwk->sproffset = 512;
   }
   userflag >>= 1;

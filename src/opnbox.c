@@ -113,7 +113,7 @@ static void opnbox_wait0(sprite_status* p_actwk) {
 
 
 static void set_break(sprite_status* p_actwk) {
-  if (g_mdRam.stageno.zone == MARBLE_GARDEN) {
+  if (GET_ZONE(g_mdRam.stageno) == MARBLE_GARDEN) {
     g_mdRam.pl2_lock_flag = 255;
   }
   p_actwk->patno = 1;
@@ -168,7 +168,7 @@ static void opnbox_fly0(sprite_status* p_actwk) {
   p_actwk->actfree.opnbox.xspeed = xspeed;
   p_actwk->xposi += SHORT_TO_LONG_HIGH(xspeed);
   short vposi = LONG_HIGH(g_mdRam.scra_v_posit) + 64;
-  if (g_mdRam.stageno.zone == MARBLE_GARDEN) {
+  if (GET_ZONE(g_mdRam.stageno) == MARBLE_GARDEN) {
     vposi -= 32;
   }
   short yspeed = 16384;
@@ -177,7 +177,7 @@ static void opnbox_fly0(sprite_status* p_actwk) {
   }
   p_actwk->yposi += yspeed;
   if (BIT_1_IS_SET(p_actwk->actfree.opnbox.status_bitfield)) {
-    p_actwk->r_no = rno_tbl[g_mdRam.stageno.zone];
+    p_actwk->r_no = rno_tbl[GET_ZONE(g_mdRam.stageno)];
     set_break(p_actwk);
   }
   puka_puka(p_actwk);
@@ -292,7 +292,7 @@ static void switchud_wait1(sprite_status* p_actwk) {
 
 static void break_(sprite_status* p_actwk) {
   enemy_init0(p_actwk, &break_init_tbl);
-  if (g_mdRam.stageno.zone == FLYING_BATTERY && g_mdRam.stageno.act == 0) {
+  if (g_mdRam.stageno == FLYING_BATTERY_ACT_1) {
     p_actwk->sproffset = 1102;
   }
   p_actwk->r_ptr = chk_break_fout;
@@ -412,7 +412,7 @@ void chk_pl_pause(sprite_status* p_actwk, unsigned char r_no) {
 
 void chk_pl2_pause(sprite_status* p_actwk) {
   if (g_mdRam.act_clear_flag == 0) return;
-  if (g_mdRam.stageno.zone == CARNIVAL_NIGHT) {
+  if (GET_ZONE(g_mdRam.stageno) == CARNIVAL_NIGHT) {
     set_pl_pause(p_actwk, &g_mdRam.actwk[0]);
   }
   if (BIT_7_IS_SET(p_actwk->actfree.opnbox.status_bitfield)) return;
@@ -524,11 +524,11 @@ static void set_friend_init(sprite_status* p_actwk) {
     p_actwk->yspeed = 0;
   }
   unsigned short ofs_index = p_actwk->userflag1 & 2;
-  if (g_mdRam.stageno.zone == FLYING_BATTERY && g_mdRam.stageno.act == 0) {
+  if (g_mdRam.stageno == FLYING_BATTERY_ACT_1) {
     ofs_index += 4;
   }
   p_actwk->sproffset = ofs_tbl[ofs_index * 2];
-  unsigned char* friends = &zone_friend_data[g_mdRam.stageno.zone][0];
+  unsigned char* friends = &zone_friend_data[GET_ZONE(g_mdRam.stageno)][0];
   unsigned char friend_id = friends[(p_actwk->userflag1 & 2) / 2];
   p_actwk->patbase = friend_data[friend_id].patbase;
   p_actwk->actfree.friend_.move_countdown = p_actwk->userflag1 * 4;

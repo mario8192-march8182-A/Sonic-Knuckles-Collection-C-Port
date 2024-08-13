@@ -5,7 +5,6 @@
 #include "acttimer.h"
 #include "blockcolibits.h"
 #include "spritestatus.h"
-#include "zoneact.h"
 
 typedef struct sonic3_ram {
   /* 08ffaa00 */ unsigned char bitdevwk[512];
@@ -21,7 +20,7 @@ typedef struct sonic3_ram {
   /* 08ffee16 */ short scralim_right;
   /* 08ffee1a */ short scralim_down;
   /* 08ffee33 */ unsigned char scr_resize_no;
-  /* 08ffee4e */ zone_act stageno_i;
+  /* 08ffee4e */ unsigned short stageno_i;
   /* 08ffee78 */ long scra_h_posit;
   /* 08ffee7c */ long scra_v_posit;
   /* 08ffeebc */ short frame_offset_x;
@@ -70,7 +69,7 @@ typedef struct sonic3_ram {
   /* 08fffe04 */ unsigned short gametimer;
   /* 08fffe08 */ unsigned char edit_r_no;
   /* 08fffe0c */ unsigned long systemtimer;
-  /* 08fffe10 */ zone_act stageno;
+  /* 08fffe10 */ unsigned short stageno;
   /* 08fffe12 */ unsigned char pl_suu;
   /* 08fffe19 */ unsigned char ssonicflag;
   /* 08fffe1b */ unsigned char plring_f2;
@@ -83,7 +82,7 @@ typedef struct sonic3_ram {
   /* 08fffe26 */ unsigned long plscore;
   /* 08fffe2a */ unsigned char markerno;
   /* 08fffe2b */ unsigned char markerno_s;
-  /* 08fffe2c */ zone_act stageno_s;
+  /* 08fffe2c */ unsigned short stageno_s;
   /* 08fffe2e */ short plxposi_s;
   /* 08fffe30 */ short plyposi_s;
   /* 08fffe32 */ short plring_s;
@@ -100,7 +99,7 @@ typedef struct sonic3_ram {
   /* 08fffe47 */ unsigned char plcddat2_s;
   /* 08fffe48 */ unsigned char marker_flag;
   /* 08fffe49 */ unsigned char markerno_s2;
-  /* 08fffe4a */ zone_act stageno_s2;
+  /* 08fffe4a */ unsigned short stageno_s2;
   /* 08fffe4c */ short plxposi_s2;
   /* 08fffe4e */ short plyposi_s2;
   /* 08fffe50 */ short plring_s2;
@@ -135,8 +134,8 @@ typedef struct sonic3_ram {
   /* 08ffff8e */ unsigned short frame_bonus;
   /* 08ffff96 */ unsigned char plcddat2_s2;
   /* 08ffff97 */ unsigned char plresetflag;
-  /* 08ffff9a */ zone_act stageno_is;
-  /* 08ffff9c */ zone_act stageno_is2;
+  /* 08ffff9a */ unsigned short stageno_is;
+  /* 08ffff9c */ unsigned short stageno_is2;
   /* 08ffffae */ unsigned short cartridge;
   /* 08ffffc0 */ unsigned long extrascore;
   /* 08ffffce */ unsigned short plsproffset;

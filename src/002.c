@@ -708,7 +708,7 @@ void set_friend_cg(sprite_status* p_actwk) {
   };
 
   Load_PLC_Raw(p_actwk, &bakuhatu_cg_tbl);
-  Load_PLC_Raw(p_actwk, cg_tbl[g_mdRam.stageno.zone]);
+  Load_PLC_Raw(p_actwk, cg_tbl[GET_ZONE(g_mdRam.stageno)]);
 }
 
 

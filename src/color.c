@@ -76,7 +76,7 @@ static void fadein2(unsigned short* p_destination, unsigned short* p_source) {
 
 // 00426447
 static void fadein0() {
-  if (IS_ENDING(g_mdRam.stageno) || IS_MASTER_EMERALD_SHRINE(g_mdRam.stageno)) {
+  if (g_mdRam.stageno == ENDING || g_mdRam.stageno == MASTER_EMERALD_SHRINE) {
     fadein0_alt();
     return;
   }

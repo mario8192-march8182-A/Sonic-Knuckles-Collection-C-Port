@@ -104,7 +104,7 @@ void break_(sprite_status* p_actwk) {
 static void break_init(sprite_status* p_actwk) {
   p_actwk->patbase = break000pat;
   p_actwk->sproffset = 16385;
-  if (g_mdRam.stageno.act == 1) {
+  if (g_mdRam.stageno == ANGEL_ISLAND_ACT_2) {
     p_actwk->patbase = break001pat;
     p_actwk->sproffset = 16385;
   }
@@ -112,7 +112,7 @@ static void break_init(sprite_status* p_actwk) {
   p_actwk->actfree.break_.breakmove_data = break00tbl;
   p_actwk->sprhs = 7;
   p_actwk->sprvs = 32;
-  if (g_mdRam.stageno.zone == ICECAP) {
+  if (GET_ZONE(g_mdRam.stageno) == ICECAP) {
     p_actwk->patbase = break050pat;
     p_actwk->sproffset = 16385;
     p_actwk->actfree.break_.breakgo_data1 = brgotbl05;
@@ -252,7 +252,7 @@ static void break2init(sprite_status* p_actwk) {
   p_actwk->r_ptr = &break2move;
   SET_USE_LEVEL_COORDS(p_actwk->actflg);
   p_actwk->sprpri = PRI_5;
-  if (g_mdRam.stageno.zone == LAUNCH_BASE) {
+  if (GET_ZONE(g_mdRam.stageno) == LAUNCH_BASE) {
     unsigned short countdown = (p_actwk->userflag1 & 0x3F) * 3;
     bool carry = util__get_add_carry(countdown, 8);
     if (!carry) {
@@ -278,7 +278,7 @@ static void break2init(sprite_status* p_actwk) {
       p_actwk->actfree.break_.breakgo_data1 = br2gotbl061;
     }
   }
-  if (g_mdRam.stageno.zone == HYDROCITY) {
+  if (GET_ZONE(g_mdRam.stageno) == HYDROCITY) {
     p_actwk->patbase = break010pat;
     p_actwk->sproffset = 49153;
     unsigned char userflag = p_actwk->userflag1;
@@ -299,7 +299,7 @@ static void break2init(sprite_status* p_actwk) {
     p_actwk->actfree.break_.breakgo_data1 = p_init_data2[0];
     p_actwk->actfree.break_.breakgo_data2 = p_init_data2[1];
   }
-  if (g_mdRam.stageno.zone == MARBLE_GARDEN) {
+  if (GET_ZONE(g_mdRam.stageno) == MARBLE_GARDEN) {
     p_actwk->patbase = break020pat;
     p_actwk->sproffset = 16385;
     p_actwk->actfree.break_.countdown = (p_actwk->userflag1 & 0xF) * 16 + 8;
@@ -318,7 +318,7 @@ static void break2init(sprite_status* p_actwk) {
     }
     return;
   }
-  if (g_mdRam.stageno.zone == ICECAP) {
+  if (GET_ZONE(g_mdRam.stageno) == ICECAP) {
     unsigned char userflag = p_actwk->userflag1;
     if (BIT_7_IS_SET(userflag)) {
       p_actwk->actfree.break_.level_trigger_no = userflag & 0xF;
@@ -334,12 +334,12 @@ static void break2init(sprite_status* p_actwk) {
     p_actwk->actfree.break_.breakgo_data2 = br2gotbl051;
     p_actwk->patno = 3;
   }
-  if (g_mdRam.stageno.zone == LAVA_REEF_BOSS_AND_HIDDEN_PALACE) {
+  if (GET_ZONE(g_mdRam.stageno) == LAVA_REEF_BOSS_AND_HIDDEN_PALACE) {
     p_actwk->patbase = break093pat;
     p_actwk->sproffset = 16385;
     goto jump16;
   }
-  if (g_mdRam.stageno.zone == LAVA_REEF) {
+  if (GET_ZONE(g_mdRam.stageno) == LAVA_REEF) {
     p_actwk->patbase = break091pat;
     p_actwk->sproffset = 16528;
 jump16:
@@ -354,7 +354,7 @@ jump16:
     p_actwk->actfree.break_.breakgo_data1 = p_init_data2[0];
     p_actwk->actfree.break_.breakgo_data2 = p_init_data2[1];
   }
-  if (g_mdRam.stageno.zone == FLYING_BATTERY) {
+  if (GET_ZONE(g_mdRam.stageno) == FLYING_BATTERY) {
     p_actwk->patbase = break041pat;
     p_actwk->sproffset = 16385;
     p_actwk->actfree.break_.countdown = (p_actwk->userflag1 & 0xF) * 16 + 8;
@@ -369,7 +369,7 @@ jump16:
     p_actwk->actfree.break_.breakgo_data1 = p_init_data2[0];
     p_actwk->actfree.break_.breakgo_data2 = p_init_data2[1];
   }
-  if (g_mdRam.stageno.zone == SANDOPOLIS) {
+  if (GET_ZONE(g_mdRam.stageno) == SANDOPOLIS) {
     p_actwk->patbase = break081pat;
     p_actwk->sproffset = 16385;
     p_actwk->actfree.break_.countdown = (p_actwk->userflag1 & 0xF) * 16 + 8;

@@ -114,20 +114,20 @@ static void iwainit(sprite_status* p_actwk) {
   p_actwk->sprpri = PRI_4;
   p_actwk->actfree.iwa.orig_xposi = LONG_HIGH(p_actwk->xposi);
   p_actwk->actfree.iwa.countdown2 = 64;
-  if (g_mdRam.stageno.act == 1) {
+  if (g_mdRam.stageno == ANGEL_ISLAND_ACT_2) {
     p_actwk->patbase = iwapat2;
     p_actwk->sproffset = 17129;
   }
-  if (g_mdRam.stageno.zone == ENDLESS_MINE && g_mdRam.stageno.act == 0) {
+  if (g_mdRam.stageno == ENDLESS_MINE_ACT) {
     p_actwk->patbase = vsiwapat;
     p_actwk->sproffset = 58112;
     p_actwk->patno = 0;
   }
-  if (g_mdRam.stageno.zone == LAVA_REEF) {
+  if (GET_ZONE(g_mdRam.stageno) == LAVA_REEF) {
     p_actwk->patbase = iwapat9;
     p_actwk->sproffset = 16595;
     p_actwk->patno += 4;
-    if (g_mdRam.stageno.act != 0) {
+    if (GET_ACT(g_mdRam.stageno) != ACT_1) {
       p_actwk->patbase = iwapat92;
       p_actwk->sproffset = 25613;
     }
@@ -278,7 +278,7 @@ static void iwamove__jump3(sprite_status* p_actwk) {
 
 
 static void iwamove2(sprite_status* p_actwk) {
-  if (g_mdRam.stageno.zone == LAVA_REEF) {
+  if (GET_ZONE(g_mdRam.stageno) == LAVA_REEF) {
     iwamove21(p_actwk);
   }
   else {
@@ -464,7 +464,7 @@ static void iwamove3__break(sprite_status* p_actwk, sprite_status* p_playerwk, s
         SET_BIT(p_playerwk->cddat1, CD_LEFT);
       }
     }
-    if (g_mdRam.stageno.zone == LAVA_REEF) {
+    if (GET_ZONE(g_mdRam.stageno) == LAVA_REEF) {
       p_actwk->r_ptr = &iwamove22;
       iwabreakgosub4(p_actwk, p_speed_data, p_actwk->patno - 4);
       iwamove22(p_actwk);
@@ -625,7 +625,7 @@ static void iwamovepush__sub(sprite_status* p_actwk, sprite_status* p_playerwk, 
 
 
 static void iwabreakgosub(sprite_status* p_actwk) {
-  if (g_mdRam.stageno.zone == LAVA_REEF) {
+  if (GET_ZONE(g_mdRam.stageno) == LAVA_REEF) {
     iwabreakgosub3(p_actwk);
   }
   else {

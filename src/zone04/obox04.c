@@ -218,7 +218,7 @@ static void set_obox04_friend_init(sprite_status* p_actwk) {
   p_actwk->actfree.friend_.yspeed = spd_tbl[spd_index];
   unsigned char ofs_index = (p_actwk->userflag1 & 2) / 2;
   p_actwk->sproffset = ofs_tbl[ofs_index];
-  unsigned char* friends = &zone_friend_data[g_mdRam.stageno.zone][0];
+  unsigned char* friends = &zone_friend_data[GET_ZONE(g_mdRam.stageno)][0];
   unsigned char friend_id = friends[ofs_index];
   p_actwk->patbase = friend_data[friend_id].patbase;
   p_actwk->actfree.friend_.move_countdown = p_actwk->userflag1 * 4;

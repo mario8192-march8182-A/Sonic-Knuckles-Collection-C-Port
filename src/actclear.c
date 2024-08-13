@@ -41,7 +41,7 @@ static void actclear_init(sprite_status* p_actwk) {
   Queue_Kos_Module(&actclear_tiles, 41984);
   void* p_data = &title_act2_tiles;
   unsigned char userflags = 255;
-  if (!IS_LAVA_REEF_BOSS(g_mdRam.stageno) && g_mdRam.stageno_i.act == 0) {
+  if (g_mdRam.stageno != LAVA_REEF_BOSS && GET_ACT(g_mdRam.stageno_i) == ACT_1) {
     p_data = &title_act1_tiles;
     userflags = 0;
   }
@@ -116,9 +116,9 @@ static void actclear_move0(sprite_status* p_actwk) {
   } while (cnt != -1);
 
   p_actwk->r_no += 2;
-  if (g_mdRam.stageno_i.act == 0
-      && g_mdRam.stageno_i.zone != ANGEL_ISLAND
-      && g_mdRam.stageno_i.zone != ICECAP) {
+  if (GET_ACT(g_mdRam.stageno_i) == ACT_1
+      && GET_ZONE(g_mdRam.stageno_i) != ANGEL_ISLAND
+      && GET_ZONE(g_mdRam.stageno_i) != ICECAP) {
     g_mdRam.event_flag_3 = 255;
   }
 }
@@ -150,7 +150,7 @@ static void actclear_move1(sprite_status* p_actwk) {
     }
     else {
       soundset(176);
-      if ((g_mdRam.stageno.zone == SKY_SANCTUARY && g_mdRam.stageno.act == 0)
+      if (g_mdRam.stageno == SKY_SANCTUARY_ACT_SONIC
           || (p_actwk->userflag1 != 0 || p_actwk->userflag2 != 0)) {
         g_mdRam.disable_interrupts_sram = 255;
         SaveGame();
@@ -170,19 +170,19 @@ static void actclear_move2(sprite_status* p_actwk) {
   else if (p_actwk->actfree.actclear.part_cnt != 0) {
     ++p_actwk->actfree.actclear.current_exit_no;
   }
-  else if (g_mdRam.stageno.zone == SKY_SANCTUARY
-      || g_mdRam.stageno.zone == LAVA_REEF_BOSS_AND_HIDDEN_PALACE
-      || g_mdRam.stageno_i.act != 0) {
+  else if (GET_ZONE(g_mdRam.stageno) == SKY_SANCTUARY
+      || GET_ZONE(g_mdRam.stageno) == LAVA_REEF_BOSS_AND_HIDDEN_PALACE
+      || GET_ACT(g_mdRam.stageno_i) != ACT_1) {
     g_mdRam.act_clear_flag = 0;
     g_mdRam.act_start_flag = 255;
     frameout(p_actwk);
   }
   else {
-    g_mdRam.stageno_i.act = 1;
+    SET_ACT(g_mdRam.stageno_i, ACT_2);
     g_mdRam.markerno = 0;
     g_mdRam.marker_flag = 0;
     g_mdRam.act_clear_flag = 0;
-    if (g_mdRam.stageno.zone != SANDOPOLIS && g_mdRam.stageno.zone != DEATH_EGG) {
+    if (GET_ZONE(g_mdRam.stageno) != SANDOPOLIS && GET_ZONE(g_mdRam.stageno) != DEATH_EGG) {
       p_actwk->r_ptr = &title;
       p_actwk->r_no = 0;
       p_actwk->actfree.title.act_start_flag = 255;
