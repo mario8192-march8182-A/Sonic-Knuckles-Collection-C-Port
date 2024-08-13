@@ -102,6 +102,7 @@
   160, 161, 162, 163, 164, 165, 166, 167, 168, 169,
    -1,  -1,  -1,   0
 };
+/* 0082ddc8 */ ULONG DAT_0082ddc8;
 /* 0082ddd0 */ char g_kbKeyNames[4][30][32] = {
   {
     "Num0",
@@ -307,9 +308,14 @@
 /* 00831370 */ HINSTANCE g_hInstance;
 /* 00831378 */ char* g_lpCmdLine;
 /* 0085475c */ ULONG g_createFileError;
+/* 00854760 */ ULONG DAT_00854760;
+/* 0085499c */ USHORT* g_pLevelSelectVram;
 /* 008549a4 */ ULONG g_mdRegisterD0;
 /* 008549d4 */ ULONG g_supplementaryMdRamAddress;
+/* 008549cc */ ULONG DAT_008549cc;
+/* 008549d8 */ ULONG DAT_008549d8;
 /* 008549e8 */ BYTE g_saveFile[1024];
+/* 00854dec */ ULONG DAT_00854dec;
 /* 00856e0c */ // CGraphics* g_pGraphics;
 /* 00856e10 */ BOOL BOOL_00856e10;
 /* 00856e18 */ CRITICAL_SECTION g_CriticalSectionObj;

@@ -7,11 +7,13 @@
 #include "spritestatus.h"
 
 typedef struct sonic3_ram {
+  /* 08ff0000 */ unsigned char chunkmappings128[0x8000];
   /* 08ffaa00 */ unsigned char bitdevwk[512];
   /* 08ffac00 */ unsigned short pbuffer[PBUFFER_LEVELS][PBUFFER_LEVEL_SLOTS];
   /* 08ffb000 */ sprite_status actwk[ACTWK_SLOTS];
   /* 08ffe380 */ unsigned short colibuffer[COLBUFFER_SLOTS];
   /* 08ffe600 */ unsigned char competitionmode_savedata[84];
+  /* 08ffe660 */ unsigned long p_saveslot;
   /* 08ffe6ac */ unsigned char main_savedata[84];
   /* 08ffe700 */ short ringwk[RINGWK_SLOTS];
   /* 08ffeb00 */ unsigned char flagwork[FLAGWORK_SLOTS];
@@ -32,6 +34,10 @@ typedef struct sonic3_ram {
   /* 08ffef80 */ unsigned short ringbuffer[RINGBUFFER_SLOTS];
   /* 08fff000 */ unsigned short colorwk4[64];
   /* 08fff080 */ unsigned short colorwk3[64];
+  /* 08fff600 */ unsigned char gamemode;
+  /* 08fff604 */ unsigned short swdata1;
+  /* 08fff606 */ unsigned short swdata2;
+  /* 08fff614 */ unsigned short demotimer;
   /* 08fff626 */ unsigned char startcolor;
   /* 08fff627 */ unsigned char colorcnt;
   /* 08fff62a */ unsigned char int_flg;
@@ -42,6 +48,7 @@ typedef struct sonic3_ram {
   /* 08fff65f */ unsigned char ssonicpallet;
   /* 08fff667 */ unsigned char smilesflag;
   /* 08fff670 */ unsigned short ssonicring_timer;
+  /* 08fff711 */ unsigned char DAT_08fff711;
   /* 08fff730 */ unsigned char watermode;
   /* 08fff73e */ unsigned char miles_carry_flag;
   /* 08fff760 */ short plmaxspdwk;
@@ -56,6 +63,7 @@ typedef struct sonic3_ram {
   /* 08fff7d4 */ unsigned short ringbonus;
   /* 08fff7da */ unsigned short scr_x_no;
   /* 08fff7e0 */ unsigned char level_triggers[LEVEL_TRIGGERS_SLOTS];
+  /* 08fff7f0 */ signed char actanimcounters[8][2];
   /* 08fffa9a */ unsigned char emy_wrt_flg[EMY_WRT_FLG_SLOTS];
   /* 08fffaa2 */ unsigned char DAT_08fffaa2;
   /* 08fffaa8 */ unsigned char act_clear_flag;
@@ -63,6 +71,8 @@ typedef struct sonic3_ram {
   /* 08fffaad */ unsigned char soz_ghosts;
   /* 08fffacd */ unsigned char DAT_08fffacd;
   /* 08ffface */ unsigned short DAT_08ffface;
+  /* 08fffb00 */ unsigned long vdpbuffer[63];
+  /* 08fffbfc */ unsigned long vdpbuffer_free;
   /* 08fffc00 */ unsigned short colorwk[64];
   /* 08fffc80 */ unsigned short colorwk2[64];
   /* 08fffe02 */ unsigned short gameflag;
@@ -71,6 +81,7 @@ typedef struct sonic3_ram {
   /* 08fffe0c */ unsigned long systemtimer;
   /* 08fffe10 */ unsigned short stageno;
   /* 08fffe12 */ unsigned char pl_suu;
+  /* 08fffe18 */ unsigned char plcontinuecnt;
   /* 08fffe19 */ unsigned char ssonicflag;
   /* 08fffe1b */ unsigned char plring_f2;
   /* 08fffe1c */ unsigned char pl_suu_f;
@@ -128,18 +139,34 @@ typedef struct sonic3_ram {
   /* 08fffece */ unsigned short DAT_08fffece;
   /* 08fffed0 */ short pl2ring;
   /* 08fffed2 */ unsigned long DAT_08fffed2;
+  /* 08fffed6 */ unsigned long DAT_08fffed6;
+  /* 08ffff02 */ unsigned short DAT_08ffff02;
   /* 08ffff04 */ short actring;
   /* 08ffff08 */ character_team_id plmode;
+  /* 08ffff0a */ character_team_id levelselect_plmode;
   /* 08ffff60 */ unsigned char divdev_modules;
+  /* 08ffff80 */ short levelselect_inputrepeattimer;
+  /* 08ffff82 */ unsigned short levelselect_selection;
+  /* 08ffff84 */ unsigned short levelselect_sound;
+  /* 08ffff8a */ unsigned short vs_noitems;
   /* 08ffff8e */ unsigned short frame_bonus;
+  /* 08ffff92 */ unsigned char brings;
   /* 08ffff96 */ unsigned char plcddat2_s2;
   /* 08ffff97 */ unsigned char plresetflag;
   /* 08ffff9a */ unsigned short stageno_is;
   /* 08ffff9c */ unsigned short stageno_is2;
+  /* 08ffffa1 */ unsigned char DAT_08ffffa1;
   /* 08ffffae */ unsigned short cartridge;
+  /* 08ffffbb */ unsigned char cartridgespec;
   /* 08ffffc0 */ unsigned long extrascore;
+  /* 08ffffc4 */ unsigned long extrascore2;
   /* 08ffffce */ unsigned short plsproffset;
+  /* 08ffffd0 */ unsigned short demoflag;
+  /* 08ffffd4 */ unsigned char specmode;
   /* 08ffffd8 */ unsigned char mdstatus;
+  /* 08ffffe2 */ unsigned short debugcheat;
+  /* 08ffffe4 */ unsigned short DAT_08ffffe4;
+  /* 08ffffe6 */ unsigned short DAT_08ffffe6;
   /* 08ffffe8 */ unsigned short vs_flag;
 }
 sonic3_ram;

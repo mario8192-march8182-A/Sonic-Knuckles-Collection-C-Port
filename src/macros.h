@@ -74,6 +74,25 @@
 #define SET_AQUA_BARIA(value) SET_BIT_6(value)
 
 
+// swdata bits
+#define IS_UP_DOWN(value) (value & 1)
+#define IS_DOWN_DOWN(value) (value & 2)
+#define IS_LEFT_DOWN(value) (value & 4)
+#define IS_RIGHT_DOWN(value) (value & 8)
+#define IS_A_DOWN(value) (value & 0x40)
+#define IS_B_DOWN(value) (value & 0x10)
+#define IS_C_DOWN(value) (value & 0x20)
+#define IS_START_DOWN(value) (value & 0x80)
+#define IS_UP_PRESSED(value) (value >> 8 & 1)
+#define IS_DOWN_PRESSED(value) (value >> 8 & 2)
+#define IS_LEFT_PRESSED(value) (value >> 8 & 4)
+#define IS_RIGHT_PRESSED(value) (value >> 8 & 8)
+#define IS_A_PRESSED(value) (value >> 8 & 0x40)
+#define IS_B_PRESSED(value) (value >> 8 & 0x10)
+#define IS_C_PRESSED(value) (value >> 8 & 0x20)
+#define IS_START_PRESSED(value) (value >> 8 & 0x80)
+
+
 #define SPRITE_STATUS_UCHAR(pointer, offset) ((unsigned char*)pointer)[offset]
 #define SPRITE_STATUS_SCHAR(pointer, offset) ((signed char*)pointer)[offset]
 #define SPRITE_STATUS_USHORT(pointer, offset) ((unsigned short*)pointer)[offset / 2]
