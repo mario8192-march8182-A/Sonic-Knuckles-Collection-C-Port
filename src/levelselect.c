@@ -42,8 +42,8 @@ void levelselect() {
   g_mdRam.stageno = ANGEL_ISLAND_ACT_1;
   fadeout();
   clear_displaydata();
-  DAT_008549cc = 0xC000;
-  DAT_00854760 = 0xE000;
+  g_vdpScrollPlaneAOffset = 0xC000;
+  g_vdpScrollPlaneBOffset = 0xE000;
   DAT_008549d8 = 0;
   DAT_00854dec = 0;
   memset(g_mdRam.pbuffer, 0, sizeof(g_mdRam.pbuffer));

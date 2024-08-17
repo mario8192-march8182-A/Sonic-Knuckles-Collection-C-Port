@@ -43,6 +43,11 @@
 #define BIT_7_IS_SET(value) (value & 128)
 #define BIT_IS_SET(value, bit) (value &= 1 << (bit))
 
+#define ROTATE_LEFT(value, bits) ((value = value << bits | value >> 32 - bits) & 0xFFFFFFFF)
+#define ROTATE_RIGHT(value, bits) ((value = value >> bits | value << 32 - bits) & 0xFFFFFFFF)
+
+#define BYTESWAP(value) (value = (value & 0xFF000000) >> 24 | (value & 0x00FF0000) >> 8 | (value & 0x0000FF00) << 8 | (value & 0x000000FF) << 24)
+
 
 // actflg bits
 
@@ -91,6 +96,11 @@
 #define IS_B_PRESSED(value) (value >> 8 & 0x10)
 #define IS_C_PRESSED(value) (value >> 8 & 0x20)
 #define IS_START_PRESSED(value) (value >> 8 & 0x80)
+
+
+// scroll plane nametable bits
+#define IS_TILE_HFLIP(value) (value & 0x800)
+#define IS_TILE_VFLIP(value) (value & 0x1000)
 
 
 #define SPRITE_STATUS_UCHAR(pointer, offset) ((unsigned char*)pointer)[offset]

@@ -1,4 +1,5 @@
 #include <stdbool.h>
+#include "macros.h"
 #include "types/bitdevrwk.h"
 #include "bitdevr.h"
 static void bitdevr_decompress(bitdevrwk* p_wk, unsigned char* p_bitdevwk, void(*p_write)(unsigned long, bitdevrwk*));
@@ -89,10 +90,7 @@ static void bitdevr_decompress_inline(bitdevrwk* p_wk) {
 
 // 004111cf
 static void bitdevr_write(unsigned long pixels, bitdevrwk* p_wk) {
-  pixels = (pixels & 0xFF000000) >> 24
-         | (pixels & 0x00FF0000) >> 8
-         | (pixels & 0x0000FF00) << 8
-         | (pixels & 0x000000FF) << 24;
+  BYTESWAP(pixels);
   *p_wk->p_destination++ = pixels;
   --p_wk->row_cnt;
 }
@@ -101,10 +99,7 @@ static void bitdevr_write(unsigned long pixels, bitdevrwk* p_wk) {
 // 0041120a
 static void bitdevr_xorwrite(unsigned long pixels, bitdevrwk* p_wk) {
   p_wk->prev_pixels ^= pixels;
-  pixels = (p_wk->prev_pixels & 0xFF000000) >> 24
-         | (p_wk->prev_pixels & 0x00FF0000) >> 8
-         | (p_wk->prev_pixels & 0x0000FF00) << 8
-         | (p_wk->prev_pixels & 0x000000FF) << 24;
+  BYTESWAP(pixels);
   *p_wk->p_destination++ = pixels;
   --p_wk->row_cnt;
 }
