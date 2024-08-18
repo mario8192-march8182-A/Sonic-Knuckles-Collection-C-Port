@@ -24,6 +24,7 @@ static unsigned char* blit_remainingpixels_ver5(unsigned char* p_pixelbuffer, un
 static unsigned char* blit_remainingpixels_ver6(unsigned char* p_pixelbuffer, unsigned short tile, unsigned char vscroll_low, unsigned char hscroll_low);
 static void blit_columnrow_ver1(int scanline, int vscroll_index, unsigned long hscroll);
 static void blit_columnrow_ver2(int scanline, int vscroll_index, unsigned long hscroll);
+static void FUN_00411a9e(Sprite* p_sprite);
 
 
 // 0040edec
@@ -1165,4 +1166,798 @@ static void blit_columnrow_ver2(int scanline, int vscroll_index, unsigned long h
     p_pixelbuffer = blit_remainingpixels_ver4(p_pixelbuffer, tile, vscroll_low, hscroll_low);
   }
   g_pPixelBuffer += 16;
+}
+
+
+// 00411698
+void blit_sprite_noprio(Sprite* p_sprite) {
+  if (p_sprite->y >= 224) return;
+
+  long y = p_sprite->y;
+  if (y < 0) {
+    y = 0;
+  }
+  long y_end = p_sprite->y + p_sprite->h;
+  if (y_end < 0) return;
+  if (y_end > 224) {
+    y_end = 224;
+  }
+  unsigned char* p_pixelbuffer = &g_pPixelBuffer[y * 320];
+
+  do {
+    unsigned long scanline_pixel_cnt = p_sprite->w;
+    long x = p_sprite->x;
+    unsigned char* p_vram = &g_mdVram[p_sprite->vram_offset + (y - p_sprite->y) * 4];
+
+    do {
+      if (x >= 320) break;
+      unsigned long pixels = *p_vram;
+      if (x > -8) {
+        BYTESWAP(pixels);
+        unsigned char* p_pixelbuffer2 = p_pixelbuffer;
+        unsigned char pixel_cnt;
+        if (x < 0) {
+          pixel_cnt = x + 8;
+          unsigned char rotatebit_cnt = -x * 4;
+          ROTATE_LEFT(pixels, rotatebit_cnt);
+        }
+        else {
+          if (x > 312) {
+            p_pixelbuffer2 += x;
+            pixel_cnt = 320 - x;
+          }
+          else {
+            p_pixelbuffer2 += x;
+            pixel_cnt = 8;
+          }
+        }
+
+        do {
+          ROTATE_LEFT(pixels, 4);
+          if ((pixels & 0xF) && (!(*p_pixelbuffer2 & 0x80) || (p_sprite->flags & 0x80))) {
+            *p_pixelbuffer2 = (pixels & 0xF) + p_sprite->flags & 0x7F;
+          }
+          ++p_pixelbuffer2;
+        } while (--pixel_cnt != 0);
+      }
+      x += 8;
+      p_vram += p_sprite->h * 4;
+    } while (--scanline_pixel_cnt != 0);
+
+    p_pixelbuffer += 320;
+  } while (++y < y_end);
+}
+
+
+// 0041177c
+void blit_sprite_hflip_noprio(Sprite* p_sprite) {
+  if (p_sprite->y >= 224) return;
+
+  long y = p_sprite->y;
+  if (y < 0) {
+    y = 0;
+  }
+  long y_end = p_sprite->y + p_sprite->h;
+  if (y_end < 0) return;
+  if (y_end > 224) {
+    y_end = 224;
+  }
+  unsigned char* p_pixelbuffer = &g_pPixelBuffer[y * 320];
+
+  do {
+    unsigned long scanline_pixel_cnt = p_sprite->w;
+    long x = p_sprite->x;
+    unsigned char* p_vram = &g_mdVram[p_sprite->vram_offset + (y - p_sprite->y) * 4];
+    p_vram += (p_sprite->w - 1) * p_sprite->h * 4;
+
+    do {
+      if (x >= 320) break;
+      unsigned long pixels = *p_vram;
+      if (x > -8) {
+        BYTESWAP(pixels);
+        unsigned char* p_pixelbuffer2 = p_pixelbuffer;
+        unsigned char pixel_cnt;
+        if (x < 0) {
+          pixel_cnt = x + 8;
+          unsigned char rotatebit_cnt = -x * 4;
+          ROTATE_RIGHT(pixels, rotatebit_cnt);
+        }
+        else {
+          if (x > 312) {
+            p_pixelbuffer2 += x;
+            pixel_cnt = 320 - x;
+          }
+          else {
+            p_pixelbuffer2 += x;
+            pixel_cnt = 8;
+          }
+        }
+
+        do {
+          if ((pixels & 0xF) && (!(*p_pixelbuffer2 & 0x80) || (p_sprite->flags & 0x80))) {
+            *p_pixelbuffer2 = (pixels & 0xF) + p_sprite->flags & 0x7F;
+          }
+          ROTATE_RIGHT(pixels, 4);
+          ++p_pixelbuffer2;
+        } while (--pixel_cnt != 0);
+      }
+      x += 8;
+      p_vram -= p_sprite->h * 4;
+    } while (--scanline_pixel_cnt != 0);
+
+    p_pixelbuffer += 320;
+  } while (++y < y_end);
+}
+
+
+// 0041186d
+void blit_sprite_vflip_noprio(Sprite* p_sprite) {
+  if (p_sprite->y >= 224) return;
+
+  long y = p_sprite->y;
+  if (y < 0) {
+    y = 0;
+  }
+  long y_end = p_sprite->y + p_sprite->h;
+  if (y_end < 0) return;
+  if (y_end > 224) {
+    y_end = 224;
+  }
+  unsigned char* p_pixelbuffer = &g_pPixelBuffer[y * 320];
+
+  do {
+    unsigned long scanline_pixel_cnt = p_sprite->w;
+    long x = p_sprite->x;
+    unsigned char* p_vram = &g_mdVram[p_sprite->vram_offset + (p_sprite->y + p_sprite->h - y - 1) * 4];
+
+    do {
+      if (x >= 320) break;
+      unsigned long pixels = *p_vram;
+      if (x > -8) {
+        BYTESWAP(pixels);
+        unsigned char* p_pixelbuffer2 = p_pixelbuffer;
+        unsigned char pixel_cnt;
+        if (x < 0) {
+          pixel_cnt = x + 8;
+          unsigned char rotatebit_cnt = -x * 4;
+          ROTATE_LEFT(pixels, rotatebit_cnt);
+        }
+        else {
+          if (x > 312) {
+            p_pixelbuffer2 += x;
+            pixel_cnt = 320 - x;
+          }
+          else {
+            p_pixelbuffer2 += x;
+            pixel_cnt = 8;
+          }
+        }
+
+        do {
+          ROTATE_LEFT(pixels, 4);
+          if ((pixels & 0xF) && (!(*p_pixelbuffer2 & 0x80) || (p_sprite->flags & 0x80))) {
+            *p_pixelbuffer2 = (pixels & 0xF) + p_sprite->flags & 0x7F;
+          }
+          ++p_pixelbuffer2;
+        } while (--pixel_cnt != 0);
+      }
+      x += 8;
+      p_vram += p_sprite->h * 4;
+    } while (--scanline_pixel_cnt != 0);
+
+    p_pixelbuffer += 320;
+  } while (++y < y_end);
+}
+
+
+// 00411957
+void blit_sprite_hvflip_noprio(Sprite* p_sprite) {
+  if (p_sprite->y >= 224) return;
+
+  long y = p_sprite->y;
+  if (y < 0) {
+    y = 0;
+  }
+  long y_end = p_sprite->y + p_sprite->h;
+  if (y_end < 0) return;
+  if (y_end > 224) {
+    y_end = 224;
+  }
+  unsigned char* p_pixelbuffer = &g_pPixelBuffer[y * 320];
+
+  do {
+    unsigned long scanline_pixel_cnt = p_sprite->w;
+    long x = p_sprite->x;
+    unsigned char* p_vram = &g_mdVram[p_sprite->vram_offset + (p_sprite->y + p_sprite->h - y - 1) * 4];
+    p_vram += (p_sprite->w - 1) * p_sprite->h * 4;
+
+    do {
+      if (x >= 320) break;
+      unsigned long pixels = *p_vram;
+      if (x > -8) {
+        BYTESWAP(pixels);
+        unsigned char* p_pixelbuffer2 = p_pixelbuffer;
+        unsigned char pixel_cnt;
+        if (x < 0) {
+          pixel_cnt = x + 8;
+          unsigned char rotatebit_cnt = -x * 4;
+          ROTATE_RIGHT(pixels, rotatebit_cnt);
+        }
+        else {
+          if (x > 312) {
+            p_pixelbuffer2 += x;
+            pixel_cnt = 320 - x;
+          }
+          else {
+            p_pixelbuffer2 += x;
+            pixel_cnt = 8;
+          }
+        }
+
+        do {
+          if ((pixels & 0xF) && (!(*p_pixelbuffer2 & 0x80) || (p_sprite->flags & 0x80))) {
+            *p_pixelbuffer2 = (pixels & 0xF) + p_sprite->flags & 0x7F;
+          }
+          ROTATE_RIGHT(pixels, 4);
+          ++p_pixelbuffer2;
+        } while (--pixel_cnt != 0);
+      }
+      x += 8;
+      p_vram -= p_sprite->h * 4;
+    } while (--scanline_pixel_cnt != 0);
+
+    p_pixelbuffer += 320;
+  } while (++y < y_end);
+}
+
+
+// 00411a50
+void FUN_00411a50(Sprite* p_sprite) {
+  if (p_sprite->x > -128) return;
+
+  long y = p_sprite->y;
+  long cnt = p_sprite->h;
+  if (p_sprite->x < 0) {
+    cnt += y;
+    y = 0;
+  }
+  long y_end = p_sprite->y + p_sprite->h;
+  if (y_end > 224) {
+    cnt -= y_end - 224;
+  }
+  if (cnt > 0) {
+    unsigned char* p_spritemasks = &g_spriteMasks[y];
+
+    do {
+      ++*p_spritemasks;
+      ++p_spritemasks;
+    } while (--cnt != 0);
+  }
+}
+
+
+// 00411a9e
+static void FUN_00411a9e(Sprite* p_sprite) {
+  long y = p_sprite->y;
+  long cnt = p_sprite->h;
+  if (p_sprite->y < 0) {
+    cnt += y;
+    y = 0;
+  }
+  long y_end = p_sprite->y + p_sprite->h;
+  if (y_end > 224) {
+    y -= y_end - 224;
+  }
+  if (cnt > 0) {
+    unsigned char* p_spritemasks = &g_spriteMasks[y];
+
+    do {
+      --*p_spritemasks;
+      ++p_spritemasks;
+    } while (--cnt != 0);
+  }
+}
+
+
+// 00411add
+void blit_sprite_masked(Sprite* p_sprite) {
+  if (p_sprite->x <= -128) {
+    FUN_00411a9e(p_sprite);
+    return;
+  }
+  if (p_sprite->y >= 224) return;
+
+  long y = p_sprite->y;
+  if (y < 0) {
+    y = 0;
+  }
+  long y_end = p_sprite->y + p_sprite->h;
+  if (y_end < 0) return;
+  if (y_end > 224) {
+    y_end = 224;
+  }
+  unsigned char* p_pixelbuffer = &g_pPixelBuffer[y * 320];
+
+  do {
+    if (g_spriteMasks[y] == 0) {
+      unsigned long scanline_pixel_cnt = p_sprite->w;
+      long x = p_sprite->x;
+      unsigned char* p_vram = &g_mdVram[p_sprite->vram_offset + (y - p_sprite->y) * 4];
+
+      do {
+        if (x >= 320) break;
+        unsigned long pixels = *p_vram;
+        if (x > -8) {
+          BYTESWAP(pixels);
+          unsigned char* p_pixelbuffer2 = p_pixelbuffer;
+          unsigned char pixel_cnt;
+          if (x < 0) {
+            pixel_cnt = x + 8;
+            unsigned char rotatebit_cnt = -x * 4;
+            ROTATE_LEFT(pixels, rotatebit_cnt);
+          }
+          else {
+            if (x > 312) {
+              p_pixelbuffer2 += x;
+              pixel_cnt = 320 - x;
+            }
+            else {
+              p_pixelbuffer2 += x;
+              pixel_cnt = 8;
+            }
+          }
+
+          do {
+            ROTATE_LEFT(pixels, 4);
+            if ((pixels & 0xF) && (!(*p_pixelbuffer2 & 0x80) || (p_sprite->flags & 0x80))) {
+              *p_pixelbuffer2 = (pixels & 0xF) + p_sprite->flags & 0x7F;
+            }
+            ++p_pixelbuffer2;
+          } while (--pixel_cnt != 0);
+        }
+        x += 8;
+        p_vram += p_sprite->h * 4;
+      } while (--scanline_pixel_cnt != 0);
+    }
+    p_pixelbuffer += 320;
+  } while (++y < y_end);
+}
+
+
+// 00411bd6
+void blit_sprite_masked_hflip(Sprite* p_sprite) {
+  if (p_sprite->x <= -128) {
+    FUN_00411a9e(p_sprite);
+    return;
+  }
+  if (p_sprite->y >= 224) return;
+
+  long y = p_sprite->y;
+  if (y < 0) {
+    y = 0;
+  }
+  long y_end = p_sprite->y + p_sprite->h;
+  if (y_end < 0) return;
+  if (y_end > 224) {
+    y_end = 224;
+  }
+  unsigned char* p_pixelbuffer = &g_pPixelBuffer[y * 320];
+
+  do {
+    if (g_spriteMasks[y] == 0) {
+      unsigned long scanline_pixel_cnt = p_sprite->w;
+      long x = p_sprite->x;
+      unsigned char* p_vram = &g_mdVram[p_sprite->vram_offset + (y - p_sprite->y) * 4];
+      p_vram += (p_sprite->w - 1) * p_sprite->h * 4;
+
+      do {
+        if (x >= 320) break;
+        unsigned long pixels = *p_vram;
+        if (x > -8) {
+          BYTESWAP(pixels);
+          unsigned char* p_pixelbuffer2 = p_pixelbuffer;
+          unsigned char pixel_cnt;
+          if (x < 0) {
+            pixel_cnt = x + 8;
+            unsigned char rotatebit_cnt = -x * 4;
+            ROTATE_RIGHT(pixels, rotatebit_cnt);
+          }
+          else {
+            if (x > 312) {
+              p_pixelbuffer2 += x;
+              pixel_cnt = 320 - x;
+            }
+            else {
+              p_pixelbuffer2 += x;
+              pixel_cnt = 8;
+            }
+          }
+
+          do {
+            if ((pixels & 0xF) && (!(*p_pixelbuffer2 & 0x80) || (p_sprite->flags & 0x80))) {
+              *p_pixelbuffer2 = (pixels & 0xF) + p_sprite->flags & 0x7F;
+            }
+            ROTATE_RIGHT(pixels, 4);
+            ++p_pixelbuffer2;
+          } while (--pixel_cnt != 0);
+        }
+        x += 8;
+        p_vram -= p_sprite->h * 4;
+      } while (--scanline_pixel_cnt != 0);
+    }
+    p_pixelbuffer += 320;
+  } while (++y < y_end);
+}
+
+
+// 00411ce0
+void blit_sprite_masked_vflip(Sprite* p_sprite) {
+  if (p_sprite->x <= -128) {
+    FUN_00411a9e(p_sprite);
+    return;
+  }
+  if (p_sprite->y >= 224) return;
+
+  long y = p_sprite->y;
+  if (y < 0) {
+    y = 0;
+  }
+  long y_end = p_sprite->y + p_sprite->h;
+  if (y_end < 0) return;
+  if (y_end > 224) {
+    y_end = 224;
+  }
+  unsigned char* p_pixelbuffer = &g_pPixelBuffer[y * 320];
+
+  do {
+    if (g_spriteMasks[y] == 0) {
+      unsigned long scanline_pixel_cnt = p_sprite->w;
+      long x = p_sprite->x;
+      unsigned char* p_vram = &g_mdVram[p_sprite->vram_offset + (p_sprite->y + p_sprite->h - y - 1) * 4];
+
+      do {
+        if (x >= 320) break;
+        unsigned long pixels = *p_vram;
+        if (x > -8) {
+          BYTESWAP(pixels);
+          unsigned char* p_pixelbuffer2 = p_pixelbuffer;
+          unsigned char pixel_cnt;
+          if (x < 0) {
+            pixel_cnt = x + 8;
+            unsigned char rotatebit_cnt = -x * 4;
+            ROTATE_LEFT(pixels, rotatebit_cnt);
+          }
+          else {
+            if (x > 312) {
+              p_pixelbuffer2 += x;
+              pixel_cnt = 320 - x;
+            }
+            else {
+              p_pixelbuffer2 += x;
+              pixel_cnt = 8;
+            }
+          }
+
+          do {
+            ROTATE_LEFT(pixels, 4);
+            if ((pixels & 0xF) && (!(*p_pixelbuffer2 & 0x80) || (p_sprite->flags & 0x80))) {
+              *p_pixelbuffer2 = (pixels & 0xF) + p_sprite->flags & 0x7F;
+            }
+            ++p_pixelbuffer2;
+          } while (--pixel_cnt != 0);
+        }
+        x += 8;
+        p_vram += p_sprite->h * 4;
+      } while (--scanline_pixel_cnt != 0);
+    }
+    p_pixelbuffer += 320;
+  } while (++y < y_end);
+}
+
+
+// 00411de3
+void blit_sprite_masked_hvflip(Sprite* p_sprite) {
+  if (p_sprite->x <= -128) {
+    FUN_00411a9e(p_sprite);
+    return;
+  }
+  if (p_sprite->y >= 224) return;
+
+  long y = p_sprite->y;
+  if (y < 0) {
+    y = 0;
+  }
+  long y_end = p_sprite->y + p_sprite->h;
+  if (y_end < 0) return;
+  if (y_end > 224) {
+    y_end = 224;
+  }
+  unsigned char* p_pixelbuffer = &g_pPixelBuffer[y * 320];
+
+  do {
+    if (g_spriteMasks[y] == 0) {
+      unsigned long scanline_pixel_cnt = p_sprite->w;
+      long x = p_sprite->x;
+      unsigned char* p_vram = &g_mdVram[p_sprite->vram_offset + (p_sprite->y + p_sprite->h - y - 1) * 4];
+      p_vram += (p_sprite->w - 1) * p_sprite->h * 4;
+
+      do {
+        if (x >= 320) break;
+        unsigned long pixels = *p_vram;
+        if (x > -8) {
+          BYTESWAP(pixels);
+          unsigned char* p_pixelbuffer2 = p_pixelbuffer;
+          unsigned char pixel_cnt;
+          if (x < 0) {
+            pixel_cnt = x + 8;
+            unsigned char rotatebit_cnt = -x * 4;
+            ROTATE_RIGHT(pixels, rotatebit_cnt);
+          }
+          else {
+            if (x > 312) {
+              p_pixelbuffer2 += x;
+              pixel_cnt = 320 - x;
+            }
+            else {
+              p_pixelbuffer2 += x;
+              pixel_cnt = 8;
+            }
+          }
+
+          do {
+            if ((pixels & 0xF) && (!(*p_pixelbuffer2 & 0x80) || (p_sprite->flags & 0x80))) {
+              *p_pixelbuffer2 = (pixels & 0xF) + p_sprite->flags & 0x7F;
+            }
+            ROTATE_RIGHT(pixels, 4);
+            ++p_pixelbuffer2;
+          } while (--pixel_cnt != 0);
+        }
+        x += 8;
+        p_vram -= p_sprite->h * 4;
+      } while (--scanline_pixel_cnt != 0);
+    }
+    p_pixelbuffer += 320;
+  } while (++y < y_end);
+}
+
+
+// 00411ef4
+void blit_sprite(Sprite* p_sprite) {
+  if (p_sprite->y >= 224) return;
+
+  long y = p_sprite->y;
+  if (y < 0) {
+    y = 0;
+  }
+  long y_end = p_sprite->y + p_sprite->h;
+  if (y_end < 0) return;
+  if (y_end > 224) {
+    y_end = 224;
+  }
+  unsigned char* p_pixelbuffer = &g_pPixelBuffer[y * 320];
+
+  do {
+    unsigned long scanline_pixel_cnt = p_sprite->w;
+    long x = p_sprite->x;
+    unsigned char* p_vram = &g_mdVram[p_sprite->vram_offset + (y - p_sprite->y) * 4];
+
+    do {
+      if (x >= 320) break;
+      unsigned long pixels = *p_vram;
+      if (x > -8) {
+        BYTESWAP(pixels);
+        unsigned char* p_pixelbuffer2 = p_pixelbuffer;
+        unsigned char pixel_cnt;
+        if (x < 0) {
+          pixel_cnt = x + 8;
+          unsigned char rotatebit_cnt = -x * 4;
+          ROTATE_LEFT(pixels, rotatebit_cnt);
+        }
+        else {
+          if (x > 312) {
+            p_pixelbuffer2 += x;
+            pixel_cnt = 320 - x;
+          }
+          else {
+            p_pixelbuffer2 += x;
+            pixel_cnt = 8;
+          }
+        }
+
+        do {
+          ROTATE_LEFT(pixels, 4);
+          if ((pixels & 0xF) && (!(*p_pixelbuffer2 & 0x80) || (p_sprite->flags & 0x80))) {
+            *p_pixelbuffer2 = (pixels & 0xF) + p_sprite->flags;
+          }
+          ++p_pixelbuffer2;
+        } while (--pixel_cnt != 0);
+      }
+      x += 8;
+      p_vram += p_sprite->h * 4;
+    } while (--scanline_pixel_cnt != 0);
+
+    p_pixelbuffer += 320;
+  } while (++y < y_end);
+}
+
+
+// 00411fd5
+void blit_sprite_hflip(Sprite* p_sprite) {
+  if (p_sprite->y >= 224) return;
+
+  long y = p_sprite->y;
+  if (y < 0) {
+    y = 0;
+  }
+  long y_end = p_sprite->y + p_sprite->h;
+  if (y_end < 0) return;
+  if (y_end > 224) {
+    y_end = 224;
+  }
+  unsigned char* p_pixelbuffer = &g_pPixelBuffer[y * 320];
+
+  do {
+    unsigned long scanline_pixel_cnt = p_sprite->w;
+    long x = p_sprite->x;
+    unsigned char* p_vram = &g_mdVram[p_sprite->vram_offset + (y - p_sprite->y) * 4];
+    p_vram += (p_sprite->w - 1) * p_sprite->h * 4;
+
+    do {
+      if (x >= 320) break;
+      unsigned long pixels = *p_vram;
+      if (x > -8) {
+        BYTESWAP(pixels);
+        unsigned char* p_pixelbuffer2 = p_pixelbuffer;
+        unsigned char pixel_cnt;
+        if (x < 0) {
+          pixel_cnt = x + 8;
+          unsigned char rotatebit_cnt = -x * 4;
+          ROTATE_RIGHT(pixels, rotatebit_cnt);
+        }
+        else {
+          if (x > 312) {
+            p_pixelbuffer2 += x;
+            pixel_cnt = 320 - x;
+          }
+          else {
+            p_pixelbuffer2 += x;
+            pixel_cnt = 8;
+          }
+        }
+
+        do {
+          if ((pixels & 0xF) && (!(*p_pixelbuffer2 & 0x80) || (p_sprite->flags & 0x80))) {
+            *p_pixelbuffer2 = (pixels & 0xF) + p_sprite->flags;
+          }
+          ROTATE_RIGHT(pixels, 4);
+          ++p_pixelbuffer2;
+        } while (--pixel_cnt != 0);
+      }
+      x += 8;
+      p_vram -= p_sprite->h * 4;
+    } while (--scanline_pixel_cnt != 0);
+
+    p_pixelbuffer += 320;
+  } while (++y < y_end);
+}
+
+
+// 004120c3
+void blit_sprite_vflip(Sprite* p_sprite) {
+  if (p_sprite->y >= 224) return;
+
+  long y = p_sprite->y;
+  if (y < 0) {
+    y = 0;
+  }
+  long y_end = p_sprite->y + p_sprite->h;
+  if (y_end < 0) return;
+  if (y_end > 224) {
+    y_end = 224;
+  }
+  unsigned char* p_pixelbuffer = &g_pPixelBuffer[y * 320];
+
+  do {
+    unsigned long scanline_pixel_cnt = p_sprite->w;
+    long x = p_sprite->x;
+    unsigned char* p_vram = &g_mdVram[p_sprite->vram_offset + (p_sprite->y + p_sprite->h - y - 1) * 4];
+
+    do {
+      if (x >= 320) break;
+      unsigned long pixels = *p_vram;
+      if (x > -8) {
+        BYTESWAP(pixels);
+        unsigned char* p_pixelbuffer2 = p_pixelbuffer;
+        unsigned char pixel_cnt;
+        if (x < 0) {
+          pixel_cnt = x + 8;
+          unsigned char rotatebit_cnt = -x * 4;
+          ROTATE_LEFT(pixels, rotatebit_cnt);
+        }
+        else {
+          if (x > 312) {
+            p_pixelbuffer2 += x;
+            pixel_cnt = 320 - x;
+          }
+          else {
+            p_pixelbuffer2 += x;
+            pixel_cnt = 8;
+          }
+        }
+
+        do {
+          ROTATE_LEFT(pixels, 4);
+          if ((pixels & 0xF) && (!(*p_pixelbuffer2 & 0x80) || (p_sprite->flags & 0x80))) {
+            *p_pixelbuffer2 = (pixels & 0xF) + p_sprite->flags;
+          }
+          ++p_pixelbuffer2;
+        } while (--pixel_cnt != 0);
+      }
+      x += 8;
+      p_vram += p_sprite->h * 4;
+    } while (--scanline_pixel_cnt != 0);
+
+    p_pixelbuffer += 320;
+  } while (++y < y_end);
+}
+
+
+// 004121aa
+void blit_sprite_hvflip(Sprite* p_sprite) {
+  if (p_sprite->y >= 224) return;
+
+  long y = p_sprite->y;
+  if (y < 0) {
+    y = 0;
+  }
+  long y_end = p_sprite->y + p_sprite->h;
+  if (y_end < 0) return;
+  if (y_end > 224) {
+    y_end = 224;
+  }
+  unsigned char* p_pixelbuffer = &g_pPixelBuffer[y * 320];
+
+  do {
+    unsigned long scanline_pixel_cnt = p_sprite->w;
+    long x = p_sprite->x;
+    unsigned char* p_vram = &g_mdVram[p_sprite->vram_offset + (p_sprite->y + p_sprite->h - y - 1) * 4];
+    p_vram += (p_sprite->w - 1) * p_sprite->h * 4;
+
+    do {
+      if (x >= 320) break;
+      unsigned long pixels = *p_vram;
+      if (x > -8) {
+        BYTESWAP(pixels);
+        unsigned char* p_pixelbuffer2 = p_pixelbuffer;
+        unsigned char pixel_cnt;
+        if (x < 0) {
+          pixel_cnt = x + 8;
+          unsigned char rotatebit_cnt = -x * 4;
+          ROTATE_RIGHT(pixels, rotatebit_cnt);
+        }
+        else {
+          if (x > 312) {
+            p_pixelbuffer2 += x;
+            pixel_cnt = 320 - x;
+          }
+          else {
+            p_pixelbuffer2 += x;
+            pixel_cnt = 8;
+          }
+        }
+
+        do {
+          if ((pixels & 0xF) && (!(*p_pixelbuffer2 & 0x80) || (p_sprite->flags & 0x80))) {
+            *p_pixelbuffer2 = (pixels & 0xF) + p_sprite->flags;
+          }
+          ROTATE_RIGHT(pixels, 4);
+          ++p_pixelbuffer2;
+        } while (--pixel_cnt != 0);
+      }
+      x += 8;
+      p_vram -= p_sprite->h * 4;
+    } while (--scanline_pixel_cnt != 0);
+
+    p_pixelbuffer += 320;
+  } while (++y < y_end);
 }

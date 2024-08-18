@@ -314,6 +314,7 @@
 /* 00854760 */ ULONG DAT_00854760;
 /* 00854768 */ ULONG g_mdVsram[20];
 /* 008547c4 */ ULONG* g_pConvertedHscrollbuff;
+/* 008547d8 */ UCHAR g_spriteMasks[448];
 /* 0085499c */ USHORT* g_pLevelSelectVram;
 /* 008549a4 */ ULONG g_mdRegisterD0;
 /* 008549d4 */ ULONG g_supplementaryMdRamAddress;

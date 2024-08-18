@@ -52,6 +52,7 @@ extern ULONG g_createFileError;
 extern ULONG DAT_00854760;
 extern ULONG g_mdVsram[20];
 extern ULONG* g_pConvertedHscrollbuff;
+extern UCHAR g_spriteMasks[448];
 extern USHORT* g_pLevelSelectVram;
 extern ULONG g_mdRegisterD0;
 extern ULONG g_supplementaryMdRamAddress;
