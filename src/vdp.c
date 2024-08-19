@@ -490,6 +490,248 @@ static unsigned char* blit_remainingpixels_ver4(unsigned char* p_pixelbuffer, un
 }
 
 
+// 0040f89b
+void FUN_0040f89b(unsigned long* p_surface, long pitch) {
+  unsigned long* p_pixelbuffer = (unsigned long*)g_pixelBuffer;
+  pitch -= 320;
+  unsigned char hint = g_mdRam.vdp_hint_cache;
+  if (DAT_008549dc != 0) {
+    hint = 255;
+  }
+
+  for (int scanline = 0; scanline < 224; ++scanline) {
+    if (scanline < hint) {
+      for (int i = 20; i != 0; --i) {
+        *p_surface++ = *p_pixelbuffer++ & 0x7F7F7F7F;
+        *p_surface++ = *p_pixelbuffer++ & 0x7F7F7F7F;
+        *p_surface++ = *p_pixelbuffer++ & 0x7F7F7F7F;
+        *p_surface++ = *p_pixelbuffer++ & 0x7F7F7F7F;
+      }
+    }
+    else {
+      for (int i = 20; i != 0; --i) {
+        *p_surface++ = *p_pixelbuffer++ | 0x80808080;
+        *p_surface++ = *p_pixelbuffer++ | 0x80808080;
+        *p_surface++ = *p_pixelbuffer++ | 0x80808080;
+        *p_surface++ = *p_pixelbuffer++ | 0x80808080;
+      }
+    }
+    p_surface = (unsigned long*)((unsigned char*)p_surface + pitch);
+  }
+}
+
+
+// 0040f96a
+void FUN_0040f96a(unsigned long* p_surface, long pitch) {
+  unsigned long* p_pixelbuffer = (unsigned long*)g_pixelBuffer;
+  long pitch2 = pitch * 2 - 640;
+  unsigned char hint = g_mdRam.vdp_hint_cache;
+  if (DAT_008549dc != 0) {
+    hint = 255;
+  }
+
+  for (int scanline = 0; scanline < 224; ++scanline) {
+    if (scanline < hint) {
+      for (int i = 20; i != 0; --i) {
+        unsigned long pixel = *p_pixelbuffer++ & 0x7F7F7F7F;
+        unsigned long pixel_mod = pixel       & 0x000000FF
+                                | pixel << 8  & 0x00FFFF00
+                                | pixel << 16 & 0xFF000000;
+        pixel >>= 16;
+        p_surface[0] = pixel_mod;
+        ((unsigned long*)&((unsigned char*)p_surface)[pitch])[0] = pixel_mod;
+        pixel_mod = pixel       & 0x000000FF
+                  | pixel << 8  & 0x00FFFF00
+                  | pixel << 16 & 0xFF000000;
+        ((unsigned long*)&((unsigned char*)p_surface)[pitch])[1] = pixel_mod;
+        p_surface[1] = pixel_mod;
+        p_surface += 2;
+        pixel = *p_pixelbuffer++ & 0x7F7F7F7F;
+        pixel_mod = pixel       & 0x000000FF
+                  | pixel << 8  & 0x00FFFF00
+                  | pixel << 16 & 0xFF000000;
+        pixel >>= 16;
+        p_surface[0] = pixel_mod;
+        ((unsigned long*)&((unsigned char*)p_surface)[pitch])[0] = pixel_mod;
+        pixel_mod = pixel       & 0x000000FF
+                  | pixel << 8  & 0x00FFFF00
+                  | pixel << 16 & 0xFF000000;
+        ((unsigned long*)&((unsigned char*)p_surface)[pitch])[1] = pixel_mod;
+        p_surface[1] = pixel_mod;
+        p_surface += 2;
+        pixel = *p_pixelbuffer++ & 0x7F7F7F7F;
+        pixel_mod = pixel       & 0x000000FF
+                  | pixel << 8  & 0x00FFFF00
+                  | pixel << 16 & 0xFF000000;
+        pixel >>= 16;
+        p_surface[0] = pixel_mod;
+        ((unsigned long*)&((unsigned char*)p_surface)[pitch])[0] = pixel_mod;
+        pixel_mod = pixel       & 0x000000FF
+                  | pixel << 8  & 0x00FFFF00
+                  | pixel << 16 & 0xFF000000;
+        ((unsigned long*)&((unsigned char*)p_surface)[pitch])[1] = pixel_mod;
+        p_surface[1] = pixel_mod;
+        p_surface += 2;
+        pixel = *p_pixelbuffer++ & 0x7F7F7F7F;
+        pixel_mod = pixel       & 0x000000FF
+                  | pixel << 8  & 0x00FFFF00
+                  | pixel << 16 & 0xFF000000;
+        pixel >>= 16;
+        p_surface[0] = pixel_mod;
+        ((unsigned long*)&((unsigned char*)p_surface)[pitch])[0] = pixel_mod;
+        pixel_mod = pixel       & 0x000000FF
+                  | pixel << 8  & 0x00FFFF00
+                  | pixel << 16 & 0xFF000000;
+        ((unsigned long*)&((unsigned char*)p_surface)[pitch])[1] = pixel_mod;
+        p_surface[1] = pixel_mod;
+        p_surface += 2;
+      }
+    }
+    else {
+      for (int i = 20; i != 0; --i) {
+        unsigned long pixel = *p_pixelbuffer++ & 0x80808080;
+        unsigned long pixel_mod = pixel       & 0x000000FF
+                                | pixel << 8  & 0x00FFFF00
+                                | pixel << 16 & 0xFF000000;
+        pixel >>= 16;
+        p_surface[0] = pixel_mod;
+        ((unsigned long*)&((unsigned char*)p_surface)[pitch])[0] = pixel_mod;
+        pixel_mod = pixel       & 0x000000FF
+                  | pixel << 8  & 0x00FFFF00
+                  | pixel << 16 & 0xFF000000;
+        ((unsigned long*)&((unsigned char*)p_surface)[pitch])[1] = pixel_mod;
+        p_surface[1] = pixel_mod;
+        p_surface += 2;
+        pixel = *p_pixelbuffer++ & 0x80808080;
+        pixel_mod = pixel       & 0x000000FF
+                  | pixel << 8  & 0x00FFFF00
+                  | pixel << 16 & 0xFF000000;
+        pixel >>= 16;
+        p_surface[0] = pixel_mod;
+        ((unsigned long*)&((unsigned char*)p_surface)[pitch])[0] = pixel_mod;
+        pixel_mod = pixel       & 0x000000FF
+                  | pixel << 8  & 0x00FFFF00
+                  | pixel << 16 & 0xFF000000;
+        ((unsigned long*)&((unsigned char*)p_surface)[pitch])[1] = pixel_mod;
+        p_surface[1] = pixel_mod;
+        p_surface += 2;
+        pixel = *p_pixelbuffer++ & 0x80808080;
+        pixel_mod = pixel       & 0x000000FF
+                  | pixel << 8  & 0x00FFFF00
+                  | pixel << 16 & 0xFF000000;
+        pixel >>= 16;
+        p_surface[0] = pixel_mod;
+        ((unsigned long*)&((unsigned char*)p_surface)[pitch])[0] = pixel_mod;
+        pixel_mod = pixel       & 0x000000FF
+                  | pixel << 8  & 0x00FFFF00
+                  | pixel << 16 & 0xFF000000;
+        ((unsigned long*)&((unsigned char*)p_surface)[pitch])[1] = pixel_mod;
+        p_surface[1] = pixel_mod;
+        p_surface += 2;
+        pixel = *p_pixelbuffer++ & 0x80808080;
+        pixel_mod = pixel       & 0x000000FF
+                  | pixel << 8  & 0x00FFFF00
+                  | pixel << 16 & 0xFF000000;
+        pixel >>= 16;
+        p_surface[0] = pixel_mod;
+        ((unsigned long*)&((unsigned char*)p_surface)[pitch])[0] = pixel_mod;
+        pixel_mod = pixel       & 0x000000FF
+                  | pixel << 8  & 0x00FFFF00
+                  | pixel << 16 & 0xFF000000;
+        ((unsigned long*)&((unsigned char*)p_surface)[pitch])[1] = pixel_mod;
+        p_surface[1] = pixel_mod;
+        p_surface += 2;
+      }
+    }
+    p_surface = (unsigned long*)((unsigned char*)p_surface + pitch2);
+  }
+}
+
+
+// 0040fceb
+void FUN_0040fceb(unsigned long* p_surface, long pitch) {
+  unsigned long* p_pixelbuffer = (unsigned long*)g_pixelBuffer;
+  pitch -= 320;
+  unsigned char hint = g_mdRam.vdp_hint_cache;
+
+  for (int scanline = 0; scanline < 224; ++scanline) {
+    for (int i = 20; i != 0; --i) {
+      *p_surface++ = *p_pixelbuffer++;
+      *p_surface++ = *p_pixelbuffer++;
+      *p_surface++ = *p_pixelbuffer++;
+      *p_surface++ = *p_pixelbuffer++;
+    }
+    p_surface = (unsigned long*)((unsigned char*)p_surface + pitch);
+  }
+}
+
+
+// 0040fd4f
+void FUN_0040fd4f(unsigned long* p_surface, long pitch) {
+  unsigned long* p_pixelbuffer = (unsigned long*)g_pixelBuffer;
+  long pitch2 = pitch * 2 - 640;
+  unsigned char hint = g_mdRam.vdp_hint_cache;
+
+  for (int scanline = 0; scanline < 224; ++scanline) {
+    for (int i = 20; i != 0; --i) {
+      unsigned long pixel = *p_pixelbuffer++;
+      unsigned long pixel_mod = pixel       & 0x000000FF
+                              | pixel << 8  & 0x00FFFF00
+                              | pixel << 16 & 0xFF000000;
+      pixel >>= 16;
+      p_surface[0] = pixel_mod;
+      ((unsigned long*)&((unsigned char*)p_surface)[pitch])[0] = pixel_mod;
+      pixel_mod = pixel       & 0x000000FF
+                | pixel << 8  & 0x00FFFF00
+                | pixel << 16 & 0xFF000000;
+      ((unsigned long*)&((unsigned char*)p_surface)[pitch])[1] = pixel_mod;
+      p_surface[1] = pixel_mod;
+      p_surface += 2;
+      pixel = *p_pixelbuffer++;
+      pixel_mod = pixel       & 0x000000FF
+                | pixel << 8  & 0x00FFFF00
+                | pixel << 16 & 0xFF000000;
+      pixel >>= 16;
+      p_surface[0] = pixel_mod;
+      ((unsigned long*)&((unsigned char*)p_surface)[pitch])[0] = pixel_mod;
+      pixel_mod = pixel       & 0x000000FF
+                | pixel << 8  & 0x00FFFF00
+                | pixel << 16 & 0xFF000000;
+      ((unsigned long*)&((unsigned char*)p_surface)[pitch])[1] = pixel_mod;
+      p_surface[1] = pixel_mod;
+      p_surface += 2;
+      pixel = *p_pixelbuffer++;
+      pixel_mod = pixel       & 0x000000FF
+                | pixel << 8  & 0x00FFFF00
+                | pixel << 16 & 0xFF000000;
+      pixel >>= 16;
+      p_surface[0] = pixel_mod;
+      ((unsigned long*)&((unsigned char*)p_surface)[pitch])[0] = pixel_mod;
+      pixel_mod = pixel       & 0x000000FF
+                | pixel << 8  & 0x00FFFF00
+                | pixel << 16 & 0xFF000000;
+      ((unsigned long*)&((unsigned char*)p_surface)[pitch])[1] = pixel_mod;
+      p_surface[1] = pixel_mod;
+      p_surface += 2;
+      pixel = *p_pixelbuffer++;
+      pixel_mod = pixel       & 0x000000FF
+                | pixel << 8  & 0x00FFFF00
+                | pixel << 16 & 0xFF000000;
+      pixel >>= 16;
+      p_surface[0] = pixel_mod;
+      ((unsigned long*)&((unsigned char*)p_surface)[pitch])[0] = pixel_mod;
+      pixel_mod = pixel       & 0x000000FF
+                | pixel << 8  & 0x00FFFF00
+                | pixel << 16 & 0xFF000000;
+      ((unsigned long*)&((unsigned char*)p_surface)[pitch])[1] = pixel_mod;
+      p_surface[1] = pixel_mod;
+      p_surface += 2;
+    }
+    p_surface = (unsigned long*)((unsigned char*)p_surface + pitch2);
+  }
+}
+
+
 // 00410384
 void copy_map_vram(unsigned short* p_source, unsigned short offset, unsigned long row_cnt, unsigned long cell_cnt) {
   unsigned short* p_destination = (unsigned short*)&g_mdVram[offset];
