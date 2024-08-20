@@ -1,6 +1,6 @@
-#include "cgame.h"
-#include "cgraphics.h"
-#include "csound.h"
+#include "classes/cgame.h"
+#include "classes/cgraphics.h"
+#include "classes/csound.h"
 #include "imidi.h"
 
 IMidi* g_pMidiInterface = 0;
