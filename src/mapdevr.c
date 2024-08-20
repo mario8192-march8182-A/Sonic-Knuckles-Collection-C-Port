@@ -30,19 +30,19 @@ void mapdevr(unsigned short* p_destination, unsigned char* p_source, unsigned sh
     unsigned char repeat_cnt = entry & 0xF;
 
     switch (type) {
+      case 0:
       case 1:
-      case 2:
         do {
           *p_destination++ = incremental_copy++;
         } while (repeat_cnt-- != 0);
         break;
+      case 2:
       case 3:
-      case 4:
         do {
           *p_destination++ = literal_copy;
         } while (repeat_cnt-- != 0);
         break;
-      case 5: {
+      case 4: {
         unsigned short inline_copy = mapdevr_getinline(&wk, offset, bitfield, inline_copy_bit_cnt);
 
         do {
@@ -50,7 +50,7 @@ void mapdevr(unsigned short* p_destination, unsigned char* p_source, unsigned sh
         } while (repeat_cnt-- != 0);
         break;
       }
-      case 6: {
+      case 5: {
         unsigned short inline_copy = mapdevr_getinline(&wk, offset, bitfield, inline_copy_bit_cnt);
 
         do {
@@ -58,7 +58,7 @@ void mapdevr(unsigned short* p_destination, unsigned char* p_source, unsigned sh
         } while (repeat_cnt-- != 0);
         break;
       }
-      case 7: {
+      case 6: {
         unsigned short inline_copy = mapdevr_getinline(&wk, offset, bitfield, inline_copy_bit_cnt);
 
         do {
@@ -66,7 +66,7 @@ void mapdevr(unsigned short* p_destination, unsigned char* p_source, unsigned sh
         } while (repeat_cnt-- != 0);
         break;
       }
-      case 8:
+      case 7:
         if (repeat_cnt == 0xF) {
           done = true;
         }
