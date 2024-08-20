@@ -6,7 +6,7 @@
 class CWinRegistry {
   public:
   CWinRegistry(const char* pKeyName);
-  openSubKey(const char* pSubKeyName);
+  void openSubKey(const char* pSubKeyName);
   BOOL queryKeyBool(const char* pKeyName);
   void queryKeyBytes2(const char* pKeyName, BYTE* pBuffer, ULONG size);
   void queryKeyDword(const char* pKeyName, DWORD* pBuffer);
@@ -19,8 +19,8 @@ class CWinRegistry {
   private:
   ULONG m_pDisposition;
   long m_result;
-  HKEY* m_phKey;
-  HKEY* m_phSubKey;
+  HKEY m_hKey;
+  HKEY m_hSubKey;
   char m_key[256];
   char m_subKey[256];
 };
