@@ -15,12 +15,13 @@ void mapdevr(unsigned short* p_destination, unsigned char* p_source, unsigned sh
   unsigned short incremental_copy = *(unsigned short*)p_source++ + offset;
   unsigned short literal_copy = *(unsigned short*)p_source++ + offset;
   wk.data = *p_source++ << 8;
+  wk.data |= *p_source++;
   wk.shift = 16;
   bool done = false;
 
   do {
     wk.entry_bit_cnt = 7;
-    unsigned char entry = wk.data >> wk.shift - wk.entry_bit_cnt & 0x7F;
+    unsigned char entry = (wk.data >> wk.shift - wk.entry_bit_cnt) & 0x7F;
     unsigned char type = entry >> 4;
     if (!(entry & 0x40)) {
       wk.entry_bit_cnt = 6;
@@ -88,7 +89,7 @@ static unsigned short mapdevr_getinline(mapdevrwk* p_wk, unsigned short offset, 
   if (bitfield & 0x80) { // priority bit
     --p_wk->shift;
     if (BIT_IS_SET(p_wk->data, p_wk->shift)) {
-      offset += 0x8000;
+      offset |= 0x8000;
     }
   }
 
