@@ -487,6 +487,7 @@ void CGame::onCommand(HWND hWnd, ULONG id, HWND hControlWnd, ULONG code) {
       else {
         m_options[OPTIONS_SHOWFRAMECOUNT] = 1;
       }
+      break;
     case ID_HELP_CONTENTS:
       WinHelp(hWnd, "Sonic.hlp", HELP_CONTENTS, 0);
       break;
