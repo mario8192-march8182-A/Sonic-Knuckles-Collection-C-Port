@@ -35,7 +35,7 @@ static void bitdevr_decompress(bitdevrwk* p_wk, unsigned char* p_bitdevwk, void(
 
   do {
     unsigned short code = p_wk->data >> p_wk->shift - 8;
-    if ((code & 0xFC) == 0xFC) {
+    if (code >= 252) {
       bitdevr_decompress_inline(p_wk);
     }
     else {
@@ -113,7 +113,7 @@ static unsigned char* bitdevr_codetable(unsigned char* p_source, unsigned short*
     while (!((data = *p_source++) & 0x80)) {
       unsigned char byte2 = data;
       unsigned char palette_index = byte1 & 0xF;
-      unsigned char indexrepeat_cnt = byte2 & 0x70 >> 4;
+      unsigned char indexrepeat_cnt = (byte2 & 0x70) >> 4;
       unsigned char codebits_cnt = byte2 & 0xF;
       unsigned short codetable_entry = codebits_cnt << 8 | indexrepeat_cnt << 4 | palette_index;
       if (codebits_cnt == 8) {
