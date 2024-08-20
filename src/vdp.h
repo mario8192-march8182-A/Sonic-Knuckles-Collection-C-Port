@@ -1,3 +1,7 @@
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #ifndef VDP_H
 #define VDP_H
 
@@ -37,4 +41,8 @@ void blit_sprite_hflip(Sprite* p_sprite);
 void blit_sprite_vflip(Sprite* p_sprite);
 void blit_sprite_hvflip(Sprite* p_sprite);
 
+#endif
+
+#ifdef __cplusplus
+}
 #endif
