@@ -11,6 +11,7 @@ typedef struct sonic3_ram {
   /* 08ffaa00 */ unsigned char bitdevwk[512];
   /* 08ffac00 */ unsigned short pbuffer[PBUFFER_LEVELS][PBUFFER_LEVEL_SLOTS];
   /* 08ffb000 */ sprite_status actwk[ACTWK_SLOTS];
+  /* 08ffe000 */ unsigned char hscrollbuff[896];
   /* 08ffe380 */ unsigned short colibuffer[COLBUFFER_SLOTS];
   /* 08ffe600 */ unsigned char competitionmode_savedata[84];
   /* 08ffe660 */ unsigned long p_saveslot;
@@ -29,6 +30,7 @@ typedef struct sonic3_ram {
   /* 08ffee84 */ long scra_v_posit_copy;
   /* 08ffeebc */ short frame_offset_x;
   /* 08ffeec6 */ unsigned char event_flag_3;
+  /* 08ffeeea */ unsigned short vscrollbuff[40];
   /* 08ffef40 */ unsigned long DAT_08ffef40;
   /* 08ffef4b */ unsigned char dataselect_selection;
   /* 08ffef4c */ character_team_id nosave_plmode;
@@ -40,6 +42,9 @@ typedef struct sonic3_ram {
   /* 08fff604 */ unsigned short swdata1;
   /* 08fff606 */ unsigned short swdata2;
   /* 08fff614 */ unsigned short demotimer;
+  /* 08fff616 */ unsigned long vscroll;
+  /* 08fff61a */ unsigned long hscroll;
+  /* 08fff624 */ unsigned char vdp_hint_cache;
   /* 08fff626 */ unsigned char startcolor;
   /* 08fff627 */ unsigned char colorcnt;
   /* 08fff62a */ unsigned char int_flg;
@@ -66,6 +71,7 @@ typedef struct sonic3_ram {
   /* 08fff7da */ unsigned short scr_x_no;
   /* 08fff7e0 */ unsigned char level_triggers[LEVEL_TRIGGERS_SLOTS];
   /* 08fff7f0 */ signed char actanimcounters[8][2];
+  /* 08fff800 */ unsigned short ramf8[320];
   /* 08fffa9a */ unsigned char emy_wrt_flg[EMY_WRT_FLG_SLOTS];
   /* 08fffaa2 */ unsigned char DAT_08fffaa2;
   /* 08fffaa8 */ unsigned char act_clear_flag;

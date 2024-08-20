@@ -40,6 +40,9 @@ class CGame {
   int setupGameThread();
   int runGameThread();
   void terminateGameThread();
+  void update();
+  void updateScreen();
+  void FUN_0040398b();
 
   private:
   int m_options[6];
@@ -55,8 +58,24 @@ class CGame {
   HANDLE m_hEvent1;
   HANDLE m_hDuplicate;
   ULONG m_unknown68;
-  BOOL m_screenshotKeyDown;
-  ULONG m_unknown88;
+  ULONG m_unknown72;
+  ULONG m_systemTime;
+  ULONG m_unknown80;
+  BOOL m_bScreenshotKeyDown;
+  ULONG m_screenshotId;
+  ULONG m_unknown92[7];
+  ULONG m_unknown120[7];
+  ULONG m_unknown148;
+  ULONG m_unknown152;
+  ULONG m_unknown156;
+  double m_unknown160;
+  double m_unknown168;
+  ULONG m_unknown176;
+  ULONG m_unknown180;
+  ULONG m_unknown184;
+  ULONG m_unknown188;
+  ULONG m_unknown192;
+  ULONG m_unknown196;
   ULONG m_unknown2172;
   ULONG m_unknown2176;
 };

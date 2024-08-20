@@ -1,22 +1,97 @@
-#include "globals.h"
-#include "globals.hpp"
 #include <stdio.h>
 #include <windows.h>
 #include <commctrl.h>
 #include <mbstring.h>
+#include "globals.h"
+#include "globalobjects.hpp"
+#include "constants.h"
 #include "winresource.h"
+#include "macros.h"
 #include "imidi.h"
-#include "classes\cfile.h"
-#include "classes\cgame.h"
-#include "classes\cgraphics.h"
-#include "classes\csound.h"
-#include "classes\cwinregistry.h"
+#include "types/sprite.h"
+#include "classes/cfile.h"
+#include "classes/cgame.h"
+#include "classes/cgraphics.h"
+#include "classes/csound.h"
+#include "classes/cwinregistry.h"
+#include "game.h"
+#include "vdp.h"
 
+void vInt18();
+void vInt22();
+void uploadPalette();
+void pollMdControllers();
 BOOL loadBgm(int id);
 void initControls();
+void pollWindowsControllers();
+USHORT getPressedController1Buttons();
+USHORT getPressedController2Buttons();
 void playBgm();
 void stopBgm();
 void pauseBgm();
+
+
+// 00401000
+int FUN_00401000() {
+  double unknown = 0.0;
+  g_systemTime = timeGetTime();
+  g_elapsedTime = g_systemTime - g_lastSystemTime;
+  if (DAT_0082b098 < 1) {
+    if (g_elapsedTime < 17 && BOOL_0082b040) {
+      if (BOOL_0082b044 == FALSE) {
+        BOOL_0082b044 = TRUE;
+        DAT_00831150 = g_systemTime;
+      }
+      return BOOL_0082b044;
+    }
+    if (BOOL_0082b044) {
+      unknown = g_systemTime - DAT_00831150;
+    }
+  }
+  BOOL_0082b044 = FALSE;
+  g_lastSystemTime = g_systemTime;
+  g_cumulativeElapsedTime += g_elapsedTime;
+  if (BOOL_0082b040) {
+    DAT_0082b054 = g_elapsedTime - (long)unknown;
+    ++DAT_0082b070;
+    ++DAT_0082b074;
+  }
+  ++DAT_0082b078;
+  ++DAT_0082b07c;
+  g_elapsedTime2 = g_systemTime - g_lastSystemTime2;
+  g_elapsedTime3 = g_systemTime - g_lastSystemTime3;
+  if (g_elapsedTime3 >= 1000) {
+    DAT_0082b088 = 1;
+    g_lastSystemTime3 = g_systemTime;
+    DAT_00831140 = g_elapsedTime3;
+    g_lastDAT_0082b074 = DAT_0082b074;
+    g_lastDAT_0082b07c = DAT_0082b07c;
+    DAT_0082b074 = DAT_0082b07c = 0;
+  }
+  BOOL_0082b040 = TRUE;
+  if (DAT_00829058[DAT_0082b098] <= DAT_0082b078) {
+    double temp = DAT_0082b078 * DAT_00829080;
+    double temp2 = temp / DAT_00829088;
+    if (g_elapsedTime2 < temp - temp2) {
+      --DAT_0082b098;
+    }
+    if (g_elapsedTime2 >= temp + temp2) {
+      ++DAT_0082b098;
+    }
+    if (DAT_0082b098 >= 8) {
+      DAT_0082b098 = 7;
+    }
+    else if (DAT_0082b098 < 0) {
+      DAT_0082b098 = 0;
+    }
+    g_lastSystemTime2 = g_systemTime;
+    DAT_0082b070 = DAT_0082b078 = 0;
+    if (DAT_0082b098 >= 1) {
+      BOOL_0082b040 = FALSE;
+    }
+  }
+  return BOOL_0082b044;
+}
 
 
 // 004012a0
@@ -86,7 +161,33 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, char* lpCmdLine
 
 // 00403d27
 DWORD WINAPI gameThreadStartRoutine(void* pParameter) {
-  // TODO
+  if (g_bResetMdRam) {
+    memset(&g_mdRam, 0, sizeof(g_mdRam));
+    g_bResetMdRam = FALSE;
+  }
+  memset(g_mdVram, 0, 0x10000);
+
+  SET_MDREGION_OVERSEAS(g_mdRam.mdstatus);
+
+  switch (g_startGameMode) {
+    case STARTGAMEMODE_NORMAL:
+      if (g_sonicGameMode == SONICGAMEMODE_SONICKNUCKLES) {
+        // TODO
+      }
+      else {
+        // TODO
+      }
+      break;
+    case STARTGAMEMODE_SPECIALSTAGEMODE:
+      g_bResetMdRam = TRUE;
+      // TODO
+      break;
+    case STARTGAMEMODE_DEBUG:
+      start_debug();
+      break;
+  }
+
+  return 0;
 }
 
 
@@ -195,8 +296,6 @@ int allocRamAndVram() {
     return 1;
   }
 
-  g_supplementaryMdRamAddress = 0x9000000;
-
   g_region7ff8000 = VirtualAlloc((void*)0x7FF8000, 0x20000, MEM_RESERVE, PAGE_READWRITE);
   if (g_region7ff8000 == 0) {
     return 1;
@@ -206,9 +305,9 @@ int allocRamAndVram() {
     return 1;
   }
 
-  memset(&g_mdRam, 0, 65536);
-  memset(g_mdVram, 0, 65536);
-  memset(g_mdSystemRam, 0, 143360);
+  memset(&g_mdRam, 0, sizeof(g_mdRam));
+  memset(g_mdVram, 0, 0x10000);
+  memset(g_pixelBuffer, 0, 0x23000);
 
   return 0;
 }
@@ -226,6 +325,114 @@ void freeRamAndVram() {
     VirtualFree(g_region7ff8000, 0, MEM_RELEASE);
     g_region7ff8000 = 0;
   }
+}
+
+
+// 00404564
+void blitSprites() {
+  Sprite* pSprite;
+  if (DAT_00854de8 == 5) {
+    pSprite = &g_sprites[g_spriteCnt - 1];
+
+    for (int i = 0; i < g_spriteCnt; ++i) {
+      switch (pSprite->flags & 0x300) {
+        case 0x000: blit_sprite(pSprite);        break;
+        case 0x100: blit_sprite_hflip(pSprite);  break;
+        case 0x200: blit_sprite_vflip(pSprite);  break;
+        case 0x300: blit_sprite_hvflip(pSprite); break;
+      }
+      --pSprite;
+    }
+  }
+  else if (DAT_00831750 != 0) {
+    memset(g_spriteMasks, 0, 448);
+
+    for (int i = 0; i < 112; ++i) {
+      g_spriteMasks[i] = 1;
+    }
+
+    pSprite = &g_sprites[g_spriteCnt - 1];
+
+    for (int i = 0; i < g_spriteCnt; ++i) {
+      if (((UCHAR*)&pSprite->flags)[2] & 1) {
+        memset(g_spriteMasks, 0, 448);
+        for (int j = 112; j < 224; ++j) {
+          g_spriteMasks[i] = 1;
+        }
+      }
+      else {
+        switch (pSprite->flags & 0x300) {
+          case 0x000: blit_sprite_masked(pSprite);        break;
+          case 0x100: blit_sprite_masked_hflip(pSprite);  break;
+          case 0x200: blit_sprite_masked_vflip(pSprite);  break;
+          case 0x300: blit_sprite_masked_hvflip(pSprite); break;
+        }
+      }
+      --pSprite;
+    }
+  }
+  else if (DAT_008547bc != 0) {
+    DAT_008547bc = 0;
+    memset(g_spriteMasks, 0, 448);
+    pSprite = g_sprites;
+
+    for (int i = 0; i < g_spriteCnt; ++i) {
+      FUN_00411a50(pSprite);
+      ++pSprite;
+    }
+
+    pSprite = &g_sprites[g_spriteCnt - 1];
+
+    for (int i = 0; i < g_spriteCnt; ++i) {
+      switch (pSprite->flags & 0x300) {
+        case 0x000: blit_sprite_masked(pSprite);        break;
+        case 0x100: blit_sprite_masked_hflip(pSprite);  break;
+        case 0x200: blit_sprite_masked_vflip(pSprite);  break;
+        case 0x300: blit_sprite_masked_hvflip(pSprite); break;
+      }
+      --pSprite;
+    }
+  }
+  else {
+    pSprite = &g_sprites[g_spriteCnt];
+
+    for (int i = 0; i < g_spriteCnt; ++i) {
+      switch (pSprite->flags & 0x300) {
+        case 0x000: blit_sprite_noprio(pSprite);        break;
+        case 0x100: blit_sprite_hflip_noprio(pSprite);  break;
+        case 0x200: blit_sprite_vflip_noprio(pSprite);  break;
+        case 0x300: blit_sprite_hvflip_noprio(pSprite); break;
+      }
+      --pSprite;
+    }
+  }
+
+  g_spriteCnt = 0;
+}
+
+
+// 004049eb
+Sprite* uploadSprites(USHORT* pSource, Sprite* pSprite) {
+  g_spriteCnt = 0;
+  DAT_00831750 = 0;
+
+  while (((UCHAR*)pSource)[3] != 0) {
+    if (pSource[0] != 0 || pSource[2] != 0 || pSource[3] != 0) {
+      pSprite->x = pSource[3] - 128;
+      pSprite->y = pSource[0] - 128;
+      pSprite->w = ((((UCHAR*)pSource)[2] & 0xC) >> 2) + 1;
+      pSprite->h = (((UCHAR*)pSource)[2] & 3) * 8 + 8;
+      pSprite->flags = ((pSource[2] & 0x6000) >> 9) + 16
+                     | (pSource[2] & 0x1800) >> 3
+                     | (pSource[2] & 0x8000) >> 8;
+      pSprite->vram_offset = ((pSource[2] & 0x7FF) << 5); // + 0x8000000
+      ++g_spriteCnt;
+      ++pSprite;
+      pSource += 4;
+    }
+  }
+
+  return pSprite;
 }
 
 
@@ -268,6 +475,265 @@ void writeSaveFile() {
 }
 
 
+// 00404fd5
+extern "C" void writeSaveData(unsigned char* pSource, int saveFileOffset, USHORT words) {
+  memcpy(&g_saveFile[saveFileOffset], pSource, words * 2 + 2);
+}
+
+
+// 00405020
+extern "C" int readSaveData(unsigned char* pDestination, int saveFileOffset, USHORT words, USHORT checkValue) {
+  ULONG size = words * 2 + 2;
+
+  memcpy(pDestination, &g_saveFile[saveFileOffset], size);
+  USHORT readCheckValue = *((USHORT*)&g_saveFile[saveFileOffset + size - 2 - 2]);
+  if (checkValue != readCheckValue) {
+    return -1;
+  }
+
+  return 0;
+}
+
+
+// 004050c0
+extern "C" void vInt() {
+  g_pHscrollbuff2 = g_pHscrollbuff = 0;
+  g_vscrollPlaneA = g_mdRam.vscroll & 0xFFFF;
+  g_vscrollPlaneB = g_mdRam.vscroll >> 16 & 0xFFFF;
+  g_bVscrollCopy = FALSE;
+
+  switch (g_mdRam.int_flg) {
+    case 2:
+      // TODO
+      break;
+    case 4:
+      // TODO
+      break;
+    case 18:
+      vInt18();
+      break;
+    case 20:
+      // TODO
+      break;
+    case 22:
+      vInt22();
+      break;
+    case 8:
+    case 10:
+    case 12:
+    case 14:
+      // TODO
+      break;
+    case 26:
+      // TODO
+      break;
+    case 28:
+      // TODO
+      break;
+    case 30:
+      // TODO
+      break;
+  }
+
+  ++g_mdRam.systemtimer;
+  g_game.update();
+  g_mdRam.int_flg = 0;
+}
+
+
+// 00405201
+void vInt18() {
+  g_pHscrollbuff = (USHORT*)&g_mdRam.hscrollbuff[0];
+  g_pHscrollbuff2 = (USHORT*)&g_mdRam.hscrollbuff[2];
+  uploadPalette();
+  uploadSprites(g_mdRam.ramf8, g_sprites);
+  pollMdControllers();
+}
+
+
+// 004052dc
+void vInt22() {
+  uploadPalette();
+  uploadSprites(g_mdRam.ramf8, g_sprites);
+  pollMdControllers();
+  if (g_mdRam.demotimer != 0) {
+    --g_mdRam.demotimer;
+  }
+}
+
+
+// 00405536
+void uploadPalette() {
+  RGBQUAD palette[64];
+  memset(palette, 0, sizeof(palette));
+  unsigned short* pColorwk;
+  if (g_mdRam.waterflag != 0) {
+    pColorwk = g_mdRam.colorwk3;
+  }
+  else {
+    pColorwk = g_mdRam.colorwk;
+  }
+
+  for (int i = 0; i < 64; ++i) {
+    palette[i].rgbRed = (pColorwk[i] & 0xF) * 17;
+    palette[i].rgbGreen = (pColorwk[i] >> 4 & 0xF) * 17;
+    palette[i].rgbBlue = (pColorwk[i] >> 8 & 0xF) * 17;
+  }
+
+  palette[0] = palette[DAT_008549d8];
+  palette[16] = palette[0];
+  palette[32] = palette[0];
+  palette[48] = palette[0];
+
+  CGraphics* pGraphics = getGraphicsPtr();
+  if (DAT_00854de8 == 5) {
+    pGraphics->copyPaletteToWk4(palette);
+    for (int i = 0; i < 64; ++i) {
+      palette[i].rgbRed >>= 1;
+      palette[i].rgbGreen >>= 1;
+      palette[i].rgbBlue >>= 1;
+    }
+    pGraphics->copyPaletteToWk3(palette);
+  }
+  else {
+    pGraphics->copyPaletteToWk3(palette);
+    pGraphics->copyPaletteToWk4(palette);
+  }
+}
+
+
+// 00405a45
+void pollMdControllers() {
+  pollWindowsControllers();
+  g_mdRam.swdata1 = getPressedController1Buttons();
+  g_mdRam.swdata2 = getPressedController2Buttons();
+}
+
+
+// 00405b76
+void blitGraphics() {
+  if (g_bVscrollCopy) {
+    for (int i = 0; i < 20; ++i) {
+      g_mdVsram[i] = g_mdRam.vscrollbuff[i + 1];
+    }
+    if (g_pHscrollbuff2 != 0) {
+      for (int i = 0; i < 224; ++i) {
+        g_convertedHscrollbuff[i] = -*g_pHscrollbuff2 & 0x3FF;
+        g_pHscrollbuff2 += 2;
+      }
+    }
+    else {
+      memset(g_convertedHscrollbuff, 0, sizeof(g_convertedHscrollbuff));
+    }
+    g_pVdpReadPos = &g_mdVram[g_vdpScrollPlaneBOffset];
+    FUN_00415039();
+    for (int i = 0; i < 20; ++i) {
+      g_mdVsram[i] = g_mdRam.vscrollbuff[i];
+    }
+    if (g_pHscrollbuff != 0) {
+      for (int i = 0; i < 224; ++i) {
+        g_convertedHscrollbuff[i] = -*g_pHscrollbuff & 0x3FF;
+        g_pHscrollbuff += 2;
+      }
+    }
+    else {
+      memset(g_convertedHscrollbuff, 0, sizeof(g_convertedHscrollbuff));
+    }
+    g_pVdpReadPos = &g_mdVram[g_vdpScrollPlaneAOffset];
+    FUN_00414f70();
+  }
+  else {
+    g_vscrollCopy = g_vscrollPlaneB;
+    if (g_pHscrollbuff2 != 0) {
+      if (DAT_00854dec != 0) {
+        for (int i = 0; i < 224; ++i) {
+          g_convertedHscrollbuff[i] = -*g_pHscrollbuff2 & 0x3FF;
+          g_pHscrollbuff2 += 2;
+        }
+      }
+      else {
+        for (int i = 0; i < 224; ++i) {
+          g_convertedHscrollbuff[i] = -*g_pHscrollbuff2 & 0x3FF;
+        }
+      }
+    }
+    else {
+      memset(g_convertedHscrollbuff, 0, sizeof(g_convertedHscrollbuff));
+    }
+    g_pVdpReadPos = &g_mdVram[g_vdpScrollPlaneBOffset];
+
+    switch (DAT_00854de8) {
+      case 0:
+        FUN_0040f4c8();
+        break;
+      case 1:
+      case 5:
+        FUN_004148fe();
+        break;
+      case 2:
+        FUN_004145ee();
+        break;
+      case 3:
+        FUN_0041479e();
+        break;
+      case 4:
+        FUN_0041448e();
+        break;
+    }
+
+    g_vscrollCopy = g_vscrollPlaneA;
+    if (g_pHscrollbuff != 0) {
+      if (DAT_00854dec != 0) {
+        for (int i = 0; i < 224; ++i) {
+          g_convertedHscrollbuff[i] = -*g_pHscrollbuff & 0x3FF;
+          g_pHscrollbuff += 2;
+        }
+      }
+      else {
+        for (int i = 0; i < 224; ++i) {
+          g_convertedHscrollbuff[i] = -*g_pHscrollbuff & 0x3FF;
+        }
+      }
+    }
+    else {
+      memset(g_convertedHscrollbuff, 0, sizeof(g_convertedHscrollbuff));
+    }
+    g_pVdpReadPos = &g_mdVram[g_vdpScrollPlaneAOffset];
+
+    switch (DAT_00854de8) {
+      case 0:
+        if (DAT_00854758 != 0) {
+          FUN_0040ee9e();
+          g_vscrollCopy = 0;
+          memset(g_convertedHscrollbuff, 0, sizeof(g_convertedHscrollbuff));
+          g_pVdpReadPos = &g_mdVram[0x8000];
+          FUN_0040ef0c();
+        }
+        else {
+          FUN_0040edec();
+        }
+        break;
+      case 1:
+        FUN_00414890();
+        break;
+      case 5:
+        FUN_0041496c();
+        break;
+      case 2:
+        FUN_0040edec();
+        break;
+      case 3:
+        FUN_004146ac();
+        break;
+      case 4:
+        FUN_0041439c();
+        break;
+    }
+  }
+  blitSprites();
+}
+
+
 // 0040632a
 void saveControlsConfig(const char* pPublisherKeyName, const char* pGameKeyName, const char* pControllerKeyName, int* pConfig, ULONG size) {
   CWinRegistry registry(pPublisherKeyName);
@@ -281,6 +747,53 @@ void loadControlsConfig(const char* pPublisherKeyName, const char* pGameKeyName,
   CWinRegistry registry(pPublisherKeyName);
   registry.openSubKey(pGameKeyName);
   registry.queryKeyBytes(pControllerKeyName, (BYTE*)pConfig, size);
+}
+
+
+// 0040a98e
+extern "C" void playSoundEffect2(signed char command) {
+  if (g_noSoundEffect != 0) return;
+
+  short soundId = command;
+  if (soundId < 0) {
+    soundId += 256;
+  }
+  if (soundId < 0 || soundId > 223) return;
+
+  int bufferId = g_soundBufferMapping[soundId];
+  ULONG unknown2 = g_unknownSoundMapping[soundId];
+  long unknown3 = g_unknownSoundMapping[soundId];
+  ULONG unknown4 = g_unknownSoundMapping3[soundId];
+  if (bufferId < 1) return;
+
+  CSound* pSound = getSoundPtr();
+  if (pSound == 0) return;
+  if (pSound->getUnknown2060() != 0) return;
+
+  int zeroBasedBufferId = bufferId - 1;
+  LPDIRECTSOUNDBUFFER buffer = pSound->getSoundBuffer(zeroBasedBufferId);
+  if (buffer == 0) return;
+
+  if (zeroBasedBufferId == 119) {
+    buffer->SetFrequency(g_soundFrequencies[g_unknownSoundFrequencyValue + (g_seMode == 2) * 10]);
+    if (g_unknownSoundFrequencyValue < 9) {
+      ++g_unknownSoundFrequencyValue;
+    }
+  }
+  else {
+    g_unknownSoundFrequencyValue = 0;
+  }
+  if (unknown2 >= 1) {
+    if (unknown3 > 0) {
+      pSound->FUN_0040a6c8(unknown2 - 1, 17, unknown3 - 1, zeroBasedBufferId, unknown4 - 1);
+    }
+    else {
+      pSound->FUN_0040a6c8(unknown2 - 1, 17, zeroBasedBufferId, 0, 0);
+    }
+  }
+  else {
+    pSound->playBuffer(zeroBasedBufferId);
+  }
 }
 
 
@@ -306,10 +819,60 @@ void playSoundEffect() {
 
 
 // 0040ac1d
-void FUN_0040ac1d() {
+void resetSound() {
   BOOL_00856e10 = FALSE;
   g_bgmId = -1;
   getSoundPtr()->FUN_0040a697();
+}
+
+
+// 0040ac4d
+extern "C" void executeBgmCommand(signed char command) {
+  if (command == -31 || command == -30 || command == -2 || command == -1) {
+    stopBgm();
+    BOOL_00856e10 = 0;
+    g_bgmId = 0;
+  }
+  else if (command > 50 || (command < 0 && command != -36)) {
+    playSoundEffect2(command);
+  }
+  else {
+    if (command == -36) {
+      command = 51;
+    }
+    if (command < 1 || command > 51) return;
+    if (g_bgmMode == 0) return;
+    EnterCriticalSection(&g_CriticalSectionObj);
+    int soundId = g_soundMapping[command];
+    if (g_sonic3Alone == 0) {
+      switch (soundId) {
+        case  0: soundId = 51; break;
+        case 31: soundId = 50; break;
+        case 40: soundId = 52; break;
+        case 42: soundId = 53; break;
+        case 48: soundId = 54; break;
+      }
+    }
+    switch (soundId) {
+      case 40:
+      case 52:
+        if (g_bgmId == 39) {
+          BOOL_00856e10 = FALSE;
+          g_bgmId = 0;
+        }
+        else {
+          BOOL_00856e10 = TRUE;
+        }
+        break;
+      default:
+        g_bgmId = soundId;
+        break;
+    }
+    if (loadBgm(soundId + 1) != 0) {
+      playBgm();
+    }
+    LeaveCriticalSection(&g_CriticalSectionObj);
+  }
 }
 
 
@@ -580,6 +1143,232 @@ void initControls() {
   loadControlsConfig("SEGA", "Sonic3K", "PadBind", g_joystickId, sizeof(g_joystickId));
   configureJoystick(0);
   configureJoystick(1);
+}
+
+
+// 0040bcdb
+void pollWindowsControllers() {
+  g_joystick1ButtonsDown = 0;
+  g_joystick2ButtonsDown = 0;
+  g_kbKeysP1Down = 0;
+  g_kbKeysP2Down = 0;
+  DAT_00856e50 = 0;
+  DAT_00856e54 = 0;
+
+  if (g_bDemo != 0) return;
+
+  JOYINFOEX joyinfoex;
+  memset(&joyinfoex, 0 , sizeof(joyinfoex));
+  joyinfoex.dwSize = sizeof(joyinfoex);
+  joyinfoex.dwFlags = JOY_RETURNX | JOY_RETURNY | JOY_RETURNBUTTONS;
+  if ((DAT_0082ddcc[3] & 0x80) && g_joystickId[0] != -1) {
+    joyGetPosEx(g_joystickId[0],&joyinfoex);
+    if (joyinfoex.dwXpos < g_joystickXCenter1[0]) {
+      g_joystick1ButtonsDown |= 4;
+    }
+    else if (g_joystickXCenter2[0] < joyinfoex.dwXpos) {
+      g_joystick1ButtonsDown |= 8;
+    }
+    if (joyinfoex.dwYpos < g_joystickYCenter1[0]) {
+      g_joystick1ButtonsDown |= 1;
+    }
+    else if (g_joystickYCenter2[0] < joyinfoex.dwYpos) {
+      g_joystick1ButtonsDown |= 2;
+    }
+    if (g_joystickEnoughButtons[0]) {
+      if (g_debugMode != 0) {
+        if (joyinfoex.dwButtons & 1) {
+          g_joystick1ButtonsDown |= 0x40;
+        }
+        if (joyinfoex.dwButtons & 2) {
+          g_joystick1ButtonsDown |= 0x10;
+        }
+        if (joyinfoex.dwButtons & 4) {
+          g_joystick1ButtonsDown |= 0x20;
+        }
+        if (joyinfoex.dwButtons & 8) {
+          g_joystick1ButtonsDown |= 0x80;
+        }
+      }
+      else {
+        if (joyinfoex.dwButtons & 1) {
+          g_joystick1ButtonsDown |= 0xa0;
+        }
+        if (joyinfoex.dwButtons & 2) {
+          g_joystick1ButtonsDown |= 0x10;
+        }
+      }
+    }
+    else {
+      if (joyinfoex.dwButtons & 1) {
+        g_joystick1ButtonsDown |= 0xa0;
+      }
+      if (joyinfoex.dwButtons & 2) {
+        g_joystick1ButtonsDown |= 0x10;
+      }
+    }
+  }
+
+  if ((DAT_0082ddcc[3] & 0x40) && g_joystickId[1] != -1) {
+    joyGetPosEx(g_joystickId[1],&joyinfoex);
+    if (joyinfoex.dwXpos < g_joystickXCenter1[1]) {
+      g_joystick2ButtonsDown |= 4;
+    }
+    else if (g_joystickXCenter2[1] < joyinfoex.dwXpos) {
+      g_joystick2ButtonsDown |= 8;
+    }
+    if (joyinfoex.dwYpos < g_joystickYCenter1[1]) {
+      g_joystick2ButtonsDown |= 1;
+    }
+    else if (g_joystickYCenter2[1] < joyinfoex.dwYpos) {
+      g_joystick2ButtonsDown |= 2;
+    }
+    if (g_joystickEnoughButtons[1]) {
+      if (g_debugMode != 0) {
+        if (joyinfoex.dwButtons & 1) {
+          g_joystick2ButtonsDown |= 0x40;
+        }
+        if (joyinfoex.dwButtons & 2) {
+          g_joystick2ButtonsDown |= 0x10;
+        }
+        if (joyinfoex.dwButtons & 4) {
+          g_joystick2ButtonsDown |= 0x20;
+        }
+        if (joyinfoex.dwButtons & 8) {
+          g_joystick2ButtonsDown |= 0x80;
+        }
+      }
+      else {
+        if (joyinfoex.dwButtons & 1) {
+          g_joystick2ButtonsDown |= 0xa0;
+        }
+        if (joyinfoex.dwButtons & 2) {
+          g_joystick2ButtonsDown |= 0x10;
+        }
+      }
+    }
+    else {
+      if (joyinfoex.dwButtons & 1) {
+        g_joystick2ButtonsDown |= 0xa0;
+      }
+      if (joyinfoex.dwButtons & 2) {
+        g_joystick2ButtonsDown |= 0x10;
+      }
+    }
+  }
+
+  if (DAT_0082ddcc[3] & 0x20) {
+    if (GetAsyncKeyState(g_kbKeys[0][1]) < 0) {
+      g_kbKeysP1Down |= 4;
+    }
+    else if (GetAsyncKeyState(g_kbKeys[0][2]) < 0) {
+      g_kbKeysP1Down |= 8;
+    }
+    if (GetAsyncKeyState(g_kbKeys[0][0]) < 0) {
+      g_kbKeysP1Down |= 1;
+    }
+    else if (GetAsyncKeyState(g_kbKeys[0][3]) < 0) {
+      g_kbKeysP1Down |= 2;
+    }
+    if (GetAsyncKeyState(VK_RETURN) < 0) {
+      g_kbKeysP1Down |= 0x80;
+    }
+    if (DAT_0082ddc8 != 0) {
+      if (GetAsyncKeyState(VK_NUMPAD1) < 0) {
+        g_kbKeysP1Down |= 0x40;
+      }
+      if (GetAsyncKeyState(VK_NUMPAD2) < 0) {
+        g_kbKeysP1Down |= 0x10;
+      }
+      if (GetAsyncKeyState(VK_NUMPAD3) < 0) {
+        g_kbKeysP1Down |= 0x20;
+      }
+    }
+    else {
+      if (GetAsyncKeyState(g_kbKeys[0][4]) < 0) {
+        g_kbKeysP1Down |= 0xa0;
+      }
+      if (GetAsyncKeyState(VK_ESCAPE) < 0) {
+        g_kbKeysP1Down |= 0x10;
+      }
+      if (g_debugMode != 0) {
+        if (GetAsyncKeyState(VK_SPACE) < 0) {
+          g_kbKeysP1Down |= 0x80;
+        }
+        if (GetAsyncKeyState(VK_NUMPAD1) < 0) {
+          g_kbKeysP1Down |= 0x40;
+        }
+        if (GetAsyncKeyState(VK_NUMPAD2) < 0) {
+          g_kbKeysP1Down |= 0x10;
+        }
+        if (GetAsyncKeyState(VK_NUMPAD3) < 0) {
+          g_kbKeysP1Down |= 0x20;
+        }
+      }
+    }
+  }
+
+  if (DAT_0082ddcc[3] & 0x10) {
+    if (GetAsyncKeyState(g_kbKeys[1][1]) < 0) {
+      g_kbKeysP2Down |= 4;
+    }
+    else if (GetAsyncKeyState(g_kbKeys[1][2]) < 0) {
+      g_kbKeysP2Down |= 8;
+    }
+    if (GetAsyncKeyState(g_kbKeys[1][0]) < 0) {
+      g_kbKeysP2Down |= 1;
+    }
+    else if (GetAsyncKeyState(g_kbKeys[1][3]) < 0) {
+      g_kbKeysP2Down |= 2;
+    }
+    if (GetAsyncKeyState(g_kbKeys[1][4]) < 0) {
+      g_kbKeysP2Down |= 0xa0;
+    }
+    if (GetAsyncKeyState(VK_ESCAPE) < 0) {
+      g_kbKeysP2Down |= 0x10;
+    }
+    if (g_debugMode != 0) {
+      if (GetAsyncKeyState(VK_TAB) < 0) {
+        g_kbKeysP2Down |= 0x80;
+      }
+      if (GetAsyncKeyState('Q') < 0) {
+        g_kbKeysP2Down |= 0x40;
+      }
+      if (GetAsyncKeyState('Z') < 0) {
+        g_kbKeysP2Down |= 0x10;
+      }
+    }
+  }
+}
+
+
+// 0040c3d2
+USHORT getPressedController1Buttons() {
+  UCHAR buttons = 0;
+
+  buttons |= DAT_0082ddcc[3] & 8 ? g_joystick1ButtonsDown : 0;
+  buttons |= DAT_0082ddcc[3] & 4 ? g_joystick2ButtonsDown : 0;
+  buttons |= DAT_0082ddcc[3] & 2 ? g_kbKeysP1Down : 0;
+  buttons |= DAT_0082ddcc[3] & 1 ? g_kbKeysP2Down : 0;
+
+  UCHAR newlyPressedButtons = (buttons ^ g_prevMdButtonsP1Down) & buttons;
+  g_prevMdButtonsP1Down = buttons;
+  return (buttons << 8) + newlyPressedButtons;
+}
+
+
+// 0040c4d0
+USHORT getPressedController2Buttons() {
+  UCHAR buttons = 0;
+
+  buttons |= DAT_0082ddcc[2] & 8 ? g_joystick1ButtonsDown : 0;
+  buttons |= DAT_0082ddcc[2] & 4 ? g_joystick2ButtonsDown : 0;
+  buttons |= DAT_0082ddcc[2] & 2 ? g_kbKeysP1Down : 0;
+  buttons |= DAT_0082ddcc[2] & 1 ? g_kbKeysP2Down : 0;
+
+  UCHAR newlyPressedButtons = (buttons ^ g_prevMdButtonsP2Down) & buttons;
+  g_prevMdButtonsP2Down = buttons;
+  return (buttons << 8) + newlyPressedButtons;
 }
 
 

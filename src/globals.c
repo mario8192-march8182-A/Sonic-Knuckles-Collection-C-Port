@@ -4,7 +4,24 @@
 #include "constants.h"
 #include "strings.h"
 #include "types/sonic3ram.h"
+#include "types/sprite.h"
 
+/* 00829058 */ ULONG DAT_00829058[10] = { 20, 19, 10, 7, 5, 4, 3, 2, 0, 0 };
+/* 00829080 */ double DAT_00829080 = 17.0;
+/* 00829088 */ double DAT_00829088 = 8.0;
+/* 0082b040 */ BOOL BOOL_0082b040 = TRUE;
+/* 0082b044 */ BOOL BOOL_0082b044 = FALSE;
+/* 0082b048 */ ULONG g_lastSystemTime = 0;
+/* 0082b04c */ ULONG g_lastSystemTime2 = 0;
+/* 0082b050 */ ULONG g_lastSystemTime3 = 0;
+/* 0082b054 */ ULONG DAT_0082b054 = 0;
+/* 0082b05c */ ULONG g_cumulativeElapsedTime = 0;
+/* 0082b070 */ ULONG DAT_0082b070 = 0;
+/* 0082b074 */ ULONG DAT_0082b074 = 0;
+/* 0082b078 */ ULONG DAT_0082b078 = 0;
+/* 0082b07c */ ULONG DAT_0082b07c = 0;
+/* 0082b088 */ ULONG DAT_0082b088 = 0;
+/* 0082b098 */ long DAT_0082b098 = 1;
 /* 0082b0b0 */ char* g_windowTitles[3] = {
   g_s3kWindowTitle,
   g_skWindowTitle,
@@ -31,6 +48,7 @@
   g_germanPausedText,
   g_spanishPausedText
 };
+/* 0082b100 */ BOOL g_bResetMdRam = FALSE;
 /* 0082b108 */ char* g_thanksForPlayingEnText[16] = {
   g_thanksForPlayingEnText1,
   g_thanksForPlayingEnText2,
@@ -102,7 +120,114 @@
   160, 161, 162, 163, 164, 165, 166, 167, 168, 169,
    -1,  -1,  -1,   0
 };
+/* 0082cbf8 */ int g_unknownSoundMapping[224] = {
+  -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
+  -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
+  -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
+  -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
+  -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
+  -1,  0, -1,  0,  0,  0,  0,  0,  0,  0,
+   0,  0,  0,  0,  0,  0,  0,  0,  0,  0,
+   0,  0,  0,  0,  0,  0,  0,  0,  0,  0,
+   0,  0,  0,  0,  0,  0,  0,  0,  0,  0,
+   0,  0,  0,  0,  0,  0,  0,  0,  0,  0,
+   0,  0,  0,  0,  0,  0,  0,  0,  0,  0,
+   0,  1,  0,  0,  0,  0,  0,  0,  0,  0,
+   0,  0,  0,  0,  0,  0,  0,  0,  0,  0,
+   0,  0,  0,  0,  0,  0,  0,  0,  0,  0,
+   0,  0,  0,  0,  0,  0,  0,  0,  0,  0,
+   0,  0,  0,  0,  0,  0,  0,  0,  0,  0,
+   0,  0,  0,  0,  0,  0,  0,  0,  0,  0,
+   0,  0,  0,  0,  0,  0,  0,  0,  0,  0,
+   0,  0,  0,  0,  0,  2,  3,  4,  5,  6,
+   7,  8,  9, 10, 11, 12, 13, 14, 15, 16,
+  17, 18, 19,  0, 20, 21, 22, 23, 24, 25,
+  26, 27, 28, 29, 30, 31, 32, 33, 34, 35,
+  -1, -1, -1, -1
+};
+/* 0082cf78 */ int g_unknownSoundMapping2[224] = {
+   -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,
+   -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,
+   -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,
+   -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,
+   -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,
+   -1,   0,  -1,   0,   0,   0,   0,   0,   0,   0,
+    0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
+    0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
+    0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
+    0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
+    0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
+    0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
+    0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
+    0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
+    0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
+    0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
+    0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
+    0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
+    0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
+    0,   0, 170, 171,   0,   0,   0,   0,   0,   0,
+    0,   0,   0,   0,   0,   0,   0,   0, 172,   0,
+    0,   0, 173, 174,   0,   0, 175,   0, 176, 177,
+   -1,  -1,  -1,  -1
+};
+/* 0082d2f8 */ int g_unknownSoundMapping3[224] = {
+   -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,
+   -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,
+   -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,
+   -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,
+   -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,
+   -1,   0,  -1,   0,   0,   0,   0,   0,   0,   0,
+    0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
+    0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
+    0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
+    0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
+    0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
+    0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
+    0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
+    0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
+    0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
+    0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
+    0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
+    0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
+    0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
+    0,   0,  54,  72,   0,   0,   0,   0,   0,   0,
+    0,   0,   0,   0,   0,   0,   0,   0, 125,   0,
+    0,   0,  60, 165,   0,   0,  67,   0, 106,  13,
+   -1,  -1,  -1,  -1
+};
+/* 0082d678 */ int g_soundFrequencies[20] = {
+  11025,
+  12127,
+  13230,
+  14332,
+  15434,
+  16537,
+  17640,
+  18742,
+  19845,
+  20947,
+  22050,
+  24255,
+  26460,
+  28665,
+  30869,
+  33075,
+  35280,
+  37485,
+  39690,
+  41895
+};
+/* 0082d6c8 */ ULONG g_unknownSoundFrequencyValue = 0;
+/* 0082d6d0 */ int g_soundMapping[51] = {
+  -1,  1,  2,  3,  4,  5,  6,  7,  8,  9,
+  10, 11, 12, 13, 14, 15, 16, 17, 18, 19,
+  20, 21, 22, 23, 24, 25, 26, 27, 28, 29,
+  30, 31, 32, 33, 34, 35, 36,  0, 49, 37,
+  38, 39, 40, 41, 42, 43, 44, 45, 46, 47,
+  48
+};
 /* 0082ddc8 */ ULONG DAT_0082ddc8;
+/* 0082ddcc */ UCHAR DAT_0082ddcc[4] = { 0xFA, 0x50, 0, 0 };
 /* 0082ddd0 */ char g_kbKeyNames[4][30][32] = {
   {
     "Num0",
@@ -281,12 +406,22 @@
     'A'
   }
 };
+/* 0082ed70 */ unsigned char g_prevMdButtonsP1Down;
+/* 0082ed74 */ unsigned char g_prevMdButtonsP2Down;
 /* 0082ed78 */ char* g_dontUseText[4] = {
   g_dontUseEnText,
   g_dontUseFrText,
   g_dontUseDeText,
   g_dontUseEsText
 };
+/* 00831140 */ ULONG DAT_00831140 = 0;
+/* 00831144 */ ULONG g_elapsedTime3 = 0;
+/* 00831148 */ ULONG g_systemTime = 0;
+/* 0083114c */ ULONG g_lastDAT_0082b074 = 0;
+/* 00831150 */ double DAT_00831150 = 0.0;
+/* 00831158 */ ULONG g_lastDAT_0082b07c = 0;
+/* 0083115c */ ULONG g_elapsedTime = 0;
+/* 00831160 */ ULONG g_elapsedTime2 = 0;
 /* 00831164 */ BOOL g_bLaunchRunSonic = FALSE;
 /* 00831168 */ HACCEL g_hAccel = 0;
 /* 00831170 */ int g_nCmdShow = 0;
@@ -308,24 +443,34 @@
 /* 00831370 */ HINSTANCE g_hInstance;
 /* 00831378 */ char* g_lpCmdLine;
 /* 008313c0 */ ULONG g_convertedHscrollbuff[224];
+/* 00831740 */ ULONG g_spriteCnt;
 /* 0083174c */ ULONG g_vscrollCopy;
+/* 00831750 */ ULONG DAT_00831750;
 /* 00854758 */ ULONG DAT_00854758;
 /* 0085475c */ ULONG g_createFileError;
-/* 00854760 */ ULONG DAT_00854760;
+/* 00854760 */ ULONG g_vdpScrollPlaneBOffset;
 /* 00854768 */ ULONG g_mdVsram[20];
+/* 008547bc */ ULONG DAT_008547bc;
 /* 008547c4 */ ULONG* g_pConvertedHscrollbuff;
 /* 008547d8 */ UCHAR g_spriteMasks[448];
 /* 0085499c */ USHORT* g_pLevelSelectVram;
 /* 008549a4 */ ULONG g_mdRegisterD0;
-/* 008549d4 */ ULONG g_supplementaryMdRamAddress;
-/* 008549cc */ ULONG DAT_008549cc;
+/* 008549cc */ ULONG g_vdpScrollPlaneAOffset;
 /* 008549d8 */ ULONG DAT_008549d8;
+/* 008549dc */ ULONG DAT_008549dc;
 /* 008549e0 */ UCHAR* g_pVdpReadPos;
 /* 008549e4 */ UCHAR* g_pPixelBuffer;
 /* 008549e8 */ BYTE g_saveFile[1024];
+/* 00854de8 */ ULONG DAT_00854de8;
 /* 00854dec */ ULONG DAT_00854dec;
+/* 00854df0 */ Sprite g_sprites[80];
+/* 00856df8 */ USHORT* g_pHscrollbuff;
 /* 00856df0 */ ULONG g_vIntScanline;
 /* 00856df4 */ ULONG DAT_00856df4;
+/* 00856dfc */ USHORT* g_pHscrollbuff2;
+/* 00856e00 */ ULONG g_vscrollPlaneB;
+/* 00856e04 */ ULONG g_vscrollPlaneA;
+/* 00856e08 */ BOOL g_bVscrollCopy;
 /* 00856e0c */ // CGraphics* g_pGraphics;
 /* 00856e10 */ BOOL BOOL_00856e10;
 /* 00856e18 */ CRITICAL_SECTION g_CriticalSectionObj;
@@ -334,7 +479,13 @@
 /* 00856e38 */ ULONG g_soundTest_seId;
 /* 00856e3c */ int g_bgmId;
 /* 00856e40 */ // CSound* g_pSound2;
+/* 00856e48 */ UCHAR g_kbKeysP1Down;
+/* 00856e4c */ UCHAR g_kbKeysP2Down;
+/* 00856e50 */ UCHAR DAT_00856e50;
+/* 00856e54 */ UCHAR DAT_00856e54;
 /* 00856e58 */ int g_kbKeys[2][5];
+/* 00856e80 */ UCHAR g_joystick1ButtonsDown;
+/* 00856e84 */ UCHAR g_joystick2ButtonsDown;
 /* 00856e88 */ int g_joystickId[2];
 /* 00856e90 */ UINT g_joystickYCenter2[2];
 /* 00856e98 */ UINT g_joystickXCenter1[2];

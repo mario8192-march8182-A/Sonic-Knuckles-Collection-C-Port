@@ -3,6 +3,7 @@
 #include <ddraw.h>
 #include <mbstring.h>
 #include "cgraphics.h"
+#include "cscreenshot.h"
 
 extern char* g_pausedText[4];
 extern HRESULT(*g_pDdrawCreate)(GUID*, LPDIRECTDRAW*, IUnknown*);
@@ -29,7 +30,7 @@ CGraphics::CGraphics() {
   m_pBackBuffer = 0;
   m_pDdrawPalette = 0;
   m_pDdrawClipper = 0;
-  m_pDibBitValues = 0;
+  m_pSurface = 0;
   m_videoMode = 1;
   m_hWnd = 0;
   m_windowX = -32768;
@@ -118,6 +119,18 @@ void CGraphics::updatePalette() {
 }
 
 
+// 004069d0
+void CGraphics::copyPaletteToWk4(RGBQUAD* pPalette) {
+  memcpy(m_colorwk4, pPalette, sizeof(m_colorwk4));
+}
+
+
+// 0040699e
+void CGraphics::copyPaletteToWk3(RGBQUAD* pPalette) {
+  memcpy(m_colorwk3, pPalette, sizeof(m_colorwk3));
+}
+
+
 // 00406a02
 int CGraphics::initVideo(ULONG videoMode, HWND hWnd) {
   if (m_bUnknown2168) {
@@ -152,7 +165,7 @@ int CGraphics::initVideo(ULONG videoMode, HWND hWnd) {
   }
 
 retry:
-  if ((((UCHAR*)m_videoMode)[1] & 16) || g_pDdrawCreate == 0) {
+  if ((((UCHAR*)&m_videoMode)[1] & 16) || g_pDdrawCreate == 0) {
     m_videoMode |= 0x1000;
     m_videoMode &= 0xFFFFFFFB;
     m_bitmapInfoHeader.biSize = 40;
@@ -182,7 +195,7 @@ retry:
     }
 
     HDC hDc = GetDC(0);
-    m_hBitmap = CreateDIBSection(hDc, pBitmapInfo, DIB_RGB_COLORS, &m_pDibBitValues, 0, 0);
+    m_hBitmap = CreateDIBSection(hDc, pBitmapInfo, DIB_RGB_COLORS, (void**)&m_pSurface, 0, 0);
     m_hCompatibleDc = CreateCompatibleDC(hDc);
     m_hPrevBitmap = (HBITMAP)SelectObject(m_hCompatibleDc, m_hBitmap);
     delete pBitmapInfo;
@@ -244,7 +257,7 @@ retry:
     m_pFrontBuffer = 0;
   }
 
-  if (((UCHAR*)m_videoMode)[0] & 4) {
+  if (((UCHAR*)&m_videoMode)[0] & 4) {
     RECT windowRect;
     GetWindowRect(hWnd, &windowRect);
     m_windowX = windowRect.left;
@@ -343,7 +356,7 @@ retry:
     ddSurfaceDesc.ddsCaps.dwCaps = DDSCAPS_PRIMARYSURFACE;
     m_ddrawResult = m_pDdraw->CreateSurface(&ddSurfaceDesc, &m_pFrontBuffer, 0);
     if (m_ddrawResult != DD_OK) {
-      if (((UCHAR*)m_videoMode)[1] & 64) {
+      if (((UCHAR*)&m_videoMode)[1] & 64) {
         _mbscpy((UCHAR*)m_message, (const UCHAR*)"CreateSurface DDSCAPS_PRIMARYSURFACE");
         return 1;
       }
@@ -383,7 +396,7 @@ retry:
 
   m_ddrawResult = m_pDdraw->CreatePalette(DDPCAPS_8BIT, m_palette, &m_pDdrawPalette, 0);
   if (m_ddrawResult != DD_OK) {
-    if (((UCHAR*)m_videoMode)[1] & 64) {
+    if (((UCHAR*)&m_videoMode)[1] & 64) {
       _mbscpy((UCHAR*)m_message, (const UCHAR*)"CreatePalette DDPCAPS_8BIT");
       return 1;
     }
@@ -393,7 +406,7 @@ retry:
   }
   m_ddrawResult = m_pFrontBuffer->SetPalette(m_pDdrawPalette);
   if (m_ddrawResult != DD_OK) {
-    if (((UCHAR*)m_videoMode)[1] & 64) {
+    if (((UCHAR*)&m_videoMode)[1] & 64) {
       _mbscpy((UCHAR*)m_message, (const UCHAR*)"lpFrontBuffer->SetPalette");
       return 1;
     }
@@ -449,7 +462,7 @@ int CGraphics::resetVideo() {
 
 // 00407c41
 int CGraphics::clearBuffers() {
-  if (((UCHAR*)m_videoMode)[1] & 16) {
+  if (((UCHAR*)&m_videoMode)[1] & 16) {
     RECT clientRect;
     GetClientRect(m_hWnd, &clientRect);
     HDC hDc = GetDC(m_hWnd);
@@ -462,7 +475,7 @@ int CGraphics::clearBuffers() {
   DDBLTFX ddBltFx;
   ddBltFx.dwSize = 100;
   ddBltFx.dwFillColor = 0;
-  if (((UCHAR*)m_videoMode)[0] & 4) {
+  if (((UCHAR*)&m_videoMode)[0] & 4) {
     m_ddrawResult = m_pBackBuffer->Blt(0, 0, 0, DDBLT_COLORFILL | DDBLT_WAIT, &ddBltFx);
     if (m_ddrawResult != DD_OK) {
       _mbscpy((UCHAR*)m_message, (const UCHAR*)"lpBackBuffer->Blt DDBLT_COLORFILL | DDBLT_WAIT");
@@ -510,9 +523,67 @@ int CGraphics::clearBuffers() {
 }
 
 
+// 00408000
+int CGraphics::lockBuffer(void** ppSurface, long* pPitch) {
+  if (((UCHAR*)&m_videoMode)[1] & 16) {
+    GdiFlush();
+    DIBSECTION dibsection;
+    GetObject(m_hBitmap, sizeof(dibsection), &dibsection);
+    *ppSurface = m_pSurface;
+    *pPitch = dibsection.dsBmih.biWidth;
+    return 0;
+  }
+
+  DDSURFACEDESC ddSurfaceDesc;
+  memset(&ddSurfaceDesc, 0, sizeof(ddSurfaceDesc));
+  ddSurfaceDesc.dwSize = sizeof(ddSurfaceDesc);
+  m_ddrawResult = m_pBackBuffer->Lock(0, &ddSurfaceDesc, DDLOCK_WAIT, 0);
+  if (m_ddrawResult == DDERR_SURFACELOST) {
+    m_ddrawResult = m_pFrontBuffer->Restore();
+    if (m_ddrawResult != DD_OK) {
+      _mbscpy((UCHAR*)m_message, (const UCHAR*)" lpFrontBuffer->Restore");
+      return 1;
+    }
+    m_ddrawResult = m_pBackBuffer->Lock(0, &ddSurfaceDesc, DDLOCK_WAIT, 0);
+    if (m_ddrawResult != DD_OK) {
+      _mbscpy((UCHAR*)m_message, (const UCHAR*)"lpBackBuffer->Lock LDD_DBUFFER");
+      return 1;
+    }
+  }
+  else if (m_ddrawResult != DD_OK) {
+    _mbscpy((UCHAR*)m_message, (const UCHAR*)"lpBackBuffer->Lock LDD_DBUFFER");
+    return 1;
+  }
+
+  m_pSurface = (BYTE*)ddSurfaceDesc.lpSurface;
+  *ppSurface = ddSurfaceDesc.lpSurface;
+  *pPitch = ddSurfaceDesc.lPitch;
+
+  return 0;
+}
+
+
+// 004081e2
+int CGraphics::unlockBuffer() {
+  if (((UCHAR*)&m_videoMode)[1] & 16) {
+    return 0;
+  }
+
+  m_ddrawResult = m_pBackBuffer->Unlock(m_pSurface);
+  if (m_ddrawResult != DD_OK) {
+    _mbscpy((UCHAR*)m_message, (const UCHAR*)"lpBackBuffer->Unlock");
+    return 1;
+  }
+
+  m_pSurface = 0;
+
+  return 0;
+}
+
+
 // 00408270
 int CGraphics::getBackBufferDc(HDC* phDc) {
-  if (((UCHAR*)m_videoMode)[1] & 16) {
+  if (((UCHAR*)&m_videoMode)[1] & 16) {
     *phDc = m_hCompatibleDc;
     return 0;
   }
@@ -529,7 +600,7 @@ int CGraphics::getBackBufferDc(HDC* phDc) {
 
 // 004082fb
 int CGraphics::releaseBackBufferDc(HDC hDc) {
-  if (((UCHAR*)m_videoMode)[1] & 16) {
+  if (((UCHAR*)&m_videoMode)[1] & 16) {
     return 0;
   }
 
@@ -547,7 +618,7 @@ int CGraphics::releaseBackBufferDc(HDC hDc) {
 int CGraphics::blit() {
   updatePalette();
 
-  if (((UCHAR*)m_videoMode)[1] & 16) {
+  if (((UCHAR*)&m_videoMode)[1] & 16) {
     GdiFlush();
     RECT rect;
     GetClientRect(m_hWnd, &rect);
@@ -562,7 +633,7 @@ int CGraphics::blit() {
     return 0;
   }
 
-  if (((UCHAR*)m_videoMode)[0] & 4) {
+  if (((UCHAR*)&m_videoMode)[0] & 4) {
     m_ddrawResult = m_pFrontBuffer->Flip(0, DDFLIP_WAIT);
     if (m_ddrawResult != DD_OK) {
       _mbscpy((UCHAR*)m_message, (const UCHAR*)" Blt1x : lpFrontBuffer->Flip");
@@ -599,7 +670,7 @@ int CGraphics::blit() {
 
 // 00408730
 int CGraphics::restoreBuffers() {
-  if (((UCHAR*)m_videoMode)[1] & 16) {
+  if (((UCHAR*)&m_videoMode)[1] & 16) {
     return 0;
   }
 
@@ -630,7 +701,7 @@ int CGraphics::updateDevicePalette(RGBQUAD* pQuads, UINT paletteStart, UINT quad
     m_palette[paletteStart + i].peBlue = pQuads[i].rgbBlue;
   }
 
-  if (((UCHAR*)m_videoMode)[1] & 16) {
+  if (((UCHAR*)&m_videoMode)[1] & 16) {
     SetDIBColorTable(m_hCompatibleDc, paletteStart, quadCnt, pQuads);
     return 0;
   }
@@ -652,6 +723,64 @@ int CGraphics::updateDevicePalette(RGBQUAD* pQuads, UINT paletteStart, UINT quad
     _mbscpy((UCHAR*)m_message, (const UCHAR*)" lpDDPalette->SetEntries");
     return 1;
   }
+
+  return 0;
+}
+
+
+// 00408a1e
+int CGraphics::copyPalette(RGBQUAD* pPalette, int start, int colorCnt) {
+  if (((UCHAR*)&m_videoMode)[1] & 16) {
+    GetDIBColorTable(m_hCompatibleDc, start, colorCnt, pPalette);
+    return 0;
+  }
+
+  m_ddrawResult = m_pDdrawPalette->GetEntries(0, start, colorCnt, &m_palette[start]);
+  if (m_ddrawResult == DDERR_SURFACELOST) {
+    m_ddrawResult = m_pFrontBuffer->Restore();
+    if (m_ddrawResult != DD_OK) {
+      _mbscpy((UCHAR*)m_message, (const UCHAR*)"lpFrontBuffer->Restore");
+      return 1;
+    }
+    m_ddrawResult = m_pDdrawPalette->GetEntries(0, start, colorCnt, &m_palette[start]);
+    if (m_ddrawResult != DD_OK) {
+      _mbscpy((UCHAR*)m_message, (const UCHAR*)" lpDDPalette->GetEntries");
+      return 1;
+    }
+  }
+  else if (m_ddrawResult != DD_OK) {
+    _mbscpy((UCHAR*)m_message, (const UCHAR*)" lpDDPalette->GetEntries");
+    return 1;
+  }
+
+  for (int i = 0; i < colorCnt; ++i) {
+    pPalette[i].rgbRed = m_palette[start + i].peRed;
+    pPalette[i].rgbGreen = m_palette[start + i].peGreen;
+    pPalette[i].rgbBlue = m_palette[start + i].peBlue;
+  }
+
+  return 0;
+}
+
+
+// 0040921b
+int CGraphics::readScreenshotData(CScreenshot& screenshot) {
+  screenshot.init(m_videoWidth, m_videoHeight, 8);
+  BYTE* pBytes = &screenshot.m_bytes[(m_videoHeight - 1) * m_videoWidth];
+  BYTE* pSurface;
+  long pitch;
+  if (lockBuffer((void**)&pSurface, &pitch) != 0) {
+    return 1;
+  }
+
+  for (int i = 0; i < m_videoHeight; ++i) {
+    memcpy(pBytes, pSurface, m_videoWidth);
+    pSurface += pitch;
+    pBytes -= m_videoWidth;
+  }
+
+  unlockBuffer();
+  copyPalette(screenshot.m_palette, 0, 256);
 
   return 0;
 }

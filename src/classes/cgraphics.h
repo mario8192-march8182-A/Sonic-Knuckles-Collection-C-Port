@@ -3,6 +3,7 @@
 
 #include <windows.h>
 #include <ddraw.h>
+#include "cscreenshot.h"
 
 class CGraphics {
   public:
@@ -13,14 +14,20 @@ class CGraphics {
   BOOL canCreateDdrawInstance();
   BOOL stubbedMethod();
   void updatePalette();
+  void copyPaletteToWk4(RGBQUAD* pPalette);
+  void copyPaletteToWk3(RGBQUAD* pPalette);
   int initVideo(ULONG videoMode, HWND hWnd);
   int resetVideo();
   int clearBuffers();
+  int lockBuffer(void** ppSurface, long* pPitch);
+  int unlockBuffer();
   int getBackBufferDc(HDC* phDC);
   int releaseBackBufferDc(HDC hDc);
   int blit();
   int restoreBuffers();
   int updateDevicePalette(RGBQUAD* pQuads, UINT paletteStart, UINT quadCnt);
+  int copyPalette(RGBQUAD* pPalette, int start, int colorCnt);
+  int readScreenshotData(CScreenshot& screenshot);
   int readMessage(char* pBuffer);
   int showMessage();
   int blitPausedMessage();
@@ -36,7 +43,7 @@ class CGraphics {
   HBITMAP m_hBitmap;
   HDC m_hCompatibleDc;
   HBITMAP m_hPrevBitmap;
-  void* m_pDibBitValues;
+  BYTE* m_pSurface;
   USHORT m_unknown80;
   USHORT m_unknown82;
   PALETTEENTRY m_palette[256];

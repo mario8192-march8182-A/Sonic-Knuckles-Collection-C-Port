@@ -1,3 +1,4 @@
+#include <stdio.h>
 #include <windows.h>
 #include <mbstring.h>
 #include "../winresource.h"
@@ -6,7 +7,9 @@
 #include "cinifile.h"
 #include "csound.h"
 #include "cwinregistry.h"
+#include "../vdp.h"
 
+extern int FUN_00401000();
 extern DWORD WINAPI gameThreadStartRoutine(void* pParameter);
 extern int checkCd();
 extern LRESULT CALLBACK thanksForPlayingDlgProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
@@ -16,7 +19,9 @@ extern int allocRamAndVram();
 extern void freeRamAndVram();
 extern void readSaveFile();
 extern void writeSaveFile();
+extern void blitGraphics();
 extern void FUN_0040ac1d();
+extern void resetSound();
 extern void restartBgm();
 extern void initSound(HWND hWnd);
 extern int openSoundTestDialog(HWND hWnd);
@@ -25,11 +30,14 @@ extern void resumeBgm();
 extern void openKeyBindDialog(HWND hWnd);
 extern void openJoyStickDialog(HWND hWnd);
 
+extern BOOL BOOL_0082b040;
 extern char* g_windowTitles[3];
 extern char* g_trialWindowTitles[3];
 extern char* g_demoWindowTitles[3];
 extern char* g_debugWindowTitles[3];
 extern char* g_pausedText[4];
+extern ULONG g_lastDAT_0082b074;
+extern ULONG g_lastDAT_0082b07c;
 extern BOOL g_bLaunchRunSonic;
 extern int g_nCmdShow;
 extern int g_useModeX;
@@ -49,6 +57,7 @@ extern int g_bgmMode;
 extern int g_cdCheckEnable;
 extern HINSTANCE g_hInstance;
 extern char* g_lpCmdLine;
+extern ULONG DAT_00854de8;
 extern CRITICAL_SECTION g_CriticalSectionObj;
 
 
@@ -130,8 +139,8 @@ void CGame::readConfig() {
   }
 
   iniFile.readInt("MIDIFlag", &g_midiFlag, 1);
-  m_screenshotKeyDown = FALSE;
-  m_unknown88 = 0;
+  m_bScreenshotKeyDown = FALSE;
+  m_screenshotId = 0;
 
   InitializeCriticalSection(&g_CriticalSectionObj);
   DuplicateHandle(GetCurrentProcess(), GetCurrentThread(), GetCurrentProcess(), &m_hDuplicate, 0, FALSE, DUPLICATE_SAME_ACCESS);
@@ -253,7 +262,7 @@ LRESULT CGame::realWndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) {
       break;
     case WM_KEYDOWN:
       if ((HIWORD(lParam) & KF_REPEAT) == 0 && wParam == VK_F9) {
-        m_screenshotKeyDown = TRUE;
+        m_bScreenshotKeyDown = TRUE;
       }
       break;
     case WM_ACTIVATEAPP:
@@ -320,6 +329,8 @@ BOOL CGame::loadMenu(HWND hWnd, LPARAM lParam) {
   }
 
   SetMenu(hWnd, m_hMenu);
+
+  return TRUE;
 }
 
 
@@ -727,7 +738,7 @@ int CGame::setupGameThread() {
   m_bPaused = m_unknown52;
   m_unknown48 = m_bPaused;
   BOOL_00831198 = FALSE;
-  ::FUN_0040ac1d();
+  ::resetSound();
   ::readSaveFile();
   m_unknown68 = 0;
 
@@ -769,4 +780,269 @@ void CGame::terminateGameThread() {
   writeSaveFile();
   CSound* pSound = ::getSoundPtr();
   pSound->stopSoundEffects();
+}
+
+
+// 00403101
+void CGame::update() {
+  if (BOOL_00831198) {
+    BOOL_00831198 = FALSE;
+    if (g_bTrial != 0) {
+      PostMessage(m_hWnd, 0x46E, 0, 0);
+    }
+  }
+
+  if(m_unknown52 != 0) {
+    ExitThread(0);
+  }
+
+  if (m_bPaused) {
+    ResetEvent(m_hEvent1);
+    SetEvent(m_hEvent2);
+    WaitForSingleObject(m_hEvent1, -1);
+  }
+
+  if (m_unknown48 != 0) {
+    ResetEvent(m_hEvent3);
+    SetEvent(m_hEvent2);
+    WaitForSingleObject(m_hEvent3, -1);
+  }
+
+  CSound* pSound = getSoundPtr();
+  pSound->playSoundEffects();
+
+  ULONG systemTime = timeGetTime();
+  if (m_unknown68 != 0) {
+    ++m_unknown68;
+  }
+  else {
+    m_unknown68 = 1;
+    m_unknown176 = 0;
+    m_unknown72 = 999;
+    m_systemTime = systemTime;
+    m_unknown80 = m_unknown68;
+  }
+
+  if (m_options[OPTIONS_ENABLEFRAMEDROP] != 0) {
+    if (m_options[OPTIONS_MUKAIDROPFRAME] != 0) {
+      FUN_0040398b();
+    }
+    else {
+      while (::FUN_00401000() != 0) {
+        Sleep(1);
+      }
+    }
+  }
+  else {
+    if (m_systemTime - systemTime > 1000) {
+      double result = (m_unknown68 - m_unknown80) * 1000.0 / (systemTime - m_systemTime);
+      if (result > 99.0) {
+        result = 99.0;
+      }
+      result += 0.05;
+      result *= 10.0;
+      m_unknown72 = result;
+      m_systemTime = systemTime;
+      m_unknown80 = m_unknown68;
+    }
+    BOOL_0082b040 = TRUE;
+  }
+
+  if (m_options[OPTIONS_MUKAIDROPFRAME] != 0) {
+    if (m_unknown196 == 0) {
+      ::blitGraphics();
+      updateScreen();
+    }
+  }
+  else if (BOOL_0082b040) {
+    ::blitGraphics();
+    updateScreen();
+  }
+}
+
+
+// 0040336e
+void CGame::updateScreen() {
+  CGraphics* pGraphics = getGraphicsPtr();
+  BYTE* pSurface;
+  long pitch;
+  if (pGraphics->lockBuffer((void**)&pSurface, &pitch) != 0) return;
+
+  if (g_debugMode != 0) {
+    if (g_useModeX == 0 && pGraphics->getVideoMode() & 4) {
+      for (int i = 0; i < 32; ++i) {
+        memset(&pSurface[i * pitch], 0, 640);
+      }
+      if (DAT_00854de8 == 5) {
+        ::FUN_0040fd4f((unsigned long*)&pSurface[32 * pitch], pitch);
+      }
+      else {
+        ::FUN_0040f96a((unsigned long*)&pSurface[32 * pitch], pitch);
+      }
+    }
+    else {
+      for (int i = 0; i < 16; ++i) {
+        memset(&pSurface[i * pitch], 0, 320);
+      }
+      if (DAT_00854de8 == 5) {
+        ::FUN_0040fceb((unsigned long*)&pSurface[16 * pitch], pitch);
+      }
+      else {
+        ::FUN_0040f89b((unsigned long*)&pSurface[16 * pitch], pitch);
+      }
+    }
+  }
+  else {
+    if (g_useModeX == 0 && pGraphics->getVideoMode() & 4) {
+      for (int i = 0; i < 16; ++i) {
+        memset(&pSurface[i * pitch], 0, 640);
+      }
+      for (int i = 0; i < 16; ++i) {
+        memset(&pSurface[(240 + i) * pitch], 0, 640);
+      }
+      if (DAT_00854de8 == 5) {
+        ::FUN_0040fd4f((unsigned long*)&pSurface[16 * pitch], pitch);
+      }
+      else {
+        ::FUN_0040f96a((unsigned long*)&pSurface[16 * pitch], pitch);
+      }
+    }
+    else {
+      for (int i = 0; i < 8; ++i) {
+        memset(&pSurface[i * pitch], 0, 320);
+      }
+      for (int i = 0; i < 8; ++i) {
+        memset(&pSurface[(232 + i) * pitch], 0, 320);
+      }
+      if (DAT_00854de8 == 5) {
+        ::FUN_0040fceb((unsigned long*)&pSurface[8 * pitch], pitch);
+      }
+      else {
+        ::FUN_0040f89b((unsigned long*)&pSurface[8 * pitch], pitch);
+      }
+    }
+  }
+
+  pGraphics->unlockBuffer();
+
+  if (m_options[OPTIONS_ENABLEFRAMECAPTURE] != 0 && m_bScreenshotKeyDown) {
+    CScreenshot screenshot;
+    pGraphics->readScreenshotData(screenshot);
+    char fileName[256];
+    wsprintf(fileName, "Cap%05d.bmp", m_screenshotId);
+    ++m_screenshotId;
+    if (m_screenshotId >= 100000) {
+      m_screenshotId = 0;
+    }
+    screenshot.save(fileName);
+    m_bScreenshotKeyDown = FALSE;
+  }
+
+  if (m_options[OPTIONS_SHOWFRAMECOUNT] != 0) {
+    char frameCount[128];
+    if (m_options[OPTIONS_ENABLEFRAMEDROP] != 0) {
+      if (m_options[OPTIONS_MUKAIDROPFRAME] != 0) {
+
+        sprintf(frameCount, "%5.1f/%5.1f [F/s] %5.1f [%%]", m_unknown160, m_unknown168, m_unknown160 * 100.0 / m_unknown168);
+      }
+      else {
+        long unknown = g_lastDAT_0082b07c / (g_lastDAT_0082b074 * 1000.0);
+        wsprintf(frameCount, "%03ld/%03ld [F/s] %03d.%01d [%%]", g_lastDAT_0082b074, g_lastDAT_0082b07c, unknown / 10, unknown % 10);
+      }
+    }
+    else {
+      wsprintf(frameCount, "%02ld.%01ld [F/s]", m_unknown72 / 10, m_unknown72 % 10);
+    }
+
+    HDC hDc;
+    if (pGraphics->getBackBufferDc(&hDc) == 0) {
+      SetTextColor(hDc, RGB(255, 255, 255));
+      SetBkColor(hDc, RGB(0, 0, 0));
+      SetBkMode(hDc, OPAQUE);
+      SIZE size;
+      GetTextExtentPoint32(hDc, frameCount, strlen(frameCount), &size);
+      RECT rect;
+      SetRect(&rect, 0, 0, size.cx, size.cy);
+      ExtTextOut(hDc, rect.left, rect.top, ETO_OPAQUE, &rect, frameCount, strlen(frameCount), 0);
+      pGraphics->releaseBackBufferDc(hDc);
+    }
+  }
+
+  pGraphics->blit();
+}
+
+
+// 0040398b
+void CGame::FUN_0040398b() {
+  ULONG systemTime = timeGetTime();
+  if (m_unknown176 == 0) {
+    m_unknown176 = 1;
+    m_unknown180 = 0;
+    m_unknown184 = m_unknown180;
+    m_unknown188 = 0;
+    m_unknown192 = 0;
+
+    for (int i = 0; i < 7; ++i) {
+      m_unknown92[i] = systemTime;
+      m_unknown120[i] = 0;
+    }
+
+    m_unknown148 = systemTime;
+    m_unknown168 = 99.9;
+    m_unknown160 = m_unknown168;
+    m_unknown156 = m_unknown152;
+  }
+  else {
+    ++m_unknown176;
+
+    for (int i = 1; i < 7; ++i) {
+      m_unknown92[i - 1] = m_unknown92[i];
+    }
+
+    m_unknown92[6] = systemTime;
+    m_unknown120[6] = 0;
+  }
+
+  m_unknown196 = 0;
+  BOOL bUnknown;
+  if (m_unknown92[6] - m_unknown92[0] > 100) {
+    bUnknown = TRUE;
+  }
+  else {
+    bUnknown = FALSE;
+  }
+  if (bUnknown) {
+    if (m_unknown192 >= 2) {
+      bUnknown = FALSE;
+    }
+    else if (m_unknown120[5] == 1 && m_unknown120[4] == 0 && m_unknown120[3] == 1) {
+      bUnknown = FALSE;
+    }
+  }
+  if (bUnknown) {
+    m_unknown188 = 1;
+    ++m_unknown192;
+    ++m_unknown180;
+    m_unknown196 = 1;
+    m_unknown120[6] = 1;
+  }
+  else {
+    m_unknown188 = 0;
+    m_unknown192 = 0;
+    ++m_unknown184;
+  }
+
+  if (systemTime - m_unknown148 <= 1000) {
+    m_unknown160 = (m_unknown184 - m_unknown156) * 1000.0 / (systemTime - m_unknown148);
+    if (m_unknown160 > 99.0) {
+      m_unknown160 = 99.0;
+    }
+    m_unknown168 = (m_unknown176 - m_unknown152) * 1000.0 / (systemTime - m_unknown148);
+    if (m_unknown160 > 99.0) {
+      m_unknown160 = 99.0;
+    }
+    m_unknown148 = systemTime;
+    m_unknown152 = m_unknown176;
+    m_unknown156 = m_unknown184;
+  }
 }

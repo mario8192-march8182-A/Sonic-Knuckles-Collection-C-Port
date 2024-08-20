@@ -1,3 +1,4 @@
+#include <stdio.h>
 #include <windows.h>
 #include <dsound.h>
 #include <mbstring.h>
@@ -24,8 +25,8 @@ CSound::CSound() {
   if (m_hDSound != 0) {
     g_pDSoundCreate = (HRESULT(*)(GUID*, LPDIRECTSOUND*, LPUNKNOWN*))GetProcAddress(m_hDSound, "DirectSoundCreate");
   }
-  m_unknown2064 = new UCHAR[960];
-  memset(m_unknown2064, 0, 960);
+  m_unknown2064 = new CUnkSoundObj[40];
+  memset(m_unknown2064, 0, sizeof(CUnkSoundObj) * 40);
   g_pSound2 = this;
   m_unknown2060 = 1;
 }
@@ -126,6 +127,25 @@ int CSound::createSoundBuffer(UCHAR formatFlag, ULONG size, int id) {
 }
 
 
+// 00409bf3
+int CSound::releaseBuffer(int id) {
+  if (m_buffers[id] == 0) {
+    _mbscpy((UCHAR*)m_message, (const UCHAR*)"");
+    return 1;
+  }
+
+  m_dsoundResult = m_buffers[id]->Release();
+  if (m_dsoundResult != DS_OK) {
+    _mbscpy((UCHAR*)m_message, (const UCHAR*)"Release");
+    return 1;
+  }
+
+  m_buffers[id] = 0;
+
+  return 0;
+}
+
+
 // 00409c9f
 int CSound::resetSound() {
   for (int i = 0; i < 256; ++i) {
@@ -175,6 +195,18 @@ int CSound::unlockSoundBuffer(void* pAudioBlock1, ULONG audioBlock1ByteCnt, void
 }
 
 
+// 00409ebf
+int CSound::playBuffer(UINT flags, int id) {
+  m_dsoundResult = m_buffers[id]->Play(0, 0, flags);
+  if (m_dsoundResult != DS_OK) {
+    _mbscpy((UCHAR*)m_message, (const UCHAR*)"DIRECTSOUNDBUFFER Play");
+    return 1;
+  }
+
+  return 0;
+}
+
+
 // 00409f33
 int CSound::stopBuffer(int id) {
   m_dsoundResult = m_buffers[id]->Stop();
@@ -212,6 +244,56 @@ int CSound::playBuffer(int id) {
   }
 
   return 0;
+}
+
+
+// 0040a07b
+int CSound::readBufferPosition(ULONG* pPlayPos, ULONG* pWritePos, int id) {
+  m_dsoundResult = m_buffers[id]->GetCurrentPosition(pPlayPos, pWritePos);
+  if (m_dsoundResult != DS_OK) {
+    _mbscpy((UCHAR*)m_message, (const UCHAR*)"DIRECTSOUNDBUFFER GetCurrentPosition");
+    return 1;
+  }
+
+  return 0;
+}
+
+
+// 0040a0ef
+int CSound::setBufferPosition(ULONG position, int id) {
+  m_dsoundResult = m_buffers[id]->SetCurrentPosition(position);
+  if (m_dsoundResult != DS_OK) {
+    // This debug message is wrong.
+    _mbscpy((UCHAR*)m_message, (const UCHAR*)"DIRECTSOUNDBUFFER GetCurrentPosition");
+    return 1;
+  }
+
+  return 0;
+}
+
+
+// 0040a15f
+int CSound::readMessage(char* pBuffer) {
+  if (m_dsoundResult == DS_OK) {
+    return 1;
+  }
+
+  char hResultString[128];
+  sprintf(hResultString, "\nHRESULT : = %08X\n", m_dsoundResult);
+  _mbscpy((UCHAR*)pBuffer, (const UCHAR*)m_message);
+  strcat(pBuffer, hResultString);
+
+  return 0;
+}
+
+
+// 0040a1e2
+void CSound::showMessage() {
+  char buffer[256];
+  if (m_dsoundResult != DS_OK) {
+    sprintf(buffer, "%s\nHRESULT : = %08X\n", m_message, m_dsoundResult);
+    MessageBox(m_hWnd, buffer, "LDirectSound::Error", MB_ICONSTOP);
+  }
 }
 
 
@@ -299,19 +381,58 @@ int CSound::stopSoundEffects() {
 
 // 0040a697
 int CSound::FUN_0040a697() {
-  memset(m_unknown2064, 0, sizeof(m_unknown2064));
+  memset(m_unknown2064, 0, sizeof(CUnkSoundObj) * 40);
 
   return 0;
 }
 
 
-// 0040b8e0
-ULONG CSound::getUnknown2060() {
-  return m_unknown2060;
+// 0040a6c8
+void CSound::FUN_0040a6c8(int unknown2064_id, int seventeen, int buffer2Id, int buffer1Id, int unknown16) {
+  m_unknown2064[unknown2064_id].init(seventeen, buffer2Id, buffer1Id, unknown16);
+}
+
+
+// 0040a707
+int CSound::playSoundEffects() {
+  for (int i = 0; i < 40; ++i) {
+    if (m_unknown2064[i].m_unknown0 == 0) continue;
+    if (m_unknown2064[i].decreaseUnknown0() == 0) {
+      if (m_unknown2064[i].m_unknown4 == 0) {
+        stopBuffer(m_unknown2064[i].m_buffer1Id);
+      }
+      else if (m_unknown2064[i].m_unknown4 == 1) {
+        stopBuffer(m_unknown2064[i].m_buffer1Id);
+        stopBuffer(m_unknown2064[i].m_buffer2Id);
+      }
+      else {
+        stopBuffer(m_unknown2064[i].m_buffer2Id);
+      }
+    }
+    else if (m_unknown2064[i].m_unknown4 == 0) {
+      if (m_unknown2064[i].decreaseUnknown16() == 0) {
+        m_unknown2064[i].m_unknown4 = 1;
+        setBufferPosition(0, m_unknown2064[i].m_buffer2Id);
+        playBuffer(DSBPLAY_LOOPING, m_unknown2064[i].m_buffer2Id);
+      }
+    }
+    else if (m_unknown2064[i].m_unknown4 == 1 && m_unknown2064[i].decreaseUnknown20() == 0) {
+      m_unknown2064[i].m_unknown4 = 2;
+      stopBuffer(m_unknown2064[i].m_buffer1Id);
+    }
+  }
+
+  return 0;
 }
 
 
 // 0040b8b0
 LPDIRECTSOUNDBUFFER CSound::getSoundBuffer(int id) {
   return m_buffers[id];
+}
+
+
+// 0040b8e0
+ULONG CSound::getUnknown2060() {
+  return m_unknown2060;
 }

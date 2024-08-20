@@ -79,6 +79,10 @@
 #define SET_AQUA_BARIA(value) SET_BIT_6(value)
 
 
+// mdstatus bits
+#define SET_MDREGION_OVERSEAS(value) SET_BIT_7(value)
+
+
 // swdata bits
 #define IS_UP_DOWN(value) (value & 1)
 #define IS_DOWN_DOWN(value) (value & 2)
