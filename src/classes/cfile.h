@@ -7,6 +7,7 @@ class CFile {
   public:
   BOOL isFileOpen();
   CFile(const char* pFileName);
+  void open(const char* pFileName);
   ~CFile();
   void closeFile();
   ULONG readData(void* pBuffer, ULONG byteCnt);

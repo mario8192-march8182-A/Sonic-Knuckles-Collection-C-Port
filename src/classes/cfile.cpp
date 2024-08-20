@@ -12,8 +12,15 @@ BOOL CFile::isFileOpen() {
 }
 
 
-// 0040ea50
+// 0040ea20
 CFile::CFile(const char* pFileName) {
+  m_hFile = INVALID_HANDLE_VALUE;
+  open(pFileName);
+}
+
+
+// 0040ea50
+void CFile::open(const char* pFileName) {
   closeFile();
   m_hFile = CreateFile(pFileName, GENERIC_READ, FILE_SHARE_READ, 0, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, 0);
 }
