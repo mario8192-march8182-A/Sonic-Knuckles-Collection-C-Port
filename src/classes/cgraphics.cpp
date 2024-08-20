@@ -170,7 +170,7 @@ retry:
     SetRect(&m_videoRect, 0, 0, m_videoWidth, m_videoHeight);
     m_bitmapInfoHeader.biSizeImage = -(m_bitmapInfoHeader.biHeight * m_bitmapInfoHeader.biWidth);
 
-    BITMAPINFO* pBitmapInfo = new BITMAPINFO;
+    BITMAPINFO* pBitmapInfo = (BITMAPINFO*)new UCHAR[1064];
     RGBQUAD* pRgbQuad = pBitmapInfo->bmiColors;
     memset(pBitmapInfo, 0, sizeof(*pBitmapInfo));
     memcpy(pBitmapInfo, &m_bitmapInfoHeader, sizeof(m_bitmapInfoHeader));
