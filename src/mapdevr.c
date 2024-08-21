@@ -10,12 +10,14 @@ static void mapdevr_nextbyte(mapdevrwk* p_wk);
 // 00410456
 void mapdevr(unsigned short* p_destination, unsigned char* p_source, unsigned short offset) {
   mapdevrwk wk = { p_source };
-  unsigned char inline_copy_bit_cnt = *p_source++;
-  unsigned char bitfield = *p_source++ << 3;
-  unsigned short incremental_copy = *(unsigned short*)p_source++ + offset;
-  unsigned short literal_copy = *(unsigned short*)p_source++ + offset;
-  wk.data = *p_source++ << 8;
-  wk.data |= *p_source++;
+  unsigned char inline_copy_bit_cnt = *wk.p_source++;
+  unsigned char bitfield = *wk.p_source++ << 3;
+  unsigned short incremental_copy = *((unsigned short*)wk.p_source) + offset;
+  wk.p_source += 2;
+  unsigned short literal_copy = *((unsigned short*)wk.p_source) + offset;
+  wk.p_source += 2;
+  wk.data = *wk.p_source++ << 8;
+  wk.data |= *wk.p_source++;
   wk.shift = 16;
   bool done = false;
 
@@ -72,9 +74,8 @@ void mapdevr(unsigned short* p_destination, unsigned char* p_source, unsigned sh
           done = true;
         }
         else {
-          unsigned short inline_copy = mapdevr_getinline(&wk, offset, bitfield, inline_copy_bit_cnt);
-
           do {
+            unsigned short inline_copy = mapdevr_getinline(&wk, offset, bitfield, inline_copy_bit_cnt);
             *p_destination++ = inline_copy;
           } while (repeat_cnt-- != 0);
         }
@@ -142,6 +143,7 @@ LAB_00410b55:
     result >>= shiftwk;
     result &= mapdevr_masks[inline_copy_bit_cnt - 1];
     result += offset;
+    p_wk->entry_bit_cnt = inline_copy_bit_cnt;
     mapdevr_nextbyte(p_wk);
   }
   else {

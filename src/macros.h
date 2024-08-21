@@ -41,7 +41,7 @@
 #define BIT_5_IS_SET(value) (value & 32)
 #define BIT_6_IS_SET(value) (value & 64)
 #define BIT_7_IS_SET(value) (value & 128)
-#define BIT_IS_SET(value, bit) (value &= 1 << (bit))
+#define BIT_IS_SET(value, bit) (value & 1 << (bit))
 
 #define ROTATE_LEFT(value, bits) ((value = value << bits | value >> 32 - bits) & 0xFFFFFFFF)
 #define ROTATE_RIGHT(value, bits) ((value = value >> bits | value << 32 - bits) & 0xFFFFFFFF)
