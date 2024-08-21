@@ -13,7 +13,8 @@ static unsigned char* bitdevr_codetable(unsigned char* p_source, unsigned short*
 void bitdevr(unsigned long* p_destination, unsigned char* p_source, unsigned char* p_bitdevwk) {
   bitdevrwk wk = { p_destination, p_source };
   void(*p_write)(unsigned long, bitdevrwk*) = &bitdevr_write;
-  unsigned short patcnt = *(unsigned short*)wk.p_source++;
+  unsigned short patcnt = *((unsigned short*)wk.p_source);
+  wk.p_source += 2;
   bool xor_mode = patcnt & 0x8000;
   if (xor_mode) {
     p_write = &bitdevr_xorwrite;
