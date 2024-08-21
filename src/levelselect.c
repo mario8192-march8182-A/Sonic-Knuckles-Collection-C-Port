@@ -250,6 +250,7 @@ static void handleinput() {
     --g_mdRam.levelselect_inputrepeattimer;
     if (g_mdRam.levelselect_inputrepeattimer >= 0) {
       handleinput2();
+      return;
     }
   }
   g_mdRam.levelselect_inputrepeattimer = 11;
