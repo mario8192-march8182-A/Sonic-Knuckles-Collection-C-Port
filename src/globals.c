@@ -227,7 +227,7 @@
   48
 };
 /* 0082ddc8 */ ULONG DAT_0082ddc8;
-/* 0082ddcc */ UCHAR DAT_0082ddcc[4] = { 0xFA, 0x50, 0, 0 };
+/* 0082ddcc */ UCHAR DAT_0082ddcc[4] = { 0, 0, 0x50, 0xFA };
 /* 0082ddd0 */ char g_kbKeyNames[4][30][32] = {
   {
     "Num0",
