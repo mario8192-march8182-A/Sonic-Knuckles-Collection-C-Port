@@ -165,7 +165,7 @@ int CGraphics::initVideo(ULONG videoMode, HWND hWnd) {
   }
 
 retry:
-  if ((((UCHAR*)&m_videoMode)[1] & 16) || g_pDdrawCreate == 0) {
+  if ((m_videoMode & 0x1000) || g_pDdrawCreate == 0) {
     m_videoMode |= 0x1000;
     m_videoMode &= 0xFFFFFFFB;
     m_bitmapInfoHeader.biSize = 40;
@@ -257,7 +257,7 @@ retry:
     m_pFrontBuffer = 0;
   }
 
-  if (((UCHAR*)&m_videoMode)[0] & 4) {
+  if (m_videoMode & 4) {
     RECT windowRect;
     GetWindowRect(hWnd, &windowRect);
     m_windowX = windowRect.left;
@@ -356,7 +356,7 @@ retry:
     ddSurfaceDesc.ddsCaps.dwCaps = DDSCAPS_PRIMARYSURFACE;
     m_ddrawResult = m_pDdraw->CreateSurface(&ddSurfaceDesc, &m_pFrontBuffer, 0);
     if (m_ddrawResult != DD_OK) {
-      if (((UCHAR*)&m_videoMode)[1] & 64) {
+      if (m_videoMode & 0x4000) {
         _mbscpy((UCHAR*)m_message, (const UCHAR*)"CreateSurface DDSCAPS_PRIMARYSURFACE");
         return 1;
       }
@@ -396,7 +396,7 @@ retry:
 
   m_ddrawResult = m_pDdraw->CreatePalette(DDPCAPS_8BIT, m_palette, &m_pDdrawPalette, 0);
   if (m_ddrawResult != DD_OK) {
-    if (((UCHAR*)&m_videoMode)[1] & 64) {
+    if (m_videoMode & 0x4000) {
       _mbscpy((UCHAR*)m_message, (const UCHAR*)"CreatePalette DDPCAPS_8BIT");
       return 1;
     }
@@ -406,7 +406,7 @@ retry:
   }
   m_ddrawResult = m_pFrontBuffer->SetPalette(m_pDdrawPalette);
   if (m_ddrawResult != DD_OK) {
-    if (((UCHAR*)&m_videoMode)[1] & 64) {
+    if (m_videoMode & 0x4000) {
       _mbscpy((UCHAR*)m_message, (const UCHAR*)"lpFrontBuffer->SetPalette");
       return 1;
     }
@@ -462,7 +462,7 @@ int CGraphics::resetVideo() {
 
 // 00407c41
 int CGraphics::clearBuffers() {
-  if (((UCHAR*)&m_videoMode)[1] & 16) {
+  if (m_videoMode & 0x1000) {
     RECT clientRect;
     GetClientRect(m_hWnd, &clientRect);
     HDC hDc = GetDC(m_hWnd);
@@ -475,7 +475,7 @@ int CGraphics::clearBuffers() {
   DDBLTFX ddBltFx;
   ddBltFx.dwSize = 100;
   ddBltFx.dwFillColor = 0;
-  if (((UCHAR*)&m_videoMode)[0] & 4) {
+  if (m_videoMode & 4) {
     m_ddrawResult = m_pBackBuffer->Blt(0, 0, 0, DDBLT_COLORFILL | DDBLT_WAIT, &ddBltFx);
     if (m_ddrawResult != DD_OK) {
       _mbscpy((UCHAR*)m_message, (const UCHAR*)"lpBackBuffer->Blt DDBLT_COLORFILL | DDBLT_WAIT");
@@ -525,7 +525,7 @@ int CGraphics::clearBuffers() {
 
 // 00408000
 int CGraphics::lockBuffer(void** ppSurface, long* pPitch) {
-  if (((UCHAR*)&m_videoMode)[1] & 16) {
+  if (m_videoMode & 0x1000) {
     GdiFlush();
     DIBSECTION dibsection;
     GetObject(m_hBitmap, sizeof(dibsection), &dibsection);
@@ -565,7 +565,7 @@ int CGraphics::lockBuffer(void** ppSurface, long* pPitch) {
 
 // 004081e2
 int CGraphics::unlockBuffer() {
-  if (((UCHAR*)&m_videoMode)[1] & 16) {
+  if (m_videoMode & 0x1000) {
     return 0;
   }
 
@@ -583,7 +583,7 @@ int CGraphics::unlockBuffer() {
 
 // 00408270
 int CGraphics::getBackBufferDc(HDC* phDc) {
-  if (((UCHAR*)&m_videoMode)[1] & 16) {
+  if (m_videoMode & 0x1000) {
     *phDc = m_hCompatibleDc;
     return 0;
   }
@@ -600,7 +600,7 @@ int CGraphics::getBackBufferDc(HDC* phDc) {
 
 // 004082fb
 int CGraphics::releaseBackBufferDc(HDC hDc) {
-  if (((UCHAR*)&m_videoMode)[1] & 16) {
+  if (m_videoMode & 0x1000) {
     return 0;
   }
 
@@ -618,7 +618,7 @@ int CGraphics::releaseBackBufferDc(HDC hDc) {
 int CGraphics::blit() {
   updatePalette();
 
-  if (((UCHAR*)&m_videoMode)[1] & 16) {
+  if (m_videoMode & 0x1000) {
     GdiFlush();
     RECT rect;
     GetClientRect(m_hWnd, &rect);
@@ -633,7 +633,7 @@ int CGraphics::blit() {
     return 0;
   }
 
-  if (((UCHAR*)&m_videoMode)[0] & 4) {
+  if (m_videoMode & 4) {
     m_ddrawResult = m_pFrontBuffer->Flip(0, DDFLIP_WAIT);
     if (m_ddrawResult != DD_OK) {
       _mbscpy((UCHAR*)m_message, (const UCHAR*)" Blt1x : lpFrontBuffer->Flip");
@@ -670,7 +670,7 @@ int CGraphics::blit() {
 
 // 00408730
 int CGraphics::restoreBuffers() {
-  if (((UCHAR*)&m_videoMode)[1] & 16) {
+  if (m_videoMode & 0x1000) {
     return 0;
   }
 
@@ -701,7 +701,7 @@ int CGraphics::updateDevicePalette(RGBQUAD* pQuads, UINT paletteStart, UINT quad
     m_palette[paletteStart + i].peBlue = pQuads[i].rgbBlue;
   }
 
-  if (((UCHAR*)&m_videoMode)[1] & 16) {
+  if (m_videoMode & 0x1000) {
     SetDIBColorTable(m_hCompatibleDc, paletteStart, quadCnt, pQuads);
     return 0;
   }
@@ -730,7 +730,7 @@ int CGraphics::updateDevicePalette(RGBQUAD* pQuads, UINT paletteStart, UINT quad
 
 // 00408a1e
 int CGraphics::copyPalette(RGBQUAD* pPalette, int start, int colorCnt) {
-  if (((UCHAR*)&m_videoMode)[1] & 16) {
+  if (m_videoMode & 0x1000) {
     GetDIBColorTable(m_hCompatibleDc, start, colorCnt, pPalette);
     return 0;
   }
