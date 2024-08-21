@@ -77,7 +77,7 @@ void levelselect() {
     }
     *p_chunkmappings = 17; // act 1
     p_chunkmappings += 40;
-    *p_chunkmappings++ = 18; // act 2
+    *p_chunkmappings = 18; // act 2
   } while (entry_cnt-- != 0);
 
   *p_chunkmappings = 0;
