@@ -4,6 +4,9 @@
 #include <mbstring.h>
 #include "cgraphics.h"
 #include "cscreenshot.h"
+#define IS_FULLSCREEN_SET(mode) (mode & 4)
+#define IS_GDI_FALLBACK_SET(mode) (mode & 0x1000)
+#define SET_GDI_FALLBACK(mode) (mode |= 0x1000)
 
 extern char* g_pausedText[4];
 extern HRESULT(*g_pDdrawCreate)(GUID*, LPDIRECTDRAW*, IUnknown*);
@@ -165,8 +168,8 @@ int CGraphics::initVideo(ULONG videoMode, HWND hWnd) {
   }
 
 retry:
-  if ((m_videoMode & 0x1000) || g_pDdrawCreate == 0) {
-    m_videoMode |= 0x1000;
+  if (IS_GDI_FALLBACK_SET(m_videoMode) || g_pDdrawCreate == 0) {
+    SET_GDI_FALLBACK(m_videoMode);
     m_videoMode &= 0xFFFFFFFB;
     m_bitmapInfoHeader.biSize = 40;
     m_bitmapInfoHeader.biPlanes = 1;
@@ -257,7 +260,7 @@ retry:
     m_pFrontBuffer = 0;
   }
 
-  if (m_videoMode & 4) {
+  if (IS_FULLSCREEN_SET(m_videoMode)) {
     RECT windowRect;
     GetWindowRect(hWnd, &windowRect);
     m_windowX = windowRect.left;
@@ -361,7 +364,7 @@ retry:
         return 1;
       }
       resetVideo();
-      m_videoMode |= 0x1000;
+      SET_GDI_FALLBACK(m_videoMode);
       goto retry;
     }
     m_ddrawResult = m_pDdraw->CreateClipper(0, &m_pDdrawClipper, 0);
@@ -401,7 +404,7 @@ retry:
       return 1;
     }
     resetVideo();
-    m_videoMode |= 0x1000;
+    SET_GDI_FALLBACK(m_videoMode);
     goto retry;
   }
   m_ddrawResult = m_pFrontBuffer->SetPalette(m_pDdrawPalette);
@@ -411,7 +414,7 @@ retry:
       return 1;
     }
     resetVideo();
-    m_videoMode |= 0x1000;
+    SET_GDI_FALLBACK(m_videoMode);
     goto retry;
   }
 
@@ -462,7 +465,7 @@ int CGraphics::resetVideo() {
 
 // 00407c41
 int CGraphics::clearBuffers() {
-  if (m_videoMode & 0x1000) {
+  if (IS_GDI_FALLBACK_SET(m_videoMode)) {
     RECT clientRect;
     GetClientRect(m_hWnd, &clientRect);
     HDC hDc = GetDC(m_hWnd);
@@ -475,7 +478,7 @@ int CGraphics::clearBuffers() {
   DDBLTFX ddBltFx;
   ddBltFx.dwSize = 100;
   ddBltFx.dwFillColor = 0;
-  if (m_videoMode & 4) {
+  if (IS_FULLSCREEN_SET(m_videoMode)) {
     m_ddrawResult = m_pBackBuffer->Blt(0, 0, 0, DDBLT_COLORFILL | DDBLT_WAIT, &ddBltFx);
     if (m_ddrawResult != DD_OK) {
       _mbscpy((UCHAR*)m_message, (const UCHAR*)"lpBackBuffer->Blt DDBLT_COLORFILL | DDBLT_WAIT");
@@ -525,7 +528,7 @@ int CGraphics::clearBuffers() {
 
 // 00408000
 int CGraphics::lockBuffer(void** ppSurface, long* pPitch) {
-  if (m_videoMode & 0x1000) {
+  if (IS_GDI_FALLBACK_SET(m_videoMode)) {
     GdiFlush();
     DIBSECTION dibsection;
     GetObject(m_hBitmap, sizeof(dibsection), &dibsection);
@@ -565,7 +568,7 @@ int CGraphics::lockBuffer(void** ppSurface, long* pPitch) {
 
 // 004081e2
 int CGraphics::unlockBuffer() {
-  if (m_videoMode & 0x1000) {
+  if (IS_GDI_FALLBACK_SET(m_videoMode)) {
     return 0;
   }
 
@@ -583,7 +586,7 @@ int CGraphics::unlockBuffer() {
 
 // 00408270
 int CGraphics::getBackBufferDc(HDC* phDc) {
-  if (m_videoMode & 0x1000) {
+  if (IS_GDI_FALLBACK_SET(m_videoMode)) {
     *phDc = m_hCompatibleDc;
     return 0;
   }
@@ -600,7 +603,7 @@ int CGraphics::getBackBufferDc(HDC* phDc) {
 
 // 004082fb
 int CGraphics::releaseBackBufferDc(HDC hDc) {
-  if (m_videoMode & 0x1000) {
+  if (IS_GDI_FALLBACK_SET(m_videoMode)) {
     return 0;
   }
 
@@ -618,7 +621,7 @@ int CGraphics::releaseBackBufferDc(HDC hDc) {
 int CGraphics::blit() {
   updatePalette();
 
-  if (m_videoMode & 0x1000) {
+  if (IS_GDI_FALLBACK_SET(m_videoMode)) {
     GdiFlush();
     RECT rect;
     GetClientRect(m_hWnd, &rect);
@@ -633,7 +636,7 @@ int CGraphics::blit() {
     return 0;
   }
 
-  if (m_videoMode & 4) {
+  if (IS_FULLSCREEN_SET(m_videoMode)) {
     m_ddrawResult = m_pFrontBuffer->Flip(0, DDFLIP_WAIT);
     if (m_ddrawResult != DD_OK) {
       _mbscpy((UCHAR*)m_message, (const UCHAR*)" Blt1x : lpFrontBuffer->Flip");
@@ -670,7 +673,7 @@ int CGraphics::blit() {
 
 // 00408730
 int CGraphics::restoreBuffers() {
-  if (m_videoMode & 0x1000) {
+  if (IS_GDI_FALLBACK_SET(m_videoMode)) {
     return 0;
   }
 
@@ -701,7 +704,7 @@ int CGraphics::updateDevicePalette(RGBQUAD* pQuads, UINT paletteStart, UINT quad
     m_palette[paletteStart + i].peBlue = pQuads[i].rgbBlue;
   }
 
-  if (m_videoMode & 0x1000) {
+  if (IS_GDI_FALLBACK_SET(m_videoMode)) {
     SetDIBColorTable(m_hCompatibleDc, paletteStart, quadCnt, pQuads);
     return 0;
   }
@@ -730,7 +733,7 @@ int CGraphics::updateDevicePalette(RGBQUAD* pQuads, UINT paletteStart, UINT quad
 
 // 00408a1e
 int CGraphics::copyPalette(RGBQUAD* pPalette, int start, int colorCnt) {
-  if (m_videoMode & 0x1000) {
+  if (IS_GDI_FALLBACK_SET(m_videoMode)) {
     GetDIBColorTable(m_hCompatibleDc, start, colorCnt, pPalette);
     return 0;
   }
