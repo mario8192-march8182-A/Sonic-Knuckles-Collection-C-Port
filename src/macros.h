@@ -84,22 +84,22 @@
 
 
 // swdata bits
-#define IS_UP_DOWN(value) (value & 1)
-#define IS_DOWN_DOWN(value) (value & 2)
-#define IS_LEFT_DOWN(value) (value & 4)
-#define IS_RIGHT_DOWN(value) (value & 8)
-#define IS_A_DOWN(value) (value & 0x40)
-#define IS_B_DOWN(value) (value & 0x10)
-#define IS_C_DOWN(value) (value & 0x20)
-#define IS_START_DOWN(value) (value & 0x80)
-#define IS_UP_PRESSED(value) (value >> 8 & 1)
-#define IS_DOWN_PRESSED(value) (value >> 8 & 2)
-#define IS_LEFT_PRESSED(value) (value >> 8 & 4)
-#define IS_RIGHT_PRESSED(value) (value >> 8 & 8)
-#define IS_A_PRESSED(value) (value >> 8 & 0x40)
-#define IS_B_PRESSED(value) (value >> 8 & 0x10)
-#define IS_C_PRESSED(value) (value >> 8 & 0x20)
-#define IS_START_PRESSED(value) (value >> 8 & 0x80)
+#define IS_UP_PRESSED(value) (value & 1)
+#define IS_DOWN_PRESSED(value) (value & 2)
+#define IS_LEFT_PRESSED(value) (value & 4)
+#define IS_RIGHT_PRESSED(value) (value & 8)
+#define IS_A_PRESSED(value) (value & 0x40)
+#define IS_B_PRESSED(value) (value & 0x10)
+#define IS_C_PRESSED(value) (value & 0x20)
+#define IS_START_PRESSED(value) (value & 0x80)
+#define IS_UP_DOWN(value) (value >> 8 & 1)
+#define IS_DOWN_DOWN(value) (value >> 8 & 2)
+#define IS_LEFT_DOWN(value) (value >> 8 & 4)
+#define IS_RIGHT_DOWN(value) (value >> 8 & 8)
+#define IS_A_DOWN(value) (value >> 8 & 0x40)
+#define IS_B_DOWN(value) (value >> 8 & 0x10)
+#define IS_C_DOWN(value) (value >> 8 & 0x20)
+#define IS_START_DOWN(value) (value >> 8 & 0x80)
 
 
 // scroll plane nametable bits
