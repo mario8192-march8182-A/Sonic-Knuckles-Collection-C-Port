@@ -23,7 +23,7 @@ void mapdevr(unsigned short* p_destination, unsigned char* p_source, unsigned sh
 
   do {
     wk.entry_bit_cnt = 7;
-    unsigned char entry = (wk.data >> wk.shift - wk.entry_bit_cnt) & 0x7F;
+    unsigned char entry = (wk.data >> (wk.shift - wk.entry_bit_cnt)) & 0x7F;
     unsigned char type = entry >> 4;
     if (!(entry & 0x40)) {
       wk.entry_bit_cnt = 6;
@@ -129,7 +129,7 @@ static unsigned short mapdevr_getinline(mapdevrwk* p_wk, unsigned short offset, 
     shiftwk = -shiftwk;
     result <<= shiftwk;
     p_wk->data |= *p_wk->p_source++;
-    p_wk->data = p_wk->data & 0xFF00 | p_wk->data << shiftwk & 0x00FF | (p_wk->data & 0x00FF) >> 8 - shiftwk;
+    p_wk->data = (p_wk->data & 0xFF00) | (p_wk->data << shiftwk & 0x00FF) | (p_wk->data & 0x00FF) >> (8 - shiftwk);
     p_wk->data &= mapdevr_masks[shiftwk - 1];
     result += p_wk->data;
 LAB_00410b55:

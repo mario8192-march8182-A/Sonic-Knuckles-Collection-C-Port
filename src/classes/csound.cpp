@@ -279,7 +279,7 @@ int CSound::readMessage(char* pBuffer) {
   }
 
   char hResultString[128];
-  sprintf(hResultString, "\nHRESULT : = %08X\n", m_dsoundResult);
+  sprintf(hResultString, "\nHRESULT : = %08X\n", (UINT)m_dsoundResult);
   _mbscpy((UCHAR*)pBuffer, (const UCHAR*)m_message);
   strcat(pBuffer, hResultString);
 
@@ -291,7 +291,7 @@ int CSound::readMessage(char* pBuffer) {
 void CSound::showMessage() {
   char buffer[256];
   if (m_dsoundResult != DS_OK) {
-    sprintf(buffer, "%s\nHRESULT : = %08X\n", m_message, m_dsoundResult);
+    sprintf(buffer, "%s\nHRESULT : = %08X\n", m_message, (UINT)m_dsoundResult);
     MessageBox(m_hWnd, buffer, "LDirectSound::Error", MB_ICONSTOP);
   }
 }
@@ -313,7 +313,7 @@ int CSound::loadSoundEffects(const char* pFileName, UCHAR formatFlag, int idModi
   }
 
   int ret = 1;
-  for (int i = 0; i < sizeCnt; ++i) {
+  for (unsigned int i = 0; i < sizeCnt; ++i) {
     ULONG bufferSize;
     if (i < cnt && i != 59) {
       bufferSize = pSizes[i] + 11050;

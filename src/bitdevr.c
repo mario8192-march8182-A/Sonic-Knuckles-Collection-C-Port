@@ -36,7 +36,7 @@ static void bitdevr_decompress(bitdevrwk* p_wk, unsigned char* p_bitdevwk, void(
   bool done = false;
 
   do {
-    unsigned short code = p_wk->data >> p_wk->shift - 8;
+    unsigned short code = p_wk->data >> (p_wk->shift - 8);
     if ((code & 0xFF) >= 252) {
       bitdevr_decompress_inline(p_wk);
     }
@@ -121,8 +121,8 @@ static unsigned char* bitdevr_codetable(unsigned char* p_source, unsigned short*
         p_bitdevwk[code] = codetable_entry;
       }
       else {
-        unsigned short code = *p_source++ << 8 - codebits_cnt;
-        unsigned short cnt = 1 << 8 - codebits_cnt;
+        unsigned short code = *p_source++ << (8 - codebits_cnt);
+        unsigned short cnt = 1 << (8 - codebits_cnt);
         do {
           p_bitdevwk[code++] = codetable_entry;
         } while (--cnt != 0);

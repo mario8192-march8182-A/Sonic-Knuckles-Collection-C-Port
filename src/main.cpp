@@ -232,7 +232,7 @@ LRESULT CALLBACK thanksForPlayingDlgProc(HWND hWnd, UINT msg, WPARAM wParam, LPA
       if (pFile != 0 && (int)pFile != -1) {
         char buffer[256];
         while (fgets(buffer, sizeof(buffer), pFile) != 0) {
-          for (int i = 0; i < sizeof(buffer) && buffer[i] != 0; ++i) {
+          for (unsigned int i = 0; i < sizeof(buffer) && buffer[i] != 0; ++i) {
             if (buffer[i] == '\n' || buffer[i] == '\r') {
               buffer[i] = 0;
             }
@@ -334,7 +334,7 @@ void blitSprites() {
   if (DAT_00854de8 == 5) {
     pSprite = &g_sprites[g_spriteCnt - 1];
 
-    for (int i = 0; i < g_spriteCnt; ++i) {
+    for (unsigned int i = 0; i < g_spriteCnt; ++i) {
       switch (pSprite->flags & 0x300) {
         case 0x000: blit_sprite(pSprite);        break;
         case 0x100: blit_sprite_hflip(pSprite);  break;
@@ -353,7 +353,7 @@ void blitSprites() {
 
     pSprite = &g_sprites[g_spriteCnt - 1];
 
-    for (int i = 0; i < g_spriteCnt; ++i) {
+    for (unsigned int i = 0; i < g_spriteCnt; ++i) {
       if (((UCHAR*)&pSprite->flags)[2] & 1) {
         memset(g_spriteMasks, 0, 448);
         for (int j = 112; j < 224; ++j) {
@@ -376,14 +376,14 @@ void blitSprites() {
     memset(g_spriteMasks, 0, 448);
     pSprite = g_sprites;
 
-    for (int i = 0; i < g_spriteCnt; ++i) {
+    for (unsigned int i = 0; i < g_spriteCnt; ++i) {
       FUN_00411a50(pSprite);
       ++pSprite;
     }
 
     pSprite = &g_sprites[g_spriteCnt - 1];
 
-    for (int i = 0; i < g_spriteCnt; ++i) {
+    for (unsigned int i = 0; i < g_spriteCnt; ++i) {
       switch (pSprite->flags & 0x300) {
         case 0x000: blit_sprite_masked(pSprite);        break;
         case 0x100: blit_sprite_masked_hflip(pSprite);  break;
@@ -396,7 +396,7 @@ void blitSprites() {
   else {
     pSprite = &g_sprites[g_spriteCnt];
 
-    for (int i = 0; i < g_spriteCnt; ++i) {
+    for (unsigned int i = 0; i < g_spriteCnt; ++i) {
       switch (pSprite->flags & 0x300) {
         case 0x000: blit_sprite_noprio(pSprite);        break;
         case 0x100: blit_sprite_hflip_noprio(pSprite);  break;
@@ -422,7 +422,7 @@ Sprite* uploadSprites(USHORT* pSource, Sprite* pSprite) {
       pSprite->y = pSource[0] - 128;
       pSprite->w = ((((UCHAR*)pSource)[2] & 0xC) >> 2) + 1;
       pSprite->h = (((UCHAR*)pSource)[2] & 3) * 8 + 8;
-      pSprite->flags = ((pSource[2] & 0x6000) >> 9) + 16
+      pSprite->flags = (((pSource[2] & 0x6000) >> 9) + 16)
                      | (pSource[2] & 0x1800) >> 3
                      | (pSource[2] & 0x8000) >> 8;
       pSprite->vram_offset = ((pSource[2] & 0x7FF) << 5); // + 0x8000000
@@ -1606,7 +1606,7 @@ LRESULT CALLBACK joyStickDlgProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lPar
       SendMessage(hJoystickP2, CB_ADDSTRING, 0, (WPARAM)pDontUseText);
       JOYCAPS joycaps;
       char buffer[64];
-      for (int i = 0; i < g_joystickCnt; ++i) {
+      for (unsigned int i = 0; i < g_joystickCnt; ++i) {
         memset(&joycaps, 0, sizeof(joycaps));
         if (joyGetDevCaps(i, &joycaps, sizeof(joycaps)) != JOYERR_NOERROR) {
           g_joystickAvailability[i] = FALSE;
@@ -1623,7 +1623,7 @@ LRESULT CALLBACK joyStickDlgProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lPar
       }
       else {
         ULONG comboIndex = 0;
-        for (int i = 0; i < g_joystickCnt; ++i) {
+        for (unsigned int i = 0; i < g_joystickCnt; ++i) {
           if (g_joystickAvailability[i]) {
             ++comboIndex;
             if (g_joystickId[0] == i) {
@@ -1638,7 +1638,7 @@ LRESULT CALLBACK joyStickDlgProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lPar
       }
       else {
         ULONG comboIndex = 0;
-        for (int i = 0; i < g_joystickCnt; ++i) {
+        for (unsigned int i = 0; i < g_joystickCnt; ++i) {
           if (g_joystickAvailability[i]) {
             ++comboIndex;
             if (g_joystickId[1] == i) {
@@ -1663,7 +1663,7 @@ LRESULT CALLBACK joyStickDlgProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lPar
           long selectedIndexP2 = SendMessage(hJoystickP2, CB_GETCURSEL, 0, 0);
           int newJoystickIdP1 = -1;
           if (selectedIndexP1 > 0) {
-            for (int i = 0; i < g_joystickCnt; ++i) {
+            for (unsigned int i = 0; i < g_joystickCnt; ++i) {
               if (g_joystickAvailability[i]) {
                 --selectedIndexP1;
                 if (selectedIndexP1 == 0) {
@@ -1675,7 +1675,7 @@ LRESULT CALLBACK joyStickDlgProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lPar
           }
           int newJoystickIdP2 = -1;
           if (selectedIndexP2 > 0) {
-            for (int i = 0; i < g_joystickCnt; ++i) {
+            for (unsigned int i = 0; i < g_joystickCnt; ++i) {
               if (g_joystickAvailability[i]) {
                 --selectedIndexP1;
                 if (selectedIndexP1 == 0) {

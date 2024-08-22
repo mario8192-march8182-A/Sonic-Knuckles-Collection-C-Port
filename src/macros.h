@@ -43,8 +43,8 @@
 #define BIT_7_IS_SET(value) (value & 128)
 #define BIT_IS_SET(value, bit) (value & 1 << (bit))
 
-#define ROTATE_LEFT(value, bits) ((value = value << bits | value >> 32 - bits) & 0xFFFFFFFF)
-#define ROTATE_RIGHT(value, bits) ((value = value >> bits | value << 32 - bits) & 0xFFFFFFFF)
+#define ROTATE_LEFT(value, bits) ((value = value << bits | value >> (32 - bits)) & 0xFFFFFFFF)
+#define ROTATE_RIGHT(value, bits) ((value = value >> bits | value << (32 - bits)) & 0xFFFFFFFF)
 
 #define BYTESWAP(value) ((value & 0xFF000000) >> 24 | (value & 0x00FF0000) >> 8 | (value & 0x0000FF00) << 8 | (value & 0x000000FF) << 24)
 
@@ -123,6 +123,6 @@
 #define GET_ZONE(value) (value >> 8)
 #define GET_ACT(value) (value & 0xFF)
 
-#define SET_ACT(value, act) (value = value & 0xFF00 | act)
+#define SET_ACT(value, act) (value = (value & 0xFF00) | act)
 
 #endif

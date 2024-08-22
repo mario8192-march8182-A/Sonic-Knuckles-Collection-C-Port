@@ -581,7 +581,7 @@ void CGame::onInitMenuPopup(HWND hWnd, HMENU hMenu, UINT pos, BOOL bIsWindowMenu
 
 // 004029ca
 void CGame::onMenuSelect(HWND hWnd, HMENU hMenu, UINT idOrIndex, HMENU hSubMenu, UINT flags) {
-  if (hMenu == 0 && flags == -1) {
+  if (hMenu == 0 && flags == (UINT)-1) {
     FUN_0040225a();
   }
 }
@@ -749,7 +749,7 @@ int CGame::setupGameThread() {
 
 // 00402fea
 int CGame::runGameThread() {
-  if (ResumeThread(m_hGameThread) == -1) {
+  if (ResumeThread(m_hGameThread) == (DWORD)-1) {
     showMessage("Cannot Run GameThread.");
     return 1;
   }

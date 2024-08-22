@@ -204,7 +204,7 @@ retry:
     delete pBitmapInfo;
     ReleaseDC(0, hDc);
 
-    long windowStyle = GetWindowLong(hWnd, GWL_STYLE) & 0x7FFFFFFF | WS_MINIMIZEBOX | WS_THICKFRAME | WS_SYSMENU | WS_CAPTION;
+    long windowStyle = (GetWindowLong(hWnd, GWL_STYLE) & 0x7FFFFFFF) | WS_MINIMIZEBOX | WS_THICKFRAME | WS_SYSMENU | WS_CAPTION;
     SetWindowLong(hWnd, GWL_STYLE, windowStyle);
     RECT windowRect;
     SetRect(&windowRect, 0, 0, m_videoWidth, m_videoHeight);
@@ -265,7 +265,7 @@ retry:
     GetWindowRect(hWnd, &windowRect);
     m_windowX = windowRect.left;
     m_windowY = windowRect.top;
-    long windowStyle = GetWindowLong(hWnd, GWL_STYLE) & 0xFF31FFFF | WS_POPUP;
+    long windowStyle = (GetWindowLong(hWnd, GWL_STYLE) & 0xFF31FFFF) | WS_POPUP;
     SetWindowLong(hWnd, GWL_STYLE, windowStyle);
 
     if (g_useModeX != 0) {
@@ -330,7 +330,7 @@ retry:
       return 1;
     }
 
-    long windowStyle = GetWindowLong(hWnd, GWL_STYLE) & 0x7FFFFFFF | WS_MINIMIZEBOX | WS_THICKFRAME | WS_SYSMENU | WS_CAPTION;
+    long windowStyle = (GetWindowLong(hWnd, GWL_STYLE) & 0x7FFFFFFF) | WS_MINIMIZEBOX | WS_THICKFRAME | WS_SYSMENU | WS_CAPTION;
     SetWindowLong(hWnd, GWL_STYLE, windowStyle);
     RECT windowRect;
     SetRect(&windowRect, 0, 0, m_videoWidth, m_videoHeight);
@@ -699,7 +699,7 @@ int CGraphics::restoreBuffers() {
 
 // 00408849
 int CGraphics::updateDevicePalette(RGBQUAD* pQuads, UINT paletteStart, UINT quadCnt) {
-  for (int i = 0; i < quadCnt; ++i) {
+  for (unsigned int i = 0; i < quadCnt; ++i) {
     m_palette[paletteStart + i].peRed = pQuads[i].rgbRed;
     m_palette[paletteStart + i].peGreen = pQuads[i].rgbGreen;
     m_palette[paletteStart + i].peBlue = pQuads[i].rgbBlue;
@@ -797,7 +797,7 @@ int CGraphics::readMessage(char* pBuffer) {
   }
 
   char hResultString[128];
-  sprintf(hResultString, "\nHRESULT : = %08X\n", m_ddrawResult);
+  sprintf(hResultString, "\nHRESULT : = %08X\n", (UINT)m_ddrawResult);
   _mbscpy((UCHAR*)pBuffer, (const UCHAR*)m_message);
   strcat(pBuffer, hResultString);
   OutputDebugString(pBuffer);

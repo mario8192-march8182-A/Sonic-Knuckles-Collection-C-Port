@@ -36,7 +36,7 @@ BOOL CWinRegistry::queryKeyBool(const char* pKeyName) {
 // 0040614f
 void CWinRegistry::queryKeyBytes2(const char* pKeyName, BYTE* pBuffer, ULONG size) {
   --size;
-  if (size > -1) {
+  if (size > (DWORD)-1) {
     pBuffer[0] = 0;
     m_result = RegQueryValueEx(m_hSubKey, pKeyName, 0, 0, pBuffer, &size);
   }

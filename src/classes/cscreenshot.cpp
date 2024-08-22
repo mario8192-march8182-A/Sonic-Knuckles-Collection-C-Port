@@ -71,7 +71,7 @@ int CScreenshot::save(const char* pFileName) {
   else {
     height = -m_bitmapInfoHeader.biHeight;
   }
-  m_bitmapInfoHeader.biSizeImage = ((m_bitmapInfoHeader.biBitCount * m_bitmapInfoHeader.biWidth + 31 & 0xFFFFFFE0) >> 3) * height;
+  m_bitmapInfoHeader.biSizeImage = ((m_bitmapInfoHeader.biBitCount * (m_bitmapInfoHeader.biWidth + 31) & 0xFFFFFFE0) >> 3) * height;
   if (_lwrite(hFile, (const char*)m_bytes, m_bitmapInfoHeader.biSizeImage) != m_bitmapInfoHeader.biSizeImage) {
     goto close;
   }
@@ -179,7 +179,7 @@ int CScreenshot::initHeader(int width, int height, int bpp) {
   else {
     positiveHeight = -m_bitmapInfoHeader.biHeight;
   }
-  m_bitmapInfoHeader.biSizeImage = ((m_bitmapInfoHeader.biBitCount * m_bitmapInfoHeader.biWidth + 31 & 0xFFFFFFE0) >> 3) * positiveHeight;
+  m_bitmapInfoHeader.biSizeImage = ((m_bitmapInfoHeader.biBitCount * (m_bitmapInfoHeader.biWidth + 31) & 0xFFFFFFE0) >> 3) * positiveHeight;
   m_bitmapInfoHeader.biXPelsPerMeter = 0;
   m_bitmapInfoHeader.biYPelsPerMeter = 0;
   m_bitmapInfoHeader.biClrUsed = 0;

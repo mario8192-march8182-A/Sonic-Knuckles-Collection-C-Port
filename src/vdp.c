@@ -534,54 +534,54 @@ void FUN_0040f96a(unsigned long* p_surface, long pitch) {
     if (scanline < hint) {
       for (int i = 20; i != 0; --i) {
         unsigned long pixel = *p_pixelbuffer++ & 0x7F7F7F7F;
-        unsigned long pixel_mod = pixel       & 0x000000FF
-                                | pixel << 8  & 0x00FFFF00
-                                | pixel << 16 & 0xFF000000;
+        unsigned long pixel_mod = (pixel       & 0x000000FF)
+                                | (pixel << 8  & 0x00FFFF00)
+                                | (pixel << 16 & 0xFF000000);
         pixel >>= 16;
         p_surface[0] = pixel_mod;
         ((unsigned long*)&((unsigned char*)p_surface)[pitch])[0] = pixel_mod;
-        pixel_mod = pixel       & 0x000000FF
-                  | pixel << 8  & 0x00FFFF00
-                  | pixel << 16 & 0xFF000000;
+        pixel_mod = (pixel       & 0x000000FF)
+                  | (pixel << 8  & 0x00FFFF00)
+                  | (pixel << 16 & 0xFF000000);
         ((unsigned long*)&((unsigned char*)p_surface)[pitch])[1] = pixel_mod;
         p_surface[1] = pixel_mod;
         p_surface += 2;
         pixel = *p_pixelbuffer++ & 0x7F7F7F7F;
-        pixel_mod = pixel       & 0x000000FF
-                  | pixel << 8  & 0x00FFFF00
-                  | pixel << 16 & 0xFF000000;
+        pixel_mod = (pixel       & 0x000000FF)
+                  | (pixel << 8  & 0x00FFFF00)
+                  | (pixel << 16 & 0xFF000000);
         pixel >>= 16;
         p_surface[0] = pixel_mod;
         ((unsigned long*)&((unsigned char*)p_surface)[pitch])[0] = pixel_mod;
-        pixel_mod = pixel       & 0x000000FF
-                  | pixel << 8  & 0x00FFFF00
-                  | pixel << 16 & 0xFF000000;
+        pixel_mod = (pixel       & 0x000000FF)
+                  | (pixel << 8  & 0x00FFFF00)
+                  | (pixel << 16 & 0xFF000000);
         ((unsigned long*)&((unsigned char*)p_surface)[pitch])[1] = pixel_mod;
         p_surface[1] = pixel_mod;
         p_surface += 2;
         pixel = *p_pixelbuffer++ & 0x7F7F7F7F;
-        pixel_mod = pixel       & 0x000000FF
-                  | pixel << 8  & 0x00FFFF00
-                  | pixel << 16 & 0xFF000000;
+        pixel_mod = (pixel       & 0x000000FF)
+                  | (pixel << 8  & 0x00FFFF00)
+                  | (pixel << 16 & 0xFF000000);
         pixel >>= 16;
         p_surface[0] = pixel_mod;
         ((unsigned long*)&((unsigned char*)p_surface)[pitch])[0] = pixel_mod;
-        pixel_mod = pixel       & 0x000000FF
-                  | pixel << 8  & 0x00FFFF00
-                  | pixel << 16 & 0xFF000000;
+        pixel_mod = (pixel       & 0x000000FF)
+                  | (pixel << 8  & 0x00FFFF00)
+                  | (pixel << 16 & 0xFF000000);
         ((unsigned long*)&((unsigned char*)p_surface)[pitch])[1] = pixel_mod;
         p_surface[1] = pixel_mod;
         p_surface += 2;
         pixel = *p_pixelbuffer++ & 0x7F7F7F7F;
-        pixel_mod = pixel       & 0x000000FF
-                  | pixel << 8  & 0x00FFFF00
-                  | pixel << 16 & 0xFF000000;
+        pixel_mod = (pixel       & 0x000000FF)
+                  | (pixel << 8  & 0x00FFFF00)
+                  | (pixel << 16 & 0xFF000000);
         pixel >>= 16;
         p_surface[0] = pixel_mod;
         ((unsigned long*)&((unsigned char*)p_surface)[pitch])[0] = pixel_mod;
-        pixel_mod = pixel       & 0x000000FF
-                  | pixel << 8  & 0x00FFFF00
-                  | pixel << 16 & 0xFF000000;
+        pixel_mod = (pixel       & 0x000000FF)
+                  | (pixel << 8  & 0x00FFFF00)
+                  | (pixel << 16 & 0xFF000000);
         ((unsigned long*)&((unsigned char*)p_surface)[pitch])[1] = pixel_mod;
         p_surface[1] = pixel_mod;
         p_surface += 2;
@@ -590,54 +590,54 @@ void FUN_0040f96a(unsigned long* p_surface, long pitch) {
     else {
       for (int i = 20; i != 0; --i) {
         unsigned long pixel = *p_pixelbuffer++ & 0x80808080;
-        unsigned long pixel_mod = pixel       & 0x000000FF
-                                | pixel << 8  & 0x00FFFF00
-                                | pixel << 16 & 0xFF000000;
+        unsigned long pixel_mod = (pixel       & 0x000000FF)
+                                | (pixel << 8  & 0x00FFFF00)
+                                | (pixel << 16 & 0xFF000000);
         pixel >>= 16;
         p_surface[0] = pixel_mod;
         ((unsigned long*)&((unsigned char*)p_surface)[pitch])[0] = pixel_mod;
-        pixel_mod = pixel       & 0x000000FF
-                  | pixel << 8  & 0x00FFFF00
-                  | pixel << 16 & 0xFF000000;
+        pixel_mod = (pixel       & 0x000000FF)
+                  | (pixel << 8  & 0x00FFFF00)
+                  | (pixel << 16 & 0xFF000000);
         ((unsigned long*)&((unsigned char*)p_surface)[pitch])[1] = pixel_mod;
         p_surface[1] = pixel_mod;
         p_surface += 2;
         pixel = *p_pixelbuffer++ & 0x80808080;
-        pixel_mod = pixel       & 0x000000FF
-                  | pixel << 8  & 0x00FFFF00
-                  | pixel << 16 & 0xFF000000;
+        pixel_mod = (pixel       & 0x000000FF)
+                  | (pixel << 8  & 0x00FFFF00)
+                  | (pixel << 16 & 0xFF000000);
         pixel >>= 16;
         p_surface[0] = pixel_mod;
         ((unsigned long*)&((unsigned char*)p_surface)[pitch])[0] = pixel_mod;
-        pixel_mod = pixel       & 0x000000FF
-                  | pixel << 8  & 0x00FFFF00
-                  | pixel << 16 & 0xFF000000;
+        pixel_mod = (pixel       & 0x000000FF)
+                  | (pixel << 8  & 0x00FFFF00)
+                  | (pixel << 16 & 0xFF000000);
         ((unsigned long*)&((unsigned char*)p_surface)[pitch])[1] = pixel_mod;
         p_surface[1] = pixel_mod;
         p_surface += 2;
         pixel = *p_pixelbuffer++ & 0x80808080;
-        pixel_mod = pixel       & 0x000000FF
-                  | pixel << 8  & 0x00FFFF00
-                  | pixel << 16 & 0xFF000000;
+        pixel_mod = (pixel       & 0x000000FF)
+                  | (pixel << 8  & 0x00FFFF00)
+                  | (pixel << 16 & 0xFF000000);
         pixel >>= 16;
         p_surface[0] = pixel_mod;
         ((unsigned long*)&((unsigned char*)p_surface)[pitch])[0] = pixel_mod;
-        pixel_mod = pixel       & 0x000000FF
-                  | pixel << 8  & 0x00FFFF00
-                  | pixel << 16 & 0xFF000000;
+        pixel_mod = (pixel       & 0x000000FF)
+                  | (pixel << 8  & 0x00FFFF00)
+                  | (pixel << 16 & 0xFF000000);
         ((unsigned long*)&((unsigned char*)p_surface)[pitch])[1] = pixel_mod;
         p_surface[1] = pixel_mod;
         p_surface += 2;
         pixel = *p_pixelbuffer++ & 0x80808080;
-        pixel_mod = pixel       & 0x000000FF
-                  | pixel << 8  & 0x00FFFF00
-                  | pixel << 16 & 0xFF000000;
+        pixel_mod = (pixel       & 0x000000FF)
+                  | (pixel << 8  & 0x00FFFF00)
+                  | (pixel << 16 & 0xFF000000);
         pixel >>= 16;
         p_surface[0] = pixel_mod;
         ((unsigned long*)&((unsigned char*)p_surface)[pitch])[0] = pixel_mod;
-        pixel_mod = pixel       & 0x000000FF
-                  | pixel << 8  & 0x00FFFF00
-                  | pixel << 16 & 0xFF000000;
+        pixel_mod = (pixel       & 0x000000FF)
+                  | (pixel << 8  & 0x00FFFF00)
+                  | (pixel << 16 & 0xFF000000);
         ((unsigned long*)&((unsigned char*)p_surface)[pitch])[1] = pixel_mod;
         p_surface[1] = pixel_mod;
         p_surface += 2;
@@ -675,54 +675,54 @@ void FUN_0040fd4f(unsigned long* p_surface, long pitch) {
   for (int scanline = 0; scanline < 224; ++scanline) {
     for (int i = 20; i != 0; --i) {
       unsigned long pixel = *p_pixelbuffer++;
-      unsigned long pixel_mod = pixel       & 0x000000FF
-                              | pixel << 8  & 0x00FFFF00
-                              | pixel << 16 & 0xFF000000;
+      unsigned long pixel_mod = (pixel       & 0x000000FF)
+                              | (pixel << 8  & 0x00FFFF00)
+                              | (pixel << 16 & 0xFF000000);
       pixel >>= 16;
       p_surface[0] = pixel_mod;
       ((unsigned long*)&((unsigned char*)p_surface)[pitch])[0] = pixel_mod;
-      pixel_mod = pixel       & 0x000000FF
-                | pixel << 8  & 0x00FFFF00
-                | pixel << 16 & 0xFF000000;
+      pixel_mod = (pixel       & 0x000000FF)
+                | (pixel << 8  & 0x00FFFF00)
+                | (pixel << 16 & 0xFF000000);
       ((unsigned long*)&((unsigned char*)p_surface)[pitch])[1] = pixel_mod;
       p_surface[1] = pixel_mod;
       p_surface += 2;
       pixel = *p_pixelbuffer++;
-      pixel_mod = pixel       & 0x000000FF
-                | pixel << 8  & 0x00FFFF00
-                | pixel << 16 & 0xFF000000;
+      pixel_mod = (pixel       & 0x000000FF)
+                | (pixel << 8  & 0x00FFFF00)
+                | (pixel << 16 & 0xFF000000);
       pixel >>= 16;
       p_surface[0] = pixel_mod;
       ((unsigned long*)&((unsigned char*)p_surface)[pitch])[0] = pixel_mod;
-      pixel_mod = pixel       & 0x000000FF
-                | pixel << 8  & 0x00FFFF00
-                | pixel << 16 & 0xFF000000;
+      pixel_mod = (pixel       & 0x000000FF)
+                | (pixel << 8  & 0x00FFFF00)
+                | (pixel << 16 & 0xFF000000);
       ((unsigned long*)&((unsigned char*)p_surface)[pitch])[1] = pixel_mod;
       p_surface[1] = pixel_mod;
       p_surface += 2;
       pixel = *p_pixelbuffer++;
-      pixel_mod = pixel       & 0x000000FF
-                | pixel << 8  & 0x00FFFF00
-                | pixel << 16 & 0xFF000000;
+      pixel_mod = (pixel       & 0x000000FF)
+                | (pixel << 8  & 0x00FFFF00)
+                | (pixel << 16 & 0xFF000000);
       pixel >>= 16;
       p_surface[0] = pixel_mod;
       ((unsigned long*)&((unsigned char*)p_surface)[pitch])[0] = pixel_mod;
-      pixel_mod = pixel       & 0x000000FF
-                | pixel << 8  & 0x00FFFF00
-                | pixel << 16 & 0xFF000000;
+      pixel_mod = (pixel       & 0x000000FF)
+                | (pixel << 8  & 0x00FFFF00)
+                | (pixel << 16 & 0xFF000000);
       ((unsigned long*)&((unsigned char*)p_surface)[pitch])[1] = pixel_mod;
       p_surface[1] = pixel_mod;
       p_surface += 2;
       pixel = *p_pixelbuffer++;
-      pixel_mod = pixel       & 0x000000FF
-                | pixel << 8  & 0x00FFFF00
-                | pixel << 16 & 0xFF000000;
+      pixel_mod = (pixel       & 0x000000FF)
+                | (pixel << 8  & 0x00FFFF00)
+                | (pixel << 16 & 0xFF000000);
       pixel >>= 16;
       p_surface[0] = pixel_mod;
       ((unsigned long*)&((unsigned char*)p_surface)[pitch])[0] = pixel_mod;
-      pixel_mod = pixel       & 0x000000FF
-                | pixel << 8  & 0x00FFFF00
-                | pixel << 16 & 0xFF000000;
+      pixel_mod = (pixel       & 0x000000FF)
+                | (pixel << 8  & 0x00FFFF00)
+                | (pixel << 16 & 0xFF000000);
       ((unsigned long*)&((unsigned char*)p_surface)[pitch])[1] = pixel_mod;
       p_surface[1] = pixel_mod;
       p_surface += 2;
@@ -1457,7 +1457,7 @@ void blit_sprite_noprio(Sprite* p_sprite) {
         do {
           ROTATE_LEFT(pixels, 4);
           if ((pixels & 0xF) && (!(*p_pixelbuffer2 & 0x80) || (p_sprite->flags & 0x80))) {
-            *p_pixelbuffer2 = (pixels & 0xF) + p_sprite->flags & 0x7F;
+            *p_pixelbuffer2 = ((pixels & 0xF) + p_sprite->flags) & 0x7F;
           }
           ++p_pixelbuffer2;
         } while (--pixel_cnt != 0);
@@ -1517,7 +1517,7 @@ void blit_sprite_hflip_noprio(Sprite* p_sprite) {
 
         do {
           if ((pixels & 0xF) && (!(*p_pixelbuffer2 & 0x80) || (p_sprite->flags & 0x80))) {
-            *p_pixelbuffer2 = (pixels & 0xF) + p_sprite->flags & 0x7F;
+            *p_pixelbuffer2 = ((pixels & 0xF) + p_sprite->flags) & 0x7F;
           }
           ROTATE_RIGHT(pixels, 4);
           ++p_pixelbuffer2;
@@ -1578,7 +1578,7 @@ void blit_sprite_vflip_noprio(Sprite* p_sprite) {
         do {
           ROTATE_LEFT(pixels, 4);
           if ((pixels & 0xF) && (!(*p_pixelbuffer2 & 0x80) || (p_sprite->flags & 0x80))) {
-            *p_pixelbuffer2 = (pixels & 0xF) + p_sprite->flags & 0x7F;
+            *p_pixelbuffer2 = ((pixels & 0xF) + p_sprite->flags) & 0x7F;
           }
           ++p_pixelbuffer2;
         } while (--pixel_cnt != 0);
@@ -1638,7 +1638,7 @@ void blit_sprite_hvflip_noprio(Sprite* p_sprite) {
 
         do {
           if ((pixels & 0xF) && (!(*p_pixelbuffer2 & 0x80) || (p_sprite->flags & 0x80))) {
-            *p_pixelbuffer2 = (pixels & 0xF) + p_sprite->flags & 0x7F;
+            *p_pixelbuffer2 = ((pixels & 0xF) + p_sprite->flags) & 0x7F;
           }
           ROTATE_RIGHT(pixels, 4);
           ++p_pixelbuffer2;
@@ -1752,7 +1752,7 @@ void blit_sprite_masked(Sprite* p_sprite) {
           do {
             ROTATE_LEFT(pixels, 4);
             if ((pixels & 0xF) && (!(*p_pixelbuffer2 & 0x80) || (p_sprite->flags & 0x80))) {
-              *p_pixelbuffer2 = (pixels & 0xF) + p_sprite->flags & 0x7F;
+              *p_pixelbuffer2 = ((pixels & 0xF) + p_sprite->flags) & 0x7F;
             }
             ++p_pixelbuffer2;
           } while (--pixel_cnt != 0);
@@ -1817,7 +1817,7 @@ void blit_sprite_masked_hflip(Sprite* p_sprite) {
 
           do {
             if ((pixels & 0xF) && (!(*p_pixelbuffer2 & 0x80) || (p_sprite->flags & 0x80))) {
-              *p_pixelbuffer2 = (pixels & 0xF) + p_sprite->flags & 0x7F;
+              *p_pixelbuffer2 = ((pixels & 0xF) + p_sprite->flags) & 0x7F;
             }
             ROTATE_RIGHT(pixels, 4);
             ++p_pixelbuffer2;
@@ -1883,7 +1883,7 @@ void blit_sprite_masked_vflip(Sprite* p_sprite) {
           do {
             ROTATE_LEFT(pixels, 4);
             if ((pixels & 0xF) && (!(*p_pixelbuffer2 & 0x80) || (p_sprite->flags & 0x80))) {
-              *p_pixelbuffer2 = (pixels & 0xF) + p_sprite->flags & 0x7F;
+              *p_pixelbuffer2 = ((pixels & 0xF) + p_sprite->flags) & 0x7F;
             }
             ++p_pixelbuffer2;
           } while (--pixel_cnt != 0);
@@ -1948,7 +1948,7 @@ void blit_sprite_masked_hvflip(Sprite* p_sprite) {
 
           do {
             if ((pixels & 0xF) && (!(*p_pixelbuffer2 & 0x80) || (p_sprite->flags & 0x80))) {
-              *p_pixelbuffer2 = (pixels & 0xF) + p_sprite->flags & 0x7F;
+              *p_pixelbuffer2 = ((pixels & 0xF) + p_sprite->flags) & 0x7F;
             }
             ROTATE_RIGHT(pixels, 4);
             ++p_pixelbuffer2;
