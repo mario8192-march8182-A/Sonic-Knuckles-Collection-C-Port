@@ -129,7 +129,7 @@ static unsigned short mapdevr_getinline(mapdevrwk* p_wk, unsigned short offset, 
     shiftwk = -shiftwk;
     result <<= shiftwk;
     p_wk->data |= *p_wk->p_source++;
-    p_wk->data = p_wk->data & 0xFF00 | p_wk->data << shiftwk & 0x00FF | p_wk->data >> 8 - shiftwk & 0x00FF;
+    p_wk->data = p_wk->data & 0xFF00 | p_wk->data << shiftwk & 0x00FF | (p_wk->data & 0x00FF) >> 8 - shiftwk;
     p_wk->data &= mapdevr_masks[shiftwk - 1];
     result += p_wk->data;
 LAB_00410b55:
