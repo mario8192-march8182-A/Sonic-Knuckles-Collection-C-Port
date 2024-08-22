@@ -70,7 +70,7 @@ typedef struct sonic3_ram {
   /* 08fff7d4 */ unsigned short ringbonus;
   /* 08fff7da */ unsigned short scr_x_no;
   /* 08fff7e0 */ unsigned char level_triggers[LEVEL_TRIGGERS_SLOTS];
-  /* 08fff7f0 */ signed char actanimcounters[8][2];
+  /* 08fff7f0 */ unsigned char actanimcounters[8][2];
   /* 08fff800 */ unsigned short ramf8[320];
   /* 08fffa9a */ unsigned char emy_wrt_flg[EMY_WRT_FLG_SLOTS];
   /* 08fffaa2 */ unsigned char DAT_08fffaa2;

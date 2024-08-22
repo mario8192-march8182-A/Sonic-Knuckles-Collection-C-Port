@@ -470,16 +470,18 @@ void anim_tiles(short script_cnt, unsigned char* p_scriptlist) {
 
   for ( ; script_cnt != -1; --script_cnt) {
     animscript* p_script = (animscript*)p_scriptlist;
-    if (--p_animcounters[0] < 0) {
+    if (p_animcounters[0]-- == 0) {
       unsigned char frame = p_animcounters[1];
       if (frame >= p_script->cnt) {
         p_animcounters[1] = frame = 0;
       }
       ++p_animcounters[1];
-      p_animcounters[0] = p_script->tim;
-      if (p_animcounters[0] < 0) {
+      if (p_script->tim < 0) {
         frame *= 2;
         p_animcounters[0] = p_script->data[frame + 1];
+      }
+      else {
+        p_animcounters[0] = p_script->tim;
       }
       unsigned char* p_rom = p_script->p_rom + (p_script->data[frame] << 5);
       copy_data_vram(p_rom, p_script->vram_adr, p_script->size << 4);
