@@ -153,10 +153,10 @@ int CSound::resetSound() {
       m_buffers[i]->Release();
       m_buffers[i] = 0;
     }
-    if (m_pDsound != 0) {
-      m_pDsound->Release();
-      m_pDsound = 0;
-    }
+  }
+  if (m_pDsound != 0) {
+    m_pDsound->Release();
+    m_pDsound = 0;
   }
 
   return 0;
