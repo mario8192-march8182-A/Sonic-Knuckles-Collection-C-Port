@@ -188,7 +188,7 @@ retry:
 
     BITMAPINFO* pBitmapInfo = (BITMAPINFO*)new UCHAR[1064];
     RGBQUAD* pRgbQuad = pBitmapInfo->bmiColors;
-    memset(pBitmapInfo, 0, sizeof(*pBitmapInfo));
+    memset(pBitmapInfo, 0, 1064);
     memcpy(pBitmapInfo, &m_bitmapInfoHeader, sizeof(m_bitmapInfoHeader));
 
     for (int i = 0; i < 256; ++i) {
