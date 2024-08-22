@@ -32,11 +32,12 @@ void bitdevr(unsigned long* p_destination, unsigned char* p_source, unsigned cha
 
 // 00410eaa
 static void bitdevr_decompress(bitdevrwk* p_wk, unsigned char* p_bitdevwk, void(*p_write)(unsigned long, bitdevrwk*)) {
+  unsigned long pixels = 0;
   bool done = false;
 
   do {
     unsigned short code = p_wk->data >> p_wk->shift - 8;
-    if (code >= 252) {
+    if ((code & 0xFF) >= 252) {
       bitdevr_decompress_inline(p_wk);
     }
     else {
@@ -52,7 +53,6 @@ static void bitdevr_decompress(bitdevrwk* p_wk, unsigned char* p_bitdevwk, void(
       p_wk->index_repeatcnt = (p_bitdevwk[code] & 0xF0) >> 4;
     }
 
-    unsigned long pixels = 0;
     do {
       pixels <<= 4;
       pixels |= p_wk->palette_index;
@@ -100,8 +100,7 @@ static void bitdevr_write(unsigned long pixels, bitdevrwk* p_wk) {
 // 0041120a
 static void bitdevr_xorwrite(unsigned long pixels, bitdevrwk* p_wk) {
   p_wk->prev_pixels ^= pixels;
-  pixels = BYTESWAP(pixels);
-  *p_wk->p_destination++ = pixels;
+  *p_wk->p_destination++ = BYTESWAP(p_wk->prev_pixels);
   --p_wk->row_cnt;
 }
 
