@@ -368,7 +368,7 @@ static void set_selectioncolor(unsigned short coloroffset) {
   if (pos.y2 != 0) {
     index = pos.y2 * 80 + pos.x2;
     p_chunkmappings = (unsigned short*)&g_mdRam.chunkmappings128[index];
-    index = pos.y2 << 7 + pos.x2 + 0xC000;
+    index = (pos.y2 << 7) + pos.x2 + 0xC000;
     g_pLevelSelectVram = (unsigned short*)&g_mdVram[index];
     *g_pLevelSelectVram++ = *p_chunkmappings++ + coloroffset;
   }
