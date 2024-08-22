@@ -331,6 +331,7 @@ retry:
     }
 
     long windowStyle = GetWindowLong(hWnd, GWL_STYLE) & 0x7FFFFFFF | WS_MINIMIZEBOX | WS_THICKFRAME | WS_SYSMENU | WS_CAPTION;
+    SetWindowLong(hWnd, GWL_STYLE, windowStyle);
     RECT windowRect;
     SetRect(&windowRect, 0, 0, m_videoWidth, m_videoHeight);
     AdjustWindowRectEx(&windowRect, GetWindowLong(hWnd, GWL_STYLE), GetMenu(hWnd) != 0, GetWindowLong(hWnd, GWL_EXSTYLE));
