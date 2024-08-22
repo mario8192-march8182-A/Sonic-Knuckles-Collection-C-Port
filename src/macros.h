@@ -46,7 +46,7 @@
 #define ROTATE_LEFT(value, bits) ((value = value << bits | value >> 32 - bits) & 0xFFFFFFFF)
 #define ROTATE_RIGHT(value, bits) ((value = value >> bits | value << 32 - bits) & 0xFFFFFFFF)
 
-#define BYTESWAP(value) (value = (value & 0xFF000000) >> 24 | (value & 0x00FF0000) >> 8 | (value & 0x0000FF00) << 8 | (value & 0x000000FF) << 24)
+#define BYTESWAP(value) ((value & 0xFF000000) >> 24 | (value & 0x00FF0000) >> 8 | (value & 0x0000FF00) << 8 | (value & 0x000000FF) << 24)
 
 
 // actflg bits

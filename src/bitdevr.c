@@ -91,7 +91,7 @@ static void bitdevr_decompress_inline(bitdevrwk* p_wk) {
 
 // 004111cf
 static void bitdevr_write(unsigned long pixels, bitdevrwk* p_wk) {
-  BYTESWAP(pixels);
+  pixels = BYTESWAP(pixels);
   *p_wk->p_destination++ = pixels;
   --p_wk->row_cnt;
 }
@@ -100,7 +100,7 @@ static void bitdevr_write(unsigned long pixels, bitdevrwk* p_wk) {
 // 0041120a
 static void bitdevr_xorwrite(unsigned long pixels, bitdevrwk* p_wk) {
   p_wk->prev_pixels ^= pixels;
-  BYTESWAP(pixels);
+  pixels = BYTESWAP(pixels);
   *p_wk->p_destination++ = pixels;
   --p_wk->row_cnt;
 }

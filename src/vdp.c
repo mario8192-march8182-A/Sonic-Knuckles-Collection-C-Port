@@ -147,7 +147,7 @@ static unsigned char* blit_8pixels_ver1(unsigned char* p_pixelbuffer, unsigned s
     pixels = p_vram[vscroll_low];
   }
   if (pixels != 0) {
-    BYTESWAP(pixels);
+    pixels = BYTESWAP(pixels);
     if (IS_TILE_HFLIP(tile)) {
       signed char offset = pixeloffsets[tile >> 13];
       if (offset < 0) {
@@ -209,7 +209,7 @@ static unsigned char* blit_remainingpixels_ver1(unsigned char* p_pixelbuffer, un
   else {
     pixels = p_vram[vscroll_low];
   }
-  BYTESWAP(pixels);
+  pixels = BYTESWAP(pixels);
   unsigned rotatebit_cnt = hscroll_low << 2;
   if (IS_TILE_HFLIP(tile)) {
     ROTATE_RIGHT(pixels, rotatebit_cnt);
@@ -272,7 +272,7 @@ static unsigned char* blit_remainingpixels_ver2(unsigned char* p_pixelbuffer, un
   else {
     pixels = p_vram[vscroll_low];
   }
-  BYTESWAP(pixels);
+  pixels = BYTESWAP(pixels);
   if (IS_TILE_HFLIP(tile)) {
     signed char offset = pixeloffsets[tile >> 13];
     if (offset < 0) {
@@ -431,7 +431,7 @@ static unsigned char* blit_remainingpixels_ver3(unsigned char* p_pixelbuffer, un
   else {
     pixels = p_vram[vscroll_low];
   }
-  BYTESWAP(pixels);
+  pixels = BYTESWAP(pixels);
   unsigned rotatebit_cnt = hscroll_low << 2;
   if (IS_TILE_HFLIP(tile)) {
     ROTATE_RIGHT(pixels, rotatebit_cnt);
@@ -468,7 +468,7 @@ static unsigned char* blit_remainingpixels_ver4(unsigned char* p_pixelbuffer, un
   else {
     pixels = p_vram[vscroll_low];
   }
-  BYTESWAP(pixels);
+  pixels = BYTESWAP(pixels);
   if (IS_TILE_HFLIP(tile)) {
     unsigned char* p_pixelconversions = &pixelconversions[tile >> 9 & 0x70];
 
@@ -1134,7 +1134,7 @@ static unsigned char* blit_8pixels_ver3(unsigned char* p_pixelbuffer, unsigned s
   else {
     pixels = p_vram[vscroll_low];
   }
-  BYTESWAP(pixels);
+  pixels = BYTESWAP(pixels);
   if (IS_TILE_HFLIP(tile)) {
     signed char offset = pixeloffsets2[tile >> 13];
     if (offset < 0) {
@@ -1198,7 +1198,7 @@ static unsigned char* blit_remainingpixels_ver5(unsigned char* p_pixelbuffer, un
   else {
     pixels = p_vram[vscroll_low];
   }
-  BYTESWAP(pixels);
+  pixels = BYTESWAP(pixels);
   unsigned rotatebit_cnt = hscroll_low << 2;
   if (IS_TILE_HFLIP(tile)) {
     ROTATE_RIGHT(pixels, rotatebit_cnt);
@@ -1268,7 +1268,7 @@ static unsigned char* blit_remainingpixels_ver6(unsigned char* p_pixelbuffer, un
   else {
     pixels = p_vram[vscroll_low];
   }
-  BYTESWAP(pixels);
+  pixels = BYTESWAP(pixels);
   if (IS_TILE_HFLIP(tile)) {
     signed char offset = pixeloffsets2[tile >> 13];
     if (offset < 0) {
@@ -1435,7 +1435,7 @@ void blit_sprite_noprio(Sprite* p_sprite) {
       if (x >= 320) break;
       unsigned long pixels = *p_vram;
       if (x > -8) {
-        BYTESWAP(pixels);
+        pixels = BYTESWAP(pixels);
         unsigned char* p_pixelbuffer2 = p_pixelbuffer;
         unsigned char pixel_cnt;
         if (x < 0) {
@@ -1496,7 +1496,7 @@ void blit_sprite_hflip_noprio(Sprite* p_sprite) {
       if (x >= 320) break;
       unsigned long pixels = *p_vram;
       if (x > -8) {
-        BYTESWAP(pixels);
+        pixels = BYTESWAP(pixels);
         unsigned char* p_pixelbuffer2 = p_pixelbuffer;
         unsigned char pixel_cnt;
         if (x < 0) {
@@ -1556,7 +1556,7 @@ void blit_sprite_vflip_noprio(Sprite* p_sprite) {
       if (x >= 320) break;
       unsigned long pixels = *p_vram;
       if (x > -8) {
-        BYTESWAP(pixels);
+        pixels = BYTESWAP(pixels);
         unsigned char* p_pixelbuffer2 = p_pixelbuffer;
         unsigned char pixel_cnt;
         if (x < 0) {
@@ -1617,7 +1617,7 @@ void blit_sprite_hvflip_noprio(Sprite* p_sprite) {
       if (x >= 320) break;
       unsigned long pixels = *p_vram;
       if (x > -8) {
-        BYTESWAP(pixels);
+        pixels = BYTESWAP(pixels);
         unsigned char* p_pixelbuffer2 = p_pixelbuffer;
         unsigned char pixel_cnt;
         if (x < 0) {
@@ -1730,7 +1730,7 @@ void blit_sprite_masked(Sprite* p_sprite) {
         if (x >= 320) break;
         unsigned long pixels = *p_vram;
         if (x > -8) {
-          BYTESWAP(pixels);
+          pixels = BYTESWAP(pixels);
           unsigned char* p_pixelbuffer2 = p_pixelbuffer;
           unsigned char pixel_cnt;
           if (x < 0) {
@@ -1796,7 +1796,7 @@ void blit_sprite_masked_hflip(Sprite* p_sprite) {
         if (x >= 320) break;
         unsigned long pixels = *p_vram;
         if (x > -8) {
-          BYTESWAP(pixels);
+          pixels = BYTESWAP(pixels);
           unsigned char* p_pixelbuffer2 = p_pixelbuffer;
           unsigned char pixel_cnt;
           if (x < 0) {
@@ -1861,7 +1861,7 @@ void blit_sprite_masked_vflip(Sprite* p_sprite) {
         if (x >= 320) break;
         unsigned long pixels = *p_vram;
         if (x > -8) {
-          BYTESWAP(pixels);
+          pixels = BYTESWAP(pixels);
           unsigned char* p_pixelbuffer2 = p_pixelbuffer;
           unsigned char pixel_cnt;
           if (x < 0) {
@@ -1927,7 +1927,7 @@ void blit_sprite_masked_hvflip(Sprite* p_sprite) {
         if (x >= 320) break;
         unsigned long pixels = *p_vram;
         if (x > -8) {
-          BYTESWAP(pixels);
+          pixels = BYTESWAP(pixels);
           unsigned char* p_pixelbuffer2 = p_pixelbuffer;
           unsigned char pixel_cnt;
           if (x < 0) {
@@ -1987,7 +1987,7 @@ void blit_sprite(Sprite* p_sprite) {
       if (x >= 320) break;
       unsigned long pixels = *p_vram;
       if (x > -8) {
-        BYTESWAP(pixels);
+        pixels = BYTESWAP(pixels);
         unsigned char* p_pixelbuffer2 = p_pixelbuffer;
         unsigned char pixel_cnt;
         if (x < 0) {
@@ -2048,7 +2048,7 @@ void blit_sprite_hflip(Sprite* p_sprite) {
       if (x >= 320) break;
       unsigned long pixels = *p_vram;
       if (x > -8) {
-        BYTESWAP(pixels);
+        pixels = BYTESWAP(pixels);
         unsigned char* p_pixelbuffer2 = p_pixelbuffer;
         unsigned char pixel_cnt;
         if (x < 0) {
@@ -2108,7 +2108,7 @@ void blit_sprite_vflip(Sprite* p_sprite) {
       if (x >= 320) break;
       unsigned long pixels = *p_vram;
       if (x > -8) {
-        BYTESWAP(pixels);
+        pixels = BYTESWAP(pixels);
         unsigned char* p_pixelbuffer2 = p_pixelbuffer;
         unsigned char pixel_cnt;
         if (x < 0) {
@@ -2169,7 +2169,7 @@ void blit_sprite_hvflip(Sprite* p_sprite) {
       if (x >= 320) break;
       unsigned long pixels = *p_vram;
       if (x > -8) {
-        BYTESWAP(pixels);
+        pixels = BYTESWAP(pixels);
         unsigned char* p_pixelbuffer2 = p_pixelbuffer;
         unsigned char pixel_cnt;
         if (x < 0) {
