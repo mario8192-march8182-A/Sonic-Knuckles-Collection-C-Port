@@ -161,5 +161,5 @@ static void fadein0_alt() {
 // 00426c05
 void colorset(unsigned short colorno) {
   colortbl_entry* p_entry = &colortbl[colorno];
-  memcpy(&g_systemPalette[p_entry->offset / 2], p_entry->p_palette, p_entry->cnt * 4);
+  memcpy(&g_mdRam.colorwk2[p_entry->offset / 2], p_entry->p_palette, (p_entry->cnt + 1) * 4);
 }
