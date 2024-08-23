@@ -1027,12 +1027,10 @@ LRESULT CALLBACK soundTestDlgProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lPa
 int openSoundTestDialog(HWND hWnd) {
   BOOL_00856e10 = FALSE;
   stopBgm();
-  ULONG mdRegisterD0Backup = g_mdRegisterD0;
   int ret = DialogBoxParam(g_hInstance, MAKEINTRESOURCE(IDD_SOUNDTEST_BASE + g_langMode), hWnd, (DLGPROC)soundTestDlgProc, 0);
   BOOL_00856e10 = TRUE;
   restartBgm();
   pauseBgm();
-  g_mdRegisterD0 = mdRegisterD0Backup;
 
   return ret;
 }
