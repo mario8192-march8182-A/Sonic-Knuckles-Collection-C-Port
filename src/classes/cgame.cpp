@@ -947,7 +947,7 @@ void CGame::updateScreen() {
         sprintf(frameCount, "%5.1f/%5.1f [F/s] %5.1f [%%]", m_unknown160, m_unknown168, m_unknown160 * 100.0 / m_unknown168);
       }
       else {
-        long unknown = g_lastDAT_0082b07c / (g_lastDAT_0082b074 * 1000.0);
+        long unknown = (g_lastDAT_0082b074 * 1000.0) / g_lastDAT_0082b07c;
         wsprintf(frameCount, "%03ld/%03ld [F/s] %03d.%01d [%%]", g_lastDAT_0082b074, g_lastDAT_0082b07c, unknown / 10, unknown % 10);
       }
     }
