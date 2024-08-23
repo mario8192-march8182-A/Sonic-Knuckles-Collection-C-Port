@@ -231,7 +231,7 @@ LRESULT CGame::realWndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) {
       return 0;
     case WM_MENUSELECT: {
       UINT flags;
-      if (HIWORD(wParam) == -1) {
+      if ((short)HIWORD(wParam) == -1) {
         flags = -1;
       }
       else {
