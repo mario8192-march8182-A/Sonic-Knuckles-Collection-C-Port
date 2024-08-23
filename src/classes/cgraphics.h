@@ -62,6 +62,7 @@ class CGraphics {
   char m_message[256];
   int m_videoWidth;
   int m_videoHeight;
+  int m_frameCntUntilPaletteUpdate;
 };
 
 #endif

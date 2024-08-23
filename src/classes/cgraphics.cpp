@@ -75,6 +75,8 @@ CGraphics::CGraphics() {
   if (m_hDdraw != 0) {
     g_pDdrawCreate = (HRESULT(*)(GUID*, LPDIRECTDRAW*, IUnknown*))GetProcAddress(m_hDdraw, "DirectDrawCreate");
   }
+
+  m_frameCntUntilPaletteUpdate = 0;
 }
 
 
@@ -117,6 +119,13 @@ void CGraphics::updatePalette() {
     memcpy(m_colorwk2, m_colorwk4, 256);
     if (updateDevicePalette(m_colorwk2, 144, 64) != 0) {
       showMessage();
+    }
+  }
+
+  if (m_frameCntUntilPaletteUpdate > 0) {
+    --m_frameCntUntilPaletteUpdate;
+    if (m_frameCntUntilPaletteUpdate == 0) {
+      m_ddrawResult = m_pDdrawPalette->SetEntries(0, 0, 256, m_palette);
     }
   }
 }
@@ -317,6 +326,8 @@ retry:
       _mbscpy((UCHAR*)m_message, (const UCHAR*)"GetAttachedSurface");
       return 1;
     }
+
+    m_frameCntUntilPaletteUpdate = 60;
   }
   else {
     m_ddrawResult = m_pDdraw->SetCooperativeLevel(hWnd, DDSCL_EXCLUSIVE | DDSCL_FULLSCREEN | DDSCL_NOWINDOWCHANGES);
