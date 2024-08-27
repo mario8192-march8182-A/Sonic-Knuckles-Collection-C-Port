@@ -39,7 +39,7 @@ static void FUN_006a5d0f(sprite_status* p_actwk, void(*r_ptr)(sprite_status*));
 static void FUN_006a5e09(sprite_status* p_actwk);
 static void codeinput(sprite_status* p_actwk);
 static void chk_code(sprite_status* p_actwk);
-static unsigned short FUN_006a668e(unsigned char* a2, unsigned short cnt);
+static unsigned short FUN_006a668e(unsigned char* a2, int cnt);
 static void FUN_006a6721(sprite_status* p_actwk);
 static void FUN_006a6738(sprite_status* p_actwk);
 static void FUN_006a6779(sprite_status* p_actwk);
@@ -204,12 +204,11 @@ static void set_palette(unsigned short* p_destination) {
 // 006a47e8
 static void update_hscrollbuff() {
   unsigned short* p_hscrollbuff = g_mdRam.hscrollbuff;
-  unsigned short cnt = 63;
 
-  do {
+  for (int i = 0; i < 64; ++i) {
     *p_hscrollbuff -= 2;
     p_hscrollbuff += 2;
-  } while (cnt-- != 0);
+  }
 }
 
 
@@ -284,12 +283,11 @@ static void FUN_006a5126(sprite_status* p_actwk) {
         g_mdRam.vscroll += SHORT_TO_LONG_HIGH(1);
       }
       sprite_status* a1 = &g_mdRam.actwk[2];
-      unsigned short d1 = 3;
 
-      do {
+      for (int i = 0; i < 4; ++i) {
         a1->yposi -= SHORT_TO_LONG_HIGH(1);
         ++a1;
-      } while (d1-- != 0);
+      }
     }
     if (!(g_mdRam.specmodemenu & 0x80)) {
       if (IS_UP_PRESSED(g_mdRam.swdata1) && g_mdRam.DAT_08ffffaa != 0) {
@@ -318,13 +316,12 @@ static void FUN_006a5126(sprite_status* p_actwk) {
     if (IS_A_DOWN(g_mdRam.swdata1)) {
       unsigned long level = g_mdRam.specmodelevel;
       unsigned char* p_code = (unsigned char*)&g_mdRam.specmodecode;
-      unsigned short cnt = 3;
 
-      do {
+      for (int i = 0; i < 4; ++i) {
         level &= 0x7F;
         *p_code++ = level;
         ++level;
-      } while (cnt-- != 0);
+      }
     }
   }
 }
@@ -342,15 +339,14 @@ static void FUN_006a5332(sprite_status* p_actwk) {
   sprite_status* p_next_actwk = p_actwk;
   (p_actwk + 1)->patno = 10;
   short xposi = 247;
-  unsigned short cnt = 10;
 
-  do {
+  for (int i = 0; i < 11; ++i) {
     ++p_next_actwk;
     p_next_actwk->r_ptr = &FUN_006a6721;
     util__assign_high(&p_next_actwk->xposi, xposi);
     util__assign_high(&p_next_actwk->yposi, yposi);
     xposi += 8;
-  } while (cnt-- != 0);
+  }
 
   p_next_actwk->patno = 11;
   p_actwk->r_ptr = &FUN_006a5444;
@@ -388,25 +384,23 @@ static void set_codedigits(sprite_status* p_actwk, unsigned long code) {
   code &= 0xFFFFFFF;
   sprite_status* p_next_actwk = p_actwk + 1;
   unsigned long* p_sequence = divideby10sequence;
-  unsigned short cnt = 8;
 
-  do {
+  for (int i = 0; i < 9; ++i) {
     ++p_next_actwk;
     unsigned long d3 = *p_sequence++;
     unsigned short patno = code / d3;
     code -= patno * d3;
     p_next_actwk->patno = patno;
-  } while (cnt-- != 0);
+  }
 
   short xposi = 247;
-  cnt = 10;
   p_next_actwk = p_actwk;
 
-  do {
+  for (int i = 0; i < 11; ++i) {
     ++p_next_actwk;
     util__assign_high(&p_next_actwk->xposi, xposi);
     xposi += 8;
-  } while (cnt-- != 0);
+  }
 }
 
 
@@ -570,15 +564,14 @@ static void FUN_006a5d0f(sprite_status* p_actwk, void(*r_ptr)(sprite_status*)) {
   p_actwk->patno = 2;
   short* p_xposi = letterxposi;
   sprite_status* p_next_actwk = p_actwk;
-  unsigned short cnt = 11;
 
-  do {
+  for (int i = 0; i < 12; ++i) {
     ++p_next_actwk;
     p_next_actwk->r_ptr = r_ptr;
     util__assign_high(&p_next_actwk->xposi, *p_xposi++);
     p_next_actwk->xposi -= SHORT_TO_LONG_HIGH(12);
     util__copy_high(&p_next_actwk->yposi, &p_actwk->yposi);
-  } while (cnt-- != 0);
+  }
 }
 
 
@@ -598,7 +591,7 @@ static void FUN_006a5e09(sprite_status* p_actwk) {
     *a2_long = BYTESWAP(*a2_long);
   }
   *a2_long &= 0xFFFFFF07;
-  unsigned short d4 = FUN_006a668e(a2, 1);
+  unsigned short d4 = FUN_006a668e(a2, 2);
   unsigned short d0 = d4 & 0x3F;
   if (g_mdRam.DAT_08ffffab != 0) {
     d0 |= 0x40;
@@ -690,7 +683,7 @@ static void chk_code(sprite_status* p_actwk) {
   d1l &= 0x7FFFFFF;
   d1l = BYTESWAP(d1l);
   *((unsigned long*)&g_mdRam.direc_x) = d1l;
-  unsigned short d4 = FUN_006a668e(g_mdRam.direc_x, 1);
+  unsigned short d4 = FUN_006a668e(g_mdRam.direc_x, 2);
   d4 &= 0x7FF;
   if (d3 == d4) {
     g_mdRam.DAT_08ffffab = 0;
@@ -744,10 +737,10 @@ static void chk_code(sprite_status* p_actwk) {
 
 
 // 006a668e
-static unsigned short FUN_006a668e(unsigned char* a2, unsigned short cnt) {
+static unsigned short FUN_006a668e(unsigned char* a2, int cnt) {
   unsigned short d4 = 0;
 
-  do {
+  for (int i = 0; i < cnt; ++i) {
     unsigned short d5 = *a2++;
     d5 <<= 8;
     d5 |= *a2++;
@@ -757,7 +750,7 @@ static unsigned short FUN_006a668e(unsigned char* a2, unsigned short cnt) {
     if (carry == 1) {
       d4 ^= 0x8810;
     }
-  } while (cnt-- != 0);
+  }
 
   return d4;
 }
@@ -1091,13 +1084,11 @@ static signed char starspheresp07[8] = {
 
 // 006a6f2d
 static void FUN_006a6f2d(sprite_status* p_actwk) {
-  unsigned short cnt = 3;
-
-  do {
+  for (int i = 0; i < 4; ++i) {
     p_actwk->patbase = specialstagemode_characterspat;
     p_actwk->sproffset = 0x20FE;
-    util__assign_high(&p_actwk->xposi, spriteposi[3 - cnt][0]);
-    util__assign_high(&p_actwk->yposi, spriteposi[3 - cnt][1]);
+    util__assign_high(&p_actwk->xposi, spriteposi[i][0]);
+    util__assign_high(&p_actwk->yposi, spriteposi[i][1]);
     if (g_mdRam.specmodemenu != 0 && g_mdRam.specmodefull != 0) {
       p_actwk->yposi -= SHORT_TO_LONG_HIGH(16);
     }
@@ -1105,10 +1096,10 @@ static void FUN_006a6f2d(sprite_status* p_actwk) {
     p_actwk->sprhs = 16;
     p_actwk->sprvs = 16;
     p_actwk->r_ptr = &FUN_006a708e;
-    p_actwk->mstno = cnt;
-    p_actwk->patno = characterspriteschg[cnt][0];
+    p_actwk->mstno = 3 - i;
+    p_actwk->patno = characterspriteschg[3 - i][0];
     ++p_actwk;
-  } while (cnt-- != 0);
+  }
 
   FUN_006a6f2d(p_actwk);
 }

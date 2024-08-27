@@ -57,28 +57,26 @@ void levelselect() {
 
   unsigned short* p_mapoffsets = levelselect_mapoffsets;
   unsigned char* p_text = entriestext;
-  unsigned char entry_cnt = 16;
   unsigned short* p_chunkmappings;
 
-  do {
+  for (int i = 0; i < 17; ++i) {
     p_chunkmappings = (unsigned short*)&g_mdRam.chunkmappings128[*p_mapoffsets++];
     unsigned char char_cnt = *p_text++;
-    unsigned char chars_left = char_cnt;
 
-    do {
+    for (int i = 0; i < char_cnt + 1; ++i) {
       *p_chunkmappings++ = *p_text++;
-    } while (chars_left-- != 0);
+    }
 
-    signed char blanks = 13 - char_cnt;
-    if (blanks >= 0) {
-      do {
+    signed char blanks = 14 - char_cnt;
+    if (blanks > 0) {
+      for (int i = 0; i < blanks; ++i) {
         *p_chunkmappings++ = 0;
-      } while (blanks-- != 0);
+      }
     }
     *p_chunkmappings = 17; // act 1
     p_chunkmappings += 40;
     *p_chunkmappings = 18; // act 2
-  } while (entry_cnt-- != 0);
+  }
 
   *p_chunkmappings = 0;
   p_chunkmappings -= 40;
@@ -359,11 +357,10 @@ static void set_selectioncolor(unsigned short coloroffset) {
   unsigned short* p_chunkmappings = (unsigned short*)&g_mdRam.chunkmappings128[index];
   index = (pos.y1 << 7) + pos.x1 + 0xC000;
   g_pLevelSelectVram = (unsigned short*)&g_mdVram[index];
-  unsigned char cnt = 14;
 
-  do {
+  for (int i = 0; i < 15; ++i) {
     *g_pLevelSelectVram++ = *p_chunkmappings++ + coloroffset;
-  } while (cnt-- != 0);
+  }
 
   if (pos.y2 != 0) {
     index = pos.y2 * 80 + pos.x2;
