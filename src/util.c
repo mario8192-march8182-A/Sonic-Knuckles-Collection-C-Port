@@ -19,6 +19,12 @@ bool util__get_add_carry(unsigned short a, unsigned short b) {
 }
 
 
+bool util__get_add_long_carry(unsigned long a, unsigned long b) {
+  bool result = a > ULONG_MAX - b;
+  return result;
+}
+
+
 unsigned long util__rotate(unsigned long value) {
   unsigned long result = value << 16 & 0xFFFF0000 | value >> 16 & 0x0000FFFF;
   return result;

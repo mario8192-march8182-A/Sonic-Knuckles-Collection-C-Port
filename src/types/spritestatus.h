@@ -316,6 +316,10 @@ typedef struct sprite_status {
       unsigned char reserved3[10];
     } springsw;
     struct {
+      unsigned char reserved1[2];
+      short* p_posi;
+    } ssm_starsphere;
+    struct {
       short delay_timer;
       unsigned short part_cnt;
       unsigned short current_exit_no;

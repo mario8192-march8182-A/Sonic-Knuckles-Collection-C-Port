@@ -543,8 +543,8 @@ extern "C" void vInt() {
 
 // 00405201
 void vInt18() {
-  g_pHscrollbuff = (USHORT*)&g_mdRam.hscrollbuff[0];
-  g_pHscrollbuff2 = (USHORT*)&g_mdRam.hscrollbuff[2];
+  g_pHscrollbuff = &g_mdRam.hscrollbuff[0];
+  g_pHscrollbuff2 = &g_mdRam.hscrollbuff[1];
   uploadPalette();
   uploadSprites(g_mdRam.ramf8, g_sprites);
   pollMdControllers();

@@ -147,7 +147,7 @@ void levelselect() {
           }
         }
         else {
-          g_mdRam.DAT_08ffffa1 = 0;
+          g_mdRam.specmodemenu = 0;
           g_mdRam.gamemode = 44;
           nextmode = true;
         }

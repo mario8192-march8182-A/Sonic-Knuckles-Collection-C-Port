@@ -1,0 +1,1175 @@
+#include "globals.h"
+#include "macros.h"
+#include "util.h"
+#include "types/spritestatus.h"
+#include "bitdevr.h"
+#include "color.h"
+#include "data.h"
+#include "mapdevr.h"
+#include "unlze.h"
+#include "vdp.h"
+typedef struct codepair {
+  unsigned short cnt;
+  unsigned long codedigit;
+}
+codepair;
+static void init_graphics();
+static void set_palette(unsigned short* p_destination);
+static unsigned short title1_color[64];
+static unsigned short title2_color[64];
+static unsigned char noway[44];
+static unsigned char getbluespheres[51];
+static void update_hscrollbuff();
+static void init_specmodevars();
+static void FUN_006a4fba(sprite_status* p_actwk);
+static void FUN_006a4fe2(sprite_status* p_actwk);
+static void FUN_006a5058(sprite_status* p_actwk);
+static void FUN_006a5126(sprite_status* p_actwk);
+static void FUN_006a5332(sprite_status* p_actwk);
+static void FUN_006a5444(sprite_status* p_actwk);
+static void set_codedigits(sprite_status* p_actwk, unsigned long code);
+static void set_leveldigits(sprite_status* p_actwk, unsigned long level);
+static unsigned long divideby10sequence[9];
+static void FUN_006a5aac(sprite_status* p_actwk, unsigned short d0, unsigned long d1);
+static codepair codepairs[12];
+static short letterxposi[12];
+static void FUN_006a5cdf(sprite_status* p_actwk);
+static void FUN_006a5cf8(sprite_status* p_actwk);
+static void FUN_006a5d0f(sprite_status* p_actwk, void(*r_ptr)(sprite_status*));
+static void FUN_006a5e09(sprite_status* p_actwk);
+static void codeinput(sprite_status* p_actwk);
+static void chk_code(sprite_status* p_actwk);
+static unsigned short FUN_006a668e(unsigned char* a2, unsigned short cnt);
+static void FUN_006a6721(sprite_status* p_actwk);
+static void FUN_006a6738(sprite_status* p_actwk);
+static void FUN_006a6779(sprite_status* p_actwk);
+static void FUN_006a678b(sprite_status* p_actwk);
+static void FUN_006a679a(sprite_status* p_actwk);
+static void FUN_006a67ac(sprite_status* p_actwk);
+static void FUN_006a67bb(sprite_status* p_actwk);
+static void starsphere_init(sprite_status* p_actwk);
+static void starsphere_move(sprite_status* p_actwk);
+static short leftstarsphereposi[3][2];
+static short rightstarsphereposi[3][2];
+static signed char* textpat[6];
+static signed char textsp00[26];
+static signed char textsp01[32];
+static signed char textsp02[20];
+static signed char textsp03[32];
+static signed char textsp04[50];
+static signed char textsp05[68];
+static signed char* numberspat[12];
+static signed char numberssp00[8];
+static signed char numberssp01[8];
+static signed char numberssp02[8];
+static signed char numberssp03[8];
+static signed char numberssp04[8];
+static signed char numberssp05[8];
+static signed char numberssp06[8];
+static signed char numberssp07[8];
+static signed char numberssp08[8];
+static signed char numberssp09[8];
+static signed char numberssp10[8];
+static signed char numberssp11[8];
+static signed char* starspherepat[8];
+static signed char starspheresp00[8];
+static signed char starspheresp01[8];
+static signed char starspheresp02[8];
+static signed char starspheresp03[8];
+static signed char starspheresp04[8];
+static signed char starspheresp05[8];
+static signed char starspheresp06[8];
+static signed char starspheresp07[8];
+static short spriteposi[4][2];
+static void FUN_006a6f2d(sprite_status* p_actwk);
+static void FUN_006a708e(sprite_status* p_actwk);
+static signed char* characterspriteschg[4];
+static signed char characterspriteschg0[9];
+static signed char characterspriteschg1[5];
+static signed char characterspriteschg2[5];
+static signed char characterspriteschg3[17];
+static void FUN_006a70d8(sprite_status* p_actwk);
+static signed char* copyrightpat[1];
+static signed char copyrightsp00[38];
+static unsigned char copyright_tiles[123];
+
+extern void vInt();
+extern void clear_displaydata();
+extern void bgmset(signed char command);
+extern void soundset(signed char command);
+extern void init_sprlist();
+extern void action();
+extern void actionsub(sprite_status* p_actwk);
+extern void patchg2(sprite_status* p_actwk, signed char** p_chg_data);
+extern void patset();
+extern void FUN_00824a1c(unsigned char* p_text, unsigned long vramoffset, unsigned short coloroffset);
+
+
+// 006a42d4
+static void init_graphics() {
+  g_mdRam.unlzequeuecnt = 0;
+  memset(g_mdRam.unlzequeue, 0, 108);
+  g_vdpScrollPlaneAOffset = 0xC000;
+  g_vdpScrollPlaneBOffset = 0xE000;
+  DAT_008549d8 = 32;
+  DAT_00854dec = 1;
+  g_mdRam.waterflag = 0;
+  g_mdRam.watermode = 0;
+  clear_displaydata();
+  memset(g_mdRam.pbuffer, 0, sizeof(g_mdRam.pbuffer));
+  memset(g_mdRam.actwk, 0, sizeof(g_mdRam.actwk) + 52);
+  init_sprlist();
+  memset(g_mdRam.colorwk, 0, sizeof(g_mdRam.colorwk));
+  memset(g_mdRam.colorwk2, 0, sizeof(g_mdRam.colorwk2));
+  g_mdRam.stageno = 0;
+  g_mdRam.vdpbuffer[0] = 0;
+  g_mdRam.vdpbuffer_free = 0x8fffb00;
+}
+
+
+// 006a4398
+void specialstagemode() {
+  bgmset(225);
+  fadeout();
+  init_graphics();
+  init_specmodevars();
+  set_palette(g_mdRam.colorwk2);
+  bitdevr((unsigned long*)&g_mdVram[0xB7E0], largetext_tiles, g_mdRam.bitdevwk);
+  bitdevr((unsigned long*)&g_mdVram[0x32E0], specialstagemode_sklogo_tiles, g_mdRam.bitdevwk);
+  unsigned char* p_chunkmappings = unlze(g_mdRam.chunkmappings128, specialstagemode_characters_tiles);
+  p_chunkmappings = unlze(p_chunkmappings, specialstagemode_charactersprites_tiles);
+  copy_data_vram(g_mdRam.chunkmappings128, 0, (p_chunkmappings - g_mdRam.chunkmappings128) / 2);
+  unlze(&g_mdRam.chunkmappings128[0x4000], specialstagemode_text_tiles);
+  copy_data_vram(&g_mdRam.chunkmappings128[0x4000], 0xA9C0, 0x6D0);
+  mapdevr((unsigned short*)&g_mdRam.chunkmappings128[0x8000], specialstagemode_fg_map, 0x2000);
+  copy_map_vram((unsigned short*)&g_mdRam.chunkmappings128[0x8000], 0xC380, 15, 39);
+  mapdevr((unsigned short*)&g_mdRam.chunkmappings128[0x8000], specialstagemode_bg_map, 0x4197);
+  copy_map_vram((unsigned short*)&g_mdRam.chunkmappings128[0x8000], 0xe09c, 7, 11);
+  unsigned char* p_text = getbluespheres;
+  if (g_mdRam.specmodemenu == 0) {
+    p_text = noway;
+    g_mdRam.levelselect_plmode = TEAM_SONIC;
+    g_mdRam.vscroll = 0xFFF8FFF0;
+  }
+  FUN_00824a1c(p_text, 256, 0x5BF);
+  if (g_mdRam.specmodefull == 0) {
+    g_mdRam.vscroll = 0xFFF8FF0;
+  }
+  g_mdRam.actwk[0].r_ptr = &FUN_006a4fba;
+  g_mdRam.actwk[1].r_ptr = &FUN_006a70d8;
+  bitdevr((unsigned long*)&g_mdVram[0xB640], copyright_tiles, g_mdRam.bitdevwk);
+  g_mdRam.actwk[2].r_ptr = &FUN_006a6f2d;
+  action();
+  patset();
+  bgmset(40);
+  fadein();
+
+  do {
+    g_mdRam.int_flg = 26;
+    g_mdRam.unlzequeuecnt = 0;
+    vInt();
+    update_hscrollbuff();
+    action();
+    patset();
+  } while (g_mdRam.gamemode == 44);
+}
+
+
+// 006a461f
+static void set_palette(unsigned short* p_destination) {
+  unsigned short* p_source = title2_color;
+  if (g_mdRam.DAT_08ffffab == 0) {
+    p_source = title1_color;
+  }
+  memcpy(p_destination, p_source, 128);
+}
+
+
+/* 006a4687 */ static unsigned short title1_color[64] = {
+  0x000, 0xEEE, 0x84E, 0x40C, 0x822, 0x080, 0x00E, 0x008, 0x0AE, 0x08E, 0x8AE, 0x46A, 0xECC, 0xCAA, 0x866, 0x222,
+  0x000, 0x004, 0x008, 0x00E, 0x026, 0x080, 0x08E, 0x0EE, 0x424, 0x44E, 0x68C, 0x800, 0x8CE, 0xA88, 0xE20, 0xEEE,
+  0x000, 0x000, 0x000, 0x000, 0x006, 0x000, 0x000, 0x204, 0x000, 0x000, 0x000, 0x600, 0x000, 0x866, 0x200, 0x222,
+  0x000, 0xEEE, 0xE48, 0xC04, 0x822, 0x080, 0xE00, 0x800, 0x0AE, 0x08E, 0x8AE, 0x46A, 0xECC, 0xCAA, 0x866, 0x222
+};
+/* 006a4707 */ static unsigned short title2_color[64] = {
+  0x000, 0xEEE, 0x84E, 0x40C, 0x822, 0x080, 0x00E, 0x008, 0x0AE, 0x08E, 0x8AE, 0x46A, 0xECC, 0xCAA, 0x866, 0x222,
+  0x000, 0x200, 0x202, 0x604, 0x202, 0x000, 0x624, 0x846, 0x200, 0x624, 0x626, 0x402, 0x846, 0x624, 0x622, 0x886,
+  0x000, 0x000, 0x000, 0x000, 0x006, 0x000, 0x000, 0x204, 0x000, 0x000, 0x000, 0x600, 0x000, 0x866, 0x200, 0x222,
+  0x000, 0xEEE, 0xE48, 0xC04, 0x822, 0x080, 0xE00, 0x800, 0x0AE, 0x08E, 0x8AE, 0x46A, 0xECC, 0xCAA, 0x866, 0x222
+};
+/* 006a4787 */ static unsigned char noway[44] = "NO WAY!    NO WAY!    NO WAY!    NO WAY?   ";
+/* 006a47b3 */ static unsigned char getbluespheres[51] = "GET   BLUE   SPHERES !                            ";
+
+
+// 006a47e8
+static void update_hscrollbuff() {
+  unsigned short* p_hscrollbuff = g_mdRam.hscrollbuff;
+  unsigned short cnt = 63;
+
+  do {
+    *p_hscrollbuff -= 2;
+    p_hscrollbuff += 2;
+  } while (cnt-- != 0);
+}
+
+
+// 006a484f
+static void init_specmodevars() {
+  g_mdRam.specmodefull = 1;
+  if (g_mdRam.specmodefull == 0) {
+    g_mdRam.DAT_08ffffab = 0;
+    g_mdRam.specmodelevel = 0;
+    g_mdRam.specmodecode = 0x3020100;
+  }
+}
+
+
+// 006a4fba
+static void FUN_006a4fba(sprite_status* p_actwk) {
+  if (g_mdRam.specmodemenu == 0) {
+    p_actwk->r_ptr = &FUN_006a4fe2;
+    p_actwk->actfree.dynamic.timer = 30;
+    FUN_006a4fe2(p_actwk);
+  }
+  else {
+    FUN_006a5058(p_actwk);
+  }
+}
+
+
+// 006a4fe2
+static void FUN_006a4fe2(sprite_status* p_actwk) {
+  --p_actwk->actfree.dynamic.timer;
+  if (p_actwk->actfree.dynamic.timer != 0) return;
+  g_mdRam.swdata1 &= 0xFF00;
+  g_mdRam.specspherecnt = 255;
+  g_mdRam.specringcnt = 255;
+  soundset(99);
+  FUN_00824a1c(getbluespheres, 256, 0x5BF);
+}
+
+
+// 006a5058
+static void FUN_006a5058(sprite_status* p_actwk) {
+  p_actwk->r_ptr = &FUN_006a5126;
+  g_mdRam.actwk[6].r_ptr = &FUN_006a5332;
+  util__assign_high(&g_mdRam.actwk[6].yposi, 192);
+  g_mdRam.specmodemenu = 1;
+  g_mdRam.DAT_08ffffaa = 0;
+  g_mdRam.actwk[46].r_ptr = &starsphere_init;
+  g_mdRam.actwk[47].r_ptr = &starsphere_init;
+  SET_HFLIP(g_mdRam.actwk[47].actflg);
+  if (g_mdRam.specmodefull != 0) {
+    util__assign_high(&g_mdRam.actwk[6].yposi, 176);
+    g_mdRam.actwk[18].r_ptr = &FUN_006a5cdf;
+    util__assign_high(&g_mdRam.actwk[18].yposi, 324);
+    g_mdRam.actwk[31].r_ptr = &FUN_006a5cf8;
+    util__assign_high(&g_mdRam.actwk[31].yposi, 324);
+    g_mdRam.actwk[45].r_ptr = &FUN_006a67bb;
+    g_mdRam.DAT_08ffffaa = 1;
+  }
+  else if (g_mdRam.specspherecnt == 0 && g_mdRam.specringcnt == 0) {
+    g_mdRam.actwk[31].r_ptr = &FUN_006a5cf8;
+    util__assign_high(&g_mdRam.actwk[31].yposi, 324);
+  }
+}
+
+
+// 006a5126
+static void FUN_006a5126(sprite_status* p_actwk) {
+  if (g_mdRam.specmodefull != 0) {
+    if (g_mdRam.vscroll != 0) {
+      ++g_mdRam.vscroll;
+      if (!(g_mdRam.vscroll & 1)) {
+        g_mdRam.vscroll += SHORT_TO_LONG_HIGH(1);
+      }
+      sprite_status* a1 = &g_mdRam.actwk[2];
+      unsigned short d1 = 3;
+
+      do {
+        a1->yposi -= SHORT_TO_LONG_HIGH(1);
+        ++a1;
+      } while (d1-- != 0);
+    }
+    if (!(g_mdRam.specmodemenu & 0x80)) {
+      if (IS_UP_PRESSED(g_mdRam.swdata1) && g_mdRam.DAT_08ffffaa != 0) {
+        --g_mdRam.DAT_08ffffaa;
+        soundset(137);
+      }
+      if (IS_DOWN_PRESSED(g_mdRam.swdata1) && g_mdRam.DAT_08ffffaa < 2) {
+        ++g_mdRam.DAT_08ffffaa;
+        soundset(137);
+        if (g_mdRam.DAT_08ffffaa == 2) {
+          g_mdRam.specmodemenu |= 0x80;
+          g_mdRam.swdata1 &= 0xFF00;
+        }
+      }
+    }
+    if (g_mdRam.DAT_08ffffaa != 1) return;
+  }
+  if (IS_B_PRESSED(g_mdRam.swdata1) || IS_START_PRESSED(g_mdRam.swdata1)) {
+    g_mdRam.marker_flag = 0;
+    g_mdRam.specmode = 1;
+    g_mdRam.plmode = g_mdRam.levelselect_plmode;
+    g_mdRam.pl_suu = 3;
+    g_mdRam.cartridgespec = 0;
+    g_mdRam.DAT_08fffe16 = 0;
+    g_mdRam.gamemode = 52;
+    if (IS_A_DOWN(g_mdRam.swdata1)) {
+      unsigned long level = g_mdRam.specmodelevel;
+      unsigned char* p_code = (unsigned char*)&g_mdRam.specmodecode;
+      unsigned short cnt = 3;
+
+      do {
+        level &= 0x7F;
+        *p_code++ = level;
+        ++level;
+      } while (cnt-- != 0);
+    }
+  }
+}
+
+
+// 006a5332
+static void FUN_006a5332(sprite_status* p_actwk) {
+  p_actwk->patbase = textpat;
+  p_actwk->sproffset = 0x854E;
+  util__assign_high(&p_actwk->xposi, 288);
+  p_actwk->sprpri = PRI_1;
+  p_actwk->sprhs = 20;
+  p_actwk->sprvs = 8;
+  short yposi = LONG_HIGH(p_actwk->yposi) + 16;
+  sprite_status* p_next_actwk = p_actwk;
+  (p_actwk + 1)->patno = 10;
+  short xposi = 247;
+  unsigned short cnt = 10;
+
+  do {
+    ++p_next_actwk;
+    p_next_actwk->r_ptr = &FUN_006a6721;
+    util__assign_high(&p_next_actwk->xposi, xposi);
+    util__assign_high(&p_next_actwk->yposi, yposi);
+    xposi += 8;
+  } while (cnt-- != 0);
+
+  p_next_actwk->patno = 11;
+  p_actwk->r_ptr = &FUN_006a5444;
+  FUN_006a5444(p_actwk);
+}
+
+
+// 006a5444
+static void FUN_006a5444(sprite_status* p_actwk) {
+  if (g_mdRam.specmodefull != 0 || g_mdRam.DAT_08ffffaa != 0 && g_mdRam.DAT_08ffffab != 0) {
+    unsigned long code = BYTESWAP(g_mdRam.specmodecode);
+    code = (code & 0xFFFFFF00) | (code & 0x000000FF) << 1;
+    code = (code & 0xFFFF0000) | (code & 0x0000FFFF) << 1;
+    ROTATE_RIGHT(code, 16);
+    code = (code & 0xFFFFFF00) | (code & 0x000000FF) << 1;
+    code = (code & 0xFFFF0000) | (code & 0x0000FFFF) >> 1;
+    ROTATE_RIGHT(code, 16);
+    code >>= 2;
+    code &= 0xFFFFFFF;
+    set_codedigits(p_actwk, code);
+    p_actwk->patno = 1;
+  }
+  else if (g_mdRam.DAT_08ffffab != 0) {
+    unsigned long level = (g_mdRam.specmodelevel + 1) & 0x7FFFFFF;
+    set_leveldigits(p_actwk, level);
+    p_actwk->patno = 0;
+  }
+
+  actionsub(p_actwk);
+}
+
+
+// 006a5543
+static void set_codedigits(sprite_status* p_actwk, unsigned long code) {
+  code &= 0xFFFFFFF;
+  sprite_status* p_next_actwk = p_actwk + 1;
+  unsigned long* p_sequence = divideby10sequence;
+  unsigned short cnt = 8;
+
+  do {
+    ++p_next_actwk;
+    unsigned long d3 = *p_sequence++;
+    unsigned short patno = code / d3;
+    code -= patno * d3;
+    p_next_actwk->patno = patno;
+  } while (cnt-- != 0);
+
+  short xposi = 247;
+  cnt = 10;
+  p_next_actwk = p_actwk;
+
+  do {
+    ++p_next_actwk;
+    util__assign_high(&p_next_actwk->xposi, xposi);
+    xposi += 8;
+  } while (cnt-- != 0);
+}
+
+
+// 006a5670
+static void set_leveldigits(sprite_status* p_actwk, unsigned long level) {
+  level &= 0x7FFFFFF;
+  sprite_status* p_next_actwk = p_actwk + 1;
+  unsigned long* p_sequence = divideby10sequence;
+  unsigned short cnt = 8;
+  unsigned short d4 = 0;
+
+  do {
+    ++p_next_actwk;
+    unsigned long d3 = *p_sequence++;
+    unsigned short patno = level / d3;
+    level -= patno * d3;
+    if (patno != 0 && d4 == 0) {
+      d4 = cnt + 1;
+    }
+    if (d4 == 0) {
+      patno = 10;
+    }
+    p_next_actwk->patno = patno;
+  } while (cnt-- != 0);
+
+  cnt = 9 - d4;
+  short xposi = 247 + cnt * 4;
+  p_next_actwk = p_actwk;
+
+  do {
+    ++p_next_actwk;
+    util__assign_high(&p_next_actwk->xposi, xposi);
+  } while (cnt-- != 0);
+}
+
+
+/* 006a5a88 */ static unsigned long divideby10sequence[9] = {
+  100000000,
+  10000000,
+  1000000,
+  100000,
+  10000,
+  1000,
+  100,
+  10,
+  1
+};
+
+
+// 006a5aac
+static void FUN_006a5aac(sprite_status* p_actwk, unsigned short d0, unsigned long d1) {
+  codepair* p_pair = codepairs;
+
+  for (int i = 0; i < 12; ++i) {
+    ++p_actwk;
+    unsigned short patno = 0;
+    bool carry;
+
+    do {
+      carry = p_pair->codedigit > d1;
+      d1 -= p_pair->codedigit;
+      d1 &= 0xFFFFFFFF; // not sure if this is correct
+      bool carry2 = p_pair->cnt > d0;
+      d0 -= p_pair->cnt;
+      if (carry) {
+        carry2 = d0 == 0;
+        --d0;
+      }
+      if (carry2) break;
+      ++patno;
+    } while (1);
+
+    carry = util__get_add_long_carry(d1, p_pair->codedigit);
+    d1 += p_pair->codedigit;
+    d1 &= 0xFFFFFFFF;
+    d0 += p_pair->cnt;
+    if (carry) {
+      ++d0;
+    }
+    p_actwk->patno = patno;
+  }
+}
+
+
+// 006a5b93
+void FUN_006a5b93(sprite_status* p_actwk, unsigned short* p_d0, unsigned long* p_d1) {
+  codepair* p_pair = codepairs;
+
+  for (int i = 0; i < 12; ++i) {
+    ++p_actwk;
+    if (p_actwk->patno != 0) {
+      for (int j = 0; j < p_actwk->patno - 1; ++j) {
+        bool carry = util__get_add_long_carry(*p_d1, p_pair->codedigit);
+        *p_d1 += p_pair->codedigit;
+        *p_d1 &= 0xFFFFFFFF;
+        *p_d0 += p_pair->cnt;
+        if (carry) {
+          ++*p_d0;
+        }
+      }
+    }
+    ++p_pair;
+  }
+}
+
+
+/* 006a5c7f */ static codepair codepairs[12] = {
+  { 23, 0x4876E800 },
+  {  2, 0x540BE400 },
+  {  0, 1000000000 },
+  {  0,  100000000 },
+  {  0,   10000000 },
+  {  0,    1000000 },
+  {  0,     100000 },
+  {  0,      10000 },
+  {  0,       1000 },
+  {  0,        100 },
+  {  0,         10 },
+  {  0,          1 }
+};
+
+
+/* 006a5cc7 */ static short letterxposi[12] = {
+  268,
+  276,
+  284,
+  292,
+  308,
+  316,
+  324,
+  332,
+  348,
+  356,
+  364,
+  372
+};
+
+
+// 006a5cdf
+static void FUN_006a5cdf(sprite_status* p_actwk) {
+  p_actwk->r_ptr = &codeinput;
+  FUN_006a5d0f(p_actwk, &FUN_006a679a);
+}
+
+
+// 006a5cf8
+static void FUN_006a5cf8(sprite_status* p_actwk) {
+  p_actwk->r_ptr = &FUN_006a5e09;
+  FUN_006a5d0f(p_actwk, &FUN_006a6779);
+}
+
+
+// 006a5d0f
+static void FUN_006a5d0f(sprite_status* p_actwk, void(*r_ptr)(sprite_status*)) {
+  p_actwk->patbase = textpat;
+  p_actwk->sproffset = 0x854E;
+  util__assign_high(&p_actwk->xposi, 212);
+  p_actwk->sprpri = PRI_1;
+  p_actwk->sprhs = 20;
+  p_actwk->sprvs = 8;
+  p_actwk->patno = 2;
+  short* p_xposi = letterxposi;
+  sprite_status* p_next_actwk = p_actwk;
+  unsigned short cnt = 11;
+
+  do {
+    ++p_next_actwk;
+    p_next_actwk->r_ptr = r_ptr;
+    util__assign_high(&p_next_actwk->xposi, *p_xposi++);
+    p_next_actwk->xposi -= SHORT_TO_LONG_HIGH(12);
+    util__copy_high(&p_next_actwk->yposi, &p_actwk->yposi);
+  } while (cnt-- != 0);
+}
+
+
+// 006a5e09
+static void FUN_006a5e09(sprite_status* p_actwk) {
+  if (g_mdRam.specmodemenu & 0x80) return;
+
+  unsigned char* a2 = g_mdRam.direc_x;
+  a2[3] = (g_mdRam.specmodelevel & 0x000000FF);
+  a2[2] = (g_mdRam.specmodelevel & 0x0000FF00) >> 8;
+  a2[1] = (g_mdRam.specmodelevel & 0x00FF0000) >> 16;
+  a2[0] = (g_mdRam.specmodelevel & 0xFF000000) >> 24;
+  unsigned long* a2_long = (unsigned long*)&g_mdRam.direc_x;
+  if (g_mdRam.DAT_08ffffab != 0) {
+    *a2_long = BYTESWAP(*a2_long);
+    *a2_long += 0x7654321;
+    *a2_long = BYTESWAP(*a2_long);
+  }
+  *a2_long &= 0xFFFFFF07;
+  unsigned short d4 = FUN_006a668e(a2, 1);
+  unsigned short d0 = d4 & 0x3F;
+  if (g_mdRam.DAT_08ffffab != 0) {
+    d0 |= 0x40;
+  }
+  d0 ^= 0x55;
+  unsigned long d1 = g_mdRam.specmodelevel + 0x1234567;
+  d1 &= 0x7FFFFFF;
+  ROTATE_RIGHT(d1, 16);
+  d4 <<= 5;
+  d4 &= 0xF800;
+  d1 = (d1 & 0xFFFF0000) | ((d1 & 0x0000FFFF) | d4);
+  ROTATE_RIGHT(d1, 16);
+  ROTATE_RIGHT(d1, 6);
+  d1 ^= 0xAAAAAAAA;
+  FUN_006a5aac(p_actwk, d0, d1);
+  actionsub(p_actwk);
+}
+
+
+// 006a5f81
+static void codeinput(sprite_status* p_actwk) {
+  if (!(g_mdRam.specmodemenu & 0x80)) {
+    SPRITE_STATUS_USHORT(p_actwk, 48) = 0;
+    return;
+  }
+
+  if (IS_B_PRESSED(g_mdRam.swdata1) || IS_START_PRESSED(g_mdRam.swdata1)) {
+    chk_code(p_actwk);
+  }
+  sprite_status* p_next_actwk = p_actwk + (SPRITE_STATUS_USHORT(p_actwk, 48) + 1);
+  p_next_actwk->sproffset = 0x854E;
+  if (IS_UP_PRESSED(g_mdRam.swdata1)) {
+    if (p_next_actwk->patno-- == 0) {
+      p_next_actwk->patno = 9;
+    }
+  }
+  if (IS_DOWN_PRESSED(g_mdRam.swdata1)) {
+    ++p_next_actwk->patno;
+    if (p_next_actwk->patno >= 10) {
+      p_next_actwk->patno = 0;
+    }
+  }
+  if (IS_LEFT_PRESSED(g_mdRam.swdata1)) {
+    if (SPRITE_STATUS_USHORT(p_actwk, 48)-- == 0) {
+      SPRITE_STATUS_USHORT(p_actwk, 48) = 11;
+    }
+  }
+  if (IS_RIGHT_PRESSED(g_mdRam.swdata1)) {
+    ++SPRITE_STATUS_USHORT(p_actwk, 48);
+    if (SPRITE_STATUS_USHORT(p_actwk, 48) >= 12) {
+      SPRITE_STATUS_USHORT(p_actwk, 48) = 0;
+    }
+  }
+
+  if (g_mdRam.specmodemenu & 0x80) {
+    p_next_actwk = p_actwk + (SPRITE_STATUS_USHORT(p_actwk, 48) + 1);
+    p_next_actwk->sproffset = 0x8562;
+  }
+  if (IS_UP_PRESSED(g_mdRam.swdata1)
+      || IS_DOWN_PRESSED(g_mdRam.swdata1)
+      || IS_LEFT_PRESSED(g_mdRam.swdata1)
+      || IS_RIGHT_PRESSED(g_mdRam.swdata1)) {
+    soundset(137);
+  }
+}
+
+
+// 006a61b0
+static void chk_code(sprite_status* p_actwk) {
+  unsigned short d0 = 0;
+  unsigned long d1l = 0;
+  FUN_006a5b93(p_actwk, &d0, &d1l);
+  d0 ^= 0x55;
+  unsigned short d2 = d0 & 0x3F;
+  d1l ^= 0xAAAAAAAA;
+  ROTATE_LEFT(d1l, 6);
+  ROTATE_RIGHT(d1l, 16);
+  unsigned short d3 = d1l & 0xFFFF;
+  d3 &= 0xF800;
+  d3 >>= 5;
+  d3 |= d0;
+  d3 &= 0x7FF;
+  ROTATE_RIGHT(d1l, 16);
+  d1l -= 0x1234567;
+  d2 &= 0x40;
+  if (d2 != 0) {
+    d1l &= 0x7654321;
+  }
+  d1l &= 0x7FFFFFF;
+  d1l = BYTESWAP(d1l);
+  *((unsigned long*)&g_mdRam.direc_x) = d1l;
+  unsigned short d4 = FUN_006a668e(g_mdRam.direc_x, 1);
+  d4 &= 0x7FF;
+  if (d3 == d4) {
+    g_mdRam.DAT_08ffffab = 0;
+    if (d2 != 0) {
+      d1l -= 0x7654321;
+      d1l &= 0x7FFFFFF;
+      g_mdRam.DAT_08ffffab = 255;
+    }
+    g_mdRam.specmodelevel = d1l;
+
+    unsigned char* a2 = (unsigned char*)&g_mdRam.specmodecode;
+    unsigned long d0l = d1l;
+    d0l &= 0xFFFFFF7F;
+    *a2++ = d0l & 0xFF;
+
+    d0l = d1l * 3;
+    ++d0l;
+    unsigned long d2l = (d0l & 0xFFFF0000) >> 16;
+    d2l = d2l % 127 << 16 | d0l & 0xFFFF;
+    d2l = d2l % 127 << 16 | d2l / 127;
+    ROTATE_RIGHT(d2l, 16);
+    *a2++ = d2l & 0xFF;
+
+    d0l = d1l * 5;
+    d0l += 2;
+    d2l = (d0l & 0xFFFF0000) >> 16;
+    d2l = d2l % 126 << 16 | d0l & 0xFFFF;
+    d2l = d2l % 126 << 16 | d2l / 126;
+    ROTATE_RIGHT(d2l, 16);
+    *a2++ = d2l & 0xFF;
+
+    d0l = d1l * 7;
+    d0l += 3;
+    d2l = (d0l & 0xFFFF0000) >> 16;
+    d2l = d2l % 125 << 16 | d0l & 0xFFFF;
+    d2l = d2l % 125 << 16 | d2l / 125;
+    ROTATE_RIGHT(d2l, 16);
+    *a2++ = d2l & 0xFF;
+
+    set_palette(g_mdRam.colorwk);
+    soundset(99);
+    g_mdRam.specmodemenu &= 0x7F;
+    g_mdRam.DAT_08ffffaa = 1;
+  }
+  else {
+    soundset(178);
+    g_mdRam.specmodemenu &= 0x7F;
+    g_mdRam.DAT_08ffffaa = 1;
+  }
+}
+
+
+// 006a668e
+static unsigned short FUN_006a668e(unsigned char* a2, unsigned short cnt) {
+  unsigned short d4 = 0;
+
+  do {
+    unsigned short d5 = *a2++;
+    d5 <<= 8;
+    d5 |= *a2++;
+    d4 ^= d5;
+    unsigned char carry = d4 & 1;
+    d4 >>= 1;
+    if (carry == 1) {
+      d4 ^= 0x8810;
+    }
+  } while (cnt-- != 0);
+
+  return d4;
+}
+
+
+// 006a6721
+static void FUN_006a6721(sprite_status* p_actwk) {
+  FUN_006a6738(p_actwk);
+  p_actwk->r_ptr = &actionsub;
+}
+
+
+// 006a6738
+static void FUN_006a6738(sprite_status* p_actwk) {
+  p_actwk->patbase = numberspat;
+  p_actwk->sproffset = 0x854E;
+  p_actwk->sprpri = PRI_1;
+  p_actwk->sprhs = 8;
+  p_actwk->sprvs = 8;
+}
+
+
+// 006a6779
+static void FUN_006a6779(sprite_status* p_actwk) {
+  FUN_006a6738(p_actwk);
+  p_actwk->r_ptr = &FUN_006a678b;
+  FUN_006a678b(p_actwk);
+}
+
+
+// 006a678b
+static void FUN_006a678b(sprite_status* p_actwk) {
+  if (!(g_mdRam.specmodemenu & 0x80)) {
+    actionsub(p_actwk);
+  }
+}
+
+
+// 006a679a
+static void FUN_006a679a(sprite_status* p_actwk) {
+  FUN_006a6738(p_actwk);
+  p_actwk->r_ptr = &FUN_006a67ac;
+  FUN_006a67ac(p_actwk);
+}
+
+
+// 006a67ac
+static void FUN_006a67ac(sprite_status* p_actwk) {
+  if (g_mdRam.specmodemenu & 0x80) {
+    actionsub(p_actwk);
+  }
+}
+
+
+// 006a67bb
+static void FUN_006a67bb(sprite_status* p_actwk) {
+  p_actwk->patbase = textpat;
+  p_actwk->sproffset = 0x854E;
+  util__assign_high(&p_actwk->xposi, 288);
+  util__assign_high(&p_actwk->yposi, 296);
+  p_actwk->sprpri = PRI_1;
+  p_actwk->sprhs = 20;
+  p_actwk->sprvs = 8;
+  p_actwk->patno = 3;
+  p_actwk->r_ptr = &actionsub;
+}
+
+
+// 006a6834
+static void starsphere_init(sprite_status* p_actwk) {
+  p_actwk->patbase = starspherepat;
+  p_actwk->sproffset = 0xE598;
+  switch (g_mdRam.levelselect_plmode) {
+    case TEAM_SONIC:
+      p_actwk->sproffset = 0xE598;
+      break;
+    case TEAM_KNUCKLES:
+      p_actwk->sproffset = 0x8598;
+      break;
+  }
+  util__assign_high(&p_actwk->xposi, 256);
+  util__assign_high(&p_actwk->yposi, 294);
+  if (g_mdRam.specmodefull == 0) {
+    util__assign_high(&p_actwk->yposi, 190);
+  }
+  p_actwk->actfree.ssm_starsphere.p_posi = (short*)leftstarsphereposi;
+  if (IS_HFLIP(p_actwk->actflg)) {
+    util__assign_high(&p_actwk->xposi, 320);
+    p_actwk->actfree.ssm_starsphere.p_posi = (short*)rightstarsphereposi;
+  }
+  p_actwk->sprpri = PRI_0;
+  p_actwk->sprhs = 8;
+  p_actwk->sprvs = 8;
+  p_actwk->r_ptr = &starsphere_move;
+  starsphere_move(p_actwk);
+}
+
+
+// 006a690c
+static void starsphere_move(sprite_status* p_actwk) {
+  if (g_mdRam.specmodefull != 0) {
+    short* p_posi = p_actwk->actfree.ssm_starsphere.p_posi;
+    p_posi += g_mdRam.DAT_08ffffaa * 2;
+    short wk;
+
+    if (p_posi[0] == LONG_HIGH(p_actwk->xposi) && p_actwk->xspeed + 128 <= 256) {
+      wk = 0;
+      p_actwk->xspeed = 0;
+    }
+    else {
+      wk = 64;
+      if (p_posi[0] < LONG_HIGH(p_actwk->xposi)) {
+        wk = -wk;
+        if (p_actwk->xspeed >= 0) {
+          wk *= 4;
+        }
+      }
+      else {
+        if (p_actwk->xspeed < 0) {
+          wk *= 4;
+        }
+      }
+    }
+    p_actwk->xspeed += wk;
+
+    if (p_posi[1] == LONG_HIGH(p_actwk->yposi) && p_actwk->yspeed + 256 <= 512) {
+      wk = 0;
+      p_actwk->yspeed = 0;
+    }
+    else {
+      wk = 128;
+      if (p_posi[1] < LONG_HIGH(p_actwk->yposi)) {
+        wk = -wk;
+        if (p_actwk->yspeed >= 0) {
+          wk *= 4;
+        }
+      }
+      else {
+        if (p_actwk->yspeed < 0) {
+          wk *= 4;
+        }
+      }
+    }
+    p_actwk->yspeed += wk;
+
+    p_actwk->xposi += p_actwk->xspeed * 256;
+    p_actwk->yposi += p_actwk->yspeed * 256;
+  }
+
+  if (p_actwk->pattim-- == 0) {
+    p_actwk->pattim = 2;
+    ++p_actwk->patno;
+    p_actwk->patno &= 7;
+  }
+  if (IS_A_PRESSED(g_mdRam.swdata1) || IS_C_PRESSED(g_mdRam.swdata1)) {
+    switch (p_actwk->sproffset) {
+      case 0x8598:
+        g_mdRam.levelselect_plmode = TEAM_SONIC;
+        p_actwk->sproffset = 0xE598;
+        break;
+      case 0xE598:
+        g_mdRam.levelselect_plmode = TEAM_KNUCKLES;
+        p_actwk->sproffset = 0x8598;
+        break;
+    }
+  }
+  actionsub(p_actwk);
+}
+
+
+/* 006a6d4d */ static short leftstarsphereposi[3][2] = {
+  { 256, 174 },
+  { 256, 294 },
+  { 200, 322 }
+};
+/* 006a6d59 */ static short rightstarsphereposi[3][2] = {
+  { 320, 174 },
+  { 320, 294 },
+  { 376, 322 }
+};
+
+
+/* 006a6d65 */ static signed char* textpat[6] = {
+  textsp00,
+  textsp01,
+  textsp02,
+  textsp03,
+  textsp04,
+  textsp05
+};
+
+
+static signed char textsp00[26] = {
+    0,   4,  -8,   5,   4,   0, -20,  -1,  -8,   1,
+    8,   0,  -4,  -1,  -8,   1,   6,   0,   4,   0,
+   -8,   1,   4,   0,  12,   0
+};
+static signed char textsp01[32] = {
+    0,   5,  -8,   1,  74,   0, -20,  -1,  -8,   1,
+   64,   0, -12,  -1,  -8,   1,  70,   0,  -4,  -1,
+   -8,   1,  76,   0,   4,   0,  -8,   1,   6,   0,
+   12,   0
+};
+static signed char textsp02[20] = {
+    0,   3,  -8,   9,  10,   0,   0,   0,  -8,   1,
+    6,   0,  24,   0,  -8,   1,  16,   0,  32,   0
+};
+static signed char textsp03[32] = {
+    0,   5,  -8,   1,  74,   0, -20,  -1,  -8,   1,
+   64,   0, -12,  -1,  -8,   1,  70,   0,  -4,  -1,
+   -8,   1,  78,   0,   4,   0,  -8,   1,  64,   0,
+   12,   0
+};
+static signed char textsp04[50] = {
+    0,   8,  -8,   1,  14,   0, -40,  -1,  -8,   5,
+   58,   0, -32,  -1,  -8,   1,  60,   0, -16,  -1,
+   -8,   1,  58,   0,  -8,  -1,  -8,   1,  10,   0,
+    0,   0,  -8,   1,  62,   0,   8,   0,  -8,   1,
+    4,   0,  16,   0,  -8,   5,  64,   0,  24,   0
+};
+static signed char textsp05[68] = {
+    0,  11,  -8,   1,  14,   0, -40,  -1,  -8,   5,
+   58,   0, -32,  -1,  -8,   1,  60,   0, -16,  -1,
+   -8,   1,  58,   0,  -8,  -1,  -8,   1,  10,   0,
+    0,   0,  -8,   1,  62,   0,   8,   0,  -8,   1,
+    4,   0,  16,   0,  -8,   5,  64,   0,  24,   0,
+    8,   9,  68,   0, -12,  -1,   8,   5,   0,   0,
+  -28,  -1,   8,   5,   0,   0,  12,   0
+};
+
+
+/* 006a6e55 */ static signed char* numberspat[12] = {
+  numberssp00,
+  numberssp01,
+  numberssp02,
+  numberssp03,
+  numberssp04,
+  numberssp05,
+  numberssp06,
+  numberssp07,
+  numberssp08,
+  numberssp09,
+  numberssp10,
+  numberssp11
+};
+
+
+static signed char numberssp00[8] = {
+  0, 1, -8, 1, 18, 0, -4, -1
+};
+static signed char numberssp01[8] = {
+  0, 1, -8, 1, 20, 0, -4, -1
+};
+static signed char numberssp02[8] = {
+  0, 1, -8, 1, 22, 0, -4, -1
+};
+static signed char numberssp03[8] = {
+  0, 1, -8, 1, 24, 0, -4, -1
+};
+static signed char numberssp04[8] = {
+  0, 1, -8, 1, 26, 0, -4, -1
+};
+static signed char numberssp05[8] = {
+  0, 1, -8, 1, 28, 0, -4, -1
+};
+static signed char numberssp06[8] = {
+  0, 1, -8, 1, 30, 0, -4, -1
+};
+static signed char numberssp07[8] = {
+  0, 1, -8, 1, 32, 0, -4, -1
+};
+static signed char numberssp08[8] = {
+  0, 1, -8, 1, 34, 0, -4, -1
+};
+static signed char numberssp09[8] = {
+  0, 1, -8, 1, 36, 0, -4, -1
+};
+static signed char numberssp10[8] = {
+  0, 1, -8, 5, 0, 0, -12, -1
+};
+static signed char numberssp11[8] = {
+  0, 1, -8, 5, 0, 0, -4, -1
+};
+
+
+/* 006a6ecd */ static signed char* starspherepat[8] = {
+  starspheresp00,
+  starspheresp01,
+  starspheresp02,
+  starspheresp03,
+  starspheresp04,
+  starspheresp05,
+  starspheresp06,
+  starspheresp07
+};
+
+
+static signed char starspheresp00[8] = {
+  0, 1, -8, 5, 6, 0, -8, -1
+};
+static signed char starspheresp01[8] = {
+  0, 1, -8, 5, 10, 0, -8, -1
+};
+static signed char starspheresp02[8] = {
+  0, 1, -8, 5, 14, 0, -8, -1
+};
+static signed char starspheresp03[8] = {
+  0, 1, -8, 5, 18, 0, -8, -1
+};
+static signed char starspheresp04[8] = {
+  0, 1, -8, 5, 22, 0, -8, -1
+};
+static signed char starspheresp05[8] = {
+  0, 1, -8, 5, 18, 8, -8, -1
+};
+static signed char starspheresp06[8] = {
+  0, 1, -8, 5, 14, 8, -8, -1
+};
+static signed char starspheresp07[8] = {
+  0, 1, -8, 5, 10, 8, -8, -1
+};
+
+
+/* 006a6f1d */ static short spriteposi[4][2] = {
+  { 184, 256 },
+  { 268, 248 },
+  { 304, 244 },
+  { 376, 224 }
+};
+
+
+// 006a6f2d
+static void FUN_006a6f2d(sprite_status* p_actwk) {
+  unsigned short cnt = 3;
+
+  do {
+    p_actwk->patbase = specialstagemode_characterspat;
+    p_actwk->sproffset = 0x20FE;
+    util__assign_high(&p_actwk->xposi, spriteposi[3 - cnt][0]);
+    util__assign_high(&p_actwk->yposi, spriteposi[3 - cnt][1]);
+    if (g_mdRam.specmodemenu != 0 && g_mdRam.specmodefull != 0) {
+      p_actwk->yposi -= SHORT_TO_LONG_HIGH(16);
+    }
+    p_actwk->sprpri = PRI_3;
+    p_actwk->sprhs = 16;
+    p_actwk->sprvs = 16;
+    p_actwk->r_ptr = &FUN_006a708e;
+    p_actwk->mstno = cnt;
+    p_actwk->patno = characterspriteschg[cnt][0];
+    ++p_actwk;
+  } while (cnt-- != 0);
+
+  FUN_006a6f2d(p_actwk);
+}
+
+
+// 006a708e
+static void FUN_006a708e(sprite_status* p_actwk) {
+  if (g_mdRam.specmodefull != 0) {
+    patchg2(p_actwk, characterspriteschg);
+  }
+  actionsub(p_actwk);
+}
+
+
+/* 006a70ab */ static signed char* characterspriteschg[4] = {
+  characterspriteschg3,
+  characterspriteschg2,
+  characterspriteschg1,
+  characterspriteschg0
+};
+
+
+static signed char characterspriteschg0[9] = {
+  0, 63, 1, 1, 2, 7, 1, 1, -1
+};
+static signed char characterspriteschg1[5] = {
+  3, 15, 4, 15, -1
+};
+static signed char characterspriteschg2[5] = {
+  5, 63, 6, 15, -1
+};
+static signed char characterspriteschg3[17] = {
+  7, 31, 8, 7, 7, 7, 8, 7, 7, 7, 8, 7, 7, 7, 8, 7, -1
+};
+
+
+// 006a70d8
+static void FUN_006a70d8(sprite_status* p_actwk) {
+  p_actwk->patbase = copyrightpat;
+  p_actwk->sproffset = 0x85B2;
+  util__assign_high(&p_actwk->xposi, 320);
+  util__assign_high(&p_actwk->yposi, 338);
+  p_actwk->sprpri = PRI_1;
+  p_actwk->sprhs = 44;
+  p_actwk->sprvs = 4;
+  p_actwk->r_ptr = &actionsub;
+  actionsub(p_actwk);
+}
+
+
+/* 006a7146 */ static signed char* copyrightpat[1] = {
+  copyrightsp00
+};
+
+
+static signed char copyrightsp00[38] = {
+    0,   6,   0,   0,   0,   0,   0,   0,   0,   8,
+    1,   0,   8,   0,   0,   4,   4,   0,  32,   0,
+    0,   8,   1,   0,  48,   0,   0,  12,   6,   0,
+   72,   0,   0,   4,  10,   0, 104,   0
+};
+
+
+/* 006a826d */ static unsigned char copyright_tiles[123] = { 0x0c, 0x00, 0x80, 0x05, 0x1b, 0x13, 0x04, 0x24, 0x0a, 0x34, 0x0c, 0x45, 0x1e, 0x54, 0x0b, 0x65, 0x1a, 0x73, 0x02, 0x81, 0x03, 0x03, 0x12, 0x00, 0x27, 0x7d, 0x35, 0x1c, 0x45, 0x1d, 0x57, 0x7c, 0xff, 0x9c, 0xa7, 0x8f, 0x6e, 0x10, 0xdb, 0xc3, 0x6f, 0x08, 0x47, 0xb7, 0x8e, 0xb8, 0xb0, 0xd3, 0xd3, 0xd3, 0xd3, 0xbf, 0xa9, 0x67, 0x28, 0x84, 0x21, 0x5d, 0xb2, 0x75, 0x2c, 0xe5, 0x10, 0x84, 0x2b, 0xb6, 0x4e, 0xa5, 0x85, 0x9b, 0x28, 0xd9, 0x46, 0xca, 0xf9, 0xe1, 0x24, 0x95, 0x16, 0x69, 0xdb, 0x5a, 0xf9, 0x67, 0x8f, 0x16, 0x58, 0x92, 0x8e, 0xcd, 0x34, 0xac, 0x4b, 0x94, 0xef, 0xb4, 0x42, 0x10, 0x9d, 0xc6, 0x97, 0x29, 0xdf, 0xc8, 0x59, 0x7f, 0x29, 0xa5, 0xc5, 0xef, 0xb4, 0xe1, 0x4e, 0x15, 0xd8, 0x24, 0xf4, 0x59, 0xa3, 0xdf, 0x74, 0x2c, 0x00 };

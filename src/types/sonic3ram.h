@@ -11,8 +11,11 @@ typedef struct sonic3_ram {
   /* 08ffaa00 */ unsigned char bitdevwk[512];
   /* 08ffac00 */ unsigned short pbuffer[PBUFFER_LEVELS][PBUFFER_LEVEL_SLOTS];
   /* 08ffb000 */ sprite_status actwk[ACTWK_SLOTS];
-  /* 08ffe000 */ unsigned char hscrollbuff[896];
+  /* 08ffe000 */ unsigned short hscrollbuff[448];
   /* 08ffe380 */ unsigned short colibuffer[COLBUFFER_SLOTS];
+  /* 08ffe400 */ unsigned char direc_x[256];
+  /* 08ffe438 */ unsigned short specspherecnt;
+  /* 08ffe442 */ unsigned short specringcnt;
   /* 08ffe600 */ unsigned char competitionmode_savedata[84];
   /* 08ffe660 */ unsigned long p_saveslot;
   /* 08ffe6ac */ unsigned char main_savedata[84];
@@ -89,6 +92,7 @@ typedef struct sonic3_ram {
   /* 08fffe0c */ unsigned long systemtimer;
   /* 08fffe10 */ unsigned short stageno;
   /* 08fffe12 */ unsigned char pl_suu;
+  /* 08fffe16 */ unsigned char DAT_08fffe16;
   /* 08fffe18 */ unsigned char plcontinuecnt;
   /* 08fffe19 */ unsigned char ssonicflag;
   /* 08fffe1b */ unsigned char plring_f2;
@@ -152,6 +156,8 @@ typedef struct sonic3_ram {
   /* 08ffff04 */ short actring;
   /* 08ffff08 */ character_team_id plmode;
   /* 08ffff0a */ character_team_id levelselect_plmode;
+  /* 08ffff0e */ unsigned short unlzequeuecnt;
+  /* 08ffff10 */ unsigned char unlzequeue[108];
   /* 08ffff60 */ unsigned char divdev_modules;
   /* 08ffff80 */ short levelselect_inputrepeattimer;
   /* 08ffff82 */ unsigned short levelselect_selection;
@@ -163,7 +169,12 @@ typedef struct sonic3_ram {
   /* 08ffff97 */ unsigned char plresetflag;
   /* 08ffff9a */ unsigned short stageno_is;
   /* 08ffff9c */ unsigned short stageno_is2;
-  /* 08ffffa1 */ unsigned char DAT_08ffffa1;
+  /* 08ffffa0 */ unsigned char specmodefull;
+  /* 08ffffa1 */ unsigned char specmodemenu;
+  /* 08ffffa2 */ unsigned long specmodecode;
+  /* 08ffffa6 */ unsigned long specmodelevel;
+  /* 08ffffaa */ unsigned char DAT_08ffffaa;
+  /* 08ffffab */ unsigned char DAT_08ffffab;
   /* 08ffffae */ unsigned short cartridge;
   /* 08ffffbb */ unsigned char cartridgespec;
   /* 08ffffc0 */ unsigned long extrascore;
