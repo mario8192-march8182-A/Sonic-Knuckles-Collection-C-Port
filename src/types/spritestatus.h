@@ -4,6 +4,7 @@
 #include "../constants.h"
 #include "blockcolibits.h"
 #include "enemyinit0data.h"
+#include "spritepattern.h"
 #include "spritestatushandler.h"
 
 typedef struct sprite_status_child sprite_status_child;
@@ -25,7 +26,7 @@ typedef struct sprite_status {
   // 0x0A
   unsigned short sproffset;
   // 0x0C
-  signed char** patbase;
+  sprite_pattern** patbase;
   // 0x10
   long xposi;
   // 0x14

@@ -1,6 +1,7 @@
 #include "globals.h"
 #include "macros.h"
 #include "util.h"
+#include "types/spritepattern.h"
 #include "types/spritestatus.h"
 #include "bitdevr.h"
 #include "color.h"
@@ -51,35 +52,35 @@ static void starsphere_init(sprite_status* p_actwk);
 static void starsphere_move(sprite_status* p_actwk);
 static short leftstarsphereposi[3][2];
 static short rightstarsphereposi[3][2];
-static signed char* textpat[6];
-static signed char textsp00[26];
-static signed char textsp01[32];
-static signed char textsp02[20];
-static signed char textsp03[32];
-static signed char textsp04[50];
-static signed char textsp05[68];
-static signed char* numberspat[12];
-static signed char numberssp00[8];
-static signed char numberssp01[8];
-static signed char numberssp02[8];
-static signed char numberssp03[8];
-static signed char numberssp04[8];
-static signed char numberssp05[8];
-static signed char numberssp06[8];
-static signed char numberssp07[8];
-static signed char numberssp08[8];
-static signed char numberssp09[8];
-static signed char numberssp10[8];
-static signed char numberssp11[8];
-static signed char* starspherepat[8];
-static signed char starspheresp00[8];
-static signed char starspheresp01[8];
-static signed char starspheresp02[8];
-static signed char starspheresp03[8];
-static signed char starspheresp04[8];
-static signed char starspheresp05[8];
-static signed char starspheresp06[8];
-static signed char starspheresp07[8];
+static sprite_pattern* textpat[6];
+static sprite_pattern textsp00;
+static sprite_pattern textsp01;
+static sprite_pattern textsp02;
+static sprite_pattern textsp03;
+static sprite_pattern textsp04;
+static sprite_pattern textsp05;
+static sprite_pattern* numberspat[12];
+static sprite_pattern numberssp00;
+static sprite_pattern numberssp01;
+static sprite_pattern numberssp02;
+static sprite_pattern numberssp03;
+static sprite_pattern numberssp04;
+static sprite_pattern numberssp05;
+static sprite_pattern numberssp06;
+static sprite_pattern numberssp07;
+static sprite_pattern numberssp08;
+static sprite_pattern numberssp09;
+static sprite_pattern numberssp10;
+static sprite_pattern numberssp11;
+static sprite_pattern* starspherepat[8];
+static sprite_pattern starspheresp00;
+static sprite_pattern starspheresp01;
+static sprite_pattern starspheresp02;
+static sprite_pattern starspheresp03;
+static sprite_pattern starspheresp04;
+static sprite_pattern starspheresp05;
+static sprite_pattern starspheresp06;
+static sprite_pattern starspheresp07;
 static short spriteposi[4][2];
 static void FUN_006a6f2d(sprite_status* p_actwk);
 static void FUN_006a708e(sprite_status* p_actwk);
@@ -89,8 +90,8 @@ static signed char characterspriteschg1[5];
 static signed char characterspriteschg2[5];
 static signed char characterspriteschg3[17];
 static void FUN_006a70d8(sprite_status* p_actwk);
-static signed char* copyrightpat[1];
-static signed char copyrightsp00[38];
+static sprite_pattern* copyrightpat[1];
+static sprite_pattern copyrightsp00;
 static unsigned char copyright_tiles[123];
 
 extern void vInt();
@@ -933,144 +934,234 @@ static void starsphere_move(sprite_status* p_actwk) {
 };
 
 
-/* 006a6d65 */ static signed char* textpat[6] = {
-  textsp00,
-  textsp01,
-  textsp02,
-  textsp03,
-  textsp04,
-  textsp05
+/* 006a6d65 */ static sprite_pattern* textpat[6] = {
+  &textsp00,
+  &textsp01,
+  &textsp02,
+  &textsp03,
+  &textsp04,
+  &textsp05
 };
 
 
-static signed char textsp00[26] = {
-    0,   4,  -8,   5,   4,   0, -20,  -1,  -8,   1,
-    8,   0,  -4,  -1,  -8,   1,   6,   0,   4,   0,
-   -8,   1,   4,   0,  12,   0
+static sprite_pattern textsp00 = {
+  4,
+  {
+    { -8, 5, 0x0004, -20 },
+    { -8, 1, 0x0008,  -4 },
+    { -8, 1, 0x0006,   4 },
+    { -8, 1, 0x0004,  12 }
+  }
 };
-static signed char textsp01[32] = {
-    0,   5,  -8,   1,  74,   0, -20,  -1,  -8,   1,
-   64,   0, -12,  -1,  -8,   1,  70,   0,  -4,  -1,
-   -8,   1,  76,   0,   4,   0,  -8,   1,   6,   0,
-   12,   0
+static sprite_pattern textsp01 = {
+  5,
+  {
+    { -8, 1, 0x004A, -20 },
+    { -8, 1, 0x0040, -12 },
+    { -8, 1, 0x0046,  -4 },
+    { -8, 1, 0x004C,   4 },
+    { -8, 1, 0x0006,  12 }
+  }
 };
-static signed char textsp02[20] = {
-    0,   3,  -8,   9,  10,   0,   0,   0,  -8,   1,
-    6,   0,  24,   0,  -8,   1,  16,   0,  32,   0
+static sprite_pattern textsp02 = {
+  3,
+  {
+    { -8, 9, 0x000A,  0 },
+    { -8, 1, 0x0006, 24 },
+    { -8, 1, 0x0010, 32 }
+  }
 };
-static signed char textsp03[32] = {
-    0,   5,  -8,   1,  74,   0, -20,  -1,  -8,   1,
-   64,   0, -12,  -1,  -8,   1,  70,   0,  -4,  -1,
-   -8,   1,  78,   0,   4,   0,  -8,   1,  64,   0,
-   12,   0
+static sprite_pattern textsp03 = {
+  5,
+  {
+    { -8, 1, 0x004A, -20 },
+    { -8, 1, 0x0040, -12 },
+    { -8, 1, 0x0046,  -4 },
+    { -8, 1, 0x004E,   4 },
+    { -8, 1, 0x0040,  12 }
+  }
 };
-static signed char textsp04[50] = {
-    0,   8,  -8,   1,  14,   0, -40,  -1,  -8,   5,
-   58,   0, -32,  -1,  -8,   1,  60,   0, -16,  -1,
-   -8,   1,  58,   0,  -8,  -1,  -8,   1,  10,   0,
-    0,   0,  -8,   1,  62,   0,   8,   0,  -8,   1,
-    4,   0,  16,   0,  -8,   5,  64,   0,  24,   0
+static sprite_pattern textsp04 = {
+  8,
+  {
+    { -8, 1, 0x000E, -40 },
+    { -8, 5, 0x003A, -32 },
+    { -8, 1, 0x003C, -16 },
+    { -8, 1, 0x003A,  -8 },
+    { -8, 1, 0x000A,   0 },
+    { -8, 1, 0x003E,   8 },
+    { -8, 1, 0x0004,  16 },
+    { -8, 5, 0x0040,  24 }
+  }
+
 };
-static signed char textsp05[68] = {
-    0,  11,  -8,   1,  14,   0, -40,  -1,  -8,   5,
-   58,   0, -32,  -1,  -8,   1,  60,   0, -16,  -1,
-   -8,   1,  58,   0,  -8,  -1,  -8,   1,  10,   0,
-    0,   0,  -8,   1,  62,   0,   8,   0,  -8,   1,
-    4,   0,  16,   0,  -8,   5,  64,   0,  24,   0,
-    8,   9,  68,   0, -12,  -1,   8,   5,   0,   0,
-  -28,  -1,   8,   5,   0,   0,  12,   0
+static sprite_pattern textsp05 = {
+  11,
+  {
+    { -8, 1, 0x000E, -40 },
+    { -8, 5, 0x003A, -32 },
+    { -8, 1, 0x003C, -16 },
+    { -8, 1, 0x003A,  -8 },
+    { -8, 1, 0x000A,   0 },
+    { -8, 1, 0x003E,   8 },
+    { -8, 1, 0x0004,  16 },
+    { -8, 5, 0x0040,  24 },
+    {  8, 9, 0x0044, -12 },
+    {  8, 5, 0x0000, -28 },
+    {  8, 5, 0x0000,  12 }
+  }
 };
 
 
-/* 006a6e55 */ static signed char* numberspat[12] = {
-  numberssp00,
-  numberssp01,
-  numberssp02,
-  numberssp03,
-  numberssp04,
-  numberssp05,
-  numberssp06,
-  numberssp07,
-  numberssp08,
-  numberssp09,
-  numberssp10,
-  numberssp11
+/* 006a6e55 */ static sprite_pattern* numberspat[12] = {
+  &numberssp00,
+  &numberssp01,
+  &numberssp02,
+  &numberssp03,
+  &numberssp04,
+  &numberssp05,
+  &numberssp06,
+  &numberssp07,
+  &numberssp08,
+  &numberssp09,
+  &numberssp10,
+  &numberssp11
 };
 
 
-static signed char numberssp00[8] = {
-  0, 1, -8, 1, 18, 0, -4, -1
+static sprite_pattern numberssp00 = {
+  1,
+  {
+    { -8, 1, 0x0012, -4 }
+  }
 };
-static signed char numberssp01[8] = {
-  0, 1, -8, 1, 20, 0, -4, -1
+static sprite_pattern numberssp01 = {
+  1,
+  {
+    { -8, 1, 0x0014, -4 }
+  }
 };
-static signed char numberssp02[8] = {
-  0, 1, -8, 1, 22, 0, -4, -1
+static sprite_pattern numberssp02 = {
+  1,
+  {
+    { -8, 1, 0x0016, -4 }
+  }
 };
-static signed char numberssp03[8] = {
-  0, 1, -8, 1, 24, 0, -4, -1
+static sprite_pattern numberssp03 = {
+  1,
+  {
+    { -8, 1, 0x0018, -4 }
+  }
 };
-static signed char numberssp04[8] = {
-  0, 1, -8, 1, 26, 0, -4, -1
+static sprite_pattern numberssp04 = {
+  1,
+  {
+    { -8, 1, 0x001A, -4 }
+  }
 };
-static signed char numberssp05[8] = {
-  0, 1, -8, 1, 28, 0, -4, -1
+static sprite_pattern numberssp05 = {
+  1,
+  {
+    { -8, 1, 0x001C, -4 }
+  }
 };
-static signed char numberssp06[8] = {
-  0, 1, -8, 1, 30, 0, -4, -1
+static sprite_pattern numberssp06 = {
+  1,
+  {
+    { -8, 1, 0x001E, -4 }
+  }
 };
-static signed char numberssp07[8] = {
-  0, 1, -8, 1, 32, 0, -4, -1
+static sprite_pattern numberssp07 = {
+  1,
+  {
+    { -8, 1, 0x0020, -4 }
+  }
 };
-static signed char numberssp08[8] = {
-  0, 1, -8, 1, 34, 0, -4, -1
+static sprite_pattern numberssp08 = {
+  1,
+  {
+    { -8, 1, 0x0022, -4 }
+  }
 };
-static signed char numberssp09[8] = {
-  0, 1, -8, 1, 36, 0, -4, -1
+static sprite_pattern numberssp09 = {
+  1,
+  {
+    { -8, 1, 0x0024, -4 }
+  }
 };
-static signed char numberssp10[8] = {
-  0, 1, -8, 5, 0, 0, -12, -1
+static sprite_pattern numberssp10 = {
+  1,
+  {
+    { -8, 5, 0x0000, -12 }
+  }
 };
-static signed char numberssp11[8] = {
-  0, 1, -8, 5, 0, 0, -4, -1
+static sprite_pattern numberssp11 = {
+  1,
+  {
+    { -8, 5, 0x0000, -4 }
+  }
 };
 
 
-/* 006a6ecd */ static signed char* starspherepat[8] = {
-  starspheresp00,
-  starspheresp01,
-  starspheresp02,
-  starspheresp03,
-  starspheresp04,
-  starspheresp05,
-  starspheresp06,
-  starspheresp07
+/* 006a6ecd */ static sprite_pattern* starspherepat[8] = {
+  &starspheresp00,
+  &starspheresp01,
+  &starspheresp02,
+  &starspheresp03,
+  &starspheresp04,
+  &starspheresp05,
+  &starspheresp06,
+  &starspheresp07
 };
 
 
-static signed char starspheresp00[8] = {
-  0, 1, -8, 5, 6, 0, -8, -1
+static sprite_pattern starspheresp00 = {
+  1,
+  {
+    { -8, 5, 0x0006, -8 }
+  }
 };
-static signed char starspheresp01[8] = {
-  0, 1, -8, 5, 10, 0, -8, -1
+static sprite_pattern starspheresp01 = {
+  1,
+  {
+    { -8, 5, 0x000A, -8 }
+  }
 };
-static signed char starspheresp02[8] = {
-  0, 1, -8, 5, 14, 0, -8, -1
+static sprite_pattern starspheresp02 = {
+  1,
+  {
+    { -8, 5, 0x000E, -8 }
+  }
 };
-static signed char starspheresp03[8] = {
-  0, 1, -8, 5, 18, 0, -8, -1
+static sprite_pattern starspheresp03 = {
+  1,
+  {
+    { -8, 5, 0x0012, -8 }
+  }
 };
-static signed char starspheresp04[8] = {
-  0, 1, -8, 5, 22, 0, -8, -1
+static sprite_pattern starspheresp04 = {
+  1,
+  {
+    { -8, 5, 0x0016, -8 }
+  }
 };
-static signed char starspheresp05[8] = {
-  0, 1, -8, 5, 18, 8, -8, -1
+static sprite_pattern starspheresp05 = {
+  1,
+  {
+    { -8, 5, 0x0812, -8 }
+  }
 };
-static signed char starspheresp06[8] = {
-  0, 1, -8, 5, 14, 8, -8, -1
+static sprite_pattern starspheresp06 = {
+  1,
+  {
+    { -8, 5, 0x080E, -8 }
+  }
 };
-static signed char starspheresp07[8] = {
-  0, 1, -8, 5, 10, 8, -8, -1
+static sprite_pattern starspheresp07 = {
+  1,
+  {
+    { -8, 5, 0x080A, -8 }
+  }
 };
 
 
@@ -1150,16 +1241,21 @@ static void FUN_006a70d8(sprite_status* p_actwk) {
 }
 
 
-/* 006a7146 */ static signed char* copyrightpat[1] = {
-  copyrightsp00
+/* 006a7146 */ static sprite_pattern* copyrightpat[1] = {
+  &copyrightsp00
 };
 
 
-static signed char copyrightsp00[38] = {
-    0,   6,   0,   0,   0,   0,   0,   0,   0,   8,
-    1,   0,   8,   0,   0,   4,   4,   0,  32,   0,
-    0,   8,   1,   0,  48,   0,   0,  12,   6,   0,
-   72,   0,   0,   4,  10,   0, 104,   0
+static sprite_pattern copyrightsp00 = {
+  6,
+  {
+    { 0,  0, 0x0000,   0 },
+    { 0,  8, 0x0001,   8 },
+    { 0,  4, 0x0004,  32 },
+    { 0,  8, 0x0001,  48 },
+    { 0, 12, 0x0006,  72 },
+    { 0,  4, 0x000A, 104 }
+  }
 };
 
 
