@@ -44,7 +44,7 @@ unsigned char* unlze(unsigned char* p_destination, unsigned char* p_source) {
         descbit_cnt = 16;
       }
 
-      repeat_cnt = (repeat_cnt << 1) | descbit & 0xFFFFFFFF;
+      repeat_cnt = ((repeat_cnt << 1) | descbit) & 0xFFFFFFFF;
       descbit = desc & 1;
       desc >>= 1;
       --descbit_cnt;
@@ -54,15 +54,16 @@ unsigned char* unlze(unsigned char* p_destination, unsigned char* p_source) {
         descbit_cnt = 16;
       }
 
-      repeat_cnt = (repeat_cnt << 1) | descbit & 0xFFFFFFFF;
+      repeat_cnt = ((repeat_cnt << 1) | descbit) & 0xFFFFFFFF;
       repeat_cnt += 2;
       offset = -256 + *p_source++;
     }
     else {
       unsigned short byte = *((unsigned short*)p_source);
-      short offset = -256 + (byte >> 8);
+      p_source += 2;
+      offset = -256 + (byte >> 8);
       offset *= 32;
-      offset += byte & 0xFF;
+      offset = (offset & 0xFF00) | (byte & 0xFF);
       repeat_cnt = (byte >> 8) & 7;
       if (repeat_cnt == 0) {
         repeat_cnt = *p_source++;
