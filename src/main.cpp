@@ -416,20 +416,18 @@ Sprite* uploadSprites(USHORT* pSource, Sprite* pSprite) {
   g_spriteCnt = 0;
   DAT_00831750 = 0;
 
-  while (((UCHAR*)pSource)[3] != 0) {
-    if (pSource[0] != 0 || pSource[2] != 0 || pSource[3] != 0) {
-      pSprite->x = pSource[3] - 128;
-      pSprite->y = pSource[0] - 128;
-      pSprite->w = ((((UCHAR*)pSource)[2] & 0xC) >> 2) + 1;
-      pSprite->h = (((UCHAR*)pSource)[2] & 3) * 8 + 8;
-      pSprite->flags = (((pSource[2] & 0x6000) >> 9) + 16)
-                     | (pSource[2] & 0x1800) >> 3
-                     | (pSource[2] & 0x8000) >> 8;
-      pSprite->vram_offset = ((pSource[2] & 0x7FF) << 5); // + 0x8000000
-      ++g_spriteCnt;
-      ++pSprite;
-      pSource += 4;
-    }
+  while (((UCHAR*)pSource)[3] != 0 && (pSource[0] != 0 || pSource[2] != 0 || pSource[3] != 0)) {
+    pSprite->x = pSource[3] - 128;
+    pSprite->y = pSource[0] - 128;
+    pSprite->w = ((((UCHAR*)pSource)[2] & 0xC) >> 2) + 1;
+    pSprite->h = (((UCHAR*)pSource)[2] & 3) * 8 + 8;
+    pSprite->flags = (((pSource[2] & 0x6000) >> 9) + 16)
+                   | (pSource[2] & 0x1800) >> 3
+                   | (pSource[2] & 0x8000) >> 8;
+    pSprite->vram_offset = ((pSource[2] & 0x7FF) << 5);
+    ++g_spriteCnt;
+    ++pSprite;
+    pSource += 4;
   }
 
   return pSprite;
