@@ -349,7 +349,7 @@ static void FUN_006a5332(sprite_status* p_actwk) {
 
 // 006a5444
 static void FUN_006a5444(sprite_status* p_actwk) {
-  if (g_mdRam.specmodefull != 0 || g_mdRam.DAT_08ffffaa != 0 && g_mdRam.DAT_08ffffab != 0) {
+  if (g_mdRam.specmodefull != 0 || (g_mdRam.DAT_08ffffaa != 0 && g_mdRam.DAT_08ffffab != 0)) {
     unsigned long code = BYTESWAP(g_mdRam.specmodecode);
     code = (code & 0xFFFFFF00) | (code & 0x000000FF) << 1;
     code = (code & 0xFFFF0000) | (code & 0x0000FFFF) << 1;
@@ -695,7 +695,7 @@ static void chk_code(sprite_status* p_actwk) {
     d0l = d1l * 3;
     ++d0l;
     unsigned long d2l = (d0l & 0xFFFF0000) >> 16;
-    d2l = d2l % 127 << 16 | d0l & 0xFFFF;
+    d2l = d2l % 127 << 16 | (d0l & 0xFFFF);
     d2l = d2l % 127 << 16 | d2l / 127;
     ROTATE_RIGHT(d2l, 16);
     *a2++ = d2l & 0xFF;
@@ -703,7 +703,7 @@ static void chk_code(sprite_status* p_actwk) {
     d0l = d1l * 5;
     d0l += 2;
     d2l = (d0l & 0xFFFF0000) >> 16;
-    d2l = d2l % 126 << 16 | d0l & 0xFFFF;
+    d2l = d2l % 126 << 16 | (d0l & 0xFFFF);
     d2l = d2l % 126 << 16 | d2l / 126;
     ROTATE_RIGHT(d2l, 16);
     *a2++ = d2l & 0xFF;
@@ -711,7 +711,7 @@ static void chk_code(sprite_status* p_actwk) {
     d0l = d1l * 7;
     d0l += 3;
     d2l = (d0l & 0xFFFF0000) >> 16;
-    d2l = d2l % 125 << 16 | d0l & 0xFFFF;
+    d2l = d2l % 125 << 16 | (d0l & 0xFFFF);
     d2l = d2l % 125 << 16 | d2l / 125;
     ROTATE_RIGHT(d2l, 16);
     *a2++ = d2l & 0xFF;
