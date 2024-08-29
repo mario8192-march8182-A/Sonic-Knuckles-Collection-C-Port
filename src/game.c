@@ -534,7 +534,7 @@ void FUN_00824a1c(unsigned char* p_text, unsigned long vramoffset, unsigned shor
 // 00824b55
 static unsigned short FUN_00824b55(unsigned char* p_text, unsigned short coloroffset) {
   unsigned short* p_chunkmappings1 = (unsigned short*)&g_mdRam.chunkmappings128[0x7000];
-  unsigned short* p_chunkmappings2 = (unsigned short*)&g_mdRam.chunkmappings128[7080];
+  unsigned short* p_chunkmappings2 = (unsigned short*)&g_mdRam.chunkmappings128[0x7080];
   unsigned short mapping_cnt = 0;
   bool end = false;
 
