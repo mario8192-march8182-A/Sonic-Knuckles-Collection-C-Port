@@ -80,7 +80,8 @@ unsigned char* unlze(unsigned char* p_destination, unsigned char* p_source) {
 
     if (!done) {
       do {
-        *p_destination++ = p_destination[offset];
+        unsigned char value = p_destination[offset];
+        *p_destination++ = value;
       } while (--repeat_cnt != 0);
     }
   }
