@@ -458,7 +458,7 @@ void readSaveFile() {
 void writeSaveFile() {
   char fileName[256];
   GetModuleFileName(0, fileName, sizeof(fileName));
-  _mbscpy((UCHAR*)&fileName[strlen(fileName - 3)], (UCHAR*)"BIN");
+  _mbscpy((UCHAR*)&fileName[strlen(fileName) - 3], (UCHAR*)"BIN");
   HANDLE hFile = CreateFile(fileName, GENERIC_WRITE, 0, 0, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, 0);
   if (hFile == INVALID_HANDLE_VALUE) {
     MessageBox(0, "Cannot Open Save Data File", "Error", MB_OK);
