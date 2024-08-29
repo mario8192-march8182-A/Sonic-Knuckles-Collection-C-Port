@@ -585,6 +585,8 @@ static unsigned short FUN_00824b55(unsigned char* p_text, unsigned short colorof
       }
     }
   } while (!end);
+
+  return mapping_cnt;
 }
 
 
