@@ -1,6 +1,10 @@
 #include <stdbool.h>
 #include <stdlib.h>
 #include "util.h"
+#define SCHAR_MAX 127
+#define UCHAR_MAX 255
+#define USHORT_MAX 65535
+#define ULONG_MAX 4294967295
 
 
 void util__assign_high(long* dest, short src) {
