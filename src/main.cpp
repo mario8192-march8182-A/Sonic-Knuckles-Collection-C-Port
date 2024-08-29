@@ -19,6 +19,7 @@
 
 void vInt18();
 void vInt22();
+void vInt26();
 void uploadPalette();
 void pollMdControllers();
 BOOL loadBgm(int id);
@@ -180,7 +181,7 @@ DWORD WINAPI gameThreadStartRoutine(void* pParameter) {
       break;
     case STARTGAMEMODE_SPECIALSTAGEMODE:
       g_bResetMdRam = TRUE;
-      // TODO
+      start_specialstagemode();
       break;
     case STARTGAMEMODE_DEBUG:
       start_debug();
@@ -523,7 +524,7 @@ extern "C" void vInt() {
       // TODO
       break;
     case 26:
-      // TODO
+      vInt26();
       break;
     case 28:
       // TODO
@@ -551,6 +552,19 @@ void vInt18() {
 
 // 004052dc
 void vInt22() {
+  uploadPalette();
+  uploadSprites(g_mdRam.ramf8, g_sprites);
+  pollMdControllers();
+  if (g_mdRam.demotimer != 0) {
+    --g_mdRam.demotimer;
+  }
+}
+
+
+// 00405312
+void vInt26() {
+  g_pHscrollbuff = &g_mdRam.hscrollbuff[0];
+  g_pHscrollbuff2 = &g_mdRam.hscrollbuff[1];
   uploadPalette();
   uploadSprites(g_mdRam.ramf8, g_sprites);
   pollMdControllers();

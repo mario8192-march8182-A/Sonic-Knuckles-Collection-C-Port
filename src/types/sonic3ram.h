@@ -31,10 +31,14 @@ typedef struct sonic3_ram {
   /* 08ffee4e */ unsigned short stageno_i;
   /* 08ffee78 */ long scra_h_posit;
   /* 08ffee7c */ long scra_v_posit;
+  /* 08ffee80 */ long scra_h_posit_copy;
   /* 08ffee84 */ long scra_v_posit_copy;
+  /* 08ffeeaa */ unsigned short scrc_v;
   /* 08ffeebc */ short frame_offset_x;
   /* 08ffeec6 */ unsigned char event_flag_3;
   /* 08ffeeea */ unsigned short vscrollbuff[40];
+  /* 08ffef3a */ unsigned short sprhmasks;
+  /* 08ffef3c */ unsigned short alt_sprlistadr;
   /* 08ffef40 */ unsigned long DAT_08ffef40;
   /* 08ffef4b */ unsigned char dataselect_selection;
   /* 08ffef4c */ character_team_id nosave_plmode;
@@ -48,10 +52,12 @@ typedef struct sonic3_ram {
   /* 08fff614 */ unsigned short demotimer;
   /* 08fff616 */ unsigned long vscroll;
   /* 08fff61a */ unsigned long hscroll;
+  /* 08fff623 */ unsigned char teleport;
   /* 08fff624 */ unsigned char vdp_hint_cache;
   /* 08fff626 */ unsigned char startcolor;
   /* 08fff627 */ unsigned char colorcnt;
   /* 08fff62a */ unsigned char int_flg;
+  /* 08fff62c */ unsigned char scrsprcnt;
   /* 08fff636 */ unsigned long ranum;
   /* 08fff648 */ short waterposi;
   /* 08fff64e */ unsigned char waterflag;
@@ -170,6 +176,7 @@ typedef struct sonic3_ram {
   /* 08ffff97 */ unsigned char plresetflag;
   /* 08ffff9a */ unsigned short stageno_is;
   /* 08ffff9c */ unsigned short stageno_is2;
+  /* 08ffff9f */ unsigned char romheadermdflag;
   /* 08ffffa0 */ unsigned char specmodefull;
   /* 08ffffa1 */ unsigned char specmodemenu;
   /* 08ffffa2 */ unsigned long specmodecode;

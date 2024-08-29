@@ -60,12 +60,16 @@
 #define CLEAR_HFLIP(value) (CLEAR_BIT_0(value))
 #define CLEAR_VFLIP(value) (CLEAR_BIT_1(value))
 #define SET_USE_SCREEN_COORDS(value) (CLEAR_BIT_2(value))
+#define CLEAR_ONSCREEN(value) (CLEAR_BIT_7(value))
 
 #define TOGGLE_HFLIP(value) (TOGGLE_BIT_0(value))
 #define TOGGLE_VFLIP(value) (TOGGLE_BIT_1(value))
 
 #define IS_HFLIP(value) (BIT_0_IS_SET(value))
 #define IS_VFLIP(value) (BIT_1_IS_SET(value))
+#define USES_LEVEL_COORDS(value) (BIT_2_IS_SET(value))
+#define HAS_STATIC_PATTERN(value) (BIT_5_IS_SET(value))
+#define IS_COMPOUND(value) (BIT_6_IS_SET(value))
 #define IS_ONSCREEN(value) (BIT_7_IS_SET(value))
 
 

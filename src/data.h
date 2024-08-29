@@ -13,5 +13,6 @@ extern unsigned char sonicmiles_tiles[1280];
 extern unsigned char levelselect_tiles[1398];
 extern unsigned char levelselect_map[428];
 extern unsigned char largetext_tiles[438];
+extern unsigned short largetext_map[120];
 
 #endif
