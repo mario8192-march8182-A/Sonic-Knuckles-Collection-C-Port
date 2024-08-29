@@ -164,7 +164,7 @@ void specialstagemode() {
     update_hscrollbuff();
     action();
     patset();
-  } while (g_mdRam.gamemode == 44);
+  } while (g_mdRam.gmmode == 44);
 }
 
 
@@ -305,7 +305,7 @@ static void FUN_006a5126(sprite_status* p_actwk) {
     g_mdRam.pl_suu = 3;
     g_mdRam.cartridgespec = 0;
     g_mdRam.DAT_08fffe16 = 0;
-    g_mdRam.gamemode = 52;
+    g_mdRam.gmmode = 52;
     if (IS_A_DOWN(g_mdRam.swdata1)) {
       unsigned long level = g_mdRam.specmodelevel;
       unsigned char* p_code = (unsigned char*)&g_mdRam.specmodecode;

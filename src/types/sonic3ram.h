@@ -46,7 +46,7 @@ typedef struct sonic3_ram {
   /* 08ffef80 */ unsigned short ringbuffer[RINGBUFFER_SLOTS];
   /* 08fff000 */ unsigned short colorwk4[64];
   /* 08fff080 */ unsigned short colorwk3[64];
-  /* 08fff600 */ unsigned char gamemode;
+  /* 08fff600 */ unsigned char gmmode;
   /* 08fff604 */ unsigned short swdata1;
   /* 08fff606 */ unsigned short swdata2;
   /* 08fff614 */ unsigned short demotimer;

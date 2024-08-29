@@ -130,7 +130,7 @@ void levelselect() {
         if (chosenstageno != 0x4000) { // Sonic 3 special stage
           if (chosenstageno == 0x4001) { // Sonic & Knuckles special stage
             g_mdRam.cartridgespec = 1;
-            g_mdRam.gamemode = 52;
+            g_mdRam.gmmode = 52;
             if (g_mdRam.cartridge != 0 && g_mdRam.stageno != FLYING_BATTERY_ACT_1 && g_mdRam.stageno < MUSHROOM_HILL_ACT_1) {
               chosenstageno = MUSHROOM_HILL_ACT_1;
               g_mdRam.stageno = chosenstageno;
@@ -143,12 +143,12 @@ void levelselect() {
         }
         else {
           g_mdRam.specmodemenu = 0;
-          g_mdRam.gamemode = 44;
+          g_mdRam.gmmode = 44;
           nextmode = true;
         }
       }
       else {
-        g_mdRam.gamemode = 0;
+        g_mdRam.gmmode = 0;
         nextmode = true;
       }
       if (!nextmode) {
@@ -188,7 +188,7 @@ denyentry:
         g_mdRam.stageno_is = chosenstageno;
         g_mdRam.scralim_down_s = 0x1000;
         g_mdRam.scralim_down_s2 = 0x1000;
-        g_mdRam.gamemode = 12;
+        g_mdRam.gmmode = 12;
         g_mdRam.pl_suu = 3;
         g_mdRam.pl2_suu = 3;
         g_mdRam.plring = 0;

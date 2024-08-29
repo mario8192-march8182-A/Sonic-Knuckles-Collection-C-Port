@@ -38,7 +38,7 @@ void start_debug() {
   g_mdRam.cartridge = 0;
   init_vdp();
   load_savedata();
-  g_mdRam.gamemode = 28;
+  g_mdRam.gmmode = 28;
   gameloop();
 }
 
@@ -48,7 +48,7 @@ void start_specialstagemode() {
   g_mdRam.romheadermdflag = 0;
   init_vdp();
   g_mdRam.specmodemenu = 0;
-  g_mdRam.gamemode = 44;
+  g_mdRam.gmmode = 44;
   gameloop();
 }
 
@@ -60,8 +60,8 @@ void gameloop() {
     DAT_00854de8 = 0;
     DAT_00854758 = 0;
     DAT_0082ddc8 = 0;
-    unsigned char gamemode = (g_mdRam.gamemode & 0x7C) / 4;
-    g_gameModes[gamemode]();
+    unsigned char gmmode = (g_mdRam.gmmode & 0x7C) / 4;
+    g_gameModes[gmmode]();
   }
 }
 
