@@ -142,10 +142,10 @@ void specialstagemode() {
   copy_data_vram(g_mdRam.chunkmappings128, 0, (p_chunkmappings - g_mdRam.chunkmappings128) / 2);
   unlze(&g_mdRam.chunkmappings128[0x4000], specialstagemode_text_tiles);
   copy_data_vram(&g_mdRam.chunkmappings128[0x4000], 0xA9C0, 0x6D0);
-  mapdevr((unsigned short*)&g_mdRam.chunkmappings128[0x8000], specialstagemode_fg_map, 0x2000);
-  copy_map_vram((unsigned short*)&g_mdRam.chunkmappings128[0x8000], 0xC380, 15, 39);
-  mapdevr((unsigned short*)&g_mdRam.chunkmappings128[0x8000], specialstagemode_bg_map, 0x4197);
-  copy_map_vram((unsigned short*)&g_mdRam.chunkmappings128[0x8000], 0xe09c, 7, 11);
+  mapdevr((unsigned short*)g_mdRam.levellayout, specialstagemode_fg_map, 0x2000);
+  copy_map_vram((unsigned short*)g_mdRam.levellayout, 0xC380, 15, 39);
+  mapdevr((unsigned short*)g_mdRam.levellayout, specialstagemode_bg_map, 0x4197);
+  copy_map_vram((unsigned short*)g_mdRam.levellayout, 0xE09C, 7, 11);
   unsigned char* p_text = getbluespheres;
   if (g_mdRam.specmodemenu == 0) {
     p_text = noway;
