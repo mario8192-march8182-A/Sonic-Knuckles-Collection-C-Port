@@ -1192,7 +1192,7 @@ static void FUN_006a6f2d(sprite_status* p_actwk) {
     ++p_actwk;
   }
 
-  FUN_006a6f2d(p_actwk);
+  FUN_006a708e(p_actwk);
 }
 
 
