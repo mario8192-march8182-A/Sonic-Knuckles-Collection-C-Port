@@ -525,9 +525,9 @@ void FUN_00824a1c(unsigned char* p_text, unsigned long vramoffset, unsigned shor
   vramoffset += 0xC000;
   vramoffset &= 0xFFFF;
   g_pLevelSelectVram = (unsigned short*)&g_mdVram[vramoffset];
-  memcpy(g_pLevelSelectVram, &g_mdRam.chunkmappings128[0x7000], (mapping_cnt + 1) * 2);
+  memcpy(g_pLevelSelectVram, &g_mdRam.chunkmappings128[0x7000], mapping_cnt * 2);
   g_pLevelSelectVram = (unsigned short*)&g_mdVram[vramoffset + 128];
-  memcpy(g_pLevelSelectVram, &g_mdRam.chunkmappings128[0x7080], (mapping_cnt + 1) * 2);
+  memcpy(g_pLevelSelectVram, &g_mdRam.chunkmappings128[0x7080], mapping_cnt * 2);
 }
 
 
