@@ -6,7 +6,9 @@
 #include "bitdevr.h"
 #include "color.h"
 #include "data.h"
+#include "game.h"
 #include "mapdevr.h"
+#include "vdp.h"
 static short stagenolist[33];
 static void handleinput();
 static void handleinput2();
@@ -24,11 +26,6 @@ static animscript sonicmiles_wrt;
 static void s3levelselect();
 
 extern void vInt();
-extern void copy_map_vram(unsigned short* p_source, unsigned short vram_offset, unsigned long row_cnt, unsigned long cell_cnt);
-extern void copy_data_vram(void* p_source, unsigned short vram_adr, unsigned short size);
-extern void clear_displaydata();
-extern void bgmset(signed char command);
-extern void soundset(signed char command);
 
 
 // 00415104

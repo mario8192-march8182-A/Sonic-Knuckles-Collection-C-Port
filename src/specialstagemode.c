@@ -6,6 +6,7 @@
 #include "bitdevr.h"
 #include "color.h"
 #include "data.h"
+#include "game.h"
 #include "mapdevr.h"
 #include "unlze.h"
 #include "vdp.h"
@@ -95,15 +96,6 @@ static sprite_pattern copyrightsp00;
 static unsigned char copyright_tiles[123];
 
 extern void vInt();
-extern void clear_displaydata();
-extern void bgmset(signed char command);
-extern void soundset(signed char command);
-extern void init_sprlist();
-extern void action();
-extern void actionsub(sprite_status* p_actwk);
-extern void patchg2(sprite_status* p_actwk, signed char** p_chg_data);
-extern void patset();
-extern void FUN_00824a1c(unsigned char* p_text, unsigned long vramoffset, unsigned short coloroffset);
 
 
 // 006a42d4
