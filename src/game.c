@@ -276,7 +276,7 @@ void patchg2(sprite_status* p_actwk, signed char** p_chg_data) {
     switch (patno) {
       case PS_CONTROL_LOOP:
         p_actwk->patcnt = 0;
-        patno = 0;
+        patno = p_sprpat[p_actwk->patcnt * 2];
         break;
       case PS_CONTROL_REWIND:
         patno = p_sprpat[p_actwk->patcnt * 2 + 1];
