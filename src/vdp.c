@@ -1424,12 +1424,12 @@ void blit_sprite_noprio(Sprite* p_sprite) {
   if (y_end > 224) {
     y_end = 224;
   }
-  unsigned char* p_pixelbuffer = &g_pPixelBuffer[y * 320];
+  unsigned char* p_pixelbuffer = &g_pixelBuffer[y * 320];
 
   do {
     unsigned long scanline_pixel_cnt = p_sprite->w;
     long x = p_sprite->x;
-    unsigned char* p_vram = &g_mdVram[p_sprite->vram_offset + (y - p_sprite->y) * 4];
+    unsigned long* p_vram = (unsigned long*)&g_mdVram[p_sprite->vram_offset + (y - p_sprite->y) * 4];
 
     do {
       if (x >= 320) break;
@@ -1463,7 +1463,7 @@ void blit_sprite_noprio(Sprite* p_sprite) {
         } while (--pixel_cnt != 0);
       }
       x += 8;
-      p_vram += p_sprite->h * 4;
+      p_vram += p_sprite->h;
     } while (--scanline_pixel_cnt != 0);
 
     p_pixelbuffer += 320;
@@ -1484,13 +1484,13 @@ void blit_sprite_hflip_noprio(Sprite* p_sprite) {
   if (y_end > 224) {
     y_end = 224;
   }
-  unsigned char* p_pixelbuffer = &g_pPixelBuffer[y * 320];
+  unsigned char* p_pixelbuffer = &g_pixelBuffer[y * 320];
 
   do {
     unsigned long scanline_pixel_cnt = p_sprite->w;
     long x = p_sprite->x;
-    unsigned char* p_vram = &g_mdVram[p_sprite->vram_offset + (y - p_sprite->y) * 4];
-    p_vram += (p_sprite->w - 1) * p_sprite->h * 4;
+    unsigned long* p_vram = (unsigned long*)&g_mdVram[p_sprite->vram_offset + (y - p_sprite->y) * 4];
+    p_vram += (p_sprite->w - 1) * p_sprite->h;
 
     do {
       if (x >= 320) break;
@@ -1524,7 +1524,7 @@ void blit_sprite_hflip_noprio(Sprite* p_sprite) {
         } while (--pixel_cnt != 0);
       }
       x += 8;
-      p_vram -= p_sprite->h * 4;
+      p_vram -= p_sprite->h;
     } while (--scanline_pixel_cnt != 0);
 
     p_pixelbuffer += 320;
@@ -1545,12 +1545,12 @@ void blit_sprite_vflip_noprio(Sprite* p_sprite) {
   if (y_end > 224) {
     y_end = 224;
   }
-  unsigned char* p_pixelbuffer = &g_pPixelBuffer[y * 320];
+  unsigned char* p_pixelbuffer = &g_pixelBuffer[y * 320];
 
   do {
     unsigned long scanline_pixel_cnt = p_sprite->w;
     long x = p_sprite->x;
-    unsigned char* p_vram = &g_mdVram[p_sprite->vram_offset + (p_sprite->y + p_sprite->h - y - 1) * 4];
+    unsigned long* p_vram = (unsigned long*)&g_mdVram[p_sprite->vram_offset + (p_sprite->y + p_sprite->h - y - 1) * 4];
 
     do {
       if (x >= 320) break;
@@ -1584,7 +1584,7 @@ void blit_sprite_vflip_noprio(Sprite* p_sprite) {
         } while (--pixel_cnt != 0);
       }
       x += 8;
-      p_vram += p_sprite->h * 4;
+      p_vram += p_sprite->h;
     } while (--scanline_pixel_cnt != 0);
 
     p_pixelbuffer += 320;
@@ -1605,13 +1605,13 @@ void blit_sprite_hvflip_noprio(Sprite* p_sprite) {
   if (y_end > 224) {
     y_end = 224;
   }
-  unsigned char* p_pixelbuffer = &g_pPixelBuffer[y * 320];
+  unsigned char* p_pixelbuffer = &g_pixelBuffer[y * 320];
 
   do {
     unsigned long scanline_pixel_cnt = p_sprite->w;
     long x = p_sprite->x;
-    unsigned char* p_vram = &g_mdVram[p_sprite->vram_offset + (p_sprite->y + p_sprite->h - y - 1) * 4];
-    p_vram += (p_sprite->w - 1) * p_sprite->h * 4;
+    unsigned long* p_vram = (unsigned long*)&g_mdVram[p_sprite->vram_offset + (p_sprite->y + p_sprite->h - y - 1) * 4];
+    p_vram += (p_sprite->w - 1) * p_sprite->h;
 
     do {
       if (x >= 320) break;
@@ -1645,7 +1645,7 @@ void blit_sprite_hvflip_noprio(Sprite* p_sprite) {
         } while (--pixel_cnt != 0);
       }
       x += 8;
-      p_vram -= p_sprite->h * 4;
+      p_vram -= p_sprite->h;
     } while (--scanline_pixel_cnt != 0);
 
     p_pixelbuffer += 320;
@@ -1718,13 +1718,13 @@ void blit_sprite_masked(Sprite* p_sprite) {
   if (y_end > 224) {
     y_end = 224;
   }
-  unsigned char* p_pixelbuffer = &g_pPixelBuffer[y * 320];
+  unsigned char* p_pixelbuffer = &g_pixelBuffer[y * 320];
 
   do {
     if (g_spriteMasks[y] == 0) {
       unsigned long scanline_pixel_cnt = p_sprite->w;
       long x = p_sprite->x;
-      unsigned char* p_vram = &g_mdVram[p_sprite->vram_offset + (y - p_sprite->y) * 4];
+      unsigned long* p_vram = (unsigned long*)&g_mdVram[p_sprite->vram_offset + (y - p_sprite->y) * 4];
 
       do {
         if (x >= 320) break;
@@ -1758,7 +1758,7 @@ void blit_sprite_masked(Sprite* p_sprite) {
           } while (--pixel_cnt != 0);
         }
         x += 8;
-        p_vram += p_sprite->h * 4;
+        p_vram += p_sprite->h;
       } while (--scanline_pixel_cnt != 0);
     }
     p_pixelbuffer += 320;
@@ -1783,14 +1783,14 @@ void blit_sprite_masked_hflip(Sprite* p_sprite) {
   if (y_end > 224) {
     y_end = 224;
   }
-  unsigned char* p_pixelbuffer = &g_pPixelBuffer[y * 320];
+  unsigned char* p_pixelbuffer = &g_pixelBuffer[y * 320];
 
   do {
     if (g_spriteMasks[y] == 0) {
       unsigned long scanline_pixel_cnt = p_sprite->w;
       long x = p_sprite->x;
-      unsigned char* p_vram = &g_mdVram[p_sprite->vram_offset + (y - p_sprite->y) * 4];
-      p_vram += (p_sprite->w - 1) * p_sprite->h * 4;
+      unsigned long* p_vram = (unsigned long*)&g_mdVram[p_sprite->vram_offset + (y - p_sprite->y) * 4];
+      p_vram += (p_sprite->w - 1) * p_sprite->h;
 
       do {
         if (x >= 320) break;
@@ -1824,7 +1824,7 @@ void blit_sprite_masked_hflip(Sprite* p_sprite) {
           } while (--pixel_cnt != 0);
         }
         x += 8;
-        p_vram -= p_sprite->h * 4;
+        p_vram -= p_sprite->h;
       } while (--scanline_pixel_cnt != 0);
     }
     p_pixelbuffer += 320;
@@ -1849,13 +1849,13 @@ void blit_sprite_masked_vflip(Sprite* p_sprite) {
   if (y_end > 224) {
     y_end = 224;
   }
-  unsigned char* p_pixelbuffer = &g_pPixelBuffer[y * 320];
+  unsigned char* p_pixelbuffer = &g_pixelBuffer[y * 320];
 
   do {
     if (g_spriteMasks[y] == 0) {
       unsigned long scanline_pixel_cnt = p_sprite->w;
       long x = p_sprite->x;
-      unsigned char* p_vram = &g_mdVram[p_sprite->vram_offset + (p_sprite->y + p_sprite->h - y - 1) * 4];
+      unsigned long* p_vram = (unsigned long*)&g_mdVram[p_sprite->vram_offset + (p_sprite->y + p_sprite->h - y - 1) * 4];
 
       do {
         if (x >= 320) break;
@@ -1889,7 +1889,7 @@ void blit_sprite_masked_vflip(Sprite* p_sprite) {
           } while (--pixel_cnt != 0);
         }
         x += 8;
-        p_vram += p_sprite->h * 4;
+        p_vram += p_sprite->h;
       } while (--scanline_pixel_cnt != 0);
     }
     p_pixelbuffer += 320;
@@ -1914,14 +1914,14 @@ void blit_sprite_masked_hvflip(Sprite* p_sprite) {
   if (y_end > 224) {
     y_end = 224;
   }
-  unsigned char* p_pixelbuffer = &g_pPixelBuffer[y * 320];
+  unsigned char* p_pixelbuffer = &g_pixelBuffer[y * 320];
 
   do {
     if (g_spriteMasks[y] == 0) {
       unsigned long scanline_pixel_cnt = p_sprite->w;
       long x = p_sprite->x;
-      unsigned char* p_vram = &g_mdVram[p_sprite->vram_offset + (p_sprite->y + p_sprite->h - y - 1) * 4];
-      p_vram += (p_sprite->w - 1) * p_sprite->h * 4;
+      unsigned long* p_vram = (unsigned long*)&g_mdVram[p_sprite->vram_offset + (p_sprite->y + p_sprite->h - y - 1) * 4];
+      p_vram += (p_sprite->w - 1) * p_sprite->h;
 
       do {
         if (x >= 320) break;
@@ -1955,7 +1955,7 @@ void blit_sprite_masked_hvflip(Sprite* p_sprite) {
           } while (--pixel_cnt != 0);
         }
         x += 8;
-        p_vram -= p_sprite->h * 4;
+        p_vram -= p_sprite->h;
       } while (--scanline_pixel_cnt != 0);
     }
     p_pixelbuffer += 320;
@@ -1976,12 +1976,12 @@ void blit_sprite(Sprite* p_sprite) {
   if (y_end > 224) {
     y_end = 224;
   }
-  unsigned char* p_pixelbuffer = &g_pPixelBuffer[y * 320];
+  unsigned char* p_pixelbuffer = &g_pixelBuffer[y * 320];
 
   do {
     unsigned long scanline_pixel_cnt = p_sprite->w;
     long x = p_sprite->x;
-    unsigned char* p_vram = &g_mdVram[p_sprite->vram_offset + (y - p_sprite->y) * 4];
+    unsigned long* p_vram = (unsigned long*)&g_mdVram[p_sprite->vram_offset + (y - p_sprite->y) * 4];
 
     do {
       if (x >= 320) break;
@@ -2015,7 +2015,7 @@ void blit_sprite(Sprite* p_sprite) {
         } while (--pixel_cnt != 0);
       }
       x += 8;
-      p_vram += p_sprite->h * 4;
+      p_vram += p_sprite->h;
     } while (--scanline_pixel_cnt != 0);
 
     p_pixelbuffer += 320;
@@ -2036,13 +2036,13 @@ void blit_sprite_hflip(Sprite* p_sprite) {
   if (y_end > 224) {
     y_end = 224;
   }
-  unsigned char* p_pixelbuffer = &g_pPixelBuffer[y * 320];
+  unsigned char* p_pixelbuffer = &g_pixelBuffer[y * 320];
 
   do {
     unsigned long scanline_pixel_cnt = p_sprite->w;
     long x = p_sprite->x;
-    unsigned char* p_vram = &g_mdVram[p_sprite->vram_offset + (y - p_sprite->y) * 4];
-    p_vram += (p_sprite->w - 1) * p_sprite->h * 4;
+    unsigned long* p_vram = (unsigned long*)&g_mdVram[p_sprite->vram_offset + (y - p_sprite->y) * 4];
+    p_vram += (p_sprite->w - 1) * p_sprite->h;
 
     do {
       if (x >= 320) break;
@@ -2076,7 +2076,7 @@ void blit_sprite_hflip(Sprite* p_sprite) {
         } while (--pixel_cnt != 0);
       }
       x += 8;
-      p_vram -= p_sprite->h * 4;
+      p_vram -= p_sprite->h;
     } while (--scanline_pixel_cnt != 0);
 
     p_pixelbuffer += 320;
@@ -2097,12 +2097,12 @@ void blit_sprite_vflip(Sprite* p_sprite) {
   if (y_end > 224) {
     y_end = 224;
   }
-  unsigned char* p_pixelbuffer = &g_pPixelBuffer[y * 320];
+  unsigned char* p_pixelbuffer = &g_pixelBuffer[y * 320];
 
   do {
     unsigned long scanline_pixel_cnt = p_sprite->w;
     long x = p_sprite->x;
-    unsigned char* p_vram = &g_mdVram[p_sprite->vram_offset + (p_sprite->y + p_sprite->h - y - 1) * 4];
+    unsigned long* p_vram = (unsigned long*)&g_mdVram[p_sprite->vram_offset + (p_sprite->y + p_sprite->h - y - 1) * 4];
 
     do {
       if (x >= 320) break;
@@ -2136,7 +2136,7 @@ void blit_sprite_vflip(Sprite* p_sprite) {
         } while (--pixel_cnt != 0);
       }
       x += 8;
-      p_vram += p_sprite->h * 4;
+      p_vram += p_sprite->h;
     } while (--scanline_pixel_cnt != 0);
 
     p_pixelbuffer += 320;
@@ -2157,13 +2157,13 @@ void blit_sprite_hvflip(Sprite* p_sprite) {
   if (y_end > 224) {
     y_end = 224;
   }
-  unsigned char* p_pixelbuffer = &g_pPixelBuffer[y * 320];
+  unsigned char* p_pixelbuffer = &g_pixelBuffer[y * 320];
 
   do {
     unsigned long scanline_pixel_cnt = p_sprite->w;
     long x = p_sprite->x;
-    unsigned char* p_vram = &g_mdVram[p_sprite->vram_offset + (p_sprite->y + p_sprite->h - y - 1) * 4];
-    p_vram += (p_sprite->w - 1) * p_sprite->h * 4;
+    unsigned long* p_vram = (unsigned long*)&g_mdVram[p_sprite->vram_offset + (p_sprite->y + p_sprite->h - y - 1) * 4];
+    p_vram += (p_sprite->w - 1) * p_sprite->h;
 
     do {
       if (x >= 320) break;
@@ -2197,7 +2197,7 @@ void blit_sprite_hvflip(Sprite* p_sprite) {
         } while (--pixel_cnt != 0);
       }
       x += 8;
-      p_vram -= p_sprite->h * 4;
+      p_vram -= p_sprite->h;
     } while (--scanline_pixel_cnt != 0);
 
     p_pixelbuffer += 320;
