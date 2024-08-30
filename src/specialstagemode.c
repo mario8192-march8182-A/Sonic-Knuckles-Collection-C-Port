@@ -142,11 +142,13 @@ void specialstagemode() {
   if (g_mdRam.specmodemenu == 0) {
     p_text = noway;
     g_mdRam.levelselect_plmode = TEAM_SONIC;
-    g_mdRam.vscroll = 0xFFF8FFF0;
+    g_mdRam.vscrolla = -16;
+    g_mdRam.vscrollb = -8;
   }
   FUN_00824a1c(p_text, 256, 0x5BF);
   if (g_mdRam.specmodefull == 0) {
-    g_mdRam.vscroll = 0xFFF8FF0;
+    g_mdRam.vscrolla = -16;
+    g_mdRam.vscrollb = -8;
   }
   g_mdRam.actwk[0].r_ptr = &FUN_006a4fba;
   g_mdRam.actwk[1].r_ptr = &FUN_006a70d8;
@@ -270,10 +272,10 @@ static void FUN_006a5058(sprite_status* p_actwk) {
 // 006a5126
 static void FUN_006a5126(sprite_status* p_actwk) {
   if (g_mdRam.specmodefull != 0) {
-    if (g_mdRam.vscroll != 0) {
-      ++g_mdRam.vscroll;
-      if (!(g_mdRam.vscroll & 1)) {
-        g_mdRam.vscroll += SHORT_TO_LONG_HIGH(1);
+    if (g_mdRam.vscrolla != 0 || g_mdRam.vscrollb != 0) {
+      ++g_mdRam.vscrolla;
+      if (g_mdRam.vscrolla % 2) {
+        ++g_mdRam.vscrollb;
       }
       sprite_status* a1 = &g_mdRam.actwk[2];
 

@@ -99,7 +99,8 @@ static void patset_hud() {
 
 // 0041a6fe
 static void init_vdp() {
-  g_mdRam.vscroll = 0;
+  g_mdRam.vscrolla = 0;
+  g_mdRam.vscrollb = 0;
   g_mdRam.hscroll = 0;
   memset(g_mdVram, 0, sizeof(g_mdVram));
 }
@@ -116,7 +117,8 @@ void clear_displaydata() {
   memset(&g_mdVram[0xC000], 0, 0x1000);
   memset(&g_mdVram[0xE000], 0, 0x1000);
 
-  g_mdRam.vscroll = 0;
+  g_mdRam.vscrolla = 0;
+  g_mdRam.vscrollb = 0;
   g_mdRam.hscroll = 0;
 
   /* BUGFIX:

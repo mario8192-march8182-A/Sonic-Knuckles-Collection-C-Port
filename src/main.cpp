@@ -497,8 +497,8 @@ extern "C" int readSaveData(unsigned char* pDestination, int saveFileOffset, USH
 // 004050c0
 extern "C" void vInt() {
   g_pHscrollbuff2 = g_pHscrollbuff = 0;
-  g_vscrollPlaneA = g_mdRam.vscroll & 0xFFFF;
-  g_vscrollPlaneB = g_mdRam.vscroll >> 16 & 0xFFFF;
+  g_vscrollPlaneA = g_mdRam.vscrolla;
+  g_vscrollPlaneB = g_mdRam.vscrollb;
   g_bVscrollCopy = FALSE;
 
   switch (g_mdRam.int_flg) {
