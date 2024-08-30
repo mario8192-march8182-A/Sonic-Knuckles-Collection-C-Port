@@ -210,7 +210,7 @@ static void update_hscrollbuff() {
 // 006a484f
 static void init_specmodevars() {
   g_mdRam.specmodefull = 1;
-  if (g_mdRam.specmodefull == 0) {
+  if (g_mdRam.specmodemenu == 0) {
     g_mdRam.DAT_08ffffab = 0;
     g_mdRam.specmodelevel = 0;
     g_mdRam.specmodecode = 0x3020100;
