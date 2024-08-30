@@ -240,6 +240,7 @@ static void FUN_006a4fe2(sprite_status* p_actwk) {
   g_mdRam.specringcnt = 255;
   soundset(99);
   FUN_00824a1c(getbluespheres, 256, 0x5BF);
+  FUN_006a5058(p_actwk);
 }
 
 
