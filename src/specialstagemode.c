@@ -1170,21 +1170,22 @@ static sprite_pattern starspheresp07 = {
 
 // 006a6f2d
 static void FUN_006a6f2d(sprite_status* p_actwk) {
+  sprite_status* p_next_actwk = p_actwk;
   for (int i = 0; i < 4; ++i) {
-    p_actwk->patbase = specialstagemode_characterspat;
-    p_actwk->sproffset = 0x20FE;
-    util__assign_high(&p_actwk->xposi, spriteposi[i][0]);
-    util__assign_high(&p_actwk->yposi, spriteposi[i][1]);
+    p_next_actwk->patbase = specialstagemode_characterspat;
+    p_next_actwk->sproffset = 0x20FE;
+    util__assign_high(&p_next_actwk->xposi, spriteposi[i][0]);
+    util__assign_high(&p_next_actwk->yposi, spriteposi[i][1]);
     if (g_mdRam.specmodemenu != 0 && g_mdRam.specmodefull != 0) {
-      p_actwk->yposi -= SHORT_TO_LONG_HIGH(16);
+      p_next_actwk->yposi -= SHORT_TO_LONG_HIGH(16);
     }
-    p_actwk->sprpri = PRI_3;
-    p_actwk->sprhs = 16;
-    p_actwk->sprvs = 16;
-    p_actwk->r_ptr = &FUN_006a708e;
-    p_actwk->mstno = 3 - i;
-    p_actwk->patno = characterspriteschg[3 - i][0];
-    ++p_actwk;
+    p_next_actwk->sprpri = PRI_3;
+    p_next_actwk->sprhs = 16;
+    p_next_actwk->sprvs = 16;
+    p_next_actwk->r_ptr = &FUN_006a708e;
+    p_next_actwk->mstno = 3 - i;
+    p_next_actwk->patno = characterspriteschg[3 - i][0];
+    ++p_next_actwk;
   }
 
   FUN_006a708e(p_actwk);
