@@ -16,7 +16,7 @@ void action();
 void actionsub(sprite_status* p_actwk);
 void patchg2(sprite_status* p_actwk, signed char** p_chg_data);
 void patset();
-void FUN_00824a1c(unsigned char* p_text, unsigned long vramoffset, unsigned short coloroffset);
+void load_string_vram(unsigned char* p_text, unsigned long vramoffset, unsigned short coloroffset);
 
 #endif
 

@@ -522,7 +522,7 @@ static void patset_rings() {
 
 
 // 00824a1c
-void FUN_00824a1c(unsigned char* p_text, unsigned long vramoffset, unsigned short coloroffset) {
+void load_string_vram(unsigned char* p_text, unsigned long vramoffset, unsigned short coloroffset) {
   unsigned short mapping_cnt = FUN_00824b55(p_text, coloroffset);
   vramoffset += 0xC000;
   vramoffset &= 0xFFFF;

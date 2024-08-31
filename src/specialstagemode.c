@@ -23,12 +23,12 @@ static unsigned char noway[44];
 static unsigned char getbluespheres[51];
 static void update_hscrollbuff();
 static void init_specmodevars();
-static void FUN_006a4fba(sprite_status* p_actwk);
-static void FUN_006a4fe2(sprite_status* p_actwk);
-static void FUN_006a5058(sprite_status* p_actwk);
-static void FUN_006a5126(sprite_status* p_actwk);
-static void FUN_006a5332(sprite_status* p_actwk);
-static void FUN_006a5444(sprite_status* p_actwk);
+static void menu_init(sprite_status* p_actwk);
+static void menu_wait(sprite_status* p_actwk);
+static void menu_move0(sprite_status* p_actwk);
+static void menu_move1(sprite_status* p_actwk);
+static void header_init(sprite_status* p_actwk);
+static void header_move(sprite_status* p_actwk);
 static void set_codedigits(sprite_status* p_actwk, unsigned long code);
 static void set_leveldigits(sprite_status* p_actwk, unsigned long level);
 static unsigned long divideby10sequence[9];
@@ -83,14 +83,14 @@ static sprite_pattern starspheresp05;
 static sprite_pattern starspheresp06;
 static sprite_pattern starspheresp07;
 static short spriteposi[4][2];
-static void FUN_006a6f2d(sprite_status* p_actwk);
-static void FUN_006a708e(sprite_status* p_actwk);
+static void character_init(sprite_status* p_actwk);
+static void character_move(sprite_status* p_actwk);
 static signed char* characterspriteschg[4];
 static signed char characterspriteschg0[9];
 static signed char characterspriteschg1[5];
 static signed char characterspriteschg2[5];
 static signed char characterspriteschg3[17];
-static void FUN_006a70d8(sprite_status* p_actwk);
+static void copyright_init(sprite_status* p_actwk);
 static sprite_pattern* copyrightpat[1];
 static sprite_pattern copyrightsp00;
 static unsigned char copyright_tiles[123];
@@ -145,15 +145,15 @@ void specialstagemode() {
     g_mdRam.vscrolla = -16;
     g_mdRam.vscrollb = -8;
   }
-  FUN_00824a1c(p_text, 256, 0x5BF);
+  load_string_vram(p_text, 256, 0x5BF);
   if (g_mdRam.specmodefull == 0) {
     g_mdRam.vscrolla = -16;
     g_mdRam.vscrollb = -8;
   }
-  g_mdRam.actwk[0].r_ptr = &FUN_006a4fba;
-  g_mdRam.actwk[1].r_ptr = &FUN_006a70d8;
+  g_mdRam.actwk[0].r_ptr = &menu_init;
+  g_mdRam.actwk[1].r_ptr = &copyright_init;
   bitdevr((unsigned long*)&g_mdVram[0xB640], copyright_tiles, g_mdRam.bitdevwk);
-  g_mdRam.actwk[2].r_ptr = &FUN_006a6f2d;
+  g_mdRam.actwk[2].r_ptr = &character_init;
   action();
   patset();
   bgmset(40);
@@ -219,35 +219,35 @@ static void init_specmodevars() {
 
 
 // 006a4fba
-static void FUN_006a4fba(sprite_status* p_actwk) {
+static void menu_init(sprite_status* p_actwk) {
   if (g_mdRam.specmodemenu == 0) {
-    p_actwk->r_ptr = &FUN_006a4fe2;
+    p_actwk->r_ptr = &menu_wait;
     p_actwk->actfree.dynamic.timer = 30;
-    FUN_006a4fe2(p_actwk);
+    menu_wait(p_actwk);
   }
   else {
-    FUN_006a5058(p_actwk);
+    menu_move0(p_actwk);
   }
 }
 
 
 // 006a4fe2
-static void FUN_006a4fe2(sprite_status* p_actwk) {
+static void menu_wait(sprite_status* p_actwk) {
   --p_actwk->actfree.dynamic.timer;
   if (p_actwk->actfree.dynamic.timer != 0) return;
   g_mdRam.swdata1 &= 0xFF00;
   g_mdRam.specspherecnt = 255;
   g_mdRam.specringcnt = 255;
   soundset(99);
-  FUN_00824a1c(getbluespheres, 256, 0x5BF);
-  FUN_006a5058(p_actwk);
+  load_string_vram(getbluespheres, 256, 0x5BF);
+  menu_move0(p_actwk);
 }
 
 
 // 006a5058
-static void FUN_006a5058(sprite_status* p_actwk) {
-  p_actwk->r_ptr = &FUN_006a5126;
-  g_mdRam.actwk[6].r_ptr = &FUN_006a5332;
+static void menu_move0(sprite_status* p_actwk) {
+  p_actwk->r_ptr = &menu_move1;
+  g_mdRam.actwk[6].r_ptr = &header_init;
   util__assign_high(&g_mdRam.actwk[6].yposi, 192);
   g_mdRam.specmodemenu = 1;
   g_mdRam.DAT_08ffffaa = 0;
@@ -271,7 +271,7 @@ static void FUN_006a5058(sprite_status* p_actwk) {
 
 
 // 006a5126
-static void FUN_006a5126(sprite_status* p_actwk) {
+static void menu_move1(sprite_status* p_actwk) {
   if (g_mdRam.specmodefull != 0) {
     if (g_mdRam.vscrolla != 0 || g_mdRam.vscrollb != 0) {
       ++g_mdRam.vscrolla;
@@ -324,7 +324,7 @@ static void FUN_006a5126(sprite_status* p_actwk) {
 
 
 // 006a5332
-static void FUN_006a5332(sprite_status* p_actwk) {
+static void header_init(sprite_status* p_actwk) {
   p_actwk->patbase = textpat;
   p_actwk->sproffset = 0x854E;
   util__assign_high(&p_actwk->xposi, 288);
@@ -345,14 +345,14 @@ static void FUN_006a5332(sprite_status* p_actwk) {
   }
 
   p_next_actwk->patno = 11;
-  p_actwk->r_ptr = &FUN_006a5444;
-  FUN_006a5444(p_actwk);
+  p_actwk->r_ptr = &header_move;
+  header_move(p_actwk);
 }
 
 
 // 006a5444
-static void FUN_006a5444(sprite_status* p_actwk) {
   if (g_mdRam.specmodefull != 0 || (g_mdRam.DAT_08ffffaa != 0 && g_mdRam.DAT_08ffffab != 0)) {
+static void header_move(sprite_status* p_actwk) {
     unsigned long code = BYTESWAP(g_mdRam.specmodecode);
     code = (code & 0xFFFFFF00) | (code & 0x000000FF) << 1;
     code = (code & 0xFFFF0000) | (code & 0x0000FFFF) << 1;
@@ -1169,7 +1169,7 @@ static sprite_pattern starspheresp07 = {
 
 
 // 006a6f2d
-static void FUN_006a6f2d(sprite_status* p_actwk) {
+static void character_init(sprite_status* p_actwk) {
   sprite_status* p_next_actwk = p_actwk;
   for (int i = 0; i < 4; ++i) {
     p_next_actwk->patbase = specialstagemode_characterspat;
@@ -1182,18 +1182,18 @@ static void FUN_006a6f2d(sprite_status* p_actwk) {
     p_next_actwk->sprpri = PRI_3;
     p_next_actwk->sprhs = 16;
     p_next_actwk->sprvs = 16;
-    p_next_actwk->r_ptr = &FUN_006a708e;
+    p_next_actwk->r_ptr = &character_move;
     p_next_actwk->mstno = 3 - i;
     p_next_actwk->patno = characterspriteschg[3 - i][0];
     ++p_next_actwk;
   }
 
-  FUN_006a708e(p_actwk);
+  character_move(p_actwk);
 }
 
 
 // 006a708e
-static void FUN_006a708e(sprite_status* p_actwk) {
+static void character_move(sprite_status* p_actwk) {
   if (g_mdRam.specmodefull != 0) {
     patchg2(p_actwk, characterspriteschg);
   }
@@ -1224,7 +1224,7 @@ static signed char characterspriteschg3[17] = {
 
 
 // 006a70d8
-static void FUN_006a70d8(sprite_status* p_actwk) {
+static void copyright_init(sprite_status* p_actwk) {
   p_actwk->patbase = copyrightpat;
   p_actwk->sproffset = 0x85B2;
   util__assign_high(&p_actwk->xposi, 320);
