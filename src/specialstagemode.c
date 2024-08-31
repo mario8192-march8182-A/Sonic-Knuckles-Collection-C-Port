@@ -354,13 +354,22 @@ static void header_init(sprite_status* p_actwk) {
   if (g_mdRam.specmodefull != 0 || (g_mdRam.DAT_08ffffaa != 0 && g_mdRam.DAT_08ffffab != 0)) {
 static void header_move(sprite_status* p_actwk) {
     unsigned long code = BYTESWAP(g_mdRam.specmodecode);
+    // pack the four 7-bit values
+    // 0AAAAAAA 0BBBBBBB 0CCCCCCC 0DDDDDDD
     code = (code & 0xFFFFFF00) | (code & 0x000000FF) << 1;
+    // 0AAAAAAA 0BBBBBBB 0CCCCCCC DDDDDDD0
     code = (code & 0xFFFF0000) | (code & 0x0000FFFF) << 1;
+    // 0AAAAAAA 0BBBBBBB CCCCCCCD DDDDDD00
     ROTATE_RIGHT(code, 16);
+    // CCCCCCCD DDDDDD00 0AAAAAAA 0BBBBBBB
     code = (code & 0xFFFFFF00) | (code & 0x000000FF) << 1;
+    // CCCCCCCD DDDDDD00 0AAAAAAA BBBBBBB0
     code = (code & 0xFFFF0000) | (code & 0x0000FFFF) >> 1;
+    // CCCCCCCD DDDDDD00 00AAAAAA ABBBBBBB
     ROTATE_RIGHT(code, 16);
+    // 00AAAAAA ABBBBBBB CCCCCCCD DDDDDD00
     code >>= 2;
+    // 0000AAAA AAABBBBB BBCCCCCC CDDDDDDD
     code &= 0xFFFFFFF;
     set_codedigits(p_actwk, code);
     p_actwk->patno = 1;
