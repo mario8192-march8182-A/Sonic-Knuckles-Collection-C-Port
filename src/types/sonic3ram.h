@@ -96,7 +96,7 @@ typedef struct sonic3_ram {
   /* 08fffc80 */ unsigned short colorwk2[64];
   /* 08fffe02 */ unsigned short gameflag;
   /* 08fffe04 */ unsigned short gametimer;
-  /* 08fffe08 */ unsigned char edit_r_no;
+  /* 08fffe08 */ unsigned short editmode;
   /* 08fffe0c */ unsigned long systemtimer;
   /* 08fffe10 */ unsigned short stageno;
   /* 08fffe12 */ unsigned char pl_suu;

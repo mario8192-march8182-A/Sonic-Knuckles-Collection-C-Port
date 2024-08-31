@@ -59,7 +59,7 @@ static void saveinit(sprite_status* p_actwk) {
 
 
 static void savemove(sprite_status* p_actwk) {
-  if (g_mdRam.edit_r_no == 0) {
+  if (g_mdRam.editmode == 0) {
     savemove__sub(p_actwk, &g_mdRam.actwk[0]);
   }
   savemove2(p_actwk);

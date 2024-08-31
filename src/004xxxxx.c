@@ -376,7 +376,7 @@ die:
 // skdisasm label: Kill_Character
 bool playdieset(sprite_status* p_playerwk, long sound_id) {
   if (sound_id == 0) {
-    if (g_mdRam.edit_r_no != 0) return true;
+    if (g_mdRam.editmode != 0) return true;
     sound_id = 53;
   }
   p_playerwk->cddat2 = 0;

@@ -359,7 +359,7 @@ static hitchk_results plhitchk_chk_bounds(sprite_status* p_actwk, sprite_status*
   if (BIT_7_IS_SET(p_actwk->actfree.player.control_bitfield)) {
     return plhitchk_chk_push(p_actwk, p_playerwk, plridebit);
   }
-  if (p_playerwk->r_no >= 6 || g_mdRam.edit_r_no != 0) { // unsigned
+  if (p_playerwk->r_no >= 6 || g_mdRam.editmode != 0) { // unsigned
     return plhitchk_no_coli(p_actwk);
   }
   hitchk_edge_distances edge_distances = {
