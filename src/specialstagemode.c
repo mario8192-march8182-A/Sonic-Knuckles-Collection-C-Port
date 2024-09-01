@@ -1183,7 +1183,7 @@ static sprite_pattern starspheresp07 = {
 static void character_init(sprite_status* p_actwk) {
   sprite_status* p_next_actwk = p_actwk;
   for (int i = 0; i < 4; ++i) {
-    p_next_actwk->patbase = specialstagemode_characterspat;
+    p_next_actwk->patbase = specialstagemode_characters_pat;
     p_next_actwk->sproffset = 0x20FE;
     util__assign_high(&p_next_actwk->xposi, spriteposi[i][0]);
     util__assign_high(&p_next_actwk->yposi, spriteposi[i][1]);

@@ -4,7 +4,7 @@
 
 extern unsigned char specialstagemode_fg_map[108];
 extern unsigned char specialstagemode_characters_tiles[4448];
-extern sprite_pattern* specialstagemode_characterspat[9];
+extern sprite_pattern* specialstagemode_characters_pat[9];
 extern unsigned char specialstagemode_charactersprites_tiles[2240];
 extern unsigned char specialstagemode_text_tiles[1136];
 extern unsigned char specialstagemode_bg_map[46];
