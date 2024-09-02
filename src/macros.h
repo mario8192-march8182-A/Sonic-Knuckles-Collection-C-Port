@@ -21,7 +21,7 @@
 #define CLEAR_BIT_5(value) (value &= 0xDF)
 #define CLEAR_BIT_6(value) (value &= 0xBF)
 #define CLEAR_BIT_7(value) (value &= 0x7F)
-#define CLEAR_BIT(value, bit) (value &= ~(bit))
+#define CLEAR_BIT(value, bit) (value &= ~(1 << (bit)))
 
 #define TOGGLE_BIT_0(value) (value ^= 1)
 #define TOGGLE_BIT_1(value) (value ^= 2)
