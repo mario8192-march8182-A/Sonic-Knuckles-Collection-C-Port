@@ -18,6 +18,9 @@
 #include "vdp.h"
 
 void vInt18();
+void vInt4();
+void vInt20();
+void vInt2();
 void vInt22();
 void vInt26();
 void uploadPalette();
@@ -173,10 +176,10 @@ DWORD WINAPI gameThreadStartRoutine(void* pParameter) {
   switch (g_startGameMode) {
     case STARTGAMEMODE_NORMAL:
       if (g_sonicGameMode == SONICGAMEMODE_SONICKNUCKLES) {
-        // TODO
+        start_game(0xFFFF);
       }
       else {
-        // TODO
+        start_game(0);
       }
       break;
     case STARTGAMEMODE_SPECIALSTAGEMODE:
@@ -503,16 +506,16 @@ extern "C" void vInt() {
 
   switch (g_mdRam.int_flg) {
     case 2:
-      // TODO
+      vInt2();
       break;
     case 4:
-      // TODO
+      vInt4();
       break;
     case 18:
       vInt18();
       break;
     case 20:
-      // TODO
+      vInt20();
       break;
     case 22:
       vInt22();
@@ -547,6 +550,36 @@ void vInt18() {
   uploadPalette();
   uploadSprites(g_mdRam.ramf8, g_sprites);
   pollMdControllers();
+}
+
+
+// 00405237
+void vInt4() {
+  memcpy(g_mdRam.colorwk, g_mdRam.colorwk2, sizeof(g_mdRam.colorwk));
+  uploadPalette();
+  uploadSprites(g_mdRam.ramf8, g_sprites);
+  pollMdControllers();
+  if (g_mdRam.demotimer != 0) {
+    --g_mdRam.demotimer;
+  }
+}
+
+
+// 00405284
+void vInt20() {
+  uploadPalette();
+  if (g_mdRam.demotimer != 0) {
+    --g_mdRam.demotimer;
+  }
+}
+
+
+// 004052b0
+void vInt2() {
+  uploadPalette();
+  if (g_mdRam.demotimer != 0) {
+    --g_mdRam.demotimer;
+  }
 }
 
 

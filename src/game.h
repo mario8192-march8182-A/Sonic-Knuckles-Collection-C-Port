@@ -7,6 +7,7 @@ extern "C" {
 
 void start_debug();
 void start_specialstagemode();
+void start_game(unsigned short cartridge);
 void gameloop();
 void clear_displaydata();
 void bgmset(signed char command);
@@ -14,6 +15,7 @@ void soundset(signed char command);
 void init_sprlist();
 void action();
 void actionsub(sprite_status* p_actwk);
+void patchg(sprite_status* p_actwk, signed char** p_chg_data);
 void patchg2(sprite_status* p_actwk, signed char** p_chg_data);
 void patset();
 void load_string_vram(unsigned char* p_text, unsigned long vramoffset, unsigned short coloroffset);

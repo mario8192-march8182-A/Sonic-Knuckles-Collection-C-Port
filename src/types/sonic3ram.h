@@ -59,6 +59,7 @@ typedef struct sonic3_ram {
   /* 08fff627 */ unsigned char colorcnt;
   /* 08fff62a */ unsigned char int_flg;
   /* 08fff62c */ unsigned char scrsprcnt;
+  /* 08fff634 */ unsigned short clchgtim;
   /* 08fff636 */ unsigned long ranum;
   /* 08fff648 */ short waterposi;
   /* 08fff64e */ unsigned char waterflag;
@@ -170,6 +171,7 @@ typedef struct sonic3_ram {
   /* 08ffff80 */ short levelselect_inputrepeattimer;
   /* 08ffff82 */ unsigned short levelselect_selection;
   /* 08ffff84 */ unsigned short levelselect_sound;
+  /* 08ffff86 */ unsigned char openingoption;
   /* 08ffff8a */ unsigned short vs_noitems;
   /* 08ffff8e */ unsigned short frame_bonus;
   /* 08ffff92 */ unsigned char brings;
@@ -186,12 +188,16 @@ typedef struct sonic3_ram {
   /* 08ffffab */ unsigned char DAT_08ffffab;
   /* 08ffffae */ unsigned short cartridge;
   /* 08ffffbb */ unsigned char cartridgespec;
+  /* 08ffffbd */ unsigned char openinganimdelay;
+  /* 08ffffbe */ unsigned short openinganimframe;
   /* 08ffffc0 */ unsigned long extrascore;
   /* 08ffffc4 */ unsigned long extrascore2;
   /* 08ffffce */ unsigned short plsproffset;
   /* 08ffffd0 */ unsigned short demoflag;
   /* 08ffffd4 */ unsigned char specmode;
   /* 08ffffd8 */ unsigned char mdstatus;
+  /* 08ffffda */ unsigned char DAT_08ffffda;
+  /* 08ffffe0 */ unsigned char levelselectcheat;
   /* 08ffffe2 */ unsigned short debugcheat;
   /* 08ffffe4 */ unsigned short DAT_08ffffe4;
   /* 08ffffe6 */ unsigned short DAT_08ffffe6;

@@ -6,8 +6,10 @@
 #include "color.h"
 #include "data.h"
 #include "mapdevr.h"
+#include "opening.h"
 #include "savedata.h"
 #include "specialstagemode.h"
+#include "util.h"
 #include "vdp.h"
 static void(*g_gameModes[21])();
 static void patset_hud();
@@ -53,6 +55,16 @@ void start_specialstagemode() {
 }
 
 
+// 00410095
+void start_game(unsigned short cartridge) {
+  g_mdRam.cartridge = cartridge;
+  init_vdp();
+  load_savedata();
+  g_mdRam.gmmode = 4;
+  gameloop();
+}
+
+
 // 004100cf
 void gameloop() {
   while (1) {
@@ -68,7 +80,7 @@ void gameloop() {
 
 /* 00410130 */ static void(*g_gameModes[21])()  = {
   0,
-  0,
+  &opening,
   0,
   0,
   0,
@@ -258,6 +270,51 @@ void actionsub(sprite_status* p_actwk) {
       pri_level += PBUFFER_LEVEL_SLOTS;
     }
   } while (!done);
+}
+
+
+// 0041ebc7
+void patchg(sprite_status* p_actwk, signed char** p_chg_data) {
+  if (p_actwk->mstno != p_actwk->restart) {
+    p_actwk->restart = p_actwk->mstno;
+    p_actwk->patcnt = 0;
+    p_actwk->pattim = 0;
+  }
+  if (p_actwk->pattim-- != 0) return;
+
+  signed char* p_sprpat = p_chg_data[p_actwk->mstno];
+  p_actwk->pattim = p_sprpat[0];
+  signed char patno = p_sprpat[p_actwk->patcnt + 1];
+  if (patno < 0) {
+    switch (patno) {
+      case PS_CONTROL_LOOP:
+        p_actwk->patcnt = 0;
+        patno = p_sprpat[1];
+        break;
+      case PS_CONTROL_REWIND:
+        patno = p_sprpat[p_actwk->patcnt + 2];
+        p_actwk->patcnt -= patno;
+        patno = p_sprpat[p_actwk->patcnt - patno + 1];
+        break;
+      case PS_CONTROL_NEXT:
+        p_actwk->mstno = p_sprpat[p_actwk->patcnt + 2];
+        return;
+      case PS_CONTROL_ROUTINE:
+        p_actwk->r_no += 2;
+        p_actwk->pattim = 0;
+        ++p_actwk->patcnt;
+        return;
+      case PS_CONTROL_FOUT:
+        util__assign_high(&p_actwk->xposi, 0x7F00);
+        return;
+      default:
+        return;
+    }
+  }
+  p_actwk->patno = patno;
+  p_actwk->actflg &= 0xFC;
+  p_actwk->actflg |= p_actwk->cddat1 & 3;
+  ++p_actwk->patcnt;
 }
 
 
