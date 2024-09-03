@@ -29,26 +29,27 @@ static void menu_move0(sprite_status* p_actwk);
 static void menu_move1(sprite_status* p_actwk);
 static void header_init(sprite_status* p_actwk);
 static void header_move(sprite_status* p_actwk);
-static void set_codedigits(sprite_status* p_actwk, unsigned long code);
+static void set_stagedigits(sprite_status* p_actwk, unsigned long code);
 static void set_leveldigits(sprite_status* p_actwk, unsigned long level);
 static unsigned long divideby10sequence[9];
 static void FUN_006a5aac(sprite_status* p_actwk, unsigned short d0, unsigned long d1);
+static void FUN_006a5b93(sprite_status* p_actwk, unsigned short* p_d0, unsigned long* p_d1);
 static codepair codepairs[12];
-static short letterxposi[12];
-static void FUN_006a5cdf(sprite_status* p_actwk);
-static void FUN_006a5cf8(sprite_status* p_actwk);
-static void FUN_006a5d0f(sprite_status* p_actwk, void(*r_ptr)(sprite_status*));
-static void FUN_006a5e09(sprite_status* p_actwk);
-static void codeinput(sprite_status* p_actwk);
+static short codedigitxposi[12];
+static void codeinput_init(sprite_status* p_actwk);
+static void currentcode_init(sprite_status* p_actwk);
+static void init_codedigit(sprite_status* p_actwk, void(*r_ptr)(sprite_status*));
+static void currentcode_move(sprite_status* p_actwk);
+static void codeinput_move(sprite_status* p_actwk);
 static void chk_code(sprite_status* p_actwk);
 static unsigned short FUN_006a668e(unsigned char* a2, int cnt);
-static void FUN_006a6721(sprite_status* p_actwk);
-static void FUN_006a6738(sprite_status* p_actwk);
-static void FUN_006a6779(sprite_status* p_actwk);
-static void FUN_006a678b(sprite_status* p_actwk);
-static void FUN_006a679a(sprite_status* p_actwk);
-static void FUN_006a67ac(sprite_status* p_actwk);
-static void FUN_006a67bb(sprite_status* p_actwk);
+static void headerdigit_init(sprite_status* p_actwk);
+static void init_number(sprite_status* p_actwk);
+static void currentcodedigit_init(sprite_status* p_actwk);
+static void currentcodedigit_move(sprite_status* p_actwk);
+static void codeinputdigit_init(sprite_status* p_actwk);
+static void codeinputdigit_move(sprite_status* p_actwk);
+static void starttext(sprite_status* p_actwk);
 static void starsphere_init(sprite_status* p_actwk);
 static void starsphere_move(sprite_status* p_actwk);
 static short leftstarsphereposi[3][2];
@@ -256,15 +257,15 @@ static void menu_move0(sprite_status* p_actwk) {
   SET_HFLIP(g_mdRam.actwk[47].actflg);
   if (g_mdRam.specmodefull != 0) {
     util__assign_high(&g_mdRam.actwk[6].yposi, 176);
-    g_mdRam.actwk[18].r_ptr = &FUN_006a5cdf;
+    g_mdRam.actwk[18].r_ptr = &codeinput_init;
     util__assign_high(&g_mdRam.actwk[18].yposi, 324);
-    g_mdRam.actwk[31].r_ptr = &FUN_006a5cf8;
+    g_mdRam.actwk[31].r_ptr = &currentcode_init;
     util__assign_high(&g_mdRam.actwk[31].yposi, 324);
-    g_mdRam.actwk[45].r_ptr = &FUN_006a67bb;
+    g_mdRam.actwk[45].r_ptr = &starttext;
     g_mdRam.DAT_08ffffaa = 1;
   }
   else if (g_mdRam.specspherecnt == 0 && g_mdRam.specringcnt == 0) {
-    g_mdRam.actwk[31].r_ptr = &FUN_006a5cf8;
+    g_mdRam.actwk[31].r_ptr = &currentcode_init;
     util__assign_high(&g_mdRam.actwk[31].yposi, 324);
   }
 }
@@ -338,7 +339,7 @@ static void header_init(sprite_status* p_actwk) {
 
   for (int i = 0; i < 11; ++i) {
     ++p_next_actwk;
-    p_next_actwk->r_ptr = &FUN_006a6721;
+    p_next_actwk->r_ptr = &headerdigit_init;
     util__assign_high(&p_next_actwk->xposi, xposi);
     util__assign_high(&p_next_actwk->yposi, yposi);
     xposi += 8;
@@ -373,7 +374,7 @@ static void header_move(sprite_status* p_actwk) {
     code >>= 2;
     // 0000AAAA AAABBBBB BBCCCCCC CDDDDDDD
     code &= 0xFFFFFFF;
-    set_codedigits(p_actwk, code);
+    set_stagedigits(p_actwk, code);
     p_actwk->patno = 1;
   }
   else {
@@ -387,7 +388,7 @@ static void header_move(sprite_status* p_actwk) {
 
 
 // 006a5543
-static void set_codedigits(sprite_status* p_actwk, unsigned long code) {
+static void set_stagedigits(sprite_status* p_actwk, unsigned long code) {
   code &= 0xFFFFFFF;
   sprite_status* p_next_actwk = p_actwk + 1;
   unsigned long* p_sequence = divideby10sequence;
@@ -499,7 +500,7 @@ static void FUN_006a5aac(sprite_status* p_actwk, unsigned short d0, unsigned lon
 
 
 // 006a5b93
-void FUN_006a5b93(sprite_status* p_actwk, unsigned short* p_d0, unsigned long* p_d1) {
+static void FUN_006a5b93(sprite_status* p_actwk, unsigned short* p_d0, unsigned long* p_d1) {
   codepair* p_pair = codepairs;
 
   for (int i = 0; i < 12; ++i) {
@@ -536,7 +537,7 @@ void FUN_006a5b93(sprite_status* p_actwk, unsigned short* p_d0, unsigned long* p
 };
 
 
-/* 006a5cc7 */ static short letterxposi[12] = {
+/* 006a5cc7 */ static short codedigitxposi[12] = {
   268,
   276,
   284,
@@ -553,21 +554,21 @@ void FUN_006a5b93(sprite_status* p_actwk, unsigned short* p_d0, unsigned long* p
 
 
 // 006a5cdf
-static void FUN_006a5cdf(sprite_status* p_actwk) {
-  p_actwk->r_ptr = &codeinput;
-  FUN_006a5d0f(p_actwk, &FUN_006a679a);
+static void codeinput_init(sprite_status* p_actwk) {
+  p_actwk->r_ptr = &codeinput_move;
+  init_codedigit(p_actwk, &codeinputdigit_init);
 }
 
 
 // 006a5cf8
-static void FUN_006a5cf8(sprite_status* p_actwk) {
-  p_actwk->r_ptr = &FUN_006a5e09;
-  FUN_006a5d0f(p_actwk, &FUN_006a6779);
+static void currentcode_init(sprite_status* p_actwk) {
+  p_actwk->r_ptr = &currentcode_move;
+  init_codedigit(p_actwk, &currentcodedigit_init);
 }
 
 
 // 006a5d0f
-static void FUN_006a5d0f(sprite_status* p_actwk, void(*r_ptr)(sprite_status*)) {
+static void init_codedigit(sprite_status* p_actwk, void(*r_ptr)(sprite_status*)) {
   p_actwk->patbase = textpat;
   p_actwk->sproffset = 0x854E;
   util__assign_high(&p_actwk->xposi, 212);
@@ -575,7 +576,7 @@ static void FUN_006a5d0f(sprite_status* p_actwk, void(*r_ptr)(sprite_status*)) {
   p_actwk->sprhs = 20;
   p_actwk->sprvs = 8;
   p_actwk->patno = 2;
-  short* p_xposi = letterxposi;
+  short* p_xposi = codedigitxposi;
   sprite_status* p_next_actwk = p_actwk;
 
   for (int i = 0; i < 12; ++i) {
@@ -589,7 +590,7 @@ static void FUN_006a5d0f(sprite_status* p_actwk, void(*r_ptr)(sprite_status*)) {
 
 
 // 006a5e09
-static void FUN_006a5e09(sprite_status* p_actwk) {
+static void currentcode_move(sprite_status* p_actwk) {
   if (g_mdRam.specmodemenu & 0x80) return;
 
   unsigned char* a2 = g_mdRam.direc_x;
@@ -625,7 +626,7 @@ static void FUN_006a5e09(sprite_status* p_actwk) {
 
 
 // 006a5f81
-static void codeinput(sprite_status* p_actwk) {
+static void codeinput_move(sprite_status* p_actwk) {
   if (!(g_mdRam.specmodemenu & 0x80)) {
     SPRITE_STATUS_USHORT(p_actwk, 48) = 0;
     return;
@@ -770,14 +771,14 @@ static unsigned short FUN_006a668e(unsigned char* a2, int cnt) {
 
 
 // 006a6721
-static void FUN_006a6721(sprite_status* p_actwk) {
-  FUN_006a6738(p_actwk);
+static void headerdigit_init(sprite_status* p_actwk) {
+  init_number(p_actwk);
   p_actwk->r_ptr = &actionsub;
 }
 
 
 // 006a6738
-static void FUN_006a6738(sprite_status* p_actwk) {
+static void init_number(sprite_status* p_actwk) {
   p_actwk->patbase = numberspat;
   p_actwk->sproffset = 0x854E;
   p_actwk->sprpri = PRI_1;
@@ -787,15 +788,15 @@ static void FUN_006a6738(sprite_status* p_actwk) {
 
 
 // 006a6779
-static void FUN_006a6779(sprite_status* p_actwk) {
-  FUN_006a6738(p_actwk);
-  p_actwk->r_ptr = &FUN_006a678b;
-  FUN_006a678b(p_actwk);
+static void currentcodedigit_init(sprite_status* p_actwk) {
+  init_number(p_actwk);
+  p_actwk->r_ptr = &currentcodedigit_move;
+  currentcodedigit_move(p_actwk);
 }
 
 
 // 006a678b
-static void FUN_006a678b(sprite_status* p_actwk) {
+static void currentcodedigit_move(sprite_status* p_actwk) {
   if (!(g_mdRam.specmodemenu & 0x80)) {
     actionsub(p_actwk);
   }
@@ -803,15 +804,15 @@ static void FUN_006a678b(sprite_status* p_actwk) {
 
 
 // 006a679a
-static void FUN_006a679a(sprite_status* p_actwk) {
-  FUN_006a6738(p_actwk);
-  p_actwk->r_ptr = &FUN_006a67ac;
-  FUN_006a67ac(p_actwk);
+static void codeinputdigit_init(sprite_status* p_actwk) {
+  init_number(p_actwk);
+  p_actwk->r_ptr = &codeinputdigit_move;
+  codeinputdigit_move(p_actwk);
 }
 
 
 // 006a67ac
-static void FUN_006a67ac(sprite_status* p_actwk) {
+static void codeinputdigit_move(sprite_status* p_actwk) {
   if (g_mdRam.specmodemenu & 0x80) {
     actionsub(p_actwk);
   }
@@ -819,7 +820,7 @@ static void FUN_006a67ac(sprite_status* p_actwk) {
 
 
 // 006a67bb
-static void FUN_006a67bb(sprite_status* p_actwk) {
+static void starttext(sprite_status* p_actwk) {
   p_actwk->patbase = textpat;
   p_actwk->sproffset = 0x854E;
   util__assign_high(&p_actwk->xposi, 288);
