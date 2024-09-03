@@ -398,7 +398,7 @@ void blitSprites() {
     }
   }
   else {
-    pSprite = &g_sprites[g_spriteCnt];
+    pSprite = &g_sprites[g_spriteCnt - 1];
 
     for (unsigned int i = 0; i < g_spriteCnt; ++i) {
       switch (pSprite->flags & 0x300) {
