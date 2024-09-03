@@ -417,23 +417,23 @@ static void set_leveldigits(sprite_status* p_actwk, unsigned long level) {
   sprite_status* p_next_actwk = p_actwk + 1;
   unsigned long* p_sequence = divideby10sequence;
   unsigned short cnt = 8;
-  unsigned short d4 = 0;
+  unsigned short digit_cnt = 0;
 
   do {
     ++p_next_actwk;
     unsigned long d3 = *p_sequence++;
     unsigned short patno = level / d3;
     level -= patno * d3;
-    if (patno != 0 && d4 == 0) {
-      d4 = cnt + 1;
+    if (patno != 0 && digit_cnt == 0) {
+      digit_cnt = cnt + 1;
     }
-    if (d4 == 0) {
+    if (digit_cnt == 0) {
       patno = 10;
     }
     p_next_actwk->patno = patno;
   } while (cnt-- != 0);
 
-  cnt = 9 - d4;
+  cnt = 9 - digit_cnt;
   short xposi = 247 + cnt * 4;
   p_next_actwk = p_actwk;
 
@@ -441,6 +441,12 @@ static void set_leveldigits(sprite_status* p_actwk, unsigned long level) {
     ++p_next_actwk;
     util__assign_high(&p_next_actwk->xposi, xposi);
   } while (cnt-- != 0);
+
+  do {
+    ++p_next_actwk;
+    xposi += 8;
+    util__assign_high(&p_next_actwk->xposi, xposi);
+  } while (digit_cnt-- != 0);
 }
 
 
