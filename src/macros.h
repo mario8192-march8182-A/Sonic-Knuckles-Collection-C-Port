@@ -87,25 +87,6 @@
 #define SET_MDREGION_OVERSEAS(value) SET_BIT_7(value)
 
 
-// swdata bits
-#define IS_UP_PRESSED(value) (value & 1)
-#define IS_DOWN_PRESSED(value) (value & 2)
-#define IS_LEFT_PRESSED(value) (value & 4)
-#define IS_RIGHT_PRESSED(value) (value & 8)
-#define IS_A_PRESSED(value) (value & 0x40)
-#define IS_B_PRESSED(value) (value & 0x10)
-#define IS_C_PRESSED(value) (value & 0x20)
-#define IS_START_PRESSED(value) (value & 0x80)
-#define IS_UP_DOWN(value) (value >> 8 & 1)
-#define IS_DOWN_DOWN(value) (value >> 8 & 2)
-#define IS_LEFT_DOWN(value) (value >> 8 & 4)
-#define IS_RIGHT_DOWN(value) (value >> 8 & 8)
-#define IS_A_DOWN(value) (value >> 8 & 0x40)
-#define IS_B_DOWN(value) (value >> 8 & 0x10)
-#define IS_C_DOWN(value) (value >> 8 & 0x20)
-#define IS_START_DOWN(value) (value >> 8 & 0x80)
-
-
 // scroll plane nametable bits
 #define IS_TILE_HFLIP(value) (value & 0x800)
 #define IS_TILE_VFLIP(value) (value & 0x1000)
@@ -128,5 +109,8 @@
 #define GET_ACT(value) (value & 0xFF)
 
 #define SET_ACT(value, act) (value = (value & 0xFF00) | act)
+
+#define IS_BUTTON_PRESSED(value, bitstring) ((value) & (bitstring))
+#define IS_BUTTON_DOWN(value, bitstring) ((value) >> 8 & (bitstring))
 
 #endif

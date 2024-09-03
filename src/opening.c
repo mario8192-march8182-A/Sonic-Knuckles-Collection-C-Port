@@ -173,7 +173,7 @@ void opening() {
       do {
         g_mdRam.int_flg = 20;
         vInt();
-        if (IS_START_PRESSED(g_mdRam.swdata1)) break;
+        if (IS_BUTTON_PRESSED(g_mdRam.swdata1, PAD_S)) break;
       } while (g_mdRam.demotimer != 0);
 
       bgmset(254);
@@ -414,7 +414,7 @@ static void selection_move(sprite_status* p_actwk) {
   unsigned char wk = g_mdRam.openingoption;
   unsigned short swdata = g_mdRam.swdata1 | g_mdRam.swdata2;
   if (g_bTrial == 0) {
-    if (IS_UP_PRESSED(swdata)) {
+    if (IS_BUTTON_PRESSED(swdata, PAD_U)) {
       if (wk-- == 0) {
         wk = 2;
         if (g_mdRam.levelselectcheat == 0) {
@@ -422,7 +422,7 @@ static void selection_move(sprite_status* p_actwk) {
         }
       }
     }
-    if (IS_DOWN_PRESSED(swdata)) {
+    if (IS_BUTTON_PRESSED(swdata, PAD_D)) {
       ++wk;
       if (g_mdRam.levelselectcheat == 0) {
         wk &= 1;
@@ -434,7 +434,7 @@ static void selection_move(sprite_status* p_actwk) {
   }
   p_actwk->patno = wk;
   g_mdRam.openingoption = wk;
-  if (IS_UP_PRESSED(swdata) || IS_DOWN_PRESSED(swdata)) {
+  if (IS_BUTTON_PRESSED(swdata, PAD_U | PAD_D)) {
     soundset(91);
   }
   actionsub(p_actwk);

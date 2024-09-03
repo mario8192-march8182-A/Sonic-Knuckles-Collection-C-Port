@@ -115,7 +115,7 @@ void levelselect() {
     handleinput();
     set_selectioncolor(0x6000);
     anim_tiles(sonicmiles_wrt_cnt, (unsigned char*)&sonicmiles_wrt);
-    if (IS_START_PRESSED(g_mdRam.swdata1) || IS_START_PRESSED(g_mdRam.swdata2)) {
+    if (IS_BUTTON_PRESSED(g_mdRam.swdata1 | g_mdRam.swdata2, PAD_S)) {
       if (g_mdRam.cartridge != 0) {
         if (g_mdRam.levelselect_plmode < TEAM_KNUCKLES) {
           g_mdRam.levelselect_plmode = TEAM_SONIC;
@@ -241,7 +241,7 @@ static short stagenolist[33] = {
 
 // 0041591b
 static void handleinput() {
-  if (!IS_UP_PRESSED(g_mdRam.swdata1) && !IS_DOWN_PRESSED(g_mdRam.swdata1)) {
+  if (!IS_BUTTON_PRESSED(g_mdRam.swdata1, PAD_U | PAD_D)) {
     --g_mdRam.levelselect_inputrepeattimer;
     if (g_mdRam.levelselect_inputrepeattimer >= 0) {
       handleinput2();
@@ -249,13 +249,13 @@ static void handleinput() {
     }
   }
   g_mdRam.levelselect_inputrepeattimer = 11;
-  if (IS_UP_DOWN(g_mdRam.swdata1) || IS_DOWN_DOWN(g_mdRam.swdata1)) {
-    if (IS_UP_DOWN(g_mdRam.swdata1)) {
+  if (IS_BUTTON_DOWN(g_mdRam.swdata1, PAD_U | PAD_D)) {
+    if (IS_BUTTON_DOWN(g_mdRam.swdata1, PAD_U)) {
       if (g_mdRam.levelselect_selection-- == 0) {
         g_mdRam.levelselect_selection = 32;
       }
     }
-    if (IS_DOWN_DOWN(g_mdRam.swdata1)) {
+    if (IS_BUTTON_DOWN(g_mdRam.swdata1, PAD_D)) {
       ++g_mdRam.levelselect_selection;
       if (g_mdRam.levelselect_selection >= 33) {
         g_mdRam.levelselect_selection = 0;
@@ -271,33 +271,33 @@ static void handleinput() {
 // 004159e3
 static void handleinput2() {
   if (g_mdRam.levelselect_selection == 32) {
-    if (IS_LEFT_PRESSED(g_mdRam.swdata1)) {
+    if (IS_BUTTON_PRESSED(g_mdRam.swdata1, PAD_L)) {
       if (g_mdRam.levelselect_sound-- == 0) {
         g_mdRam.levelselect_sound = 0;
       }
     }
-    if (IS_RIGHT_PRESSED(g_mdRam.swdata1)) {
+    if (IS_BUTTON_PRESSED(g_mdRam.swdata1, PAD_R)) {
       ++g_mdRam.levelselect_sound;
       if (g_mdRam.levelselect_sound >= 256) {
         g_mdRam.levelselect_sound = 0;
       }
     }
-    if (IS_A_PRESSED(g_mdRam.swdata1)) {
+    if (IS_BUTTON_PRESSED(g_mdRam.swdata1, PAD_A)) {
       g_mdRam.levelselect_sound += 16;
       g_mdRam.levelselect_sound &= 0xFF;
     }
-    if (IS_C_PRESSED(g_mdRam.swdata1)) {
+    if (IS_BUTTON_PRESSED(g_mdRam.swdata1, PAD_C)) {
       bgmset(g_mdRam.levelselect_sound);
     }
-    if (IS_B_PRESSED(g_mdRam.swdata1)) {
+    if (IS_BUTTON_PRESSED(g_mdRam.swdata1, PAD_B)) {
       bgmset(227);
     }
   }
   else {
-    if (IS_LEFT_PRESSED(g_mdRam.swdata1) || IS_RIGHT_PRESSED(g_mdRam.swdata1)) {
+    if (IS_BUTTON_PRESSED(g_mdRam.swdata1, PAD_L | PAD_R)) {
       g_mdRam.levelselect_selection = levelselect_columnchangelookup[g_mdRam.levelselect_selection];
     }
-    if (IS_C_PRESSED(g_mdRam.swdata1)) {
+    if (IS_BUTTON_PRESSED(g_mdRam.swdata1, PAD_C)) {
       ++g_mdRam.levelselect_plmode;
       if (g_mdRam.levelselect_plmode >= 4) {
         g_mdRam.levelselect_plmode = TEAM_SONIC_AND_MILES;

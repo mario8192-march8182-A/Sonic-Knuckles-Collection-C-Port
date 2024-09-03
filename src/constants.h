@@ -149,6 +149,18 @@ typedef enum sonic_game_modes {
 }
 sonic_game_modes;
 
+typedef enum pad_buttons {
+  PAD_U = 0x01,
+  PAD_D = 0x02,
+  PAD_L = 0x04,
+  PAD_R = 0x08,
+  PAD_B = 0x10,
+  PAD_C = 0x20,
+  PAD_A = 0x40,
+  PAD_S = 0x80
+}
+pad_buttons;
+
 #define SPEEDUPTIMER 54
 #define FOOTDIR 58
 #define KO_ADR 68

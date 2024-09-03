@@ -287,11 +287,11 @@ static void menu_move1(sprite_status* p_actwk) {
       }
     }
     if (!(g_mdRam.specmodemenu & 0x80)) {
-      if (IS_UP_PRESSED(g_mdRam.swdata1) && g_mdRam.DAT_08ffffaa != 0) {
+      if (IS_BUTTON_PRESSED(g_mdRam.swdata1, PAD_U) && g_mdRam.DAT_08ffffaa != 0) {
         --g_mdRam.DAT_08ffffaa;
         soundset(137);
       }
-      if (IS_DOWN_PRESSED(g_mdRam.swdata1) && g_mdRam.DAT_08ffffaa < 2) {
+      if (IS_BUTTON_PRESSED(g_mdRam.swdata1, PAD_D) && g_mdRam.DAT_08ffffaa < 2) {
         ++g_mdRam.DAT_08ffffaa;
         soundset(137);
         if (g_mdRam.DAT_08ffffaa == 2) {
@@ -302,7 +302,7 @@ static void menu_move1(sprite_status* p_actwk) {
     }
     if (g_mdRam.DAT_08ffffaa != 1) return;
   }
-  if (IS_B_PRESSED(g_mdRam.swdata1) || IS_START_PRESSED(g_mdRam.swdata1)) {
+  if (IS_BUTTON_PRESSED(g_mdRam.swdata1, PAD_B | PAD_S)) {
     g_mdRam.marker_flag = 0;
     g_mdRam.specmode = 1;
     g_mdRam.plmode = g_mdRam.levelselect_plmode;
@@ -310,7 +310,7 @@ static void menu_move1(sprite_status* p_actwk) {
     g_mdRam.cartridgespec = 0;
     g_mdRam.DAT_08fffe16 = 0;
     g_mdRam.gmmode = 52;
-    if (IS_A_DOWN(g_mdRam.swdata1)) {
+    if (IS_BUTTON_DOWN(g_mdRam.swdata1, PAD_A)) {
       unsigned long level = g_mdRam.specmodelevel;
       unsigned char* p_code = (unsigned char*)&g_mdRam.specmodecode;
 
@@ -632,28 +632,28 @@ static void codeinput_move(sprite_status* p_actwk) {
     return;
   }
 
-  if (IS_B_PRESSED(g_mdRam.swdata1) || IS_START_PRESSED(g_mdRam.swdata1)) {
+  if (IS_BUTTON_PRESSED(g_mdRam.swdata1, PAD_B | PAD_S)) {
     chk_code(p_actwk);
   }
   sprite_status* p_next_actwk = p_actwk + (SPRITE_STATUS_USHORT(p_actwk, 48) + 1);
   p_next_actwk->sproffset = 0x854E;
-  if (IS_UP_PRESSED(g_mdRam.swdata1)) {
+  if (IS_BUTTON_PRESSED(g_mdRam.swdata1, PAD_U)) {
     if (p_next_actwk->patno-- == 0) {
       p_next_actwk->patno = 9;
     }
   }
-  if (IS_DOWN_PRESSED(g_mdRam.swdata1)) {
+  if (IS_BUTTON_PRESSED(g_mdRam.swdata1, PAD_D)) {
     ++p_next_actwk->patno;
     if (p_next_actwk->patno >= 10) {
       p_next_actwk->patno = 0;
     }
   }
-  if (IS_LEFT_PRESSED(g_mdRam.swdata1)) {
+  if (IS_BUTTON_PRESSED(g_mdRam.swdata1, PAD_L)) {
     if (SPRITE_STATUS_USHORT(p_actwk, 48)-- == 0) {
       SPRITE_STATUS_USHORT(p_actwk, 48) = 11;
     }
   }
-  if (IS_RIGHT_PRESSED(g_mdRam.swdata1)) {
+  if (IS_BUTTON_PRESSED(g_mdRam.swdata1, PAD_R)) {
     ++SPRITE_STATUS_USHORT(p_actwk, 48);
     if (SPRITE_STATUS_USHORT(p_actwk, 48) >= 12) {
       SPRITE_STATUS_USHORT(p_actwk, 48) = 0;
@@ -664,10 +664,7 @@ static void codeinput_move(sprite_status* p_actwk) {
     p_next_actwk = p_actwk + (SPRITE_STATUS_USHORT(p_actwk, 48) + 1);
     p_next_actwk->sproffset = 0x8562;
   }
-  if (IS_UP_PRESSED(g_mdRam.swdata1)
-      || IS_DOWN_PRESSED(g_mdRam.swdata1)
-      || IS_LEFT_PRESSED(g_mdRam.swdata1)
-      || IS_RIGHT_PRESSED(g_mdRam.swdata1)) {
+  if (IS_BUTTON_PRESSED(g_mdRam.swdata1, PAD_U | PAD_D | PAD_L | PAD_R)) {
     soundset(137);
   }
 }
@@ -919,7 +916,7 @@ static void starsphere_move(sprite_status* p_actwk) {
     ++p_actwk->patno;
     p_actwk->patno &= 7;
   }
-  if (IS_A_PRESSED(g_mdRam.swdata1) || IS_C_PRESSED(g_mdRam.swdata1)) {
+  if (IS_BUTTON_PRESSED(g_mdRam.swdata1, PAD_A | PAD_C)) {
     switch (p_actwk->sproffset) {
       case 0x8598:
         g_mdRam.levelselect_plmode = TEAM_SONIC;
