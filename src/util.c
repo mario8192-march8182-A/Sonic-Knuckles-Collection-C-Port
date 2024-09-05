@@ -75,3 +75,14 @@ unsigned short util__to_unsigned(short value) {
 
   return result;
 }
+
+
+short util__longhigh_to_short(long value) {
+  bool negative = value < 0;
+  short result = value / 65536;
+  if (negative && value % 65536 != 0) {
+    --result;
+  }
+
+  return result;
+}
