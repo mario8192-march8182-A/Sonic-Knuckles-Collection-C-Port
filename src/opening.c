@@ -11,6 +11,8 @@
 #include "vdp.h"
 static void load_frames();
 static unsigned char s3opening_andknuckles_tiles[856];
+static void plays3kdemo();
+static short s3kdemostagenos[7];
 static unsigned short s3opening_transition_color[56];
 static unsigned short s3opening_main_color[64];
 static void banner_init(sprite_status* p_actwk);
@@ -221,14 +223,109 @@ void opening() {
       g_mdRam.openinganimdelay = 0;
 
       do {
-        g_mdRam.int_flg = 4;
-        vInt();
-        action();
-        patset();
-      } while (g_mdRam.actwk[2].r_ptr == 0);
+        do {
+          g_mdRam.int_flg = 4;
+          vInt();
+          action();
+          patset();
+        } while (g_mdRam.actwk[2].r_ptr == 0);
+
+        if (g_mdRam.demotimer == 0) {
+          plays3kdemo();
+          return;
+        }
+      } while (!IS_BUTTON_PRESSED(g_mdRam.swdata1 | g_mdRam.swdata2, PAD_S));
+
+      g_mdRam.gmmode = 12;
+      g_mdRam.pl_suu = 3;
+      g_mdRam.pl2_suu = 3;
+      g_mdRam.plring = 0;
+      g_mdRam.pltime.hours = 0;
+      g_mdRam.pltime.minutes = 0;
+      g_mdRam.pltime.seconds = 0;
+      g_mdRam.pltime.frames = 0;
+      g_mdRam.plscore = 0;
+      g_mdRam.pl2ring = 0;
+      g_mdRam.DAT_08fffed2 = 0;
+      g_mdRam.DAT_08fffed6 = 0;
+      g_mdRam.plcontinuecnt = 0;
+      g_mdRam.extrascore = 5000;
+      g_mdRam.extrascore2 = 5000;
+      soundset(225);
+
+      switch (g_mdRam.openingoption) {
+        case 0:
+          g_mdRam.gmmode = 76;
+          break;
+        case 1:
+          g_mdRam.gmmode = 56;
+          break;
+        case 2:
+          g_mdRam.gmmode = 40;
+          break;
+      }
     }
   }
 }
+
+
+// 006dc7a7
+static void plays3kdemo() {
+  soundset(225);
+  g_mdRam.demoid = g_mdRam.nextdemoid;
+  short stageno = s3kdemostagenos[g_mdRam.nextdemoid & 7];
+  g_mdRam.stageno = stageno;
+  g_mdRam.stageno_i = stageno;
+  g_mdRam.stageno_s = stageno;
+  unsigned short nextdemoid = g_mdRam.nextdemoid + 1;
+  if (g_mdRam.cartridge == 0) {
+    if (nextdemoid == 3) {
+      nextdemoid = 4;
+    }
+    else if (nextdemoid >= 7) {
+      nextdemoid = 0;
+    }
+  }
+  else if (nextdemoid >= 3) {
+    nextdemoid = 0;
+  }
+  g_mdRam.nextdemoid = nextdemoid;
+  if (stageno < 0) {
+    g_mdRam.gmmode = 52;
+    g_mdRam.DAT_08fffe16 = 1;
+    g_mdRam.cartridgespec = 1;
+    SET_ACT(g_mdRam.stageno, 7);
+    memset(g_mdRam.specprogress, 0, sizeof(g_mdRam.specprogress));
+  }
+  else {
+    g_mdRam.gmmode = 8;
+  }
+  g_mdRam.demoflag = 1;
+  g_mdRam.pl_suu = 3;
+  g_mdRam.pl2_suu = 3;
+  g_mdRam.plring = 0;
+  g_mdRam.pltime.hours = 0;
+  g_mdRam.pltime.minutes = 0;
+  g_mdRam.pltime.seconds = 0;
+  g_mdRam.pltime.frames = 0;
+  g_mdRam.plscore = 0;
+  g_mdRam.pl2ring = 0;
+  g_mdRam.DAT_08fffed2 = 0;
+  g_mdRam.DAT_08fffed6 = 0;
+  g_mdRam.plcontinuecnt = 0;
+  g_mdRam.extrascore = 5000;
+  g_mdRam.extrascore2 = 5000;
+}
+
+
+/* 006dc975 */ static short s3kdemostagenos[7] = {
+  ANGEL_ISLAND_ACT_1,
+  HYDROCITY_ACT_1,
+  MUSHROOM_HILL_ACT_1,
+  FLYING_BATTERY_ACT_1,
+  SANDOPOLIS_ACT_1,
+  -1
+};
 
 
 /* 006dce75 */ static unsigned short s3opening_transition_color[56] = {

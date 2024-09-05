@@ -43,6 +43,7 @@ typedef struct sonic3_ram {
   /* 08ffef4b */ unsigned char dataselect_selection;
   /* 08ffef4c */ character_team_id nosave_plmode;
   /* 08ffef56 */ unsigned short disable_interrupts_sram;
+  /* 08ffef7a */ unsigned short demoid;
   /* 08ffef80 */ unsigned short ringbuffer[RINGBUFFER_SLOTS];
   /* 08fff000 */ unsigned short colorwk4[64];
   /* 08fff080 */ unsigned short colorwk3[64];
@@ -187,6 +188,7 @@ typedef struct sonic3_ram {
   /* 08ffffaa */ unsigned char DAT_08ffffaa;
   /* 08ffffab */ unsigned char DAT_08ffffab;
   /* 08ffffae */ unsigned short cartridge;
+  /* 08ffffb2 */ unsigned char specprogress[8];
   /* 08ffffbb */ unsigned char cartridgespec;
   /* 08ffffbd */ unsigned char openinganimdelay;
   /* 08ffffbe */ unsigned short openinganimframe;
@@ -194,6 +196,7 @@ typedef struct sonic3_ram {
   /* 08ffffc4 */ unsigned long extrascore2;
   /* 08ffffce */ unsigned short plsproffset;
   /* 08ffffd0 */ unsigned short demoflag;
+  /* 08ffffd2 */ unsigned short nextdemoid;
   /* 08ffffd4 */ unsigned char specmode;
   /* 08ffffd8 */ unsigned char mdstatus;
   /* 08ffffda */ unsigned char DAT_08ffffda;
