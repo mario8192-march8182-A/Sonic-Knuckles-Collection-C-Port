@@ -255,7 +255,7 @@ static void banner_init(sprite_status* p_actwk) {
   util__assign_high(&p_actwk->xposi, 288);
   util__assign_high(&p_actwk->yposi, 240);
   p_actwk->yspeed = 1024;
-  SPRITE_STATUS_LONG(p_actwk, 48) = -6291456;
+  p_actwk->actfree.s3opening_banner.yposiwk = -6291456;
   p_actwk->r_ptr = &banner_move0;
   banner_move0(p_actwk);
 }
@@ -263,15 +263,15 @@ static void banner_init(sprite_status* p_actwk) {
 
 // 006dd18a
 static void banner_move0(sprite_status* p_actwk) {
-  unsigned char d2 = SPRITE_STATUS_UCHAR(p_actwk, 52);
-  SPRITE_STATUS_LONG(p_actwk, 48) += p_actwk->yspeed * 256;
-  SPRITE_STATUS_UCHAR(p_actwk, 52) = 0;
+  unsigned char prev_dir = p_actwk->actfree.s3opening_banner.dir;
+  p_actwk->actfree.s3opening_banner.yposiwk += p_actwk->yspeed * 256;
+  p_actwk->actfree.s3opening_banner.dir = 0;
   short yspeed_add = 64;
   int compare_result = 0;
-  if (LONG_HIGH(SPRITE_STATUS_LONG(p_actwk, 48)) > 0) {
+  if (LONG_HIGH(p_actwk->actfree.s3opening_banner.yposiwk) > 0) {
     compare_result = 1;
   }
-  else if (LONG_HIGH(SPRITE_STATUS_LONG(p_actwk, 48)) < 0) {
+  else if (LONG_HIGH(p_actwk->actfree.s3opening_banner.yposiwk) < 0) {
     compare_result = -1;
   }
 
@@ -284,18 +284,18 @@ static void banner_move0(sprite_status* p_actwk) {
       }
       // fall-through
     case -1:
-      SPRITE_STATUS_UCHAR(p_actwk, 52) = 255;
+      p_actwk->actfree.s3opening_banner.dir = 255;
       yspeed_add = -64;
       // fall-through
     case 1:
       p_actwk->yspeed += yspeed_add;
-      if (d2 != SPRITE_STATUS_UCHAR(p_actwk, 52)) {
+      if (prev_dir != p_actwk->actfree.s3opening_banner.dir) {
         p_actwk->yspeed /= 2;
       }
       break;
   }
 
-  short yposi = -LONG_HIGH(SPRITE_STATUS_LONG(p_actwk, 48)) + 212;
+  short yposi = -LONG_HIGH(p_actwk->actfree.s3opening_banner.yposiwk) + 212;
   util__assign_high(&p_actwk->yposi, yposi);
   if (g_mdRam.vscrolla != 16) {
     ++g_mdRam.vscrolla;

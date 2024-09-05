@@ -226,6 +226,11 @@ typedef struct sprite_status {
       unsigned short flagwork_index;
     } ring;
     struct {
+      unsigned char reserved1[2];
+      long yposiwk;
+      unsigned char dir;
+    } s3opening_banner;
+    struct {
       short attack_countdown;
       unsigned char reserved1[4];
       sprite_status_handler callback_ptr;
