@@ -394,6 +394,7 @@ static void copyright_init(sprite_status* p_actwk) {
   p_actwk->sprvs = 4;
   p_actwk->patno = 3;
   p_actwk->r_ptr = &actionsub;
+  actionsub(p_actwk);
 }
 
 
@@ -460,6 +461,7 @@ static void sonicfinger_init(sprite_status* p_actwk) {
 static void sonicfinger_move(sprite_status* p_actwk) {
   util__assign_high(&p_actwk->yposi, 220 - g_mdRam.vscrolla);
   patchg(p_actwk, s3opening_sonicfinger_chg);
+  actionsub(p_actwk);
 }
 
 
@@ -491,6 +493,7 @@ static void sonicwink_init(sprite_status* p_actwk) {
 static void sonicwink_move(sprite_status* p_actwk) {
   util__assign_high(&p_actwk->yposi, 200 - g_mdRam.vscrolla);
   patchg2(p_actwk, s3opening_sonicwink_chg);
+  actionsub(p_actwk);
 }
 
 
