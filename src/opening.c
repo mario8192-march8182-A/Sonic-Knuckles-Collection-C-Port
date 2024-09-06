@@ -69,12 +69,12 @@ extern void vInt();
 
 // 0040b900
 static void load_frames() {
-  unsigned char* p_chunkmappings = unlze(g_mdRam.chunkmappings128, s3opening_frame1_tiles);
+  unsigned char* p_chunkmappings = unlze(g_mdRam.chunkmappings128, s3opening_frame1_tiles, 0);
   copy_data_vram(g_mdRam.chunkmappings128, 0, (p_chunkmappings - g_mdRam.chunkmappings128) / 2);
 
   for (int i = 0; i < 14; ++i) {
     if (s3opening_datalist[i * 3] != s3opening_frame1_tiles) {
-      p_chunkmappings = unlze(g_mdRam.chunkmappings128, s3opening_datalist[i * 3]);
+      p_chunkmappings = unlze(g_mdRam.chunkmappings128, s3opening_datalist[i * 3], 0);
       copy_data_vram(g_mdRam.chunkmappings128, 0, (p_chunkmappings - g_mdRam.chunkmappings128) / 2);
     }
     memcpy(g_mdRam.colorwk2, s3opening_datalist[i * 3 + 1], 64);
@@ -176,7 +176,7 @@ void opening() {
 
 // 006dc199
 static void s3kopening() {
-  unsigned char* p_chunkmappings = unlze(g_mdRam.chunkmappings128, s3opening_frame1_tiles);
+  unsigned char* p_chunkmappings = unlze(g_mdRam.chunkmappings128, s3opening_frame1_tiles, 0);
   copy_data_vram(g_mdRam.chunkmappings128, 0, (p_chunkmappings - g_mdRam.chunkmappings128) / 2);
   mapdevr((unsigned short*)g_mdRam.levellayout, s3opening_frame1_map, 0);
   if (!(g_mdRam.mdstatus & 0x80)) {
@@ -216,7 +216,7 @@ static void s3kopening() {
   g_mdRam.openinganimdelay = 3;
   g_mdRam.int_flg = 4;
   vInt();
-  p_chunkmappings = unlze(g_mdRam.chunkmappings128, s3opening_frame13_tiles);
+  p_chunkmappings = unlze(g_mdRam.chunkmappings128, s3opening_frame13_tiles, 0);
   copy_data_vram(g_mdRam.chunkmappings128, 0, (p_chunkmappings - g_mdRam.chunkmappings128) / 2);
   mapdevr((unsigned short*)g_mdRam.levellayout, s3opening_frame13_map, 0x8000);
   copy_map_vram((unsigned short*)g_mdRam.levellayout, 0xC000, 27, 39);

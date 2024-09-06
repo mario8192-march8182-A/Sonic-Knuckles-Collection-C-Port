@@ -2,7 +2,8 @@
 
 
 // 0041034b
-unsigned char* unlze(unsigned char* p_destination, unsigned char* p_source) {
+unsigned char* unlze(unsigned char* p_destination, unsigned char* p_source, unsigned short* p_readbyte_cnt) {
+  unsigned char* p_sourcestart = p_source;
   unsigned short desc = *((unsigned short*)p_source);
   p_source += 2;
   unsigned char descbit_cnt = 16;
@@ -87,5 +88,30 @@ unsigned char* unlze(unsigned char* p_destination, unsigned char* p_source) {
   }
   while (!done);
 
+  if (p_readbyte_cnt != 0) {
+    *p_readbyte_cnt = p_source - p_sourcestart;
+  }
+
   return p_destination;
+}
+
+
+// 004114aa
+void unlze_moduled(unsigned char* p_destination, unsigned char* p_source) {
+  unsigned short size = *((unsigned short*)p_source);
+  if (size == 0) return;
+
+  unsigned char module_cnt;
+  if (size & 0xFFF) {
+    module_cnt = (size >>= 12) + 1;
+  }
+  else {
+    module_cnt = size >>= 12;
+  }
+
+  for (int i = 0; i < module_cnt; ++i) {
+    unsigned short readbyte_cnt;
+    p_destination = unlze(p_destination, p_source, &readbyte_cnt);
+    p_source += readbyte_cnt + (16 - readbyte_cnt / 16);
+  }
 }
