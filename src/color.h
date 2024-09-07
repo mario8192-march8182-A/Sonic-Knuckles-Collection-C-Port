@@ -3,6 +3,7 @@
 
 void fadein();
 void fadeout();
+void flashin();
 void colorset(unsigned short colorno);
 
 #endif

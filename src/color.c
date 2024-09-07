@@ -10,6 +10,7 @@ static void fadein0();
 static void fadeout1();
 static void fadeout2(unsigned short* pPalette);
 static void fadein0_alt();
+static void flashin1();
 
 extern void vInt();
 
@@ -155,6 +156,63 @@ static void fadein0_alt() {
   } while (cnt-- != 0);
 
   g_mdRam.DAT_08ffface = 0;
+}
+
+
+// 004267d2
+void flashin() {
+  if (g_mdRam.DAT_08ffface-- != 0) return;
+
+  g_mdRam.DAT_08ffface = 2;
+  unsigned short* p_destination = &g_mdRam.colorwk[g_mdRam.startcolor / 2];
+  unsigned short* p_source = &g_mdRam.colorwk2[g_mdRam.startcolor / 2];
+
+  for (int i = 0; g_mdRam.colorcnt >= i; ++i) {
+    flashin1((unsigned char*)p_destination, (unsigned char*)p_source);
+    ++p_destination;
+    ++p_source;
+  }
+
+  if (g_mdRam.watermode != 0) {
+    p_destination = &g_mdRam.colorwk3[g_mdRam.startcolor / 2];
+    p_source = &g_mdRam.colorwk4[g_mdRam.startcolor / 2];
+
+    for (int i = 0; g_mdRam.colorcnt >= i; ++i) {
+      flashin1((unsigned char*)p_destination, (unsigned char*)p_source);
+      ++p_destination;
+      ++p_source;
+    }
+  }
+}
+
+
+// 004268e8
+static void flashin1(unsigned char* p_destination, unsigned char* p_source) {
+  unsigned char d1 = *p_source++;
+  unsigned char d2 = d1;
+  d1 &= 0xE0;
+  unsigned char d3 = *p_destination;
+  unsigned char d5 = d3;
+  d3 &= 0xE0;
+  if (d3 > d1) {
+    d3 -= 0x20;
+  }
+  d2 &= 0xE;
+  d5 &= 0xE;
+  if (d5 > d2) {
+    d5 -= 0x02;
+  }
+  d3 |= d5;
+  *p_destination++ = d3;
+
+  d2 = *p_source++;
+  d2 &= 0xE;
+  d3 = *p_destination;
+  d3 &= 0xE;
+  if (d3 > d2) {
+    d3 -= 0x02;
+  }
+  *p_destination++ = d3;
 }
 
 

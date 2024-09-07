@@ -12,6 +12,11 @@ void util__assign_high(long* dest, short src) {
 }
 
 
+void util__assign_low(long* dest, short src) {
+  *dest = *dest / 65536 * 65536 + src;
+}
+
+
 void util__copy_high(long* dest, long* src) {
   *dest = *src / 65536 * 65536 + *dest % 65536;
 }

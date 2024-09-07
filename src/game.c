@@ -566,6 +566,27 @@ static void patset_vs() {
 }
 
 
+// 00426f24
+unsigned long random() {
+  unsigned long d1 = g_mdRam.ranum;
+  if (d1 == 0) {
+    d1 = 711800411;
+  }
+  unsigned long d0 = d1;
+  d1 = d1 << 2 & 0xFFFFFFFF;
+  d1 = (d1 + d0) & 0xFFFFFFFF;
+  d1 = d1 << 3 & 0xFFFFFFFF;
+  d1 = (d1 + d0) & 0xFFFFFFFF;
+  d0 = (d0 & 0xFFFF0000) | (d1 & 0x0000FFFF);
+  d1 = util__rotate(d1);
+  d0 = (d0 & 0xFFFF0000) | (((d0 & 0x0000FFFF) + (d1 & 0x0000FFFF)) & 0x0000FFFF);
+  d1 = (d1 & 0xFFFF0000) | (d0 & 0x0000FFFF);
+  d1 = util__rotate(d1);
+  g_mdRam.ranum = d1;
+  return d0;
+}
+
+
 // 004487b9
 static void FUN_004487b9() {
   // TODO

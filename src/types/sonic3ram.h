@@ -9,6 +9,7 @@
 typedef struct sonic3_ram {
   /* 08ff0000 */ unsigned char chunkmappings128[0x8000];
   /* 08ff8000 */ unsigned char levellayout[0x1000];
+  /* 08ff9000 */ unsigned char blockmappings16[0x1800];
   /* 08ffaa00 */ unsigned char bitdevwk[512];
   /* 08ffac00 */ unsigned short pbuffer[PBUFFER_LEVELS][PBUFFER_LEVEL_SLOTS];
   /* 08ffb000 */ sprite_status actwk[ACTWK_SLOTS];
@@ -29,13 +30,21 @@ typedef struct sonic3_ram {
   /* 08ffee33 */ unsigned char scr_resize_no;
   /* 08ffee3a */ unsigned long vs_vscroll;
   /* 08ffee4e */ unsigned short stageno_i;
+  /* 08ffee50 */ short colorcycle;
+  /* 08ffee60 */ long vs_scra_h_posit;
+  /* 08ffee64 */ long vs_scra_v_posit;
+  /* 08ffee68 */ long vs_scra_h_posit_copy;
+  /* 08ffee6c */ long vs_scra_v_posit_copy;
   /* 08ffee78 */ long scra_h_posit;
   /* 08ffee7c */ long scra_v_posit;
   /* 08ffee80 */ long scra_h_posit_copy;
   /* 08ffee84 */ long scra_v_posit_copy;
   /* 08ffeeaa */ unsigned short scrc_v;
   /* 08ffeebc */ short frame_offset_x;
+  /* 08ffeec0 */ unsigned short scr_evta;
   /* 08ffeec6 */ unsigned char event_flag_3;
+  /* 08ffeecc */ short scr_shake_flg;
+  /* 08ffeed2 */ unsigned short DAT_08ffeed2;
   /* 08ffeeea */ unsigned short vscrollbuff[40];
   /* 08ffef3a */ unsigned short sprhmasks;
   /* 08ffef3c */ unsigned short alt_sprlistadr;

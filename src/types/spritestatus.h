@@ -231,6 +231,11 @@ typedef struct sprite_status {
       unsigned char dir;
     } s3opening_banner;
     struct {
+      unsigned char reserved1[2];
+      long yposiwk;
+      unsigned char dir;
+    } skopening_banner;
+    struct {
       short attack_countdown;
       unsigned char reserved1[4];
       sprite_status_handler callback_ptr;
@@ -280,6 +285,18 @@ typedef struct sprite_status {
       unsigned char reserved4[8];
       unsigned short flagwork_index;
     } save;
+    struct {
+      unsigned char reserved1[2];
+      unsigned char sonicsmile_anim[2];
+      unsigned char sonicfinger_anim[2];
+      unsigned char knuckleshand1_anim[2];
+      unsigned char knuckleshand2_anim[2];
+    } skopening_anims;
+    struct {
+      unsigned char reserved1[2];
+      long xposi;
+      long yposi;
+    } skopening_deathegg;
     struct {
       unsigned short unknown;
       long xposi;
