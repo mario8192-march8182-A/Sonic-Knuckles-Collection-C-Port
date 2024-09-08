@@ -1523,7 +1523,7 @@ static void skcopyright_init(sprite_status* p_actwk) {
 
 // 006dfb32
 static void copy_mapline_vram(unsigned char* p_destination, unsigned char* p_source, short offset) {
-  if (offset -= 16 < 0) return;
+  if ((offset -= 16) < 0) return;
   if (offset & 7) return;
 
   offset &= 0xF8;
