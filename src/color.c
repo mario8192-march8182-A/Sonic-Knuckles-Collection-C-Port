@@ -19,13 +19,12 @@ extern void vInt();
 void fadein() {
   g_mdRam.colorcnt = 63;
   fadein0();
-  unsigned short cnt = 21;
 
-  do {
+  for (int fadecount = 0; fadecount < 22; ++fadecount) {
     g_mdRam.int_flg = 18;
     vInt();
     fadein1();
-  } while (cnt-- != 0);
+  }
 }
 
 
@@ -149,11 +148,10 @@ static void fadeout2(unsigned short* pPalette) {
 // 0042670d
 static void fadein0_alt() {
   unsigned short* p_palette = &g_mdRam.colorwk[g_mdRam.startcolor / 2];
-  unsigned char cnt = g_mdRam.colorcnt;
 
-  do {
+  for (int i = 0; g_mdRam.colorcnt >= i; ++i) {
     *p_palette++ = 0xEEE;
-  } while (cnt-- != 0);
+  }
 
   g_mdRam.DAT_08ffface = 0;
 }
