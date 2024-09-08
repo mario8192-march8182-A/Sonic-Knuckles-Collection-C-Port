@@ -1090,7 +1090,7 @@ static void skopening() {
 
   bgmset(254);
   memcpy(g_mdRam.colorwk2, skopening_color, sizeof(skopening_color));
-  unlze_moduled(skopening_sonicknuckles_tiles, &g_mdVram[0x1C40]);
+  unlze_moduled(&g_mdVram[0x1C40], skopening_sonicknuckles_tiles);
   g_mdRam.colorcnt = 63;
   g_mdRam.colorcycle = 22;
   g_mdRam.actwk[0].r_ptr = &sonicfalling_init;
@@ -1252,8 +1252,8 @@ static void sonicfalling_wait1(sprite_status* p_actwk) {
 // 006debf9
 static void sonicfalling_move1(sprite_status* p_actwk) {
   copy_map_vram((unsigned short*)&g_mdRam.blockmappings16[0xFC0], 0xC000, 27, 39);
-  unlze_moduled(skopening_banner_tiles, &g_mdVram[0x9DC0]);
-  unlze_moduled(skopening_menu_tiles, &g_mdVram[0x8C40]);
+  unlze_moduled(&g_mdVram[0x9DC0], skopening_banner_tiles);
+  unlze_moduled(&g_mdVram[0x8C40], skopening_menu_tiles);
   g_mdRam.actwk[3].r_ptr = &skbanner_init;
   g_mdRam.actwk[3].pattim = 30;
   p_actwk->r_ptr = 0;
