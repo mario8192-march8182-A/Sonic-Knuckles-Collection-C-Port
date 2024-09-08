@@ -97,7 +97,7 @@ void fadeout() {
   g_mdRam.startcolor = 0;
   g_mdRam.colorcnt = 63;
 
-  for (int fadecount = 21; fadecount > 0; --fadecount) {
+  for (int fadecount = 0; fadecount < 22; ++fadecount) {
     g_mdRam.int_flg = 18;
     vInt();
     fadeout1();
