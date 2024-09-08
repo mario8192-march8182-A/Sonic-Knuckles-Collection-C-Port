@@ -103,15 +103,19 @@ void unlze_moduled(unsigned char* p_destination, unsigned char* p_source) {
 
   unsigned char module_cnt;
   if (size & 0xFFF) {
-    module_cnt = (size >>= 12) + 1;
+    module_cnt = (size >> 12) + 1;
   }
   else {
-    module_cnt = size >>= 12;
+    module_cnt = size >> 12;
   }
 
   for (int i = 0; i < module_cnt; ++i) {
     unsigned short readbyte_cnt;
     p_destination = unlze(p_destination, p_source, &readbyte_cnt);
-    p_source += readbyte_cnt + (16 - readbyte_cnt / 16);
+    if (readbyte_cnt % 16 != 0) {
+      readbyte_cnt &= 0xFFF0;
+      readbyte_cnt += 16;
+    }
+    p_source += readbyte_cnt;
   }
 }
