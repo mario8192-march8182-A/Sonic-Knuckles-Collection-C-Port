@@ -7,6 +7,7 @@
 #include "spritestatus.h"
 
 typedef struct sonic3_ram {
+  /* 08ff0000 */ unsigned char decompressed[0xA800];
   /* 08ff0000 */ unsigned char chunkmappings128[0x8000];
   /* 08ff8000 */ unsigned char levellayout[0x1000];
   /* 08ff9000 */ unsigned char blockmappings16[0x1800];

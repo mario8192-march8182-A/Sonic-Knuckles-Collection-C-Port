@@ -128,17 +128,17 @@ extern void vInt();
 
 // 0040b900
 static void load_frames() {
-  unsigned char* p_chunkmappings = unlze(g_mdRam.chunkmappings128, s3opening_frame1_tiles, 0);
-  copy_data_vram(g_mdRam.chunkmappings128, 0, (p_chunkmappings - g_mdRam.chunkmappings128) / 2);
+  unsigned char* p_decompressed = unlze(g_mdRam.decompressed, s3opening_frame1_tiles, 0);
+  copy_data_vram(g_mdRam.decompressed, 0, (p_decompressed - g_mdRam.decompressed) / 2);
 
   for (int i = 0; i < 14; ++i) {
     if (s3opening_datalist[i * 3] != s3opening_frame1_tiles) {
-      p_chunkmappings = unlze(g_mdRam.chunkmappings128, s3opening_datalist[i * 3], 0);
-      copy_data_vram(g_mdRam.chunkmappings128, 0, (p_chunkmappings - g_mdRam.chunkmappings128) / 2);
+      p_decompressed = unlze(g_mdRam.decompressed, s3opening_datalist[i * 3], 0);
+      copy_data_vram(g_mdRam.decompressed, 0, (p_decompressed - g_mdRam.decompressed) / 2);
     }
     memcpy(g_mdRam.colorwk2, s3opening_datalist[i * 3 + 1], 64);
-    mapdevr((unsigned short*)g_mdRam.chunkmappings128, s3opening_datalist[i * 3 + 2], 0);
-    copy_map_vram((unsigned short*)g_mdRam.chunkmappings128, 0xC000, 27, 39);
+    mapdevr((unsigned short*)g_mdRam.decompressed, s3opening_datalist[i * 3 + 2], 0);
+    copy_map_vram((unsigned short*)g_mdRam.decompressed, 0xC000, 27, 39);
 
     for (int j = 0; j < 4; ++j) {
       g_mdRam.int_flg = 4;
@@ -391,13 +391,13 @@ void opening() {
 
 // 006dc199
 static void s3kopening() {
-  unsigned char* p_chunkmappings = unlze(g_mdRam.chunkmappings128, s3opening_frame1_tiles, 0);
-  copy_data_vram(g_mdRam.chunkmappings128, 0, (p_chunkmappings - g_mdRam.chunkmappings128) / 2);
-  mapdevr((unsigned short*)g_mdRam.levellayout, s3opening_frame1_map, 0);
+  unsigned char* p_decompressed = unlze(g_mdRam.decompressed, s3opening_frame1_tiles, 0);
+  copy_data_vram(g_mdRam.decompressed, 0, (p_decompressed - g_mdRam.decompressed) / 2);
+  mapdevr((unsigned short*)&g_mdRam.decompressed[0x8000], s3opening_frame1_map, 0);
   if (!(g_mdRam.mdstatus & 0x80)) {
-    *((unsigned long*)&g_mdRam.levellayout[0x3AC]) = 0;
+    *((unsigned long*)&g_mdRam.decompressed[0x83AC]) = 0;
   }
-  copy_map_vram((unsigned short*)g_mdRam.levellayout, 0xC000, 27, 39);
+  copy_map_vram((unsigned short*)&g_mdRam.decompressed[0x8000], 0xC000, 27, 39);
   memcpy(g_mdRam.colorwk2, s3opening_frame1_color, 32);
   g_mdRam.demotimer = 240;
   fadein();
@@ -431,12 +431,12 @@ static void s3kopening() {
   g_mdRam.openinganimdelay = 3;
   g_mdRam.int_flg = 4;
   vInt();
-  p_chunkmappings = unlze(g_mdRam.chunkmappings128, s3opening_frame13_tiles, 0);
-  copy_data_vram(g_mdRam.chunkmappings128, 0, (p_chunkmappings - g_mdRam.chunkmappings128) / 2);
-  mapdevr((unsigned short*)g_mdRam.levellayout, s3opening_frame13_map, 0x8000);
-  copy_map_vram((unsigned short*)g_mdRam.levellayout, 0xC000, 27, 39);
-  mapdevr((unsigned short*)g_mdRam.levellayout, s3opening_frame14_map, 0x4000);
-  copy_map_vram((unsigned short*)g_mdRam.levellayout, 0xE000, 27, 39);
+  p_decompressed = unlze(g_mdRam.decompressed, s3opening_frame13_tiles, 0);
+  copy_data_vram(g_mdRam.decompressed, 0, (p_decompressed - g_mdRam.decompressed) / 2);
+  mapdevr((unsigned short*)&g_mdRam.decompressed[0x8000], s3opening_frame13_map, 0x8000);
+  copy_map_vram((unsigned short*)&g_mdRam.decompressed[0x8000], 0xC000, 27, 39);
+  mapdevr((unsigned short*)&g_mdRam.decompressed[0x8000], s3opening_frame14_map, 0x4000);
+  copy_map_vram((unsigned short*)&g_mdRam.decompressed[0x8000], 0xE000, 27, 39);
   g_mdRam.int_flg = 4;
   vInt();
   memcpy(g_mdRam.colorwk2, s3opening_main_color, sizeof(s3opening_main_color));
@@ -1039,32 +1039,32 @@ static sprite_pattern s3opening_tornado_sp05 = {
 
 // 006dde88
 static void skopening() {
-  unsigned char* p_chunkmappings = unlze(g_mdRam.chunkmappings128, skopening_bg_tiles, 0);
-  p_chunkmappings = unlze(p_chunkmappings, skopening_segalogo_tiles, 0);
-  unlze(p_chunkmappings, skopening_sonicfalling_tiles, 0);
-  copy_data_vram(g_mdRam.chunkmappings128, 0, 0xE20);
-  copy_data_vram(&g_mdRam.chunkmappings128[0x1C40], 0x9380, 0x1640);
-  unlze(&g_mdRam.chunkmappings128[0x4E00], skopening_deathegg_tiles, 0);
-  copy_data_vram(&g_mdRam.chunkmappings128[0x4E00], 0xD000, 0x720);
-  unlze(&g_mdRam.chunkmappings128[0x5D00], skopening_mountain_tiles, 0);
-  copy_data_vram(&g_mdRam.chunkmappings128[0x5D00], 0xF400, 336);
-  mapdevr((unsigned short*)&g_mdRam.chunkmappings128[0x7400], skopening_segalogo_map, 0x849C);
+  unsigned char* p_decompressed = unlze(g_mdRam.decompressed, skopening_bg_tiles, 0);
+  p_decompressed = unlze(p_decompressed, skopening_segalogo_tiles, 0);
+  unlze(p_decompressed, skopening_sonicfalling_tiles, 0);
+  copy_data_vram(g_mdRam.decompressed, 0, 0xE20);
+  copy_data_vram(&g_mdRam.decompressed[0x1C40], 0x9380, 0x1640);
+  unlze(&g_mdRam.decompressed[0x4E00], skopening_deathegg_tiles, 0);
+  copy_data_vram(&g_mdRam.decompressed[0x4E00], 0xD000, 0x720);
+  unlze(&g_mdRam.decompressed[0x5D00], skopening_mountain_tiles, 0);
+  copy_data_vram(&g_mdRam.decompressed[0x5D00], 0xF400, 336);
+  mapdevr((unsigned short*)&g_mdRam.decompressed[0x7400], skopening_segalogo_map, 0x849C);
   if (!(g_mdRam.mdstatus & 0x80)) {
-    *((unsigned short*)&g_mdRam.chunkmappings128[0x775C]) = 0xA49C;
-    *((unsigned short*)&g_mdRam.chunkmappings128[0x775E]) = 0xA49C;
-    *((unsigned short*)&g_mdRam.chunkmappings128[0x7760]) = 0xA49C;
-    *((unsigned short*)&g_mdRam.chunkmappings128[0x77AC]) = 0xA49C;
-    *((unsigned short*)&g_mdRam.chunkmappings128[0x77AE]) = 0xA49C;
-    *((unsigned short*)&g_mdRam.chunkmappings128[0x77B0]) = 0xA49C;
+    *((unsigned short*)&g_mdRam.decompressed[0x775C]) = 0xA49C;
+    *((unsigned short*)&g_mdRam.decompressed[0x775E]) = 0xA49C;
+    *((unsigned short*)&g_mdRam.decompressed[0x7760]) = 0xA49C;
+    *((unsigned short*)&g_mdRam.decompressed[0x77AC]) = 0xA49C;
+    *((unsigned short*)&g_mdRam.decompressed[0x77AE]) = 0xA49C;
+    *((unsigned short*)&g_mdRam.decompressed[0x77B0]) = 0xA49C;
   }
-  copy_map_vram((unsigned short*)&g_mdRam.chunkmappings128[0x7400], 0xC000, 27, 39);
-  mapdevr((unsigned short*)&g_mdRam.chunkmappings128[0x7CC0], skopening_bg_map, 0);
-  FUN_006dfc23((unsigned short*)&g_mdVram[0xE000], (unsigned short*)&g_mdRam.chunkmappings128[0x7CC0]);
-  mapdevr((unsigned short*)&g_mdRam.levellayout[0x580], skopening_frame1_map, 0x80E2);
-  mapdevr((unsigned short*)&g_mdRam.levellayout[0xE40], skopening_frame2_map, 0x80E2);
-  mapdevr((unsigned short*)&g_mdRam.blockmappings16[0x700], skopening_frame3_map, 0x80E2);
-  mapdevr((unsigned short*)&g_mdRam.blockmappings16[0xFC0], skopening_frame4_map, 0x80E2);
-  unlze(&g_mdRam.chunkmappings128[0x4800], skopening_hands_tiles, 0);
+  copy_map_vram((unsigned short*)&g_mdRam.decompressed[0x7400], 0xC000, 27, 39);
+  mapdevr((unsigned short*)&g_mdRam.decompressed[0x7CC0], skopening_bg_map, 0);
+  FUN_006dfc23((unsigned short*)&g_mdVram[0xE000], (unsigned short*)&g_mdRam.decompressed[0x7CC0]);
+  mapdevr((unsigned short*)&g_mdRam.decompressed[0x8580], skopening_frame1_map, 0x80E2);
+  mapdevr((unsigned short*)&g_mdRam.decompressed[0x8E40], skopening_frame2_map, 0x80E2);
+  mapdevr((unsigned short*)&g_mdRam.decompressed[0x9700], skopening_frame3_map, 0x80E2);
+  mapdevr((unsigned short*)&g_mdRam.decompressed[0x9FC0], skopening_frame4_map, 0x80E2);
+  unlze(&g_mdRam.decompressed[0x4800], skopening_hands_tiles, 0);
 
   for (int line = 0; line < 4; ++line) {
     g_mdRam.colorwk2[line * 16] = 0;
@@ -1141,7 +1141,7 @@ LAB_006de36c:
 LAB_006de522:
   g_mdRam.int_flg = 26;
   vInt();
-  copy_map_vram((unsigned short*)&g_mdRam.chunkmappings128[0x7CC0], 0xE000, 27, 39);
+  copy_map_vram((unsigned short*)&g_mdRam.decompressed[0x7CC0], 0xE000, 27, 39);
   sonicfalling_move1(&g_mdRam.actwk[0]);
 
   do {
@@ -1208,7 +1208,7 @@ static void sonicfalling_move0(sprite_status* p_actwk) {
       if (util__longhigh_to_short(g_mdRam.scra_v_posit) >= 224) break;
 
       g_mdRam.scra_v_posit += SHORT_TO_LONG_HIGH(8);
-      copy_mapline_vram(&g_mdVram[0xC000], &g_mdRam.levellayout[0x580], util__longhigh_to_short(g_mdRam.scra_v_posit));
+      copy_mapline_vram(&g_mdVram[0xC000], &g_mdRam.decompressed[0x8580], util__longhigh_to_short(g_mdRam.scra_v_posit));
       // fall-through
     default:
       actionsub(p_actwk);
@@ -1216,7 +1216,7 @@ static void sonicfalling_move0(sprite_status* p_actwk) {
   }
 
   if (util__longhigh_to_short(g_mdRam.scra_v_posit) == 224) {
-    copy_map_vram((unsigned short*)&g_mdRam.levellayout[0xE40], 0xC000, 27, 39);
+    copy_map_vram((unsigned short*)&g_mdRam.decompressed[0x8E40], 0xC000, 27, 39);
     p_actwk->pattim = 6;
     unlze_moduled(&g_mdVram[0x8C40], skopening_soniclanding_tiles);
   }
@@ -1234,7 +1234,7 @@ static void sonicfalling_move0(sprite_status* p_actwk) {
 static void sonicfalling_wait0(sprite_status* p_actwk) {
   if (p_actwk->pattim-- != 0) return;
 
-  copy_map_vram((unsigned short*)&g_mdRam.blockmappings16[0x700], 0xC000, 27, 39);
+  copy_map_vram((unsigned short*)&g_mdRam.decompressed[0x9700], 0xC000, 27, 39);
   p_actwk->pattim = 4;
   p_actwk->r_ptr = &sonicfalling_wait1;
   sonicfalling_wait1(p_actwk);
@@ -1251,7 +1251,7 @@ static void sonicfalling_wait1(sprite_status* p_actwk) {
 
 // 006debf9
 static void sonicfalling_move1(sprite_status* p_actwk) {
-  copy_map_vram((unsigned short*)&g_mdRam.blockmappings16[0xFC0], 0xC000, 27, 39);
+  copy_map_vram((unsigned short*)&g_mdRam.decompressed[0x9FC0], 0xC000, 27, 39);
   unlze_moduled(&g_mdVram[0x9DC0], skopening_banner_tiles);
   unlze_moduled(&g_mdVram[0x8C40], skopening_menu_tiles);
   g_mdRam.actwk[3].r_ptr = &skbanner_init;
@@ -1280,7 +1280,7 @@ static void deathegg_move0(sprite_status* p_actwk) {
     p_actwk->yposi += 0x8000;
     if (util__longhigh_to_short(g_mdRam.vs_scra_v_posit) != 256) {
       g_mdRam.vs_scra_v_posit += SHORT_TO_LONG_HIGH(1);
-      copy_mapline_vram(&g_mdVram[0xE000], &g_mdRam.chunkmappings128[0x7CC0], util__longhigh_to_short(g_mdRam.vs_scra_v_posit));
+      copy_mapline_vram(&g_mdVram[0xE000], &g_mdRam.decompressed[0x7CC0], util__longhigh_to_short(g_mdRam.vs_scra_v_posit));
     }
     actionsub(p_actwk);
   }
@@ -1303,7 +1303,7 @@ static void deathegg_move1(sprite_status* p_actwk) {
   if (util__longhigh_to_short(g_mdRam.vs_scra_v_posit) != 256) {
     p_actwk->actfree.skopening_deathegg.yposi -= 0x8000;
     g_mdRam.vs_scra_v_posit += 0x8000;
-    copy_mapline_vram(&g_mdVram[0xE000], &g_mdRam.chunkmappings128[0x7CC0], util__longhigh_to_short(g_mdRam.vs_scra_v_posit));
+    copy_mapline_vram(&g_mdVram[0xE000], &g_mdRam.decompressed[0x7CC0], util__longhigh_to_short(g_mdRam.vs_scra_v_posit));
   }
   short xposi = util__longhigh_to_short(p_actwk->actfree.skopening_deathegg.xposi);
   short yposi = util__longhigh_to_short(p_actwk->actfree.skopening_deathegg.yposi);
@@ -1411,8 +1411,8 @@ static void skbanner_move(sprite_status* p_actwk) {
 
 // 006df1b3
 static void skopeninganims_init(sprite_status* p_actwk) {
-  copy_data_vram(&g_mdRam.chunkmappings128[0x4800], 0x1C60, 48);
-  copy_data_vram(&g_mdRam.chunkmappings128[0x4E40], 0x1CC0, 656);
+  copy_data_vram(&g_mdRam.decompressed[0x4800], 0x1C60, 48);
+  copy_data_vram(&g_mdRam.decompressed[0x4E40], 0x1CC0, 656);
   p_actwk->actfree.skopening_anims.sonicsmile_anim[0] = 180;
   p_actwk->r_ptr = &skopeninganims_move;
   skopeninganims_move(p_actwk);
@@ -1423,22 +1423,22 @@ static void skopeninganims_init(sprite_status* p_actwk) {
 static void skopeninganims_move(sprite_status* p_actwk) {
   signed char offset = skopening_animate(skopening_sonicsmile_anim, p_actwk->actfree.skopening_anims.sonicsmile_anim);
   if (offset >= 0) {
-    copy_data_vram(&g_mdRam.chunkmappings128[0x4800 + offset], 0x1C60, 48);
+    copy_data_vram(&g_mdRam.decompressed[0x4800 + offset], 0x1C60, 48);
   }
 
   offset = skopening_animate(skopening_sonicfinger_anim, p_actwk->actfree.skopening_anims.sonicfinger_anim);
   if (offset >= 0) {
-    copy_data_vram(&g_mdRam.chunkmappings128[0x4920 + offset], 0x1CC0, 656);
+    copy_data_vram(&g_mdRam.decompressed[0x4920 + offset], 0x1CC0, 656);
   }
 
   offset = skopening_animate(skopening_knuckleshand1_anim, p_actwk->actfree.skopening_anims.knuckleshand1_anim);
   if (offset >= 0) {
-    copy_data_vram(&g_mdRam.chunkmappings128[0x5880 + offset], 0x21E0, 752);
+    copy_data_vram(&g_mdRam.decompressed[0x5880 + offset], 0x21E0, 752);
   }
 
   offset = skopening_animate(skopening_knuckleshand2_anim, p_actwk->actfree.skopening_anims.knuckleshand2_anim);
   if (offset >= 0) {
-    copy_data_vram(&g_mdRam.chunkmappings128[0x6A20 + offset], 0x27C0, 320);
+    copy_data_vram(&g_mdRam.decompressed[0x6A20 + offset], 0x27C0, 320);
   }
 }
 

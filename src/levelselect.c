@@ -48,39 +48,39 @@ void levelselect() {
   g_mdRam.vdpbuffer[0] = 0;
   g_mdRam.vdpbuffer_free = 0;
   bitdevr((unsigned long*)&g_mdVram[512], levelselect_tiles, g_mdRam.bitdevwk);
-  mapdevr((unsigned short*)&g_mdRam.chunkmappings128, levelselect_map, 0x6000);
-  copy_map_vram((unsigned short*)g_mdRam.chunkmappings128, 0xE000, 27, 39);
-  memset(g_mdRam.chunkmappings128, 0, 0x8C0);
+  mapdevr((unsigned short*)&g_mdRam.decompressed, levelselect_map, 0x6000);
+  copy_map_vram((unsigned short*)g_mdRam.decompressed, 0xE000, 27, 39);
+  memset(g_mdRam.decompressed, 0, 0x8C0);
 
   unsigned short* p_mapoffsets = levelselect_mapoffsets;
   unsigned char* p_text = entriestext;
-  unsigned short* p_chunkmappings;
+  unsigned short* p_decompressed;
 
   for (int i = 0; i < 17; ++i) {
-    p_chunkmappings = (unsigned short*)&g_mdRam.chunkmappings128[*p_mapoffsets++];
+    p_decompressed = (unsigned short*)&g_mdRam.decompressed[*p_mapoffsets++];
     unsigned char char_cnt = *p_text++;
 
     for (int i = 0; i < char_cnt + 1; ++i) {
-      *p_chunkmappings++ = *p_text++;
+      *p_decompressed++ = *p_text++;
     }
 
     signed char blanks = 14 - char_cnt;
     if (blanks > 0) {
       for (int i = 0; i < blanks; ++i) {
-        *p_chunkmappings++ = 0;
+        *p_decompressed++ = 0;
       }
     }
-    *p_chunkmappings = 17; // act 1
-    p_chunkmappings += 40;
-    *p_chunkmappings = 18; // act 2
+    *p_decompressed = 17; // act 1
+    p_decompressed += 40;
+    *p_decompressed = 18; // act 2
   }
 
-  *p_chunkmappings = 0;
-  p_chunkmappings -= 40;
-  *p_chunkmappings = 26; // *
-  ((unsigned short*)g_mdRam.chunkmappings128)[197] = 19; // act 3
-  ((unsigned short*)g_mdRam.chunkmappings128)[237] = 20; // act 4
-  copy_map_vram((unsigned short*)g_mdRam.chunkmappings128, 0xC000, 27, 39);
+  *p_decompressed = 0;
+  p_decompressed -= 40;
+  *p_decompressed = 26; // *
+  ((unsigned short*)g_mdRam.decompressed)[197] = 19; // act 3
+  ((unsigned short*)g_mdRam.decompressed)[237] = 20; // act 4
+  copy_map_vram((unsigned short*)g_mdRam.decompressed, 0xC000, 27, 39);
   set_sounddigits(0);
   g_mdRam.plmode = TEAM_SONIC_AND_MILES;
   g_mdRam.DAT_08ffff02 = 0;
@@ -351,20 +351,20 @@ static void handleinput2() {
 static void set_selectioncolor(unsigned short coloroffset) {
   levelselect_textpos pos = textpositions[g_mdRam.levelselect_selection];
   unsigned short index = pos.y1 * 80 + pos.x1;
-  unsigned short* p_chunkmappings = (unsigned short*)&g_mdRam.chunkmappings128[index];
+  unsigned short* p_decompressed = (unsigned short*)&g_mdRam.decompressed[index];
   index = (pos.y1 << 7) + pos.x1 + 0xC000;
   g_pLevelSelectVram = (unsigned short*)&g_mdVram[index];
 
   for (int i = 0; i < 15; ++i) {
-    *g_pLevelSelectVram++ = *p_chunkmappings++ + coloroffset;
+    *g_pLevelSelectVram++ = *p_decompressed++ + coloroffset;
   }
 
   if (pos.y2 != 0) {
     index = pos.y2 * 80 + pos.x2;
-    p_chunkmappings = (unsigned short*)&g_mdRam.chunkmappings128[index];
+    p_decompressed = (unsigned short*)&g_mdRam.decompressed[index];
     index = (pos.y2 << 7) + pos.x2 + 0xC000;
     g_pLevelSelectVram = (unsigned short*)&g_mdVram[index];
-    *g_pLevelSelectVram++ = *p_chunkmappings++ + coloroffset;
+    *g_pLevelSelectVram++ = *p_decompressed++ + coloroffset;
   }
   if (g_mdRam.levelselect_selection == 32) {
     set_sounddigits(coloroffset);
