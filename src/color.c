@@ -11,6 +11,7 @@ static void fadeout1();
 static void fadeout2(unsigned short* pPalette);
 static void fadein0_alt();
 static void flashin1();
+static void flashout2(unsigned short* pPalette);
 
 extern void vInt();
 
@@ -211,6 +212,61 @@ static void flashin1(unsigned char* p_destination, unsigned char* p_source) {
     d3 -= 0x02;
   }
   *p_destination++ = d3;
+}
+
+
+// 00426a12
+void flashout() {
+  g_mdRam.colorcnt = 63;
+
+  for (int fadecount = 0; fadecount < 22; ++fadecount) {
+    g_mdRam.int_flg = 18;
+    vInt();
+    flashout1();
+  }
+}
+
+
+// 00426a53
+void flashout1() {
+  unsigned short* pPalette = &g_mdRam.colorwk[g_mdRam.startcolor / 2];
+
+  for (int i = 0; g_mdRam.colorcnt >= i; ++i) {
+    flashout2(pPalette);
+    ++pPalette;
+  }
+
+  pPalette = &g_mdRam.colorwk3[g_mdRam.startcolor / 2];
+
+  for (int i = 0; g_mdRam.colorcnt >= i; ++i) {
+    flashout2(pPalette);
+    ++pPalette;
+  }
+}
+
+
+// 00426b00
+static void flashout2(unsigned short* pPalette) {
+  unsigned short color = *pPalette;
+  if (color == 0xEEE) return;
+
+  unsigned short red = color & 0xE;
+  if (red != 0) {
+    *pPalette += 0x2;
+    return;
+  }
+
+  unsigned short green = color & 0xE0;
+  if (green != 0) {
+    *pPalette += 0x20;
+    return;
+  }
+
+  unsigned short blue = color & 0xE00;
+  if (blue != 0) {
+    *pPalette += 0x200;
+    return;
+  }
 }
 
 

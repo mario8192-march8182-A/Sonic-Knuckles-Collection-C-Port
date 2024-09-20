@@ -4,6 +4,8 @@
 void fadein();
 void fadeout();
 void flashin();
+void flashout();
+void flashout1();
 void colorset(unsigned short colorno);
 
 #endif
