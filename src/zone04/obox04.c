@@ -149,7 +149,7 @@ static void obox04_ring(sprite_status* p_actwk) {
   g_mdRam.flyring_patcnt = 255;
   p_actwk->sprvsize = 8;
   p_actwk->sprhsize = 8;
-  p_actwk->actflg = 124;
+  p_actwk->actflg = (1 << FLG_LEVELCOORDS) | (1 << FLG_3) | (1 << FLG_4) | (1 << FLG_STATICPATTERN) | (1 << FLG_COMPOUND);
   set_break_spd(p_actwk, 4);
   actionsub(p_actwk);
 }
@@ -228,9 +228,9 @@ static void set_obox04_friend_init(sprite_status* p_actwk) {
     xspeed = -xspeed;
   }
   p_actwk->xspeed = xspeed;
-  CLEAR_HFLIP(p_actwk->actflg);
+  CLEAR_BIT(p_actwk->actflg, FLG_HFLIP);
   if (p_actwk->xspeed < 0) {
-    SET_HFLIP(p_actwk->actflg);
+    SET_BIT(p_actwk->actflg, FLG_HFLIP);
   }
 }
 

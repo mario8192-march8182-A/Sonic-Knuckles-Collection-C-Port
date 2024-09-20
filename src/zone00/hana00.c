@@ -45,7 +45,7 @@ static void hana00_init(sprite_status* p_actwk) {
 
 
 static void hana00_wait(sprite_status* p_actwk) {
-  if (IS_ONSCREEN(p_actwk->actflg)) {
+  if (BIT_IS_SET(p_actwk->actflg, FLG_ONSCREEN)) {
     dec_timer(p_actwk);
   }
 }

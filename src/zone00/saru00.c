@@ -87,7 +87,7 @@ static void saru00_init(sprite_status* p_actwk) {
   p_actwk->actfree.saru00.pg_data_ptr = saru00_pg00;
   p_actwk->actfree.saru00.timer = 59;
   p_actwk->actfree.saru00.callback_ptr = &saru00_move_init;
-  if (!IS_HFLIP(p_actwk->actflg)) {
+  if (!BIT_IS_SET(p_actwk->actflg, FLG_HFLIP)) {
     set_act03(p_actwk, &saru00_arm_set_tbl0);
   }
   else {
@@ -425,10 +425,10 @@ static void saru00_chk_rev(sprite_status* p_actwk) {
   sprite_status* p_parentwk = &g_mdRam.actwk[p_actwk->actfree.saru00.oya];
   unsigned char actflg = p_parentwk->actflg;
   if (BIT_3_IS_SET(p_parentwk->actfree.saru00.status_bitfield)) {
-    TOGGLE_HFLIP(actflg);
+    TOGGLE_BIT(actflg, FLG_HFLIP);
   }
   p_actwk->sprpri = PRI_4;
-  if (IS_HFLIP(actflg)) {
+  if (BIT_IS_SET(actflg, FLG_HFLIP)) {
     p_actwk->sprpri = PRI_6;
   }
 }

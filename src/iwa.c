@@ -110,7 +110,7 @@ static void iwainit(sprite_status* p_actwk) {
   p_actwk->sprvsize = p_actwk->sprvs = iwainittbl[userflag + 1];
   p_actwk->patbase = iwapat;
   p_actwk->sproffset = 9011;
-  SET_USE_LEVEL_COORDS(p_actwk->actflg);
+  SET_BIT(p_actwk->actflg, FLG_LEVELCOORDS);
   p_actwk->sprpri = PRI_4;
   p_actwk->actfree.iwa.orig_xposi = LONG_HIGH(p_actwk->xposi);
   p_actwk->actfree.iwa.countdown2 = 64;
@@ -300,7 +300,7 @@ static void iwamove20(sprite_status* p_actwk) {
   }
   speedset2(p_actwk);
   p_actwk->yspeed += 24;
-  if (!IS_ONSCREEN(p_actwk->actflg)) {
+  if (!BIT_IS_SET(p_actwk->actflg, FLG_ONSCREEN)) {
     frameout(p_actwk);
   }
   else {
@@ -323,7 +323,7 @@ static void iwamove22(sprite_status* p_actwk) {
   }
   speedset2(p_actwk);
   p_actwk->yspeed += 24;
-  if (!IS_ONSCREEN(p_actwk->actflg)) {
+  if (!BIT_IS_SET(p_actwk->actflg, FLG_ONSCREEN)) {
     frameout(p_actwk);
   }
   else {
@@ -344,7 +344,7 @@ static void vsiwamove(sprite_status* p_actwk) {
 static void vsiwamove2(sprite_status* p_actwk) {
   speedset2(p_actwk);
   p_actwk->yspeed += SHORT_TO_LONG_HIGH(24);
-  if (!IS_ONSCREEN(p_actwk->actflg)) {
+  if (!BIT_IS_SET(p_actwk->actflg, FLG_ONSCREEN)) {
     frameout(p_actwk);
   }
   else {
@@ -366,7 +366,7 @@ static void vsiwasub(sprite_status* p_actwk) {
 
 
 static void vsiwamove3(sprite_status* p_actwk) {
-  if (!IS_ONSCREEN(p_actwk->actflg)) {
+  if (!BIT_IS_SET(p_actwk->actflg, FLG_ONSCREEN)) {
     p_actwk->r_ptr = p_actwk->actfree.iwa.parent_r_ptr;
     p_actwk->patno = 0;
   }

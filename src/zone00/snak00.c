@@ -90,7 +90,7 @@ static void snak00_move1(sprite_status* p_actwk) {
   if (axis_dir_changed) {
     p_actwk->r_no = 8;
     p_actwk->xspeed = -p_actwk->xspeed;
-    TOGGLE_HFLIP(p_actwk->actflg);
+    TOGGLE_BIT(p_actwk->actflg, FLG_HFLIP);
   }
   speedset2(p_actwk);
   chk_fire(p_actwk);

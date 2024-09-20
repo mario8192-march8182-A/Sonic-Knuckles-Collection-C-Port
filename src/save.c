@@ -45,7 +45,7 @@ static void saveinit(sprite_status* p_actwk) {
   p_actwk->r_no += 2;
   p_actwk->patbase = savepat;
   p_actwk->sproffset = 1516;
-  p_actwk->actflg = 4;
+  p_actwk->actflg = 1 << FLG_LEVELCOORDS;
   p_actwk->sprhs = 8;
   p_actwk->sprvs = 40;
   p_actwk->sprpri = PRI_5;
@@ -300,7 +300,7 @@ void o_starinit(sprite_status* p_actwk) {
     p_new_actwk->r_ptr = p_actwk->r_ptr;
     p_new_actwk->patbase = starpat;
     p_new_actwk->sproffset = 1516;
-    p_new_actwk->actflg = 4;
+    p_new_actwk->actflg = 1 << FLG_LEVELCOORDS;
     p_new_actwk->r_no = 8;
     short xposi = LONG_HIGH(p_actwk->xposi);
     util__assign_high(&p_new_actwk->xposi, xposi);

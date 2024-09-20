@@ -104,7 +104,7 @@ loop:
     p_new_actwk->patno = p_init_data->patno;
     p_new_actwk->sprhs = p_init_data->sprhs;
     p_new_actwk->colino = p_init_data->colino;
-    p_new_actwk->actflg = 64;
+    p_new_actwk->actflg = 1 << FLG_COMPOUND;
     p_new_actwk->patbase = titlepat;
     p_new_actwk->actfree.title_part.oya = p_actwk - g_mdRam.actwk;
     bool created = Create_New_Sprite4(&p_new_actwk, slot_cnt);
@@ -191,7 +191,7 @@ LAB_frameout:
 static void title_red_banner(sprite_status* p_actwk) {
   sprite_status* p_parentwk = &g_mdRam.actwk[p_actwk->actfree.title_part.oya];
   if (p_parentwk->actfree.title.current_exit_no != 0) {
-    if (!IS_ONSCREEN(p_actwk->actflg)) {
+    if (!BIT_IS_SET(p_actwk->actflg, FLG_ONSCREEN)) {
       --p_parentwk->actfree.title.part_cnt;
       frameout(p_actwk);
       return;
@@ -231,7 +231,7 @@ LAB_00416aab:
 static void title_element(sprite_status* p_actwk) {
   sprite_status* p_parentwk = &g_mdRam.actwk[p_actwk->actfree.title_part.oya];
   if (p_parentwk->actfree.title.current_exit_no != 0) {
-    if (!IS_HFLIP(p_actwk->actflg)) {
+    if (!BIT_IS_SET(p_actwk->actflg, FLG_HFLIP)) {
       --p_parentwk->actfree.title.part_cnt;
       frameout(p_actwk);
       return;

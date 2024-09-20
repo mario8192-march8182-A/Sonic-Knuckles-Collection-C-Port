@@ -129,7 +129,7 @@ static void gost08_body(sprite_status* p_actwk) {
 
   act_tbl[p_actwk->r_no / 2](p_actwk);
   set_emy_wchg(p_actwk, &gost08_wrt_tbl);
-  if (!IS_ONSCREEN(p_actwk->actflg)) {
+  if (!BIT_IS_SET(p_actwk->actflg, FLG_ONSCREEN)) {
     gost08_body__fout0(p_actwk);
     return;
   }
@@ -171,8 +171,8 @@ static void gost08_body__fout1(sprite_status* p_actwk) {
 
 static void gost08_init(sprite_status* p_actwk) {
   emy_wrt_init(p_actwk, &gost08_init_tbl);
-  SET_USE_SCREEN_COORDS(p_actwk->actflg);
-  SET_ONSCREEN(p_actwk->actflg);
+  CLEAR_BIT(p_actwk->actflg, FLG_LEVELCOORDS);
+  SET_BIT(p_actwk->actflg, FLG_ONSCREEN);
   p_actwk->actfree.gost08.darkness_level = g_mdRam.soz_darkness_level;
   p_actwk->actfree.gost08.sequence_no = g_mdRam.soz_ghosts;
   set_body_init(p_actwk);
@@ -282,7 +282,7 @@ static void gost08_atak0(sprite_status* p_actwk) {
     if (util__to_unsigned(xposi) >= 160); return; // unsigned
   }
   p_actwk->r_no = 14;
-  TOGGLE_HFLIP(p_actwk->actflg);
+  TOGGLE_BIT(p_actwk->actflg, FLG_HFLIP);
   p_actwk->xspeed = -p_actwk->xspeed;
   p_actwk->actfree.gost08.attack_countdown = 59;
 }
@@ -294,7 +294,7 @@ static void gost08_atak1(sprite_status* p_actwk) {
   if (p_actwk->actfree.gost08.attack_countdown >= 0) return;
   p_actwk->r_no = 16;
   p_actwk->colino = 215;
-  SET_USE_LEVEL_COORDS(p_actwk->actflg);
+  SET_BIT(p_actwk->actflg, FLG_LEVELCOORDS);
   short xposi = LONG_HIGH(g_mdRam.scra_h_posit) + (LONG_HIGH(p_actwk->xposi) - 128);
   util__assign_high(&p_actwk->xposi, xposi);
   short yposi = LONG_HIGH(g_mdRam.scra_v_posit) + (LONG_HIGH(p_actwk->yposi) - 128);
@@ -443,7 +443,7 @@ static void chk_gost08_limit(sprite_status* p_actwk) {
     // chk_l
     if (util__to_unsigned(xposi) >= 160) return; // unsigned
   }
-  TOGGLE_HFLIP(p_actwk->actflg);
+  TOGGLE_BIT(p_actwk->actflg, FLG_HFLIP);
   p_actwk->xspeed = -p_actwk->xspeed;
 }
 
@@ -469,7 +469,7 @@ static void set_body_init(sprite_status* p_actwk) {
   p_actwk->xposi += SHORT_TO_LONG_HIGH(number);
   short xspeed = gost08_init_spd_tbl[g_mdRam.soz_darkness_level];
   if (util__to_unsigned(number) < 288) { // unsigned
-    SET_HFLIP(p_actwk->actflg);
+    SET_BIT(p_actwk->actflg, FLG_HFLIP);
     xspeed = -xspeed;
   }
   p_actwk->xspeed = xspeed;

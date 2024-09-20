@@ -87,7 +87,7 @@ void opnbox(sprite_status* p_actwk) {
 
 static void opnbox_init(sprite_status* p_actwk) {
   enemy_init0(p_actwk, &opnbox_init_tbl);
-  if (!IS_VFLIP(p_actwk->actflg)) {
+  if (!BIT_IS_SET(p_actwk->actflg, FLG_VFLIP)) {
     set_act00(p_actwk, &switch_set_tbl);
   }
   else {
@@ -257,7 +257,7 @@ void switch_wait1(sprite_status* p_actwk) {
 
 static void switchud(sprite_status* p_actwk) {
   p_actwk->r_ptr = &switchud_wait0;
-  SET_VFLIP(p_actwk->actflg);
+  SET_BIT(p_actwk->actflg, FLG_VFLIP);
   enemy_init2(p_actwk, &switch_init_tbl);
 }
 
@@ -382,7 +382,7 @@ static void friend_move1(sprite_status* p_actwk) {
   chk_spd_pt(p_actwk);
   if (g_mdRam.act_clear_flag == 0) {
     p_actwk->r_ptr = &friend_move2;
-    SET_HFLIP(p_actwk->actflg);
+    SET_BIT(p_actwk->actflg, FLG_HFLIP);
   }
   friend_pg(p_actwk);
 }
@@ -429,7 +429,7 @@ static bool chk_pl_pausez02(sprite_status* p_actwk, unsigned char r_no) {
   --p_actwk->actfree.opnbox.timer;
   if (p_actwk->actfree.opnbox.timer >= 0) return false;
   if (g_mdRam.actwk[0].r_no >= 6) return false; // unsigned
-  if (!IS_ONSCREEN(g_mdRam.actwk[0].actflg)) return false;
+  if (!BIT_IS_SET(g_mdRam.actwk[0].actflg, FLG_ONSCREEN)) return false;
   if (g_mdRam.actwk[0].actfree.player.character != SONIC) {
     if (g_mdRam.miles_carry_flag == 0) return false;
   }
@@ -518,7 +518,7 @@ static void set_friend_init(sprite_status* p_actwk) {
   p_actwk->yspeed = yspeed;
   p_actwk->actfree.friend_.yspeed = yspeed;
   sprite_status* p_parentwk = &g_mdRam.actwk[p_actwk->actfree.friend_.oya];
-  if (IS_VFLIP(p_parentwk->actflg)) {
+  if (BIT_IS_SET(p_parentwk->actflg, FLG_VFLIP)) {
     p_actwk->r_ptr = &friend_wait1;
     SPRITE_STATUS_UCHAR(p_actwk, 67) += 8;
     p_actwk->yspeed = 0;
@@ -542,9 +542,9 @@ static void set_friend_init(sprite_status* p_actwk) {
 
 
 static void chk_spd_pt(sprite_status* p_actwk) {
-  CLEAR_HFLIP(p_actwk->actflg);
+  CLEAR_BIT(p_actwk->actflg, FLG_HFLIP);
   if (p_actwk->xspeed < 0) {
-    SET_HFLIP(p_actwk->actflg);
+    SET_BIT(p_actwk->actflg, FLG_HFLIP);
   }
 }
 

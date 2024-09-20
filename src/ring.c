@@ -60,7 +60,7 @@ static void ringinit(sprite_status* p_actwk) {
   p_actwk->r_no += 2;
   p_actwk->patbase = ringpat;
   p_actwk->sproffset = 42684;
-  p_actwk->actflg = 4;
+  p_actwk->actflg = 1 << FLG_LEVELCOORDS;
   p_actwk->sprpri = PRI_4;
   p_actwk->colino = 71;
   p_actwk->sprhs = 8;
@@ -221,7 +221,7 @@ jump:
     util__copy_high(&p_new_actwk->yposi, &p_actwk->xposi);
     p_new_actwk->patbase = ringpat;
     p_new_actwk->sproffset = 42684;
-    p_new_actwk->actflg = 132;
+    p_new_actwk->actflg = (1 << FLG_LEVELCOORDS) | (1 << FLG_ONSCREEN);
     p_new_actwk->sprpri = PRI_3;
     p_new_actwk->colino = 71;
     p_new_actwk->sprhs = 8;
@@ -270,7 +270,7 @@ static void flyringmove(sprite_status* p_actwk) {
   p_actwk->yspeed += 24;
   if (p_actwk->yspeed >= 0) {
     if (!((g_mdRam.systemtimer % 256 + (p_actwk - g_mdRam.actwk - 1)) % 8)) {
-      if (IS_ONSCREEN(p_actwk->actflg)) {
+      if (BIT_IS_SET(p_actwk->actflg, FLG_ONSCREEN)) {
         short unknown1 = RingCheckFloorDist(p_actwk);
         if (unknown1 < 0) {
           p_actwk->yposi += SHORT_TO_LONG_HIGH(unknown1);
@@ -320,7 +320,7 @@ static void flyringmoveg(sprite_status* p_actwk) {
   p_actwk->yspeed += 24;
   if (p_actwk->yspeed >= 0) {
     if (!((g_mdRam.systemtimer % 256 + (p_actwk - g_mdRam.actwk - 1)) % 8)) {
-      if (IS_ONSCREEN(p_actwk->actflg)) {
+      if (BIT_IS_SET(p_actwk->actflg, FLG_ONSCREEN)) {
         short unknown1 = RingCheckFloorDist_ReverseGravity(p_actwk);
         if (unknown1 < 0) {
           p_actwk->yposi += SHORT_TO_LONG_HIGH(unknown1);
@@ -347,7 +347,7 @@ static void flyringmoveg(sprite_status* p_actwk) {
 void tring(sprite_status* p_actwk) {
   p_actwk->patbase = ringpat;
   p_actwk->sproffset = 42684;
-  p_actwk->actflg = 4;
+  p_actwk->actflg = 1 << FLG_LEVELCOORDS;
   p_actwk->sprpri = PRI_2;
   p_actwk->colino = 71;
   p_actwk->sprhs = 8;

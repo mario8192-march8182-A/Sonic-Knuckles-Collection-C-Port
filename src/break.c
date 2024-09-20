@@ -120,7 +120,7 @@ static void break_init(sprite_status* p_actwk) {
     p_actwk->sprhs = 48;
     p_actwk->sprvs = 48;
   }
-  SET_USE_LEVEL_COORDS(p_actwk->actflg);
+  SET_BIT(p_actwk->actflg, FLG_LEVELCOORDS);
   p_actwk->sprpri = PRI_5;
   p_actwk->actfree.break_.countdown = 7;
   p_actwk->patno = p_actwk->userflag1;
@@ -182,7 +182,7 @@ static void breakdown2__sub(sprite_status* p_actwk, sprite_status* p_playerwk, u
 
 
 static void breakdown3(sprite_status* p_actwk) {
-  if (!IS_ONSCREEN(p_actwk->actflg)) {
+  if (!BIT_IS_SET(p_actwk->actflg, FLG_ONSCREEN)) {
     frameout(p_actwk);
   }
   else {
@@ -250,7 +250,7 @@ static void break2init(sprite_status* p_actwk) {
   };
 
   p_actwk->r_ptr = &break2move;
-  SET_USE_LEVEL_COORDS(p_actwk->actflg);
+  SET_BIT(p_actwk->actflg, FLG_LEVELCOORDS);
   p_actwk->sprpri = PRI_5;
   if (GET_ZONE(g_mdRam.stageno) == LAUNCH_BASE) {
     unsigned short countdown = (p_actwk->userflag1 & 0x3F) * 3;
@@ -460,7 +460,7 @@ static void break2move_koma(sprite_status* p_actwk) {
 static void break2komamove2(sprite_status* p_actwk) {
   speedset2(p_actwk);
   p_actwk->yspeed += 24;
-  if (IS_ONSCREEN(p_actwk->actflg)) {
+  if (BIT_IS_SET(p_actwk->actflg, FLG_ONSCREEN)) {
     actionsub(p_actwk);
   }
   else {
@@ -519,7 +519,7 @@ static void break2down(sprite_status* p_actwk) {
 
 
 static void break2down1(sprite_status* p_actwk) {
-  if (IS_ONSCREEN(p_actwk->actflg)) {
+  if (BIT_IS_SET(p_actwk->actflg, FLG_ONSCREEN)) {
     speedset(p_actwk);
     actionsub(p_actwk);
   }
@@ -588,7 +588,7 @@ static void breakgosub(sprite_status* p_actwk, unsigned char* p_data, sprite_sta
   signed char cnt = *p_sp;
   p_sp += 2;
   --cnt;
-  SET_STATIC_PATTERN(p_actwk->actflg);
+  SET_BIT(p_actwk->actflg, FLG_STATICPATTERN);
   unsigned char actflg = p_actwk->actflg;
   sprite_status* p_new_actwk = p_actwk;
   goto jump;

@@ -125,7 +125,7 @@ static signed char banedaisp03[8];
 void sjump(sprite_status* p_actwk) {
   p_actwk->patbase = banepat;
   p_actwk->sproffset = 1188;
-  SET_USE_LEVEL_COORDS(p_actwk->actflg);
+  SET_BIT(p_actwk->actflg, FLG_LEVELCOORDS);
   p_actwk->sprhs = 16;
   p_actwk->sprvs = 16;
   p_actwk->sprpri = PRI_4;
@@ -147,7 +147,7 @@ static sprite_status_handler sjumpinit_tbl[5] = {
 static void sjumpswinit(sprite_status* p_actwk) {
   p_actwk->patbase = banepat;
   p_actwk->sproffset = 1188;
-  SET_USE_LEVEL_COORDS(p_actwk->actflg);
+  SET_BIT(p_actwk->actflg, FLG_LEVELCOORDS);
   p_actwk->sprhs = 16;
   p_actwk->sprvs = 16;
   p_actwk->sprpri = PRI_4;
@@ -1081,7 +1081,7 @@ static void sjumpmv_sub(sprite_status* p_actwk) {
   if (p_actwk->actfree.spring.move_countdown != 0) {
     --p_actwk->actfree.spring.move_countdown;
     if (p_actwk->actfree.spring.move_countdown != 0) return;
-    if (!IS_ONSCREEN(p_actwk->actflg)) return;
+    if (!BIT_IS_SET(p_actwk->actflg, FLG_ONSCREEN)) return;
     soundset(82);
   }
   else if (p_actwk->actfree.spring.move_dir != 0) {
@@ -1161,7 +1161,7 @@ void sjumpsw(sprite_status* p_actwk) {
     }
     p_new_actwk->cddat1 = p_actwk->cddat1;
     p_new_actwk->actflg = p_actwk->actflg;
-    SET_USE_LEVEL_COORDS(p_new_actwk->actflg);
+    SET_BIT(p_new_actwk->actflg, FLG_LEVELCOORDS);
     p_new_actwk->sprpri = PRI_4;
     p_new_actwk->actfree.springsw.parent = p_actwk - g_mdRam.actwk;
     p_actwk->actfree.spring.child = p_new_actwk - g_mdRam.actwk;
@@ -1279,7 +1279,7 @@ static void sjumpsw_sub(sprite_status* p_actwk) {
   if (p_actwk->actfree.spring.move_countdown != 0) {
     --p_actwk->actfree.spring.move_countdown;
     if (p_actwk->actfree.spring.move_countdown != 0) return;
-    if (!IS_ONSCREEN(p_actwk->actflg)) return;
+    if (!BIT_IS_SET(p_actwk->actflg, FLG_ONSCREEN)) return;
     soundset(82);
   }
   else if (p_actwk->actfree.spring.move_dir != 0) {
@@ -1320,7 +1320,7 @@ static void sjumpsw_sub2(sprite_status* p_actwk) {
     if (userflag == 224) {
       p_actwk->yposi += SHORT_TO_LONG_HIGH(22);
       TOGGLE_BIT(p_actwk->cddat1, CD_DOWN);
-      TOGGLE_VFLIP(p_actwk->actflg);
+      TOGGLE_BIT(p_actwk->actflg, FLG_VFLIP);
       p_actwk->userflag1 &= 0xF;
       p_actwk->userflag1 |= 0xF0;
       p_actwk->r_ptr = &sjumpswkind;
@@ -1330,7 +1330,7 @@ static void sjumpsw_sub2(sprite_status* p_actwk) {
     if (userflag == 240) {
       p_actwk->yposi -= SHORT_TO_LONG_HIGH(22);
       TOGGLE_BIT(p_actwk->cddat1, CD_DOWN);
-      TOGGLE_VFLIP(p_actwk->actflg);
+      TOGGLE_BIT(p_actwk->actflg, FLG_VFLIP);
       p_actwk->userflag1 &= 0xF;
       p_actwk->userflag1 |= 0xE0;
       p_actwk->r_ptr = &sjumpswkind;
@@ -1368,7 +1368,7 @@ static void sjumpsw_sub3(sprite_status* p_actwk) {
     if (userflag == 224) {
       p_actwk->yposi += SHORT_TO_LONG_HIGH(22);
       TOGGLE_BIT(p_actwk->cddat1, CD_DOWN);
-      TOGGLE_VFLIP(p_actwk->actflg);
+      TOGGLE_BIT(p_actwk->actflg, FLG_VFLIP);
       p_actwk->userflag1 &= 0xF;
       p_actwk->userflag1 |= 0xF0;
       p_actwk->r_ptr = &sjumpswkind;
@@ -1378,7 +1378,7 @@ static void sjumpsw_sub3(sprite_status* p_actwk) {
     if (userflag == 240) {
       p_actwk->yposi -= SHORT_TO_LONG_HIGH(22);
       TOGGLE_BIT(p_actwk->cddat1, CD_DOWN);
-      TOGGLE_VFLIP(p_actwk->actflg);
+      TOGGLE_BIT(p_actwk->actflg, FLG_VFLIP);
       p_actwk->userflag1 &= 0xF;
       p_actwk->userflag1 |= 0xE0;
       p_actwk->r_ptr = &sjumpswkind;

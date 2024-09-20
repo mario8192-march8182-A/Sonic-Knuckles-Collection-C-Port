@@ -107,7 +107,7 @@ static void actclear_move0(sprite_status* p_actwk) {
     p_new_actwk->patno = p_data->patno;
     p_new_actwk->sprhs = p_data->sprhs;
     p_new_actwk->colino = p_data->exit_no;
-    p_new_actwk->actflg = 64;
+    p_new_actwk->actflg = 1 << FLG_COMPOUND;
     p_new_actwk->patbase = actclearpat;
     p_new_actwk->actfree.actclear_part.oya = p_actwk - g_mdRam.actwk;
     bool created = Create_New_Sprite4(&p_new_actwk, slot_cnt);
@@ -300,7 +300,7 @@ static bool actclear_part_move(sprite_status* p_actwk) {
   sprite_status* p_parentwk = &g_mdRam.actwk[p_actwk->actfree.actclear_part.oya];
   short xposi = p_parentwk->actfree.actclear.current_exit_no;
   if (p_parentwk->actfree.actclear.current_exit_no != 0) {
-    if (!IS_ONSCREEN(p_actwk->actflg)) {
+    if (!BIT_IS_SET(p_actwk->actflg, FLG_ONSCREEN)) {
       --p_parentwk->actfree.actclear.part_cnt;
       frameout(p_actwk);
       return true;

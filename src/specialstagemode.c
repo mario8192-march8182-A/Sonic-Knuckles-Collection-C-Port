@@ -251,7 +251,7 @@ static void menu_move0(sprite_status* p_actwk) {
   g_mdRam.DAT_08ffffaa = 0;
   g_mdRam.actwk[46].r_ptr = &starsphere_init;
   g_mdRam.actwk[47].r_ptr = &starsphere_init;
-  SET_HFLIP(g_mdRam.actwk[47].actflg);
+  SET_BIT(g_mdRam.actwk[47].actflg, FLG_HFLIP);
   if (g_mdRam.specmodefull != 0) {
     util__assign_high(&g_mdRam.actwk[6].yposi, 176);
     g_mdRam.actwk[18].r_ptr = &codeinput_init;
@@ -845,7 +845,7 @@ static void starsphere_init(sprite_status* p_actwk) {
     util__assign_high(&p_actwk->yposi, 190);
   }
   p_actwk->actfree.ssm_starsphere.p_posi = (short*)leftstarsphereposi;
-  if (IS_HFLIP(p_actwk->actflg)) {
+  if (BIT_IS_SET(p_actwk->actflg, FLG_HFLIP)) {
     util__assign_high(&p_actwk->xposi, 320);
     p_actwk->actfree.ssm_starsphere.p_posi = (short*)rightstarsphereposi;
   }

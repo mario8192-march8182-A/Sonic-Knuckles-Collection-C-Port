@@ -161,6 +161,18 @@ typedef enum pad_buttons {
 }
 pad_buttons;
 
+typedef enum actflg_bits {
+  FLG_HFLIP = 0,
+  FLG_VFLIP = 1,
+  FLG_LEVELCOORDS = 2,
+  FLG_3,
+  FLG_4,
+  FLG_STATICPATTERN = 5,
+  FLG_COMPOUND = 6,
+  FLG_ONSCREEN = 7
+}
+actflg_bits;
+
 #define SPEEDUPTIMER 54
 #define FOOTDIR 58
 #define KO_ADR 68

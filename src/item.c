@@ -78,7 +78,7 @@ static void iteminit(sprite_status* p_actwk) {
   p_actwk->sprhsize = 15;
   p_actwk->patbase = itempat;
   p_actwk->sproffset = 1220;
-  SET_USE_LEVEL_COORDS(p_actwk->actflg);
+  SET_BIT(p_actwk->actflg, FLG_LEVELCOORDS);
   p_actwk->sprpri = PRI_3;
   p_actwk->sprhs = 14;
   p_actwk->sprvs = 16;
@@ -122,7 +122,7 @@ static void itemmove2(sprite_status* p_actwk) {
 
 static void itemdownsub(sprite_status* p_actwk) {
   if (p_actwk->actfree.item.unknown == 0) return;
-  if (!IS_VFLIP(p_actwk->actflg)) {
+  if (!BIT_IS_SET(p_actwk->actflg, FLG_VFLIP)) {
     speedset(p_actwk);
     if (p_actwk->yspeed < 0) return;
     short unknown = ObjCheckFloorDist(p_actwk);
@@ -251,7 +251,7 @@ static void item2init(sprite_status* p_actwk) {
   p_actwk->sprpri = PRI_3;
   p_actwk->sprhs = 8;
   p_actwk->yspeed = -768;
-  if (IS_VFLIP(p_actwk->actflg)) {
+  if (BIT_IS_SET(p_actwk->actflg, FLG_VFLIP)) {
     p_actwk->yspeed = -p_actwk->yspeed;
   }
   p_actwk->patno = p_actwk->mstno + 1;
@@ -267,7 +267,7 @@ static void item2move(sprite_status* p_actwk) {
 
 
 static void item2move__sub(sprite_status* p_actwk) {
-  if (!IS_VFLIP(p_actwk->actflg)) {
+  if (!BIT_IS_SET(p_actwk->actflg, FLG_VFLIP)) {
     if (p_actwk->yspeed < 0) {
       speedset2(p_actwk);
       p_actwk->yspeed += 24;

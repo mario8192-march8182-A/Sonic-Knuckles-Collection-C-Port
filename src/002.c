@@ -181,9 +181,9 @@ void chk_distance(sprite_status* p_actwk, bool* pl_is_right, bool* pl_is_below, 
 
 // skdisasm label: Change_FlipXWithVelocity
 void chk_emy_revs(sprite_status* p_actwk) {
-  CLEAR_HFLIP(p_actwk->actflg);
+  CLEAR_BIT(p_actwk->actflg, FLG_HFLIP);
   if (p_actwk->xspeed < 0) return;
-  SET_HFLIP(p_actwk->actflg);
+  SET_BIT(p_actwk->actflg, FLG_HFLIP);
 }
 
 
@@ -255,7 +255,7 @@ ok:
   p_actwk->colino = p_data->colino;
   SET_BIT(p_actwk->cddat1, CD_WRT);
   p_actwk->actfree.dynamic.prev_patno = 255;
-  SET_USE_LEVEL_COORDS(p_actwk->actflg);
+  SET_BIT(p_actwk->actflg, FLG_LEVELCOORDS);
   p_actwk->r_no += 2;
 }
 
@@ -395,7 +395,7 @@ void clr_wchg_bit(sprite_status* p_actwk) {
 
 // skdisasm label: Sprite_CheckDeleteTouchSlotted
 void chk_emy_foutwc0(sprite_status* p_actwk) {
-  if (!IS_ONSCREEN(p_actwk->actflg)) {
+  if (!BIT_IS_SET(p_actwk->actflg, FLG_ONSCREEN)) {
     unsigned short scr_xposi = util__to_unsigned(LONG_HIGH(p_actwk->xposi)) & 0xFF80;
     scr_xposi -= g_mdRam.scr_x_no;
     if (scr_xposi > 640) { // unsigned
@@ -481,7 +481,7 @@ void set_break_spd(sprite_status* p_actwk, unsigned char unknown) {
   unsigned char index = p_actwk->userflag1 * 2 + unknown;
   p_actwk->xspeed = speed_tbl[index];
   p_actwk->yspeed = speed_tbl[index + 1];
-  if (IS_HFLIP(p_actwk->actflg)) {
+  if (BIT_IS_SET(p_actwk->actflg, FLG_HFLIP)) {
     p_actwk->xspeed = -p_actwk->xspeed;
   }
 }
@@ -547,7 +547,7 @@ sprite_status* chk_emy_colt__col(sprite_status* p_playerwk_chk, sprite_status* p
 // skdisasm: Obj_WaitOffscreen
 void chk_framein(sprite_status* p_actwk, sprite_status_handler p_callback) {
   p_actwk->patbase = space_pt;
-  SET_USE_LEVEL_COORDS(p_actwk->actflg);
+  SET_BIT(p_actwk->actflg, FLG_LEVELCOORDS);
   p_actwk->sprhs = 32;
   p_actwk->sprvs = 32;
   p_actwk->actfree.dynamic.callback_ptr = p_callback;
@@ -557,7 +557,7 @@ void chk_framein(sprite_status* p_actwk, sprite_status_handler p_callback) {
 
 
 static void chk_framein__chk(sprite_status* p_actwk) {
-  if (!IS_ONSCREEN(p_actwk->actflg)) {
+  if (!BIT_IS_SET(p_actwk->actflg, FLG_ONSCREEN)) {
     unsigned short scr_xposi = util__to_unsigned(LONG_HIGH(p_actwk->xposi)) & 0xFF80;
     scr_xposi -= g_mdRam.scr_x_no;
     if (scr_xposi <= 640) { // unsigned

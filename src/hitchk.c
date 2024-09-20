@@ -26,7 +26,7 @@ static hitchk_results plhitchk_pop_up(sprite_status* p_actwk, sprite_status* p_p
 
 hitchk_results hitchk(sprite_status* p_actwk, hitchk_data data) {
   hitchk_results results = plhitchk(p_actwk, &g_mdRam.actwk[0], data, 3);
-  if (BIT_7_IS_SET(g_mdRam.actwk[1].actflg)) {
+  if (BIT_IS_SET(g_mdRam.actwk[1].actflg, FLG_ONSCREEN)) {
     hitchk_results results2 = plhitchk(p_actwk, &g_mdRam.actwk[1], data, 4);
     results.plcoli += results2.plcoli;
   }
@@ -264,7 +264,7 @@ static hitchk_results plhitchk_chk_slope_coli(sprite_status* p_actwk, sprite_sta
   }
   hitchk_distances distances = { left_edge_distance, 0, 0, 0 };
   short unknown_distance = distances.left_edge;
-  if (IS_HFLIP(p_actwk->actflg)) {
+  if (BIT_IS_SET(p_actwk->actflg, FLG_HFLIP)) {
     unknown_distance = ~unknown_distance;
     unknown_distance += width;
   }
@@ -295,7 +295,7 @@ static hitchk_results plhitchk_chk_doubleslope_coli(sprite_status* p_actwk, spri
   }
   hitchk_distances distances = { left_edge_distance, 0, 0, 0 };
   short unknown_distance = distances.left_edge;
-  if (IS_HFLIP(p_actwk->actflg)) {
+  if (BIT_IS_SET(p_actwk->actflg, FLG_HFLIP)) {
     unknown_distance = ~unknown_distance;
     unknown_distance += width;
   }
@@ -315,7 +315,7 @@ static hitchk_results plhitchk_chk_doubleslope_coli(sprite_status* p_actwk, spri
 
 
 static hitchk_results plhitchk_chk_coli(sprite_status* p_actwk, sprite_status* p_playerwk, hitchk_data data, unsigned char plridebit) {
-  if (!IS_ONSCREEN(p_actwk->actflg)) {
+  if (!BIT_IS_SET(p_actwk->actflg, FLG_ONSCREEN)) {
     return plhitchk_chk_push(p_actwk, p_playerwk, plridebit);
   }
   return plhitchk_chk_coli2(p_actwk, p_playerwk, data, plridebit);

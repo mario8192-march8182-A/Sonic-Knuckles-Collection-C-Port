@@ -241,7 +241,7 @@ static void action3() {
 // 0041e80f
 static sprite_status* action4(sprite_status* p_actwk, int cnt) {
   for (int i = 0; i < cnt; ++i) {
-    if (p_actwk->r_ptr != 0 && IS_ONSCREEN(p_actwk->actflg)) {
+    if (p_actwk->r_ptr != 0 && BIT_IS_SET(p_actwk->actflg, FLG_ONSCREEN)) {
       actionsub(p_actwk);
     }
     ++p_actwk;
@@ -380,14 +380,14 @@ void patset() {
     do {
       int act = *p_pbufferrow++;
       sprite_status* p_actwk = &g_mdRam.actwk[act];
-      CLEAR_ONSCREEN(p_actwk->actflg);
-      if (IS_COMPOUND(p_actwk->actflg)) {
+      CLEAR_BIT(p_actwk->actflg, FLG_ONSCREEN);
+      if (BIT_IS_SET(p_actwk->actflg, FLG_COMPOUND)) {
         patset_compound(p_actwk);
         goto next;
       }
       short xposi = LONG_HIGH(p_actwk->xposi);
       short yposi = LONG_HIGH(p_actwk->yposi);
-      if (USES_LEVEL_COORDS(p_actwk->actflg)) {
+      if (BIT_IS_SET(p_actwk->actflg, FLG_LEVELCOORDS)) {
         xposi -= LONG_HIGH(g_mdRam.scra_h_posit_copy);
         if (xposi + p_actwk->sprhs < 0) {
           goto next;
@@ -406,11 +406,11 @@ void patset() {
         yposi += 128;
         yposi -= p_actwk->sprvs;
       }
-      SET_ONSCREEN(p_actwk->actflg);
+      SET_BIT(p_actwk->actflg, FLG_ONSCREEN);
       if (spritesleft_cnt > 0 && p_actwk->patbase != 0) {
         sprite_pattern* p_sprpat;
         unsigned short spr_cnt;
-        if (HAS_STATIC_PATTERN(p_actwk->actflg)) {
+        if (BIT_IS_SET(p_actwk->actflg, FLG_STATICPATTERN)) {
           p_sprpat = (sprite_pattern*)p_actwk->patbase;
           spr_cnt = 1;
         }
