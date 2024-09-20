@@ -417,10 +417,10 @@ unsigned long random() {
   d1 = d1 << 3 & 0xFFFFFFFF;
   d1 = d1 + d0 & 0xFFFFFFFF;
   d0 = d0 & 0xFFFF0000 | d1 & 0x0000FFFF;
-  d1 = util__rotate(d1);
+  ROTATE_RIGHT(d1, 16);
   d0 = d0 & 0xFFFF0000 | ((d0 & 0x0000FFFF) + (d1 & 0x0000FFFF) & 0x0000FFFF);
   d1 = d1 & 0xFFFF0000 | d0 & 0x0000FFFF;
-  d1 = util__rotate(d1);
+  ROTATE_RIGHT(d1, 16);
   g_mdRam.ranum = d1;
   return d0;
 }
