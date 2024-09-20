@@ -101,8 +101,6 @@ extern void vInt();
 
 // 006a42d4
 static void init_graphics() {
-  g_mdRam.unlzequeuecnt = 0;
-  memset(g_mdRam.unlzequeue, 0, 108);
   g_vdpScrollPlaneAOffset = 0xC000;
   g_vdpScrollPlaneBOffset = 0xE000;
   DAT_008549d8 = 32;
@@ -162,7 +160,6 @@ void specialstagemode() {
 
   do {
     g_mdRam.int_flg = 26;
-    g_mdRam.unlzequeuecnt = 0;
     vInt();
     update_hscrollbuff();
     action();

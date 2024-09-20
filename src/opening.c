@@ -307,9 +307,6 @@ void opening() {
   }
 
   bgmset(225);
-  g_mdRam.unlzequeuecnt = 0;
-  g_mdRam.unlzequeue[0] = 0;
-  memset(g_mdRam.unlzequeue, 0, 108);
   g_mdRam.stageno = 0;
   g_vdpScrollPlaneAOffset = 0xC000;
   g_vdpScrollPlaneBOffset = 0xE000;

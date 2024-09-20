@@ -176,8 +176,6 @@ typedef struct sonic3_ram {
   /* 08ffff04 */ short actring;
   /* 08ffff08 */ character_team_id plmode;
   /* 08ffff0a */ character_team_id levelselect_plmode;
-  /* 08ffff0e */ unsigned short unlzequeuecnt;
-  /* 08ffff10 */ unsigned char unlzequeue[108];
   /* 08ffff60 */ unsigned char divdev_modules;
   /* 08ffff80 */ short levelselect_inputrepeattimer;
   /* 08ffff82 */ unsigned short levelselect_selection;
