@@ -539,7 +539,6 @@ static void plays3kdemo() {
   g_mdRam.pl2ring = 0;
   g_mdRam.DAT_08fffed2 = 0;
   g_mdRam.DAT_08fffed6 = 0;
-  g_mdRam.plcontinuecnt = 0;
   g_mdRam.extrascore = 5000;
   g_mdRam.extrascore2 = 5000;
 }
