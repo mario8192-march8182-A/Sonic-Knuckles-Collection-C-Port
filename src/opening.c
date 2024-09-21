@@ -121,7 +121,8 @@ static sprite_pattern* skopening_copyright_pat[1];
 static sprite_pattern skopening_copyright_sp00;
 static unsigned char DAT_006e0340[209];
 static unsigned char DAT_006e0411[183];
-static void s3opening();
+static void plays3demo();
+static short s3demostagenos[3];
 
 extern void vInt();
 
@@ -301,19 +302,18 @@ static sprite_pattern skopening_mountain_sp00 = {
 
 // 006dbfe2
 void opening() {
-  if (g_sonic3Alone != 0) {
-    s3opening();
-    return;
-  }
-
   bgmset(225);
-  g_mdRam.stageno = 0;
+  if (g_sonic3Alone == 0) {
+    g_mdRam.stageno = 0;
+  }
   g_vdpScrollPlaneAOffset = 0xC000;
   g_vdpScrollPlaneBOffset = 0xE000;
   DAT_008549d8 = 0;
   DAT_00854dec = 1;
   g_mdRam.waterflag = 0;
-  g_mdRam.watermode = 0;
+  if (g_sonic3Alone == 0) {
+    g_mdRam.watermode = 0;
+  }
   scrinit();
   memset(g_mdRam.pbuffer, 0, sizeof(g_mdRam.pbuffer));
   memset(g_mdRam.actwk, 0, sizeof(g_mdRam.actwk) + 52);
@@ -391,7 +391,7 @@ static void s3kopening() {
   unsigned char* p_decompressed = unlze(g_mdRam.decompressed, s3opening_frame1_tiles, 0);
   copy_data_vram(g_mdRam.decompressed, 0, (p_decompressed - g_mdRam.decompressed) / 2);
   mapdevr((unsigned short*)&g_mdRam.decompressed[0x8000], s3opening_frame1_map, 0);
-  if (!(g_mdRam.mdstatus & 0x80)) {
+  if (!BIT_7_IS_SET(g_mdRam.mdstatus) && g_sonic3Alone == 0) {
     *((unsigned long*)&g_mdRam.decompressed[0x83AC]) = 0;
   }
   copy_map_vram((unsigned short*)&g_mdRam.decompressed[0x8000], 0xC000, 27, 39);
@@ -441,15 +441,20 @@ static void s3kopening() {
   bitdevr((unsigned long*)&g_mdVram[0xD000], s3opening_text_tiles, g_mdRam.bitdevwk);
   bitdevr((unsigned long*)&g_mdVram[0xD4C0], DAT_006e0340, g_mdRam.bitdevwk);
   bitdevr((unsigned long*)&g_mdVram[0x8000], s3opening_sonicsprites_tiles, g_mdRam.bitdevwk);
-  bitdevr((unsigned long*)&g_mdVram[0x9800], s3opening_andknuckles_tiles, g_mdRam.bitdevwk);
+  if (g_sonic3Alone == 0) {
+    bitdevr((unsigned long*)&g_mdVram[0x9800], s3opening_andknuckles_tiles, g_mdRam.bitdevwk);
+  }
   g_mdRam.actwk[0].r_ptr = &s3banner_init;
   g_mdRam.actwk[1].r_ptr = &selection_init;
   g_mdRam.actwk[3].r_ptr = &s3copyright_init;
   g_mdRam.actwk[4].r_ptr = &sonicfinger_init;
   g_mdRam.actwk[5].r_ptr = &sonicwink_init;
   g_mdRam.actwk[6].r_ptr = &tornado_init;
-  g_mdRam.actwk[7].r_ptr = &andknuckles_init;
+  if (g_sonic3Alone == 0) {
+    g_mdRam.actwk[7].r_ptr = &andknuckles_init;
+  }
   g_mdRam.openinganimdelay = 0;
+  unsigned short swdata;
 
   do {
     do {
@@ -460,10 +465,19 @@ static void s3kopening() {
     } while (g_mdRam.actwk[2].r_ptr == 0);
 
     if (g_mdRam.demotimer == 0) {
-      plays3kdemo();
+      if (g_sonic3Alone == 0) {
+        plays3kdemo();
+      }
+      else {
+        plays3demo();
+      }
       return;
     }
-  } while (!IS_BUTTON_PRESSED(g_mdRam.swdata1 | g_mdRam.swdata2, PAD_S));
+    swdata = g_mdRam.swdata1;
+    if (g_sonic3Alone == 0) {
+      swdata |= g_mdRam.swdata2;
+    }
+  } while (!IS_BUTTON_PRESSED(swdata, PAD_S));
 
   g_mdRam.gmmode = 12;
   g_mdRam.pl_suu = 3;
@@ -619,10 +633,18 @@ static void s3banner_move0(sprite_status* p_actwk) {
       break;
   }
 
-  short yposi = -util__longhigh_to_short(p_actwk->actfree.s3opening_banner.yposiwk) + 212;
+  short yposi = -util__longhigh_to_short(p_actwk->actfree.s3opening_banner.yposiwk);
+  if (g_sonic3Alone == 0) {
+    yposi += 212;
+  }
+  else {
+    yposi += 240;
+  }
   util__assign_high(&p_actwk->yposi, yposi);
-  if (g_mdRam.vscrolla != 16) {
-    ++g_mdRam.vscrolla;
+  if (g_sonic3Alone == 0) {
+    if (g_mdRam.vscrolla != 16) {
+      ++g_mdRam.vscrolla;
+    }
   }
   s3banner_move1(p_actwk);
 }
@@ -651,6 +673,9 @@ static void s3bannertm_init(sprite_status* p_actwk) {
   p_actwk->sproffset = 0xE500;
   util__assign_high(&p_actwk->xposi, 392);
   util__assign_high(&p_actwk->yposi, 236);
+  if (g_sonic3Alone != 0) {
+    util__assign_high(&p_actwk->yposi, 264);
+  }
   p_actwk->sprpri = PRI_1;
   p_actwk->sprhs = 12;
   p_actwk->sprvs = 4;
@@ -661,7 +686,7 @@ static void s3bannertm_init(sprite_status* p_actwk) {
 
 // 006dd3f9
 static void s3bannertm_move(sprite_status* p_actwk) {
-  if (g_mdRam.mdstatus & 0x80) {
+  if (BIT_7_IS_SET(g_mdRam.mdstatus) || g_sonic3Alone != 0) {
     actionsub(p_actwk);
   }
 }
@@ -737,8 +762,11 @@ static void selection_init(sprite_status* p_actwk) {
 // 006dd650
 static void selection_move(sprite_status* p_actwk) {
   unsigned char wk = g_mdRam.openingoption;
-  unsigned short swdata = g_mdRam.swdata1 | g_mdRam.swdata2;
-  if (g_bTrial == 0) {
+  unsigned short swdata = g_mdRam.swdata1;
+  if (g_sonic3Alone == 0) {
+    swdata |= g_mdRam.swdata2;
+  }
+  if (g_bTrial == 0 || g_sonic3Alone != 0) {
     if (IS_BUTTON_PRESSED(swdata, PAD_U)) {
       if (wk-- == 0) {
         wk = 2;
@@ -782,7 +810,9 @@ static void sonicfinger_init(sprite_status* p_actwk) {
 
 // 006dd79f
 static void sonicfinger_move(sprite_status* p_actwk) {
-  util__assign_high(&p_actwk->yposi, 220 - g_mdRam.vscrolla);
+  if (g_sonic3Alone == 0) {
+    util__assign_high(&p_actwk->yposi, 220 - g_mdRam.vscrolla);
+  }
   patchg(p_actwk, s3opening_sonicfinger_chg);
   actionsub(p_actwk);
 }
@@ -814,7 +844,9 @@ static void sonicwink_init(sprite_status* p_actwk) {
 
 // 006dd86d
 static void sonicwink_move(sprite_status* p_actwk) {
-  util__assign_high(&p_actwk->yposi, 200 - g_mdRam.vscrolla);
+  if (g_sonic3Alone == 0) {
+    util__assign_high(&p_actwk->yposi, 200 - g_mdRam.vscrolla);
+  }
   patchg2(p_actwk, s3opening_sonicwink_chg);
   actionsub(p_actwk);
 }
@@ -1659,7 +1691,38 @@ static sprite_pattern skopening_copyright_sp00 = {
 /* 006e0411 */ static unsigned char DAT_006e0411[183] = { 0x0c, 0x80, 0x80, 0x02, 0x00, 0x14, 0x09, 0x25, 0x1b, 0x35, 0x1a, 0x44, 0x0b, 0x55, 0x1d, 0x68, 0xfb, 0x74, 0x0a, 0x81, 0x03, 0x03, 0x16, 0x3c, 0x37, 0x7c, 0x8a, 0x03, 0x02, 0x14, 0x08, 0x25, 0x1c, 0x34, 0x0c, 0x46, 0x3d, 0x58, 0xfa, 0xff, 0x1f, 0xee, 0xd8, 0xfe, 0x9c, 0x10, 0x44, 0xf2, 0xaf, 0x9b, 0x82, 0x08, 0x7f, 0x4e, 0x79, 0xf8, 0xb7, 0xb8, 0xdb, 0x95, 0xd7, 0x5f, 0x6f, 0x6f, 0x48, 0x57, 0xcd, 0xbe, 0xb3, 0x0f, 0x11, 0x02, 0xa9, 0x44, 0x5f, 0x35, 0x82, 0x9f, 0x47, 0x4c, 0xc1, 0x88, 0x81, 0x54, 0xa2, 0x2f, 0x9a, 0xc1, 0x4f, 0xa3, 0xbf, 0x37, 0x07, 0xe8, 0x6e, 0x2a, 0x87, 0xb5, 0x2a, 0x79, 0x28, 0xfd, 0x09, 0x03, 0xdf, 0xca, 0xa3, 0xe5, 0xc5, 0x5b, 0x5d, 0x70, 0xed, 0x1f, 0xc1, 0x3e, 0xa7, 0x37, 0xe4, 0xa1, 0x69, 0x08, 0x7d, 0x75, 0xa8, 0xbf, 0xe8, 0xdb, 0x17, 0x57, 0xda, 0xeb, 0x15, 0xba, 0x8e, 0xc7, 0xc1, 0xce, 0x78, 0x7b, 0x28, 0xe5, 0xc0, 0xab, 0x50, 0x29, 0x47, 0x0f, 0x05, 0xa7, 0xbc, 0x19, 0xec, 0xa3, 0x35, 0x95, 0xac, 0x94, 0x60, 0xc5, 0xa6, 0x79, 0x8e, 0x5e, 0x5f, 0x25, 0xa1, 0x57, 0x63, 0x6d, 0x19, 0x31, 0x3f, 0xd1, 0x54, 0x9d, 0x5a, 0x13, 0xd2, 0xfb, 0x81, 0x76, 0x34 };
 
 
-// 006e62e0
-static void s3opening() {
-  // TODO
+// 006e69e7
+static void plays3demo() {
+  soundset(225);
+  g_mdRam.demoid = g_mdRam.nextdemoid;
+  short stageno = s3demostagenos[g_mdRam.nextdemoid & 7];
+  g_mdRam.stageno = stageno;
+  g_mdRam.stageno_i = stageno;
+  g_mdRam.stageno_s = stageno;
+  ++g_mdRam.nextdemoid;
+  if (g_mdRam.nextdemoid >= 3) {
+    g_mdRam.nextdemoid = 0;
+  }
+  g_mdRam.demoflag = 1;
+  g_mdRam.gmmode = 8;
+  g_mdRam.pl_suu = 3;
+  g_mdRam.pl2_suu = 3;
+  g_mdRam.plring = 0;
+  g_mdRam.pltime.hours = 0;
+  g_mdRam.pltime.minutes = 0;
+  g_mdRam.pltime.seconds = 0;
+  g_mdRam.pltime.frames = 0;
+  g_mdRam.plscore = 0;
+  g_mdRam.pl2ring = 0;
+  g_mdRam.DAT_08fffed2 = 0;
+  g_mdRam.DAT_08fffed6 = 0;
+  g_mdRam.extrascore = 5000;
+  g_mdRam.extrascore2 = 5000;
 }
+
+
+/* 006e6b0f */ static short s3demostagenos[3] = {
+  ANGEL_ISLAND_ACT_1,
+  HYDROCITY_ACT_1,
+  MARBLE_GARDEN_ACT_1
+};
