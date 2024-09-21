@@ -119,7 +119,7 @@ static void init_vdp() {
 
 
 // 0041a75c
-void clear_displaydata() {
+void scrinit() {
   memset(g_mdVram, 0, 64);
 
   if (g_mdRam.vs_flag != 0) {

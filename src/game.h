@@ -9,7 +9,7 @@ void start_debug();
 void start_specialstagemode();
 void start_game(unsigned short cartridge);
 void gameloop();
-void clear_displaydata();
+void scrinit();
 void bgmset(signed char command);
 void soundset(signed char command);
 void init_sprlist();

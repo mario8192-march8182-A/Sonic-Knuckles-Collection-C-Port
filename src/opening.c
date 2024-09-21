@@ -314,7 +314,7 @@ void opening() {
   DAT_00854dec = 1;
   g_mdRam.waterflag = 0;
   g_mdRam.watermode = 0;
-  clear_displaydata();
+  scrinit();
   memset(g_mdRam.pbuffer, 0, sizeof(g_mdRam.pbuffer));
   memset(g_mdRam.actwk, 0, sizeof(g_mdRam.actwk) + 52);
   // START memset(DAT_08fff700, 0, 256)

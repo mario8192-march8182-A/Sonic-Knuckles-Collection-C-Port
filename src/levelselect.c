@@ -38,7 +38,7 @@ void levelselect() {
 
   g_mdRam.stageno = ANGEL_ISLAND_ACT_1;
   fadeout();
-  clear_displaydata();
+  scrinit();
   g_vdpScrollPlaneAOffset = 0xC000;
   g_vdpScrollPlaneBOffset = 0xE000;
   DAT_008549d8 = 0;
