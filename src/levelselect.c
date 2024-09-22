@@ -45,8 +45,6 @@ void levelselect() {
   DAT_00854dec = 0;
   memset(g_mdRam.pbuffer, 0, sizeof(g_mdRam.pbuffer));
   memset(g_mdRam.actwk, 0, sizeof(g_mdRam.actwk) + 52);
-  g_mdRam.vdpbuffer[0] = 0;
-  g_mdRam.vdpbuffer_free = 0;
   bitdevr((unsigned long*)&g_mdVram[512], levelselect_tiles, g_mdRam.bitdevwk);
   mapdevr((unsigned short*)&g_mdRam.decompressed, levelselect_map, 0x6000);
   copy_map_vram((unsigned short*)g_mdRam.decompressed, 0xE000, 27, 39);

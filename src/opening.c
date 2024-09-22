@@ -375,8 +375,6 @@ void opening() {
   g_mdRam.DAT_08ffffe6 = 0;
   g_mdRam.specmode = 0;
   g_mdRam.demotimer = 359;
-  g_mdRam.vdpbuffer[0] = 0;
-  g_mdRam.vdpbuffer_free = 0x8fffb00;
   if (g_mdRam.cartridge == 0) {
     s3kopening();
   }

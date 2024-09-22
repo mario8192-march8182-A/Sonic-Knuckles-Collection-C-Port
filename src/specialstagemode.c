@@ -114,8 +114,6 @@ static void init_graphics() {
   memset(g_mdRam.colorwk, 0, sizeof(g_mdRam.colorwk));
   memset(g_mdRam.colorwk2, 0, sizeof(g_mdRam.colorwk2));
   g_mdRam.stageno = 0;
-  g_mdRam.vdpbuffer[0] = 0;
-  g_mdRam.vdpbuffer_free = 0x8fffb00;
 }
 
 

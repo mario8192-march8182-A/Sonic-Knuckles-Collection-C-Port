@@ -102,8 +102,6 @@ typedef struct sonic3_ram {
   /* 08fffaad */ unsigned char soz_ghosts;
   /* 08fffacd */ unsigned char DAT_08fffacd;
   /* 08ffface */ unsigned short DAT_08ffface;
-  /* 08fffb00 */ unsigned long vdpbuffer[63];
-  /* 08fffbfc */ unsigned long vdpbuffer_free;
   /* 08fffc00 */ unsigned short colorwk[64];
   /* 08fffc80 */ unsigned short colorwk2[64];
   /* 08fffe02 */ unsigned short gameflag;
