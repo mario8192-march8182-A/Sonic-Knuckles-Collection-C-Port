@@ -371,8 +371,8 @@ void opening() {
   g_mdRam.DAT_08fff711 = 0;
   g_mdRam.DAT_08ffffda = 0;
   g_mdRam.vs_flag = 0;
-  g_mdRam.DAT_08ffffe4 = 0;
-  g_mdRam.DAT_08ffffe6 = 0;
+  g_mdRam.editmodecheatcounter = 0;
+  g_mdRam.allemeraldscheatcounter = 0;
   g_mdRam.specmode = 0;
   g_mdRam.demotimer = 359;
   if (g_mdRam.cartridge == 0) {

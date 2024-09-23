@@ -194,6 +194,7 @@ typedef struct sonic3_ram {
   /* 08ffffaa */ unsigned char DAT_08ffffaa;
   /* 08ffffab */ unsigned char DAT_08ffffab;
   /* 08ffffae */ unsigned short cartridge;
+  /* 08ffffb0 */ unsigned char emeraldcnt;
   /* 08ffffb2 */ unsigned char specprogress[8];
   /* 08ffffbb */ unsigned char cartridgespec;
   /* 08ffffbd */ unsigned char openinganimdelay;
@@ -207,10 +208,13 @@ typedef struct sonic3_ram {
   /* 08ffffd8 */ unsigned char mdstatus;
   /* 08ffffda */ unsigned char DAT_08ffffda;
   /* 08ffffe0 */ unsigned char levelselectcheat;
-  /* 08ffffe2 */ unsigned short debugcheat;
-  /* 08ffffe4 */ unsigned short DAT_08ffffe4;
-  /* 08ffffe6 */ unsigned short DAT_08ffffe6;
+  /* 08ffffe1 */ unsigned char slowmotioncheat;
+  /* 08ffffe2 */ unsigned short editmodecheat;
+  /* 08ffffe4 */ unsigned short editmodecheatcounter;
+  /* 08ffffe6 */ unsigned short allemeraldscheatcounter;
   /* 08ffffe8 */ unsigned short vs_flag;
+  /* 08ffffea */ unsigned char whoplay1;
+  /* 08ffffeb */ unsigned char whoplay2;
 }
 sonic3_ram;
 
