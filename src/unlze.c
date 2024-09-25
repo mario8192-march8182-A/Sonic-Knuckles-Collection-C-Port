@@ -99,6 +99,7 @@ unsigned char* unlze(unsigned char* p_destination, unsigned char* p_source, unsi
 // 004114aa
 void unlze_moduled(unsigned char* p_destination, unsigned char* p_source) {
   unsigned short size = *((unsigned short*)p_source);
+  p_source += 2;
   if (size == 0) return;
 
   unsigned char module_cnt;
