@@ -102,7 +102,7 @@ static void skbanner_init(sprite_status* p_actwk);
 static void skbanner_move(sprite_status* p_actwk);
 static void skopeninganims_init(sprite_status* p_actwk);
 static void skopeninganims_move(sprite_status* p_actwk);
-static signed char skopening_animate(signed char* p_animdata, unsigned char* p_currentanim);
+static short skopening_animate(signed char* p_animdata, unsigned char* p_currentanim);
 static signed char skopening_sonicsmile_anim[6];
 static signed char skopening_sonicfinger_anim[47];
 static signed char skopening_knuckleshand1_anim[17];
@@ -1447,7 +1447,7 @@ static void skopeninganims_init(sprite_status* p_actwk) {
 
 // 006df211
 static void skopeninganims_move(sprite_status* p_actwk) {
-  signed char offset = skopening_animate(skopening_sonicsmile_anim, p_actwk->actfree.skopening_anims.sonicsmile_anim);
+  short offset = skopening_animate(skopening_sonicsmile_anim, p_actwk->actfree.skopening_anims.sonicsmile_anim);
   if (offset >= 0) {
     copy_data_vram(&g_mdRam.decompressed[0x4800 + offset], 0x1C60, 48);
   }
@@ -1470,7 +1470,7 @@ static void skopeninganims_move(sprite_status* p_actwk) {
 
 
 // 006df392
-static signed char skopening_animate(signed char* p_animdata, unsigned char* p_currentanim) {
+static short skopening_animate(signed char* p_animdata, unsigned char* p_currentanim) {
   if (p_currentanim[0]-- != 0) {
     return -1;
   }
@@ -1484,10 +1484,13 @@ static signed char skopening_animate(signed char* p_animdata, unsigned char* p_c
         p_currentanim[1] = 0;
         next = p_animdata[1];
         break;
-      case -2:
-        p_currentanim[1] -= p_animdata[index + 2];
+      case -2: {
+        unsigned char rewind = p_animdata[index + 2];
+        p_currentanim[1] -= rewind;
+        index -= rewind;
         next = p_animdata[index + 1];
         break;
+      }
       default:
         return -1;
     }
