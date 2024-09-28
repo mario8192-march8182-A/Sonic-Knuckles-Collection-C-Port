@@ -391,22 +391,36 @@ typedef struct sprite_status_child {
 }
 sprite_status_child;
 
-typedef struct sprite_family_status {
+typedef struct compound_sprite_status {
+  // 0x00
   sprite_status_handler r_ptr;
+  // 0x04
   unsigned char actflg;
+  // 0x05
   unsigned char r_no;
+  // 0x06
   unsigned char sprvs;
+  // 0x07
   unsigned char sprhs;
+  // 0x08
   unsigned short sprpri;
+  // 0x0A
   unsigned short sproffset;
-  signed char** patbase;
-  short eldest_xposi;
+  // 0x0C
+  sprite_pattern** patbase;
+  // 0x10
+  short xposi;
+  // 0x12
   unsigned char reserved[2];
-  short eldest_yposi;
+  // 0x14
+  short yposi;
+  // 0x16
   unsigned short child_cnt;
+  // 0x18
   sprite_status_child children[8];
-  unsigned char actfree[26];
+  // 0x48
+  unsigned char actfree[2];
 }
-sprite_family_status;
+compound_sprite_status;
 
 #endif

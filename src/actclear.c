@@ -93,17 +93,17 @@ static void actclear_move0(sprite_status* p_actwk) {
   short cnt = 11;
 
   do {
-    sprite_family_status* p_familywk = (sprite_family_status*)p_new_actwk;
+    compound_sprite_status* p_compoundwk = (compound_sprite_status*)p_new_actwk;
     p_new_actwk->r_ptr = p_data->r_ptr;
     p_actwk->actfree.actclear_part.x_destination = p_data->x_destination;
-    p_familywk->eldest_xposi = p_data->xposi;
-    if (p_familywk->eldest_xposi < 0) {
+    p_compoundwk->xposi = p_data->xposi;
+    if (p_compoundwk->xposi < 0) {
       p_actwk->r_no = 0;
     }
     else {
       p_actwk->r_no = 255;
     }
-    p_familywk->eldest_yposi = p_data->yposi;
+    p_compoundwk->yposi = p_data->yposi;
     p_new_actwk->patno = p_data->patno;
     p_new_actwk->sprhs = p_data->sprhs;
     p_new_actwk->colino = p_data->exit_no;
@@ -195,12 +195,12 @@ static void actclear_move2(sprite_status* p_actwk) {
 
 
 static void actclear_name(sprite_status* p_actwk) {
-  sprite_family_status* p_familywk = (sprite_family_status*)p_actwk;
+  compound_sprite_status* p_compoundwk = (compound_sprite_status*)p_actwk;
 
   switch (g_mdRam.plmode) {
     case TEAM_KNUCKLES:
       p_actwk->patno += 3;
-      p_familywk->eldest_xposi -= 48;
+      p_compoundwk->xposi -= 48;
       p_actwk->actfree.actclear_part.x_destination -= 48;
       p_actwk->sprhs += 48;
       break;
@@ -208,7 +208,7 @@ static void actclear_name(sprite_status* p_actwk) {
       ++p_actwk->patno;
       if (!BIT_7_IS_SET(g_mdRam.mdstatus)) {
         ++p_actwk->patno;
-        p_familywk->eldest_xposi += 8;
+        p_compoundwk->xposi += 8;
         p_actwk->actfree.actclear_part.x_destination += 8;
         p_actwk->sprhs -= 8;
       }
@@ -268,13 +268,13 @@ static void actclear_bonus(sprite_status* p_actwk, unsigned short bonus) {
 
 
 static void actclear_bonus_move(sprite_status* p_actwk, unsigned short bonus) {
-  sprite_family_status* p_familywk = (sprite_family_status*)p_actwk;
-  p_familywk->child_cnt = 7;
+  compound_sprite_status* p_compoundwk = (compound_sprite_status*)p_actwk;
+  p_compoundwk->child_cnt = 7;
   unsigned long decimal_bonus = score_to_nibbles(p_actwk, bonus);
   decimal_bonus = decimal_bonus & 0x0FFFFFFF << 4 | decimal_bonus & 0xF0000000 >> 28;
-  sprite_status_child* p_child = &p_familywk->children[0];
-  short xposi = p_familywk->eldest_xposi - 56;
-  short yposi = p_familywk->eldest_yposi;
+  sprite_status_child* p_child = &p_compoundwk->children[0];
+  short xposi = p_compoundwk->xposi - 56;
+  short yposi = p_compoundwk->yposi;
   unsigned short unknown1 = 0;
   unsigned short cnt = 6;
 
@@ -296,7 +296,7 @@ static void actclear_bonus_move(sprite_status* p_actwk, unsigned short bonus) {
 
 
 static bool actclear_part_move(sprite_status* p_actwk) {
-  sprite_family_status* p_familywk = (sprite_family_status*)p_actwk;
+  compound_sprite_status* p_compoundwk = (compound_sprite_status*)p_actwk;
   sprite_status* p_parentwk = &g_mdRam.actwk[p_actwk->actfree.actclear_part.oya];
   short xposi = p_parentwk->actfree.actclear.current_exit_no;
   if (p_parentwk->actfree.actclear.current_exit_no != 0) {
@@ -309,11 +309,11 @@ static bool actclear_part_move(sprite_status* p_actwk) {
     if (p_actwk->r_no != 0) {
       xposi = -xposi;
     }
-    xposi += p_familywk->eldest_xposi;
+    xposi += p_compoundwk->xposi;
   }
   else {
     short xspeed = 16;
-    xposi = p_familywk->eldest_xposi;
+    xposi = p_compoundwk->xposi;
     int compare_result = 1;
     if (xposi == p_actwk->actfree.actclear_part.x_destination) {
       compare_result = 0;
@@ -333,7 +333,7 @@ static bool actclear_part_move(sprite_status* p_actwk) {
         break;
     }
   }
-  p_familywk->eldest_xposi = xposi;
+  p_compoundwk->xposi = xposi;
 
   return false;
 }
