@@ -119,7 +119,7 @@ static void skbannertm_init(sprite_status* p_actwk);
 static void skbannertm_move(sprite_status* p_actwk);
 static void skcopyright_init(sprite_status* p_actwk);
 static void copy_mapline_vram(unsigned char* p_destination, unsigned char* p_source, short offset);
-static void FUN_006dfc23(unsigned short* p_destination, unsigned short* p_source);
+static void copy_bgmap_vram(unsigned short* p_destination, unsigned short* p_source);
 static void shake_screen();
 static void deform_bg();
 static unsigned char shakeoffsets[66];
@@ -1103,7 +1103,7 @@ static void skopening() {
   }
   copy_map_vram((unsigned short*)&g_mdRam.decompressed[0x7400], 0xC000, 27, 39);
   mapdevr((unsigned short*)&g_mdRam.decompressed[0x7CC0], skopening_bg_map, 0);
-  FUN_006dfc23((unsigned short*)&g_mdVram[0xE000], (unsigned short*)&g_mdRam.decompressed[0x7CC0]);
+  copy_bgmap_vram((unsigned short*)&g_mdVram[0xE000], (unsigned short*)&g_mdRam.decompressed[0x7CC0]);
   mapdevr((unsigned short*)&g_mdRam.decompressed[0x8580], skopening_frame1_map, 0x80E2);
   mapdevr((unsigned short*)&g_mdRam.decompressed[0x8E40], skopening_frame2_map, 0x80E2);
   mapdevr((unsigned short*)&g_mdRam.decompressed[0x9700], skopening_frame3_map, 0x80E2);
@@ -1706,7 +1706,7 @@ static void copy_mapline_vram(unsigned char* p_destination, unsigned char* p_sou
 
 
 // 006dfc23
-static void FUN_006dfc23(unsigned short* p_destination, unsigned short* p_source) {
+static void copy_bgmap_vram(unsigned short* p_destination, unsigned short* p_source) {
   for (int i = 0; i < 32; ++i) {
     memcpy(p_destination, p_source, 80);
     p_destination += 64;
