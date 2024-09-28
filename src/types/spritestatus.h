@@ -298,6 +298,11 @@ typedef struct sprite_status {
       long yposi;
     } skopening_deathegg;
     struct {
+      unsigned char reserved[22];
+      short xposi;
+      short yposi;
+    } skopening_nameroulette;
+    struct {
       unsigned short unknown;
       long xposi;
       long yposi;

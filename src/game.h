@@ -19,6 +19,7 @@ void patchg(sprite_status* p_actwk, signed char** p_chg_data);
 void patchg2(sprite_status* p_actwk, signed char** p_chg_data);
 void patset();
 unsigned long random();
+void sinset(unsigned char angle, short* sin, short* cos);
 void load_string_vram(unsigned char* p_text, unsigned long vramoffset, unsigned short coloroffset);
 
 #endif

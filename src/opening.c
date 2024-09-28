@@ -107,6 +107,14 @@ static signed char skopening_sonicsmile_anim[6];
 static signed char skopening_sonicfinger_anim[47];
 static signed char skopening_knuckleshand1_anim[17];
 static signed char skopening_knuckleshand2_anim[9];
+static void nameroulette_init(sprite_status* p_actwk);
+static void nameroulette_move(sprite_status* p_actwk);
+static void chibi_init(sprite_status* p_actwk);
+static void chibi_move(sprite_status* p_actwk);
+static signed char* chibichg[3];
+static signed char chibichg0[6];
+static signed char chibichg1[6];
+static signed char chibichg2[3];
 static void skbannertm_init(sprite_status* p_actwk);
 static void skbannertm_move(sprite_status* p_actwk);
 static void skcopyright_init(sprite_status* p_actwk);
@@ -115,6 +123,16 @@ static void FUN_006dfc23(unsigned short* p_destination, unsigned short* p_source
 static void shake_screen();
 static void deform_bg();
 static unsigned char shakeoffsets[66];
+static sprite_pattern* skselectionpat[9];
+static sprite_pattern skselectionsp00;
+static sprite_pattern skselectionsp01;
+static sprite_pattern skselectionsp02;
+static sprite_pattern skselectionsp03;
+static sprite_pattern skselectionsp04;
+static sprite_pattern skselectionsp05;
+static sprite_pattern skselectionsp06;
+static sprite_pattern skselectionsp07;
+static sprite_pattern skselectionsp08;
 static sprite_pattern* skopening_bannertm_pat[1];
 static sprite_pattern skopening_bannertm_sp00;
 static sprite_pattern* skopening_copyright_pat[1];
@@ -1409,8 +1427,8 @@ static void skbanner_move(sprite_status* p_actwk) {
     case 0:
       if (p_actwk->yspeed == -91) {
         p_actwk->r_ptr = &actionsub;
-        //g_mdRam.actwk[5].r_ptr = &006df50c; // icon
-        //g_mdRam.actwk[6].r_ptr = &006df99c; // icon2
+        g_mdRam.actwk[5].r_ptr = &nameroulette_init;
+        g_mdRam.actwk[6].r_ptr = &chibi_init;
         g_mdRam.actwk[7].r_ptr = &skbannertm_init;
         g_mdRam.actwk[8].r_ptr = &skcopyright_init;
         bitdevr((unsigned long*)&g_mdVram[0xD000], DAT_006e0411, g_mdRam.bitdevwk);
@@ -1511,6 +1529,133 @@ static short skopening_animate(signed char* p_animdata, unsigned char* p_current
 };
 /* 006df503 */ static signed char skopening_knuckleshand2_anim[9] = {
   3, 0, 0, 20, 40, 20, 0, 0, -1
+};
+
+
+// 006df50c
+static void nameroulette_init(sprite_status* p_actwk) {
+  compound_sprite_status* p_compoundwk = (compound_sprite_status*)p_actwk;
+  p_compoundwk->xposi = 264;
+  p_compoundwk->yposi = 336;
+  p_actwk->actfree.skopening_nameroulette.xposi = p_compoundwk->xposi;
+  p_actwk->actfree.skopening_nameroulette.yposi = p_compoundwk->yposi;
+  p_actwk->patbase = skselectionpat;
+  p_actwk->sproffset = 0x8462;
+  SET_BIT(p_actwk->actflg, FLG_COMPOUND);
+
+  p_compoundwk->child_cnt = 2;
+  p_compoundwk->children[0].xposi = p_compoundwk->xposi;
+  p_compoundwk->children[0].yposi = p_compoundwk->yposi;
+  p_compoundwk->children[0].reserved = 0;
+  p_compoundwk->children[0].patno = 0;
+  g_mdRam.openingoption &= 1;
+  p_actwk->direc1 = g_mdRam.openingoption << 7;
+  p_actwk->direc2 = 8;
+  p_actwk->r_ptr = &nameroulette_move;
+  nameroulette_move(p_actwk);
+}
+
+
+// 006df638
+static void nameroulette_move(sprite_status* p_actwk) {
+  unsigned char optionwk = g_mdRam.openingoption;
+  if (!(p_actwk->direc1 % 128)) {
+    if (IS_BUTTON_PRESSED(g_mdRam.swdata1, PAD_U)) {
+      p_actwk->direc1 -= 8;
+      p_actwk->direc2 = -8;
+      if (optionwk-- == 0) {
+        optionwk = 1;
+      }
+    }
+    if (IS_BUTTON_PRESSED(g_mdRam.swdata1, PAD_D)) {
+      p_actwk->direc1 += 8;
+      p_actwk->direc2 = 8;
+      ++optionwk;
+      optionwk &= 1;
+      if (optionwk >= 3) {
+        optionwk = 0;
+      }
+    }
+    g_mdRam.openingoption = optionwk;
+    if (IS_BUTTON_PRESSED(g_mdRam.swdata1, PAD_U | PAD_D)) {
+      soundset(91);
+    }
+  }
+  if (p_actwk->direc1 % 128) {
+    p_actwk->direc1 += p_actwk->direc2;
+  }
+  short sin, cos;
+  sinset(p_actwk->direc1 + 152, &sin, &cos);
+  cos *= 5;
+  sin *= 5;
+  cos /= 256;
+  sin /= 256;
+  short cos2 = -cos, sin2 = -sin;
+  cos += p_actwk->actfree.skopening_nameroulette.xposi;
+  sin += p_actwk->actfree.skopening_nameroulette.yposi;
+  cos2 += p_actwk->actfree.skopening_nameroulette.xposi;
+  sin2 += p_actwk->actfree.skopening_nameroulette.yposi;
+  unsigned char patno1 = 0;
+  unsigned char patno2 = 2;
+  if (p_actwk->direc1 > 64 || p_actwk->direc1 == -128) {
+    short temp = cos2;
+    cos2 = cos;
+    cos = temp;
+    temp = sin2;
+    sin2 = sin;
+    sin = temp;
+    patno1 = 2;
+    patno2 = 0;
+  }
+  ++patno2;
+  compound_sprite_status* p_compoundwk = (compound_sprite_status*)p_actwk;
+  p_compoundwk->children[0].xposi = cos;
+  p_compoundwk->children[0].yposi = sin;
+  p_compoundwk->children[0].patno = patno1;
+  p_compoundwk->children[1].xposi = cos2;
+  p_compoundwk->children[1].yposi = sin2;
+  p_compoundwk->children[1].patno = patno2;
+  actionsub(p_actwk);
+}
+
+
+// 006df99c
+static void chibi_init(sprite_status* p_actwk) {
+  util__assign_high(&p_actwk->xposi, 208);
+  util__assign_high(&p_actwk->yposi, 332);
+  p_actwk->patbase = skselectionpat;
+  p_actwk->sproffset = 0x8462;
+  p_actwk->mstno = g_mdRam.openingoption;
+  p_actwk->restart = g_mdRam.openingoption;
+  p_actwk->patcnt = 1;
+  p_actwk->r_ptr = &chibi_move;
+  chibi_move(p_actwk);
+}
+
+
+// 006dfa12
+static void chibi_move(sprite_status* p_actwk) {
+  p_actwk->mstno = g_mdRam.openingoption;
+  patchg(p_actwk, chibichg);
+  actionsub(p_actwk);
+}
+
+
+/* 006dfa34 */ static signed char* chibichg[3] = {
+  chibichg0,
+  chibichg1,
+  chibichg2
+};
+
+
+static signed char chibichg0[6] = {
+  7, 4, 5, 6, -2, 2
+};
+static signed char chibichg1[6] = {
+  7, 4, 7, 8, -2, 2
+};
+static signed char chibichg2[3] = {
+  7, 4, -1
 };
 
 
@@ -1652,6 +1797,83 @@ static void deform_bg() {
 
 /* 006e0241 */ static unsigned char shakeoffsets[66] = {
   1, 2, 1, 3, 1, 2, 2, 1, 2, 3, 1, 2, 1, 2, 0, 0, 2, 0, 3, 2, 2, 3, 2, 2, 1, 3, 0, 0, 1, 0, 1, 3, 1, 2, 1, 3, 1, 2, 2, 1, 2, 3, 1, 2, 1, 2, 0, 0, 2, 0, 3, 2, 2, 3, 2, 2, 1, 3, 0, 0, 1, 0, 1, 3, 1, 2
+};
+
+
+/* 006e0284 */ static sprite_pattern* skselectionpat[9] = {
+  &skselectionsp00,
+  &skselectionsp01,
+  &skselectionsp02,
+  &skselectionsp03,
+  &skselectionsp04,
+  &skselectionsp05,
+  &skselectionsp06,
+  &skselectionsp07,
+  &skselectionsp08
+};
+
+
+static sprite_pattern skselectionsp00 = {
+  2,
+  {
+    { -8, 13, 0x0000, -36 },
+    { -8, 13, 0x0008,  -4 }
+  }
+};
+static sprite_pattern skselectionsp01 = {
+  2,
+  {
+    { -8, 13, 0x0010, -36 },
+    { -8, 13, 0x0018,  -4 }
+  }
+};
+static sprite_pattern skselectionsp02 = {
+  4,
+  {
+    { -9, 13, 0x2020, -37 },
+    { -9, 13, 0x2028,  -5 },
+    { -9, 13, 0x2030,  27 },
+    { -9,  1, 0x2038,  59 }
+  }
+};
+static sprite_pattern skselectionsp03 = {
+  4,
+  {
+    { -9, 13, 0x203A, -37 },
+    { -9, 13, 0x2042,  -5 },
+    { -9, 13, 0x204A,  27 },
+    { -9,  1, 0x2052,  59 }
+  }
+};
+static sprite_pattern skselectionsp04 = {
+  1,
+  {
+    { -12, 10, 0x0066, -12 }
+  }
+};
+static sprite_pattern skselectionsp05 = {
+  1,
+  {
+    { -12, 10, 0x0054, -12 }
+  }
+};
+static sprite_pattern skselectionsp06 = {
+  1,
+  {
+    { -12, 10, 0x005D, -12 }
+  }
+};
+static sprite_pattern skselectionsp07 = {
+  1,
+  {
+    { -12, 10, 0x206F, -12 }
+  }
+};
+static sprite_pattern skselectionsp08 = {
+  1,
+  {
+    { -12, 10, 0x2078, -12 }
+  }
 };
 
 
