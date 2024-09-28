@@ -291,11 +291,12 @@ void patchg(sprite_status* p_actwk, signed char** p_chg_data) {
         p_actwk->patcnt = 0;
         patno = p_sprpat[1];
         break;
-      case PS_CONTROL_REWIND:
-        patno = p_sprpat[p_actwk->patcnt + 2];
-        p_actwk->patcnt -= patno;
-        patno = p_sprpat[p_actwk->patcnt - patno + 1];
+      case PS_CONTROL_REWIND: {
+        unsigned char rewind = p_sprpat[p_actwk->patcnt + 2];
+        p_actwk->patcnt -= rewind;
+        patno = p_sprpat[p_actwk->patcnt + 1];
         break;
+      }
       case PS_CONTROL_NEXT:
         p_actwk->mstno = p_sprpat[p_actwk->patcnt + 2];
         return;
@@ -335,11 +336,12 @@ void patchg2(sprite_status* p_actwk, signed char** p_chg_data) {
         p_actwk->patcnt = 0;
         patno = p_sprpat[p_actwk->patcnt * 2];
         break;
-      case PS_CONTROL_REWIND:
-        patno = p_sprpat[p_actwk->patcnt * 2 + 1];
-        p_actwk->patcnt -= patno;
-        patno = p_sprpat[p_actwk->patcnt * 2 - patno * 2];
+      case PS_CONTROL_REWIND: {
+        unsigned char rewind = p_sprpat[p_actwk->patcnt * 2 + 1];
+        p_actwk->patcnt -= rewind;
+        patno = p_sprpat[p_actwk->patcnt * 2];
         break;
+      }
       case PS_CONTROL_NEXT:
         p_actwk->mstno = p_sprpat[p_actwk->patcnt * 2 + 1];
         return;
