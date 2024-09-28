@@ -19,10 +19,11 @@ static void init_sprlist_first(unsigned long* p_sprlist);
 static sprite_status* action2(sprite_status* p_actwk, int cnt);
 static void action3();
 static sprite_status* action4(sprite_status* p_actwk, int cnt);
-static void patset_compound(sprite_status* p_actwk);
+static unsigned short patset_compound(sprite_status* p_actwk, unsigned short spritesleft_cnt);
 static unsigned short spatset(sprite_status* p_actwk, sprite_pattern* p_sprpat, short xposi, short yposi, unsigned short spr_cnt, unsigned short spritesleft_cnt);
 static unsigned char xshapeoffsets[16];
 static unsigned char yshapeoffsets[16];
+static unsigned short spatset_compound(sprite_status* p_actwk, sprite_pattern* p_sprpat, short xposi, short yposi, unsigned short spr_cnt, unsigned short spritesleft_cnt);
 static void patset_vs();
 static void FUN_004487b9();
 static void patset_rings();
@@ -384,7 +385,7 @@ void patset() {
       sprite_status* p_actwk = &g_mdRam.actwk[act];
       CLEAR_BIT(p_actwk->actflg, FLG_ONSCREEN);
       if (BIT_IS_SET(p_actwk->actflg, FLG_COMPOUND)) {
-        patset_compound(p_actwk);
+        spritesleft_cnt = patset_compound(p_actwk, spritesleft_cnt);
         goto next;
       }
       short xposi = LONG_HIGH(p_actwk->xposi);
@@ -461,8 +462,62 @@ next:
 
 
 // 0041f577
-static void patset_compound(sprite_status* p_actwk) {
-  // TODO
+static unsigned short patset_compound(sprite_status* p_actwk, unsigned short spritesleft_cnt) {
+  compound_sprite_status* p_compoundwk = (compound_sprite_status*)p_actwk;
+  short xposi = p_compoundwk->xposi;
+  short yposi = p_compoundwk->yposi;
+  if (!BIT_IS_SET(p_actwk->actflg, FLG_LEVELCOORDS)) {
+    xposi -= 128;
+    if (xposi + p_actwk->sprhs < 0) goto end;
+    if (xposi - p_actwk->sprhs >= 320) goto end;
+    xposi += 128;
+
+    yposi -= 128;
+    if (yposi + p_actwk->sprvs < 0) goto end;
+    if (yposi - p_actwk->sprvs >= 224) goto end;
+    yposi += 128;
+  }
+  else {
+    xposi -= util__longhigh_to_short(g_mdRam.scra_h_posit_copy);
+    if (xposi + p_actwk->sprhs < 0) goto end;
+    if (xposi - p_actwk->sprhs >= 320) goto end;
+    xposi += 128;
+
+    yposi -= util__longhigh_to_short(g_mdRam.scra_v_posit_copy);
+    yposi += p_actwk->sprvs;
+    yposi &= g_mdRam.scrc_v;
+    if (yposi >= p_actwk->sprvs * 2 + 224) goto end;
+    yposi += 128;
+    yposi -= p_actwk->sprvs;
+  }
+
+  SET_BIT(p_actwk->actflg, FLG_ONSCREEN);
+  if (spritesleft_cnt == 0) goto end;
+  if (p_actwk->patno != 0) {
+    sprite_pattern* p_sprpat = p_actwk->patbase[p_actwk->patno];
+    if (p_sprpat->cnt != 0) {
+      spritesleft_cnt = spatset_compound(p_actwk, p_sprpat, xposi, yposi, p_sprpat->cnt, spritesleft_cnt);
+      if (spritesleft_cnt == 0) goto end;
+    }
+  }
+
+  for (int i = 0; i < p_compoundwk->child_cnt; ++i) {
+    short xposi = p_compoundwk->children[i].xposi;
+    short yposi = p_compoundwk->children[i].yposi;
+    if (BIT_IS_SET(p_actwk->actflg, FLG_LEVELCOORDS)) {
+      xposi = xposi - util__longhigh_to_short(g_mdRam.scra_h_posit_copy) + 128;
+      yposi = yposi - util__longhigh_to_short(g_mdRam.scra_v_posit_copy) + 128;
+      yposi &= g_mdRam.scrc_v;
+    }
+    sprite_pattern* p_sprpat = p_actwk->patbase[p_compoundwk->children[i].patno];
+    if (p_sprpat->cnt != 0) {
+      spritesleft_cnt = spatset_compound(p_actwk, p_sprpat, xposi, yposi, p_sprpat->cnt, spritesleft_cnt);
+    }
+    if (spritesleft_cnt == 0) goto end;
+  }
+
+end:
+  return spritesleft_cnt;
 }
 
 
@@ -560,6 +615,106 @@ static unsigned char xshapeoffsets[16] = {
 static unsigned char yshapeoffsets[16] = {
   8, 16, 24, 32, 8, 16, 24, 32, 8, 16, 24, 32, 8, 16, 24, 32
 };
+
+
+// 004201b3
+static unsigned short spatset_compound(sprite_status* p_actwk, sprite_pattern* p_sprpat, short xposi, short yposi, unsigned short spr_cnt, unsigned short spritesleft_cnt) {
+  switch (p_actwk->actflg & 3) {
+    case 0:
+      for (int i = 0; i < spr_cnt; ++i) {
+        short new_yposi = p_sprpat->spr[i].yoff + yposi;
+        if (new_yposi <= 96 || new_yposi >= 352) {
+          continue;
+        }
+        *((short*)g_pLevelSelectVram) = new_yposi;
+        ++g_pLevelSelectVram;
+        *((unsigned char*)g_pLevelSelectVram) = p_sprpat->spr[i].etc;
+        ++g_pLevelSelectVram;
+        *g_pLevelSelectVram = p_sprpat->spr[i].index + p_actwk->sproffset;
+        ++g_pLevelSelectVram;
+        short new_xposi = p_sprpat->spr[i].xoff + xposi;
+        if (new_xposi <= 96 || new_xposi >= 448) {
+          g_pLevelSelectVram -= 3;
+          continue;
+        }
+        *((short*)g_pLevelSelectVram) = new_xposi;
+        ++g_pLevelSelectVram;
+        --spritesleft_cnt;
+        if (spritesleft_cnt == 0) break;
+      }
+      break;
+    case 1:
+      for (int i = 0; i < spr_cnt; ++i) {
+        short new_yposi = p_sprpat->spr[i].yoff + yposi;
+        if (new_yposi <= 96 || new_yposi >= 352) {
+          continue;
+        }
+        *((short*)g_pLevelSelectVram) = new_yposi;
+        ++g_pLevelSelectVram;
+        *((unsigned char*)g_pLevelSelectVram) = p_sprpat->spr[i].etc;
+        ++g_pLevelSelectVram;
+        *g_pLevelSelectVram = (p_sprpat->spr[i].index + p_actwk->sproffset) ^ 0x800;
+        ++g_pLevelSelectVram;
+        short new_xposi = -p_sprpat->spr[i].xoff - xshapeoffsets[p_sprpat->spr[i].etc] + xposi;
+        if (new_xposi <= 96 || new_xposi >= 448) {
+          g_pLevelSelectVram -= 3;
+          continue;
+        }
+        *((short*)g_pLevelSelectVram) = new_xposi;
+        ++g_pLevelSelectVram;
+        --spritesleft_cnt;
+        if (spritesleft_cnt == 0) break;
+      }
+      break;
+    case 3:
+      for (int i = 0; i < spr_cnt; ++i) {
+        short new_yposi = -p_sprpat->spr[i].yoff - yshapeoffsets[p_sprpat->spr[i].etc] + yposi;
+        if (new_yposi <= 96 || new_yposi >= 352) {
+          continue;
+        }
+        *((short*)g_pLevelSelectVram) = new_yposi;
+        ++g_pLevelSelectVram;
+        *((unsigned char*)g_pLevelSelectVram) = p_sprpat->spr[i].etc;
+        ++g_pLevelSelectVram;
+        *g_pLevelSelectVram = (p_sprpat->spr[i].index + p_actwk->sproffset) ^ 0x1800;
+        ++g_pLevelSelectVram;
+        short new_xposi = -p_sprpat->spr[i].xoff - xshapeoffsets[p_sprpat->spr[i].etc] + xposi;
+        if (new_xposi <= 96 || new_xposi >= 448) {
+          g_pLevelSelectVram -= 3;
+          continue;
+        }
+        *((short*)g_pLevelSelectVram) = new_xposi;
+        ++g_pLevelSelectVram;
+        --spritesleft_cnt;
+        if (spritesleft_cnt == 0) break;
+      }
+      break;
+    case 2:
+      for (int i = 0; i < spr_cnt; ++i) {
+        ((unsigned char*)g_pLevelSelectVram)[2] = p_sprpat->spr[i].etc;
+        short new_yposi = -p_sprpat->spr[i].yoff - yshapeoffsets[p_sprpat->spr[i].etc] + yposi;
+        if (new_yposi <= 96 || new_yposi >= 352) {
+          continue;
+        }
+        *((short*)g_pLevelSelectVram) = new_yposi;
+        g_pLevelSelectVram += 2;
+        *g_pLevelSelectVram = (p_sprpat->spr[i].index + p_actwk->sproffset) ^ 0x1000;
+        ++g_pLevelSelectVram;
+        short new_xposi = p_sprpat->spr[i].xoff + xposi;
+        if (new_xposi <= 96 || new_xposi >= 448) {
+          g_pLevelSelectVram -= 3;
+          continue;
+        }
+        *((short*)g_pLevelSelectVram) = new_xposi;
+        ++g_pLevelSelectVram;
+        --spritesleft_cnt;
+        if (spritesleft_cnt == 0) break;
+      }
+      break;
+  }
+
+  return spritesleft_cnt;
+}
 
 
 // 00420a46
