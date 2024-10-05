@@ -8,6 +8,7 @@
 #include "data.h"
 #include "game.h"
 #include "mapdevr.h"
+#include "cg/specialstagemodecg.h"
 #include "unlze.h"
 #include "vdp.h"
 typedef struct codepair {
@@ -94,7 +95,6 @@ static signed char characterspriteschg3[17];
 static void copyright_init(sprite_status* p_actwk);
 static sprite_pattern* copyrightpat[1];
 static sprite_pattern copyrightsp00;
-static unsigned char copyright_tiles[123];
 
 extern void vInt();
 
@@ -125,11 +125,11 @@ void specialstagemode() {
   init_specmodevars();
   set_palette(g_mdRam.colorwk2);
   bitdevr((unsigned long*)&g_mdVram[0xB7E0], largetext_tiles, g_mdRam.bitdevwk);
-  bitdevr((unsigned long*)&g_mdVram[0x32E0], specialstagemode_sklogo_tiles, g_mdRam.bitdevwk);
-  unsigned char* p_chunkmappings = unlze(g_mdRam.chunkmappings128, specialstagemode_characters_tiles, 0);
-  p_chunkmappings = unlze(p_chunkmappings, specialstagemode_charactersprites_tiles, 0);
+  bitdevr((unsigned long*)&g_mdVram[0x32E0], specialstagemode_sklogo_cg, g_mdRam.bitdevwk);
+  unsigned char* p_chunkmappings = unlze(g_mdRam.chunkmappings128, specialstagemode_characters_cg, 0);
+  p_chunkmappings = unlze(p_chunkmappings, specialstagemode_charactersprites_cg, 0);
   copy_data_vram(g_mdRam.chunkmappings128, 0, (p_chunkmappings - g_mdRam.chunkmappings128) / 2);
-  unlze(&g_mdRam.chunkmappings128[0x4000], specialstagemode_text_tiles, 0);
+  unlze(&g_mdRam.chunkmappings128[0x4000], specialstagemode_text_cg, 0);
   copy_data_vram(&g_mdRam.chunkmappings128[0x4000], 0xA9C0, 0x6D0);
   mapdevr((unsigned short*)g_mdRam.levellayout, specialstagemode_fg_map, 0x2000);
   copy_map_vram((unsigned short*)g_mdRam.levellayout, 0xC380, 15, 39);
@@ -149,7 +149,7 @@ void specialstagemode() {
   }
   g_mdRam.actwk[0].r_ptr = &menu_init;
   g_mdRam.actwk[1].r_ptr = &copyright_init;
-  bitdevr((unsigned long*)&g_mdVram[0xB640], copyright_tiles, g_mdRam.bitdevwk);
+  bitdevr((unsigned long*)&g_mdVram[0xB640], specialstagemode_copyright_cg, g_mdRam.bitdevwk);
   g_mdRam.actwk[2].r_ptr = &character_init;
   action();
   patset();
@@ -1263,6 +1263,3 @@ static sprite_pattern copyrightsp00 = {
     { 0,  4, 0x000A, 104 }
   }
 };
-
-
-/* 006a826d */ static unsigned char copyright_tiles[123] = { 0x0c, 0x00, 0x80, 0x05, 0x1b, 0x13, 0x04, 0x24, 0x0a, 0x34, 0x0c, 0x45, 0x1e, 0x54, 0x0b, 0x65, 0x1a, 0x73, 0x02, 0x81, 0x03, 0x03, 0x12, 0x00, 0x27, 0x7d, 0x35, 0x1c, 0x45, 0x1d, 0x57, 0x7c, 0xff, 0x9c, 0xa7, 0x8f, 0x6e, 0x10, 0xdb, 0xc3, 0x6f, 0x08, 0x47, 0xb7, 0x8e, 0xb8, 0xb0, 0xd3, 0xd3, 0xd3, 0xd3, 0xbf, 0xa9, 0x67, 0x28, 0x84, 0x21, 0x5d, 0xb2, 0x75, 0x2c, 0xe5, 0x10, 0x84, 0x2b, 0xb6, 0x4e, 0xa5, 0x85, 0x9b, 0x28, 0xd9, 0x46, 0xca, 0xf9, 0xe1, 0x24, 0x95, 0x16, 0x69, 0xdb, 0x5a, 0xf9, 0x67, 0x8f, 0x16, 0x58, 0x92, 0x8e, 0xcd, 0x34, 0xac, 0x4b, 0x94, 0xef, 0xb4, 0x42, 0x10, 0x9d, 0xc6, 0x97, 0x29, 0xdf, 0xc8, 0x59, 0x7f, 0x29, 0xa5, 0xc5, 0xef, 0xb4, 0xe1, 0x4e, 0x15, 0xd8, 0x24, 0xf4, 0x59, 0xa3, 0xdf, 0x74, 0x2c, 0x00 };
