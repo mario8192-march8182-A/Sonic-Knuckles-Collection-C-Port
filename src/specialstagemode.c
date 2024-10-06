@@ -9,6 +9,7 @@
 #include "game.h"
 #include "mapdevr.h"
 #include "cg/specialstagemodecg.h"
+#include "map/specialstagemodemap.h"
 #include "unlze.h"
 #include "vdp.h"
 typedef struct codepair {
