@@ -10,7 +10,7 @@ static void fadein0();
 static void fadeout1();
 static void fadeout2(unsigned short* pPalette);
 static void fadein0_alt();
-static void flashin1();
+static void flashin2();
 static void flashout2(unsigned short* pPalette);
 
 extern void vInt();
@@ -158,8 +158,21 @@ static void fadein0_alt() {
 }
 
 
-// 004267d2
+// 0042678c
 void flashin() {
+  g_mdRam.colorcnt = 63;
+  fadein0_alt();
+
+  for (int i = 0; i < 22; ++i) {
+    g_mdRam.int_flg = 18;
+    vInt();
+    flashin1();
+  }
+}
+
+
+// 004267d2
+void flashin1() {
   if (g_mdRam.DAT_08ffface-- != 0) return;
 
   g_mdRam.DAT_08ffface = 2;
@@ -167,7 +180,7 @@ void flashin() {
   unsigned short* p_source = &g_mdRam.colorwk2[g_mdRam.startcolor / 2];
 
   for (int i = 0; g_mdRam.colorcnt >= i; ++i) {
-    flashin1((unsigned char*)p_destination, (unsigned char*)p_source);
+    flashin2((unsigned char*)p_destination, (unsigned char*)p_source);
     ++p_destination;
     ++p_source;
   }
@@ -177,7 +190,7 @@ void flashin() {
     p_source = &g_mdRam.colorwk4[g_mdRam.startcolor / 2];
 
     for (int i = 0; g_mdRam.colorcnt >= i; ++i) {
-      flashin1((unsigned char*)p_destination, (unsigned char*)p_source);
+      flashin2((unsigned char*)p_destination, (unsigned char*)p_source);
       ++p_destination;
       ++p_source;
     }
@@ -186,7 +199,7 @@ void flashin() {
 
 
 // 004268e8
-static void flashin1(unsigned char* p_destination, unsigned char* p_source) {
+static void flashin2(unsigned char* p_destination, unsigned char* p_source) {
   unsigned char d1 = *p_source++;
   unsigned char d2 = d1;
   d1 &= 0xE0;

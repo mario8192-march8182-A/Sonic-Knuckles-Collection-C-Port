@@ -1115,7 +1115,7 @@ LAB_006de36c:
   vInt();
   if (g_mdRam.colorcycle != 0) {
     --g_mdRam.colorcycle;
-    flashin();
+    flashin1();
   }
   action();
   patset();
@@ -1157,7 +1157,7 @@ LAB_006de522:
       vInt();
       if (g_mdRam.colorcycle != 0) {
         --g_mdRam.colorcycle;
-        flashin();
+        flashin1();
       }
       action();
       patset();
