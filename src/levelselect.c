@@ -53,26 +53,26 @@ void levelselect() {
     return;
   }
 
-  g_mdRam.stageno = ANGEL_ISLAND_ACT_1;
+  g_ram.stageno = ANGEL_ISLAND_ACT_1;
   fadeout();
   scrinit();
   g_vdpScrollPlaneAOffset = 0xC000;
   g_vdpScrollPlaneBOffset = 0xE000;
   DAT_008549d8 = 0;
   DAT_00854dec = 0;
-  memset(g_mdRam.pbuffer, 0, sizeof(g_mdRam.pbuffer));
-  memset(g_mdRam.actwk, 0, sizeof(g_mdRam.actwk) + 52);
-  bitdevr((unsigned long*)&g_mdVram[512], levelselect_main_cg, g_mdRam.bitdevwk);
-  mapdevr((unsigned short*)&g_mdRam.decompressed, levelselect_main_map, 0x6000);
-  copy_map_vram((unsigned short*)g_mdRam.decompressed, 0xE000, 27, 39);
-  memset(g_mdRam.decompressed, 0, 0x8C0);
+  memset(g_ram.pbuffer, 0, sizeof(g_ram.pbuffer));
+  memset(g_ram.actwk, 0, sizeof(g_ram.actwk) + 52);
+  bitdevr((unsigned long*)&g_mdVram[512], levelselect_main_cg, g_ram.bitdevwk);
+  mapdevr((unsigned short*)&g_ram.decompressed, levelselect_main_map, 0x6000);
+  copy_map_vram((unsigned short*)g_ram.decompressed, 0xE000, 27, 39);
+  memset(g_ram.decompressed, 0, 0x8C0);
 
   unsigned short* p_mapoffsets = levelselect_mapoffsets;
   unsigned char* p_text = entriestext;
   unsigned short* p_decompressed;
 
   for (int i = 0; i < 17; ++i) {
-    p_decompressed = (unsigned short*)&g_mdRam.decompressed[*p_mapoffsets++];
+    p_decompressed = (unsigned short*)&g_ram.decompressed[*p_mapoffsets++];
     unsigned char char_cnt = *p_text++;
 
     for (int j = 0; j < char_cnt + 1; ++j) {
@@ -93,82 +93,82 @@ void levelselect() {
   *p_decompressed = 0;
   p_decompressed -= 40;
   *p_decompressed = 26; // *
-  ((unsigned short*)g_mdRam.decompressed)[197] = 19; // act 3
-  ((unsigned short*)g_mdRam.decompressed)[237] = 20; // act 4
-  copy_map_vram((unsigned short*)g_mdRam.decompressed, 0xC000, 27, 39);
+  ((unsigned short*)g_ram.decompressed)[197] = 19; // act 3
+  ((unsigned short*)g_ram.decompressed)[237] = 20; // act 4
+  copy_map_vram((unsigned short*)g_ram.decompressed, 0xC000, 27, 39);
   set_sounddigits(0);
-  g_mdRam.plmode = TEAM_SONIC_AND_MILES;
-  g_mdRam.DAT_08ffff02 = 0;
-  g_mdRam.DAT_08fff711 = 0;
-  g_mdRam.actanimcounters[0][0] = 0;
+  g_ram.plmode = TEAM_SONIC_AND_MILES;
+  g_ram.DAT_08ffff02 = 0;
+  g_ram.DAT_08fff711 = 0;
+  g_ram.actanimcounters[0][0] = 0;
   anim_tiles(sonicmiles_wrt_cnt, (unsigned char*)&sonicmiles_wrt);
 
   colorset(4);
-  memcpy(&g_mdRam.colorwk2[32], &g_mdRam.colorwk[32], 32);
+  memcpy(&g_ram.colorwk2[32], &g_ram.colorwk[32], 32);
 
   bgmset(47);
-  g_mdRam.demotimer = 1799;
-  g_mdRam.vs_flag = 0;
-  g_mdRam.scra_h_posit = 0;
-  g_mdRam.scra_v_posit = 0;
-  g_mdRam.p_saveslot = 0;
-  g_mdRam.brings = 0;
-  g_mdRam.markerno = 0;
-  g_mdRam.marker_flag = 0;
-  g_mdRam.specmode = 0;
-  g_mdRam.editmodecheatcounter = 0;
-  g_mdRam.allemeraldscheatcounter = 0;
-  g_mdRam.int_flg = 22;
+  g_ram.demotimer = 1799;
+  g_ram.vs_flag = 0;
+  g_ram.scra_h_posit = 0;
+  g_ram.scra_v_posit = 0;
+  g_ram.p_saveslot = 0;
+  g_ram.brings = 0;
+  g_ram.markerno = 0;
+  g_ram.marker_flag = 0;
+  g_ram.specmode = 0;
+  g_ram.editmodecheatcounter = 0;
+  g_ram.allemeraldscheatcounter = 0;
+  g_ram.int_flg = 22;
   vInt();
   fadein();
   bool nextmode = false;
 
   do {
-    g_mdRam.int_flg = 22;
+    g_ram.int_flg = 22;
     vInt();
     set_selectioncolor(0);
     handleinput();
     set_selectioncolor(0x6000);
     anim_tiles(sonicmiles_wrt_cnt, (unsigned char*)&sonicmiles_wrt);
-    if (IS_BUTTON_PRESSED(g_mdRam.swdata1 | g_mdRam.swdata2, PAD_S)) {
-      if (g_mdRam.cartridge != 0) {
-        if (g_mdRam.levelselect_plmode < TEAM_KNUCKLES) {
-          g_mdRam.levelselect_plmode = TEAM_SONIC;
+    if (IS_BUTTON_PRESSED(g_ram.swdata1 | g_ram.swdata2, PAD_S)) {
+      if (g_ram.cartridge != 0) {
+        if (g_ram.levelselect_plmode < TEAM_KNUCKLES) {
+          g_ram.levelselect_plmode = TEAM_SONIC;
         }
       }
-      g_mdRam.plmode = g_mdRam.levelselect_plmode;
-      short chosenstageno = stagenolist[g_mdRam.levelselect_selection];
+      g_ram.plmode = g_ram.levelselect_plmode;
+      short chosenstageno = stagenolist[g_ram.levelselect_selection];
       if (chosenstageno >= 0) {
         if (chosenstageno == 0x5555) continue;
-        g_mdRam.pl_suu = 3;
-        g_mdRam.cartridgespec = 0;
+        g_ram.pl_suu = 3;
+        g_ram.cartridgespec = 0;
         if (chosenstageno != 0x4000) { // Sonic 3 special stage
           if (chosenstageno == 0x4001) { // Sonic & Knuckles special stage
-            g_mdRam.cartridgespec = 1;
-            g_mdRam.gmmode = 52;
-            if (g_mdRam.cartridge != 0 && g_mdRam.stageno != FLYING_BATTERY_ACT_1 && g_mdRam.stageno < MUSHROOM_HILL_ACT_1) {
+            g_ram.cartridgespec = 1;
+            g_ram.gmmode = 52;
+            if (g_ram.cartridge != 0 && g_ram.stageno != FLYING_BATTERY_ACT_1 && g_ram.stageno < MUSHROOM_HILL_ACT_1) {
               chosenstageno = MUSHROOM_HILL_ACT_1;
-              g_mdRam.stageno = chosenstageno;
-              g_mdRam.stageno_i = chosenstageno;
-              g_mdRam.stageno_s = chosenstageno;
-              g_mdRam.stageno_is = chosenstageno;
+              g_ram.stageno = chosenstageno;
+              g_ram.stageno_i = chosenstageno;
+              g_ram.stageno_s = chosenstageno;
+              g_ram.stageno_is = chosenstageno;
             }
             nextmode = true;
           }
         }
         else {
-          g_mdRam.specmodemenu = 0;
-          g_mdRam.gmmode = 44;
+          g_ram.specmodemenu = 0;
+          g_ram.gmmode = 44;
           nextmode = true;
         }
       }
       else {
-        g_mdRam.gmmode = 0;
+        g_ram.gmmode = 0;
         nextmode = true;
       }
       if (!nextmode) {
-        if (g_mdRam.editmodecheat == 0) {
-          if (g_mdRam.plmode == TEAM_KNUCKLES) {
+        if (g_ram.editmodecheat == 0) {
+          if (g_ram.plmode == TEAM_KNUCKLES) {
             if (chosenstageno == SKY_SANCTUARY_ACT_SONIC
                 || chosenstageno == DOOMSDAY_ACT
                 || chosenstageno == LAVA_REEF_BOSS
@@ -178,18 +178,18 @@ denyentry:
               continue;
             }
           }
-          if (g_mdRam.plmode < TEAM_KNUCKLES) {
+          if (g_ram.plmode < TEAM_KNUCKLES) {
             if (chosenstageno == SKY_SANCTUARY_ACT_KNUCKLES) {
               goto denyentry;
             }
           }
-          if (g_mdRam.plmode == TEAM_MILES) {
+          if (g_ram.plmode == TEAM_MILES) {
             if (chosenstageno == DOOMSDAY_ACT) {
               goto denyentry;
             }
           }
         }
-        if (g_mdRam.cartridge != 0) {
+        if (g_ram.cartridge != 0) {
           short chosenstagenoact1 = chosenstageno;
           SET_ACT(chosenstagenoact1, ACT_1);
           if (chosenstagenoact1 != FLYING_BATTERY_ACT_1 && chosenstagenoact1 < MUSHROOM_HILL_ACT_1) {
@@ -197,33 +197,33 @@ denyentry:
           }
         }
         chosenstageno &= 0x3FFF;
-        g_mdRam.stageno = chosenstageno;
-        g_mdRam.stageno_i = chosenstageno;
-        g_mdRam.stageno_s = chosenstageno;
-        g_mdRam.stageno_is = chosenstageno;
-        g_mdRam.scralim_down_s = 0x1000;
-        g_mdRam.scralim_down_s2 = 0x1000;
-        g_mdRam.gmmode = 12;
-        g_mdRam.pl_suu = 3;
-        g_mdRam.pl2_suu = 3;
-        g_mdRam.plring = 0;
-        g_mdRam.pltime.hours = 0;
-        g_mdRam.pltime.minutes = 0;
-        g_mdRam.pltime.seconds = 0;
-        g_mdRam.pltime.frames = 0;
-        g_mdRam.plscore = 0;
-        g_mdRam.pl2ring = 0;
-        g_mdRam.DAT_08fffed2 = 0;
-        g_mdRam.DAT_08fffed6 = 0;
-        g_mdRam.plcontinuecnt = 0;
-        g_mdRam.demoflag = 0;
-        g_mdRam.extrascore = 5000;
-        g_mdRam.extrascore2 = 5000;
+        g_ram.stageno = chosenstageno;
+        g_ram.stageno_i = chosenstageno;
+        g_ram.stageno_s = chosenstageno;
+        g_ram.stageno_is = chosenstageno;
+        g_ram.scralim_down_s = 0x1000;
+        g_ram.scralim_down_s2 = 0x1000;
+        g_ram.gmmode = 12;
+        g_ram.pl_suu = 3;
+        g_ram.pl2_suu = 3;
+        g_ram.plring = 0;
+        g_ram.pltime.hours = 0;
+        g_ram.pltime.minutes = 0;
+        g_ram.pltime.seconds = 0;
+        g_ram.pltime.frames = 0;
+        g_ram.plscore = 0;
+        g_ram.pl2ring = 0;
+        g_ram.DAT_08fffed2 = 0;
+        g_ram.DAT_08fffed6 = 0;
+        g_ram.plcontinuecnt = 0;
+        g_ram.demoflag = 0;
+        g_ram.extrascore = 5000;
+        g_ram.extrascore2 = 5000;
         soundset(-31);
-        g_mdRam.vs_noitems = 0;
-        g_mdRam.vs_flag = 0;
-        if (GET_ZONE(g_mdRam.stageno) >= AZURE_LAKE && GET_ZONE(g_mdRam.stageno) < ZONE_GUMBALL_MACHINE) {
-          g_mdRam.vs_flag = 1;
+        g_ram.vs_noitems = 0;
+        g_ram.vs_flag = 0;
+        if (GET_ZONE(g_ram.stageno) >= AZURE_LAKE && GET_ZONE(g_ram.stageno) < ZONE_GUMBALL_MACHINE) {
+          g_ram.vs_flag = 1;
         }
         nextmode = true;
       }
@@ -255,24 +255,24 @@ denyentry:
 
 // 0041591b
 static void handleinput() {
-  if (!IS_BUTTON_PRESSED(g_mdRam.swdata1, PAD_U | PAD_D)) {
-    --g_mdRam.levelselect_inputrepeattimer;
-    if (g_mdRam.levelselect_inputrepeattimer >= 0) {
+  if (!IS_BUTTON_PRESSED(g_ram.swdata1, PAD_U | PAD_D)) {
+    --g_ram.levelselect_inputrepeattimer;
+    if (g_ram.levelselect_inputrepeattimer >= 0) {
       handleinput2();
       return;
     }
   }
-  g_mdRam.levelselect_inputrepeattimer = 11;
-  if (IS_BUTTON_DOWN(g_mdRam.swdata1, PAD_U | PAD_D)) {
-    if (IS_BUTTON_DOWN(g_mdRam.swdata1, PAD_U)) {
-      if (g_mdRam.levelselect_selection-- == 0) {
-        g_mdRam.levelselect_selection = soundtestpos;
+  g_ram.levelselect_inputrepeattimer = 11;
+  if (IS_BUTTON_DOWN(g_ram.swdata1, PAD_U | PAD_D)) {
+    if (IS_BUTTON_DOWN(g_ram.swdata1, PAD_U)) {
+      if (g_ram.levelselect_selection-- == 0) {
+        g_ram.levelselect_selection = soundtestpos;
       }
     }
-    if (IS_BUTTON_DOWN(g_mdRam.swdata1, PAD_D)) {
-      ++g_mdRam.levelselect_selection;
-      if (g_mdRam.levelselect_selection >= soundtestpos + 1) {
-        g_mdRam.levelselect_selection = 0;
+    if (IS_BUTTON_DOWN(g_ram.swdata1, PAD_D)) {
+      ++g_ram.levelselect_selection;
+      if (g_ram.levelselect_selection >= soundtestpos + 1) {
+        g_ram.levelselect_selection = 0;
       }
     }
   }
@@ -284,59 +284,59 @@ static void handleinput() {
 
 // 004159e3
 static void handleinput2() {
-  if (g_mdRam.levelselect_selection == soundtestpos) {
-    if (IS_BUTTON_PRESSED(g_mdRam.swdata1, PAD_L)) {
-      if (g_mdRam.levelselect_sound-- == 0) {
-        g_mdRam.levelselect_sound = 0;
+  if (g_ram.levelselect_selection == soundtestpos) {
+    if (IS_BUTTON_PRESSED(g_ram.swdata1, PAD_L)) {
+      if (g_ram.levelselect_sound-- == 0) {
+        g_ram.levelselect_sound = 0;
       }
     }
-    if (IS_BUTTON_PRESSED(g_mdRam.swdata1, PAD_R)) {
-      ++g_mdRam.levelselect_sound;
-      if (g_mdRam.levelselect_sound >= 256) {
-        g_mdRam.levelselect_sound = 0;
+    if (IS_BUTTON_PRESSED(g_ram.swdata1, PAD_R)) {
+      ++g_ram.levelselect_sound;
+      if (g_ram.levelselect_sound >= 256) {
+        g_ram.levelselect_sound = 0;
       }
     }
-    if (IS_BUTTON_PRESSED(g_mdRam.swdata1, PAD_A)) {
-      g_mdRam.levelselect_sound += 16;
-      g_mdRam.levelselect_sound &= 0xFF;
+    if (IS_BUTTON_PRESSED(g_ram.swdata1, PAD_A)) {
+      g_ram.levelselect_sound += 16;
+      g_ram.levelselect_sound &= 0xFF;
     }
-    if (IS_BUTTON_PRESSED(g_mdRam.swdata1, PAD_C)) {
-      bgmset(g_mdRam.levelselect_sound);
+    if (IS_BUTTON_PRESSED(g_ram.swdata1, PAD_C)) {
+      bgmset(g_ram.levelselect_sound);
       if (g_sonic3Alone != 0) {
         chk_cheats();
       }
     }
-    if (IS_BUTTON_PRESSED(g_mdRam.swdata1, PAD_B)) {
+    if (IS_BUTTON_PRESSED(g_ram.swdata1, PAD_B)) {
       bgmset(227);
     }
   }
   else {
-    if (IS_BUTTON_PRESSED(g_mdRam.swdata1, PAD_L | PAD_R)) {
+    if (IS_BUTTON_PRESSED(g_ram.swdata1, PAD_L | PAD_R)) {
       unsigned char* p_lookup = columnchangelookup;
       if (g_sonic3Alone != 0) {
         p_lookup = s3columnchangelookup;
       }
-      g_mdRam.levelselect_selection = p_lookup[g_mdRam.levelselect_selection];
+      g_ram.levelselect_selection = p_lookup[g_ram.levelselect_selection];
     }
     if (g_sonic3Alone == 0) {
-      if (IS_BUTTON_PRESSED(g_mdRam.swdata1, PAD_C)) {
-        ++g_mdRam.levelselect_plmode;
-        if (g_mdRam.levelselect_plmode >= 4) {
-          g_mdRam.levelselect_plmode = TEAM_SONIC_AND_MILES;
+      if (IS_BUTTON_PRESSED(g_ram.swdata1, PAD_C)) {
+        ++g_ram.levelselect_plmode;
+        if (g_ram.levelselect_plmode >= 4) {
+          g_ram.levelselect_plmode = TEAM_SONIC_AND_MILES;
         }
       }
     }
     else {
-      if (IS_BUTTON_PRESSED(g_mdRam.swdata1, PAD_C)) {
-        ++g_mdRam.whoplay1;
-        if (g_mdRam.whoplay1 >= 3) {
-          g_mdRam.whoplay1 = 0;
+      if (IS_BUTTON_PRESSED(g_ram.swdata1, PAD_C)) {
+        ++g_ram.whoplay1;
+        if (g_ram.whoplay1 >= 3) {
+          g_ram.whoplay1 = 0;
         }
       }
-      if (IS_BUTTON_PRESSED(g_mdRam.swdata2, PAD_C)) {
-        ++g_mdRam.whoplay2;
-        if (g_mdRam.whoplay2 >= 3) {
-          g_mdRam.whoplay2 = 0;
+      if (IS_BUTTON_PRESSED(g_ram.swdata2, PAD_C)) {
+        ++g_ram.whoplay2;
+        if (g_ram.whoplay2 >= 3) {
+          g_ram.whoplay2 = 0;
         }
       }
     }
@@ -386,12 +386,12 @@ static void handleinput2() {
 
 // 00415b77
 static void set_selectioncolor(unsigned short coloroffset) {
-  levelselect_textpos pos = textpositions[g_mdRam.levelselect_selection];
+  levelselect_textpos pos = textpositions[g_ram.levelselect_selection];
   if (g_sonic3Alone != 0) {
-    pos = s3textpositions[g_mdRam.levelselect_selection];
+    pos = s3textpositions[g_ram.levelselect_selection];
   }
   unsigned short index = pos.y1 * 80 + pos.x1;
-  unsigned short* p_decompressed = (unsigned short*)&g_mdRam.decompressed[index];
+  unsigned short* p_decompressed = (unsigned short*)&g_ram.decompressed[index];
   index = (pos.y1 << 7) + pos.x1 + 0xC000;
   g_pLevelSelectVram = (unsigned short*)&g_mdVram[index];
 
@@ -401,7 +401,7 @@ static void set_selectioncolor(unsigned short coloroffset) {
 
   if (pos.y2 != 0) {
     index = pos.y2 * 80 + pos.x2;
-    p_decompressed = (unsigned short*)&g_mdRam.decompressed[index];
+    p_decompressed = (unsigned short*)&g_ram.decompressed[index];
     index = (pos.y2 << 7) + pos.x2 + 0xC000;
     g_pLevelSelectVram = (unsigned short*)&g_mdVram[index];
     *g_pLevelSelectVram++ = *p_decompressed++ + coloroffset;
@@ -410,7 +410,7 @@ static void set_selectioncolor(unsigned short coloroffset) {
   if (g_sonic3Alone != 0) {
     soundtest = 28;
   }
-  if (g_mdRam.levelselect_selection == soundtest) {
+  if (g_ram.levelselect_selection == soundtest) {
     set_sounddigits(coloroffset);
   }
   else {
@@ -427,7 +427,7 @@ static void set_selectioncolor(unsigned short coloroffset) {
 // 00415e32
 static void set_plmodedigits(unsigned short coloroffset) {
   g_pLevelSelectVram = (unsigned short*)&g_mdVram[0xC19C];
-  set_digits(g_mdRam.levelselect_plmode, coloroffset);
+  set_digits(g_ram.levelselect_plmode, coloroffset);
 }
 
 
@@ -437,7 +437,7 @@ static void set_sounddigits(unsigned short coloroffset) {
   if (g_sonic3Alone != 0) {
     g_pLevelSelectVram = (unsigned short*)&g_mdVram[0xC846];
   }
-  set_digits(g_mdRam.levelselect_sound, coloroffset);
+  set_digits(g_ram.levelselect_sound, coloroffset);
 }
 
 
@@ -512,7 +512,7 @@ static void set_digit(unsigned short digit, unsigned short coloroffset) {
 
 // 0041607c
 void anim_tiles(short script_cnt, unsigned char* p_scriptlist) {
-  unsigned char* p_animcounters = g_mdRam.actanimcounters[0];
+  unsigned char* p_animcounters = g_ram.actanimcounters[0];
 
   for ( ; script_cnt != -1; --script_cnt) {
     animscript* p_script = (animscript*)p_scriptlist;
@@ -552,22 +552,22 @@ static void s3levelselect() {
   g_vdpScrollPlaneBOffset = 0xE000;
   DAT_008549d8 = 0;
   DAT_00854dec = 0;
-  memset(g_mdRam.pbuffer, 0, sizeof(g_mdRam.pbuffer));
-  memset(g_mdRam.actwk, 0, sizeof(g_mdRam.actwk) + 52);
-  bitdevr((unsigned long*)&g_mdVram[512], levelselect_main_cg, g_mdRam.bitdevwk);
-  bitdevr((unsigned long*)&g_mdVram[0xE00], levelselect_menubox_cg, g_mdRam.bitdevwk);
-  bitdevr((unsigned long*)&g_mdVram[0x1200], levelselect_zoneicons_cg, g_mdRam.bitdevwk);
-  mapdevr((unsigned short*)&g_mdRam.decompressed, levelselect_main_map, 0x6000);
-  copy_map_vram((unsigned short*)g_mdRam.decompressed, 0xE000, 27, 39);
-  mapdevr((unsigned short*)g_mdRam.decompressed, DAT_004297e0, 0);
-  memset(g_mdRam.decompressed, 0, 0x640);
-  memset(&g_mdRam.decompressed[0x696], 0, 32);
+  memset(g_ram.pbuffer, 0, sizeof(g_ram.pbuffer));
+  memset(g_ram.actwk, 0, sizeof(g_ram.actwk) + 52);
+  bitdevr((unsigned long*)&g_mdVram[512], levelselect_main_cg, g_ram.bitdevwk);
+  bitdevr((unsigned long*)&g_mdVram[0xE00], levelselect_menubox_cg, g_ram.bitdevwk);
+  bitdevr((unsigned long*)&g_mdVram[0x1200], levelselect_zoneicons_cg, g_ram.bitdevwk);
+  mapdevr((unsigned short*)&g_ram.decompressed, levelselect_main_map, 0x6000);
+  copy_map_vram((unsigned short*)g_ram.decompressed, 0xE000, 27, 39);
+  mapdevr((unsigned short*)g_ram.decompressed, DAT_004297e0, 0);
+  memset(g_ram.decompressed, 0, 0x640);
+  memset(&g_ram.decompressed[0x696], 0, 32);
   unsigned short* p_mapoffsets = s3mapoffsets;
   unsigned char* p_text = s3entriestext;
   unsigned short* p_decompressed;
 
   for (int i = 0; i < 15; ++i) {
-    p_decompressed = (unsigned short*)&g_mdRam.decompressed[*p_mapoffsets++];
+    p_decompressed = (unsigned short*)&g_ram.decompressed[*p_mapoffsets++];
     unsigned char char_cnt = *p_text++;
 
     for (int j = 0; j < char_cnt + 1; ++j) {
@@ -588,87 +588,87 @@ static void s3levelselect() {
   *p_decompressed = 0;
   p_decompressed -= 40;
   *p_decompressed = 26; // *
-  copy_map_vram((unsigned short*)g_mdRam.decompressed, 0xC000, 27, 39);
+  copy_map_vram((unsigned short*)g_ram.decompressed, 0xC000, 27, 39);
   set_sounddigits(0);
-  mapdevr((unsigned short*)&g_mdRam.decompressed[0x8C0], DAT_00429934, 144);
+  mapdevr((unsigned short*)&g_ram.decompressed[0x8C0], DAT_00429934, 144);
   setzoneicon();
-  g_mdRam.plmode = TEAM_SONIC_AND_MILES;
-  g_mdRam.DAT_08ffff02 = 0;
-  g_mdRam.DAT_08fff711 = 0;
-  g_mdRam.actanimcounters[0][0] = 0;
+  g_ram.plmode = TEAM_SONIC_AND_MILES;
+  g_ram.DAT_08ffff02 = 0;
+  g_ram.DAT_08fff711 = 0;
+  g_ram.actanimcounters[0][0] = 0;
   anim_tiles(sonicmiles_wrt_cnt, (unsigned char*)&sonicmiles_wrt);
 
   colorset(4);
-  memcpy(&g_mdRam.colorwk2[32], &g_mdRam.colorwk[32], 32);
+  memcpy(&g_ram.colorwk2[32], &g_ram.colorwk[32], 32);
 
   bgmset(47);
-  g_mdRam.demotimer = 1799;
-  g_mdRam.vs_flag = 0;
-  g_mdRam.scra_h_posit = 0;
-  g_mdRam.scra_v_posit = 0;
-  g_mdRam.p_saveslot = 0;
-  g_mdRam.levelselectcheat = 1;
-  g_mdRam.slowmotioncheat = 1;
-  g_mdRam.editmodecheat = 257;
-  g_mdRam.editmodecheatcounter = 0;
-  g_mdRam.allemeraldscheatcounter = 0;
-  g_mdRam.int_flg = 22;
+  g_ram.demotimer = 1799;
+  g_ram.vs_flag = 0;
+  g_ram.scra_h_posit = 0;
+  g_ram.scra_v_posit = 0;
+  g_ram.p_saveslot = 0;
+  g_ram.levelselectcheat = 1;
+  g_ram.slowmotioncheat = 1;
+  g_ram.editmodecheat = 257;
+  g_ram.editmodecheatcounter = 0;
+  g_ram.allemeraldscheatcounter = 0;
+  g_ram.int_flg = 22;
   vInt();
   fadein();
   bool nextmode = false;
 
   do {
-    g_mdRam.int_flg = 22;
+    g_ram.int_flg = 22;
     vInt();
     set_selectioncolor(0);
     handleinput();
     set_selectioncolor(0x6000);
     setzoneicon();
     anim_tiles(sonicmiles_wrt_cnt, (unsigned char*)&sonicmiles_wrt);
-    if (IS_BUTTON_PRESSED(g_mdRam.swdata1 | g_mdRam.swdata2, PAD_S)) {
-      short chosenstageno = s3stagenolist[g_mdRam.levelselect_selection];
+    if (IS_BUTTON_PRESSED(g_ram.swdata1 | g_ram.swdata2, PAD_S)) {
+      short chosenstageno = s3stagenolist[g_ram.levelselect_selection];
       if (chosenstageno >= 0) {
         if (chosenstageno == 0x5555) continue;
         switch (chosenstageno) {
           case 0x4000: // Sonic 3 special stage
-            g_mdRam.gmmode = 44;
+            g_ram.gmmode = 44;
             nextmode = true;
             break;
           case 0x4001: // Sonic & Knuckles special stage
-            g_mdRam.gmmode = 52;
+            g_ram.gmmode = 52;
             nextmode = true;
             break;
         }
       }
       else {
-        g_mdRam.gmmode = 0;
+        g_ram.gmmode = 0;
         nextmode = true;
       }
       if (!nextmode) {
         chosenstageno &= 0x3FFF;
-        g_mdRam.stageno = chosenstageno;
-        g_mdRam.stageno_i = chosenstageno;
-        g_mdRam.stageno_s = chosenstageno;
-        g_mdRam.gmmode = 12;
-        g_mdRam.pl_suu = 3;
-        g_mdRam.pl2_suu = 3;
-        g_mdRam.plring = 0;
-        g_mdRam.pltime.hours = 0;
-        g_mdRam.pltime.minutes = 0;
-        g_mdRam.pltime.seconds = 0;
-        g_mdRam.pltime.frames = 0;
-        g_mdRam.plscore = 0;
-        g_mdRam.pl2ring = 0;
-        g_mdRam.DAT_08fffed2 = 0;
-        g_mdRam.DAT_08fffed6 = 0;
-        g_mdRam.plcontinuecnt = 0;
-        g_mdRam.extrascore = 5000;
-        g_mdRam.extrascore2 = 5000;
+        g_ram.stageno = chosenstageno;
+        g_ram.stageno_i = chosenstageno;
+        g_ram.stageno_s = chosenstageno;
+        g_ram.gmmode = 12;
+        g_ram.pl_suu = 3;
+        g_ram.pl2_suu = 3;
+        g_ram.plring = 0;
+        g_ram.pltime.hours = 0;
+        g_ram.pltime.minutes = 0;
+        g_ram.pltime.seconds = 0;
+        g_ram.pltime.frames = 0;
+        g_ram.plscore = 0;
+        g_ram.pl2ring = 0;
+        g_ram.DAT_08fffed2 = 0;
+        g_ram.DAT_08fffed6 = 0;
+        g_ram.plcontinuecnt = 0;
+        g_ram.extrascore = 5000;
+        g_ram.extrascore2 = 5000;
         soundset(225);
-        g_mdRam.vs_noitems = 0;
-        g_mdRam.vs_flag = 0;
-        if (GET_ZONE(g_mdRam.stageno) >= AZURE_LAKE && GET_ZONE(g_mdRam.stageno) < GUMBALL_MACHINE_ACT) {
-          g_mdRam.vs_flag = 1;
+        g_ram.vs_noitems = 0;
+        g_ram.vs_flag = 0;
+        if (GET_ZONE(g_ram.stageno) >= AZURE_LAKE && GET_ZONE(g_ram.stageno) < GUMBALL_MACHINE_ACT) {
+          g_ram.vs_flag = 1;
         }
         nextmode = true;
       }
@@ -737,19 +737,19 @@ static void s3levelselect() {
 // 00428f88
 static void setwhoplaydigits(unsigned short coloroffset) {
   g_pLevelSelectVram = (unsigned short*)&g_mdVram[0xC1B8];
-  set_digits(g_mdRam.whoplay1, coloroffset);
+  set_digits(g_ram.whoplay1, coloroffset);
   g_pLevelSelectVram = (unsigned short*)&g_mdVram[0xC1C0];
-  set_digits(g_mdRam.whoplay2, coloroffset);
+  set_digits(g_ram.whoplay2, coloroffset);
 }
 
 
 // 00429059
 static void setzoneicon() {
-  unsigned char* p_decompressed = &g_mdRam.decompressed[0x8C0];
-  unsigned short offset = zoneiconoffsets[g_mdRam.levelselect_selection];
+  unsigned char* p_decompressed = &g_ram.decompressed[0x8C0];
+  unsigned short offset = zoneiconoffsets[g_ram.levelselect_selection];
   p_decompressed += offset * 24;
   copy_map_vram((unsigned short*)p_decompressed, 0xCB36, 2, 3);
-  memcpy(&g_mdRam.colorwk[32], &zoneicons_color[offset][0], 32);
+  memcpy(&g_ram.colorwk[32], &zoneicons_color[offset][0], 32);
 }
 
 
@@ -808,28 +808,28 @@ static void setzoneicon() {
 
 // 00429268
 static void chk_cheats() {
-  if (editmodecode[g_mdRam.editmodecheatcounter] == g_mdRam.levelselect_sound) {
-    ++g_mdRam.editmodecheatcounter;
-    if (editmodecode[g_mdRam.editmodecheatcounter] == 0) {
-      g_mdRam.editmodecheat = 257;
+  if (editmodecode[g_ram.editmodecheatcounter] == g_ram.levelselect_sound) {
+    ++g_ram.editmodecheatcounter;
+    if (editmodecode[g_ram.editmodecheatcounter] == 0) {
+      g_ram.editmodecheat = 257;
       soundset(51);
-      g_mdRam.editmodecheatcounter = 0;
+      g_ram.editmodecheatcounter = 0;
     }
   }
   else {
-    g_mdRam.editmodecheatcounter = 0;
+    g_ram.editmodecheatcounter = 0;
   }
 
-  if (allemeraldscode[g_mdRam.allemeraldscheatcounter] == g_mdRam.levelselect_sound) {
-    ++g_mdRam.allemeraldscheatcounter;
-    if (allemeraldscode[g_mdRam.allemeraldscheatcounter] == 0) {
-      g_mdRam.emeraldcnt = 7;
+  if (allemeraldscode[g_ram.allemeraldscheatcounter] == g_ram.levelselect_sound) {
+    ++g_ram.allemeraldscheatcounter;
+    if (allemeraldscode[g_ram.allemeraldscheatcounter] == 0) {
+      g_ram.emeraldcnt = 7;
       bgmset(43);
-      g_mdRam.allemeraldscheatcounter = 0;
+      g_ram.allemeraldscheatcounter = 0;
     }
   }
   else {
-    g_mdRam.allemeraldscheatcounter = 0;
+    g_ram.allemeraldscheatcounter = 0;
   }
 }
 

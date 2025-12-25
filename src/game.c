@@ -39,30 +39,30 @@ extern void playSoundEffect2(signed char command);
 
 // 0040ff14
 void start_debug() {
-  g_mdRam.cartridge = 0;
+  g_ram.cartridge = 0;
   init_vdp();
   load_savedata();
-  g_mdRam.gmmode = 28;
+  g_ram.gmmode = 28;
   gameloop();
 }
 
 
 // 0040ff72
 void start_specialstagemode() {
-  g_mdRam.romheadermdflag = 0;
+  g_ram.romheadermdflag = 0;
   init_vdp();
-  g_mdRam.specmodemenu = 0;
-  g_mdRam.gmmode = 44;
+  g_ram.specmodemenu = 0;
+  g_ram.gmmode = 44;
   gameloop();
 }
 
 
 // 00410095
 void start_game(unsigned short cartridge) {
-  g_mdRam.cartridge = cartridge;
+  g_ram.cartridge = cartridge;
   init_vdp();
   load_savedata();
-  g_mdRam.gmmode = 4;
+  g_ram.gmmode = 4;
   gameloop();
 }
 
@@ -74,7 +74,7 @@ void gameloop() {
     DAT_00854de8 = 0;
     DAT_00854758 = 0;
     DAT_0082ddc8 = 0;
-    unsigned char gmmode = (g_mdRam.gmmode & 0x7C) / 4;
+    unsigned char gmmode = (g_ram.gmmode & 0x7C) / 4;
     g_gameModes[gmmode]();
   }
 }
@@ -113,9 +113,9 @@ static void patset_hud() {
 
 // 0041a6fe
 static void init_vdp() {
-  g_mdRam.vscrolla = 0;
-  g_mdRam.vscrollb = 0;
-  g_mdRam.hscroll = 0;
+  g_ram.vscrolla = 0;
+  g_ram.vscrollb = 0;
+  g_ram.hscroll = 0;
   memset(g_mdVram, 0, sizeof(g_mdVram));
 }
 
@@ -124,28 +124,28 @@ static void init_vdp() {
 void scrinit() {
   memset(g_mdVram, 0, 64);
 
-  if (g_mdRam.vs_flag != 0) {
+  if (g_ram.vs_flag != 0) {
     memset(&g_mdVram[0x8000], 0, 0x4000);
   }
 
   memset(&g_mdVram[0xC000], 0, 0x1000);
   memset(&g_mdVram[0xE000], 0, 0x1000);
 
-  g_mdRam.vscrolla = 0;
-  g_mdRam.vscrollb = 0;
-  g_mdRam.hscroll = 0;
+  g_ram.vscrolla = 0;
+  g_ram.vscrollb = 0;
+  g_ram.hscroll = 0;
 
   /* BUGFIX:
     The original ASM cleared four bytes too many due to the loop counter
     not taking into account that the loop counts down to -1.
   */
-  memset(g_mdRam.ramf8, 0, sizeof(g_mdRam.ramf8));
+  memset(g_ram.ramf8, 0, sizeof(g_ram.ramf8));
 
   /* BUGFIX:
     The original ASM cleared four bytes too many due to the loop counter
     not taking into account that the loop counts down to -1.
   */
-  memset(g_mdRam.hscrollbuff, 0, sizeof(g_mdRam.hscrollbuff) + sizeof(g_mdRam.colibuffer));
+  memset(g_ram.hscrollbuff, 0, sizeof(g_ram.hscrollbuff) + sizeof(g_ram.colibuffer));
 }
 
 
@@ -163,18 +163,18 @@ void soundset(signed char command) {
 
 // 0041e61c
 void init_sprlist() {
-  g_mdRam.sprhmasks = 0;
-  g_mdRam.alt_sprlistadr = 0;
-  if (g_mdRam.vs_flag != 0) {
-    unsigned short* p_sprlist = init_sprlist_vp_linkdata(g_mdRam.ramf8);
+  g_ram.sprhmasks = 0;
+  g_ram.alt_sprlistadr = 0;
+  if (g_ram.vs_flag != 0) {
+    unsigned short* p_sprlist = init_sprlist_vp_linkdata(g_ram.ramf8);
     init_sprlist_first((unsigned long*)p_sprlist);
-    p_sprlist = init_sprlist_vp_linkdata((unsigned short*)&g_mdRam.chunkmappings128[0x7880]);
+    p_sprlist = init_sprlist_vp_linkdata((unsigned short*)&g_ram.chunkmappings128[0x7880]);
     init_sprlist_first((unsigned long*)p_sprlist);
-    init_sprlist_vp_linkdata((unsigned short*)&g_mdRam.chunkmappings128[0x7B00]);
-    init_sprlist_vp_linkdata((unsigned short*)&g_mdRam.chunkmappings128[0x7D80]);
+    init_sprlist_vp_linkdata((unsigned short*)&g_ram.chunkmappings128[0x7B00]);
+    init_sprlist_vp_linkdata((unsigned short*)&g_ram.chunkmappings128[0x7D80]);
   }
   else {
-    init_sprlist_vp_linkdata(g_mdRam.ramf8);
+    init_sprlist_vp_linkdata(g_ram.ramf8);
   }
 }
 
@@ -208,10 +208,10 @@ static void init_sprlist_first(unsigned long* p_sprlist) {
 
 // 0041e760
 void action() {
-  if (g_mdRam.teleport != 0) return;
+  if (g_ram.teleport != 0) return;
 
-  if (g_mdRam.vs_flag != 0 || g_mdRam.actwk[0].r_no == 12 || g_mdRam.actwk[0].r_no < 6) {
-    action2(&g_mdRam.actwk[0], 110);
+  if (g_ram.vs_flag != 0 || g_ram.actwk[0].r_no == 12 || g_ram.actwk[0].r_no < 6) {
+    action2(&g_ram.actwk[0], 110);
   }
   else {
     action3();
@@ -234,7 +234,7 @@ static sprite_status* action2(sprite_status* p_actwk, int cnt) {
 
 // 0041e7e5
 static void action3() {
-  sprite_status* p_actwk = action2(&g_mdRam.actwk[0], 4);
+  sprite_status* p_actwk = action2(&g_ram.actwk[0], 4);
   p_actwk = action4(p_actwk, 90);
   action2(p_actwk, 16);
 }
@@ -256,16 +256,16 @@ static sprite_status* action4(sprite_status* p_actwk, int cnt) {
 // 0041eb34
 void actionsub(sprite_status* p_actwk) {
   unsigned char level_no = p_actwk->sprpri / (PBUFFER_LEVEL_SLOTS * PBUFFER_LEVEL_SLOT_SIZE);
-  unsigned short* pri_level = &g_mdRam.pbuffer[level_no][0];
+  unsigned short* pri_level = &g_ram.pbuffer[level_no][0];
   bool done = false;
 
   do {
     if (pri_level[0] < PBUFFER_LEVEL_MAX_SIZE) {
       pri_level[0] += PBUFFER_LEVEL_SLOT_SIZE;
-      pri_level[pri_level[0] / PBUFFER_LEVEL_SLOT_SIZE] = p_actwk - g_mdRam.actwk;
+      pri_level[pri_level[0] / PBUFFER_LEVEL_SLOT_SIZE] = p_actwk - g_ram.actwk;
       done = true;
     }
-    else if (pri_level == &g_mdRam.pbuffer[PBUFFER_LEVELS - 1][0]) {
+    else if (pri_level == &g_ram.pbuffer[PBUFFER_LEVELS - 1][0]) {
       done = true;
     }
     else {
@@ -364,26 +364,26 @@ void patchg2(sprite_status* p_actwk, signed char** p_chg_data) {
 
 // 0041f0b6
 void patset() {
-  if (g_mdRam.vs_flag != 0) {
+  if (g_ram.vs_flag != 0) {
     patset_vs();
     return;
   }
 
   unsigned short spritesleft_cnt = 80;
-  g_pLevelSelectVram = g_mdRam.ramf8;
-  if (g_mdRam.DAT_08fff711 != 0) {
+  g_pLevelSelectVram = g_ram.ramf8;
+  if (g_ram.DAT_08fff711 != 0) {
     patset_hud();
     patset_rings();
   }
 
   for (int i = 0; i < PBUFFER_LEVELS; ++i) {
-    if (g_mdRam.pbuffer[i][0] == 0) continue;
+    if (g_ram.pbuffer[i][0] == 0) continue;
 
-    unsigned short* p_pbufferrow = &g_mdRam.pbuffer[i][1];
+    unsigned short* p_pbufferrow = &g_ram.pbuffer[i][1];
 
     do {
       int act = *p_pbufferrow++;
-      sprite_status* p_actwk = &g_mdRam.actwk[act];
+      sprite_status* p_actwk = &g_ram.actwk[act];
       CLEAR_BIT(p_actwk->actflg, FLG_ONSCREEN);
       if (BIT_IS_SET(p_actwk->actflg, FLG_COMPOUND)) {
         spritesleft_cnt = patset_compound(p_actwk, spritesleft_cnt);
@@ -392,7 +392,7 @@ void patset() {
       short xposi = LONG_HIGH(p_actwk->xposi);
       short yposi = LONG_HIGH(p_actwk->yposi);
       if (BIT_IS_SET(p_actwk->actflg, FLG_LEVELCOORDS)) {
-        xposi -= LONG_HIGH(g_mdRam.scra_h_posit_copy);
+        xposi -= LONG_HIGH(g_ram.scra_h_posit_copy);
         if (xposi + p_actwk->sprhs < 0) {
           goto next;
         }
@@ -401,9 +401,9 @@ void patset() {
         }
         xposi += 128;
 
-        yposi -= LONG_HIGH(g_mdRam.scra_v_posit_copy);
+        yposi -= LONG_HIGH(g_ram.scra_v_posit_copy);
         yposi += p_actwk->sprvs;
-        yposi &= g_mdRam.scrc_v;
+        yposi &= g_ram.scrc_v;
         if (yposi >= p_actwk->sprvs * 2 + 224) {
           goto next;
         }
@@ -429,11 +429,11 @@ void patset() {
       }
 
 next:
-      g_mdRam.pbuffer[i][0] -= 2;
-    } while (g_mdRam.pbuffer[i][0] != 0);
+      g_ram.pbuffer[i][0] -= 2;
+    } while (g_ram.pbuffer[i][0] != 0);
 
 
-    if (i == 0 && GET_ZONE(g_mdRam.stageno) == LAVA_REEF) {
+    if (i == 0 && GET_ZONE(g_ram.stageno) == LAVA_REEF) {
       FUN_004487b9();
     }
   }
@@ -444,13 +444,13 @@ next:
       g_pLevelSelectVram += 4;
     }
   }
-  g_mdRam.scrsprcnt = 80 - spritesleft_cnt;
-  if (g_mdRam.sprhmasks != 0) {
-    if (g_mdRam.actwk[0].r_no < 6) {
-      g_mdRam.sprhmasks = 0;
+  g_ram.scrsprcnt = 80 - spritesleft_cnt;
+  if (g_ram.sprhmasks != 0) {
+    if (g_ram.actwk[0].r_no < 6) {
+      g_ram.sprhmasks = 0;
     }
     DAT_008547bc = 1;
-    unsigned short* p_ramf8 = g_mdRam.ramf8;
+    unsigned short* p_ramf8 = g_ram.ramf8;
 
     for (int i = 0; i < 79; ++i) {
       if (p_ramf8[2] == 0x7C0) {
@@ -479,14 +479,14 @@ static unsigned short patset_compound(sprite_status* p_actwk, unsigned short spr
     yposi += 128;
   }
   else {
-    xposi -= util__longhigh_to_short(g_mdRam.scra_h_posit_copy);
+    xposi -= util__longhigh_to_short(g_ram.scra_h_posit_copy);
     if (xposi + p_actwk->sprhs < 0) goto end;
     if (xposi - p_actwk->sprhs >= 320) goto end;
     xposi += 128;
 
-    yposi -= util__longhigh_to_short(g_mdRam.scra_v_posit_copy);
+    yposi -= util__longhigh_to_short(g_ram.scra_v_posit_copy);
     yposi += p_actwk->sprvs;
-    yposi &= g_mdRam.scrc_v;
+    yposi &= g_ram.scrc_v;
     if (yposi >= p_actwk->sprvs * 2 + 224) goto end;
     yposi += 128;
     yposi -= p_actwk->sprvs;
@@ -506,9 +506,9 @@ static unsigned short patset_compound(sprite_status* p_actwk, unsigned short spr
     short xposi = p_compoundwk->children[i].xposi;
     short yposi = p_compoundwk->children[i].yposi;
     if (BIT_IS_SET(p_actwk->actflg, FLG_LEVELCOORDS)) {
-      xposi = xposi - util__longhigh_to_short(g_mdRam.scra_h_posit_copy) + 128;
-      yposi = yposi - util__longhigh_to_short(g_mdRam.scra_v_posit_copy) + 128;
-      yposi &= g_mdRam.scrc_v;
+      xposi = xposi - util__longhigh_to_short(g_ram.scra_h_posit_copy) + 128;
+      yposi = yposi - util__longhigh_to_short(g_ram.scra_v_posit_copy) + 128;
+      yposi &= g_ram.scrc_v;
     }
     sprite_pattern* p_sprpat = p_actwk->patbase[p_compoundwk->children[i].patno];
     if (p_sprpat->cnt != 0) {
@@ -726,7 +726,7 @@ static void patset_vs() {
 
 // 00426f24
 unsigned long random() {
-  unsigned long d1 = g_mdRam.ranum;
+  unsigned long d1 = g_ram.ranum;
   if (d1 == 0) {
     d1 = 711800411;
   }
@@ -740,7 +740,7 @@ unsigned long random() {
   d0 = (d0 & 0xFFFF0000) | (((d0 & 0x0000FFFF) + (d1 & 0x0000FFFF)) & 0x0000FFFF);
   d1 = (d1 & 0xFFFF0000) | (d0 & 0x0000FFFF);
   ROTATE_RIGHT(d1, 16);
-  g_mdRam.ranum = d1;
+  g_ram.ranum = d1;
   return d0;
 }
 
@@ -797,16 +797,16 @@ void load_string_vram(unsigned char* p_text, unsigned long vramoffset, unsigned 
   vramoffset += 0xC000;
   vramoffset &= 0xFFFF;
   g_pLevelSelectVram = (unsigned short*)&g_mdVram[vramoffset];
-  memcpy(g_pLevelSelectVram, &g_mdRam.chunkmappings128[0x7000], mapping_cnt * 2);
+  memcpy(g_pLevelSelectVram, &g_ram.chunkmappings128[0x7000], mapping_cnt * 2);
   g_pLevelSelectVram = (unsigned short*)&g_mdVram[vramoffset + 128];
-  memcpy(g_pLevelSelectVram, &g_mdRam.chunkmappings128[0x7080], mapping_cnt * 2);
+  memcpy(g_pLevelSelectVram, &g_ram.chunkmappings128[0x7080], mapping_cnt * 2);
 }
 
 
 // 00824b55
 static unsigned short FUN_00824b55(unsigned char* p_text, unsigned short coloroffset) {
-  unsigned short* p_chunkmappings1 = (unsigned short*)&g_mdRam.chunkmappings128[0x7000];
-  unsigned short* p_chunkmappings2 = (unsigned short*)&g_mdRam.chunkmappings128[0x7080];
+  unsigned short* p_chunkmappings1 = (unsigned short*)&g_ram.chunkmappings128[0x7000];
+  unsigned short* p_chunkmappings2 = (unsigned short*)&g_ram.chunkmappings128[0x7080];
   unsigned short mapping_cnt = 0;
   bool end = false;
 

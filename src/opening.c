@@ -132,20 +132,20 @@ extern void vInt();
 
 // 0040b900
 static void load_frames() {
-  unsigned char* p_decompressed = unlze(g_mdRam.decompressed, s3opening_frame1_cg, 0);
-  copy_data_vram(g_mdRam.decompressed, 0, (p_decompressed - g_mdRam.decompressed) / 2);
+  unsigned char* p_decompressed = unlze(g_ram.decompressed, s3opening_frame1_cg, 0);
+  copy_data_vram(g_ram.decompressed, 0, (p_decompressed - g_ram.decompressed) / 2);
 
   for (int i = 0; i < 14; ++i) {
     if (s3opening_datalist[i * 3] != s3opening_frame1_cg) {
-      p_decompressed = unlze(g_mdRam.decompressed, s3opening_datalist[i * 3], 0);
-      copy_data_vram(g_mdRam.decompressed, 0, (p_decompressed - g_mdRam.decompressed) / 2);
+      p_decompressed = unlze(g_ram.decompressed, s3opening_datalist[i * 3], 0);
+      copy_data_vram(g_ram.decompressed, 0, (p_decompressed - g_ram.decompressed) / 2);
     }
-    memcpy(g_mdRam.colorwk2, s3opening_datalist[i * 3 + 1], 64);
-    mapdevr((unsigned short*)g_mdRam.decompressed, s3opening_datalist[i * 3 + 2], 0);
-    copy_map_vram((unsigned short*)g_mdRam.decompressed, 0xC000, 27, 39);
+    memcpy(g_ram.colorwk2, s3opening_datalist[i * 3 + 1], 64);
+    mapdevr((unsigned short*)g_ram.decompressed, s3opening_datalist[i * 3 + 2], 0);
+    copy_map_vram((unsigned short*)g_ram.decompressed, 0xC000, 27, 39);
 
     for (int j = 0; j < 4; ++j) {
-      g_mdRam.int_flg = 4;
+      g_ram.int_flg = 4;
       vInt();
     }
   }
@@ -288,78 +288,78 @@ static sprite_pattern skopening_mountain_sp00 = {
 void opening() {
   bgmset(225);
   if (g_sonic3Alone == 0) {
-    g_mdRam.stageno = 0;
+    g_ram.stageno = 0;
   }
   g_vdpScrollPlaneAOffset = 0xC000;
   g_vdpScrollPlaneBOffset = 0xE000;
   DAT_008549d8 = 0;
   DAT_00854dec = 1;
-  g_mdRam.waterflag = 0;
+  g_ram.waterflag = 0;
   if (g_sonic3Alone == 0) {
-    g_mdRam.watermode = 0;
+    g_ram.watermode = 0;
   }
   scrinit();
-  memset(g_mdRam.pbuffer, 0, sizeof(g_mdRam.pbuffer));
-  memset(g_mdRam.actwk, 0, sizeof(g_mdRam.actwk) + 52);
+  memset(g_ram.pbuffer, 0, sizeof(g_ram.pbuffer));
+  memset(g_ram.actwk, 0, sizeof(g_ram.actwk) + 52);
   // START memset(DAT_08fff700, 0, 256)
-  g_mdRam.DAT_08fff711 = 0;
-  g_mdRam.watermode = 0;
-  g_mdRam.miles_carry_flag = 0;
-  g_mdRam.plmaxspdwk = 0;
-  g_mdRam.pladdspdwk = 0;
-  g_mdRam.plretspdwk = 0;
-  g_mdRam.bossstart = 0;
-  g_mdRam.soz_darkness_level = 0;
-  g_mdRam.reverse_gravity_flag = 0;
-  g_mdRam.pl2_lock_flag = 0;
-  g_mdRam.emyscorecnt = 0;
-  g_mdRam.timebonus = 0;
-  g_mdRam.ringbonus = 0;
-  g_mdRam.scr_x_no = 0;
-  memset(g_mdRam.level_triggers, 0, LEVEL_TRIGGERS_SLOTS);
-  memset(g_mdRam.actanimcounters, 0, 16);
+  g_ram.DAT_08fff711 = 0;
+  g_ram.watermode = 0;
+  g_ram.miles_carry_flag = 0;
+  g_ram.plmaxspdwk = 0;
+  g_ram.pladdspdwk = 0;
+  g_ram.plretspdwk = 0;
+  g_ram.bossstart = 0;
+  g_ram.soz_darkness_level = 0;
+  g_ram.reverse_gravity_flag = 0;
+  g_ram.pl2_lock_flag = 0;
+  g_ram.emyscorecnt = 0;
+  g_ram.timebonus = 0;
+  g_ram.ringbonus = 0;
+  g_ram.scr_x_no = 0;
+  memset(g_ram.level_triggers, 0, LEVEL_TRIGGERS_SLOTS);
+  memset(g_ram.actanimcounters, 0, 16);
   // END memset(DAT_08fff700, 0. 256)
   // START memset(DAT_08ffee00, 0, 256)
-  g_mdRam.scralim_n_down = 0;
-  g_mdRam.scralim_left = 0;
-  g_mdRam.scralim_right = 0;
-  g_mdRam.scralim_down = 0;
-  g_mdRam.scr_resize_no = 0;
-  g_mdRam.vs_vscroll = 0;
-  g_mdRam.stageno_i = 0;
-  g_mdRam.colorcycle = 0;
-  g_mdRam.vs_scra_h_posit = 0;
-  g_mdRam.vs_scra_v_posit = 0;
-  g_mdRam.vs_scra_h_posit_copy = 0;
-  g_mdRam.vs_scra_v_posit_copy = 0;
-  g_mdRam.scra_h_posit = 0;
-  g_mdRam.scra_v_posit = 0;
-  g_mdRam.scra_h_posit_copy = 0;
-  g_mdRam.scra_v_posit_copy = 0;
-  g_mdRam.scrc_v = 0;
-  g_mdRam.frame_offset_x = 0;
-  g_mdRam.scr_evta = 0;
-  g_mdRam.event_flag_3 = 0;
-  g_mdRam.scr_shake_flg = 0;
-  g_mdRam.DAT_08ffeed2 = 0;
-  memset(g_mdRam.vscrollbuff, 0, 80);
+  g_ram.scralim_n_down = 0;
+  g_ram.scralim_left = 0;
+  g_ram.scralim_right = 0;
+  g_ram.scralim_down = 0;
+  g_ram.scr_resize_no = 0;
+  g_ram.vs_vscroll = 0;
+  g_ram.stageno_i = 0;
+  g_ram.colorcycle = 0;
+  g_ram.vs_scra_h_posit = 0;
+  g_ram.vs_scra_v_posit = 0;
+  g_ram.vs_scra_h_posit_copy = 0;
+  g_ram.vs_scra_v_posit_copy = 0;
+  g_ram.scra_h_posit = 0;
+  g_ram.scra_v_posit = 0;
+  g_ram.scra_h_posit_copy = 0;
+  g_ram.scra_v_posit_copy = 0;
+  g_ram.scrc_v = 0;
+  g_ram.frame_offset_x = 0;
+  g_ram.scr_evta = 0;
+  g_ram.event_flag_3 = 0;
+  g_ram.scr_shake_flg = 0;
+  g_ram.DAT_08ffeed2 = 0;
+  memset(g_ram.vscrollbuff, 0, 80);
   // END memset(DAT_08ffee00, 0, 256)
   init_sprlist();
-  memset(g_mdRam.colorwk, 0, sizeof(g_mdRam.colorwk));
-  g_mdRam.markerno = 0;
-  g_mdRam.marker_flag = 0;
-  g_mdRam.editmode = 0;
-  g_mdRam.demoflag = 0;
-  g_mdRam.clchgtim = 0;
-  g_mdRam.vs_flag = 0;
-  g_mdRam.DAT_08fff711 = 0;
-  g_mdRam.DAT_08ffffda = 0;
-  g_mdRam.vs_flag = 0;
-  g_mdRam.editmodecheatcounter = 0;
-  g_mdRam.allemeraldscheatcounter = 0;
-  g_mdRam.specmode = 0;
-  g_mdRam.demotimer = 359;
-  if (g_mdRam.cartridge == 0) {
+  memset(g_ram.colorwk, 0, sizeof(g_ram.colorwk));
+  g_ram.markerno = 0;
+  g_ram.marker_flag = 0;
+  g_ram.editmode = 0;
+  g_ram.demoflag = 0;
+  g_ram.clchgtim = 0;
+  g_ram.vs_flag = 0;
+  g_ram.DAT_08fff711 = 0;
+  g_ram.DAT_08ffffda = 0;
+  g_ram.vs_flag = 0;
+  g_ram.editmodecheatcounter = 0;
+  g_ram.allemeraldscheatcounter = 0;
+  g_ram.specmode = 0;
+  g_ram.demotimer = 359;
+  if (g_ram.cartridge == 0) {
     s3kopening();
   }
   else {
@@ -370,83 +370,83 @@ void opening() {
 
 // 006dc199
 static void s3kopening() {
-  unsigned char* p_decompressed = unlze(g_mdRam.decompressed, s3opening_frame1_cg, 0);
-  copy_data_vram(g_mdRam.decompressed, 0, (p_decompressed - g_mdRam.decompressed) / 2);
-  mapdevr((unsigned short*)&g_mdRam.decompressed[0x8000], s3opening_frame1_map, 0);
-  if (!BIT_7_IS_SET(g_mdRam.mdstatus) && g_sonic3Alone == 0) {
-    *((unsigned long*)&g_mdRam.decompressed[0x83AC]) = 0;
+  unsigned char* p_decompressed = unlze(g_ram.decompressed, s3opening_frame1_cg, 0);
+  copy_data_vram(g_ram.decompressed, 0, (p_decompressed - g_ram.decompressed) / 2);
+  mapdevr((unsigned short*)&g_ram.decompressed[0x8000], s3opening_frame1_map, 0);
+  if (!BIT_7_IS_SET(g_ram.mdstatus) && g_sonic3Alone == 0) {
+    *((unsigned long*)&g_ram.decompressed[0x83AC]) = 0;
   }
-  copy_map_vram((unsigned short*)&g_mdRam.decompressed[0x8000], 0xC000, 27, 39);
-  memcpy(g_mdRam.colorwk2, s3opening_frame1_color, 32);
-  g_mdRam.demotimer = 240;
+  copy_map_vram((unsigned short*)&g_ram.decompressed[0x8000], 0xC000, 27, 39);
+  memcpy(g_ram.colorwk2, s3opening_frame1_color, 32);
+  g_ram.demotimer = 240;
   fadein();
   bgmset(255);
-  g_mdRam.demotimer = 180;
+  g_ram.demotimer = 180;
 
   do {
-    g_mdRam.int_flg = 20;
+    g_ram.int_flg = 20;
     vInt();
-    if (IS_BUTTON_PRESSED(g_mdRam.swdata1, PAD_S)) break;
-  } while (g_mdRam.demotimer != 0);
+    if (IS_BUTTON_PRESSED(g_ram.swdata1, PAD_S)) break;
+  } while (g_ram.demotimer != 0);
 
   bgmset(254);
-  unsigned short* p_colorwk = g_mdRam.colorwk;
+  unsigned short* p_colorwk = g_ram.colorwk;
 
   for (int i = 0; i < 4; ++i) {
-    g_mdRam.int_flg = 2;
+    g_ram.int_flg = 2;
     memcpy(p_colorwk, s3opening_transition_color, 14);
     p_colorwk += 7;
   }
 
   bgmset(37);
   load_frames();
-  g_mdRam.demotimer = 750;
-  g_mdRam.openinganimframe = 12;
+  g_ram.demotimer = 750;
+  g_ram.openinganimframe = 12;
 
   for (int i = 0; i < 64; ++i) {
-    g_mdRam.colorwk[i] = 0xEEE;
+    g_ram.colorwk[i] = 0xEEE;
   }
 
-  g_mdRam.openinganimdelay = 3;
-  g_mdRam.int_flg = 4;
+  g_ram.openinganimdelay = 3;
+  g_ram.int_flg = 4;
   vInt();
-  p_decompressed = unlze(g_mdRam.decompressed, s3opening_frame13_cg, 0);
-  copy_data_vram(g_mdRam.decompressed, 0, (p_decompressed - g_mdRam.decompressed) / 2);
-  mapdevr((unsigned short*)&g_mdRam.decompressed[0x8000], s3opening_frame13_map, 0x8000);
-  copy_map_vram((unsigned short*)&g_mdRam.decompressed[0x8000], 0xC000, 27, 39);
-  mapdevr((unsigned short*)&g_mdRam.decompressed[0x8000], s3opening_frame14_map, 0x4000);
-  copy_map_vram((unsigned short*)&g_mdRam.decompressed[0x8000], 0xE000, 27, 39);
-  g_mdRam.int_flg = 4;
+  p_decompressed = unlze(g_ram.decompressed, s3opening_frame13_cg, 0);
+  copy_data_vram(g_ram.decompressed, 0, (p_decompressed - g_ram.decompressed) / 2);
+  mapdevr((unsigned short*)&g_ram.decompressed[0x8000], s3opening_frame13_map, 0x8000);
+  copy_map_vram((unsigned short*)&g_ram.decompressed[0x8000], 0xC000, 27, 39);
+  mapdevr((unsigned short*)&g_ram.decompressed[0x8000], s3opening_frame14_map, 0x4000);
+  copy_map_vram((unsigned short*)&g_ram.decompressed[0x8000], 0xE000, 27, 39);
+  g_ram.int_flg = 4;
   vInt();
-  memcpy(g_mdRam.colorwk2, s3opening_main_color, sizeof(s3opening_main_color));
-  bitdevr((unsigned long*)&g_mdVram[0xA000], s3opening_banner_cg, g_mdRam.bitdevwk);
-  bitdevr((unsigned long*)&g_mdVram[0xD000], s3opening_text_cg, g_mdRam.bitdevwk);
-  bitdevr((unsigned long*)&g_mdVram[0xD4C0], DAT_006e0340, g_mdRam.bitdevwk);
-  bitdevr((unsigned long*)&g_mdVram[0x8000], s3opening_sonicsprites_cg, g_mdRam.bitdevwk);
+  memcpy(g_ram.colorwk2, s3opening_main_color, sizeof(s3opening_main_color));
+  bitdevr((unsigned long*)&g_mdVram[0xA000], s3opening_banner_cg, g_ram.bitdevwk);
+  bitdevr((unsigned long*)&g_mdVram[0xD000], s3opening_text_cg, g_ram.bitdevwk);
+  bitdevr((unsigned long*)&g_mdVram[0xD4C0], DAT_006e0340, g_ram.bitdevwk);
+  bitdevr((unsigned long*)&g_mdVram[0x8000], s3opening_sonicsprites_cg, g_ram.bitdevwk);
   if (g_sonic3Alone == 0) {
-    bitdevr((unsigned long*)&g_mdVram[0x9800], s3kopening_andknuckles_cg, g_mdRam.bitdevwk);
+    bitdevr((unsigned long*)&g_mdVram[0x9800], s3kopening_andknuckles_cg, g_ram.bitdevwk);
   }
-  g_mdRam.actwk[0].r_ptr = &s3banner_init;
-  g_mdRam.actwk[1].r_ptr = &selection_init;
-  g_mdRam.actwk[3].r_ptr = &s3copyright_init;
-  g_mdRam.actwk[4].r_ptr = &sonicfinger_init;
-  g_mdRam.actwk[5].r_ptr = &sonicwink_init;
-  g_mdRam.actwk[6].r_ptr = &tornado_init;
+  g_ram.actwk[0].r_ptr = &s3banner_init;
+  g_ram.actwk[1].r_ptr = &selection_init;
+  g_ram.actwk[3].r_ptr = &s3copyright_init;
+  g_ram.actwk[4].r_ptr = &sonicfinger_init;
+  g_ram.actwk[5].r_ptr = &sonicwink_init;
+  g_ram.actwk[6].r_ptr = &tornado_init;
   if (g_sonic3Alone == 0) {
-    g_mdRam.actwk[7].r_ptr = &andknuckles_init;
+    g_ram.actwk[7].r_ptr = &andknuckles_init;
   }
-  g_mdRam.openinganimdelay = 0;
+  g_ram.openinganimdelay = 0;
   unsigned short swdata;
 
   do {
     do {
-      g_mdRam.int_flg = 4;
+      g_ram.int_flg = 4;
       vInt();
       action();
       patset();
-    } while (g_mdRam.actwk[2].r_ptr == 0);
+    } while (g_ram.actwk[2].r_ptr == 0);
 
-    if (g_mdRam.demotimer == 0) {
+    if (g_ram.demotimer == 0) {
       if (g_sonic3Alone == 0) {
         plays3kdemo();
       }
@@ -455,38 +455,38 @@ static void s3kopening() {
       }
       return;
     }
-    swdata = g_mdRam.swdata1;
+    swdata = g_ram.swdata1;
     if (g_sonic3Alone == 0) {
-      swdata |= g_mdRam.swdata2;
+      swdata |= g_ram.swdata2;
     }
   } while (!IS_BUTTON_PRESSED(swdata, PAD_S));
 
-  g_mdRam.gmmode = 12;
-  g_mdRam.pl_suu = 3;
-  g_mdRam.pl2_suu = 3;
-  g_mdRam.plring = 0;
-  g_mdRam.pltime.hours = 0;
-  g_mdRam.pltime.minutes = 0;
-  g_mdRam.pltime.seconds = 0;
-  g_mdRam.pltime.frames = 0;
-  g_mdRam.plscore = 0;
-  g_mdRam.pl2ring = 0;
-  g_mdRam.DAT_08fffed2 = 0;
-  g_mdRam.DAT_08fffed6 = 0;
-  g_mdRam.plcontinuecnt = 0;
-  g_mdRam.extrascore = 5000;
-  g_mdRam.extrascore2 = 5000;
+  g_ram.gmmode = 12;
+  g_ram.pl_suu = 3;
+  g_ram.pl2_suu = 3;
+  g_ram.plring = 0;
+  g_ram.pltime.hours = 0;
+  g_ram.pltime.minutes = 0;
+  g_ram.pltime.seconds = 0;
+  g_ram.pltime.frames = 0;
+  g_ram.plscore = 0;
+  g_ram.pl2ring = 0;
+  g_ram.DAT_08fffed2 = 0;
+  g_ram.DAT_08fffed6 = 0;
+  g_ram.plcontinuecnt = 0;
+  g_ram.extrascore = 5000;
+  g_ram.extrascore2 = 5000;
   soundset(225);
 
-  switch (g_mdRam.openingoption) {
+  switch (g_ram.openingoption) {
     case 0:
-      g_mdRam.gmmode = 76;
+      g_ram.gmmode = 76;
       break;
     case 1:
-      g_mdRam.gmmode = 56;
+      g_ram.gmmode = 56;
       break;
     case 2:
-      g_mdRam.gmmode = 40;
+      g_ram.gmmode = 40;
       break;
   }
 }
@@ -495,13 +495,13 @@ static void s3kopening() {
 // 006dc7a7
 static void plays3kdemo() {
   soundset(225);
-  g_mdRam.demoid = g_mdRam.nextdemoid;
-  short stageno = s3kdemostagenos[g_mdRam.nextdemoid & 7];
-  g_mdRam.stageno = stageno;
-  g_mdRam.stageno_i = stageno;
-  g_mdRam.stageno_s = stageno;
-  unsigned short nextdemoid = g_mdRam.nextdemoid + 1;
-  if (g_mdRam.cartridge == 0) {
+  g_ram.demoid = g_ram.nextdemoid;
+  short stageno = s3kdemostagenos[g_ram.nextdemoid & 7];
+  g_ram.stageno = stageno;
+  g_ram.stageno_i = stageno;
+  g_ram.stageno_s = stageno;
+  unsigned short nextdemoid = g_ram.nextdemoid + 1;
+  if (g_ram.cartridge == 0) {
     if (nextdemoid == 3) {
       nextdemoid = 4;
     }
@@ -512,31 +512,31 @@ static void plays3kdemo() {
   else if (nextdemoid >= 3) {
     nextdemoid = 0;
   }
-  g_mdRam.nextdemoid = nextdemoid;
+  g_ram.nextdemoid = nextdemoid;
   if (stageno < 0) {
-    g_mdRam.gmmode = 52;
-    g_mdRam.DAT_08fffe16 = 1;
-    g_mdRam.cartridgespec = 1;
-    SET_ACT(g_mdRam.stageno, 7);
-    memset(g_mdRam.specprogress, 0, sizeof(g_mdRam.specprogress));
+    g_ram.gmmode = 52;
+    g_ram.DAT_08fffe16 = 1;
+    g_ram.cartridgespec = 1;
+    SET_ACT(g_ram.stageno, 7);
+    memset(g_ram.specprogress, 0, sizeof(g_ram.specprogress));
   }
   else {
-    g_mdRam.gmmode = 8;
+    g_ram.gmmode = 8;
   }
-  g_mdRam.demoflag = 1;
-  g_mdRam.pl_suu = 3;
-  g_mdRam.pl2_suu = 3;
-  g_mdRam.plring = 0;
-  g_mdRam.pltime.hours = 0;
-  g_mdRam.pltime.minutes = 0;
-  g_mdRam.pltime.seconds = 0;
-  g_mdRam.pltime.frames = 0;
-  g_mdRam.plscore = 0;
-  g_mdRam.pl2ring = 0;
-  g_mdRam.DAT_08fffed2 = 0;
-  g_mdRam.DAT_08fffed6 = 0;
-  g_mdRam.extrascore = 5000;
-  g_mdRam.extrascore2 = 5000;
+  g_ram.demoflag = 1;
+  g_ram.pl_suu = 3;
+  g_ram.pl2_suu = 3;
+  g_ram.plring = 0;
+  g_ram.pltime.hours = 0;
+  g_ram.pltime.minutes = 0;
+  g_ram.pltime.seconds = 0;
+  g_ram.pltime.frames = 0;
+  g_ram.plscore = 0;
+  g_ram.pl2ring = 0;
+  g_ram.DAT_08fffed2 = 0;
+  g_ram.DAT_08fffed6 = 0;
+  g_ram.extrascore = 5000;
+  g_ram.extrascore2 = 5000;
 }
 
 
@@ -599,7 +599,7 @@ static void s3banner_move0(sprite_status* p_actwk) {
     case 0:
       if (p_actwk->yspeed == -91) {
         p_actwk->r_ptr = &s3banner_move1;
-        g_mdRam.actwk[2].r_ptr = &s3bannertm_init;
+        g_ram.actwk[2].r_ptr = &s3bannertm_init;
         break;
       }
       // fall-through
@@ -624,8 +624,8 @@ static void s3banner_move0(sprite_status* p_actwk) {
   }
   util__assign_high(&p_actwk->yposi, yposi);
   if (g_sonic3Alone == 0) {
-    if (g_mdRam.vscrolla != 16) {
-      ++g_mdRam.vscrolla;
+    if (g_ram.vscrolla != 16) {
+      ++g_ram.vscrolla;
     }
   }
   s3banner_move1(p_actwk);
@@ -639,7 +639,7 @@ static void s3banner_move1(sprite_status* p_actwk) {
     p_actwk->patcnt += 4;
     p_actwk->patcnt &= 0x1C;
   }
-  memcpy(&g_mdRam.colorwk2[45], &s3opening_water_color[p_actwk->patcnt], 4);
+  memcpy(&g_ram.colorwk2[45], &s3opening_water_color[p_actwk->patcnt], 4);
   actionsub(p_actwk);
 }
 
@@ -668,7 +668,7 @@ static void s3bannertm_init(sprite_status* p_actwk) {
 
 // 006dd3f9
 static void s3bannertm_move(sprite_status* p_actwk) {
-  if (BIT_7_IS_SET(g_mdRam.mdstatus) || g_sonic3Alone != 0) {
+  if (BIT_7_IS_SET(g_ram.mdstatus) || g_sonic3Alone != 0) {
     actionsub(p_actwk);
   }
 }
@@ -689,7 +689,7 @@ static void andknuckles_init(sprite_status* p_actwk) {
 
 // 006dd471
 static void andknuckles_move(sprite_status* p_actwk) {
-  util__assign_high(&p_actwk->yposi, LONG_HIGH(g_mdRam.actwk[0].yposi) + 92);
+  util__assign_high(&p_actwk->yposi, LONG_HIGH(g_ram.actwk[0].yposi) + 92);
   actionsub(p_actwk);
 }
 
@@ -734,8 +734,8 @@ static void selection_init(sprite_status* p_actwk) {
   util__assign_high(&p_actwk->yposi, 320);
   p_actwk->patbase = s3opening_selectioncopyright_pat;
   p_actwk->sproffset = 0xC680;
-  g_mdRam.openingoption &= 1;
-  p_actwk->patno = g_mdRam.openingoption;
+  g_ram.openingoption &= 1;
+  p_actwk->patno = g_ram.openingoption;
   p_actwk->r_ptr = &selection_move;
   selection_move(p_actwk);
 }
@@ -743,23 +743,23 @@ static void selection_init(sprite_status* p_actwk) {
 
 // 006dd650
 static void selection_move(sprite_status* p_actwk) {
-  unsigned char wk = g_mdRam.openingoption;
-  unsigned short swdata = g_mdRam.swdata1;
+  unsigned char wk = g_ram.openingoption;
+  unsigned short swdata = g_ram.swdata1;
   if (g_sonic3Alone == 0) {
-    swdata |= g_mdRam.swdata2;
+    swdata |= g_ram.swdata2;
   }
   if (g_bTrial == 0 || g_sonic3Alone != 0) {
     if (IS_BUTTON_PRESSED(swdata, PAD_U)) {
       if (wk-- == 0) {
         wk = 2;
-        if (g_mdRam.levelselectcheat == 0) {
+        if (g_ram.levelselectcheat == 0) {
           wk = 1;
         }
       }
     }
     if (IS_BUTTON_PRESSED(swdata, PAD_D)) {
       ++wk;
-      if (g_mdRam.levelselectcheat == 0) {
+      if (g_ram.levelselectcheat == 0) {
         wk &= 1;
       }
       if (wk >= 3) {
@@ -768,7 +768,7 @@ static void selection_move(sprite_status* p_actwk) {
     }
   }
   p_actwk->patno = wk;
-  g_mdRam.openingoption = wk;
+  g_ram.openingoption = wk;
   if (IS_BUTTON_PRESSED(swdata, PAD_U | PAD_D)) {
     soundset(91);
   }
@@ -793,7 +793,7 @@ static void sonicfinger_init(sprite_status* p_actwk) {
 // 006dd79f
 static void sonicfinger_move(sprite_status* p_actwk) {
   if (g_sonic3Alone == 0) {
-    util__assign_high(&p_actwk->yposi, 220 - g_mdRam.vscrolla);
+    util__assign_high(&p_actwk->yposi, 220 - g_ram.vscrolla);
   }
   patchg(p_actwk, s3opening_sonicfinger_chg);
   actionsub(p_actwk);
@@ -827,7 +827,7 @@ static void sonicwink_init(sprite_status* p_actwk) {
 // 006dd86d
 static void sonicwink_move(sprite_status* p_actwk) {
   if (g_sonic3Alone == 0) {
-    util__assign_high(&p_actwk->yposi, 200 - g_mdRam.vscrolla);
+    util__assign_high(&p_actwk->yposi, 200 - g_ram.vscrolla);
   }
   patchg2(p_actwk, s3opening_sonicwink_chg);
   actionsub(p_actwk);
@@ -1046,129 +1046,129 @@ static sprite_pattern s3opening_tornado_sp05 = {
 
 // 006dde88
 static void skopening() {
-  unsigned char* p_decompressed = unlze(g_mdRam.decompressed, skopening_bg_cg, 0);
+  unsigned char* p_decompressed = unlze(g_ram.decompressed, skopening_bg_cg, 0);
   p_decompressed = unlze(p_decompressed, skopening_segalogo_cg, 0);
   unlze(p_decompressed, skopening_sonicfalling_cg, 0);
-  copy_data_vram(g_mdRam.decompressed, 0, 0xE20);
-  copy_data_vram(&g_mdRam.decompressed[0x1C40], 0x9380, 0x1640);
-  unlze(&g_mdRam.decompressed[0x4E00], skopening_deathegg_cg, 0);
-  copy_data_vram(&g_mdRam.decompressed[0x4E00], 0xD000, 0x720);
-  unlze(&g_mdRam.decompressed[0x5D00], skopening_mountain_cg, 0);
-  copy_data_vram(&g_mdRam.decompressed[0x5D00], 0xF400, 336);
-  mapdevr((unsigned short*)&g_mdRam.decompressed[0x7400], skopening_segalogo_map, 0x849C);
-  if (!(g_mdRam.mdstatus & 0x80)) {
-    *((unsigned short*)&g_mdRam.decompressed[0x775C]) = 0xA49C;
-    *((unsigned short*)&g_mdRam.decompressed[0x775E]) = 0xA49C;
-    *((unsigned short*)&g_mdRam.decompressed[0x7760]) = 0xA49C;
-    *((unsigned short*)&g_mdRam.decompressed[0x77AC]) = 0xA49C;
-    *((unsigned short*)&g_mdRam.decompressed[0x77AE]) = 0xA49C;
-    *((unsigned short*)&g_mdRam.decompressed[0x77B0]) = 0xA49C;
+  copy_data_vram(g_ram.decompressed, 0, 0xE20);
+  copy_data_vram(&g_ram.decompressed[0x1C40], 0x9380, 0x1640);
+  unlze(&g_ram.decompressed[0x4E00], skopening_deathegg_cg, 0);
+  copy_data_vram(&g_ram.decompressed[0x4E00], 0xD000, 0x720);
+  unlze(&g_ram.decompressed[0x5D00], skopening_mountain_cg, 0);
+  copy_data_vram(&g_ram.decompressed[0x5D00], 0xF400, 336);
+  mapdevr((unsigned short*)&g_ram.decompressed[0x7400], skopening_segalogo_map, 0x849C);
+  if (!(g_ram.mdstatus & 0x80)) {
+    *((unsigned short*)&g_ram.decompressed[0x775C]) = 0xA49C;
+    *((unsigned short*)&g_ram.decompressed[0x775E]) = 0xA49C;
+    *((unsigned short*)&g_ram.decompressed[0x7760]) = 0xA49C;
+    *((unsigned short*)&g_ram.decompressed[0x77AC]) = 0xA49C;
+    *((unsigned short*)&g_ram.decompressed[0x77AE]) = 0xA49C;
+    *((unsigned short*)&g_ram.decompressed[0x77B0]) = 0xA49C;
   }
-  copy_map_vram((unsigned short*)&g_mdRam.decompressed[0x7400], 0xC000, 27, 39);
-  mapdevr((unsigned short*)&g_mdRam.decompressed[0x7CC0], skopening_bg_map, 0);
-  copy_bgmap_vram((unsigned short*)&g_mdVram[0xE000], (unsigned short*)&g_mdRam.decompressed[0x7CC0]);
-  mapdevr((unsigned short*)&g_mdRam.decompressed[0x8580], skopening_frame1_map, 0x80E2);
-  mapdevr((unsigned short*)&g_mdRam.decompressed[0x8E40], skopening_frame2_map, 0x80E2);
-  mapdevr((unsigned short*)&g_mdRam.decompressed[0x9700], skopening_frame3_map, 0x80E2);
-  mapdevr((unsigned short*)&g_mdRam.decompressed[0x9FC0], skopening_frame4_map, 0x80E2);
-  unlze(&g_mdRam.decompressed[0x4800], skopening_hands_cg, 0);
+  copy_map_vram((unsigned short*)&g_ram.decompressed[0x7400], 0xC000, 27, 39);
+  mapdevr((unsigned short*)&g_ram.decompressed[0x7CC0], skopening_bg_map, 0);
+  copy_bgmap_vram((unsigned short*)&g_mdVram[0xE000], (unsigned short*)&g_ram.decompressed[0x7CC0]);
+  mapdevr((unsigned short*)&g_ram.decompressed[0x8580], skopening_frame1_map, 0x80E2);
+  mapdevr((unsigned short*)&g_ram.decompressed[0x8E40], skopening_frame2_map, 0x80E2);
+  mapdevr((unsigned short*)&g_ram.decompressed[0x9700], skopening_frame3_map, 0x80E2);
+  mapdevr((unsigned short*)&g_ram.decompressed[0x9FC0], skopening_frame4_map, 0x80E2);
+  unlze(&g_ram.decompressed[0x4800], skopening_hands_cg, 0);
 
   for (int line = 0; line < 4; ++line) {
-    g_mdRam.colorwk2[line * 16] = 0;
+    g_ram.colorwk2[line * 16] = 0;
 
     for (int i = 0; i < 15; ++i) {
-      g_mdRam.colorwk2[line * 16 + i + 1] = 0xEEE;
+      g_ram.colorwk2[line * 16 + i + 1] = 0xEEE;
     }
   }
 
-  memcpy(&g_mdRam.colorwk2[16], &skopening_color[16], 32);
-  g_mdRam.demotimer = 180;
-  if (BIT_6_IS_SET(g_mdRam.mdstatus)) {
-    g_mdRam.demotimer = 150;
+  memcpy(&g_ram.colorwk2[16], &skopening_color[16], 32);
+  g_ram.demotimer = 180;
+  if (BIT_6_IS_SET(g_ram.mdstatus)) {
+    g_ram.demotimer = 150;
   }
   fadein();
   bgmset(255);
 
   do {
-    g_mdRam.int_flg = 20;
+    g_ram.int_flg = 20;
     vInt();
-    if (IS_BUTTON_PRESSED(g_mdRam.swdata1, PAD_S)) break;
-  } while (g_mdRam.demotimer != 0);
+    if (IS_BUTTON_PRESSED(g_ram.swdata1, PAD_S)) break;
+  } while (g_ram.demotimer != 0);
 
   bgmset(254);
-  memcpy(g_mdRam.colorwk2, skopening_color, sizeof(skopening_color));
+  memcpy(g_ram.colorwk2, skopening_color, sizeof(skopening_color));
   unlze_moduled(&g_mdVram[0x1C40], skopening_sonicknuckles_cg);
-  g_mdRam.colorcnt = 63;
-  g_mdRam.colorcycle = 22;
-  g_mdRam.actwk[0].r_ptr = &sonicfalling_init;
-  g_mdRam.actwk[1].r_ptr = &deathegg_init;
-  g_mdRam.actwk[2].r_ptr = &mountain_init;
+  g_ram.colorcnt = 63;
+  g_ram.colorcycle = 22;
+  g_ram.actwk[0].r_ptr = &sonicfalling_init;
+  g_ram.actwk[1].r_ptr = &deathegg_init;
+  g_ram.actwk[2].r_ptr = &mountain_init;
   bgmset(37);
-  g_mdRam.pl_suu = 3;
-  g_mdRam.demotimer = 1080;
-  if (BIT_6_IS_SET(g_mdRam.mdstatus)) {
-    g_mdRam.demotimer = 900;
+  g_ram.pl_suu = 3;
+  g_ram.demotimer = 1080;
+  if (BIT_6_IS_SET(g_ram.mdstatus)) {
+    g_ram.demotimer = 900;
   }
 
 LAB_006de36c:
-  g_mdRam.int_flg = 26;
+  g_ram.int_flg = 26;
   vInt();
-  if (g_mdRam.colorcycle != 0) {
-    --g_mdRam.colorcycle;
+  if (g_ram.colorcycle != 0) {
+    --g_ram.colorcycle;
     flashin1();
   }
   action();
   patset();
   deform_bg();
-  if (!IS_BUTTON_PRESSED(g_mdRam.swdata1, PAD_S)) {
-    if (g_mdRam.actwk[3].r_ptr == 0) {
+  if (!IS_BUTTON_PRESSED(g_ram.swdata1, PAD_S)) {
+    if (g_ram.actwk[3].r_ptr == 0) {
       goto LAB_006de36c;
     }
     else {
       goto LAB_006de522;
     }
   }
-  if (g_mdRam.colorcycle != 0) {
+  if (g_ram.colorcycle != 0) {
     goto LAB_006de36c;
   }
 
-  skopeninganims_init(&g_mdRam.actwk[4]);
-  g_mdRam.actwk[1].r_ptr = &deathegg_move1;
-  util__assign_high(&g_mdRam.actwk[1].actfree.skopening_deathegg.xposi, 320);
-  util__assign_high(&g_mdRam.actwk[1].actfree.skopening_deathegg.yposi, 112);
-  g_mdRam.scr_evta = 3;
-  g_mdRam.scr_shake_flg = 0;
-  g_mdRam.vscrollb = 256;
-  util__assign_high(&g_mdRam.scra_v_posit, 256);
-  util__assign_high(&g_mdRam.vs_scra_v_posit, 256);
-  memcpy(&g_mdRam.colorwk[16], skopening_knuckles_color, sizeof(skopening_knuckles_color));
-  memcpy(&g_mdRam.colorwk2[16], skopening_knuckles_color, sizeof(skopening_knuckles_color));
+  skopeninganims_init(&g_ram.actwk[4]);
+  g_ram.actwk[1].r_ptr = &deathegg_move1;
+  util__assign_high(&g_ram.actwk[1].actfree.skopening_deathegg.xposi, 320);
+  util__assign_high(&g_ram.actwk[1].actfree.skopening_deathegg.yposi, 112);
+  g_ram.scr_evta = 3;
+  g_ram.scr_shake_flg = 0;
+  g_ram.vscrollb = 256;
+  util__assign_high(&g_ram.scra_v_posit, 256);
+  util__assign_high(&g_ram.vs_scra_v_posit, 256);
+  memcpy(&g_ram.colorwk[16], skopening_knuckles_color, sizeof(skopening_knuckles_color));
+  memcpy(&g_ram.colorwk2[16], skopening_knuckles_color, sizeof(skopening_knuckles_color));
   deform_bg();
 
 LAB_006de522:
-  g_mdRam.int_flg = 26;
+  g_ram.int_flg = 26;
   vInt();
-  copy_map_vram((unsigned short*)&g_mdRam.decompressed[0x7CC0], 0xE000, 27, 39);
-  sonicfalling_move1(&g_mdRam.actwk[0]);
+  copy_map_vram((unsigned short*)&g_ram.decompressed[0x7CC0], 0xE000, 27, 39);
+  sonicfalling_move1(&g_ram.actwk[0]);
 
   do {
     do {
-      g_mdRam.int_flg = 26;
+      g_ram.int_flg = 26;
       vInt();
-      if (g_mdRam.colorcycle != 0) {
-        --g_mdRam.colorcycle;
+      if (g_ram.colorcycle != 0) {
+        --g_ram.colorcycle;
         flashin1();
       }
       action();
       patset();
       deform_bg();
-    } while (g_mdRam.actwk[5].r_ptr == 0);
+    } while (g_ram.actwk[5].r_ptr == 0);
 
-    if (g_mdRam.demotimer == 0) {
+    if (g_ram.demotimer == 0) {
       playskdemo();
       return;
     }
-  } while (!IS_BUTTON_PRESSED(g_mdRam.swdata1, PAD_S));
+  } while (!IS_BUTTON_PRESSED(g_ram.swdata1, PAD_S));
 }
 
 
@@ -1209,26 +1209,26 @@ static void sonicfalling_move0(sprite_status* p_actwk) {
     p_actwk->yposi += SHORT_TO_LONG_HIGH(1);
   }
 
-  switch (g_mdRam.scr_evta) {
+  switch (g_ram.scr_evta) {
     case 3:
       p_actwk->sproffset |= 0x8000;
-      if (util__longhigh_to_short(g_mdRam.scra_v_posit) >= 224) break;
+      if (util__longhigh_to_short(g_ram.scra_v_posit) >= 224) break;
 
-      g_mdRam.scra_v_posit += SHORT_TO_LONG_HIGH(8);
-      copy_mapline_vram(&g_mdVram[0xC000], &g_mdRam.decompressed[0x8580], util__longhigh_to_short(g_mdRam.scra_v_posit));
+      g_ram.scra_v_posit += SHORT_TO_LONG_HIGH(8);
+      copy_mapline_vram(&g_mdVram[0xC000], &g_ram.decompressed[0x8580], util__longhigh_to_short(g_ram.scra_v_posit));
       // fall-through
     default:
       actionsub(p_actwk);
       return;
   }
 
-  if (util__longhigh_to_short(g_mdRam.scra_v_posit) == 224) {
-    copy_map_vram((unsigned short*)&g_mdRam.decompressed[0x8E40], 0xC000, 27, 39);
+  if (util__longhigh_to_short(g_ram.scra_v_posit) == 224) {
+    copy_map_vram((unsigned short*)&g_ram.decompressed[0x8E40], 0xC000, 27, 39);
     p_actwk->pattim = 6;
     unlze_moduled(&g_mdVram[0x8C40], skopening_soniclanding_cg);
   }
-  if (util__longhigh_to_short(g_mdRam.scra_v_posit) != 256) {
-    g_mdRam.scra_v_posit += SHORT_TO_LONG_HIGH(8);
+  if (util__longhigh_to_short(g_ram.scra_v_posit) != 256) {
+    g_ram.scra_v_posit += SHORT_TO_LONG_HIGH(8);
   }
   else {
     p_actwk->r_ptr = &sonicfalling_wait0;
@@ -1241,7 +1241,7 @@ static void sonicfalling_move0(sprite_status* p_actwk) {
 static void sonicfalling_wait0(sprite_status* p_actwk) {
   if (p_actwk->pattim-- != 0) return;
 
-  copy_map_vram((unsigned short*)&g_mdRam.decompressed[0x9700], 0xC000, 27, 39);
+  copy_map_vram((unsigned short*)&g_ram.decompressed[0x9700], 0xC000, 27, 39);
   p_actwk->pattim = 4;
   p_actwk->r_ptr = &sonicfalling_wait1;
   sonicfalling_wait1(p_actwk);
@@ -1258,11 +1258,11 @@ static void sonicfalling_wait1(sprite_status* p_actwk) {
 
 // 006debf9
 static void sonicfalling_move1(sprite_status* p_actwk) {
-  copy_map_vram((unsigned short*)&g_mdRam.decompressed[0x9FC0], 0xC000, 27, 39);
+  copy_map_vram((unsigned short*)&g_ram.decompressed[0x9FC0], 0xC000, 27, 39);
   unlze_moduled(&g_mdVram[0x9DC0], skopening_banner_cg);
   unlze_moduled(&g_mdVram[0x8C40], skopening_menu_cg);
-  g_mdRam.actwk[3].r_ptr = &skbanner_init;
-  g_mdRam.actwk[3].pattim = 30;
+  g_ram.actwk[3].r_ptr = &skbanner_init;
+  g_ram.actwk[3].pattim = 30;
   p_actwk->r_ptr = 0;
 }
 
@@ -1285,19 +1285,19 @@ static void deathegg_init(sprite_status* p_actwk) {
 static void deathegg_move0(sprite_status* p_actwk) {
   if (util__longhigh_to_short(p_actwk->yposi) != 240) {
     p_actwk->yposi += 0x8000;
-    if (util__longhigh_to_short(g_mdRam.vs_scra_v_posit) != 256) {
-      g_mdRam.vs_scra_v_posit += SHORT_TO_LONG_HIGH(1);
-      copy_mapline_vram(&g_mdVram[0xE000], &g_mdRam.decompressed[0x7CC0], util__longhigh_to_short(g_mdRam.vs_scra_v_posit));
+    if (util__longhigh_to_short(g_ram.vs_scra_v_posit) != 256) {
+      g_ram.vs_scra_v_posit += SHORT_TO_LONG_HIGH(1);
+      copy_mapline_vram(&g_mdVram[0xE000], &g_ram.decompressed[0x7CC0], util__longhigh_to_short(g_ram.vs_scra_v_posit));
     }
     actionsub(p_actwk);
   }
   else {
     p_actwk->actfree.skopening_deathegg.xposi = p_actwk->xposi;
     p_actwk->actfree.skopening_deathegg.yposi = p_actwk->yposi;
-    util__assign_low(&g_mdRam.vs_scra_v_posit, 0x8000);
-    g_mdRam.DAT_08ffeed2 = 34;
-    g_mdRam.scr_evta = 1;
-    g_mdRam.scr_shake_flg = 30;
+    util__assign_low(&g_ram.vs_scra_v_posit, 0x8000);
+    g_ram.DAT_08ffeed2 = 34;
+    g_ram.scr_evta = 1;
+    g_ram.scr_shake_flg = 30;
     p_actwk->r_ptr = &deathegg_move1;
     deathegg_move1(p_actwk);
   }
@@ -1307,16 +1307,16 @@ static void deathegg_move0(sprite_status* p_actwk) {
 // 006dedab
 static void deathegg_move1(sprite_status* p_actwk) {
   shake_screen();
-  if (util__longhigh_to_short(g_mdRam.vs_scra_v_posit) != 256) {
+  if (util__longhigh_to_short(g_ram.vs_scra_v_posit) != 256) {
     p_actwk->actfree.skopening_deathegg.yposi -= 0x8000;
-    g_mdRam.vs_scra_v_posit += 0x8000;
-    copy_mapline_vram(&g_mdVram[0xE000], &g_mdRam.decompressed[0x7CC0], util__longhigh_to_short(g_mdRam.vs_scra_v_posit));
+    g_ram.vs_scra_v_posit += 0x8000;
+    copy_mapline_vram(&g_mdVram[0xE000], &g_ram.decompressed[0x7CC0], util__longhigh_to_short(g_ram.vs_scra_v_posit));
   }
   short xposi = util__longhigh_to_short(p_actwk->actfree.skopening_deathegg.xposi);
   short yposi = util__longhigh_to_short(p_actwk->actfree.skopening_deathegg.yposi);
-  if (g_mdRam.scr_shake_flg != 0) {
-    xposi -= util__longhigh_to_short(g_mdRam.vs_scra_h_posit_copy);
-    yposi -= util__longhigh_to_short(g_mdRam.vs_scra_v_posit_copy);
+  if (g_ram.scr_shake_flg != 0) {
+    xposi -= util__longhigh_to_short(g_ram.vs_scra_h_posit_copy);
+    yposi -= util__longhigh_to_short(g_ram.vs_scra_v_posit_copy);
   }
   util__assign_high(&p_actwk->xposi, xposi);
   util__assign_high(&p_actwk->yposi, yposi);
@@ -1340,11 +1340,11 @@ static void mountain_init(sprite_status* p_actwk) {
 static void mountain_move(sprite_status* p_actwk) {
   short xposi = 320;
   short yposi = 424;
-  xposi -= util__longhigh_to_short(g_mdRam.vs_scra_h_posit);
-  yposi -= util__longhigh_to_short(g_mdRam.vs_scra_v_posit);
-  if (g_mdRam.scr_shake_flg != 0) {
-    xposi -= util__longhigh_to_short(g_mdRam.vs_scra_h_posit_copy);
-    yposi -= util__longhigh_to_short(g_mdRam.vs_scra_v_posit_copy);
+  xposi -= util__longhigh_to_short(g_ram.vs_scra_h_posit);
+  yposi -= util__longhigh_to_short(g_ram.vs_scra_v_posit);
+  if (g_ram.scr_shake_flg != 0) {
+    xposi -= util__longhigh_to_short(g_ram.vs_scra_h_posit_copy);
+    yposi -= util__longhigh_to_short(g_ram.vs_scra_v_posit_copy);
   }
   util__assign_high(&p_actwk->xposi, xposi);
   util__assign_high(&p_actwk->yposi, yposi);
@@ -1390,11 +1390,11 @@ static void skbanner_move(sprite_status* p_actwk) {
     case 0:
       if (p_actwk->yspeed == -91) {
         p_actwk->r_ptr = &actionsub;
-        g_mdRam.actwk[5].r_ptr = &nameroulette_init;
-        g_mdRam.actwk[6].r_ptr = &chibi_init;
-        g_mdRam.actwk[7].r_ptr = &skbannertm_init;
-        g_mdRam.actwk[8].r_ptr = &skcopyright_init;
-        bitdevr((unsigned long*)&g_mdVram[0xD000], DAT_006e0411, g_mdRam.bitdevwk);
+        g_ram.actwk[5].r_ptr = &nameroulette_init;
+        g_ram.actwk[6].r_ptr = &chibi_init;
+        g_ram.actwk[7].r_ptr = &skbannertm_init;
+        g_ram.actwk[8].r_ptr = &skcopyright_init;
+        bitdevr((unsigned long*)&g_mdVram[0xD000], DAT_006e0411, g_ram.bitdevwk);
         break;
       }
       // fall-through
@@ -1418,8 +1418,8 @@ static void skbanner_move(sprite_status* p_actwk) {
 
 // 006df1b3
 static void skopeninganims_init(sprite_status* p_actwk) {
-  copy_data_vram(&g_mdRam.decompressed[0x4800], 0x1C60, 48);
-  copy_data_vram(&g_mdRam.decompressed[0x4E40], 0x1CC0, 656);
+  copy_data_vram(&g_ram.decompressed[0x4800], 0x1C60, 48);
+  copy_data_vram(&g_ram.decompressed[0x4E40], 0x1CC0, 656);
   p_actwk->actfree.skopening_anims.sonicsmile_anim[0] = 180;
   p_actwk->r_ptr = &skopeninganims_move;
   skopeninganims_move(p_actwk);
@@ -1430,22 +1430,22 @@ static void skopeninganims_init(sprite_status* p_actwk) {
 static void skopeninganims_move(sprite_status* p_actwk) {
   short offset = skopening_animate(skopening_sonicsmile_anim, p_actwk->actfree.skopening_anims.sonicsmile_anim);
   if (offset >= 0) {
-    copy_data_vram(&g_mdRam.decompressed[0x4800 + offset], 0x1C60, 48);
+    copy_data_vram(&g_ram.decompressed[0x4800 + offset], 0x1C60, 48);
   }
 
   offset = skopening_animate(skopening_sonicfinger_anim, p_actwk->actfree.skopening_anims.sonicfinger_anim);
   if (offset >= 0) {
-    copy_data_vram(&g_mdRam.decompressed[0x4920 + offset], 0x1CC0, 656);
+    copy_data_vram(&g_ram.decompressed[0x4920 + offset], 0x1CC0, 656);
   }
 
   offset = skopening_animate(skopening_knuckleshand1_anim, p_actwk->actfree.skopening_anims.knuckleshand1_anim);
   if (offset >= 0) {
-    copy_data_vram(&g_mdRam.decompressed[0x5880 + offset], 0x21E0, 752);
+    copy_data_vram(&g_ram.decompressed[0x5880 + offset], 0x21E0, 752);
   }
 
   offset = skopening_animate(skopening_knuckleshand2_anim, p_actwk->actfree.skopening_anims.knuckleshand2_anim);
   if (offset >= 0) {
-    copy_data_vram(&g_mdRam.decompressed[0x6A20 + offset], 0x27C0, 320);
+    copy_data_vram(&g_ram.decompressed[0x6A20 + offset], 0x27C0, 320);
   }
 }
 
@@ -1511,8 +1511,8 @@ static void nameroulette_init(sprite_status* p_actwk) {
   p_compoundwk->children[0].yposi = p_compoundwk->yposi;
   p_compoundwk->children[0].reserved = 0;
   p_compoundwk->children[0].patno = 0;
-  g_mdRam.openingoption &= 1;
-  p_actwk->direc1 = g_mdRam.openingoption << 7;
+  g_ram.openingoption &= 1;
+  p_actwk->direc1 = g_ram.openingoption << 7;
   p_actwk->direc2 = 8;
   p_actwk->r_ptr = &nameroulette_move;
   nameroulette_move(p_actwk);
@@ -1521,16 +1521,16 @@ static void nameroulette_init(sprite_status* p_actwk) {
 
 // 006df638
 static void nameroulette_move(sprite_status* p_actwk) {
-  unsigned char optionwk = g_mdRam.openingoption;
+  unsigned char optionwk = g_ram.openingoption;
   if (!(p_actwk->direc1 % 128)) {
-    if (IS_BUTTON_PRESSED(g_mdRam.swdata1, PAD_U)) {
+    if (IS_BUTTON_PRESSED(g_ram.swdata1, PAD_U)) {
       p_actwk->direc1 -= 8;
       p_actwk->direc2 = -8;
       if (optionwk-- == 0) {
         optionwk = 1;
       }
     }
-    if (IS_BUTTON_PRESSED(g_mdRam.swdata1, PAD_D)) {
+    if (IS_BUTTON_PRESSED(g_ram.swdata1, PAD_D)) {
       p_actwk->direc1 += 8;
       p_actwk->direc2 = 8;
       ++optionwk;
@@ -1539,8 +1539,8 @@ static void nameroulette_move(sprite_status* p_actwk) {
         optionwk = 0;
       }
     }
-    g_mdRam.openingoption = optionwk;
-    if (IS_BUTTON_PRESSED(g_mdRam.swdata1, PAD_U | PAD_D)) {
+    g_ram.openingoption = optionwk;
+    if (IS_BUTTON_PRESSED(g_ram.swdata1, PAD_U | PAD_D)) {
       soundset(91);
     }
   }
@@ -1588,8 +1588,8 @@ static void chibi_init(sprite_status* p_actwk) {
   util__assign_high(&p_actwk->yposi, 332);
   p_actwk->patbase = skselectionpat;
   p_actwk->sproffset = 0x8462;
-  p_actwk->mstno = g_mdRam.openingoption;
-  p_actwk->restart = g_mdRam.openingoption;
+  p_actwk->mstno = g_ram.openingoption;
+  p_actwk->restart = g_ram.openingoption;
   p_actwk->patcnt = 1;
   p_actwk->r_ptr = &chibi_move;
   chibi_move(p_actwk);
@@ -1598,7 +1598,7 @@ static void chibi_init(sprite_status* p_actwk) {
 
 // 006dfa12
 static void chibi_move(sprite_status* p_actwk) {
-  p_actwk->mstno = g_mdRam.openingoption;
+  p_actwk->mstno = g_ram.openingoption;
   patchg(p_actwk, chibichg);
   actionsub(p_actwk);
 }
@@ -1638,7 +1638,7 @@ static void skbannertm_init(sprite_status* p_actwk) {
 
 // 006dfab5
 static void skbannertm_move(sprite_status* p_actwk) {
-  if (g_mdRam.mdstatus & 0x80) {
+  if (g_ram.mdstatus & 0x80) {
     actionsub(p_actwk);
   }
 }
@@ -1679,79 +1679,79 @@ static void copy_bgmap_vram(unsigned short* p_destination, unsigned short* p_sou
 
 // 006dfd27
 static void shake_screen() {
-  if (g_mdRam.scr_shake_flg == 0) return;
+  if (g_ram.scr_shake_flg == 0) return;
 
-  --g_mdRam.scr_shake_flg;
-  if (g_mdRam.scr_shake_flg == 0) {
-    ++g_mdRam.scr_evta;
+  --g_ram.scr_shake_flg;
+  if (g_ram.scr_shake_flg == 0) {
+    ++g_ram.scr_evta;
   }
-  unsigned short counter = g_mdRam.systemtimer & 0x3F;
-  util__assign_high(&g_mdRam.vs_scra_v_posit_copy, shakeoffsets[counter]);
-  util__assign_high(&g_mdRam.vs_scra_v_posit_copy, shakeoffsets[counter + 1]);
+  unsigned short counter = g_ram.systemtimer & 0x3F;
+  util__assign_high(&g_ram.vs_scra_v_posit_copy, shakeoffsets[counter]);
+  util__assign_high(&g_ram.vs_scra_v_posit_copy, shakeoffsets[counter + 1]);
 }
 
 
 // 006dfddb
 static void deform_bg() {
-  g_mdRam.vscrolla = util__longhigh_to_short(g_mdRam.scra_v_posit);
-  g_mdRam.vscrollb = util__longhigh_to_short(g_mdRam.vs_scra_v_posit);
+  g_ram.vscrolla = util__longhigh_to_short(g_ram.scra_v_posit);
+  g_ram.vscrollb = util__longhigh_to_short(g_ram.vs_scra_v_posit);
   short scra_h_posit = 0;
-  if (g_mdRam.scr_shake_flg != 0) {
-    g_mdRam.vscrolla += util__longhigh_to_short(g_mdRam.vs_scra_v_posit_copy);
-    g_mdRam.vscrollb += util__longhigh_to_short(g_mdRam.vs_scra_v_posit_copy);
-    scra_h_posit = g_mdRam.vs_scra_h_posit_copy;
+  if (g_ram.scr_shake_flg != 0) {
+    g_ram.vscrolla += util__longhigh_to_short(g_ram.vs_scra_v_posit_copy);
+    g_ram.vscrollb += util__longhigh_to_short(g_ram.vs_scra_v_posit_copy);
+    scra_h_posit = g_ram.vs_scra_h_posit_copy;
   }
 
-  switch (g_mdRam.scr_evta) {
+  switch (g_ram.scr_evta) {
     case 1:
-      scra_h_posit += g_mdRam.vs_scra_h_posit;
+      scra_h_posit += g_ram.vs_scra_h_posit;
       scra_h_posit = -scra_h_posit;
 
       for (int i = 0; i < 112; ++i) {
         unsigned long value = random();
-        g_mdRam.hscrollbuff[i * 4] = value & 0x00000007;
-        g_mdRam.hscrollbuff[i * 4 + 1] = scra_h_posit;
-        g_mdRam.hscrollbuff[i * 4 + 2] = -((value & 0x00070000) >> 16);
-        g_mdRam.hscrollbuff[i * 4 + 3] = scra_h_posit;
+        g_ram.hscrollbuff[i * 4] = value & 0x00000007;
+        g_ram.hscrollbuff[i * 4 + 1] = scra_h_posit;
+        g_ram.hscrollbuff[i * 4 + 2] = -((value & 0x00070000) >> 16);
+        g_ram.hscrollbuff[i * 4 + 3] = scra_h_posit;
       }
       break;
     case 2:
-      if (--g_mdRam.DAT_08ffeed2 == 0) {
-        ++g_mdRam.scr_evta;
+      if (--g_ram.DAT_08ffeed2 == 0) {
+        ++g_ram.scr_evta;
         memset(&g_mdVram[0xC500], 0, 256);
-        memcpy(&g_mdRam.colorwk[16], skopening_knuckles_color, sizeof(skopening_knuckles_color));
-        g_mdRam.actwk[4].r_ptr = &skopeninganims_init;
+        memcpy(&g_ram.colorwk[16], skopening_knuckles_color, sizeof(skopening_knuckles_color));
+        g_ram.actwk[4].r_ptr = &skopeninganims_init;
         scra_h_posit = 0;
       }
       else {
-        scra_h_posit = util__longhigh_to_short(g_mdRam.vs_scra_h_posit);
+        scra_h_posit = util__longhigh_to_short(g_ram.vs_scra_h_posit);
         scra_h_posit = -scra_h_posit;
 
         for (int i = 0; i < 112; ++i) {
           unsigned long value = random();
-          g_mdRam.hscrollbuff[i * 4] += 8;
-          g_mdRam.hscrollbuff[i * 4] += value & 0x00000007;
-          if (g_mdRam.hscrollbuff[i * 4] >= 252) {
-            g_mdRam.hscrollbuff[i * 4] = 252;
+          g_ram.hscrollbuff[i * 4] += 8;
+          g_ram.hscrollbuff[i * 4] += value & 0x00000007;
+          if (g_ram.hscrollbuff[i * 4] >= 252) {
+            g_ram.hscrollbuff[i * 4] = 252;
           }
-          g_mdRam.hscrollbuff[i * 4 + 1] = scra_h_posit;
-          g_mdRam.hscrollbuff[i * 4 + 2] -= 8;
-          g_mdRam.hscrollbuff[i * 4 + 2] -= (value & 0x00070000) >> 16;
-          if (g_mdRam.hscrollbuff[i * 4 + 2] <= -260) {
-            g_mdRam.hscrollbuff[i * 4 + 2] = -260;
+          g_ram.hscrollbuff[i * 4 + 1] = scra_h_posit;
+          g_ram.hscrollbuff[i * 4 + 2] -= 8;
+          g_ram.hscrollbuff[i * 4 + 2] -= (value & 0x00070000) >> 16;
+          if (g_ram.hscrollbuff[i * 4 + 2] <= -260) {
+            g_ram.hscrollbuff[i * 4 + 2] = -260;
           }
-          g_mdRam.hscrollbuff[i * 4 + 3] = scra_h_posit;
+          g_ram.hscrollbuff[i * 4 + 3] = scra_h_posit;
           break;
         }
       }
       // fall-through
     default: {
-      short hscrolla = -(util__longhigh_to_short(g_mdRam.scra_h_posit) + scra_h_posit);
-      short hscrollb = -(util__longhigh_to_short(g_mdRam.vs_scra_h_posit) + scra_h_posit);
+      short hscrolla = -(util__longhigh_to_short(g_ram.scra_h_posit) + scra_h_posit);
+      short hscrollb = -(util__longhigh_to_short(g_ram.vs_scra_h_posit) + scra_h_posit);
 
       for (int i = 0; i < 224; ++i) {
-        g_mdRam.hscrollbuff[i * 2] = hscrolla;
-        g_mdRam.hscrollbuff[i * 2 + 1] = hscrollb;
+        g_ram.hscrollbuff[i * 2] = hscrolla;
+        g_ram.hscrollbuff[i * 2 + 1] = hscrollb;
       }
     }
   }
@@ -1880,30 +1880,30 @@ static sprite_pattern skopening_copyright_sp00 = {
 // 006e69e7
 static void plays3demo() {
   soundset(225);
-  g_mdRam.demoid = g_mdRam.nextdemoid;
-  short stageno = s3demostagenos[g_mdRam.nextdemoid & 7];
-  g_mdRam.stageno = stageno;
-  g_mdRam.stageno_i = stageno;
-  g_mdRam.stageno_s = stageno;
-  ++g_mdRam.nextdemoid;
-  if (g_mdRam.nextdemoid >= 3) {
-    g_mdRam.nextdemoid = 0;
+  g_ram.demoid = g_ram.nextdemoid;
+  short stageno = s3demostagenos[g_ram.nextdemoid & 7];
+  g_ram.stageno = stageno;
+  g_ram.stageno_i = stageno;
+  g_ram.stageno_s = stageno;
+  ++g_ram.nextdemoid;
+  if (g_ram.nextdemoid >= 3) {
+    g_ram.nextdemoid = 0;
   }
-  g_mdRam.demoflag = 1;
-  g_mdRam.gmmode = 8;
-  g_mdRam.pl_suu = 3;
-  g_mdRam.pl2_suu = 3;
-  g_mdRam.plring = 0;
-  g_mdRam.pltime.hours = 0;
-  g_mdRam.pltime.minutes = 0;
-  g_mdRam.pltime.seconds = 0;
-  g_mdRam.pltime.frames = 0;
-  g_mdRam.plscore = 0;
-  g_mdRam.pl2ring = 0;
-  g_mdRam.DAT_08fffed2 = 0;
-  g_mdRam.DAT_08fffed6 = 0;
-  g_mdRam.extrascore = 5000;
-  g_mdRam.extrascore2 = 5000;
+  g_ram.demoflag = 1;
+  g_ram.gmmode = 8;
+  g_ram.pl_suu = 3;
+  g_ram.pl2_suu = 3;
+  g_ram.plring = 0;
+  g_ram.pltime.hours = 0;
+  g_ram.pltime.minutes = 0;
+  g_ram.pltime.seconds = 0;
+  g_ram.pltime.frames = 0;
+  g_ram.plscore = 0;
+  g_ram.pl2ring = 0;
+  g_ram.DAT_08fffed2 = 0;
+  g_ram.DAT_08fffed6 = 0;
+  g_ram.extrascore = 5000;
+  g_ram.extrascore2 = 5000;
 }
 
 

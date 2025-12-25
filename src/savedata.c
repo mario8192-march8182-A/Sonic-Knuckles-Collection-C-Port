@@ -18,38 +18,38 @@ void load_savedata() {
     return;
   }
 
-  if (g_mdRam.cartridge != 0) return;
+  if (g_ram.cartridge != 0) return;
 
-  g_mdRam.disable_interrupts_sram = 0;
-  if (readSaveData(g_mdRam.competitionmode_savedata, 0, 41, 0x4C44) != 0) {
-    memcpy(g_mdRam.competitionmode_savedata, default_s3k_competitionmode_savedata, sizeof(default_s3k_competitionmode_savedata));
-    writeSaveData(g_mdRam.competitionmode_savedata, 0, 41);
+  g_ram.disable_interrupts_sram = 0;
+  if (readSaveData(g_ram.competitionmode_savedata, 0, 41, 0x4C44) != 0) {
+    memcpy(g_ram.competitionmode_savedata, default_s3k_competitionmode_savedata, sizeof(default_s3k_competitionmode_savedata));
+    writeSaveData(g_ram.competitionmode_savedata, 0, 41);
   }
 
   if (g_sonic3Alone != 0) {
-    if (readSaveData(&g_mdRam.main_savedata[20], 192, 25, 0x4244) != 0) {
-      memcpy(&g_mdRam.main_savedata[20], unused_default_s3_savedata, sizeof(unused_default_s3_savedata));
+    if (readSaveData(&g_ram.main_savedata[20], 192, 25, 0x4244) != 0) {
+      memcpy(&g_ram.main_savedata[20], unused_default_s3_savedata, sizeof(unused_default_s3_savedata));
       write_main_savedata();
     }
   }
   else {
     bool active_found = false;
-    if (readSaveData(g_mdRam.main_savedata, 384, 41, 0x4244) == 0) {
+    if (readSaveData(g_ram.main_savedata, 384, 41, 0x4244) == 0) {
       for (int i = 0; i < 7; ++i) {
-        if (!BIT_7_IS_SET(g_mdRam.main_savedata[i * 10])) {
+        if (!BIT_7_IS_SET(g_ram.main_savedata[i * 10])) {
           active_found = true;
           break;
         }
       }
     }
     if (!active_found) {
-      memcpy(g_mdRam.main_savedata, default_s3k_savedata, sizeof(default_s3k_savedata));
+      memcpy(g_ram.main_savedata, default_s3k_savedata, sizeof(default_s3k_savedata));
       write_main_savedata();
     }
   }
 
-  g_mdRam.nosave_plmode = TEAM_SONIC_AND_MILES;
-  g_mdRam.dataselect_selection = 1;
+  g_ram.nosave_plmode = TEAM_SONIC_AND_MILES;
+  g_ram.dataselect_selection = 1;
 }
 
 
@@ -104,24 +104,24 @@ void write_main_savedata() {
   if (g_sonic3Alone != 0) {
     saveFileOffset = 192;
   }
-  writeSaveData(g_mdRam.main_savedata, saveFileOffset, 41);
+  writeSaveData(g_ram.main_savedata, saveFileOffset, 41);
 }
 
 
 // 006e96a8
 void load_sonic3_savedata() {
-  if (readSaveData(g_mdRam.competitionmode_savedata, 0, 41, 0x4c44) != 0) {
-    memcpy(g_mdRam.competitionmode_savedata, default_s3_competitionmode_savedata, sizeof(default_s3_competitionmode_savedata));
-    writeSaveData(g_mdRam.competitionmode_savedata, 0, 41);
+  if (readSaveData(g_ram.competitionmode_savedata, 0, 41, 0x4c44) != 0) {
+    memcpy(g_ram.competitionmode_savedata, default_s3_competitionmode_savedata, sizeof(default_s3_competitionmode_savedata));
+    writeSaveData(g_ram.competitionmode_savedata, 0, 41);
   }
 
-  if (readSaveData(&g_mdRam.main_savedata[32], 192, 25, 0x4244) != 0) {
-    memcpy(&g_mdRam.main_savedata[32], default_s3_savedata, sizeof(default_s3_savedata));
-    writeSaveData(&g_mdRam.main_savedata[32], 192, 25);
+  if (readSaveData(&g_ram.main_savedata[32], 192, 25, 0x4244) != 0) {
+    memcpy(&g_ram.main_savedata[32], default_s3_savedata, sizeof(default_s3_savedata));
+    writeSaveData(&g_ram.main_savedata[32], 192, 25);
   }
 
-  g_mdRam.nosave_plmode = TEAM_SONIC_AND_MILES;
-  g_mdRam.dataselect_selection = 1;
+  g_ram.nosave_plmode = TEAM_SONIC_AND_MILES;
+  g_ram.dataselect_selection = 1;
 }
 
 

@@ -40,7 +40,7 @@ void obox04(sprite_status* p_actwk) {
   p_actwk->r_ptr = &obox04_wait0;
   set_act00(p_actwk, &obox04_switch_set_tbl);
   if (p_actwk->actfree.obox04.flagwork_index != 0) {
-    if (BIT_0_IS_SET(g_mdRam.flagwork[p_actwk->actfree.obox04.flagwork_index - 1])) {
+    if (BIT_0_IS_SET(g_ram.flagwork[p_actwk->actfree.obox04.flagwork_index - 1])) {
       p_actwk->r_ptr = &obox04_wait1;
       p_actwk->patno = 1;
       SET_BIT_5(p_actwk->actfree.obox04.status_bitfield);
@@ -54,7 +54,7 @@ void obox04_wait0(sprite_status* p_actwk) {
     p_actwk->r_ptr = &obox04_wait1;
     p_actwk->patno = 1;
     if (p_actwk->actfree.obox04.flagwork_index != 0) {
-      SET_BIT_1(g_mdRam.flagwork[p_actwk->actfree.obox04.flagwork_index - 1]);
+      SET_BIT_1(g_ram.flagwork[p_actwk->actfree.obox04.flagwork_index - 1]);
     }
     set_obox04_item(p_actwk);
     sprite_status* p_new_actwk = set_act05(p_actwk, &bsexp01_set_tbl);
@@ -76,7 +76,7 @@ void obox04_wait1(sprite_status* p_actwk) {
 static void obox04_switch(sprite_status* p_actwk) {
   enemy_init2(p_actwk, &switch_init_tbl);
   p_actwk->r_ptr = &switch_wait0;
-  sprite_status* p_parentwk = &g_mdRam.actwk[p_actwk->actfree.obox04.oya];
+  sprite_status* p_parentwk = &g_ram.actwk[p_actwk->actfree.obox04.oya];
   if (BIT_5_IS_SET(p_parentwk->actfree.obox04.status_bitfield)) {
     p_actwk->r_ptr = &switch_wait1;
     p_actwk->patno = 12;
@@ -97,11 +97,11 @@ void swit04_wait0(sprite_status* p_actwk) {
     p_actwk->patno = 6;
     if (BIT_IS_SET(p_actwk->cddat1, CD_PLRIDE)) {
       p_actwk->patno = 12;
-      set_bane_jump(&g_mdRam.actwk[0], -2560);
+      set_bane_jump(&g_ram.actwk[0], -2560);
     }
     if (BIT_IS_SET(p_actwk->cddat1, CD_PL2RIDE)) {
       p_actwk->patno = 12;
-      set_bane_jump(&g_mdRam.actwk[1], -2560);
+      set_bane_jump(&g_ram.actwk[1], -2560);
     }
   }
   chk_emy_fout0(p_actwk);
@@ -135,7 +135,7 @@ static void obox04_friend_move0(sprite_status* p_actwk) {
     p_actwk->yspeed = p_actwk->actfree.friend_.yspeed;
   }
   unsigned char patno = 0;
-  if (!BIT_3_IS_SET(g_mdRam.systemtimer)) {
+  if (!BIT_3_IS_SET(g_ram.systemtimer)) {
     patno = 1;
   }
   p_actwk->patno = patno;
@@ -146,7 +146,7 @@ static void obox04_friend_move0(sprite_status* p_actwk) {
 static void obox04_ring(sprite_status* p_actwk) {
   enemy_init0(p_actwk, &obox04_ring_init_tbl);
   p_actwk->r_ptr = &flyring;
-  g_mdRam.flyring_patcnt = 255;
+  g_ram.flyring_patcnt = 255;
   p_actwk->sprvsize = 8;
   p_actwk->sprhsize = 8;
   p_actwk->actflg = (1 << FLG_LEVELCOORDS) | (1 << FLG_3) | (1 << FLG_4) | (1 << FLG_STATICPATTERN) | (1 << FLG_COMPOUND);
@@ -218,11 +218,11 @@ static void set_obox04_friend_init(sprite_status* p_actwk) {
   p_actwk->actfree.friend_.yspeed = spd_tbl[spd_index];
   unsigned char ofs_index = (p_actwk->userflag1 & 2) / 2;
   p_actwk->sproffset = ofs_tbl[ofs_index];
-  unsigned char* friends = &zone_friend_data[GET_ZONE(g_mdRam.stageno)][0];
+  unsigned char* friends = &zone_friend_data[GET_ZONE(g_ram.stageno)][0];
   unsigned char friend_id = friends[ofs_index];
   p_actwk->patbase = friend_data[friend_id].patbase;
   p_actwk->actfree.friend_.move_countdown = p_actwk->userflag1 * 4;
-  sprite_status* p_parentwk = &g_mdRam.actwk[p_actwk->actfree.friend_.oya];
+  sprite_status* p_parentwk = &g_ram.actwk[p_actwk->actfree.friend_.oya];
   short xspeed = 512;
   if (util__to_unsigned(LONG_HIGH(p_actwk->xposi)) < util__to_unsigned(LONG_HIGH(p_parentwk->xposi))) { // unsigned
     xspeed = -xspeed;

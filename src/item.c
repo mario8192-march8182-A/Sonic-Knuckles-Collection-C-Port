@@ -83,7 +83,7 @@ static void iteminit(sprite_status* p_actwk) {
   p_actwk->sprhs = 14;
   p_actwk->sprvs = 16;
   if (p_actwk->actfree.item.flagwork_index != 0) {
-    if (BIT_0_IS_SET(g_mdRam.flagwork[p_actwk->actfree.item.flagwork_index - 1])) {
+    if (BIT_0_IS_SET(g_ram.flagwork[p_actwk->actfree.item.flagwork_index - 1])) {
       p_actwk->patno = 11;
       p_actwk->r_ptr = &frameoutchk;
       return;
@@ -98,8 +98,8 @@ static void iteminit(sprite_status* p_actwk) {
 static void itemmove(sprite_status* p_actwk) {
   itemdownsub(p_actwk);
   hitchk_data data = { 25, 16, 17, LONG_HIGH(p_actwk->xposi) };
-  itemsub(p_actwk, &g_mdRam.actwk[0], data, 3);
-  itemsub1(p_actwk, &g_mdRam.actwk[1], data, 4);
+  itemsub(p_actwk, &g_ram.actwk[0], data, 3);
+  itemsub1(p_actwk, &g_ram.actwk[1], data, 4);
   Add_Object_To_Collision_Response_List(p_actwk);
   patchg(p_actwk, itemchg);
   itemmove3(p_actwk);
@@ -163,7 +163,7 @@ static void itemsub1(sprite_status* p_actwk, sprite_status* p_playerwk, hitchk_d
     itemsub2(p_actwk, p_playerwk, data, plridebit);
     return;
   }
-  if (g_mdRam.vs_flag == 0 || p_actwk->mstno != 2) {
+  if (g_ram.vs_flag == 0 || p_actwk->mstno != 2) {
     plhitchk_chk_coli2(p_actwk, p_playerwk, data, plridebit);
   }
 }
@@ -194,12 +194,12 @@ static hitchk_results itemsub2(sprite_status* p_actwk, sprite_status* p_playerwk
 static void itemget(sprite_status* p_actwk) {
   if (p_actwk->cddat1 & 0x78) {
     if (p_actwk->cddat1 & 0x28) {
-      g_mdRam.actwk[0].cddat1 &= 0xD7;
-      SET_BIT(g_mdRam.actwk[0].cddat1, CD_JUMP);
+      g_ram.actwk[0].cddat1 &= 0xD7;
+      SET_BIT(g_ram.actwk[0].cddat1, CD_JUMP);
     }
     if (p_actwk->cddat1 & 0x50) {
-      g_mdRam.actwk[1].cddat1 &= 0xD7;
-      SET_BIT(g_mdRam.actwk[1].cddat1, CD_JUMP);
+      g_ram.actwk[1].cddat1 &= 0xD7;
+      SET_BIT(g_ram.actwk[1].cddat1, CD_JUMP);
     }
   }
   p_actwk->cddat1 &= 3;
@@ -224,7 +224,7 @@ static void itemget(sprite_status* p_actwk) {
     util__copy_high(&p_new_actwk->yposi, &p_actwk->yposi);
   }
   if (p_actwk->actfree.item.flagwork_index != 0) {
-    SET_BIT_0(g_mdRam.flagwork[p_actwk->actfree.item.flagwork_index - 1]);
+    SET_BIT_0(g_ram.flagwork[p_actwk->actfree.item.flagwork_index - 1]);
   }
   p_actwk->mstno = 10;
   p_actwk->r_ptr = &itemmove2;
@@ -283,10 +283,10 @@ static void item2move__sub(sprite_status* p_actwk) {
   }
   p_actwk->r_no += 2;
   p_actwk->pattim = 29;
-  sprite_status* p_playerwk = &g_mdRam.actwk[p_actwk->actfree.item.player];
-  unsigned short* p_counter = &g_mdRam.DAT_08fffecc;
-  if (p_playerwk != &g_mdRam.actwk[0]) {
-    p_counter = &g_mdRam.DAT_08fffece;
+  sprite_status* p_playerwk = &g_ram.actwk[p_actwk->actfree.item.player];
+  unsigned short* p_counter = &g_ram.DAT_08fffecc;
+  if (p_playerwk != &g_ram.actwk[0]) {
+    p_counter = &g_ram.DAT_08fffece;
   }
   item2tbl[p_actwk->mstno](p_actwk, p_playerwk, p_counter);
 }
@@ -313,31 +313,31 @@ static void item2_00_item2_02(sprite_status* p_actwk, sprite_status* p_playerwk,
 
 
 static void item2_01(sprite_status* p_actwk, sprite_status* p_playerwk, unsigned short* p_counter) {
-  ++g_mdRam.DAT_08fffecc;
-  ++g_mdRam.pl_suu;
-  ++g_mdRam.pl_suu_f;
+  ++g_ram.DAT_08fffecc;
+  ++g_ram.pl_suu;
+  ++g_ram.pl_suu_f;
   bgmset(42);
 }
 
 
 static void item2_03(sprite_status* p_actwk, sprite_status* p_playerwk, unsigned short* p_counter) {
   ++*p_counter;
-  g_mdRam.plring_act += 10;
-  if (g_mdRam.plring_act >= 999) {
-    g_mdRam.plring_act = 999;
+  g_ram.plring_act += 10;
+  if (g_ram.plring_act >= 999) {
+    g_ram.plring_act = 999;
   }
-  g_mdRam.plring += 10;
-  if (g_mdRam.plring >= 999) {
-    g_mdRam.plring = 999;
+  g_ram.plring += 10;
+  if (g_ram.plring >= 999) {
+    g_ram.plring = 999;
   }
-  SET_BIT_0(g_mdRam.plring_f);
-  if (g_mdRam.plring >= 100) {
-    bool bit_1_clear = !BIT_1_IS_SET(g_mdRam.plring_f2);
-    SET_BIT_1(g_mdRam.plring_f2);
+  SET_BIT_0(g_ram.plring_f);
+  if (g_ram.plring >= 100) {
+    bool bit_1_clear = !BIT_1_IS_SET(g_ram.plring_f2);
+    SET_BIT_1(g_ram.plring_f2);
     if (bit_1_clear) goto jump2;
-    if (g_mdRam.plring >= 200) {
-      bool bit_2_clear = !BIT_2_IS_SET(g_mdRam.plring_f2);
-      SET_BIT_2(g_mdRam.plring_f2);
+    if (g_ram.plring >= 200) {
+      bool bit_2_clear = !BIT_2_IS_SET(g_ram.plring_f2);
+      SET_BIT_2(g_ram.plring_f2);
       if (bit_2_clear) goto jump2;
     }
   }
@@ -345,7 +345,7 @@ static void item2_03(sprite_status* p_actwk, sprite_status* p_playerwk, unsigned
   return;
 
 jump2:
-  if (p_playerwk == &g_mdRam.actwk[0]) {
+  if (p_playerwk == &g_ram.actwk[0]) {
     item2_01(p_actwk, p_playerwk, p_counter);
   }
   else {
@@ -358,15 +358,15 @@ static void item2_04(sprite_status* p_actwk, sprite_status* p_playerwk, unsigned
   ++*p_counter;
   SET_SPEEDUP(p_playerwk->cddat2);
   p_playerwk->actfree.player.speedup_timer = 150;
-  if (p_playerwk == &g_mdRam.actwk[0] && g_mdRam.plmode != TEAM_MILES) {
-    g_mdRam.plmaxspdwk = 3072;
-    g_mdRam.pladdspdwk = 24;
-    g_mdRam.plretspdwk = 128;
+  if (p_playerwk == &g_ram.actwk[0] && g_ram.plmode != TEAM_MILES) {
+    g_ram.plmaxspdwk = 3072;
+    g_ram.pladdspdwk = 24;
+    g_ram.plretspdwk = 128;
   }
   else {
-    g_mdRam.pl2maxspdwk = 3072;
-    g_mdRam.pl2addspdwk = 24;
-    g_mdRam.pl2retspdwk = 128;
+    g_ram.pl2maxspdwk = 3072;
+    g_ram.pl2addspdwk = 24;
+    g_ram.pl2retspdwk = 128;
   }
   SpeedUpMusic(8);
 }
@@ -379,12 +379,12 @@ static void item2_05(sprite_status* p_actwk, sprite_status* p_playerwk, unsigned
   SET_FLAME_BARIA(p_playerwk->cddat2);
   bgmset(62);
   if (p_actwk->actfree.item.player == 0) {
-    g_mdRam.actwk[100].r_ptr = &flamebaria;
-    SPRITE_STATUS_USHORT(&g_mdRam.actwk[100], 66) = p_playerwk - g_mdRam.actwk;
+    g_ram.actwk[100].r_ptr = &flamebaria;
+    SPRITE_STATUS_USHORT(&g_ram.actwk[100], 66) = p_playerwk - g_ram.actwk;
   }
   else {
-    g_mdRam.actwk[101].r_ptr = &flamebaria;
-    SPRITE_STATUS_USHORT(&g_mdRam.actwk[101], 66) = p_playerwk - g_mdRam.actwk;
+    g_ram.actwk[101].r_ptr = &flamebaria;
+    SPRITE_STATUS_USHORT(&g_ram.actwk[101], 66) = p_playerwk - g_ram.actwk;
   }
 }
 
@@ -396,12 +396,12 @@ static void item2_06(sprite_status* p_actwk, sprite_status* p_playerwk, unsigned
   SET_THUNDER_BARIA(p_playerwk->cddat2);
   bgmset(65);
   if (p_actwk->actfree.item.player == 0) {
-    g_mdRam.actwk[100].r_ptr = &thunderbaria;
-    SPRITE_STATUS_USHORT(&g_mdRam.actwk[100], 66) = p_playerwk - g_mdRam.actwk;
+    g_ram.actwk[100].r_ptr = &thunderbaria;
+    SPRITE_STATUS_USHORT(&g_ram.actwk[100], 66) = p_playerwk - g_ram.actwk;
   }
   else {
-    g_mdRam.actwk[101].r_ptr = &thunderbaria;
-    SPRITE_STATUS_USHORT(&g_mdRam.actwk[101], 66) = p_playerwk - g_mdRam.actwk;
+    g_ram.actwk[101].r_ptr = &thunderbaria;
+    SPRITE_STATUS_USHORT(&g_ram.actwk[101], 66) = p_playerwk - g_ram.actwk;
   }
 }
 
@@ -413,73 +413,73 @@ static void item2_07(sprite_status* p_actwk, sprite_status* p_playerwk, unsigned
   SET_AQUA_BARIA(p_playerwk->cddat2);
   bgmset(63);
   if (p_actwk->actfree.item.player == 0) {
-    g_mdRam.actwk[100].r_ptr = &aquabaria;
-    SPRITE_STATUS_USHORT(&g_mdRam.actwk[100], 66) = p_playerwk - g_mdRam.actwk;
+    g_ram.actwk[100].r_ptr = &aquabaria;
+    SPRITE_STATUS_USHORT(&g_ram.actwk[100], 66) = p_playerwk - g_ram.actwk;
   }
   else {
-    g_mdRam.actwk[101].r_ptr = &aquabaria;
-    SPRITE_STATUS_USHORT(&g_mdRam.actwk[101], 66) = p_playerwk - g_mdRam.actwk;
+    g_ram.actwk[101].r_ptr = &aquabaria;
+    SPRITE_STATUS_USHORT(&g_ram.actwk[101], 66) = p_playerwk - g_ram.actwk;
   }
 }
 
 
 static void item2_08(sprite_status* p_actwk, sprite_status* p_playerwk, unsigned short* p_counter) {
   ++*p_counter;
-  if (g_mdRam.ssonicflag != 0) return;
-  if (g_mdRam.smilesflag != 0) return;
+  if (g_ram.ssonicflag != 0) return;
+  if (g_ram.smilesflag != 0) return;
   SET_MUTEKI(p_playerwk->cddat2);
   p_playerwk->actfree.player.muteki_timer = 150;
-  if (g_mdRam.bossstart == 0 && p_playerwk->userflag1 > 12) {
+  if (g_ram.bossstart == 0 && p_playerwk->userflag1 > 12) {
     bgmset(44);
   }
   if (p_actwk->actfree.item.player == 0) {
-    g_mdRam.actwk[102].r_ptr = &muteki;
-    SPRITE_STATUS_USHORT(&g_mdRam.actwk[100], 66) = p_playerwk - g_mdRam.actwk;
+    g_ram.actwk[102].r_ptr = &muteki;
+    SPRITE_STATUS_USHORT(&g_ram.actwk[100], 66) = p_playerwk - g_ram.actwk;
   }
   else {
-    g_mdRam.actwk[106].r_ptr = &muteki;
-    SPRITE_STATUS_USHORT(&g_mdRam.actwk[101], 66) = p_playerwk - g_mdRam.actwk;
+    g_ram.actwk[106].r_ptr = &muteki;
+    SPRITE_STATUS_USHORT(&g_ram.actwk[101], 66) = p_playerwk - g_ram.actwk;
   }
 }
 
 
 static void item2_09(sprite_status* p_actwk, sprite_status* p_playerwk, unsigned short* p_counter) {
   ++*p_counter;
-  g_mdRam.plring += 50;
-  g_mdRam.ssonicpallet = 1;
-  g_mdRam.ssonicpallet_next = 15;
-  g_mdRam.ssonicflag = 1;
-  g_mdRam.ssonicring_timer = 60;
-  g_mdRam.plmaxspdwk = 2048;
-  g_mdRam.pladdspdwk = 24;
-  g_mdRam.plretspdwk = 192;
-  g_mdRam.actwk[0].mstno = 31;
-  switch (g_mdRam.plmode) {
+  g_ram.plring += 50;
+  g_ram.ssonicpallet = 1;
+  g_ram.ssonicpallet_next = 15;
+  g_ram.ssonicflag = 1;
+  g_ram.ssonicring_timer = 60;
+  g_ram.plmaxspdwk = 2048;
+  g_ram.pladdspdwk = 24;
+  g_ram.plretspdwk = 192;
+  g_ram.actwk[0].mstno = 31;
+  switch (g_ram.plmode) {
     case TEAM_MILES:
-      g_mdRam.ssonicflag = 0;
-      g_mdRam.smilesflag = 1;
-      g_mdRam.actwk[0].mstno = 41;
-      g_mdRam.pl2maxspdwk = 2048;
-      g_mdRam.pl2addspdwk = 24;
-      g_mdRam.pl2retspdwk = 192;
-      g_mdRam.actwk[102].r_ptr = &smilesflickies;
+      g_ram.ssonicflag = 0;
+      g_ram.smilesflag = 1;
+      g_ram.actwk[0].mstno = 41;
+      g_ram.pl2maxspdwk = 2048;
+      g_ram.pl2addspdwk = 24;
+      g_ram.pl2retspdwk = 192;
+      g_ram.actwk[102].r_ptr = &smilesflickies;
       break;
     case TEAM_SONIC_AND_MILES:
     case TEAM_SONIC:
-      g_mdRam.actwk[0].patbase = ssonicpat;
-      g_mdRam.ssonicflag = 255;
-      g_mdRam.plmaxspdwk = 2560;
-      g_mdRam.pladdspdwk = 48;
-      g_mdRam.plretspdwk = 256;
-      g_mdRam.actwk[102].r_ptr = &hsonicstars;
-      g_mdRam.actwk[96].r_ptr = &hypertrail;
+      g_ram.actwk[0].patbase = ssonicpat;
+      g_ram.ssonicflag = 255;
+      g_ram.plmaxspdwk = 2560;
+      g_ram.pladdspdwk = 48;
+      g_ram.plretspdwk = 256;
+      g_ram.actwk[102].r_ptr = &hsonicstars;
+      g_ram.actwk[96].r_ptr = &hypertrail;
       break;
     case TEAM_KNUCKLES:
-      g_mdRam.actwk[96].r_ptr = &hypertrail;
+      g_ram.actwk[96].r_ptr = &hypertrail;
       break;
   }
-  g_mdRam.actwk[0].actfree.player.control_bitfield = 129;
-  g_mdRam.actwk[0].actfree.player.muteki_timer = 0;
+  g_ram.actwk[0].actfree.player.control_bitfield = 129;
+  g_ram.actwk[0].actfree.player.muteki_timer = 0;
   SET_MUTEKI(p_playerwk->cddat2);
   soundset(159);
   bgmset(44);

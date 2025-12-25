@@ -133,6 +133,6 @@ extern int g_kbKeysEdit[2][5];
 extern UINT g_joystickCnt;
 extern BYTE g_mdVram[0x10000];
 extern BYTE g_pixelBuffer[0x23000];
-extern sonic3_ram g_mdRam;
+extern sonic3_ram g_ram;
 
 #endif

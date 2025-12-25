@@ -166,12 +166,12 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, char* lpCmdLine
 // 00403d27
 DWORD WINAPI gameThreadStartRoutine(void* pParameter) {
   if (g_bResetMdRam) {
-    memset(&g_mdRam, 0, sizeof(g_mdRam));
+    memset(&g_ram, 0, sizeof(g_ram));
     g_bResetMdRam = FALSE;
   }
   memset(g_mdVram, 0, 0x10000);
 
-  SET_MDREGION_OVERSEAS(g_mdRam.mdstatus);
+  SET_MDREGION_OVERSEAS(g_ram.mdstatus);
 
   switch (g_startGameMode) {
     case STARTGAMEMODE_NORMAL:
@@ -309,7 +309,7 @@ int allocRamAndVram() {
     return 1;
   }
 
-  memset(&g_mdRam, 0, sizeof(g_mdRam));
+  memset(&g_ram, 0, sizeof(g_ram));
   memset(g_mdVram, 0, 0x10000);
   memset(g_pixelBuffer, 0, 0x23000);
 
@@ -500,11 +500,11 @@ extern "C" int readSaveData(unsigned char* pDestination, int saveFileOffset, USH
 // 004050c0
 extern "C" void vInt() {
   g_pHscrollbuff2 = g_pHscrollbuff = 0;
-  g_vscrollPlaneA = g_mdRam.vscrolla;
-  g_vscrollPlaneB = g_mdRam.vscrollb;
+  g_vscrollPlaneA = g_ram.vscrolla;
+  g_vscrollPlaneB = g_ram.vscrollb;
   g_bVscrollCopy = FALSE;
 
-  switch (g_mdRam.int_flg) {
+  switch (g_ram.int_flg) {
     case 2:
       vInt2();
       break;
@@ -537,30 +537,30 @@ extern "C" void vInt() {
       break;
   }
 
-  ++g_mdRam.systemtimer;
+  ++g_ram.systemtimer;
   g_game.update();
-  g_mdRam.int_flg = 0;
+  g_ram.int_flg = 0;
 }
 
 
 // 00405201
 void vInt18() {
-  g_pHscrollbuff = &g_mdRam.hscrollbuff[0];
-  g_pHscrollbuff2 = &g_mdRam.hscrollbuff[1];
+  g_pHscrollbuff = &g_ram.hscrollbuff[0];
+  g_pHscrollbuff2 = &g_ram.hscrollbuff[1];
   uploadPalette();
-  uploadSprites(g_mdRam.ramf8, g_sprites);
+  uploadSprites(g_ram.ramf8, g_sprites);
   pollMdControllers();
 }
 
 
 // 00405237
 void vInt4() {
-  memcpy(g_mdRam.colorwk, g_mdRam.colorwk2, sizeof(g_mdRam.colorwk));
+  memcpy(g_ram.colorwk, g_ram.colorwk2, sizeof(g_ram.colorwk));
   uploadPalette();
-  uploadSprites(g_mdRam.ramf8, g_sprites);
+  uploadSprites(g_ram.ramf8, g_sprites);
   pollMdControllers();
-  if (g_mdRam.demotimer != 0) {
-    --g_mdRam.demotimer;
+  if (g_ram.demotimer != 0) {
+    --g_ram.demotimer;
   }
 }
 
@@ -568,8 +568,8 @@ void vInt4() {
 // 00405284
 void vInt20() {
   uploadPalette();
-  if (g_mdRam.demotimer != 0) {
-    --g_mdRam.demotimer;
+  if (g_ram.demotimer != 0) {
+    --g_ram.demotimer;
   }
 }
 
@@ -577,8 +577,8 @@ void vInt20() {
 // 004052b0
 void vInt2() {
   uploadPalette();
-  if (g_mdRam.demotimer != 0) {
-    --g_mdRam.demotimer;
+  if (g_ram.demotimer != 0) {
+    --g_ram.demotimer;
   }
 }
 
@@ -586,23 +586,23 @@ void vInt2() {
 // 004052dc
 void vInt22() {
   uploadPalette();
-  uploadSprites(g_mdRam.ramf8, g_sprites);
+  uploadSprites(g_ram.ramf8, g_sprites);
   pollMdControllers();
-  if (g_mdRam.demotimer != 0) {
-    --g_mdRam.demotimer;
+  if (g_ram.demotimer != 0) {
+    --g_ram.demotimer;
   }
 }
 
 
 // 00405312
 void vInt26() {
-  g_pHscrollbuff = &g_mdRam.hscrollbuff[0];
-  g_pHscrollbuff2 = &g_mdRam.hscrollbuff[1];
+  g_pHscrollbuff = &g_ram.hscrollbuff[0];
+  g_pHscrollbuff2 = &g_ram.hscrollbuff[1];
   uploadPalette();
-  uploadSprites(g_mdRam.ramf8, g_sprites);
+  uploadSprites(g_ram.ramf8, g_sprites);
   pollMdControllers();
-  if (g_mdRam.demotimer != 0) {
-    --g_mdRam.demotimer;
+  if (g_ram.demotimer != 0) {
+    --g_ram.demotimer;
   }
 }
 
@@ -612,11 +612,11 @@ void uploadPalette() {
   RGBQUAD palette[64];
   memset(palette, 0, sizeof(palette));
   unsigned short* pColorwk;
-  if (g_mdRam.waterflag != 0) {
-    pColorwk = g_mdRam.colorwk3;
+  if (g_ram.waterflag != 0) {
+    pColorwk = g_ram.colorwk3;
   }
   else {
-    pColorwk = g_mdRam.colorwk;
+    pColorwk = g_ram.colorwk;
   }
 
   for (int i = 0; i < 64; ++i) {
@@ -650,8 +650,8 @@ void uploadPalette() {
 // 00405a45
 void pollMdControllers() {
   pollWindowsControllers();
-  g_mdRam.swdata1 = getPressedController1Buttons();
-  g_mdRam.swdata2 = getPressedController2Buttons();
+  g_ram.swdata1 = getPressedController1Buttons();
+  g_ram.swdata2 = getPressedController2Buttons();
 }
 
 
@@ -659,7 +659,7 @@ void pollMdControllers() {
 void blitGraphics() {
   if (g_bVscrollCopy) {
     for (int i = 0; i < 20; ++i) {
-      g_mdVsram[i] = g_mdRam.vscrollbuff[i + 1];
+      g_mdVsram[i] = g_ram.vscrollbuff[i + 1];
     }
     if (g_pHscrollbuff2 != 0) {
       for (int i = 0; i < 224; ++i) {
@@ -673,7 +673,7 @@ void blitGraphics() {
     g_pVdpReadPos = &g_mdVram[g_vdpScrollPlaneBOffset];
     FUN_00415039();
     for (int i = 0; i < 20; ++i) {
-      g_mdVsram[i] = g_mdRam.vscrollbuff[i];
+      g_mdVsram[i] = g_ram.vscrollbuff[i];
     }
     if (g_pHscrollbuff != 0) {
       for (int i = 0; i < 224; ++i) {

@@ -63,7 +63,7 @@ void toge(sprite_status* p_actwk) {
   SET_BIT(p_actwk->actflg, FLG_LEVELCOORDS);
   p_actwk->sprpri = PRI_4;
   unsigned char userflag = (p_actwk->userflag1 & 0xF0) / 8;
-  if (g_mdRam.vs_flag != 0) {
+  if (g_ram.vs_flag != 0) {
     vstogeinit(p_actwk, userflag);
   }
   else {
@@ -79,7 +79,7 @@ static void togeinit(sprite_status* p_actwk, unsigned char userflag) {
   p_actwk->r_ptr = &togemove;
   p_actwk->patbase = togepat;
   p_actwk->sproffset = 1180;
-  if (GET_ZONE(g_mdRam.stageno) == FLYING_BATTERY) {
+  if (GET_ZONE(g_ram.stageno) == FLYING_BATTERY) {
     p_actwk->sproffset = 512;
   }
   userflag >>= 1;
@@ -89,7 +89,7 @@ static void togeinit(sprite_status* p_actwk, unsigned char userflag) {
     p_actwk->sproffset = 1172;
   }
   unsigned char cddat1 = p_actwk->cddat1;
-  if (g_mdRam.reverse_gravity_flag != 0) {
+  if (g_ram.reverse_gravity_flag != 0) {
     cddat1 ^= 2;
   }
   if (BIT_IS_SET(cddat1, CD_DOWN)) {
@@ -146,10 +146,10 @@ static void togemove(sprite_status* p_actwk) {
   hitchk(p_actwk, data);
   if (p_actwk->cddat1 & 0x18) {
     if (BIT_IS_SET(p_actwk->cddat1, CD_PLRIDE)) {
-      togedamegesub(p_actwk, &g_mdRam.actwk[0]);
+      togedamegesub(p_actwk, &g_ram.actwk[0]);
     }
     if (BIT_IS_SET(p_actwk->cddat1, CD_PL2RIDE)) {
-      togedamegesub(p_actwk, &g_mdRam.actwk[1]);
+      togedamegesub(p_actwk, &g_ram.actwk[1]);
     }
   }
   frameoutchk2(p_actwk, p_actwk->actfree.toge.orig_xposi);
@@ -167,11 +167,11 @@ static void togemove2(sprite_status* p_actwk) {
   hitchk_results results = hitchk(p_actwk, data);
   if (results.plcoli & 3) {
     if (BIT_0_IS_SET(results.plcoli)) {
-      togedamegesub(p_actwk, &g_mdRam.actwk[0]);
+      togedamegesub(p_actwk, &g_ram.actwk[0]);
       CLEAR_BIT(p_actwk->cddat1, CD_PLPUSH);
     }
     if (BIT_1_IS_SET(results.plcoli)) {
-      togedamegesub(p_actwk, &g_mdRam.actwk[1]);
+      togedamegesub(p_actwk, &g_ram.actwk[1]);
       CLEAR_BIT(p_actwk->cddat1, CD_PL2PUSH);
     }
   }
@@ -190,10 +190,10 @@ static void togemove3(sprite_status* p_actwk) {
   hitchk_results results = hitchk(p_actwk, data);
   if (results.plcoli & 0xC) {
     if (BIT_2_IS_SET(results.plcoli)) {
-      togedamegesub(p_actwk, &g_mdRam.actwk[0]);
+      togedamegesub(p_actwk, &g_ram.actwk[0]);
     }
     if (BIT_3_IS_SET(results.plcoli)) {
-      togedamegesub(p_actwk, &g_mdRam.actwk[1]);
+      togedamegesub(p_actwk, &g_ram.actwk[1]);
     }
   }
   frameoutchk2(p_actwk, p_actwk->actfree.toge.orig_xposi);
@@ -211,10 +211,10 @@ static void vstogemove(sprite_status* p_actwk) {
   hitchk(p_actwk, data);
   if (p_actwk->cddat1 & 0x18) {
     if (BIT_IS_SET(p_actwk->cddat1, CD_PLRIDE)) {
-      togedamegesub(p_actwk, &g_mdRam.actwk[0]);
+      togedamegesub(p_actwk, &g_ram.actwk[0]);
     }
     if (BIT_IS_SET(p_actwk->cddat1, CD_PL2RIDE)) {
-      togedamegesub(p_actwk, &g_mdRam.actwk[1]);
+      togedamegesub(p_actwk, &g_ram.actwk[1]);
     }
   }
   actionsub(p_actwk);
@@ -232,11 +232,11 @@ static void vstogemove2(sprite_status* p_actwk) {
   hitchk_results results = hitchk(p_actwk, data);
   if (results.plcoli & 3) {
     if (BIT_0_IS_SET(results.plcoli)) {
-      togedamegesub(p_actwk, &g_mdRam.actwk[0]);
+      togedamegesub(p_actwk, &g_ram.actwk[0]);
       CLEAR_BIT(p_actwk->cddat1, CD_PLPUSH);
     }
     if (BIT_1_IS_SET(results.plcoli)) {
-      togedamegesub(p_actwk, &g_mdRam.actwk[1]);
+      togedamegesub(p_actwk, &g_ram.actwk[1]);
       CLEAR_BIT(p_actwk->cddat1, CD_PL2PUSH);
     }
   }
@@ -255,10 +255,10 @@ static void vstogemove3(sprite_status* p_actwk) {
   hitchk_results results = hitchk(p_actwk, data);
   if (results.plcoli & 0xC) {
     if (BIT_2_IS_SET(results.plcoli)) {
-      togedamegesub(p_actwk, &g_mdRam.actwk[0]);
+      togedamegesub(p_actwk, &g_ram.actwk[0]);
     }
     if (BIT_3_IS_SET(results.plcoli)) {
-      togedamegesub(p_actwk, &g_mdRam.actwk[1]);
+      togedamegesub(p_actwk, &g_ram.actwk[1]);
     }
   }
   actionsub(p_actwk);
@@ -333,10 +333,10 @@ static void toge_sub(sprite_status* p_actwk) {
 static void toge_push(sprite_status* p_actwk) {
   unsigned char cddat1 = p_actwk->cddat1 & 0x60;
   if (cddat1 == 0) return;
-  toge_push__sub(p_actwk, LONG_HIGH(p_actwk->xposi), cddat1, 5, &g_mdRam.actwk[0], p_actwk->actfree.toge.plcddat1);
-  toge_push__sub(p_actwk, LONG_HIGH(p_actwk->xposi), cddat1, 6, &g_mdRam.actwk[1], p_actwk->actfree.toge.pl2cddat1);
-  p_actwk->actfree.toge.plcddat1 = g_mdRam.actwk[0].cddat1;
-  p_actwk->actfree.toge.pl2cddat1 = g_mdRam.actwk[1].cddat1;
+  toge_push__sub(p_actwk, LONG_HIGH(p_actwk->xposi), cddat1, 5, &g_ram.actwk[0], p_actwk->actfree.toge.plcddat1);
+  toge_push__sub(p_actwk, LONG_HIGH(p_actwk->xposi), cddat1, 6, &g_ram.actwk[1], p_actwk->actfree.toge.pl2cddat1);
+  p_actwk->actfree.toge.plcddat1 = g_ram.actwk[0].cddat1;
+  p_actwk->actfree.toge.pl2cddat1 = g_ram.actwk[1].cddat1;
 }
 
 

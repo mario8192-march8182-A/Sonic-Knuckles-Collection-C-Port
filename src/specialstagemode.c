@@ -106,15 +106,15 @@ static void init_graphics() {
   g_vdpScrollPlaneBOffset = 0xE000;
   DAT_008549d8 = 32;
   DAT_00854dec = 1;
-  g_mdRam.waterflag = 0;
-  g_mdRam.watermode = 0;
+  g_ram.waterflag = 0;
+  g_ram.watermode = 0;
   scrinit();
-  memset(g_mdRam.pbuffer, 0, sizeof(g_mdRam.pbuffer));
-  memset(g_mdRam.actwk, 0, sizeof(g_mdRam.actwk) + 52);
+  memset(g_ram.pbuffer, 0, sizeof(g_ram.pbuffer));
+  memset(g_ram.actwk, 0, sizeof(g_ram.actwk) + 52);
   init_sprlist();
-  memset(g_mdRam.colorwk, 0, sizeof(g_mdRam.colorwk));
-  memset(g_mdRam.colorwk2, 0, sizeof(g_mdRam.colorwk2));
-  g_mdRam.stageno = 0;
+  memset(g_ram.colorwk, 0, sizeof(g_ram.colorwk));
+  memset(g_ram.colorwk2, 0, sizeof(g_ram.colorwk2));
+  g_ram.stageno = 0;
 }
 
 
@@ -124,53 +124,53 @@ void specialstagemode() {
   fadeout();
   init_graphics();
   init_specmodevars();
-  set_palette(g_mdRam.colorwk2);
-  bitdevr((unsigned long*)&g_mdVram[0xB7E0], largetext_tiles, g_mdRam.bitdevwk);
-  bitdevr((unsigned long*)&g_mdVram[0x32E0], specialstagemode_sklogo_cg, g_mdRam.bitdevwk);
-  unsigned char* p_chunkmappings = unlze(g_mdRam.chunkmappings128, specialstagemode_characters_cg, 0);
+  set_palette(g_ram.colorwk2);
+  bitdevr((unsigned long*)&g_mdVram[0xB7E0], largetext_tiles, g_ram.bitdevwk);
+  bitdevr((unsigned long*)&g_mdVram[0x32E0], specialstagemode_sklogo_cg, g_ram.bitdevwk);
+  unsigned char* p_chunkmappings = unlze(g_ram.chunkmappings128, specialstagemode_characters_cg, 0);
   p_chunkmappings = unlze(p_chunkmappings, specialstagemode_charactersprites_cg, 0);
-  copy_data_vram(g_mdRam.chunkmappings128, 0, (p_chunkmappings - g_mdRam.chunkmappings128) / 2);
-  unlze(&g_mdRam.chunkmappings128[0x4000], specialstagemode_text_cg, 0);
-  copy_data_vram(&g_mdRam.chunkmappings128[0x4000], 0xA9C0, 0x6D0);
-  mapdevr((unsigned short*)g_mdRam.levellayout, specialstagemode_fg_map, 0x2000);
-  copy_map_vram((unsigned short*)g_mdRam.levellayout, 0xC380, 15, 39);
-  mapdevr((unsigned short*)g_mdRam.levellayout, specialstagemode_bg_map, 0x4197);
-  copy_map_vram((unsigned short*)g_mdRam.levellayout, 0xE09C, 7, 11);
+  copy_data_vram(g_ram.chunkmappings128, 0, (p_chunkmappings - g_ram.chunkmappings128) / 2);
+  unlze(&g_ram.chunkmappings128[0x4000], specialstagemode_text_cg, 0);
+  copy_data_vram(&g_ram.chunkmappings128[0x4000], 0xA9C0, 0x6D0);
+  mapdevr((unsigned short*)g_ram.levellayout, specialstagemode_fg_map, 0x2000);
+  copy_map_vram((unsigned short*)g_ram.levellayout, 0xC380, 15, 39);
+  mapdevr((unsigned short*)g_ram.levellayout, specialstagemode_bg_map, 0x4197);
+  copy_map_vram((unsigned short*)g_ram.levellayout, 0xE09C, 7, 11);
   unsigned char* p_text = getbluespheres;
-  if (g_mdRam.specmodemenu == 0) {
+  if (g_ram.specmodemenu == 0) {
     p_text = noway;
-    g_mdRam.levelselect_plmode = TEAM_SONIC;
-    g_mdRam.vscrolla = -16;
-    g_mdRam.vscrollb = -8;
+    g_ram.levelselect_plmode = TEAM_SONIC;
+    g_ram.vscrolla = -16;
+    g_ram.vscrollb = -8;
   }
   load_string_vram(p_text, 256, 0x5BF);
-  if (g_mdRam.specmodefull == 0) {
-    g_mdRam.vscrolla = -16;
-    g_mdRam.vscrollb = -8;
+  if (g_ram.specmodefull == 0) {
+    g_ram.vscrolla = -16;
+    g_ram.vscrollb = -8;
   }
-  g_mdRam.actwk[0].r_ptr = &menu_init;
-  g_mdRam.actwk[1].r_ptr = &copyright_init;
-  bitdevr((unsigned long*)&g_mdVram[0xB640], specialstagemode_copyright_cg, g_mdRam.bitdevwk);
-  g_mdRam.actwk[2].r_ptr = &character_init;
+  g_ram.actwk[0].r_ptr = &menu_init;
+  g_ram.actwk[1].r_ptr = &copyright_init;
+  bitdevr((unsigned long*)&g_mdVram[0xB640], specialstagemode_copyright_cg, g_ram.bitdevwk);
+  g_ram.actwk[2].r_ptr = &character_init;
   action();
   patset();
   bgmset(40);
   fadein();
 
   do {
-    g_mdRam.int_flg = 26;
+    g_ram.int_flg = 26;
     vInt();
     update_hscrollbuff();
     action();
     patset();
-  } while (g_mdRam.gmmode == 44);
+  } while (g_ram.gmmode == 44);
 }
 
 
 // 006a461f
 static void set_palette(unsigned short* p_destination) {
   unsigned short* p_source = title2_color;
-  if (g_mdRam.DAT_08ffffab == 0) {
+  if (g_ram.DAT_08ffffab == 0) {
     p_source = title1_color;
   }
   memcpy(p_destination, p_source, 128);
@@ -195,7 +195,7 @@ static void set_palette(unsigned short* p_destination) {
 
 // 006a47e8
 static void update_hscrollbuff() {
-  unsigned short* p_hscrollbuff = g_mdRam.hscrollbuff;
+  unsigned short* p_hscrollbuff = g_ram.hscrollbuff;
 
   for (int i = 0; i < 64; ++i) {
     *p_hscrollbuff -= 2;
@@ -206,18 +206,18 @@ static void update_hscrollbuff() {
 
 // 006a484f
 static void init_specmodevars() {
-  g_mdRam.specmodefull = 1;
-  if (g_mdRam.specmodemenu == 0) {
-    g_mdRam.DAT_08ffffab = 0;
-    g_mdRam.specmodelevel = 0;
-    g_mdRam.specmodecode = 0x3020100;
+  g_ram.specmodefull = 1;
+  if (g_ram.specmodemenu == 0) {
+    g_ram.DAT_08ffffab = 0;
+    g_ram.specmodelevel = 0;
+    g_ram.specmodecode = 0x3020100;
   }
 }
 
 
 // 006a4fba
 static void menu_init(sprite_status* p_actwk) {
-  if (g_mdRam.specmodemenu == 0) {
+  if (g_ram.specmodemenu == 0) {
     p_actwk->r_ptr = &menu_wait;
     p_actwk->actfree.dynamic.timer = 30;
     menu_wait(p_actwk);
@@ -232,9 +232,9 @@ static void menu_init(sprite_status* p_actwk) {
 static void menu_wait(sprite_status* p_actwk) {
   --p_actwk->actfree.dynamic.timer;
   if (p_actwk->actfree.dynamic.timer != 0) return;
-  g_mdRam.swdata1 &= 0xFF00;
-  g_mdRam.specspherecnt = 255;
-  g_mdRam.specringcnt = 255;
+  g_ram.swdata1 &= 0xFF00;
+  g_ram.specspherecnt = 255;
+  g_ram.specringcnt = 255;
   soundset(99);
   load_string_vram(getbluespheres, 256, 0x5BF);
   menu_move0(p_actwk);
@@ -244,71 +244,71 @@ static void menu_wait(sprite_status* p_actwk) {
 // 006a5058
 static void menu_move0(sprite_status* p_actwk) {
   p_actwk->r_ptr = &menu_move1;
-  g_mdRam.actwk[6].r_ptr = &header_init;
-  util__assign_high(&g_mdRam.actwk[6].yposi, 192);
-  g_mdRam.specmodemenu = 1;
-  g_mdRam.DAT_08ffffaa = 0;
-  g_mdRam.actwk[46].r_ptr = &starsphere_init;
-  g_mdRam.actwk[47].r_ptr = &starsphere_init;
-  SET_BIT(g_mdRam.actwk[47].actflg, FLG_HFLIP);
-  if (g_mdRam.specmodefull != 0) {
-    util__assign_high(&g_mdRam.actwk[6].yposi, 176);
-    g_mdRam.actwk[18].r_ptr = &codeinput_init;
-    util__assign_high(&g_mdRam.actwk[18].yposi, 324);
-    g_mdRam.actwk[31].r_ptr = &currentcode_init;
-    util__assign_high(&g_mdRam.actwk[31].yposi, 324);
-    g_mdRam.actwk[45].r_ptr = &starttext;
-    g_mdRam.DAT_08ffffaa = 1;
+  g_ram.actwk[6].r_ptr = &header_init;
+  util__assign_high(&g_ram.actwk[6].yposi, 192);
+  g_ram.specmodemenu = 1;
+  g_ram.DAT_08ffffaa = 0;
+  g_ram.actwk[46].r_ptr = &starsphere_init;
+  g_ram.actwk[47].r_ptr = &starsphere_init;
+  SET_BIT(g_ram.actwk[47].actflg, FLG_HFLIP);
+  if (g_ram.specmodefull != 0) {
+    util__assign_high(&g_ram.actwk[6].yposi, 176);
+    g_ram.actwk[18].r_ptr = &codeinput_init;
+    util__assign_high(&g_ram.actwk[18].yposi, 324);
+    g_ram.actwk[31].r_ptr = &currentcode_init;
+    util__assign_high(&g_ram.actwk[31].yposi, 324);
+    g_ram.actwk[45].r_ptr = &starttext;
+    g_ram.DAT_08ffffaa = 1;
   }
-  else if (g_mdRam.specspherecnt == 0 && g_mdRam.specringcnt == 0) {
-    g_mdRam.actwk[31].r_ptr = &currentcode_init;
-    util__assign_high(&g_mdRam.actwk[31].yposi, 324);
+  else if (g_ram.specspherecnt == 0 && g_ram.specringcnt == 0) {
+    g_ram.actwk[31].r_ptr = &currentcode_init;
+    util__assign_high(&g_ram.actwk[31].yposi, 324);
   }
 }
 
 
 // 006a5126
 static void menu_move1(sprite_status* p_actwk) {
-  if (g_mdRam.specmodefull != 0) {
-    if (g_mdRam.vscrolla != 0 || g_mdRam.vscrollb != 0) {
-      ++g_mdRam.vscrolla;
-      if (g_mdRam.vscrolla % 2) {
-        ++g_mdRam.vscrollb;
+  if (g_ram.specmodefull != 0) {
+    if (g_ram.vscrolla != 0 || g_ram.vscrollb != 0) {
+      ++g_ram.vscrolla;
+      if (g_ram.vscrolla % 2) {
+        ++g_ram.vscrollb;
       }
-      sprite_status* a1 = &g_mdRam.actwk[2];
+      sprite_status* a1 = &g_ram.actwk[2];
 
       for (int i = 0; i < 4; ++i) {
         a1->yposi -= SHORT_TO_LONG_HIGH(1);
         ++a1;
       }
     }
-    if (!(g_mdRam.specmodemenu & 0x80)) {
-      if (IS_BUTTON_PRESSED(g_mdRam.swdata1, PAD_U) && g_mdRam.DAT_08ffffaa != 0) {
-        --g_mdRam.DAT_08ffffaa;
+    if (!(g_ram.specmodemenu & 0x80)) {
+      if (IS_BUTTON_PRESSED(g_ram.swdata1, PAD_U) && g_ram.DAT_08ffffaa != 0) {
+        --g_ram.DAT_08ffffaa;
         soundset(137);
       }
-      if (IS_BUTTON_PRESSED(g_mdRam.swdata1, PAD_D) && g_mdRam.DAT_08ffffaa < 2) {
-        ++g_mdRam.DAT_08ffffaa;
+      if (IS_BUTTON_PRESSED(g_ram.swdata1, PAD_D) && g_ram.DAT_08ffffaa < 2) {
+        ++g_ram.DAT_08ffffaa;
         soundset(137);
-        if (g_mdRam.DAT_08ffffaa == 2) {
-          g_mdRam.specmodemenu |= 0x80;
-          g_mdRam.swdata1 &= 0xFF00;
+        if (g_ram.DAT_08ffffaa == 2) {
+          g_ram.specmodemenu |= 0x80;
+          g_ram.swdata1 &= 0xFF00;
         }
       }
     }
-    if (g_mdRam.DAT_08ffffaa != 1) return;
+    if (g_ram.DAT_08ffffaa != 1) return;
   }
-  if (IS_BUTTON_PRESSED(g_mdRam.swdata1, PAD_B | PAD_S)) {
-    g_mdRam.marker_flag = 0;
-    g_mdRam.specmode = 1;
-    g_mdRam.plmode = g_mdRam.levelselect_plmode;
-    g_mdRam.pl_suu = 3;
-    g_mdRam.cartridgespec = 0;
-    g_mdRam.DAT_08fffe16 = 0;
-    g_mdRam.gmmode = 52;
-    if (IS_BUTTON_DOWN(g_mdRam.swdata1, PAD_A)) {
-      unsigned long level = g_mdRam.specmodelevel;
-      unsigned char* p_code = (unsigned char*)&g_mdRam.specmodecode;
+  if (IS_BUTTON_PRESSED(g_ram.swdata1, PAD_B | PAD_S)) {
+    g_ram.marker_flag = 0;
+    g_ram.specmode = 1;
+    g_ram.plmode = g_ram.levelselect_plmode;
+    g_ram.pl_suu = 3;
+    g_ram.cartridgespec = 0;
+    g_ram.DAT_08fffe16 = 0;
+    g_ram.gmmode = 52;
+    if (IS_BUTTON_DOWN(g_ram.swdata1, PAD_A)) {
+      unsigned long level = g_ram.specmodelevel;
+      unsigned char* p_code = (unsigned char*)&g_ram.specmodecode;
 
       for (int i = 0; i < 4; ++i) {
         level &= 0x7F;
@@ -349,10 +349,10 @@ static void header_init(sprite_status* p_actwk) {
 
 // 006a5444
 static void header_move(sprite_status* p_actwk) {
-  if (g_mdRam.specmodefull == 0
-    || (g_mdRam.DAT_08ffffaa == 0 && g_mdRam.DAT_08ffffab == 0)
-    || (g_mdRam.DAT_08ffffaa != 0 && g_mdRam.DAT_08ffffab != 0)) {
-    unsigned long code = BYTESWAP(g_mdRam.specmodecode);
+  if (g_ram.specmodefull == 0
+    || (g_ram.DAT_08ffffaa == 0 && g_ram.DAT_08ffffab == 0)
+    || (g_ram.DAT_08ffffaa != 0 && g_ram.DAT_08ffffab != 0)) {
+    unsigned long code = BYTESWAP(g_ram.specmodecode);
     // pack the four 7-bit values
     // 0AAAAAAA 0BBBBBBB 0CCCCCCC 0DDDDDDD
     code = (code & 0xFFFFFF00) | (code & 0x000000FF) << 1;
@@ -374,7 +374,7 @@ static void header_move(sprite_status* p_actwk) {
     p_actwk->patno = 1;
   }
   else {
-    unsigned long level = (g_mdRam.specmodelevel + 1) & 0x7FFFFFF;
+    unsigned long level = (g_ram.specmodelevel + 1) & 0x7FFFFFF;
     set_leveldigits(p_actwk, level);
     p_actwk->patno = 0;
   }
@@ -587,15 +587,15 @@ static void init_codedigit(sprite_status* p_actwk, void(*r_ptr)(sprite_status*))
 
 // 006a5e09
 static void currentcode_move(sprite_status* p_actwk) {
-  if (g_mdRam.specmodemenu & 0x80) return;
+  if (g_ram.specmodemenu & 0x80) return;
 
-  unsigned char* a2 = g_mdRam.direc_x;
-  a2[3] = (g_mdRam.specmodelevel & 0x000000FF);
-  a2[2] = (g_mdRam.specmodelevel & 0x0000FF00) >> 8;
-  a2[1] = (g_mdRam.specmodelevel & 0x00FF0000) >> 16;
-  a2[0] = (g_mdRam.specmodelevel & 0xFF000000) >> 24;
-  unsigned long* a2_long = (unsigned long*)&g_mdRam.direc_x;
-  if (g_mdRam.DAT_08ffffab != 0) {
+  unsigned char* a2 = g_ram.direc_x;
+  a2[3] = (g_ram.specmodelevel & 0x000000FF);
+  a2[2] = (g_ram.specmodelevel & 0x0000FF00) >> 8;
+  a2[1] = (g_ram.specmodelevel & 0x00FF0000) >> 16;
+  a2[0] = (g_ram.specmodelevel & 0xFF000000) >> 24;
+  unsigned long* a2_long = (unsigned long*)&g_ram.direc_x;
+  if (g_ram.DAT_08ffffab != 0) {
     *a2_long = BYTESWAP(*a2_long);
     *a2_long += 0x7654321;
     *a2_long = BYTESWAP(*a2_long);
@@ -603,11 +603,11 @@ static void currentcode_move(sprite_status* p_actwk) {
   *a2_long &= 0xFFFFFF07;
   unsigned short d4 = FUN_006a668e(a2, 2);
   unsigned short d0 = d4 & 0x3F;
-  if (g_mdRam.DAT_08ffffab != 0) {
+  if (g_ram.DAT_08ffffab != 0) {
     d0 |= 0x40;
   }
   d0 ^= 0x55;
-  unsigned long d1 = g_mdRam.specmodelevel + 0x1234567;
+  unsigned long d1 = g_ram.specmodelevel + 0x1234567;
   d1 &= 0x7FFFFFF;
   ROTATE_RIGHT(d1, 16);
   d4 <<= 5;
@@ -623,44 +623,44 @@ static void currentcode_move(sprite_status* p_actwk) {
 
 // 006a5f81
 static void codeinput_move(sprite_status* p_actwk) {
-  if (!(g_mdRam.specmodemenu & 0x80)) {
+  if (!(g_ram.specmodemenu & 0x80)) {
     SPRITE_STATUS_USHORT(p_actwk, 48) = 0;
     return;
   }
 
-  if (IS_BUTTON_PRESSED(g_mdRam.swdata1, PAD_B | PAD_S)) {
+  if (IS_BUTTON_PRESSED(g_ram.swdata1, PAD_B | PAD_S)) {
     chk_code(p_actwk);
   }
   sprite_status* p_next_actwk = p_actwk + (SPRITE_STATUS_USHORT(p_actwk, 48) + 1);
   p_next_actwk->sproffset = 0x854E;
-  if (IS_BUTTON_PRESSED(g_mdRam.swdata1, PAD_U)) {
+  if (IS_BUTTON_PRESSED(g_ram.swdata1, PAD_U)) {
     if (p_next_actwk->patno-- == 0) {
       p_next_actwk->patno = 9;
     }
   }
-  if (IS_BUTTON_PRESSED(g_mdRam.swdata1, PAD_D)) {
+  if (IS_BUTTON_PRESSED(g_ram.swdata1, PAD_D)) {
     ++p_next_actwk->patno;
     if (p_next_actwk->patno >= 10) {
       p_next_actwk->patno = 0;
     }
   }
-  if (IS_BUTTON_PRESSED(g_mdRam.swdata1, PAD_L)) {
+  if (IS_BUTTON_PRESSED(g_ram.swdata1, PAD_L)) {
     if (SPRITE_STATUS_USHORT(p_actwk, 48)-- == 0) {
       SPRITE_STATUS_USHORT(p_actwk, 48) = 11;
     }
   }
-  if (IS_BUTTON_PRESSED(g_mdRam.swdata1, PAD_R)) {
+  if (IS_BUTTON_PRESSED(g_ram.swdata1, PAD_R)) {
     ++SPRITE_STATUS_USHORT(p_actwk, 48);
     if (SPRITE_STATUS_USHORT(p_actwk, 48) >= 12) {
       SPRITE_STATUS_USHORT(p_actwk, 48) = 0;
     }
   }
 
-  if (g_mdRam.specmodemenu & 0x80) {
+  if (g_ram.specmodemenu & 0x80) {
     p_next_actwk = p_actwk + (SPRITE_STATUS_USHORT(p_actwk, 48) + 1);
     p_next_actwk->sproffset = 0x8562;
   }
-  if (IS_BUTTON_PRESSED(g_mdRam.swdata1, PAD_U | PAD_D | PAD_L | PAD_R)) {
+  if (IS_BUTTON_PRESSED(g_ram.swdata1, PAD_U | PAD_D | PAD_L | PAD_R)) {
     soundset(137);
   }
 }
@@ -689,19 +689,19 @@ static void chk_code(sprite_status* p_actwk) {
   }
   d1l &= 0x7FFFFFF;
   d1l = BYTESWAP(d1l);
-  *((unsigned long*)&g_mdRam.direc_x) = d1l;
-  unsigned short d4 = FUN_006a668e(g_mdRam.direc_x, 2);
+  *((unsigned long*)&g_ram.direc_x) = d1l;
+  unsigned short d4 = FUN_006a668e(g_ram.direc_x, 2);
   d4 &= 0x7FF;
   if (d3 == d4) {
-    g_mdRam.DAT_08ffffab = 0;
+    g_ram.DAT_08ffffab = 0;
     if (d2 != 0) {
       d1l -= 0x7654321;
       d1l &= 0x7FFFFFF;
-      g_mdRam.DAT_08ffffab = 255;
+      g_ram.DAT_08ffffab = 255;
     }
-    g_mdRam.specmodelevel = d1l;
+    g_ram.specmodelevel = d1l;
 
-    unsigned char* a2 = (unsigned char*)&g_mdRam.specmodecode;
+    unsigned char* a2 = (unsigned char*)&g_ram.specmodecode;
     unsigned long d0l = d1l;
     d0l &= 0xFFFFFF7F;
     *a2++ = d0l & 0xFF;
@@ -730,15 +730,15 @@ static void chk_code(sprite_status* p_actwk) {
     ROTATE_RIGHT(d2l, 16);
     *a2++ = d2l & 0xFF;
 
-    set_palette(g_mdRam.colorwk);
+    set_palette(g_ram.colorwk);
     soundset(99);
-    g_mdRam.specmodemenu &= 0x7F;
-    g_mdRam.DAT_08ffffaa = 1;
+    g_ram.specmodemenu &= 0x7F;
+    g_ram.DAT_08ffffaa = 1;
   }
   else {
     soundset(178);
-    g_mdRam.specmodemenu &= 0x7F;
-    g_mdRam.DAT_08ffffaa = 1;
+    g_ram.specmodemenu &= 0x7F;
+    g_ram.DAT_08ffffaa = 1;
   }
 }
 
@@ -790,7 +790,7 @@ static void currentcodedigit_init(sprite_status* p_actwk) {
 
 // 006a678b
 static void currentcodedigit_move(sprite_status* p_actwk) {
-  if (!(g_mdRam.specmodemenu & 0x80)) {
+  if (!(g_ram.specmodemenu & 0x80)) {
     actionsub(p_actwk);
   }
 }
@@ -806,7 +806,7 @@ static void codeinputdigit_init(sprite_status* p_actwk) {
 
 // 006a67ac
 static void codeinputdigit_move(sprite_status* p_actwk) {
-  if (g_mdRam.specmodemenu & 0x80) {
+  if (g_ram.specmodemenu & 0x80) {
     actionsub(p_actwk);
   }
 }
@@ -830,7 +830,7 @@ static void starttext(sprite_status* p_actwk) {
 static void starsphere_init(sprite_status* p_actwk) {
   p_actwk->patbase = starspherepat;
   p_actwk->sproffset = 0xE598;
-  switch (g_mdRam.levelselect_plmode) {
+  switch (g_ram.levelselect_plmode) {
     case TEAM_SONIC:
       p_actwk->sproffset = 0xE598;
       break;
@@ -840,7 +840,7 @@ static void starsphere_init(sprite_status* p_actwk) {
   }
   util__assign_high(&p_actwk->xposi, 256);
   util__assign_high(&p_actwk->yposi, 294);
-  if (g_mdRam.specmodefull == 0) {
+  if (g_ram.specmodefull == 0) {
     util__assign_high(&p_actwk->yposi, 190);
   }
   p_actwk->actfree.ssm_starsphere.p_posi = (short*)leftstarsphereposi;
@@ -858,9 +858,9 @@ static void starsphere_init(sprite_status* p_actwk) {
 
 // 006a690c
 static void starsphere_move(sprite_status* p_actwk) {
-  if (g_mdRam.specmodefull != 0) {
+  if (g_ram.specmodefull != 0) {
     short* p_posi = p_actwk->actfree.ssm_starsphere.p_posi;
-    p_posi += g_mdRam.DAT_08ffffaa * 2;
+    p_posi += g_ram.DAT_08ffffaa * 2;
     short wk;
 
     if (p_posi[0] == LONG_HIGH(p_actwk->xposi) && p_actwk->xspeed + 128 <= 256) {
@@ -912,14 +912,14 @@ static void starsphere_move(sprite_status* p_actwk) {
     ++p_actwk->patno;
     p_actwk->patno &= 7;
   }
-  if (IS_BUTTON_PRESSED(g_mdRam.swdata1, PAD_A | PAD_C)) {
+  if (IS_BUTTON_PRESSED(g_ram.swdata1, PAD_A | PAD_C)) {
     switch (p_actwk->sproffset) {
       case 0x8598:
-        g_mdRam.levelselect_plmode = TEAM_SONIC;
+        g_ram.levelselect_plmode = TEAM_SONIC;
         p_actwk->sproffset = 0xE598;
         break;
       case 0xE598:
-        g_mdRam.levelselect_plmode = TEAM_KNUCKLES;
+        g_ram.levelselect_plmode = TEAM_KNUCKLES;
         p_actwk->sproffset = 0x8598;
         break;
     }
@@ -1187,7 +1187,7 @@ static void character_init(sprite_status* p_actwk) {
     p_next_actwk->sproffset = 0x20FE;
     util__assign_high(&p_next_actwk->xposi, spriteposi[i][0]);
     util__assign_high(&p_next_actwk->yposi, spriteposi[i][1]);
-    if (g_mdRam.specmodemenu != 0 && g_mdRam.specmodefull != 0) {
+    if (g_ram.specmodemenu != 0 && g_ram.specmodefull != 0) {
       p_next_actwk->yposi -= SHORT_TO_LONG_HIGH(16);
     }
     p_next_actwk->sprpri = PRI_3;
@@ -1205,7 +1205,7 @@ static void character_init(sprite_status* p_actwk) {
 
 // 006a708e
 static void character_move(sprite_status* p_actwk) {
-  if (g_mdRam.specmodefull != 0) {
+  if (g_ram.specmodefull != 0) {
     patchg2(p_actwk, characterspriteschg);
   }
   actionsub(p_actwk);

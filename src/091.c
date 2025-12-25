@@ -56,7 +56,7 @@ sprite_status* set_act00(sprite_status* p_actwk, set_act00_data* p_data) {
     bool created = Create_New_Sprite3(p_actwk, &p_new_actwk, &slot_cnt);
     if (!created) return 0;
 
-    p_new_actwk->actfree.dynamic.oya = p_actwk - g_mdRam.actwk;
+    p_new_actwk->actfree.dynamic.oya = p_actwk - g_ram.actwk;
     p_new_actwk->patbase = p_actwk->patbase;
     p_new_actwk->sproffset = p_actwk->sproffset;
     p_new_actwk->r_ptr = p_data->data[i / 2].r_ptr;
@@ -89,7 +89,7 @@ sprite_status* set_act01(sprite_status* p_actwk, set_act01_data* p_data) {
     bool created = Create_New_Sprite3(p_actwk, &p_new_actwk, &slot_cnt);
     if (!created) return 0;
 
-    p_new_actwk->actfree.dynamic.oya = p_actwk - g_mdRam.actwk;
+    p_new_actwk->actfree.dynamic.oya = p_actwk - g_ram.actwk;
     p_new_actwk->patbase = p_actwk->patbase;
     p_new_actwk->sproffset = p_actwk->sproffset;
     p_new_actwk->r_ptr = p_data->data[i / 2].r_ptr;
@@ -127,7 +127,7 @@ sprite_status* set_act02(sprite_status* p_actwk, set_act02_data* p_data) {
     bool created = Create_New_Sprite3(p_actwk, &p_new_actwk, &slot_cnt);
     if (!created) return 0;
 
-    p_new_actwk->actfree.dynamic.oya = p_actwk - g_mdRam.actwk;
+    p_new_actwk->actfree.dynamic.oya = p_actwk - g_ram.actwk;
     p_new_actwk->patbase = p_actwk->patbase;
     p_new_actwk->sproffset = p_actwk->sproffset;
     p_new_actwk->r_ptr = p_data->r_ptr;
@@ -159,8 +159,8 @@ sprite_status* set_act03(sprite_status* p_actwk, set_act03_data* p_data) {
     bool created = Create_New_Sprite3(p_actwk, &p_new_actwk, &slot_cnt);
     if (!created) return 0;
 
-    p_new_actwk->actfree.dynamic.oya = p_prev_actwk - g_mdRam.actwk;
-    p_prev_actwk->actfree.dynamic.ko = p_new_actwk - g_mdRam.actwk;
+    p_new_actwk->actfree.dynamic.oya = p_prev_actwk - g_ram.actwk;
+    p_prev_actwk->actfree.dynamic.ko = p_new_actwk - g_ram.actwk;
     p_prev_actwk = p_new_actwk;
     p_new_actwk->patbase = p_actwk->patbase;
     p_new_actwk->sproffset = p_actwk->sproffset;
@@ -178,7 +178,7 @@ sprite_status* set_act03(sprite_status* p_actwk, set_act03_data* p_data) {
 
 // skdisasm label: Refresh_ChildPosition
 void ko_offset0(sprite_status* p_actwk) {
-  sprite_status* p_parentwk = &g_mdRam.actwk[p_actwk->actfree.dynamic.oya];
+  sprite_status* p_parentwk = &g_ram.actwk[p_actwk->actfree.dynamic.oya];
   short xposi = LONG_HIGH(p_parentwk->xposi) + p_actwk->actfree.dynamic.xoffset;
   util__assign_high(&p_actwk->xposi, xposi);
   short yposi = LONG_HIGH(p_parentwk->yposi) + p_actwk->actfree.dynamic.yoffset;
@@ -188,7 +188,7 @@ void ko_offset0(sprite_status* p_actwk) {
 
 // skdisasm label: Refresh_ChildPositionAdjusted
 void ko_offset1(sprite_status* p_actwk) {
-  sprite_status* p_parentwk = &g_mdRam.actwk[p_actwk->actfree.dynamic.oya];
+  sprite_status* p_parentwk = &g_ram.actwk[p_actwk->actfree.dynamic.oya];
   signed char xoffset = p_actwk->actfree.dynamic.xoffset;
   CLEAR_BIT(p_actwk->actflg, FLG_HFLIP);
   if (BIT_IS_SET(p_parentwk->actflg, FLG_HFLIP)) {

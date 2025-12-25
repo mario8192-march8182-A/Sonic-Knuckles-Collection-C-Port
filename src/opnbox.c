@@ -92,10 +92,10 @@ static void opnbox_init(sprite_status* p_actwk) {
   }
   else {
     p_actwk->r_no = 8;
-    short xposi = LONG_HIGH(g_mdRam.scra_h_posit) + 160;
+    short xposi = LONG_HIGH(g_ram.scra_h_posit) + 160;
     util__assign_high(&p_actwk->xposi, xposi);
     p_actwk->actfree.opnbox.xposi = xposi;
-    short yposi = LONG_HIGH(g_mdRam.scra_v_posit) - 64;
+    short yposi = LONG_HIGH(g_ram.scra_v_posit) - 64;
     util__assign_high(&p_actwk->yposi, yposi);
     p_actwk->actfree.opnbox.xspeed = 1;
     bs00m0_puka_init(p_actwk);
@@ -113,12 +113,12 @@ static void opnbox_wait0(sprite_status* p_actwk) {
 
 
 static void set_break(sprite_status* p_actwk) {
-  if (GET_ZONE(g_mdRam.stageno) == MARBLE_GARDEN) {
-    g_mdRam.pl2_lock_flag = 255;
+  if (GET_ZONE(g_ram.stageno) == MARBLE_GARDEN) {
+    g_ram.pl2_lock_flag = 255;
   }
   p_actwk->patno = 1;
   p_actwk->actfree.opnbox.timer = 64;
-  g_mdRam.DAT_08fffacd = 255;
+  g_ram.DAT_08fffacd = 255;
   set_act00(p_actwk, &opnbox_break_set_tbl);
   set_act00(p_actwk, &friend_set_tbl);
   sprite_status* p_new_actwk = set_act00(p_actwk, &bsexp01_set_tbl);
@@ -150,14 +150,14 @@ static void opnbox_fly0(sprite_status* p_actwk) {
   bool neg = false;
   if (xspeed >= 0) {
     // p_chk
-    unsigned short hposi = util__to_unsigned(LONG_HIGH(g_mdRam.scra_h_posit) + 272);
+    unsigned short hposi = util__to_unsigned(LONG_HIGH(g_ram.scra_h_posit) + 272);
     if (hposi < util__to_unsigned(LONG_HIGH(p_actwk->xposi))) { // unsigned
       neg = true;
     }
   }
   else {
     // m_chk
-    unsigned short hposi = util__to_unsigned(LONG_HIGH(g_mdRam.scra_h_posit) + 48);
+    unsigned short hposi = util__to_unsigned(LONG_HIGH(g_ram.scra_h_posit) + 48);
     if (hposi >= util__to_unsigned(LONG_HIGH(p_actwk->xposi))) { // unsigned
       neg = true;
     }
@@ -167,8 +167,8 @@ static void opnbox_fly0(sprite_status* p_actwk) {
   }
   p_actwk->actfree.opnbox.xspeed = xspeed;
   p_actwk->xposi += SHORT_TO_LONG_HIGH(xspeed);
-  short vposi = LONG_HIGH(g_mdRam.scra_v_posit) + 64;
-  if (GET_ZONE(g_mdRam.stageno) == MARBLE_GARDEN) {
+  short vposi = LONG_HIGH(g_ram.scra_v_posit) + 64;
+  if (GET_ZONE(g_ram.stageno) == MARBLE_GARDEN) {
     vposi -= 32;
   }
   short yspeed = 16384;
@@ -177,7 +177,7 @@ static void opnbox_fly0(sprite_status* p_actwk) {
   }
   p_actwk->yposi += yspeed;
   if (BIT_1_IS_SET(p_actwk->actfree.opnbox.status_bitfield)) {
-    p_actwk->r_no = rno_tbl[GET_ZONE(g_mdRam.stageno)];
+    p_actwk->r_no = rno_tbl[GET_ZONE(g_ram.stageno)];
     set_break(p_actwk);
   }
   puka_puka(p_actwk);
@@ -214,9 +214,9 @@ static void opnbox_fly4(sprite_status* p_actwk) {
 
 static void opnbox_fly40(sprite_status* p_actwk) {
   puka_puka(p_actwk);
-  unsigned short hposi = util__to_unsigned(LONG_HIGH(g_mdRam.scra_h_posit) - 96);
+  unsigned short hposi = util__to_unsigned(LONG_HIGH(g_ram.scra_h_posit) - 96);
   if (hposi >= util__to_unsigned(LONG_HIGH(p_actwk->xposi))) {
-    g_mdRam.DAT_08fffaa2 = 255;
+    g_ram.DAT_08fffaa2 = 255;
   }
   else {
     p_actwk->xposi -= SHORT_TO_LONG_HIGH(2);
@@ -241,7 +241,7 @@ void switch_wait0(sprite_status* p_actwk) {
   chk_switch_ride(p_actwk);
   if (p_actwk->cddat1 & 0x18) {
     p_actwk->r_ptr = &switch_wait1;
-    sprite_status* p_parentwk = &g_mdRam.actwk[p_actwk->actfree.opnbox_switch.oya];
+    sprite_status* p_parentwk = &g_ram.actwk[p_actwk->actfree.opnbox_switch.oya];
     SET_BIT_1(p_parentwk->actfree.opnbox.status_bitfield);
     p_actwk->patno = 12;
   }
@@ -275,7 +275,7 @@ static void switchud_wait0(sprite_status* p_actwk) {
     if (player1 || p_playerwk->yspeed < 0) {
       p_actwk->r_ptr = switchud_wait1;
       SPRITE_STATUS_UCHAR(p_actwk, 67) -= 8;
-      sprite_status* p_parentwk = &g_mdRam.actwk[p_actwk->actfree.opnbox_switch.oya];
+      sprite_status* p_parentwk = &g_ram.actwk[p_actwk->actfree.opnbox_switch.oya];
       SET_BIT_1(p_parentwk->actfree.opnbox.status_bitfield);
     }
   }
@@ -292,7 +292,7 @@ static void switchud_wait1(sprite_status* p_actwk) {
 
 static void break_(sprite_status* p_actwk) {
   enemy_init0(p_actwk, &break_init_tbl);
-  if (g_mdRam.stageno == FLYING_BATTERY_ACT_1) {
+  if (g_ram.stageno == FLYING_BATTERY_ACT_1) {
     p_actwk->sproffset = 1102;
   }
   p_actwk->r_ptr = chk_break_fout;
@@ -345,7 +345,7 @@ static void friend_move0(sprite_status* p_actwk) {
     short pl_x_distance, pl_y_distance;
     chk_distance(p_actwk, &pl_is_right, &pl_is_below, &pl_x_distance, &pl_y_distance);
     short xspeed = -512;
-    if (g_mdRam.act_clear_flag != 0 && pl_is_right) {
+    if (g_ram.act_clear_flag != 0 && pl_is_right) {
       xspeed = -xspeed;
     }
     p_actwk->xspeed = xspeed;
@@ -357,7 +357,7 @@ static void friend_move0(sprite_status* p_actwk) {
 
 static void friend_pg(sprite_status* p_actwk) {
   unsigned char patno = 0;
-  if (!BIT_3_IS_SET(g_mdRam.systemtimer)) {
+  if (!BIT_3_IS_SET(g_ram.systemtimer)) {
     patno = 1;
   }
   p_actwk->patno = patno;
@@ -377,10 +377,10 @@ static void friend_wait1(sprite_status* p_actwk) {
 
 
 static void friend_move1(sprite_status* p_actwk) {
-  get_closero(p_actwk, &g_mdRam.actwk[0], 768, 256, 16, 0, -48 - p_actwk->userflag1);
+  get_closero(p_actwk, &g_ram.actwk[0], 768, 256, 16, 0, -48 - p_actwk->userflag1);
   speedset2(p_actwk);
   chk_spd_pt(p_actwk);
-  if (g_mdRam.act_clear_flag == 0) {
+  if (g_ram.act_clear_flag == 0) {
     p_actwk->r_ptr = &friend_move2;
     SET_BIT(p_actwk->actflg, FLG_HFLIP);
   }
@@ -396,11 +396,11 @@ static void friend_move2(sprite_status* p_actwk) {
 
 void chk_pl_pause(sprite_status* p_actwk, unsigned char r_no) {
   --p_actwk->actfree.opnbox.timer;
-  if (BIT_7_IS_SET(g_mdRam.actwk[0].cddat1)) return;
-  if (BIT_1_IS_SET(g_mdRam.actwk[0].cddat1)) return;
-  if (g_mdRam.actwk[0].r_no >= 6) return; // unsigned
+  if (BIT_7_IS_SET(g_ram.actwk[0].cddat1)) return;
+  if (BIT_1_IS_SET(g_ram.actwk[0].cddat1)) return;
+  if (g_ram.actwk[0].r_no >= 6) return; // unsigned
   p_actwk->r_no = r_no;
-  set_pl_pause(p_actwk, &g_mdRam.actwk[0]);
+  set_pl_pause(p_actwk, &g_ram.actwk[0]);
   short slot_cnt;
   sprite_status* p_new_actwk;
   bool created = Create_New_Sprite(&p_new_actwk, &slot_cnt);
@@ -411,27 +411,27 @@ void chk_pl_pause(sprite_status* p_actwk, unsigned char r_no) {
 
 
 void chk_pl2_pause(sprite_status* p_actwk) {
-  if (g_mdRam.act_clear_flag == 0) return;
-  if (GET_ZONE(g_mdRam.stageno) == CARNIVAL_NIGHT) {
-    set_pl_pause(p_actwk, &g_mdRam.actwk[0]);
+  if (g_ram.act_clear_flag == 0) return;
+  if (GET_ZONE(g_ram.stageno) == CARNIVAL_NIGHT) {
+    set_pl_pause(p_actwk, &g_ram.actwk[0]);
   }
   if (BIT_7_IS_SET(p_actwk->actfree.opnbox.status_bitfield)) return;
-  if (BIT_7_IS_SET(g_mdRam.actwk[1].cddat1)) return;
-  if (BIT_1_IS_SET(g_mdRam.actwk[1].cddat1)) return;
-  if (g_mdRam.actwk[1].r_no >= 6) return; // unsigned
+  if (BIT_7_IS_SET(g_ram.actwk[1].cddat1)) return;
+  if (BIT_1_IS_SET(g_ram.actwk[1].cddat1)) return;
+  if (g_ram.actwk[1].r_no >= 6) return; // unsigned
   SET_BIT_7(p_actwk->actfree.opnbox.status_bitfield);
-  g_mdRam.pl2_lock_flag = 0;
-  set_pl_pause(p_actwk, &g_mdRam.actwk[1]);
+  g_ram.pl2_lock_flag = 0;
+  set_pl_pause(p_actwk, &g_ram.actwk[1]);
 }
 
 
 static bool chk_pl_pausez02(sprite_status* p_actwk, unsigned char r_no) {
   --p_actwk->actfree.opnbox.timer;
   if (p_actwk->actfree.opnbox.timer >= 0) return false;
-  if (g_mdRam.actwk[0].r_no >= 6) return false; // unsigned
-  if (!BIT_IS_SET(g_mdRam.actwk[0].actflg, FLG_ONSCREEN)) return false;
-  if (g_mdRam.actwk[0].actfree.player.character != SONIC) {
-    if (g_mdRam.miles_carry_flag == 0) return false;
+  if (g_ram.actwk[0].r_no >= 6) return false; // unsigned
+  if (!BIT_IS_SET(g_ram.actwk[0].actflg, FLG_ONSCREEN)) return false;
+  if (g_ram.actwk[0].actfree.player.character != SONIC) {
+    if (g_ram.miles_carry_flag == 0) return false;
   }
   p_actwk->xspeed = -256;
   p_actwk->r_no = r_no;
@@ -517,18 +517,18 @@ static void set_friend_init(sprite_status* p_actwk) {
   short yspeed = spd_tbl[(p_actwk->userflag1 & 6) / 2];
   p_actwk->yspeed = yspeed;
   p_actwk->actfree.friend_.yspeed = yspeed;
-  sprite_status* p_parentwk = &g_mdRam.actwk[p_actwk->actfree.friend_.oya];
+  sprite_status* p_parentwk = &g_ram.actwk[p_actwk->actfree.friend_.oya];
   if (BIT_IS_SET(p_parentwk->actflg, FLG_VFLIP)) {
     p_actwk->r_ptr = &friend_wait1;
     SPRITE_STATUS_UCHAR(p_actwk, 67) += 8;
     p_actwk->yspeed = 0;
   }
   unsigned short ofs_index = p_actwk->userflag1 & 2;
-  if (g_mdRam.stageno == FLYING_BATTERY_ACT_1) {
+  if (g_ram.stageno == FLYING_BATTERY_ACT_1) {
     ofs_index += 4;
   }
   p_actwk->sproffset = ofs_tbl[ofs_index * 2];
-  unsigned char* friends = &zone_friend_data[GET_ZONE(g_mdRam.stageno)][0];
+  unsigned char* friends = &zone_friend_data[GET_ZONE(g_ram.stageno)][0];
   unsigned char friend_id = friends[(p_actwk->userflag1 & 2) / 2];
   p_actwk->patbase = friend_data[friend_id].patbase;
   p_actwk->actfree.friend_.move_countdown = p_actwk->userflag1 * 4;

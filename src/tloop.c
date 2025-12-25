@@ -32,24 +32,24 @@ static void tloopmove(sprite_status* p_actwk) {
   if (!(p_actwk->cddat1 & 0x18) && p_actwk->actfree.tloop.countdown != 0) {
     --p_actwk->actfree.tloop.countdown;
     if (p_actwk->actfree.tloop.countdown == 0) {
-      g_mdRam.scralim_left = 4864;
-      g_mdRam.scralim_right = 16384;
+      g_ram.scralim_left = 4864;
+      g_ram.scralim_right = 16384;
     }
     else {
-      if (g_mdRam.scralim_left != 4864) {
-        if (LONG_HIGH(g_mdRam.actwk[0].xposi) >= 11520) { // unsigned
-          g_mdRam.scralim_left = 4864;
+      if (g_ram.scralim_left != 4864) {
+        if (LONG_HIGH(g_ram.actwk[0].xposi) >= 11520) { // unsigned
+          g_ram.scralim_left = 4864;
         }
         else {
-          g_mdRam.scralim_left -= 4;
+          g_ram.scralim_left -= 4;
         }
       }
-      if (g_mdRam.scralim_right != 16384) {
-        if (LONG_HIGH(g_mdRam.actwk[0].xposi) < 11520) { // unsigned
-          g_mdRam.scralim_right = 16384;
+      if (g_ram.scralim_right != 16384) {
+        if (LONG_HIGH(g_ram.actwk[0].xposi) < 11520) { // unsigned
+          g_ram.scralim_right = 16384;
         }
         else {
-          g_mdRam.scralim_right += 4;
+          g_ram.scralim_right += 4;
         }
       }
     }
@@ -59,8 +59,8 @@ static void tloopmove(sprite_status* p_actwk) {
 
 
 static void tloopmovesub(sprite_status* p_actwk) {
-  tloopmovesub__sub(p_actwk, &g_mdRam.actwk[0], &p_actwk->actfree.tloop.pldir_counter, 3);
-  tloopmovesub__sub(p_actwk, &g_mdRam.actwk[1], &p_actwk->actfree.tloop.pl2dir_counter , 4);
+  tloopmovesub__sub(p_actwk, &g_ram.actwk[0], &p_actwk->actfree.tloop.pldir_counter, 3);
+  tloopmovesub__sub(p_actwk, &g_ram.actwk[1], &p_actwk->actfree.tloop.pl2dir_counter , 4);
 }
 
 
@@ -76,22 +76,22 @@ static void tloopmovesub__sub(sprite_status* p_actwk, sprite_status* p_playerwk,
   short relative_yposi = LONG_HIGH(p_playerwk->yposi) - LONG_HIGH(p_actwk->yposi);
   if (relative_yposi < -90) return;
   if (relative_yposi > 160) return;
-  if (g_mdRam.actwk[0].xspeed < 1536) return;
+  if (g_ram.actwk[0].xspeed < 1536) return;
   if (p_playerwk->actfree.player.control_bitfield != 0) return;
   RideObject_SetRide(p_actwk, p_playerwk);
   *pldir_counter = 0;
   SET_BIT_6(p_playerwk->actfree.player.control_bitfield);
   SET_BIT_1(p_playerwk->actfree.player.control_bitfield);
   p_playerwk->mstno = 0;
-  if (p_playerwk == &g_mdRam.actwk[0]) return;
+  if (p_playerwk == &g_ram.actwk[0]) return;
   short slot_cnt;
   sprite_status* p_new_actwk;
   bool created = Create_New_Sprite3(p_actwk, &p_new_actwk, &slot_cnt);
   if (created) {
     p_new_actwk->r_ptr = &Obj_AIZ1TreeRevealControl;
   }
-  g_mdRam.scralim_left = 11360;
-  g_mdRam.scralim_right = 11360;
+  g_ram.scralim_left = 11360;
+  g_ram.scralim_right = 11360;
   p_actwk->actfree.tloop.countdown = 60;
 }
 
@@ -164,8 +164,8 @@ static void tloopmovesub__jump2(sprite_status* p_actwk, sprite_status* p_playerw
     return;
   }
   if (LONG_HIGH(*pldir_counter) >= 1024) {
-    g_mdRam.scralim_left = 4864;
-    g_mdRam.scralim_right= 16384;
+    g_ram.scralim_left = 4864;
+    g_ram.scralim_right= 16384;
   }
   short plxposi = LONG_HIGH(p_playerwk->xposi);
   unsigned char angle = LONG_HIGH(*pldir_counter) / 2;

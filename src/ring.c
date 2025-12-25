@@ -64,7 +64,7 @@ static void ringinit(sprite_status* p_actwk) {
   p_actwk->sprpri = PRI_4;
   p_actwk->colino = 71;
   p_actwk->sprhs = 8;
-  if (g_mdRam.vs_flag != 0) {
+  if (g_ram.vs_flag != 0) {
     p_actwk->sproffset = 25554;
   }
   ringmove(p_actwk);
@@ -72,7 +72,7 @@ static void ringinit(sprite_status* p_actwk) {
 
 
 static void ringmove(sprite_status* p_actwk) {
-  p_actwk->patno = g_mdRam.ring_patno;
+  p_actwk->patno = g_ram.ring_patno;
   frameoutchkc(p_actwk, LONG_HIGH(p_actwk->xposi));
 }
 
@@ -98,28 +98,28 @@ static void ringerase(sprite_status* p_actwk) {
 
 
 void ringgetsub(sprite_status* p_actwk) {
-  if (g_mdRam.plring_act < 999) {
-    ++g_mdRam.plring_act;
+  if (g_ram.plring_act < 999) {
+    ++g_ram.plring_act;
   }
   ringgetsub1(p_actwk);
 }
 
 
 static void ringgetsub1(sprite_status* p_actwk) {
-  if (g_mdRam.plring < 999) {
-    ++g_mdRam.plring;
-    SET_BIT_0(g_mdRam.plring_f);
-    if (g_mdRam.plring >= 100) {
-      bool bit_1_clear = !BIT_1_IS_SET(g_mdRam.plring_f2);
-      SET_BIT_1(g_mdRam.plring_f2);
+  if (g_ram.plring < 999) {
+    ++g_ram.plring;
+    SET_BIT_0(g_ram.plring_f);
+    if (g_ram.plring >= 100) {
+      bool bit_1_clear = !BIT_1_IS_SET(g_ram.plring_f2);
+      SET_BIT_1(g_ram.plring_f2);
       if (bit_1_clear) goto LAB_1up;
-      if (g_mdRam.plring >= 200) {
-        bool bit_2_clear = !BIT_2_IS_SET(g_mdRam.plring_f2);
-        SET_BIT_2(g_mdRam.plring_f2);
+      if (g_ram.plring >= 200) {
+        bool bit_2_clear = !BIT_2_IS_SET(g_ram.plring_f2);
+        SET_BIT_2(g_ram.plring_f2);
         if (bit_2_clear) {
 LAB_1up:
-          ++g_mdRam.pl_suu;
-          ++g_mdRam.pl_suu_f;
+          ++g_ram.pl_suu;
+          ++g_ram.pl_suu_f;
           bgmset(42);
           return;
         }
@@ -131,27 +131,27 @@ LAB_1up:
 
 
 void ringgetsub2(sprite_status* p_actwk) {
-  if (g_mdRam.pl2ring_act < 999) {
-    ++g_mdRam.pl2ring_act;
+  if (g_ram.pl2ring_act < 999) {
+    ++g_ram.pl2ring_act;
   }
-  if (g_mdRam.pl2ring < 999) {
-    ++g_mdRam.pl2ring;
+  if (g_ram.pl2ring < 999) {
+    ++g_ram.pl2ring;
   }
-  if (g_mdRam.vs_flag == 0) {
+  if (g_ram.vs_flag == 0) {
     ringgetsub1(p_actwk);
     return;
   }
-  SET_BIT_0(g_mdRam.pl2ring_f);
-  if (g_mdRam.pl2ring >= 100) {
-    bool bit_1_clear = !BIT_1_IS_SET(g_mdRam.pl2ring_f2);
-    SET_BIT_1(g_mdRam.pl2ring_f2);
+  SET_BIT_0(g_ram.pl2ring_f);
+  if (g_ram.pl2ring >= 100) {
+    bool bit_1_clear = !BIT_1_IS_SET(g_ram.pl2ring_f2);
+    SET_BIT_1(g_ram.pl2ring_f2);
     if (bit_1_clear) goto LAB_1up;
-    if (g_mdRam.pl2ring >= 200) {
-      bool bit_2_clear = !BIT_2_IS_SET(g_mdRam.pl2ring_f2);
-      SET_BIT_2(g_mdRam.pl2ring_f2);
+    if (g_ram.pl2ring >= 200) {
+      bool bit_2_clear = !BIT_2_IS_SET(g_ram.pl2ring_f2);
+      SET_BIT_2(g_ram.pl2ring_f2);
       if (bit_2_clear) {
 LAB_1up:
-        ++g_mdRam.pl2_suu;
+        ++g_ram.pl2_suu;
         bgmset(42);
         return;
       }
@@ -191,13 +191,13 @@ static sprite_status_handler flyring_move_tblg[5] = {
 
 static void flyringinit(sprite_status* p_actwk) {
   sprite_status_handler p_routine = &flyring;
-  if (g_mdRam.reverse_gravity_flag != 0) {
+  if (g_ram.reverse_gravity_flag != 0) {
     p_routine = flyringg;
   }
   sprite_status* p_new_actwk = p_actwk;
-  short flyring_cnt = g_mdRam.plring;
+  short flyring_cnt = g_ram.plring;
   if (p_actwk->actfree.ring.player != 0) {
-    flyring_cnt = g_mdRam.pl2ring;
+    flyring_cnt = g_ram.pl2ring;
   }
   if (flyring_cnt >= 32) {
     flyring_cnt = 32;
@@ -225,7 +225,7 @@ jump:
     p_new_actwk->sprpri = PRI_3;
     p_new_actwk->colino = 71;
     p_new_actwk->sprhs = 8;
-    g_mdRam.flyring_patcnt = 255;
+    g_ram.flyring_patcnt = 255;
     if (angle >= 0) {
       short sin, cos;
       sinset(angle & 0xFF, &sin, &cos);
@@ -252,10 +252,10 @@ jump:
   } while (flyring_cnt != -1);
 
   soundset(65465);
-  g_mdRam.plring = 0;
-  g_mdRam.plring_f = 128;
-  g_mdRam.plring_f2 = 0;
-  if (g_mdRam.reverse_gravity_flag != 0) {
+  g_ram.plring = 0;
+  g_ram.plring_f = 128;
+  g_ram.plring_f2 = 0;
+  if (g_ram.reverse_gravity_flag != 0) {
     flyringmoveg(p_actwk);
   }
   else {
@@ -265,11 +265,11 @@ jump:
 
 
 static void flyringmove(sprite_status* p_actwk) {
-  p_actwk->patno = g_mdRam.flyring_patno;
+  p_actwk->patno = g_ram.flyring_patno;
   speedset2(p_actwk);
   p_actwk->yspeed += 24;
   if (p_actwk->yspeed >= 0) {
-    if (!((g_mdRam.systemtimer % 256 + (p_actwk - g_mdRam.actwk - 1)) % 8)) {
+    if (!((g_ram.systemtimer % 256 + (p_actwk - g_ram.actwk - 1)) % 8)) {
       if (BIT_IS_SET(p_actwk->actflg, FLG_ONSCREEN)) {
         short unknown1 = RingCheckFloorDist(p_actwk);
         if (unknown1 < 0) {
@@ -278,18 +278,18 @@ static void flyringmove(sprite_status* p_actwk) {
           p_actwk->yspeed = -p_actwk->yspeed;
         }
       }
-      if (g_mdRam.flyring_patcnt == 0) {
+      if (g_ram.flyring_patcnt == 0) {
         flyringerase(p_actwk);
         return;
       }
-      if (g_mdRam.scralim_down + 224 < LONG_HIGH(p_actwk->yposi)) {
+      if (g_ram.scralim_down + 224 < LONG_HIGH(p_actwk->yposi)) {
         flyringerase(p_actwk);
         return;
       }
     }
   }
   Add_Object_To_Collision_Response_List(p_actwk);
-  p_actwk->xposi += SHORT_TO_LONG_HIGH(g_mdRam.frame_offset_x);
+  p_actwk->xposi += SHORT_TO_LONG_HIGH(g_ram.frame_offset_x);
   actionsub(p_actwk);
 }
 
@@ -315,11 +315,11 @@ static void flyringerase(sprite_status* p_actwk) {
 
 
 static void flyringmoveg(sprite_status* p_actwk) {
-  p_actwk->patno = g_mdRam.flyring_patno;
+  p_actwk->patno = g_ram.flyring_patno;
   speedset2g(p_actwk);
   p_actwk->yspeed += 24;
   if (p_actwk->yspeed >= 0) {
-    if (!((g_mdRam.systemtimer % 256 + (p_actwk - g_mdRam.actwk - 1)) % 8)) {
+    if (!((g_ram.systemtimer % 256 + (p_actwk - g_ram.actwk - 1)) % 8)) {
       if (BIT_IS_SET(p_actwk->actflg, FLG_ONSCREEN)) {
         short unknown1 = RingCheckFloorDist_ReverseGravity(p_actwk);
         if (unknown1 < 0) {
@@ -328,18 +328,18 @@ static void flyringmoveg(sprite_status* p_actwk) {
           p_actwk->yspeed = -p_actwk->yspeed;
         }
       }
-      if (g_mdRam.flyring_patcnt == 0) {
+      if (g_ram.flyring_patcnt == 0) {
         flyringerase(p_actwk);
         return;
       }
-      if (g_mdRam.scralim_down + 224 < LONG_HIGH(p_actwk->yposi)) {
+      if (g_ram.scralim_down + 224 < LONG_HIGH(p_actwk->yposi)) {
         flyringerase(p_actwk);
         return;
       }
     }
   }
   Add_Object_To_Collision_Response_List(p_actwk);
-  p_actwk->xposi += SHORT_TO_LONG_HIGH(g_mdRam.frame_offset_x);
+  p_actwk->xposi += SHORT_TO_LONG_HIGH(g_ram.frame_offset_x);
   actionsub(p_actwk);
 }
 
@@ -362,10 +362,10 @@ void tring(sprite_status* p_actwk) {
 static void tringmove(sprite_status* p_actwk) {
   if (p_actwk->r_no == 0) {
     tringspdset(p_actwk);
-    if (!BIT_5_IS_SET(g_mdRam.actwk[0].cddat2)) {
+    if (!BIT_5_IS_SET(g_ram.actwk[0].cddat2)) {
       p_actwk->r_ptr = flyring;
       p_actwk->r_no = 2;
-      g_mdRam.flyring_patcnt = 255;
+      g_ram.flyring_patcnt = 255;
     }
     --p_actwk->pattim;
     if (util__to_signed(p_actwk->pattim) < 0) {
@@ -374,17 +374,17 @@ static void tringmove(sprite_status* p_actwk) {
       p_actwk->patno &= 3;
     }
     unsigned short screen_xposi = util__to_unsigned(LONG_HIGH(p_actwk->xposi)) & 0xFF80;
-    screen_xposi -= g_mdRam.scr_x_no;
+    screen_xposi -= g_ram.scr_x_no;
     if (screen_xposi <= 640) { // unsigned
       Add_Object_To_Collision_Response_List(p_actwk);
       actionsub(p_actwk);
     }
     else {
       if (p_actwk->actfree.ring.flagwork_index != 0) {
-        CLEAR_BIT_7(g_mdRam.flagwork[p_actwk->actfree.ring.flagwork_index - 1]);
+        CLEAR_BIT_7(g_ram.flagwork[p_actwk->actfree.ring.flagwork_index - 1]);
       }
       if (p_actwk->actfree.ring.ringwk_index != 0) {
-        g_mdRam.ringwk[p_actwk->actfree.ring.ringwk_index - 1] = 0;
+        g_ram.ringwk[p_actwk->actfree.ring.ringwk_index - 1] = 0;
       }
       frameout(p_actwk);
     }
@@ -392,7 +392,7 @@ static void tringmove(sprite_status* p_actwk) {
   else {
     p_actwk->colino = 0;
     p_actwk->sprpri = PRI_1;
-    --g_mdRam.actring;
+    --g_ram.actring;
     ringgetsub(p_actwk);
     p_actwk->r_ptr = &tringdie;
     p_actwk->r_no = 0;
@@ -419,7 +419,7 @@ static void tringerase(sprite_status* p_actwk) {
 
 static void tringspdset(sprite_status* p_actwk) {
   short accel = 48;
-  if (LONG_HIGH(g_mdRam.actwk[0].xposi) < LONG_HIGH(p_actwk->xposi)) {
+  if (LONG_HIGH(g_ram.actwk[0].xposi) < LONG_HIGH(p_actwk->xposi)) {
     accel = -accel;
     if (p_actwk->xspeed < 0) goto jump2;
     accel *= 3;
@@ -430,7 +430,7 @@ static void tringspdset(sprite_status* p_actwk) {
 jump2:
   p_actwk->xspeed += accel;
   accel = 48;
-  if (LONG_HIGH(g_mdRam.actwk[0].yposi) < LONG_HIGH(p_actwk->yposi)) {
+  if (LONG_HIGH(g_ram.actwk[0].yposi) < LONG_HIGH(p_actwk->yposi)) {
     accel = -accel;
     if (p_actwk->yspeed < 0) goto jump4;
     accel *= 3;

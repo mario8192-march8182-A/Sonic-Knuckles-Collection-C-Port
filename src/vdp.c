@@ -46,7 +46,7 @@ void FUN_0040edec() {
     }
     ++i;
     if (i == g_vIntScanline) {
-      vscroll_high = g_mdRam.scra_v_posit_copy + g_vIntScanline;
+      vscroll_high = g_ram.scra_v_posit_copy + g_vIntScanline;
       g_vscrollCopy = vscroll_high;
       vscroll_high >>= 3;
       vscroll_high &= 0x1F;
@@ -494,7 +494,7 @@ static unsigned char* blit_remainingpixels_ver4(unsigned char* p_pixelbuffer, un
 void FUN_0040f89b(unsigned long* p_surface, long pitch) {
   unsigned long* p_pixelbuffer = (unsigned long*)g_pixelBuffer;
   pitch -= 320;
-  unsigned char hint = g_mdRam.vdp_hint_cache;
+  unsigned char hint = g_ram.vdp_hint_cache;
   if (DAT_008549dc != 0) {
     hint = 255;
   }
@@ -525,7 +525,7 @@ void FUN_0040f89b(unsigned long* p_surface, long pitch) {
 void FUN_0040f96a(unsigned long* p_surface, long pitch) {
   unsigned long* p_pixelbuffer = (unsigned long*)g_pixelBuffer;
   long pitch2 = pitch * 2 - 640;
-  unsigned char hint = g_mdRam.vdp_hint_cache;
+  unsigned char hint = g_ram.vdp_hint_cache;
   if (DAT_008549dc != 0) {
     hint = 255;
   }
@@ -652,7 +652,7 @@ void FUN_0040f96a(unsigned long* p_surface, long pitch) {
 void FUN_0040fceb(unsigned long* p_surface, long pitch) {
   unsigned long* p_pixelbuffer = (unsigned long*)g_pixelBuffer;
   pitch -= 320;
-  unsigned char hint = g_mdRam.vdp_hint_cache;
+  unsigned char hint = g_ram.vdp_hint_cache;
 
   for (int scanline = 0; scanline < 224; ++scanline) {
     for (int i = 20; i != 0; --i) {
@@ -670,7 +670,7 @@ void FUN_0040fceb(unsigned long* p_surface, long pitch) {
 void FUN_0040fd4f(unsigned long* p_surface, long pitch) {
   unsigned long* p_pixelbuffer = (unsigned long*)g_pixelBuffer;
   long pitch2 = pitch * 2 - 640;
-  unsigned char hint = g_mdRam.vdp_hint_cache;
+  unsigned char hint = g_ram.vdp_hint_cache;
 
   for (int scanline = 0; scanline < 224; ++scanline) {
     for (int i = 20; i != 0; --i) {
@@ -754,11 +754,11 @@ void copy_data_vram(void* p_source, unsigned short offset, unsigned short size) 
 // 0041434c
 static void vint_handler_ver1(unsigned char* p_vscroll_high, unsigned char** pp_scrollplane, unsigned char* p_vscroll_low) {
   if (DAT_00856df4 != 0) {
-    g_vscrollCopy = g_mdRam.vs_vscroll >> 16;
+    g_vscrollCopy = g_ram.vs_vscroll >> 16;
   }
   else {
     ++DAT_00856df4;
-    g_vscrollCopy = g_mdRam.vs_vscroll & 0xFFFF;
+    g_vscrollCopy = g_ram.vs_vscroll & 0xFFFF;
   }
   *p_vscroll_high = g_vscrollCopy >> 3 & 0x1F;
   *pp_scrollplane = &g_pVdpReadPos[*p_vscroll_high << 8];
@@ -902,11 +902,11 @@ void FUN_004145ee() {
 // 0041465c
 static void vint_handler_ver2(unsigned char* p_vscroll_high, unsigned char** pp_scrollplane, unsigned char* p_vscroll_low) {
   if (DAT_00856df4 != 0) {
-    g_vscrollCopy = g_mdRam.vs_vscroll >> 16;
+    g_vscrollCopy = g_ram.vs_vscroll >> 16;
   }
   else {
     ++DAT_00856df4;
-    g_vscrollCopy = g_mdRam.vs_vscroll & 0xFFFF;
+    g_vscrollCopy = g_ram.vs_vscroll & 0xFFFF;
   }
   *p_vscroll_high = g_vscrollCopy >> 3 & 0x3F;
   *pp_scrollplane = &g_pVdpReadPos[*p_vscroll_high << 7];

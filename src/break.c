@@ -104,7 +104,7 @@ void break_(sprite_status* p_actwk) {
 static void break_init(sprite_status* p_actwk) {
   p_actwk->patbase = break000pat;
   p_actwk->sproffset = 16385;
-  if (g_mdRam.stageno == ANGEL_ISLAND_ACT_2) {
+  if (g_ram.stageno == ANGEL_ISLAND_ACT_2) {
     p_actwk->patbase = break001pat;
     p_actwk->sproffset = 16385;
   }
@@ -112,7 +112,7 @@ static void break_init(sprite_status* p_actwk) {
   p_actwk->actfree.break_.breakmove_data = break00tbl;
   p_actwk->sprhs = 7;
   p_actwk->sprvs = 32;
-  if (GET_ZONE(g_mdRam.stageno) == ICECAP) {
+  if (GET_ZONE(g_ram.stageno) == ICECAP) {
     p_actwk->patbase = break050pat;
     p_actwk->sproffset = 16385;
     p_actwk->actfree.break_.breakgo_data1 = brgotbl05;
@@ -166,8 +166,8 @@ static void breakdown2(sprite_status* p_actwk) {
   --p_actwk->actfree.break_.countdown;
   if (p_actwk->actfree.break_.countdown != 0) return;
   p_actwk->r_ptr = &breakdown3;
-  breakdown2__sub(p_actwk, &g_mdRam.actwk[0], 3);
-  breakdown2__sub(p_actwk, &g_mdRam.actwk[1], 4);
+  breakdown2__sub(p_actwk, &g_ram.actwk[0], 3);
+  breakdown2__sub(p_actwk, &g_ram.actwk[1], 4);
 }
 
 
@@ -252,7 +252,7 @@ static void break2init(sprite_status* p_actwk) {
   p_actwk->r_ptr = &break2move;
   SET_BIT(p_actwk->actflg, FLG_LEVELCOORDS);
   p_actwk->sprpri = PRI_5;
-  if (GET_ZONE(g_mdRam.stageno) == LAUNCH_BASE) {
+  if (GET_ZONE(g_ram.stageno) == LAUNCH_BASE) {
     unsigned short countdown = (p_actwk->userflag1 & 0x3F) * 3;
     bool carry = util__get_add_carry(countdown, 8);
     if (!carry) {
@@ -278,7 +278,7 @@ static void break2init(sprite_status* p_actwk) {
       p_actwk->actfree.break_.breakgo_data1 = br2gotbl061;
     }
   }
-  if (GET_ZONE(g_mdRam.stageno) == HYDROCITY) {
+  if (GET_ZONE(g_ram.stageno) == HYDROCITY) {
     p_actwk->patbase = break010pat;
     p_actwk->sproffset = 49153;
     unsigned char userflag = p_actwk->userflag1;
@@ -299,7 +299,7 @@ static void break2init(sprite_status* p_actwk) {
     p_actwk->actfree.break_.breakgo_data1 = p_init_data2[0];
     p_actwk->actfree.break_.breakgo_data2 = p_init_data2[1];
   }
-  if (GET_ZONE(g_mdRam.stageno) == MARBLE_GARDEN) {
+  if (GET_ZONE(g_ram.stageno) == MARBLE_GARDEN) {
     p_actwk->patbase = break020pat;
     p_actwk->sproffset = 16385;
     p_actwk->actfree.break_.countdown = (p_actwk->userflag1 & 0xF) * 16 + 8;
@@ -318,7 +318,7 @@ static void break2init(sprite_status* p_actwk) {
     }
     return;
   }
-  if (GET_ZONE(g_mdRam.stageno) == ICECAP) {
+  if (GET_ZONE(g_ram.stageno) == ICECAP) {
     unsigned char userflag = p_actwk->userflag1;
     if (BIT_7_IS_SET(userflag)) {
       p_actwk->actfree.break_.level_trigger_no = userflag & 0xF;
@@ -334,12 +334,12 @@ static void break2init(sprite_status* p_actwk) {
     p_actwk->actfree.break_.breakgo_data2 = br2gotbl051;
     p_actwk->patno = 3;
   }
-  if (GET_ZONE(g_mdRam.stageno) == LAVA_REEF_BOSS_AND_HIDDEN_PALACE) {
+  if (GET_ZONE(g_ram.stageno) == LAVA_REEF_BOSS_AND_HIDDEN_PALACE) {
     p_actwk->patbase = break093pat;
     p_actwk->sproffset = 16385;
     goto jump16;
   }
-  if (GET_ZONE(g_mdRam.stageno) == LAVA_REEF) {
+  if (GET_ZONE(g_ram.stageno) == LAVA_REEF) {
     p_actwk->patbase = break091pat;
     p_actwk->sproffset = 16528;
 jump16:
@@ -354,7 +354,7 @@ jump16:
     p_actwk->actfree.break_.breakgo_data1 = p_init_data2[0];
     p_actwk->actfree.break_.breakgo_data2 = p_init_data2[1];
   }
-  if (GET_ZONE(g_mdRam.stageno) == FLYING_BATTERY) {
+  if (GET_ZONE(g_ram.stageno) == FLYING_BATTERY) {
     p_actwk->patbase = break041pat;
     p_actwk->sproffset = 16385;
     p_actwk->actfree.break_.countdown = (p_actwk->userflag1 & 0xF) * 16 + 8;
@@ -369,7 +369,7 @@ jump16:
     p_actwk->actfree.break_.breakgo_data1 = p_init_data2[0];
     p_actwk->actfree.break_.breakgo_data2 = p_init_data2[1];
   }
-  if (GET_ZONE(g_mdRam.stageno) == SANDOPOLIS) {
+  if (GET_ZONE(g_ram.stageno) == SANDOPOLIS) {
     p_actwk->patbase = break081pat;
     p_actwk->sproffset = 16385;
     p_actwk->actfree.break_.countdown = (p_actwk->userflag1 & 0xF) * 16 + 8;
@@ -392,9 +392,9 @@ static void break2move(sprite_status* p_actwk) {
     if (p_actwk->actfree.break_.countdown == 0) {
       unsigned char* p_data = p_actwk->actfree.break_.breakgo_data1;
       if (BIT_7_IS_SET(p_actwk->userflag1) && p_actwk->cddat1 & 0x18) {
-        short xposi = LONG_HIGH(g_mdRam.actwk[0].xposi);
+        short xposi = LONG_HIGH(g_ram.actwk[0].xposi);
         if (!BIT_IS_SET(p_actwk->cddat1, CD_PLRIDE)) {
-          xposi = LONG_HIGH(g_mdRam.actwk[1].xposi);
+          xposi = LONG_HIGH(g_ram.actwk[1].xposi);
           if (xposi < LONG_HIGH(p_actwk->xposi)) {
             p_data = p_actwk->actfree.break_.breakgo_data2;
             TOGGLE_BIT(p_actwk->cddat1, CD_RIGHT);
@@ -425,20 +425,20 @@ static void break2move_koma(sprite_status* p_actwk) {
   hitchk_data data = { p_actwk->sprhs, 0, 16, LONG_HIGH(p_actwk->xposi) };
   SolidObjectTop(p_actwk, data);
   if (p_actwk->cddat1 & 0x18) {
-    unsigned char eventflag = g_mdRam.actwk[0].actfree.player.eventflag;
+    unsigned char eventflag = g_ram.actwk[0].actfree.player.eventflag;
     if (!BIT_IS_SET(p_actwk->cddat1, CD_PLRIDE)) {
-      eventflag = g_mdRam.actwk[1].actfree.player.eventflag;
+      eventflag = g_ram.actwk[1].actfree.player.eventflag;
     }
     if (BIT_7_IS_SET(eventflag)) {
       bool bit_3_clear = BIT_IS_SET(p_actwk->cddat1, CD_RIDE);
       CLEAR_BIT(p_actwk->cddat1, CD_PLRIDE);
       if (bit_3_clear) {
-        CLEAR_BIT(g_mdRam.actwk[0].cddat1, CD_RIDE);
+        CLEAR_BIT(g_ram.actwk[0].cddat1, CD_RIDE);
       }
       bool bit_4_clear = !BIT_IS_SET(p_actwk->cddat1, CD_PL2RIDE);
       CLEAR_BIT(p_actwk->cddat1, CD_PL2RIDE);
       if (bit_4_clear) {
-        CLEAR_BIT(g_mdRam.actwk[1].cddat1, CD_RIDE);
+        CLEAR_BIT(g_ram.actwk[1].cddat1, CD_RIDE);
       }
       a4 = break2komatbl;
       ++p_actwk->patno;
@@ -446,7 +446,7 @@ static void break2move_koma(sprite_status* p_actwk) {
       p_actwk->r_ptr = &break2komamove2;
       breakgosubf(p_actwk);
       if (p_actwk->actfree.break_.flagwork_index != 0) {
-        CLEAR_BIT_7(g_mdRam.flagwork[p_actwk->actfree.break_.flagwork_index - 1]);
+        CLEAR_BIT_7(g_ram.flagwork[p_actwk->actfree.break_.flagwork_index - 1]);
         p_actwk->actfree.break_.flagwork_index = 0;
       }
       break2komamove2(p_actwk);
@@ -486,9 +486,9 @@ static void break2movesw(sprite_status* p_actwk) {
     if (p_actwk->actfree.break_.countdown == 0) {
       unsigned char* p_data = p_actwk->actfree.break_.breakgo_data1;
       if (BIT_7_IS_SET(p_actwk->userflag1) && p_actwk->cddat1 & 0x18) {
-        short xposi = LONG_HIGH(g_mdRam.actwk[0].xposi);
+        short xposi = LONG_HIGH(g_ram.actwk[0].xposi);
         if (!BIT_IS_SET(p_actwk->cddat1, CD_PLRIDE)) {
-          xposi = LONG_HIGH(g_mdRam.actwk[1].xposi);
+          xposi = LONG_HIGH(g_ram.actwk[1].xposi);
         }
         if (xposi < LONG_HIGH(p_actwk->xposi)) { // unsigned
           p_data = p_actwk->actfree.break_.breakgo_data2;
@@ -501,7 +501,7 @@ static void break2movesw(sprite_status* p_actwk) {
     }
     --p_actwk->actfree.break_.countdown;
   }
-  unsigned char trigger = g_mdRam.level_triggers[p_actwk->actfree.break_.level_trigger_no & 0xF];
+  unsigned char trigger = g_ram.level_triggers[p_actwk->actfree.break_.level_trigger_no & 0xF];
   if (trigger != 0) {
     p_actwk->actfree.break_.break_flag = 1;
   }
@@ -540,8 +540,8 @@ static void break2down2(sprite_status* p_actwk) {
     p_actwk->actfree.break_.countdown,
     0
   };
-  break2down2__sub(p_actwk, &g_mdRam.actwk[0], data, p_actwk->actfree.break_.breakgo_data1, 3);
-  break2down2__sub(p_actwk, &g_mdRam.actwk[1], data, p_actwk->actfree.break_.breakgo_data1, 4);
+  break2down2__sub(p_actwk, &g_ram.actwk[0], data, p_actwk->actfree.break_.breakgo_data1, 3);
+  break2down2__sub(p_actwk, &g_ram.actwk[1], data, p_actwk->actfree.break_.breakgo_data1, 4);
   frameoutchk(p_actwk);
 }
 
@@ -616,7 +616,7 @@ jump:
 
   actionsub(p_actwk);
   if (p_actwk->actfree.break_.flagwork_index != 0) {
-    CLEAR_BIT_7(g_mdRam.flagwork[p_actwk->actfree.break_.flagwork_index - 1]);
+    CLEAR_BIT_7(g_ram.flagwork[p_actwk->actfree.break_.flagwork_index - 1]);
     p_actwk->actfree.break_.flagwork_index = 0;
   }
   soundset(89);

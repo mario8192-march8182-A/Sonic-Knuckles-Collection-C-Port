@@ -105,7 +105,7 @@ static void sai00_kemuri(sprite_status* p_actwk) {
     &sai00_kemuri_wait
   };
 
-  if (g_mdRam.stageno != ANGEL_ISLAND_ACT_2) {
+  if (g_ram.stageno != ANGEL_ISLAND_ACT_2) {
     ko_offset1(p_actwk);
     act_tbl[p_actwk->r_no / 2](p_actwk);
     set_emy_wchg(p_actwk, &sai00_wrt_tbl);

@@ -18,11 +18,11 @@ extern void vInt();
 
 // 00426210
 void fadein() {
-  g_mdRam.colorcnt = 63;
+  g_ram.colorcnt = 63;
   fadein0();
 
   for (int fadecount = 0; fadecount < 22; ++fadecount) {
-    g_mdRam.int_flg = 18;
+    g_ram.int_flg = 18;
     vInt();
     fadein1();
   }
@@ -31,9 +31,9 @@ void fadein() {
 
 // 00426258
 static void fadein1() {
-  unsigned short* p_destination = &g_mdRam.colorwk[g_mdRam.startcolor / 2];
-  unsigned short* p_source = &g_mdRam.colorwk2[g_mdRam.startcolor / 2];
-  unsigned char cnt = g_mdRam.colorcnt;
+  unsigned short* p_destination = &g_ram.colorwk[g_ram.startcolor / 2];
+  unsigned short* p_source = &g_ram.colorwk2[g_ram.startcolor / 2];
+  unsigned char cnt = g_ram.colorcnt;
 
   do {
     fadein2(p_destination, p_source);
@@ -41,10 +41,10 @@ static void fadein1() {
     ++p_source;
   } while (cnt-- != 0);
 
-  if (g_mdRam.watermode != 0) {
-    p_destination = &g_mdRam.colorwk3[g_mdRam.startcolor / 2];
-    p_source = &g_mdRam.colorwk4[g_mdRam.startcolor / 2];
-    cnt = g_mdRam.colorcnt;
+  if (g_ram.watermode != 0) {
+    p_destination = &g_ram.colorwk3[g_ram.startcolor / 2];
+    p_source = &g_ram.colorwk4[g_ram.startcolor / 2];
+    cnt = g_ram.colorcnt;
 
     do {
       fadein2(p_destination, p_source);
@@ -77,16 +77,16 @@ static void fadein2(unsigned short* p_destination, unsigned short* p_source) {
 
 // 00426447
 static void fadein0() {
-  if (g_mdRam.stageno == ENDING || g_mdRam.stageno == MASTER_EMERALD_SHRINE) {
+  if (g_ram.stageno == ENDING || g_ram.stageno == MASTER_EMERALD_SHRINE) {
     fadein0_alt();
     return;
   }
 
-  unsigned short* p_palette = &g_mdRam.colorwk[g_mdRam.startcolor / 2];
-  unsigned char cnt = g_mdRam.colorcnt * 2;
+  unsigned short* p_palette = &g_ram.colorwk[g_ram.startcolor / 2];
+  unsigned char cnt = g_ram.colorcnt * 2;
   memset(p_palette, 0, cnt);
-  if (g_mdRam.watermode != 0) {
-    p_palette = &g_mdRam.colorwk3[g_mdRam.startcolor / 2];
+  if (g_ram.watermode != 0) {
+    p_palette = &g_ram.colorwk3[g_ram.startcolor / 2];
     memset(p_palette, 0, cnt);
   }
 }
@@ -94,11 +94,11 @@ static void fadein0() {
 
 // 0042653f
 void fadeout() {
-  g_mdRam.startcolor = 0;
-  g_mdRam.colorcnt = 63;
+  g_ram.startcolor = 0;
+  g_ram.colorcnt = 63;
 
   for (int fadecount = 0; fadecount < 22; ++fadecount) {
-    g_mdRam.int_flg = 18;
+    g_ram.int_flg = 18;
     vInt();
     fadeout1();
   }
@@ -107,14 +107,14 @@ void fadeout() {
 
 // 00426580
 static void fadeout1() {
-  unsigned short* pPalette = &g_mdRam.colorwk[g_mdRam.startcolor / 2];
-  for (int i = 0; g_mdRam.colorcnt >= i; ++i) {
+  unsigned short* pPalette = &g_ram.colorwk[g_ram.startcolor / 2];
+  for (int i = 0; g_ram.colorcnt >= i; ++i) {
     fadeout2(pPalette);
     ++pPalette;
   }
 
-  pPalette = &g_mdRam.colorwk3[g_mdRam.startcolor / 2];
-  for (int i = 0; g_mdRam.colorcnt >= i; ++i) {
+  pPalette = &g_ram.colorwk3[g_ram.startcolor / 2];
+  for (int i = 0; g_ram.colorcnt >= i; ++i) {
     fadeout2(pPalette);
     ++pPalette;
   }
@@ -148,23 +148,23 @@ static void fadeout2(unsigned short* pPalette) {
 
 // 0042670d
 static void fadein0_alt() {
-  unsigned short* p_palette = &g_mdRam.colorwk[g_mdRam.startcolor / 2];
+  unsigned short* p_palette = &g_ram.colorwk[g_ram.startcolor / 2];
 
-  for (int i = 0; g_mdRam.colorcnt >= i; ++i) {
+  for (int i = 0; g_ram.colorcnt >= i; ++i) {
     *p_palette++ = 0xEEE;
   }
 
-  g_mdRam.DAT_08ffface = 0;
+  g_ram.DAT_08ffface = 0;
 }
 
 
 // 0042678c
 void flashin() {
-  g_mdRam.colorcnt = 63;
+  g_ram.colorcnt = 63;
   fadein0_alt();
 
   for (int i = 0; i < 22; ++i) {
-    g_mdRam.int_flg = 18;
+    g_ram.int_flg = 18;
     vInt();
     flashin1();
   }
@@ -173,23 +173,23 @@ void flashin() {
 
 // 004267d2
 void flashin1() {
-  if (g_mdRam.DAT_08ffface-- != 0) return;
+  if (g_ram.DAT_08ffface-- != 0) return;
 
-  g_mdRam.DAT_08ffface = 2;
-  unsigned short* p_destination = &g_mdRam.colorwk[g_mdRam.startcolor / 2];
-  unsigned short* p_source = &g_mdRam.colorwk2[g_mdRam.startcolor / 2];
+  g_ram.DAT_08ffface = 2;
+  unsigned short* p_destination = &g_ram.colorwk[g_ram.startcolor / 2];
+  unsigned short* p_source = &g_ram.colorwk2[g_ram.startcolor / 2];
 
-  for (int i = 0; g_mdRam.colorcnt >= i; ++i) {
+  for (int i = 0; g_ram.colorcnt >= i; ++i) {
     flashin2((unsigned char*)p_destination, (unsigned char*)p_source);
     ++p_destination;
     ++p_source;
   }
 
-  if (g_mdRam.watermode != 0) {
-    p_destination = &g_mdRam.colorwk3[g_mdRam.startcolor / 2];
-    p_source = &g_mdRam.colorwk4[g_mdRam.startcolor / 2];
+  if (g_ram.watermode != 0) {
+    p_destination = &g_ram.colorwk3[g_ram.startcolor / 2];
+    p_source = &g_ram.colorwk4[g_ram.startcolor / 2];
 
-    for (int i = 0; g_mdRam.colorcnt >= i; ++i) {
+    for (int i = 0; g_ram.colorcnt >= i; ++i) {
       flashin2((unsigned char*)p_destination, (unsigned char*)p_source);
       ++p_destination;
       ++p_source;
@@ -230,10 +230,10 @@ static void flashin2(unsigned char* p_destination, unsigned char* p_source) {
 
 // 00426a12
 void flashout() {
-  g_mdRam.colorcnt = 63;
+  g_ram.colorcnt = 63;
 
   for (int fadecount = 0; fadecount < 22; ++fadecount) {
-    g_mdRam.int_flg = 18;
+    g_ram.int_flg = 18;
     vInt();
     flashout1();
   }
@@ -242,16 +242,16 @@ void flashout() {
 
 // 00426a53
 void flashout1() {
-  unsigned short* pPalette = &g_mdRam.colorwk[g_mdRam.startcolor / 2];
+  unsigned short* pPalette = &g_ram.colorwk[g_ram.startcolor / 2];
 
-  for (int i = 0; g_mdRam.colorcnt >= i; ++i) {
+  for (int i = 0; g_ram.colorcnt >= i; ++i) {
     flashout2(pPalette);
     ++pPalette;
   }
 
-  pPalette = &g_mdRam.colorwk3[g_mdRam.startcolor / 2];
+  pPalette = &g_ram.colorwk3[g_ram.startcolor / 2];
 
-  for (int i = 0; g_mdRam.colorcnt >= i; ++i) {
+  for (int i = 0; g_ram.colorcnt >= i; ++i) {
     flashout2(pPalette);
     ++pPalette;
   }
@@ -286,5 +286,5 @@ static void flashout2(unsigned short* pPalette) {
 // 00426c05
 void colorset(unsigned short colorno) {
   colortbl_entry* p_entry = &colortbl[colorno];
-  memcpy(&g_mdRam.colorwk2[p_entry->offset / 2], p_entry->p_palette, (p_entry->cnt + 1) * 4);
+  memcpy(&g_ram.colorwk2[p_entry->offset / 2], p_entry->p_palette, (p_entry->cnt + 1) * 4);
 }

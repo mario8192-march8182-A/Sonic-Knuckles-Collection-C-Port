@@ -41,7 +41,7 @@ static void actclear_init(sprite_status* p_actwk) {
   Queue_Kos_Module(&actclear_tiles, 41984);
   void* p_data = &title_act2_tiles;
   unsigned char userflags = 255;
-  if (g_mdRam.stageno != LAVA_REEF_BOSS && GET_ACT(g_mdRam.stageno_i) == ACT_1) {
+  if (g_ram.stageno != LAVA_REEF_BOSS && GET_ACT(g_ram.stageno_i) == ACT_1) {
     p_data = &title_act1_tiles;
     userflags = 0;
   }
@@ -49,11 +49,11 @@ static void actclear_init(sprite_status* p_actwk) {
   p_actwk->userflag2 = userflags;
   Queue_Kos_Module(p_data, 44288);
   p_data = &actclear_sonic_tiles;
-  if (g_mdRam.plmode > 1) { // unsigned
+  if (g_ram.plmode > 1) { // unsigned
     p_data = &actclear_knuckles_tiles;
-    if (g_mdRam.plmode != 3) {
+    if (g_ram.plmode != 3) {
       p_data = &actclear_miles_tiles;
-      if (BIT_7_IS_SET(g_mdRam.mdstatus)) {
+      if (BIT_7_IS_SET(g_ram.mdstatus)) {
         p_data = &actclear_tails_tiles;
       }
     }
@@ -63,20 +63,20 @@ static void actclear_init(sprite_status* p_actwk) {
     act_id = 46080;
   }
   Queue_Kos_Module(p_data, act_id);
-  g_mdRam.pltime_f = 0;
-  unsigned long seconds = g_mdRam.pltime.minutes * 60 + g_mdRam.pltime.seconds;
+  g_ram.pltime_f = 0;
+  unsigned long seconds = g_ram.pltime.minutes * 60 + g_ram.pltime.seconds;
   if (seconds == 599) {
-    g_mdRam.timebonus = 10000;
+    g_ram.timebonus = 10000;
   }
   else {
     unsigned char bonus_id = seconds / 30;
     if (bonus_id >= 7) { // unsigned
       bonus_id = 7;
     }
-    g_mdRam.timebonus = timebonustbl[bonus_id];
+    g_ram.timebonus = timebonustbl[bonus_id];
   }
-  g_mdRam.ringbonus = g_mdRam.plring * 10;
-  g_mdRam.frame_bonus = 0;
+  g_ram.ringbonus = g_ram.plring * 10;
+  g_ram.frame_bonus = 0;
   p_actwk->actfree.actclear.delay_timer = 360;
   p_actwk->actfree.actclear.part_cnt = 12;
   p_actwk->r_no += 2;
@@ -84,7 +84,7 @@ static void actclear_init(sprite_status* p_actwk) {
 
 
 static void actclear_move0(sprite_status* p_actwk) {
-  if (g_mdRam.divdev_modules != 0) return;
+  if (g_ram.divdev_modules != 0) return;
   short slot_cnt;
   sprite_status* p_new_actwk;
   bool created = Create_New_Sprite3(p_actwk, &p_new_actwk, &slot_cnt);
@@ -109,17 +109,17 @@ static void actclear_move0(sprite_status* p_actwk) {
     p_new_actwk->colino = p_data->exit_no;
     p_new_actwk->actflg = 1 << FLG_COMPOUND;
     p_new_actwk->patbase = actclearpat;
-    p_new_actwk->actfree.actclear_part.oya = p_actwk - g_mdRam.actwk;
+    p_new_actwk->actfree.actclear_part.oya = p_actwk - g_ram.actwk;
     bool created = Create_New_Sprite4(&p_new_actwk, slot_cnt);
     if (!created) break;
     --cnt;
   } while (cnt != -1);
 
   p_actwk->r_no += 2;
-  if (GET_ACT(g_mdRam.stageno_i) == ACT_1
-      && GET_ZONE(g_mdRam.stageno_i) != ANGEL_ISLAND
-      && GET_ZONE(g_mdRam.stageno_i) != ICECAP) {
-    g_mdRam.event_flag_3 = 255;
+  if (GET_ACT(g_ram.stageno_i) == ACT_1
+      && GET_ZONE(g_ram.stageno_i) != ANGEL_ISLAND
+      && GET_ZONE(g_ram.stageno_i) != ICECAP) {
+    g_ram.event_flag_3 = 255;
   }
 }
 
@@ -128,31 +128,31 @@ static void actclear_move1(sprite_status* p_actwk) {
   if (p_actwk->actfree.actclear.delay_timer != 0) {
     --p_actwk->actfree.actclear.delay_timer;
     if (p_actwk->actfree.actclear.delay_timer == 289) {
-      g_mdRam.actwk[0].userflag1 = 30;
-      g_mdRam.actwk[1].userflag1 = 30;
+      g_ram.actwk[0].userflag1 = 30;
+      g_ram.actwk[1].userflag1 = 30;
       bgmset(41);
     }
   }
   else {
     short points = 0;
-    if (g_mdRam.timebonus != 0) {
+    if (g_ram.timebonus != 0) {
       points += 10;
     }
-    if (g_mdRam.ringbonus != 0) {
+    if (g_ram.ringbonus != 0) {
       points += 10;
     }
-    g_mdRam.frame_bonus += points;
+    g_ram.frame_bonus += points;
     if (points != 0) {
       scoreup(points);
-      if (!(g_mdRam.gametimer & 3)) {
+      if (!(g_ram.gametimer & 3)) {
         soundset(91);
       }
     }
     else {
       soundset(176);
-      if (g_mdRam.stageno == SKY_SANCTUARY_ACT_SONIC
+      if (g_ram.stageno == SKY_SANCTUARY_ACT_SONIC
           || (p_actwk->userflag1 != 0 || p_actwk->userflag2 != 0)) {
-        g_mdRam.disable_interrupts_sram = 255;
+        g_ram.disable_interrupts_sram = 255;
         SaveGame();
       }
       p_actwk->actfree.actclear.delay_timer = 90;
@@ -170,19 +170,19 @@ static void actclear_move2(sprite_status* p_actwk) {
   else if (p_actwk->actfree.actclear.part_cnt != 0) {
     ++p_actwk->actfree.actclear.current_exit_no;
   }
-  else if (GET_ZONE(g_mdRam.stageno) == SKY_SANCTUARY
-      || GET_ZONE(g_mdRam.stageno) == LAVA_REEF_BOSS_AND_HIDDEN_PALACE
-      || GET_ACT(g_mdRam.stageno_i) != ACT_1) {
-    g_mdRam.act_clear_flag = 0;
-    g_mdRam.act_start_flag = 255;
+  else if (GET_ZONE(g_ram.stageno) == SKY_SANCTUARY
+      || GET_ZONE(g_ram.stageno) == LAVA_REEF_BOSS_AND_HIDDEN_PALACE
+      || GET_ACT(g_ram.stageno_i) != ACT_1) {
+    g_ram.act_clear_flag = 0;
+    g_ram.act_start_flag = 255;
     frameout(p_actwk);
   }
   else {
-    SET_ACT(g_mdRam.stageno_i, ACT_2);
-    g_mdRam.markerno = 0;
-    g_mdRam.marker_flag = 0;
-    g_mdRam.act_clear_flag = 0;
-    if (GET_ZONE(g_mdRam.stageno) != SANDOPOLIS && GET_ZONE(g_mdRam.stageno) != DEATH_EGG) {
+    SET_ACT(g_ram.stageno_i, ACT_2);
+    g_ram.markerno = 0;
+    g_ram.marker_flag = 0;
+    g_ram.act_clear_flag = 0;
+    if (GET_ZONE(g_ram.stageno) != SANDOPOLIS && GET_ZONE(g_ram.stageno) != DEATH_EGG) {
       p_actwk->r_ptr = &title;
       p_actwk->r_no = 0;
       p_actwk->actfree.title.act_start_flag = 255;
@@ -197,7 +197,7 @@ static void actclear_move2(sprite_status* p_actwk) {
 static void actclear_name(sprite_status* p_actwk) {
   compound_sprite_status* p_compoundwk = (compound_sprite_status*)p_actwk;
 
-  switch (g_mdRam.plmode) {
+  switch (g_ram.plmode) {
     case TEAM_KNUCKLES:
       p_actwk->patno += 3;
       p_compoundwk->xposi -= 48;
@@ -206,7 +206,7 @@ static void actclear_name(sprite_status* p_actwk) {
       break;
     case TEAM_MILES:
       ++p_actwk->patno;
-      if (!BIT_7_IS_SET(g_mdRam.mdstatus)) {
+      if (!BIT_7_IS_SET(g_ram.mdstatus)) {
         ++p_actwk->patno;
         p_compoundwk->xposi += 8;
         p_actwk->actfree.actclear_part.x_destination += 8;
@@ -219,7 +219,7 @@ static void actclear_name(sprite_status* p_actwk) {
   }
 
   unsigned short sproffset = 0;
-  sprite_status* p_parentwk = &g_mdRam.actwk[p_actwk->actfree.actclear_part.oya];
+  sprite_status* p_parentwk = &g_ram.actwk[p_actwk->actfree.actclear_part.oya];
   if (p_parentwk->userflag1 != 0 || p_parentwk->userflag2 != 0) {
     sproffset = 40;
   }
@@ -240,7 +240,7 @@ static void actclear_text(sprite_status* p_actwk) {
 static void actclear_timebonus(sprite_status* p_actwk) {
   bool fout = actclear_part_move(p_actwk);
   if (!fout) {
-    actclear_bonus(p_actwk, g_mdRam.timebonus);
+    actclear_bonus(p_actwk, g_ram.timebonus);
   }
 }
 
@@ -248,7 +248,7 @@ static void actclear_timebonus(sprite_status* p_actwk) {
 static void actclear_ringbonus(sprite_status* p_actwk) {
   bool fout = actclear_part_move(p_actwk);
   if (!fout) {
-    actclear_bonus(p_actwk, g_mdRam.ringbonus);
+    actclear_bonus(p_actwk, g_ram.ringbonus);
   }
 }
 
@@ -256,7 +256,7 @@ static void actclear_ringbonus(sprite_status* p_actwk) {
 static void actclear_total(sprite_status* p_actwk) {
   bool fout = actclear_part_move(p_actwk);
   if (!fout) {
-    actclear_bonus(p_actwk, g_mdRam.frame_bonus);
+    actclear_bonus(p_actwk, g_ram.frame_bonus);
   }
 }
 
@@ -297,7 +297,7 @@ static void actclear_bonus_move(sprite_status* p_actwk, unsigned short bonus) {
 
 static bool actclear_part_move(sprite_status* p_actwk) {
   compound_sprite_status* p_compoundwk = (compound_sprite_status*)p_actwk;
-  sprite_status* p_parentwk = &g_mdRam.actwk[p_actwk->actfree.actclear_part.oya];
+  sprite_status* p_parentwk = &g_ram.actwk[p_actwk->actfree.actclear_part.oya];
   short xposi = p_parentwk->actfree.actclear.current_exit_no;
   if (p_parentwk->actfree.actclear.current_exit_no != 0) {
     if (!BIT_IS_SET(p_actwk->actflg, FLG_ONSCREEN)) {
@@ -340,16 +340,16 @@ static bool actclear_part_move(sprite_status* p_actwk) {
 
 
 static unsigned long score_to_nibbles(sprite_status* p_actwk, unsigned short score) {
-  g_mdRam.DAT_08ffef40 = 0;
+  g_ram.DAT_08ffef40 = 0;
   unsigned char pos = 0;
 
   do {
-    g_mdRam.DAT_08ffef40 += score / subtbl[pos] * subtblh[pos];
+    g_ram.DAT_08ffef40 += score / subtbl[pos] * subtblh[pos];
     score %= subtbl[pos];
     ++pos;
   } while (pos < 5); // unsigned
 
-  return g_mdRam.DAT_08ffef40;
+  return g_ram.DAT_08ffef40;
 }
 
 
