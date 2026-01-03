@@ -1,0 +1,245 @@
+#ifndef SKC_SHARED_H
+#define SKC_SHARED_H
+
+#include <stdbool.h>
+#include "types/cchgcntinfo.h"
+#include "types/cgdata.h"
+#include "types/chkdistanceresult.h"
+#include "types/chkemycoltresult.h"
+#include "types/enemyinit0data.h"
+#include "types/enemyinit1data.h"
+#include "types/enemyinit2data.h"
+#include "types/setact00data.h"
+#include "types/setact01data.h"
+#include "types/setact02data.h"
+#include "types/setact03data.h"
+#include "types/setact04data.h"
+#include "types/setact05data.h"
+#include "types/setact06data.h"
+#include "types/setact07data.h"
+#include "types/setact08data.h"
+#include "types/setact09data.h"
+#include "types/spritestatus.h"
+#include "types/wrtdata.h"
+#include "types/wrtinitdata.h"
+
+void enemy_init0(SKC_sprite_status* p_actwk, SKC_enemy_init0_data* p_data);
+void enemy_init1(SKC_sprite_status* p_actwk, SKC_enemy_init1_data* p_data);
+void enemy_init2(SKC_sprite_status* p_actwk, SKC_enemy_init2_data* p_data);
+SKC_sprite_status* set_act00(SKC_sprite_status* p_actwk, SKC_set_act00_data* p_data);
+SKC_sprite_status* set_act01(SKC_sprite_status* p_actwk, SKC_set_act01_data* p_data);
+SKC_sprite_status* set_act02(SKC_sprite_status* p_actwk, SKC_set_act02_data* p_data);
+SKC_sprite_status* set_act03(SKC_sprite_status* p_actwk, SKC_set_act03_data* p_data);
+SKC_sprite_status* set_act04(SKC_sprite_status* p_actwk, SKC_set_act04_data* p_data);
+SKC_sprite_status* set_act05(SKC_sprite_status* p_actwk, SKC_set_act05_data* p_data);
+SKC_sprite_status* set_act06(SKC_sprite_status* p_actwk, SKC_set_act06_data* p_data);
+SKC_sprite_status* set_act07(SKC_sprite_status* p_actwk, SKC_set_act07_data* p_data);
+SKC_sprite_status* set_act08(SKC_sprite_status* p_actwk, SKC_set_act08_data* p_data);
+SKC_sprite_status* set_act09(SKC_sprite_status* p_actwk, SKC_set_act09_data* p_data);
+void ko_offset0(SKC_sprite_status* p_actwk);
+void ko_offset1(SKC_sprite_status* p_actwk);
+void pt_chg(SKC_sprite_status* p_actwk);
+void pt_chg0(SKC_sprite_status* p_actwk, signed char* p_pg_data);
+void pt_chgr(SKC_sprite_status* p_actwk);
+void pt_chgr0(SKC_sprite_status* p_actwk, signed char* p_pg_data);
+void pt_chgvr(SKC_sprite_status* p_actwk);
+void pt_chgvr0(SKC_sprite_status* p_actwk, signed char* p_pg_data);
+void pl_pt_chg(SKC_sprite_status* p_actwk, SKC_sprite_status* p_playerwk, signed char* p_pg_data);
+int pt_chgs(SKC_sprite_status* p_actwk);
+int pt_chgs0(SKC_sprite_status* p_actwk, signed char* p_pg_data);
+void pg_init(SKC_sprite_status* p_actwk, signed char* p_pg_data);
+void pl_spd_clr(SKC_sprite_status* p_playerwk);
+int time_pg(SKC_sprite_status* p_actwk);
+int time_pg0(SKC_sprite_status* p_actwk, signed char* p_pg_data);
+int time_pgr(SKC_sprite_status* p_actwk);
+int time_pgr0(SKC_sprite_status* p_actwk, signed char* p_pg_data);
+int time_pgvr(SKC_sprite_status* p_actwk);
+int time_pgvr0(SKC_sprite_status* p_actwk, signed char* p_pg_data);
+int time_pgs(SKC_sprite_status* p_actwk);
+int time_pgs0(SKC_sprite_status* p_actwk, signed char* p_pg_data);
+int pg_get_fast(SKC_sprite_status* p_actwk);
+int pg_get_fast0(SKC_sprite_status* p_actwk, signed char* p_pg_data);
+void pg_get_slow(SKC_sprite_status* p_actwk);
+void pg_get_slow0(SKC_sprite_status* p_actwk, signed char* p_pg_data);
+bool puka_puka(SKC_sprite_status* p_actwk);
+bool fura_fura(SKC_sprite_status* p_actwk);
+bool puka_count(SKC_sprite_status* p_actwk);
+void dec_timer(SKC_sprite_status* p_actwk);
+void emy_fall_col(SKC_sprite_status* p_actwk);
+bool emy_down_col(SKC_sprite_status* p_actwk);
+void emy_right_col(SKC_sprite_status* p_actwk);
+void emy_left_col(SKC_sprite_status* p_actwk);
+void chk_actsubc(SKC_sprite_status* p_actwk);
+void chk_oya_die0(SKC_sprite_status* p_actwk);
+void chk_oya_diec0(SKC_sprite_status* p_actwk);
+void chk_oya_dien0(SKC_sprite_status* p_actwk);
+void chk_oya_dienc0(SKC_sprite_status* p_actwk);
+void chk_oya_diew0(SKC_sprite_status* p_actwk);
+void chk_oya_die1(SKC_sprite_status* p_actwk);
+void chk_oya_diec1(SKC_sprite_status* p_actwk);
+void chk_tobi_die0(SKC_sprite_status* p_actwk, unsigned char break_type);
+void set_emy_tobi(SKC_sprite_status* p_actwk, unsigned char break_type);
+void chk_tobi_die1(SKC_sprite_status* p_actwk, unsigned char break_type);
+void chk_tobi_diec0(SKC_sprite_status* p_actwk, unsigned char break_type);
+void chk_tobi_diec1(SKC_sprite_status* p_actwk, unsigned char break_type);
+void chg_scr_lim_r(SKC_sprite_status* p_actwk);
+void chg_scr_lim_l(SKC_sprite_status* p_actwk);
+void chg_scr_lim_u(SKC_sprite_status* p_actwk);
+void chg_scr_lim_d(SKC_sprite_status* p_actwk);
+SKC_chk_distance_result chk_distance(SKC_sprite_status* p_actwk);
+void chk_emy_rev(SKC_sprite_status* p_actwk, bool pl_right);
+void chk_emy_revs(SKC_sprite_status* p_actwk);
+void chk_oya_rev(SKC_sprite_status* p_actwk);
+SKC_chk_distance_result chk_distance0(SKC_sprite_status* p_actwk, SKC_sprite_status* p_otherwk);
+void speedsetg20(SKC_sprite_status* p_actwk);
+void speedsetg(SKC_sprite_status* p_actwk, short gravity);
+void speedseta1(SKC_sprite_status* p_actwk, SKC_sprite_status* p_playerwk);
+void speedseta1g(SKC_sprite_status* p_actwk, SKC_sprite_status* p_playerwk, short gravity);
+void circle_radius(SKC_sprite_status* p_actwk);
+void circle_move(SKC_sprite_status* p_actwk, unsigned char bit_offset);
+void circle_mover(SKC_sprite_status* p_actwk, unsigned char bit_offset);
+void circle_moveo(SKC_sprite_status* p_actwk, unsigned char bit_offset);
+void circle_movet(SKC_sprite_status* p_actwk, unsigned char* p_sin_data);
+void circle_moveto(SKC_sprite_status* p_actwk, unsigned char* p_sin_data);
+void sin_movety(SKC_sprite_status* p_actwk, unsigned char* p_sin_data);
+void sin_movex(SKC_sprite_status* p_actwk, unsigned char* p_sin_data);
+void sin_movey(SKC_sprite_status* p_actwk, unsigned char* p_sin_data);
+void time_fout(SKC_sprite_status* p_actwk);
+void time_fouts(SKC_sprite_status* p_actwk);
+void time_fouts2(SKC_sprite_status* p_actwk);
+void time_foutsg20(SKC_sprite_status* p_actwk);
+void bs_time_fout(SKC_sprite_status* p_actwk);
+void boss_flash(SKC_sprite_status* p_actwk);
+void emy_wrt_init(SKC_sprite_status* p_actwk, SKC_wrt_init_data* p_data);
+void set_emy_wchg(SKC_sprite_status* p_actwk, SKC_wrt_data* p_data);
+void chk_emy_fout0(SKC_sprite_status* p_actwk);
+void emy_fout(SKC_sprite_status* p_actwk);
+void chk_emy_fout1(SKC_sprite_status* p_actwk);
+void emy_fout1(SKC_sprite_status* p_actwk);
+void chk_emy_fout3(SKC_sprite_status* p_actwk);
+void chk_break_fout(SKC_sprite_status* p_actwk);
+void chk_emy_foutc0(SKC_sprite_status* p_actwk);
+void chk_emy_foutc1(SKC_sprite_status* p_actwk);
+void chk_emy_foutc3(SKC_sprite_status* p_actwk);
+void chk_emy_foutw0(SKC_sprite_status* p_actwk);
+void wchg_fout(SKC_sprite_status* p_actwk);
+void set_wchg_fout0(SKC_sprite_status* p_actwk);
+void clr_wchg_bit(SKC_sprite_status* p_actwk);
+void chk_emy_foutw1(SKC_sprite_status* p_actwk);
+void chk_emy_foutwc0(SKC_sprite_status* p_actwk);
+void wchg_die(SKC_sprite_status* p_actwk);
+void chk_emy_foutwc1(SKC_sprite_status* p_actwk);
+void chk_emy_foutn0(SKC_sprite_status* p_actwk);
+void chk_emy_foutn1(SKC_sprite_status* p_actwk);
+void chk_emy_foutnc0(SKC_sprite_status* p_actwk);
+void set_emy_fout0(SKC_sprite_status* p_actwk);
+void set_emy_fout1(SKC_sprite_status* p_actwk);
+void set_break_spd(SKC_sprite_status* p_actwk, unsigned char type);
+unsigned char make_dir(SKC_sprite_status* p_actwk);
+void set_init_spd(SKC_sprite_status* p_actwk, short xspeed);
+void get_closer(SKC_sprite_status* p_actwk, SKC_sprite_status* p_otherwk, short max_speed, short accel);
+void get_closer_x(SKC_sprite_status* p_actwk, SKC_sprite_status* p_otherwk, short max_speed, short accel);
+void get_closer_y(SKC_sprite_status* p_actwk, SKC_sprite_status* p_otherwk, short max_speed, short accel);
+void get_closer_o(SKC_sprite_status* p_actwk, SKC_sprite_status* p_otherwk, short max_speed, short accel);
+void fadeout_act(SKC_sprite_status* p_actwk);
+void fadeout_1cor(unsigned short* p_palette, unsigned char mask_low, unsigned char mask_high);
+void fadein_act(SKC_sprite_status* p_actwk);
+void fadein_1cor(unsigned short* p_palette, unsigned short* p_target_palette, unsigned char mask_low, unsigned char mask_high);
+void spd_pt_chg(SKC_sprite_status* p_actwk);
+void spd2_pt_chg(SKC_sprite_status* p_actwk);
+void spdg20_pt_chg(SKC_sprite_status* p_actwk);
+void pk_spd2_pt_tim(SKC_sprite_status* p_actwk);
+void spd2_pt_tim(SKC_sprite_status* p_actwk);
+void pt_tim(SKC_sprite_status* p_actwk);
+void ko0_tim_act(SKC_sprite_status* p_actwk);
+void tim_act(SKC_sprite_status* p_actwk);
+void bos_tim_act(SKC_sprite_status* p_actwk);
+void bos_tim_act0(SKC_sprite_status* p_actwk);
+void spd2_tim_actc(SKC_sprite_status* p_actwk);
+void ko0_tpg_actc(SKC_sprite_status* p_actwk);
+void tim_tpg(SKC_sprite_status* p_actwk);
+void pg_spd_fout3(SKC_sprite_status* p_actwk);
+void spd_fout3(SKC_sprite_status* p_actwk);
+void pg_spd_foutc3(SKC_sprite_status* p_actwk);
+void spd_foutc3(SKC_sprite_status* p_actwk);
+void spd2_tim(SKC_sprite_status* p_actwk);
+void pk_spd2_tim(SKC_sprite_status* p_actwk);
+void pt_actc(SKC_sprite_status* p_actwk);
+void pt_act(SKC_sprite_status* p_actwk);
+void pt_tim_actc(SKC_sprite_status* p_actwk);
+void set_emy_die(SKC_sprite_status* p_actwk);
+void set_emy_die1(SKC_sprite_status* p_actwk);
+void set_emy_die0(SKC_sprite_status* p_actwk);
+void set_pl_damage(SKC_sprite_status* p_actwk, SKC_sprite_status* p_playerwk);
+bool chk_pl_attack(SKC_sprite_status* p_actwk, SKC_sprite_status* p_playerwk);
+bool chk_gacha_gacha(SKC_sprite_status* p_actwk);
+bool chk_emy_col(SKC_sprite_status* p_actwk, SKC_sprite_status** pp_coliwk);
+bool emy_col_a0(SKC_sprite_status* p_actwk, SKC_sprite_status* p_coliwk, short* p_col_data);
+bool emy_col_a1(SKC_sprite_status* p_actwk, SKC_sprite_status* p_coliwk, short* p_col_data);
+SKC_chk_emy_colt_result chk_emy_colt(SKC_sprite_status* p_actwk, short* p_col_data);
+void set_emy_cor(unsigned short (*p_color_data)[16]);
+void chk_ride_flg(SKC_sprite_status* p_actwk);
+void emy_cor_chg(SKC_sprite_status* p_actwk);
+void cor_chg_cnt(SKC_sprite_status* p_actwk, SKC_cchg_cnt_info* p_info, unsigned short* p_palette);
+void chk_oya_pri(SKC_sprite_status* p_actwk);
+void chk_oya_pri_1(SKC_sprite_status* p_actwk, SKC_sprite_status_handler p_return);
+void set_damg_cor07(unsigned char* p_pal_offset_data, unsigned short* p_color_data);
+void set_damg_cor06(unsigned char* p_pal_offset_data, unsigned short* p_color_data);
+void set_damg_cor05(unsigned char* p_pal_offset_data, unsigned short* p_color_data);
+void set_damg_cor04(unsigned char* p_pal_offset_data, unsigned short* p_color_data);
+void set_damg_cor03(unsigned char* p_pal_offset_data, unsigned short* p_color_data);
+void set_damg_cor02(unsigned char* p_pal_offset_data, unsigned short* p_color_data);
+void set_damg_cor01(unsigned char* p_pal_offset_data, unsigned short* p_color_data);
+void chk_framein(SKC_sprite_status* p_actwk, SKC_sprite_status_handler p_return);
+void res_bgm_act(SKC_sprite_status* p_actwk);
+void set_bgm_act(SKC_sprite_status* p_actwk);
+void reset_bgm(void);
+void reset_pl_data(void);
+void reset_pl_data0(SKC_sprite_status* p_playerwk);
+void set_midbos_die(SKC_sprite_status* p_actwk);
+extern SKC_cg_data kanbst_cg_tbl;
+void midbos_die2(SKC_sprite_status* p_actwk);
+void clr_ride_flg(SKC_sprite_status* p_actwk);
+void chk_boss_set(SKC_sprite_status* p_actwk, unsigned short* p_limit_data, SKC_sprite_status_handler p_return);
+void fix_scr_l(SKC_sprite_status* p_actwk);
+void chk_scr_bgm(SKC_sprite_status* p_actwk);
+void boss_init(SKC_sprite_status* p_actwk, unsigned short* p_limit_data);
+void scr_bgm_init(SKC_sprite_status* p_actwk, unsigned short* p_limit_data);
+void scr_bgm_init0(unsigned short* p_limit_data);
+void reset_scrlim(SKC_sprite_status* p_actwk);
+void set_scrlim_act(SKC_sprite_status* p_actwk);
+extern SKC_set_act00_data chglimrud_set_tbl;
+void reset_all_scrlim(SKC_sprite_status* p_actwk);
+void set_stageno(unsigned short stageno);
+void set_cont_se(signed char cont_se);
+void flashout_act(SKC_sprite_status* p_actwk);
+void flashout_1cor(unsigned short* p_palette);
+void flashin_act(SKC_sprite_status* p_actwk);
+void flashin_1cor(unsigned short* p_palette, unsigned short* p_target_palette);
+int chk_play_type(void);
+void boss_die_init(SKC_sprite_status* p_actwk);
+void boss_die_init0(SKC_sprite_status* p_actwk);
+void wrt_player(void);
+void wrt_player0(SKC_sprite_status* p_playerwk);
+void set_friend_cg(SKC_sprite_status* p_actwk);
+void set_friend_cg0(SKC_sprite_status* p_actwk);
+void get_ring(unsigned short cnt);
+void wrt_zoom(SKC_sprite_status* p_actwk);
+void speedset2_m(SKC_sprite_status* p_actwk);
+void zoom_posi_ctr(SKC_sprite_status* p_actwk);
+void aim_emy_pl(SKC_sprite_status* p_actwk, unsigned char d5);
+void aim_emy_pl0(SKC_sprite_status* p_actwk, SKC_sprite_status* p_playerwk, unsigned char d5);
+void aim_emy_pl1(SKC_sprite_status* p_actwk, short xposi, short yposi, unsigned char d5);
+short chk_pl_angle(SKC_sprite_status* p_actwk, SKC_sprite_status* p_playerwk);
+void mask_spr(SKC_sprite_status* p_actwk);
+void mask_spr0(SKC_sprite_status* p_actwk);
+void pl_move_right(SKC_sprite_status* p_actwk);
+void set_bane_jump(SKC_sprite_status* p_playerwk, short yspeed);
+void chk_pl_dir(SKC_sprite_status* p_actwk);
+void fox_auto(SKC_sprite_status* p_actwk);
+void nextst(SKC_sprite_status* p_actwk);
+void shake_se_act(SKC_sprite_status* p_actwk);
+void set_many_posi(SKC_sprite_status* p_actwk, unsigned char* p_posi_data);
+void chg_super(void);
+
+#endif

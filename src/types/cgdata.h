@@ -1,16 +1,14 @@
-#ifndef CGDATA_H
-#define CGDATA_H
+#ifndef SKC_CGDATA_H
+#define SKC_CGDATA_H
 
-typedef struct cg_data_entry {
-  unsigned char* tiles_ptr;
-  unsigned short offset;
-}
-cg_data_entry;
-
-typedef struct cg_data {
+typedef struct SKC_cg_data {
   unsigned short cnt;
-  cg_data_entry data[];
+  struct {
+    unsigned char* cg_ptr;
+    unsigned short offset;
+  }
+  data[];
 }
-cg_data;
+SKC_cg_data;
 
 #endif

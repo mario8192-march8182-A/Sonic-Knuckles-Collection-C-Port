@@ -3,7 +3,9 @@
 
 #include "../constants.h"
 #include "acttimer.h"
+#include "cchgwork.h"
 #include "spritestatus.h"
+#include "spritestatushandler.h"
 
 typedef struct sonic3_ram {
   /* 08ff0000 */ unsigned char decompressed[0xA800];
@@ -13,6 +15,7 @@ typedef struct sonic3_ram {
   /* 08ffaa00 */ unsigned char bitdevwk[512];
   /* 08ffac00 */ unsigned short pbuffer[PBUFFER_LEVELS][PBUFFER_LEVEL_SLOTS];
   /* 08ffb000 */ SKC_sprite_status actwk[ACTWK_SLOTS];
+  /* 08ffd000 */ unsigned char zoombuffer[0x1000];
   /* 08ffe000 */ unsigned short hscrollbuff[448];
   /* 08ffe380 */ unsigned short colibuffer[COLBUFFER_SLOTS];
   /* 08ffe400 */ unsigned char direc_x[256];
@@ -23,22 +26,23 @@ typedef struct sonic3_ram {
   /* 08ffe6ac */ unsigned char main_savedata[84];
   /* 08ffe700 */ short ringwk[RINGWK_SLOTS];
   /* 08ffeb00 */ unsigned char flagwork[FLAGWORK_SLOTS];
-  /* 08ffee12 */ short scralim_n_down;
-  /* 08ffee14 */ short scralim_left;
-  /* 08ffee16 */ short scralim_right;
-  /* 08ffee1a */ short scralim_down;
+  /* 08ffee12 */ unsigned short scralim_n_down;
+  /* 08ffee14 */ unsigned short scralim_left;
+  /* 08ffee16 */ unsigned short scralim_right;
+  /* 08ffee18 */ unsigned short scralim_up;
+  /* 08ffee1a */ unsigned short scralim_down;
   /* 08ffee33 */ unsigned char scr_resize_no;
   /* 08ffee3a */ unsigned long vs_vscroll;
   /* 08ffee4e */ unsigned short stageno_i;
   /* 08ffee50 */ short colorcycle;
-  /* 08ffee60 */ long vs_scra_h_posit;
-  /* 08ffee64 */ long vs_scra_v_posit;
-  /* 08ffee68 */ long vs_scra_h_posit_copy;
-  /* 08ffee6c */ long vs_scra_v_posit_copy;
-  /* 08ffee78 */ long scra_h_posit;
-  /* 08ffee7c */ long scra_v_posit;
-  /* 08ffee80 */ long scra_h_posit_copy;
-  /* 08ffee84 */ long scra_v_posit_copy;
+  /* 08ffee60 */ unsigned long vs_scra_h_posit;
+  /* 08ffee64 */ unsigned long vs_scra_v_posit;
+  /* 08ffee68 */ unsigned long vs_scra_h_posit_copy;
+  /* 08ffee6c */ unsigned long vs_scra_v_posit_copy;
+  /* 08ffee78 */ unsigned long scra_h_posit;
+  /* 08ffee7c */ unsigned long scra_v_posit;
+  /* 08ffee80 */ unsigned long scra_h_posit_copy;
+  /* 08ffee84 */ unsigned long scra_v_posit_copy;
   /* 08ffeeaa */ unsigned short scrc_v;
   /* 08ffeebc */ short frame_offset_x;
   /* 08ffeec0 */ unsigned short scr_evta;
@@ -50,13 +54,14 @@ typedef struct sonic3_ram {
   /* 08ffef3c */ unsigned short alt_sprlistadr;
   /* 08ffef40 */ unsigned long DAT_08ffef40;
   /* 08ffef4b */ unsigned char dataselect_selection;
-  /* 08ffef4c */ character_team_id nosave_plmode;
+  /* 08ffef4c */ SKC_play_type nosave_plmode;
   /* 08ffef56 */ unsigned short disable_interrupts_sram;
   /* 08ffef7a */ unsigned short demoid;
   /* 08ffef80 */ unsigned short ringbuffer[RINGBUFFER_SLOTS];
   /* 08fff000 */ unsigned short colorwk4[64];
   /* 08fff080 */ unsigned short colorwk3[64];
   /* 08fff600 */ unsigned char gmmode;
+  /* 08fff602 */ unsigned short swdata1_auto;
   /* 08fff604 */ unsigned short swdata1;
   /* 08fff606 */ unsigned short swdata2;
   /* 08fff614 */ unsigned short demotimer;
@@ -76,10 +81,13 @@ typedef struct sonic3_ram {
   /* 08fff65e */ unsigned char ssonicpallet_next;
   /* 08fff65f */ unsigned char ssonicpallet;
   /* 08fff667 */ unsigned char smilesflag;
+  /* 08fff66a */ unsigned short swdata2_auto;
   /* 08fff670 */ unsigned short ssonicring_timer;
+  /* 08fff702 */ unsigned short fox_auto_timer;
   /* 08fff711 */ unsigned char DAT_08fff711;
   /* 08fff730 */ unsigned char watermode;
   /* 08fff73e */ unsigned char miles_carry_flag;
+  /* 08fff740 */ unsigned short zoom_tile_cnt;
   /* 08fff760 */ short plmaxspdwk;
   /* 08fff762 */ short pladdspdwk;
   /* 08fff764 */ short plretspdwk;
@@ -94,13 +102,24 @@ typedef struct sonic3_ram {
   /* 08fff7e0 */ unsigned char level_triggers[LEVEL_TRIGGERS_SLOTS];
   /* 08fff7f0 */ unsigned char actanimcounters[8][2];
   /* 08fff800 */ unsigned short ramf8[320];
+  /* 08fffa92 */ unsigned short scralim_m_right;
+  /* 08fffa94 */ unsigned short scralim_m_left;
+  /* 08fffa96 */ unsigned short scralim_m_up;
+  /* 08fffa98 */ unsigned short scralim_m_down;
   /* 08fffa9a */ unsigned char emy_wrt_flg[EMY_WRT_FLG_SLOTS];
   /* 08fffaa2 */ unsigned char DAT_08fffaa2;
   /* 08fffaa8 */ unsigned char act_clear_flag;
   /* 08fffaaa */ unsigned char act_start_flag;
   /* 08fffaad */ unsigned char soz_ghosts;
+  /* 08fffab0 */ unsigned short scralim_b_up;
+  /* 08fffab2 */ unsigned short scralim_b_down;
+  /* 08fffab4 */ unsigned short scralim_b_left;
+  /* 08fffab6 */ unsigned short scralim_b_right;
+  /* 08fffabf */ unsigned char fade_flag;
   /* 08fffacd */ unsigned char DAT_08fffacd;
   /* 08ffface */ unsigned short DAT_08ffface;
+  /* 08fffada */ SKC_sprite_status_handler cchg_callback_ptr;
+  /* 08fffade */ SKC_cchg_work cchg_work[2];
   /* 08fffc00 */ unsigned short colorwk[64];
   /* 08fffc80 */ unsigned short colorwk2[64];
   /* 08fffe02 */ unsigned short gameflag;
@@ -135,7 +154,7 @@ typedef struct sonic3_ram {
   /* 08fffe40 */ short waterposi_s;
   /* 08fffe42 */ unsigned char waterflag_s;
   /* 08fffe43 */ unsigned char plring_f2_s;
-  /* 08fffe44 */ short scralim_down_s;
+  /* 08fffe44 */ unsigned short scralim_down_s;
   /* 08fffe46 */ unsigned char scr_resize_no_s;
   /* 08fffe47 */ unsigned char plcddat2_s;
   /* 08fffe48 */ unsigned char marker_flag;
@@ -153,7 +172,7 @@ typedef struct sonic3_ram {
   /* 08fffe5e */ short waterposi_s2;
   /* 08fffe60 */ unsigned char waterflag_s2;
   /* 08fffe61 */ unsigned char plring_f2_s2;
-  /* 08fffe62 */ short scralim_down_s2;
+  /* 08fffe62 */ unsigned short scralim_down_s2;
   /* 08fffe64 */ unsigned char scr_resize_no_s2;
   /* 08fffeb3 */ unsigned char ring_patno;
   /* 08fffeb6 */ unsigned char flyring_patcnt;
@@ -173,8 +192,8 @@ typedef struct sonic3_ram {
   /* 08fffed6 */ unsigned long DAT_08fffed6;
   /* 08ffff02 */ unsigned short DAT_08ffff02;
   /* 08ffff04 */ short actring;
-  /* 08ffff08 */ character_team_id plmode;
-  /* 08ffff0a */ character_team_id levelselect_plmode;
+  /* 08ffff08 */ SKC_play_type play_type;
+  /* 08ffff0a */ SKC_play_type levelselect_play_type;
   /* 08ffff60 */ unsigned char divdev_modules;
   /* 08ffff80 */ short levelselect_inputrepeattimer;
   /* 08ffff82 */ unsigned short levelselect_selection;
@@ -182,6 +201,7 @@ typedef struct sonic3_ram {
   /* 08ffff86 */ unsigned char openingoption;
   /* 08ffff8a */ unsigned short vs_noitems;
   /* 08ffff8e */ unsigned short frame_bonus;
+  /* 08ffff90 */ short bgm_act;
   /* 08ffff92 */ unsigned char brings;
   /* 08ffff96 */ unsigned char plcddat2_s2;
   /* 08ffff97 */ unsigned char plresetflag;

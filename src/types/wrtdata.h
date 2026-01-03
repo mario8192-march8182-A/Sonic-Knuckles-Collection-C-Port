@@ -1,10 +1,10 @@
-#ifndef WRTDATA_H
-#define WRTDATA_H
+#ifndef SKC_WRTDATA_H
+#define SKC_WRTDATA_H
 
-typedef struct wrt_data {
+typedef struct SKC_wrt_data {
   unsigned char* pat;
   unsigned short** wrtpat;
 }
-wrt_data;
+SKC_wrt_data;
 
 #endif

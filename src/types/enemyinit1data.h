@@ -1,7 +1,7 @@
-#ifndef ENEMYINIT1DATA_H
-#define ENEMYINIT1DATA_H
+#ifndef SKC_ENEMYINIT1DATA_H
+#define SKC_ENEMYINIT1DATA_H
 
-typedef struct enemy_init1_data {
+typedef struct SKC_enemy_init1_data {
   unsigned short sproffset;
   unsigned short sprpri;
   unsigned char sprhs;
@@ -9,6 +9,6 @@ typedef struct enemy_init1_data {
   unsigned char patno;
   unsigned char colino;
 }
-enemy_init1_data;
+SKC_enemy_init1_data;
 
 #endif

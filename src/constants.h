@@ -15,83 +15,6 @@ typedef enum bonus_stage_id {
 }
 bonus_stage_id;
 
-typedef enum zone_id {
-  ANGEL_ISLAND = 0x00,
-  HYDROCITY = 0x01,
-  MARBLE_GARDEN = 0x02,
-  CARNIVAL_NIGHT = 0x03,
-  FLYING_BATTERY = 0x04,
-  ICECAP = 0x05,
-  LAUNCH_BASE = 0x06,
-  MUSHROOM_HILL = 0x07,
-  SANDOPOLIS = 0x08,
-  LAVA_REEF = 0x09,
-  SKY_SANCTUARY = 0x0A,
-  DEATH_EGG = 0x0B,
-  DOOMSDAY = 0x0C,
-  ANGEL_ISLAND_ACT_1_AND_ENDING = 0x0D,
-  AZURE_LAKE = 0x0E,
-  BALLOON_PARK = 0x0F,
-  DESERT_PALACE = 0x10,
-  CHROME_GADGET = 0x11,
-  ENDLESS_MINE = 0x12,
-  ZONE_GUMBALL_MACHINE = 0x13,
-  ZONE_ROLLING_JUMP = 0x14,
-  ZONE_SLOT_MACHINE = 0x15,
-  LAVA_REEF_BOSS_AND_HIDDEN_PALACE = 0x16,
-  DEATH_EGG_BOSS_AND_MASTER_EMERALD_SHRINE = 0x17
-}
-zone_id;
-
-typedef enum act_id {
-  ACT_1 = 0,
-  ACT_2 = 1
-}
-act_id;
-
-typedef enum stageno_id {
-  ANGEL_ISLAND_ACT_1_INTRO = 0x0000,
-  ANGEL_ISLAND_ACT_2 = 0x0001,
-  HYDROCITY_ACT_1 = 0x0100,
-  HYDROCITY_ACT_2 = 0x0101,
-  MARBLE_GARDEN_ACT_1 = 0x0200,
-  MARBLE_GARDEN_ACT_2 = 0x0201,
-  CARNIVAL_NIGHT_ACT_1 = 0x0300,
-  CARNIVAL_NIGHT_ACT_2 = 0x0301,
-  FLYING_BATTERY_ACT_1 = 0x0400,
-  FLYING_BATTERY_ACT_2 = 0x0401,
-  ICECAP_ACT_1 = 0x0500,
-  ICECAP_ACT_2 = 0x0501,
-  LAUNCH_BASE_ACT_1 = 0x0600,
-  LAUNCH_BASE_ACT_2 = 0x0601,
-  MUSHROOM_HILL_ACT_1 = 0x0700,
-  MUSHROOM_HILL_ACT_2 = 0x0701,
-  SANDOPOLIS_ACT_1 = 0x0800,
-  SANDOPOLIS_ACT_2 = 0x0801,
-  LAVA_REEF_ACT_1 = 0x0900,
-  LAVA_REEF_ACT_2 = 0x0901,
-  SKY_SANCTUARY_ACT_SONIC = 0x0A00,
-  SKY_SANCTUARY_ACT_KNUCKLES = 0x0A01,
-  DEATH_EGG_ACT_1 = 0x0B00,
-  DEATH_EGG_ACT_2 = 0x0B01,
-  DOOMSDAY_ACT = 0x0C00,
-  ANGEL_ISLAND_ACT_1 = 0x0D00,
-  ENDING = 0x0D01,
-  AZURE_LAKE_ACT = 0x0E00,
-  BALLOON_PARK_ACT = 0x0F00,
-  DESERT_PALACE_ACT = 0x1000,
-  CHROME_GADGET_ACT = 0x1100,
-  ENDLESS_MINE_ACT = 0x1200,
-  GUMBALL_MACHINE_ACT = 0x1300,
-  ROLLING_JUMP_ACT = 0x1400,
-  SLOT_MACHINE_ACT = 0x1500,
-  LAVA_REEF_BOSS = 0x1600,
-  HIDDEN_PALACE = 0x1601,
-  DEATH_EGG_BOSS = 0x1700,
-  MASTER_EMERALD_SHRINE = 0x1701
-}
-stageno_id;
-
 typedef enum SKC_sprite_priority_id {
   PRI_0 = 0,
   PRI_1 = 128,
@@ -104,13 +27,13 @@ typedef enum SKC_sprite_priority_id {
 }
 SKC_sprite_priority_id;
 
-typedef enum character_team_id {
-  TEAM_SONIC_AND_MILES = 0,
-  TEAM_SONIC = 1,
-  TEAM_MILES = 2,
-  TEAM_KNUCKLES = 3
+typedef enum SKC_play_type {
+  PLAY_TYPE_SONIC_AND_MILES = 0,
+  PLAY_TYPE_SONIC = 1,
+  PLAY_TYPE_MILES = 2,
+  PLAY_TYPE_KNUCKLES = 3
 }
-character_team_id;
+SKC_play_type;
 
 typedef enum start_game_modes {
   STARTGAMEMODE_NORMAL = 0,
@@ -125,18 +48,6 @@ typedef enum sonic_game_modes {
   SONICGAMEMODE_SONIC3 = 2
 }
 sonic_game_modes;
-
-typedef enum pad_buttons {
-  PAD_U = 0x01,
-  PAD_D = 0x02,
-  PAD_L = 0x04,
-  PAD_R = 0x08,
-  PAD_B = 0x10,
-  PAD_C = 0x20,
-  PAD_A = 0x40,
-  PAD_S = 0x80
-}
-pad_buttons;
 
 #define PBUFFER_LEVELS 8
 #define PBUFFER_LEVEL_SLOTS 64
@@ -171,5 +82,9 @@ pad_buttons;
 #define PS_CONTROL_NEXT -3
 #define PS_CONTROL_ROUTINE -4
 #define PS_CONTROL_FOUT -5
+
+#define RING_MAX 999
+#define RING_EXTRA_LIFE_1 100
+#define RING_EXTRA_LIFE_2 200
 
 #endif
