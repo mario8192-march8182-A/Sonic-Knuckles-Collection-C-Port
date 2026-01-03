@@ -3,7 +3,6 @@
 
 #include "../constants.h"
 #include "acttimer.h"
-#include "blockcolibits.h"
 #include "spritestatus.h"
 
 typedef struct sonic3_ram {
@@ -13,7 +12,7 @@ typedef struct sonic3_ram {
   /* 08ff9000 */ unsigned char blockmappings16[0x1800];
   /* 08ffaa00 */ unsigned char bitdevwk[512];
   /* 08ffac00 */ unsigned short pbuffer[PBUFFER_LEVELS][PBUFFER_LEVEL_SLOTS];
-  /* 08ffb000 */ sprite_status actwk[ACTWK_SLOTS];
+  /* 08ffb000 */ SKC_sprite_status actwk[ACTWK_SLOTS];
   /* 08ffe000 */ unsigned short hscrollbuff[448];
   /* 08ffe380 */ unsigned short colibuffer[COLBUFFER_SLOTS];
   /* 08ffe400 */ unsigned char direc_x[256];
@@ -129,7 +128,8 @@ typedef struct sonic3_ram {
   /* 08fffe32 */ short plring_s;
   /* 08fffe34 */ act_timer pltime_s;
   /* 08fffe38 */ unsigned short plsproffset_s;
-  /* 08fffe3a */ block_coli_bits plcolibits_s;
+  /* 08fffe3a */ unsigned char pl_top_solid_bit_s;
+  /* 08fffe3b */ unsigned char pl_lrb_solid_bit_s;
   /* 08fffe3c */ short scra_h_posit_s;
   /* 08fffe3e */ short scra_v_posit_s;
   /* 08fffe40 */ short waterposi_s;
@@ -146,7 +146,8 @@ typedef struct sonic3_ram {
   /* 08fffe50 */ short plring_s2;
   /* 08fffe52 */ act_timer pltime_s2;
   /* 08fffe56 */ unsigned short plsproffset_s2;
-  /* 08fffe58 */ block_coli_bits plcolibits_s2;
+  /* 08fffe58 */ unsigned char pl_top_solid_bit_s2;
+  /* 08fffe59 */ unsigned char pl_lrb_solid_bit_s2;
   /* 08fffe5a */ short scra_h_posit_s2;
   /* 08fffe5c */ short scra_v_posit_s2;
   /* 08fffe5e */ short waterposi_s2;

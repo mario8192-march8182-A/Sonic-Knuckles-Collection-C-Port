@@ -2,114 +2,213 @@
 #define SPRITESTATUS_H
 
 #include "../constants.h"
-#include "blockcolibits.h"
 #include "enemyinit0data.h"
 #include "spritepattern.h"
 #include "spritestatushandler.h"
 
-typedef struct sprite_status_child sprite_status_child;
-typedef struct sprite_family_status sprite_family_status;
-
-typedef struct sprite_status {
-  // 0x00
-  sprite_status_handler r_ptr;
-  // 0x04
-  unsigned char actflg;
-  // 0x05
-  unsigned char r_no;
-  // 0x06
-  unsigned char sprvs;
-  // 0x07
-  unsigned char sprhs;
-  // 0x08
-  unsigned short sprpri;
-  // 0x0A
-  unsigned short sproffset;
-  // 0x0C
-  sprite_pattern** patbase;
-  // 0x10
-  long xposi;
-  // 0x14
-  long yposi;
-  // 0x18
-  short xspeed;
-  // 0x1A
-  short yspeed;
-  // 0x1C
-  short mspeed;
-  // 0x1E
-  unsigned char sprvsize;
-  // 0x1F
-  unsigned char sprhsize;
-  // 0x20
-  unsigned char mstno;
-  // 0x21
-  unsigned char restart;
-  // 0x22
-  unsigned char patno;
-  // 0x23
-  unsigned char patcnt;
-  // 0x24
-  unsigned char pattim;
-  // 0x25
-  unsigned char pattimm;
-  // 0x26
-  signed char direc1;
-  // 0x27
-  signed char direc2;
-  // 0x28
-  unsigned char colino;
-  // 0x29
-  unsigned char colicnt;
-  // 0x2A
-  unsigned char cddat1;
-  // 0x2B
-  unsigned char cddat2;
-  // 0x2C
-  unsigned char userflag1;
-  // 0x2D
-  unsigned char userflag2;
-  // 0x2E
+typedef struct SKC_sprite_status {
+  SKC_sprite_status_handler r_ptr; // 0x00
+  struct {
+    unsigned int hflip : 1;
+    unsigned int vflip : 1;
+    unsigned int relative_coordinates : 1;
+    unsigned int unused3 : 1;
+    unsigned int unused4 : 1;
+    unsigned int static_pattern : 1;
+    unsigned int compound : 1;
+    unsigned int onscreen : 1;
+  }
+  actflg; // 0x04
+  unsigned char r_no; // 0x05
+  unsigned char sprvs; // 0x06
+  unsigned char sprhs; // 0x07
+  SKC_sprite_priority_id sprpri; // 0x08
+  unsigned short sproffset; // 0x0A
+  SKC_sprite_pattern** patbase; // 0x0C
+  long xposi; // 0x10
+  long yposi; // 0x14
+  short xspeed; // 0x18
+  short yspeed; // 0x1A
+  short mspeed; // 0x1C
+  unsigned char sprvsize; // 0x1E
+  unsigned char sprhsize; // 0x1F
+  unsigned char mstno; // 0x20
+  unsigned char mstrestart; // 0x21
+  unsigned char patno; // 0x22
+  unsigned char patcnt; // 0x23
+  unsigned char pattim; // 0x24
+  unsigned char pattimm; // 0x25
+  signed char direc1; // 0x26
+  signed char direc2; // 0x27
+  unsigned char colino; // 0x28
+  unsigned char colicnt; // 0x29
   union {
-    unsigned char generic[28];
     struct {
-      unsigned char control_bitfield;
-      unsigned char talent_status;
-      unsigned char flip_rev_cnt;
-      unsigned char flip_rev_frame_cnt;
-      unsigned short hlock_timer;
-      unsigned char invulnerability_timer;
-      unsigned char muteki_timer;
-      unsigned char speedup_timer;
-      unsigned char eventflag;
-      character_id character;
-      unsigned char reserved1[4];
-      unsigned char roll_status;
-      unsigned char reserved2[2];
-      unsigned char jump_status;
-      unsigned char reserved3[3];
-      unsigned char height;
-      unsigned char reserved4[1];
-      block_coli_bits colibits;
-      unsigned char reserved5[2];
-    } player;
+      struct { // 0x2A
+        unsigned int right : 1;
+        unsigned int down : 1;
+        unsigned int wrt : 1;
+        unsigned int plride : 1;
+        unsigned int pl2ride : 1;
+        unsigned int plpush : 1;
+        unsigned int pl2push : 1;
+        unsigned int die : 1;
+        unsigned int unused8 : 1;
+        unsigned int unused9 : 1;
+        unsigned int unuseda : 1;
+        unsigned int baria_bounce : 1;
+        unsigned int flame_baria_die : 1;
+        unsigned int thunder_baria_die : 1;
+        unsigned int aqua_baria_die : 1;
+        unsigned int unusedf : 1;
+      }
+      cddat;
+      unsigned short userflag; // 0x2C
+      unsigned short timer; // 0x2E
+      struct {
+        unsigned char flash_duration; // 0x2E
+        unsigned char pattim; // 0x2F
+      }
+      get_fast_slow;
+      struct {
+        unsigned char pal_offset; // 0x30
+        unsigned char target_pal_offset; // 0x32
+        unsigned char step_cnt; // 0x39
+        unsigned short timer_init; // 0x3A
+        unsigned short cor_cnt; // 0x3C
+      }
+      fade;
+      struct {
+        long xposi; // 0x30
+        long yposi; // 0x34
+        unsigned short vram_offset; // 0x3A
+        unsigned char unknown; // 0x40
+      }
+      zoom;
+      signed char* pg_data_ptr; // 0x30
+      unsigned long scralim_unknown; // 0x30;
+      SKC_sprite_status_handler callback_ptr; // 0x34
+      struct { // 0x38
+        unsigned int puka_down : 1;
+        unsigned int unused1 : 1;
+        unsigned int unused2 : 1;
+        unsigned int fura_right : 1;
+        unsigned int ko_die : 1;
+        unsigned int flash : 1;
+        unsigned int flicker : 1;
+        unsigned int unused7 : 1;
+      }
+      actflg0;
+      struct {
+        unsigned char cnt; // 0x39
+        short accel_max; // 0x3E
+        short accel; // 0x40
+      }
+      puka;
+      struct {
+        short accel_max; // 0x3A
+        short accel; // 0x3C
+      }
+      fura;
+      unsigned short scralim_unknown2; // 0x3A
+      struct {
+        unsigned char prev_patno; // 0x3A
+        unsigned char flg_bit; // 0x3B
+        unsigned short flg_index; // 0x3C;
+      }
+      wrt;
+      struct {
+        short unknown; // 0x3A
+        unsigned char angle; // 0x3C
+      }
+      radius;
+      struct {
+        unsigned short prev_swdata; // 0x3A
+        unsigned char lr_cnt; // 0x3C
+        unsigned char timer; // 0x3D
+        unsigned char pad; // 0x3E
+      }
+      gacha;
+      struct {
+        unsigned char timer; // 0x3A
+        unsigned char command_index; // 0x3B
+      }
+      cchg;
+      SKC_enemy_init0_data* enemy_init0_data_ptr; // 0x3E
+      unsigned short score_id; // 0x3E
+      struct {
+        signed char x; // 0x42
+        signed char y; // 0x43
+      }
+      oya_offset;
+      unsigned char ko; // 0x44
+      unsigned char oya; // 0x46
+      unsigned short flagwork_index; // 0x48
+    }
+    obj;
     struct {
-      short timer;
-      signed char* pg_data_ptr;
-      sprite_status_handler callback_ptr;
-      unsigned char status_bitfield;
-      signed char puka_cnt;
-      unsigned char prev_patno;
-      unsigned char wchg_bit;
-      unsigned short wrt_flg_index;
-      short accel_max;
-      short accel;
-      signed char xoffset;
-      signed char yoffset;
-      unsigned short ko;
-      unsigned short oya;
-      unsigned short flagwork_index;
-    } dynamic;
+      struct { // 0x2A
+        unsigned int left : 1;
+        unsigned int jump : 1;
+        unsigned int ball : 1;
+        unsigned int ride : 1;
+        unsigned int ballj : 1;
+        unsigned int push : 1;
+        unsigned int underwater : 1;
+        unsigned int unused7 : 1;
+        unsigned int baria : 1;
+        unsigned int muteki : 1;
+        unsigned int speedup : 1;
+        unsigned int unusedb : 1;
+        unsigned int flame_baria : 1;
+        unsigned int thunder_baria : 1;
+        unsigned int aqua_baria : 1;
+        unsigned int infinite_inertia : 1;
+      }
+      cddat;
+      unsigned char air_timer; // 0x2C
+      unsigned char flip_mst; // 0x2D
+      unsigned char control_bitfield; // 0x2E
+      unsigned char talent_status; // 0x2F
+      unsigned char flip_rev_cnt; // 0x30
+      unsigned char flip_rev_frame_cnt; // 0x31
+      unsigned short hlock_timer; // 0x32
+      unsigned char invulnerability_timer; // 0x34
+      unsigned char muteki_timer; // 0x35
+      unsigned char speedup_timer; // 0x36
+      unsigned char eventflag; // 0x37
+      SKC_character_id character; // 0x38
+      unsigned char lever_ctr; // 0x39
+      unsigned char angle_front; // 0x3A
+      unsigned char angle_below; // 0x3B
+      unsigned char convex_flag; // 0x3C
+      unsigned char spindash_flag; // 0x3D
+      unsigned short spindash_ctr; // 0x3E
+      unsigned char jump_flag; // 0x40
+      unsigned char unused41;
+      unsigned short obj_index; // 0x42
+      unsigned char height; // 0x44
+      unsigned char width; // 0x45
+      unsigned char top_solid_bit; // 0x46
+      unsigned char lrb_solid_bit; // 0x47
+    }
+    play;
+    struct {
+      unsigned short child_cnt; // 0x16
+      struct {
+        short xposi;
+        short yposi;
+        unsigned char patno;
+      }
+      children[8]; // 0x18
+    }
+    compound;
+  }
+  u;
+}
+SKC_sprite_status;
+
+/*
     struct {
       unsigned char reserved1[16];
       enemy_init0_data* init_data_ptr;
@@ -385,47 +484,6 @@ typedef struct sprite_status {
       unsigned char reserved3[10];
     } toge;
   } actfree;
-}
-sprite_status;
-
-typedef struct sprite_status_child {
-  short xposi;
-  short yposi;
-  unsigned char reserved;
-  unsigned char patno;
-}
-sprite_status_child;
-
-typedef struct compound_sprite_status {
-  // 0x00
-  sprite_status_handler r_ptr;
-  // 0x04
-  unsigned char actflg;
-  // 0x05
-  unsigned char r_no;
-  // 0x06
-  unsigned char sprvs;
-  // 0x07
-  unsigned char sprhs;
-  // 0x08
-  unsigned short sprpri;
-  // 0x0A
-  unsigned short sproffset;
-  // 0x0C
-  sprite_pattern** patbase;
-  // 0x10
-  short xposi;
-  // 0x12
-  unsigned char reserved[2];
-  // 0x14
-  short yposi;
-  // 0x16
-  unsigned short child_cnt;
-  // 0x18
-  sprite_status_child children[8];
-  // 0x48
-  unsigned char actfree[2];
-}
-compound_sprite_status;
+*/
 
 #endif

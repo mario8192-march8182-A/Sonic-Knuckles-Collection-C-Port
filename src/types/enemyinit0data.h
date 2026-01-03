@@ -1,8 +1,10 @@
-#ifndef ENEMYINIT0DATA_H
-#define ENEMYINIT0DATA_H
+#ifndef SKC_ENEMYINIT0DATA_H
+#define SKC_ENEMYINIT0DATA_H
 
-typedef struct enemy_init0_data {
-  signed char** patbase;
+#include "spritepattern.h"
+
+typedef struct SKC_enemy_init0_data {
+  SKC_sprite_pattern** patbase;
   unsigned short sproffset;
   unsigned short sprpri;
   unsigned char sprhs;
@@ -10,6 +12,6 @@ typedef struct enemy_init0_data {
   unsigned char patno;
   unsigned char colino;
 }
-enemy_init0_data;
+SKC_enemy_init0_data;
 
 #endif

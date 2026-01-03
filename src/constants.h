@@ -1,12 +1,12 @@
 #ifndef CONSTANTS_H
 #define CONSTANTS_H
 
-typedef enum character_id {
+typedef enum SKC_character_id {
   SONIC = 0,
   MILES = 1,
   KNUCKLES = 2
 }
-character_id;
+SKC_character_id;
 
 typedef enum bonus_stage_id {
   BONUS_STAGE_ROLLING_JUMP = 0,
@@ -92,7 +92,7 @@ typedef enum stageno_id {
 }
 stageno_id;
 
-typedef enum sprite_priority {
+typedef enum SKC_sprite_priority_id {
   PRI_0 = 0,
   PRI_1 = 128,
   PRI_2 = 256,
@@ -102,7 +102,7 @@ typedef enum sprite_priority {
   PRI_6 = 768,
   PRI_7 = 896
 }
-sprite_priority;
+SKC_sprite_priority_id;
 
 typedef enum character_team_id {
   TEAM_SONIC_AND_MILES = 0,
@@ -111,29 +111,6 @@ typedef enum character_team_id {
   TEAM_KNUCKLES = 3
 }
 character_team_id;
-
-typedef enum object_cddat1_bits {
-  CD_RIGHT = 0,
-  CD_DOWN = 1,
-  CD_WRT = 2,
-  CD_PLRIDE = 3,
-  CD_PL2RIDE = 4,
-  CD_PLPUSH = 5,
-  CD_PL2PUSH = 6,
-  CD_DIE = 7
-}
-object_cddat1_bits;
-
-typedef enum player_cddat1_bits {
-  CD_LEFT = 0,
-  CD_JUMP = 1,
-  CD_BALL = 2,
-  CD_RIDE = 3,
-  CD_BALLJ = 4,
-  CD_PUSH = 5,
-  CD_UNDERWATER = 6
-}
-player_cddat1_bits;
 
 typedef enum start_game_modes {
   STARTGAMEMODE_NORMAL = 0,
@@ -160,23 +137,6 @@ typedef enum pad_buttons {
   PAD_S = 0x80
 }
 pad_buttons;
-
-typedef enum actflg_bits {
-  FLG_HFLIP = 0,
-  FLG_VFLIP = 1,
-  FLG_LEVELCOORDS = 2,
-  FLG_3,
-  FLG_4,
-  FLG_STATICPATTERN = 5,
-  FLG_COMPOUND = 6,
-  FLG_ONSCREEN = 7
-}
-actflg_bits;
-
-#define SPEEDUPTIMER 54
-#define FOOTDIR 58
-#define KO_ADR 68
-#define OYA_ADR 70
 
 #define PBUFFER_LEVELS 8
 #define PBUFFER_LEVEL_SLOTS 64
