@@ -110,7 +110,7 @@ typedef struct sonic3_ram {
   /* 08fffaa2 */ unsigned char DAT_08fffaa2;
   /* 08fffaa8 */ unsigned char act_clear_flag;
   /* 08fffaaa */ unsigned char act_start_flag;
-  /* 08fffaad */ unsigned char soz_ghosts;
+  /* 08fffaad */ unsigned char gost08_count;
   /* 08fffab0 */ unsigned short scralim_b_up;
   /* 08fffab2 */ unsigned short scralim_b_down;
   /* 08fffab4 */ unsigned short scralim_b_left;

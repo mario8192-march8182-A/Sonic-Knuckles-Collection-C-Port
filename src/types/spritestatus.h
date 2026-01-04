@@ -144,6 +144,18 @@ typedef struct SKC_sprite_status {
       unsigned char ko; // 0x44
       unsigned char oya; // 0x46
       unsigned short flagwork_index; // 0x48
+      union {
+        struct {
+          unsigned char darkness_level; // 0x42
+          unsigned char sequence_no; // 0x43
+        }
+        gost08;
+        struct {
+          unsigned short spawn_timer; // 0x3A
+        }
+        gost08_ctr;
+      }
+      actfree;
     }
     obj;
     struct {
@@ -246,24 +258,6 @@ SKC_sprite_status;
       unsigned short oya;
       unsigned char reserved3[2];
     } friend_;
-    struct {
-      short attack_countdown;
-      signed char* pg_data_ptr;
-      sprite_status_handler callback_ptr;
-      unsigned char puka_axis_dir;
-      unsigned char reserved1;
-      unsigned char reserved2[4];
-      short accel_max;
-      short accel;
-      unsigned char darkness_level;
-      unsigned char sequence_no;
-      unsigned char reserved3[6];
-    } gost08;
-    struct {
-      unsigned char reserved1[12];
-      short ghost_countdown;
-      unsigned char reserved2[14];
-    } gost08_ctr;
     struct {
       short shot_countdown;
       signed char* pg_data_ptr;

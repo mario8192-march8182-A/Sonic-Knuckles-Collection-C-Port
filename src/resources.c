@@ -86,25 +86,6 @@ signed char obox04sp02[8];
 signed char obox04sp03[8];
 signed char obox04sp04[8]
 signed char obox04sp05[14];
-signed char* gost08pat[18];
-signed char gost08sp00[8];
-signed char gost08sp01[8];
-signed char gost08sp02[8];
-signed char gost08sp03[8];
-signed char gost08sp04[8];
-signed char gost08sp05[8];
-signed char gost08sp06[8];
-signed char gost08sp07[8];
-signed char gost08sp08[8];
-signed char gost08sp09[14];
-signed char gost08sp10[14];
-signed char gost08sp11[14];
-signed char gost08sp12[14];
-signed char gost08sp13[8];
-signed char gost08sp14[8];
-signed char gost08sp15[8];
-signed char gost08sp16[8];
-signed char gost08sp17[8];
 unsigned short* sai00_tbl[8];
 unsigned short sai00_tbl00[4];
 unsigned short sai00_tbl01[4];
@@ -702,85 +683,6 @@ signed char obox04sp12[14] = {
     0,   2,  -5,   5, 117,   3, -16,  -1,
    -5,   5, 117,  11,   0,   0
 };
-
-
-signed char* gost08pat[18] = {
-  gost08sp00,
-  gost08sp01,
-  gost08sp02,
-  gost08sp03,
-  gost08sp04,
-  gost08sp05,
-  gost08sp06,
-  gost08sp07,
-  gost08sp08,
-  gost08sp09,
-  gost08sp10,
-  gost08sp00,
-  gost08sp00,
-  gost08sp00,
-  gost08sp00,
-  gost08sp00,
-  gost08sp00,
-  gost08sp00
-};
-
-
-signed char gost08sp00[8] = {
-    0,   1, -12,  10,   0,   0, -12,  -1
-};
-signed char gost08sp01[8] = {
-    0,   1, -12,  10,   0,   0, -12,  -1
-};
-signed char gost08sp02[8] = {
-    0,   1, -12,  10,   0,   0, -12,  -1
-};
-signed char gost08sp03[8] = {
-    0,   1, -12,  10,   0,   0, -12,  -1
-};
-signed char gost08sp04[8] = {
-    0,   1, -12,  10,   0,   0, -12,  -1
-};
-signed char gost08sp05[8] = {
-    0,   1, -12,  10,   0,   0, -12,  -1
-};
-signed char gost08sp06[8] = {
-    0,   1, -12,  10,   0,   0, -12,  -1
-};
-signed char gost08sp07[8] = {
-    0,   1, -12,  10,   0,   0, -12,  -1
-};
-signed char gost08sp08[8] = {
-    0,   1, -16,  15,   0,   0, -16,  -1
-};
-signed char gost08sp09[14] = {
-    0,   2, -20,   9,   0,   0, -16,  -1,  -4,  14,   6,   0, -16,  -1
-};
-signed char gost08sp10[14] = {
-    0,   2, -20,   9,   0,   0, -16,  -1,  -4,  14,   6,   0, -16,  -1
-};
-signed char gost08sp11[14] = {
-    0,   2, -20,   9,   0,   0, -16,  -1,  -4,  14,   6,   0, -16,  -1
-};
-signed char gost08sp12[14] = {
-    0,   2, -20,   9,   0,   0, -16,  -1,  -4,  14,   6,   0, -16,  -1
-};
-signed char gost08sp13[8] = {
-    0,   1, -12,  10,   0,   0, -12,  -1
-};
-signed char gost08sp14[8] = {
-    0,   1, -12,  10,   0,   0, -12,  -1
-};
-signed char gost08sp15[8] = {
-    0,   1,  -8,   5,   0,   0,  -8,  -1
-};
-signed char gost08sp16[8] = {
-    0,   1,  -8,   5,   0,   0,  -8,  -1
-};
-signed char gost08sp17[8] = {
-    0,   1,  -4,   0,   0,   0,  -4,  -1
-};
-
 
 unsigned short* sai00_tbl[8] = {
   sai00_tbl00,
