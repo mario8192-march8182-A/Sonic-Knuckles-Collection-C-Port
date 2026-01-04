@@ -154,6 +154,10 @@ typedef struct SKC_sprite_status {
           unsigned short spawn_timer; // 0x3A
         }
         gost08_ctr;
+        struct {
+          short yspeed_init; // 0x3E
+        }
+        obox04_friend;
       }
       actfree;
     }
@@ -251,14 +255,6 @@ SKC_sprite_status;
       unsigned short flagwork_index;
     } break_;
     struct {
-      short move_countdown;
-      unsigned char reserved1[14];
-      short yspeed;
-      unsigned char reserved2[6];
-      unsigned short oya;
-      unsigned char reserved3[2];
-    } friend_;
-    struct {
       short shot_countdown;
       signed char* pg_data_ptr;
       void(*callback_ptr)(sprite_status*);
@@ -291,13 +287,6 @@ SKC_sprite_status;
       sprite_status_handler parent_r_ptr;
       unsigned short flagwork_index;
     } iwa;
-    struct {
-      unsigned char reserved1[10];
-      unsigned char status_bitfield;
-      unsigned char reserved2[13];
-      unsigned short oya;
-      unsigned short flagwork_index;
-    } obox04;
     struct {
       short timer;
       unsigned char reserved1[8];

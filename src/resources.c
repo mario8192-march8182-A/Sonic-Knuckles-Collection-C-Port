@@ -79,13 +79,6 @@ signed char actclearsp54[32];
 signed char actclearsp55[26];
 signed char actclearsp56[20];
 signed char actclearsp57[20];
-signed char* obox04pat[13];
-signed char obox04sp00[62];
-signed char obox04sp01[50];
-signed char obox04sp02[8];
-signed char obox04sp03[8];
-signed char obox04sp04[8]
-signed char obox04sp05[14];
 unsigned short* sai00_tbl[8];
 unsigned short sai00_tbl00[4];
 unsigned short sai00_tbl01[4];
@@ -626,63 +619,6 @@ signed char actclearsp57[20] = {
   -107, -123,   32,    0,  -10,    6,  -52, -123,   60,    0
 };
 
-
-signed char* obox04pat[13] = {
-  obox04sp00,
-  obox04sp01,
-  obox04sp02,
-  obox04sp03,
-  obox04sp04,
-  obox04sp05,
-  obox04sp05,
-  obox04sp05,
-  obox04sp05,
-  obox04sp05,
-  obox04sp10,
-  obox04sp11,
-  obox04sp12
-};
-
-
-signed char obox04sp00[62] = {
-    0,  10, -32,  13,  37,   0, -32,  -1, -32,  13,
-   37,   8,   0,   0, -16,   2,  45,   0,  -8,  -1,
-  -16,   2,  45,   8,   0,   0, -16,   6,  48,   0,
-  -24,  -1, -16,   6,  48,   8,   8,   0, -16,   2,
-   54,   0, -32,  -1, -16,   2,  54,   8,  24,   0,
-    8,  14,  25,   0, -32,  -1,   8,  14,  25,   8,
-    0,   0
-};
-signed char obox04sp01[50] = {
-    0,   8, -32,  13,  93,   3, -32,  -1, -16,   1,
-  101,   3, -16,  -1,   0,  12, 103,   3, -32,  -1,
-  -32,  13,  93,  11,   0,   0, -16,   1, 101,  11,
-    8,   0,   0,  12, 103,  11,   0,   0,   8,  14,
-   25,   0, -32,  -1,   8,  14,  25,   8,   0,   0
-};
-signed char obox04sp02[8] = {
-    0,   1,  -8,   5, 107,   3,  -8,  -1
-};
-signed char obox04sp03[8] = {
-    0,   1,  -8,   5, 111,   3,  -8,  -1
-};
-signed char obox04sp04[8] = {
-    0,   1,  -8,   1, 115,   3,  -4,  -1
-};
-signed char obox04sp05[14] = {
-    0,   2, -12,   5, 117,   3, -16,  -1, -12,   5,
-  117,  11,   0,   0
-};
-signed char obox04sp10[8] = {
-    0,   1,  -8,   5, 111,  11,  -8,  -1
-};
-signed char obox04sp11[8] = {
-    0,   1,  -8,   1, 115,  11,  -4,  -1
-};
-signed char obox04sp12[14] = {
-    0,   2,  -5,   5, 117,   3, -16,  -1,
-   -5,   5, 117,  11,   0,   0
-};
 
 unsigned short* sai00_tbl[8] = {
   sai00_tbl00,

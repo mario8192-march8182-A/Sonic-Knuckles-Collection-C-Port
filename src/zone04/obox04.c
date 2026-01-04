@@ -1,65 +1,66 @@
-#include "../globals.h"
-#include "../macros.h"
-#include "../util.h"
+#include "obox04.h"
+#include "../data/pat/zone04/obox04.h"
 #include "../types/enemyinit2data.h"
 #include "../types/hitchkdata.h"
 #include "../types/setact00data.h"
-#include "obox04.h"
-#include "../004xxxxx.h"
-#include "../002.h"
-#include "../091.h"
+#include "../types/sonic3ram.h"
+#include "../types/spritestatus.h"
+#include "../utils/bits.h"
+#include "../utils/fp16.h"
+#include "../utils/stageno.h"
+#include "../constants.h"
 #include "../hitchk.h"
 #include "../opnbox.h"
-#include "../resources.h"
 #include "../ring.h"
+#include "../shared.h"
 #include "../zone08/gost08.h"
-static void obox04_switch(sprite_status* p_actwk);
-static void obox04_friend(sprite_status* p_actwk);
-static void obox04_friend_wait0(sprite_status* p_actwk);
-static void obox04_friend_move0(sprite_status* p_actwk);
-static void obox04_ring(sprite_status* p_actwk);
-static void obox04_break(sprite_status* p_actwk);
-static void chk_opnbox_ride(sprite_status* p_actwk);
-static void set_obox04_item(sprite_status* p_actwk);
-static void set_friend(sprite_status* p_actwk);
-static void set_ring(sprite_status* p_actwk);
-static void set_enemy(sprite_status* p_actwk);
-static void set_obox04_friend_init(sprite_status* p_actwk);
-static enemy_init2_data obox04_break_init_tbl;
-static enemy_init2_data obox04_friend_init_tbl;
-static enemy_init0_data obox04_ring_init_tbl;
-static set_act00_data obox04_switch_set_tbl;
-static set_act00_data obox04_break_set_tbl;
-static set_act00_data obox04_ring_set_tbl;
-static set_act00_data obox04_betl_set_tbl;
-static set_act00_data obox04_mous_set_tbl;
+static void obox04_switch(SKC_sprite_status* p_actwk);
+static void obox04_friend(SKC_sprite_status* p_actwk);
+static void obox04_friend_wait0(SKC_sprite_status* p_actwk);
+static void obox04_friend_move0(SKC_sprite_status* p_actwk);
+static void obox04_ring(SKC_sprite_status* p_actwk);
+static void obox04_break(SKC_sprite_status* p_actwk);
+static void chk_opnbox_ride(SKC_sprite_status* p_actwk);
+static void set_obox04_item(SKC_sprite_status* p_actwk);
+static void set_friend(SKC_sprite_status* p_actwk);
+static void set_ring(SKC_sprite_status* p_actwk);
+static void set_enemy(SKC_sprite_status* p_actwk);
+static void set_obox04_friend_init(SKC_sprite_status* p_actwk);
+static SKC_enemy_init2_data obox04_break_init_tbl;
+static SKC_enemy_init2_data obox04_friend_init_tbl;
+static SKC_enemy_init0_data obox04_ring_init_tbl;
+static SKC_set_act00_data obox04_switch_set_tbl;
+static SKC_set_act00_data obox04_break_set_tbl;
+static SKC_set_act00_data obox04_ring_set_tbl;
+static SKC_set_act00_data obox04_betl_set_tbl;
+static SKC_set_act00_data obox04_mous_set_tbl;
+
+extern sonic3_ram g_ram;
 
 
-void obox04(sprite_status* p_actwk) {
+void obox04(SKC_sprite_status* p_actwk) {
   enemy_init0(p_actwk, &obox04_init_tbl);
   p_actwk->r_ptr = &obox04_wait0;
   set_act00(p_actwk, &obox04_switch_set_tbl);
-  if (p_actwk->actfree.obox04.flagwork_index != 0) {
-    if (BIT_0_IS_SET(g_ram.flagwork[p_actwk->actfree.obox04.flagwork_index - 1])) {
-      p_actwk->r_ptr = &obox04_wait1;
-      p_actwk->patno = 1;
-      SET_BIT_5(p_actwk->actfree.obox04.status_bitfield);
-    }
+  if (p_actwk->u.obj.flagwork_index != 0 && BIT_IS_SET(g_ram.flagwork[p_actwk->u.obj.flagwork_index - 1], 0)) {
+    p_actwk->r_ptr = &obox04_wait1;
+    p_actwk->patno = 1;
+    p_actwk->u.obj.actflg0.flash = 1;
   }
 }
 
 
-void obox04_wait0(sprite_status* p_actwk) {
-  if (BIT_1_IS_SET(p_actwk->actfree.obox04.status_bitfield)) {
+void obox04_wait0(SKC_sprite_status* p_actwk) {
+  if (p_actwk->u.obj.actflg0.unused1 != 0) {
     p_actwk->r_ptr = &obox04_wait1;
     p_actwk->patno = 1;
-    if (p_actwk->actfree.obox04.flagwork_index != 0) {
-      SET_BIT_1(g_ram.flagwork[p_actwk->actfree.obox04.flagwork_index - 1]);
+    if (p_actwk->u.obj.flagwork_index != 0) {
+      SET_BIT(g_ram.flagwork[p_actwk->u.obj.flagwork_index - 1], 1);
     }
     set_obox04_item(p_actwk);
-    sprite_status* p_new_actwk = set_act05(p_actwk, &bsexp01_set_tbl);
-    if (p_new_actwk) {
-      p_new_actwk->userflag1 = 8;
+    SKC_sprite_status* p_new_actwk = set_act05(p_actwk, &bsexp01_set_tbl);
+    if (p_new_actwk != 0) {
+      p_new_actwk->u.obj.userflag = 8;
     }
     set_act00(p_actwk, &obox04_break_set_tbl);
   }
@@ -67,48 +68,48 @@ void obox04_wait0(sprite_status* p_actwk) {
 }
 
 
-void obox04_wait1(sprite_status* p_actwk) {
+void obox04_wait1(SKC_sprite_status* p_actwk) {
   chk_opnbox_ride(p_actwk);
   chk_emy_foutc0(p_actwk);
 }
 
 
-static void obox04_switch(sprite_status* p_actwk) {
+static void obox04_switch(SKC_sprite_status* p_actwk) {
   enemy_init2(p_actwk, &switch_init_tbl);
   p_actwk->r_ptr = &switch_wait0;
-  sprite_status* p_parentwk = &g_ram.actwk[p_actwk->actfree.obox04.oya];
-  if (BIT_5_IS_SET(p_parentwk->actfree.obox04.status_bitfield)) {
+  SKC_sprite_status* p_parentwk = &g_ram.actwk[p_actwk->u.obj.oya];
+  if (p_parentwk->u.obj.actflg0.flash == 1) {
     p_actwk->r_ptr = &switch_wait1;
     p_actwk->patno = 12;
   }
 }
 
 
-void swit04(sprite_status* p_actwk) {
+void swit04(SKC_sprite_status* p_actwk) {
   enemy_init0(p_actwk, &swit04_init_tbl);
   swit04_wait0(p_actwk);
 }
 
 
-void swit04_wait0(sprite_status* p_actwk) {
+void swit04_wait0(SKC_sprite_status* p_actwk) {
   p_actwk->patno = 5;
   chk_switch_ride(p_actwk);
-  if (p_actwk->cddat1 & 0x18) {
+  if (p_actwk->u.obj.cddat.plride == 1 || p_actwk->u.obj.cddat.pl2ride == 1) {
     p_actwk->patno = 6;
-    if (BIT_IS_SET(p_actwk->cddat1, CD_PLRIDE)) {
+    if (p_actwk->u.obj.cddat.plride == 1) {
       p_actwk->patno = 12;
-      set_bane_jump(&g_ram.actwk[0], -2560);
+      set_bane_jump(&g_ram.actwk[0], -0xA00);
     }
-    if (BIT_IS_SET(p_actwk->cddat1, CD_PL2RIDE)) {
+    if (p_actwk->u.obj.cddat.pl2ride == 1) {
       p_actwk->patno = 12;
-      set_bane_jump(&g_ram.actwk[1], -2560);
+      set_bane_jump(&g_ram.actwk[1], -0xA00);
     }
   }
   chk_emy_fout0(p_actwk);
 }
 
 
-static void obox04_friend(sprite_status* p_actwk) {
+static void obox04_friend(SKC_sprite_status* p_actwk) {
   enemy_init2(p_actwk, &obox04_friend_init_tbl);
   p_actwk->r_ptr = &obox04_friend_wait0;
   p_actwk->sprvsize = 8;
@@ -117,9 +118,8 @@ static void obox04_friend(sprite_status* p_actwk) {
 }
 
 
-static void obox04_friend_wait0(sprite_status* p_actwk) {
-  --p_actwk->actfree.friend_.move_countdown;
-  if (p_actwk->actfree.friend_.move_countdown < 0) {
+static void obox04_friend_wait0(SKC_sprite_status* p_actwk) {
+  if (p_actwk->u.obj.timer-- == 0) {
     p_actwk->r_ptr = &obox04_friend_move0;
     p_actwk->sprpri = PRI_1;
   }
@@ -127,35 +127,32 @@ static void obox04_friend_wait0(sprite_status* p_actwk) {
 }
 
 
-static void obox04_friend_move0(sprite_status* p_actwk) {
+static void obox04_friend_move0(SKC_sprite_status* p_actwk) {
   speedsetg20(p_actwk);
-  short unknown = ObjCheckFloorDist(p_actwk);
-  if (unknown < 0) {
-    p_actwk->yposi += SHORT_TO_LONG_HIGH(unknown);
-    p_actwk->yspeed = p_actwk->actfree.friend_.yspeed;
+  short yoffset = ObjCheckFloorDist(p_actwk);
+  if (yoffset < 0) {
+    fp16_set_integer(&p_actwk->yposi, fp16_get_integer(p_actwk->yposi) + yoffset);
+    p_actwk->yspeed = p_actwk->u.obj.actfree.obox04_friend.yspeed_init;
   }
-  unsigned char patno = 0;
-  if (!BIT_3_IS_SET(g_ram.systemtimer)) {
-    patno = 1;
-  }
-  p_actwk->patno = patno;
+  p_actwk->patno = BIT_IS_SET(g_ram.systemtimer, 3) ? 0 : 1;
   chk_emy_fout0(p_actwk);
 }
 
 
-static void obox04_ring(sprite_status* p_actwk) {
+static void obox04_ring(SKC_sprite_status* p_actwk) {
   enemy_init0(p_actwk, &obox04_ring_init_tbl);
   p_actwk->r_ptr = &flyring;
   g_ram.flyring_patcnt = 255;
   p_actwk->sprvsize = 8;
   p_actwk->sprhsize = 8;
-  p_actwk->actflg = (1 << FLG_LEVELCOORDS) | (1 << FLG_3) | (1 << FLG_4) | (1 << FLG_STATICPATTERN) | (1 << FLG_COMPOUND);
+  p_actwk->actflg.relative_coordinates = 1;
+  p_actwk->actflg.onscreen = 1;
   set_break_spd(p_actwk, 4);
   actionsub(p_actwk);
 }
 
 
-static void obox04_break(sprite_status* p_actwk) {
+static void obox04_break(SKC_sprite_status* p_actwk) {
   enemy_init2(p_actwk, &obox04_break_init_tbl);
   p_actwk->r_ptr = &chk_break_fout;
   set_obox_break_pt(p_actwk);
@@ -164,15 +161,16 @@ static void obox04_break(sprite_status* p_actwk) {
 }
 
 
-static void chk_opnbox_ride(sprite_status* p_actwk) {
-  hitchk_data data = { 43, 24, 24, LONG_HIGH(p_actwk->xposi) };
+static void chk_opnbox_ride(SKC_sprite_status* p_actwk) {
+  hitchk_data data = { 43, 24, 24, fp16_get_integer(p_actwk->xposi) };
   hitchk(p_actwk, data);
 }
 
 
-static void set_obox04_item(sprite_status* p_actwk) {
-  switch (p_actwk->userflag1) {
+static void set_obox04_item(SKC_sprite_status* p_actwk) {
+  switch (p_actwk->u.obj.userflag) {
     case 1:
+    default:
       set_friend(p_actwk);
       break;
     case 2:
@@ -188,54 +186,50 @@ static void set_obox04_item(sprite_status* p_actwk) {
 }
 
 
-static void set_friend(sprite_status* p_actwk) {
+static void set_friend(SKC_sprite_status* p_actwk) {
   set_act00(p_actwk, &obox04_friend_set_tbl);
 }
 
 
-static void set_ring(sprite_status* p_actwk) {
-  soundset(65465);
+static void set_ring(SKC_sprite_status* p_actwk) {
+  soundset(-71);
   set_act00(p_actwk, &obox04_ring_set_tbl);
 }
 
 
-static void set_enemy(sprite_status* p_actwk) {
+static void set_enemy(SKC_sprite_status* p_actwk) {
   set_act00(p_actwk, &obox04_betl_set_tbl);
   set_act00(p_actwk, &obox04_mous_set_tbl);
 }
 
 
-static void set_obox04_friend_init(sprite_status* p_actwk) {
+static void set_obox04_friend_init(SKC_sprite_status* p_actwk) {
   static short spd_tbl[4] = {
-    -896, -768, -640, -512
+    -0x380, -0x300, -0x280, -0x200
   };
   static unsigned short ofs_tbl[2] = {
-    34176, 34194
+    0x8580, 0x8592
   };
 
-  unsigned char spd_index = (p_actwk->userflag1 & 6) / 2;
-  p_actwk->yspeed = spd_tbl[spd_index];
-  p_actwk->actfree.friend_.yspeed = spd_tbl[spd_index];
-  unsigned char ofs_index = (p_actwk->userflag1 & 2) / 2;
+  short yspeed = spd_tbl[(p_actwk->u.obj.userflag & 6) / 2];
+  p_actwk->yspeed = yspeed;
+  p_actwk->u.obj.actfree.obox04_friend.yspeed_init = yspeed;
+  unsigned char ofs_index = (p_actwk->u.obj.userflag & 2) / 2;
   p_actwk->sproffset = ofs_tbl[ofs_index];
-  unsigned char* friends = &zone_friend_data[GET_ZONE(g_ram.stageno)][0];
-  unsigned char friend_id = friends[ofs_index];
-  p_actwk->patbase = friend_data[friend_id].patbase;
-  p_actwk->actfree.friend_.move_countdown = p_actwk->userflag1 * 4;
-  sprite_status* p_parentwk = &g_ram.actwk[p_actwk->actfree.friend_.oya];
-  short xspeed = 512;
-  if (util__to_unsigned(LONG_HIGH(p_actwk->xposi)) < util__to_unsigned(LONG_HIGH(p_parentwk->xposi))) { // unsigned
+  unsigned char friend_id = zone_friend_tbl[get_zone(g_ram.stageno)][ofs_index];
+  p_actwk->patbase = zone_friend_init_tbl[friend_id].patbase;
+  p_actwk->u.obj.timer = p_actwk->u.obj.userflag * 4;
+  SKC_sprite_status* p_parentwk = &g_ram.actwk[p_actwk->u.obj.oya];
+  short xspeed = 0x200;
+  if ((unsigned short)fp16_get_integer(p_actwk->xposi) < (unsigned short)fp16_get_integer(p_parentwk->xposi)) {
     xspeed = -xspeed;
   }
   p_actwk->xspeed = xspeed;
-  CLEAR_BIT(p_actwk->actflg, FLG_HFLIP);
-  if (p_actwk->xspeed < 0) {
-    SET_BIT(p_actwk->actflg, FLG_HFLIP);
-  }
+  p_actwk->actflg.hflip = p_actwk->xspeed < 0;
 }
 
 
-enemy_init0_data obox04_init_tbl = {
+SKC_enemy_init0_data obox04_init_tbl = {
   obox04pat,
   0,
   PRI_4,
@@ -246,7 +240,7 @@ enemy_init0_data obox04_init_tbl = {
 };
 
 
-enemy_init0_data swit04_init_tbl = {
+SKC_enemy_init0_data swit04_init_tbl = {
   obox04pat,
   0,
   PRI_3,
@@ -257,7 +251,7 @@ enemy_init0_data swit04_init_tbl = {
 };
 
 
-static enemy_init2_data obox04_break_init_tbl = {
+static SKC_enemy_init2_data obox04_break_init_tbl = {
   PRI_2,
   8,
   8,
@@ -266,7 +260,7 @@ static enemy_init2_data obox04_break_init_tbl = {
 };
 
 
-static enemy_init2_data obox04_friend_init_tbl = {
+static SKC_enemy_init2_data obox04_friend_init_tbl = {
   PRI_5,
   32,
   40,
@@ -275,9 +269,9 @@ static enemy_init2_data obox04_friend_init_tbl = {
 };
 
 
-static enemy_init0_data obox04_ring_init_tbl = {
+static SKC_enemy_init0_data obox04_ring_init_tbl = {
   ringpat,
-  42684,
+  0xA6BC,
   PRI_3,
   8,
   8,
@@ -286,7 +280,7 @@ static enemy_init0_data obox04_ring_init_tbl = {
 };
 
 
-static set_act00_data obox04_switch_set_tbl = {
+static SKC_set_act00_data obox04_switch_set_tbl = {
   0,
   {
     { &obox04_switch, 0, 220 }
@@ -294,7 +288,7 @@ static set_act00_data obox04_switch_set_tbl = {
 };
 
 
-static set_act00_data obox04_break_set_tbl = {
+static SKC_set_act00_data obox04_break_set_tbl = {
   4,
   {
     { &obox04_break, 0, 248 },
@@ -306,7 +300,7 @@ static set_act00_data obox04_break_set_tbl = {
 };
 
 
-set_act00_data obox04_friend_set_tbl = {
+SKC_set_act00_data obox04_friend_set_tbl = {
   4,
   {
     { &obox04_friend, 0, 252 },
@@ -318,7 +312,7 @@ set_act00_data obox04_friend_set_tbl = {
 };
 
 
-static set_act00_data obox04_ring_set_tbl = {
+static SKC_set_act00_data obox04_ring_set_tbl = {
   5,
   {
     { &obox04_ring, 248, 252 },
@@ -331,7 +325,7 @@ static set_act00_data obox04_ring_set_tbl = {
 };
 
 
-static set_act00_data obox04_betl_set_tbl = {
+static SKC_set_act00_data obox04_betl_set_tbl = {
   1,
   {
     { &betl04_box, 232, 252 },
@@ -340,7 +334,7 @@ static set_act00_data obox04_betl_set_tbl = {
 };
 
 
-static set_act00_data obox04_mous_set_tbl = {
+static SKC_set_act00_data obox04_mous_set_tbl = {
   1,
   {
     { &mous04_box, 248, 252 },
