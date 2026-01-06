@@ -84,6 +84,7 @@ sonic_game_modes;
 #define PS_CONTROL_FOUT -5
 
 #define RING_MAX 999
+#define FLYRING_MAX 32
 #define RING_EXTRA_LIFE_1 100
 #define RING_EXTRA_LIFE_2 200
 

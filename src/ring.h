@@ -1,14 +1,15 @@
-#ifndef RING_H
-#define RING_H
+#ifndef SKC_RING_H
+#define SKC_RING_H
 
+#include "types/spritepattern.h"
 #include "types/spritestatus.h"
 
-void ring(sprite_status* p_actwk);
-void ringgetsub(sprite_status* p_actwk);
-void ringgetsub2(sprite_status* p_actwk);
-void flyring(sprite_status* p_actwk);
-void tring(sprite_status* p_actwk);
-extern signed char* ringpat[9];
-void slot_ring(sprite_status* p_actwk);
+void ring(SKC_sprite_status* p_actwk);
+void ringgetsub(SKC_sprite_status* p_actwk);
+void ringgetsub2(SKC_sprite_status* p_actwk);
+void flyring(SKC_sprite_status* p_actwk);
+void tring(SKC_sprite_status* p_actwk);
+extern SKC_sprite_pattern* ringpat[9];
+void slot_ring(SKC_sprite_status* p_actwk);
 
 #endif

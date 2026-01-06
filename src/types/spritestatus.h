@@ -158,6 +158,24 @@ typedef struct SKC_sprite_status {
           short yspeed_init; // 0x3E
         }
         obox04_friend;
+        struct {
+          unsigned char player; // 0x3E
+        }
+        ring;
+        struct {
+          short* unknown2e_ptr; // 0x2E
+          long angled_xposi; // 0x34
+          long angled_yposi; // 0x38
+          short oya_xposi; // 0x3C;
+          short oya_yposi; // 0x3E;
+          short unknown40; // 0x40
+          short unknown42; // 0x42
+        }
+        slot_ring;
+        struct {
+          unsigned short ringwk_index; // 0x30
+        }
+        tring;
       }
       actfree;
     }
@@ -301,14 +319,6 @@ SKC_sprite_status;
     } opnbox;
     struct {
       unsigned char reserved1[2];
-      unsigned short ringwk_index;
-      unsigned char reserved2[12];
-      unsigned short player;
-      unsigned char reserved3[8];
-      unsigned short flagwork_index;
-    } ring;
-    struct {
-      unsigned char reserved1[2];
       long yposiwk;
       unsigned char dir;
     } s3opening_banner;
@@ -384,15 +394,6 @@ SKC_sprite_status;
       short xposi;
       short yposi;
     } skopening_nameroulette;
-    struct {
-      unsigned short unknown;
-      long xposi;
-      long yposi;
-      short xspeed;
-      short yspeed;
-      unsigned short countdown;
-      unsigned char reserved1[8];
-    } slotring;
     struct {
       short timer;
       unsigned char reserved1[4];

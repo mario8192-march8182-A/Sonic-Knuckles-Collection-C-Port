@@ -136,7 +136,7 @@ typedef struct sonic3_ram {
   /* 08fffe1d */ unsigned char plring_f;
   /* 08fffe1e */ unsigned char pltime_f;
   /* 08fffe1f */ unsigned char plscore_f;
-  /* 08fffe20 */ short plring;
+  /* 08fffe20 */ unsigned short plring;
   /* 08fffe22 */ act_timer pltime;
   /* 08fffe26 */ unsigned long plscore;
   /* 08fffe2a */ unsigned char markerno;
@@ -144,7 +144,7 @@ typedef struct sonic3_ram {
   /* 08fffe2c */ unsigned short stageno_s;
   /* 08fffe2e */ short plxposi_s;
   /* 08fffe30 */ short plyposi_s;
-  /* 08fffe32 */ short plring_s;
+  /* 08fffe32 */ unsigned short plring_s;
   /* 08fffe34 */ act_timer pltime_s;
   /* 08fffe38 */ unsigned short plsproffset_s;
   /* 08fffe3a */ unsigned char pl_top_solid_bit_s;
@@ -162,7 +162,7 @@ typedef struct sonic3_ram {
   /* 08fffe4a */ unsigned short stageno_s2;
   /* 08fffe4c */ short plxposi_s2;
   /* 08fffe4e */ short plyposi_s2;
-  /* 08fffe50 */ short plring_s2;
+  /* 08fffe50 */ unsigned short plring_s2;
   /* 08fffe52 */ act_timer pltime_s2;
   /* 08fffe56 */ unsigned short plsproffset_s2;
   /* 08fffe58 */ unsigned char pl_top_solid_bit_s2;
@@ -183,11 +183,11 @@ typedef struct sonic3_ram {
   /* 08fffec2 */ short pl2addspdwk;
   /* 08fffec4 */ short pl2retspdwk;
   /* 08fffec6 */ unsigned char pl2_suu;
-  /* 08fffec8 */ short plring_act;
-  /* 08fffeca */ short pl2ring_act;
+  /* 08fffec8 */ unsigned short plring_act;
+  /* 08fffeca */ unsigned short pl2ring_act;
   /* 08fffecc */ unsigned short DAT_08fffecc;
   /* 08fffece */ unsigned short DAT_08fffece;
-  /* 08fffed0 */ short pl2ring;
+  /* 08fffed0 */ unsigned short pl2ring;
   /* 08fffed2 */ unsigned long DAT_08fffed2;
   /* 08fffed6 */ unsigned long DAT_08fffed6;
   /* 08ffff02 */ unsigned short DAT_08ffff02;
