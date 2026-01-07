@@ -76,7 +76,7 @@ typedef struct sonic3_ram {
   /* 08fff62c */ unsigned char scrsprcnt;
   /* 08fff634 */ unsigned short clchgtim;
   /* 08fff636 */ unsigned long ranum;
-  /* 08fff648 */ short waterposi;
+  /* 08fff648 */ unsigned short waterposi;
   /* 08fff64e */ unsigned char waterflag;
   /* 08fff65e */ unsigned char ssonicpallet_next;
   /* 08fff65f */ unsigned char ssonicpallet;
@@ -149,9 +149,9 @@ typedef struct sonic3_ram {
   /* 08fffe38 */ unsigned short plsproffset_s;
   /* 08fffe3a */ unsigned char pl_top_solid_bit_s;
   /* 08fffe3b */ unsigned char pl_lrb_solid_bit_s;
-  /* 08fffe3c */ short scra_h_posit_s;
-  /* 08fffe3e */ short scra_v_posit_s;
-  /* 08fffe40 */ short waterposi_s;
+  /* 08fffe3c */ unsigned short scra_h_posit_s;
+  /* 08fffe3e */ unsigned short scra_v_posit_s;
+  /* 08fffe40 */ unsigned short waterposi_s;
   /* 08fffe42 */ unsigned char waterflag_s;
   /* 08fffe43 */ unsigned char plring_f2_s;
   /* 08fffe44 */ unsigned short scralim_down_s;
@@ -167,9 +167,9 @@ typedef struct sonic3_ram {
   /* 08fffe56 */ unsigned short plsproffset_s2;
   /* 08fffe58 */ unsigned char pl_top_solid_bit_s2;
   /* 08fffe59 */ unsigned char pl_lrb_solid_bit_s2;
-  /* 08fffe5a */ short scra_h_posit_s2;
-  /* 08fffe5c */ short scra_v_posit_s2;
-  /* 08fffe5e */ short waterposi_s2;
+  /* 08fffe5a */ unsigned short scra_h_posit_s2;
+  /* 08fffe5c */ unsigned short scra_v_posit_s2;
+  /* 08fffe5e */ unsigned short waterposi_s2;
   /* 08fffe60 */ unsigned char waterflag_s2;
   /* 08fffe61 */ unsigned char plring_f2_s2;
   /* 08fffe62 */ unsigned short scralim_down_s2;

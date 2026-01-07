@@ -8,13 +8,6 @@ typedef enum SKC_character_id {
 }
 SKC_character_id;
 
-typedef enum bonus_stage_id {
-  BONUS_STAGE_ROLLING_JUMP = 0,
-  BONUS_STAGE_SLOT_MACHINE = 1,
-  BONUS_STAGE_GUMBALL_MACHINE = 2
-}
-bonus_stage_id;
-
 typedef enum SKC_sprite_priority_id {
   PRI_0 = 0,
   PRI_1 = 128,

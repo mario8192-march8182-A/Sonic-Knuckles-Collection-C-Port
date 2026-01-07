@@ -163,6 +163,13 @@ typedef struct SKC_sprite_status {
         }
         ring;
         struct {
+          short oya_xposi; // 0x30
+          short oya_yposi; // 0x32
+          unsigned short angle; // 0x34
+          unsigned short counter; // 0x36
+        }
+        save;
+        struct {
           short* unknown2e_ptr; // 0x2E
           long angled_xposi; // 0x34
           long angled_yposi; // 0x38
@@ -366,17 +373,6 @@ SKC_sprite_status;
       sprite_status_handler callback_ptr;
       unsigned char reserved2[18];
     } saru00_banana;
-    struct {
-      unsigned char reserved1[2];
-      short parent_xposi;
-      short parent_yposi;
-      unsigned short angle;
-      short counter;
-      unsigned char reserved3[6];
-      unsigned short parent;
-      unsigned char reserved4[8];
-      unsigned short flagwork_index;
-    } save;
     struct {
       unsigned char reserved1[2];
       unsigned char sonicsmile_anim[2];

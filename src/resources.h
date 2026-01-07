@@ -12,9 +12,6 @@ unsigned char title_sky_sanctuary_tiles[450]; // 004e0094
 unsigned char title_death_egg_tiles[226]; // 004e0256
 unsigned char title_doomsday_tiles[402]; // 004e0338
 unsigned char title_hidden_palace_tiles[306]; // 004e04ca
-unsigned char red_star_ring_tiles[98]; // 0050b4a6
-unsigned char white_star_ring_tiles[98]; // 0050b508
-unsigned char orange_star_ring_tiles[98]; // 0050b56a
 unsigned char rocky_tiles[284]; // 005109a4
 unsigned char picky_tiles[332]; // 00510ac0
 unsigned char flicky_tiles[308]; // 00510c0c
