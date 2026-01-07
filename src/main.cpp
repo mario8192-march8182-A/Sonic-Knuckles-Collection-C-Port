@@ -889,7 +889,7 @@ extern "C" void executeBgmCommand(signed char command) {
     if (g_bgmMode == 0) return;
     EnterCriticalSection(&g_CriticalSectionObj);
     int soundId = g_soundMapping[command];
-    if (g_sonic3Alone == 0) {
+    if (!g_sonic3_alone) {
       switch (soundId) {
         case  0: soundId = 51; break;
         case 31: soundId = 50; break;

@@ -43,7 +43,7 @@ extern int g_nCmdShow;
 extern int g_useModeX;
 extern int g_noSoundEffect;
 extern int g_midiFlag;
-extern int g_sonic3Alone;
+extern bool g_sonic3_alone;
 extern int g_startGameMode;
 extern BOOL g_bTrial;
 extern int g_sonicGameMode;
@@ -158,10 +158,10 @@ void CGame::readConfig() {
     g_sonicGameMode = 0;
   }
   if (g_sonicGameMode == 2) {
-    g_sonic3Alone = 1;
+    g_sonic3_alone = true;
   }
   else {
-    g_sonic3Alone = 0;
+    g_sonic3_alone = false;
   }
 
   int gameMode;
@@ -180,7 +180,7 @@ void CGame::readConfig() {
   }
   if (g_bTrial) {
     g_sonicGameMode = 0;
-    g_sonic3Alone = 0;
+    g_sonic3_alone = false;
   }
 }
 

@@ -47,7 +47,7 @@ extern void vInt();
 void levelselect() {
   soundtestpos = 32;
   DAT_0082ddc8 = 1;
-  if (g_sonic3Alone != 0) {
+  if (g_sonic3_alone) {
     soundtestpos = 28;
     s3levelselect();
     return;
@@ -302,7 +302,7 @@ static void handleinput2() {
     }
     if (IS_BUTTON_PRESSED(g_ram.swdata1, PAD_C)) {
       bgmset(g_ram.levelselect_sound);
-      if (g_sonic3Alone != 0) {
+      if (g_sonic3_alone) {
         chk_cheats();
       }
     }
@@ -313,12 +313,12 @@ static void handleinput2() {
   else {
     if (IS_BUTTON_PRESSED(g_ram.swdata1, PAD_L | PAD_R)) {
       unsigned char* p_lookup = columnchangelookup;
-      if (g_sonic3Alone != 0) {
+      if (g_sonic3_alone) {
         p_lookup = s3columnchangelookup;
       }
       g_ram.levelselect_selection = p_lookup[g_ram.levelselect_selection];
     }
-    if (g_sonic3Alone == 0) {
+    if (!g_sonic3_alone) {
       if (IS_BUTTON_PRESSED(g_ram.swdata1, PAD_C)) {
         ++g_ram.levelselect_plmode;
         if (g_ram.levelselect_plmode >= 4) {
@@ -387,7 +387,7 @@ static void handleinput2() {
 // 00415b77
 static void set_selectioncolor(unsigned short coloroffset) {
   levelselect_textpos pos = textpositions[g_ram.levelselect_selection];
-  if (g_sonic3Alone != 0) {
+  if (g_sonic3_alone) {
     pos = s3textpositions[g_ram.levelselect_selection];
   }
   unsigned short index = pos.y1 * 80 + pos.x1;
@@ -407,14 +407,14 @@ static void set_selectioncolor(unsigned short coloroffset) {
     *g_pLevelSelectVram++ = *p_decompressed++ + coloroffset;
   }
   unsigned char soundtest = 32;
-  if (g_sonic3Alone != 0) {
+  if (g_sonic3_alone) {
     soundtest = 28;
   }
   if (g_ram.levelselect_selection == soundtest) {
     set_sounddigits(coloroffset);
   }
   else {
-    if (g_sonic3Alone == 0) {
+    if (!g_sonic3_alone) {
       set_plmodedigits(coloroffset);
     }
     else {
@@ -434,7 +434,7 @@ static void set_plmodedigits(unsigned short coloroffset) {
 // 00415e4f
 static void set_sounddigits(unsigned short coloroffset) {
   g_pLevelSelectVram = (unsigned short*)&g_mdVram[0xCB46];
-  if (g_sonic3Alone != 0) {
+  if (g_sonic3_alone) {
     g_pLevelSelectVram = (unsigned short*)&g_mdVram[0xC846];
   }
   set_digits(g_ram.levelselect_sound, coloroffset);

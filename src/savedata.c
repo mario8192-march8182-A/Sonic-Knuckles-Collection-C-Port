@@ -13,7 +13,7 @@ extern int readSaveData(unsigned char* pDestination, int saveFileOffset, unsigne
 
 // 006e04c8
 void load_savedata() {
-  if (g_sonic3Alone != 0) {
+  if (g_sonic3_alone) {
     load_sonic3_savedata();
     return;
   }
@@ -26,7 +26,7 @@ void load_savedata() {
     writeSaveData(g_ram.competitionmode_savedata, 0, 41);
   }
 
-  if (g_sonic3Alone != 0) {
+  if (g_sonic3_alone) {
     if (readSaveData(&g_ram.main_savedata[20], 192, 25, 0x4244) != 0) {
       memcpy(&g_ram.main_savedata[20], unused_default_s3_savedata, sizeof(unused_default_s3_savedata));
       write_main_savedata();
@@ -101,7 +101,7 @@ void load_savedata() {
 // 006e08e7
 void write_main_savedata() {
   int saveFileOffset = 384;
-  if (g_sonic3Alone != 0) {
+  if (g_sonic3_alone) {
     saveFileOffset = 192;
   }
   writeSaveData(g_ram.main_savedata, saveFileOffset, 41);

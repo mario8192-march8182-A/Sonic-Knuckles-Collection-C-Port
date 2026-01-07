@@ -67,7 +67,7 @@ extern int g_nCmdShow;
 extern int g_useModeX;
 extern int g_noSoundEffect;
 extern int g_midiFlag;
-extern int g_sonic3Alone;
+extern bool g_sonic3_alone;
 extern int g_startGameMode;
 extern BOOL g_bTrial;
 extern int g_sonicGameMode;

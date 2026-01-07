@@ -42,7 +42,7 @@ LAB_frameout:
   }
   Queue_Kos_Module(title_red_banner_tiles, 40960);
   unsigned char* p_tiles = 0;
-  if (g_sonic3Alone == 0) {
+  if (!g_sonic3_alone) {
     p_tiles = title_sk_tiles;
     if (g_ram.cartridge == 0) {
       p_tiles = title_s3k_tiles;

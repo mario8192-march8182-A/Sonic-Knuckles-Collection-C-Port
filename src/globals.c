@@ -1,6 +1,7 @@
 #include <windows.h>
 #include <ddraw.h>
 #include <dsound.h>
+#include <stdbool.h>
 #include "constants.h"
 #include "strings.h"
 #include "types/sonic3ram.h"
@@ -428,7 +429,7 @@
 /* 00831174 */ int g_useModeX = 0;
 /* 00831178 */ int g_noSoundEffect = 0;
 /* 0083117c */ int g_midiFlag = 0;
-/* 00831180 */ int g_sonic3Alone = 0;
+/* 00831180 */ bool g_sonic3_alone = false;
 /* 00831184 */ int g_startGameMode = 0;
 /* 0083118c */ BOOL g_bTrial = FALSE;
 /* 00831188 */ int g_sonicGameMode = 0;
