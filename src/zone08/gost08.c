@@ -13,6 +13,7 @@
 #include "../types/wrtinitdata.h"
 #include "../utils/fp16.h"
 #include "../utils/stageno.h"
+#include "../action.h"
 #include "../constants.h"
 #include "../opnbox.h"
 #include "../save.h"

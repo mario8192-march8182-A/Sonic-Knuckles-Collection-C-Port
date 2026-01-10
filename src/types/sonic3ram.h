@@ -4,6 +4,7 @@
 #include "../constants.h"
 #include "acttimer.h"
 #include "cchgwork.h"
+#include "spritedata.h"
 #include "spritestatus.h"
 #include "spritestatushandler.h"
 
@@ -13,7 +14,7 @@ typedef struct sonic3_ram {
   /* 08ff8000 */ unsigned char levellayout[0x1000];
   /* 08ff9000 */ unsigned char blockmappings16[0x1800];
   /* 08ffaa00 */ unsigned char bitdevwk[512];
-  /* 08ffac00 */ unsigned short pbuffer[PBUFFER_LEVELS][PBUFFER_LEVEL_SLOTS];
+  /* 08ffac00 */ unsigned char pbuffer[PBUFFER_LEVELS][PBUFFER_LEVEL_SLOTS];
   /* 08ffb000 */ SKC_sprite_status actwk[ACTWK_SLOTS];
   /* 08ffd000 */ unsigned char zoombuffer[0x1000];
   /* 08ffe000 */ unsigned short hscrollbuff[448];
@@ -43,6 +44,7 @@ typedef struct sonic3_ram {
   /* 08ffee7c */ unsigned long scra_v_posit;
   /* 08ffee80 */ unsigned long scra_h_posit_copy;
   /* 08ffee84 */ unsigned long scra_v_posit_copy;
+  /* 08ffeea8 */ unsigned short scrc3;
   /* 08ffeeaa */ unsigned short scrc_v;
   /* 08ffeebc */ short frame_offset_x;
   /* 08ffeec0 */ unsigned short scr_evta;
@@ -51,7 +53,8 @@ typedef struct sonic3_ram {
   /* 08ffeed2 */ unsigned short DAT_08ffeed2;
   /* 08ffeeea */ unsigned short vscrollbuff[40];
   /* 08ffef3a */ unsigned short sprhmasks;
-  /* 08ffef3c */ unsigned short alt_sprlistadr;
+  /* 08ffef3c */ unsigned short sprtbl_pageflip;
+  /* 08ffef3e */ unsigned short sprtbl_pageready;
   /* 08ffef40 */ unsigned long DAT_08ffef40;
   /* 08ffef4b */ unsigned char dataselect_selection;
   /* 08ffef4c */ SKC_play_type nosave_plmode;
@@ -73,7 +76,7 @@ typedef struct sonic3_ram {
   /* 08fff626 */ unsigned char startcolor;
   /* 08fff627 */ unsigned char colorcnt;
   /* 08fff62a */ unsigned char int_flg;
-  /* 08fff62c */ unsigned char scrsprcnt;
+  /* 08fff62c */ unsigned char linkdata;
   /* 08fff634 */ unsigned short clchgtim;
   /* 08fff636 */ unsigned long ranum;
   /* 08fff648 */ unsigned short waterposi;
@@ -101,7 +104,8 @@ typedef struct sonic3_ram {
   /* 08fff7da */ unsigned short scr_x_no;
   /* 08fff7e0 */ unsigned char level_triggers[LEVEL_TRIGGERS_SLOTS];
   /* 08fff7f0 */ unsigned char actanimcounters[8][2];
-  /* 08fff800 */ unsigned short ramf8[320];
+  /* 08fff800 */ SKC_sprite_data ramf8[SPRITE_COUNT_LIMIT];
+  /* 08ff7880 */ SKC_sprite_data vssprtbl[3][SPRITE_COUNT_LIMIT];
   /* 08fffa92 */ unsigned short scralim_m_right;
   /* 08fffa94 */ unsigned short scralim_m_left;
   /* 08fffa96 */ unsigned short scralim_m_up;

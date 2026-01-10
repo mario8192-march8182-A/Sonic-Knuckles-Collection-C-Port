@@ -9,6 +9,7 @@
 #include "utils/bits.h"
 #include "utils/fp16.h"
 #include "utils/stageno.h"
+#include "action.h"
 #include "constants.h"
 #include "unlze.h"
 static void saveinit(SKC_sprite_status* pActwk);

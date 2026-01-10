@@ -7,6 +7,7 @@
 #include "utils/bits.h"
 #include "utils/fp16.h"
 #include "utils/fp8.h"
+#include "action.h"
 #include "constants.h"
 static void ringinit(SKC_sprite_status* p_actwk);
 static void ringmove(SKC_sprite_status* p_actwk);
@@ -324,7 +325,7 @@ static void flyringerase(SKC_sprite_status* p_actwk) {
 
 static void flyringmoveg(SKC_sprite_status* p_actwk) {
   p_actwk->patno = g_ram.flyring_patno;
-  speedset2g(p_actwk);
+  speedset2_g(p_actwk);
   p_actwk->yspeed += 0x18;
   if (p_actwk->yspeed >= 0) {
     if (!(((g_ram.systemtimer & 0xFF) + (p_actwk - g_ram.actwk - 1)) & 7)) {

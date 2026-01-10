@@ -3,7 +3,6 @@
 
 #include "../constants.h"
 #include "enemyinit0data.h"
-#include "spritepattern.h"
 #include "spritestatushandler.h"
 
 typedef struct SKC_sprite_status {
@@ -12,8 +11,8 @@ typedef struct SKC_sprite_status {
     unsigned int hflip : 1;
     unsigned int vflip : 1;
     unsigned int relative_coordinates : 1;
-    unsigned int unused3 : 1;
-    unsigned int unused4 : 1;
+    unsigned int vspl : 1;
+    unsigned int vspl2 : 1;
     unsigned int static_pattern : 1;
     unsigned int compound : 1;
     unsigned int onscreen : 1;
@@ -24,7 +23,7 @@ typedef struct SKC_sprite_status {
   unsigned char sprhs; // 0x07
   SKC_sprite_priority_id sprpri; // 0x08
   unsigned short sproffset; // 0x0A
-  SKC_sprite_pattern** patbase; // 0x0C
+  void* patbase; // 0x0C
   long xposi; // 0x10
   long yposi; // 0x14
   short xspeed; // 0x18
