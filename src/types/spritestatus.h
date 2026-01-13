@@ -145,6 +145,10 @@ typedef struct SKC_sprite_status {
       unsigned short flagwork_index; // 0x48
       union {
         struct {
+          short yspeed_init; // 0x3E
+        }
+        friend;
+        struct {
           unsigned char darkness_level; // 0x42
           unsigned char sequence_no; // 0x43
         }
@@ -157,6 +161,10 @@ typedef struct SKC_sprite_status {
           short yspeed_init; // 0x3E
         }
         obox04_friend;
+        struct {
+          short xspeed; // 0x3A
+        }
+        opnbox;
         struct {
           unsigned char player; // 0x3E
         }
@@ -311,18 +319,6 @@ SKC_sprite_status;
       sprite_status_handler parent_r_ptr;
       unsigned short flagwork_index;
     } iwa;
-    struct {
-      short timer;
-      unsigned char reserved1[8];
-      unsigned char status_bitfield;
-      unsigned char reserved2[1];
-      short xspeed;
-      unsigned char reserved3[2];
-      short xposi;
-      unsigned char reserved4[6];
-      unsigned short oya;
-      unsigned char reserved5[2];
-    } opnbox;
     struct {
       unsigned char reserved1[2];
       long yposiwk;

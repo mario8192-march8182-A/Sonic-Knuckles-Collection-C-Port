@@ -1,70 +1,77 @@
-#include "globals.h"
-#include "macros.h"
-#include "util.h"
-#include "types/hitchkdata.h"
 #include "opnbox.h"
-#include "004xxxxx.h"
-#include "002.h"
-#include "091.h"
+#include "types/chkdistanceresult.h"
+#include "types/chkemycoltresult.h"
+#include "types/hitchkdata.h"
+#include "types/sonic3ram.h"
+#include "types/spritepattern.h"
+#include "types/spritestatus.h"
+#include "types/spritestatushandler.h"
+#include "utils/fp16.h"
+#include "utils/stageno.h"
 #include "actclear.h"
+#include "action.h"
+#include "constants.h"
 #include "hitchk.h"
-#include "resources.h"
-static void opnbox_init(sprite_status* p_actwk);
-static void opnbox_wait0(sprite_status* p_actwk);
-static void set_break(sprite_status* p_actwk);
-static void opnbox_wait1(sprite_status* p_actwk);
-static void opnbox_wait2(sprite_status* p_actwk);
-static void opnbox_fly0(sprite_status* p_actwk);
-static void opnbox_fly1(sprite_status* p_actwk);
-static void opnbox_fly2(sprite_status* p_actwk);
-static void opnbox_fly3(sprite_status* p_actwk);
-static void opnbox_fly4(sprite_status* p_actwk);
-static void opnbox_fly40(sprite_status* p_actwk);
-static void opnbox_fly5(sprite_status* p_actwk);
-static void switch_(sprite_status* p_actwk);
-static void switchud(sprite_status* p_actwk);
-static void switchud_wait0(sprite_status* p_actwk);
-static void switchud_wait1(sprite_status* p_actwk);
-static void break_(sprite_status* p_actwk);
-static void propera(sprite_status* p_actwk);
-static void propera_wait0(sprite_status* p_actwk);
-static void friend_wait0(sprite_status* p_actwk);
-static void friend_move0(sprite_status* p_actwk);
-static void friend_pg(sprite_status* p_actwk);
-static void friend_wait1(sprite_status* p_actwk);
-static void friend_move1(sprite_status* p_actwk);
-static void friend_move2(sprite_status* p_actwk);
-static bool chk_pl_pausez02(sprite_status* p_actwk, unsigned char r_no);
-static void get_closero(sprite_status* p_actwk, sprite_status* p_other_actwk, short x_unknown, short y_unknown, short speed_add, short xposi_add, short yposi_add);
-static void chk_switchu_ride(sprite_status* p_actwk);
-static void set_friend_init(sprite_status* p_actwk);
-static void chk_spd_pt(sprite_status* p_actwk);
-static enemy_init0_data opnbox_init_tbl;
-static enemy_init0_data break_init_tbl;
-static enemy_init2_data friend_init_tbl;
-static enemy_init2_data propera_init_tbl;
-static set_act00_data switch_set_tbl;
-static set_act00_data switch_set_tblud;
-static set_act00_data propera_set_tbl;
-static set_act00_data friend_set_tbl;
+#include "shared.h"
+static void opnbox_init(SKC_sprite_status* p_actwk);
+static void opnbox_init__set_fly(SKC_sprite_status* p_actwk);
+static void opnbox_wait0(SKC_sprite_status* p_actwk);
+static void set_break(SKC_sprite_status* SKC_p_actwk);
+static void opnbox_wait1(SKC_sprite_status* p_actwk);
+static void opnbox_wait2(SKC_sprite_status* p_actwk);
+static void opnbox_fly0(SKC_sprite_status* p_actwk);
+static void opnbox_fly1(SKC_sprite_status* p_actwk);
+static void opnbox_fly2(SKC_sprite_status* p_actwk);
+static void opnbox_fly3(SKC_sprite_status* p_actwk);
+static void opnbox_fly4(SKC_sprite_status* p_actwk);
+static void opnbox_fly40(SKC_sprite_status* p_actwk);
+static void opnbox_fly5(SKC_sprite_status* p_actwk);
+static void switch_(SKC_sprite_status* p_actwk);
+static void switchud(SKC_sprite_status* p_actwk);
+static void switchud_wait0(SKC_sprite_status* p_actwk);
+static void switchud_wait1(SKC_sprite_status* p_actwk);
+static void break_(SKC_sprite_status* p_actwk);
+static void propera(SKC_sprite_status* p_actwk);
+static void propera_wait0(SKC_sprite_status* p_actwk);
+static void friend_wait0(SKC_sprite_status* p_actwk);
+static void friend_move0(SKC_sprite_status* p_actwk);
+static void friend_pg(SKC_sprite_status* p_actwk);
+static void friend_wait1(SKC_sprite_status* p_actwk);
+static void friend_move1(SKC_sprite_status* p_actwk);
+static void friend_move2(SKC_sprite_status* p_actwk);
+static void chk_pl_pausez02(SKC_sprite_status* p_actwk, unsigned char r_no);
+static void get_closero(SKC_sprite_status* p_actwk, SKC_sprite_status* p_otherwk, short max_xspeed, short max_yspeed, short accel, short xoffset, short yoffset);
+static void chk_switchu_ride(SKC_sprite_status* p_actwk);
+static void set_friend_init(SKC_sprite_status* p_actwk);
+static void chk_spd_pt(SKC_sprite_status* p_actwk);
+static SKC_enemy_init0_data opnbox_init_tbl;
+static SKC_enemy_init0_data break_init_tbl;
+static SKC_enemy_init2_data friend_init_tbl;
+static SKC_enemy_init2_data propera_init_tbl;
+static SKC_set_act00_data switch_set_tbl;
+static SKC_set_act00_data switch_set_tblud;
+static SKC_set_act00_data propera_set_tbl;
+static SKC_set_act00_data friend_set_tbl;
 static signed char propera_pg00[6];
-static signed char openbox_pt00[62];
-static signed char openbox_pt01[50];
-static signed char openbox_pt02[14];
-static signed char openbox_pt03[8];
-static signed char openbox_pt04[8];
-static signed char openbox_pt05[14];
-static signed char openbox_pt06[14];
-static signed char openbox_pt07[8];
-static signed char openbox_pt08[8];
-static signed char openbox_pt09[8];
-static signed char openbox_pt10[8];
-static signed char openbox_pt11[8];
-static signed char openbox_pt12[14];
+static SKC_sprite_pattern openbox_pt00;
+static SKC_sprite_pattern openbox_pt01;
+static SKC_sprite_pattern openbox_pt02;
+static SKC_sprite_pattern openbox_pt03;
+static SKC_sprite_pattern openbox_pt04;
+static SKC_sprite_pattern openbox_pt05;
+static SKC_sprite_pattern openbox_pt06;
+static SKC_sprite_pattern openbox_pt07;
+static SKC_sprite_pattern openbox_pt08;
+static SKC_sprite_pattern openbox_pt09;
+static SKC_sprite_pattern openbox_pt10;
+static SKC_sprite_pattern openbox_pt11;
+static SKC_sprite_pattern openbox_pt12;
+
+extern sonic3_ram g_ram;
 
 
-void opnbox(sprite_status* p_actwk) {
-  static sprite_status_handler act_tbl[10] = {
+void opnbox(SKC_sprite_status* p_actwk) {
+  SKC_sprite_status_handler act_tbl[10] = {
     &opnbox_init,
     &opnbox_wait0,
     &opnbox_wait1,
@@ -77,7 +84,7 @@ void opnbox(sprite_status* p_actwk) {
     &opnbox_fly5
   };
 
-  short xposi = LONG_HIGH(p_actwk->xposi);
+  short xposi = fp16_get_integer(p_actwk->xposi);
   act_tbl[p_actwk->r_no / 2](p_actwk);
   hitchk_data data = { 43, 24, 24, xposi };
   hitchk(p_actwk, data);
@@ -85,99 +92,93 @@ void opnbox(sprite_status* p_actwk) {
 }
 
 
-static void opnbox_init(sprite_status* p_actwk) {
+static void opnbox_init(SKC_sprite_status* p_actwk) {
   enemy_init0(p_actwk, &opnbox_init_tbl);
-  if (!BIT_IS_SET(p_actwk->actflg, FLG_VFLIP)) {
-    set_act00(p_actwk, &switch_set_tbl);
+  if (p_actwk->actflg.vflip == 1) {
+    opnbox_init__set_fly(p_actwk);
   }
   else {
-    p_actwk->r_no = 8;
-    short xposi = LONG_HIGH(g_ram.scra_h_posit) + 160;
-    util__assign_high(&p_actwk->xposi, xposi);
-    p_actwk->actfree.opnbox.xposi = xposi;
-    short yposi = LONG_HIGH(g_ram.scra_v_posit) - 64;
-    util__assign_high(&p_actwk->yposi, yposi);
-    p_actwk->actfree.opnbox.xspeed = 1;
-    bs00m0_puka_init(p_actwk);
-    set_act00(p_actwk, &switch_set_tblud);
-    set_act00(p_actwk, &propera_set_tbl);
+    set_act00(p_actwk, &switch_set_tbl);
   }
 }
 
 
-static void opnbox_wait0(sprite_status* p_actwk) {
-  if (BIT_1_IS_SET(p_actwk->actfree.opnbox.status_bitfield)) {
-    p_actwk->r_no = 4;
-  }
+static void opnbox_init__set_fly(SKC_sprite_status* p_actwk) {
+  p_actwk->r_no = 8;
+  short xposi = (g_ram.scra_h_posit >> 16) + 160;
+  fp16_set_integer(&p_actwk->xposi, xposi);
+  p_actwk->u.obj.puka.accel_max = xposi;
+  short yposi = (g_ram.scra_v_posit >> 16) - 64;
+  fp16_set_integer(&p_actwk->yposi, yposi);
+  p_actwk->u.obj.actfree.opnbox.xspeed = 1;
+  bs00m0_puka_init(p_actwk);
+  set_act00(p_actwk, &switch_set_tblud);
+  set_act00(p_actwk, &propera_set_tbl);
 }
 
 
-static void set_break(sprite_status* p_actwk) {
-  if (GET_ZONE(g_ram.stageno) == MARBLE_GARDEN) {
-    g_ram.pl2_lock_flag = 255;
+static void opnbox_wait0(SKC_sprite_status* p_actwk) {
+  if (p_actwk->u.obj.actflg0.unused1 == 0) return;
+
+  p_actwk->r_no = 4;
+}
+
+
+static void set_break(SKC_sprite_status* p_actwk) {
+  if (get_zone(g_ram.stageno) != MARBLE_GARDEN) {
+    g_ram.pl2_lock_flag = 0xFF;
   }
   p_actwk->patno = 1;
-  p_actwk->actfree.opnbox.timer = 64;
-  g_ram.DAT_08fffacd = 255;
+  p_actwk->u.obj.timer = 64;
+  g_ram.DAT_08fffacd = 0xFF;
   set_act00(p_actwk, &opnbox_break_set_tbl);
   set_act00(p_actwk, &friend_set_tbl);
-  sprite_status* p_new_actwk = set_act00(p_actwk, &bsexp01_set_tbl);
-  p_new_actwk->userflag1 = 8;
+  SKC_sprite_status* p_new_actwk = set_act00(p_actwk, &bsexp01_set_tbl);
+  p_new_actwk->u.obj.userflag = 8;
 }
 
 
-static void opnbox_wait1(sprite_status* p_actwk) {
+static void opnbox_wait1(SKC_sprite_status* p_actwk) {
   chk_pl_pause(p_actwk, 6);
 }
 
 
-static void opnbox_wait2(sprite_status* p_actwk) {
+static void opnbox_wait2(SKC_sprite_status* p_actwk) {
   chk_pl2_pause(p_actwk);
 }
 
 
-static void opnbox_fly0(sprite_status* p_actwk) {
-  static unsigned char rno_tbl[24] = {
-    10, 10, 14, 10,
-    10, 10, 16, 10,
-    10, 10, 10, 10,
-    10, 10, 10, 10,
-    10, 10, 10, 10,
-    10, 10, 10, 10
+static void opnbox_fly0(SKC_sprite_status* p_actwk) {
+  unsigned char rno_tbl[24] = {
+    10, 10, 14, 10, 10, 10, 16, 10,
+    10, 10, 10, 10, 10, 10, 10, 10,
+    10, 10, 10, 10, 10, 10, 10, 10
   };
 
-  short xspeed = p_actwk->actfree.opnbox.xspeed;
-  bool neg = false;
-  if (xspeed >= 0) {
-    // p_chk
-    unsigned short hposi = util__to_unsigned(LONG_HIGH(g_ram.scra_h_posit) + 272);
-    if (hposi < util__to_unsigned(LONG_HIGH(p_actwk->xposi))) { // unsigned
-      neg = true;
+  short xspeed = p_actwk->u.obj.actfree.opnbox.xspeed;
+  if (xspeed >= 0) { // p_chk
+    if ((g_ram.scra_h_posit >> 16) + 272 < (unsigned short)fp16_get_integer(p_actwk->xposi)) {
+      xspeed = -xspeed;
     }
   }
-  else {
-    // m_chk
-    unsigned short hposi = util__to_unsigned(LONG_HIGH(g_ram.scra_h_posit) + 48);
-    if (hposi >= util__to_unsigned(LONG_HIGH(p_actwk->xposi))) { // unsigned
-      neg = true;
+  else { // m_chk
+    if ((g_ram.scra_h_posit >> 16) + 48 >= (unsigned short)fp16_get_integer(p_actwk->xposi)) {
+      xspeed = xspeed;
     }
   }
-  if (neg) {
-    xspeed = -xspeed;
+  p_actwk->u.obj.actfree.opnbox.xspeed = xspeed;
+  fp16_set_integer(&p_actwk->xposi, fp16_get_integer(p_actwk->xposi) + xspeed);
+  unsigned short scr_yposi = (g_ram.scra_v_posit >> 16) + 64;
+  if (get_zone(g_ram.stageno) == MARBLE_GARDEN) {
+    scr_yposi -= 32;
   }
-  p_actwk->actfree.opnbox.xspeed = xspeed;
-  p_actwk->xposi += SHORT_TO_LONG_HIGH(xspeed);
-  short vposi = LONG_HIGH(g_ram.scra_v_posit) + 64;
-  if (GET_ZONE(g_ram.stageno) == MARBLE_GARDEN) {
-    vposi -= 32;
-  }
-  short yspeed = 16384;
-  if (vposi >= util__to_unsigned(LONG_HIGH(p_actwk->yposi))) { // unsigned
+  short yspeed = 0x4000;
+  if (scr_yposi <= (unsigned short)fp16_get_integer(p_actwk->yposi)) {
     yspeed = -yspeed;
   }
   p_actwk->yposi += yspeed;
-  if (BIT_1_IS_SET(p_actwk->actfree.opnbox.status_bitfield)) {
-    p_actwk->r_no = rno_tbl[GET_ZONE(g_ram.stageno)];
+  if (p_actwk->u.obj.actflg0.unused1 == 1) {
+    p_actwk->r_no = rno_tbl[get_zone(g_ram.stageno)];
     set_break(p_actwk);
   }
   puka_puka(p_actwk);
@@ -185,115 +186,114 @@ static void opnbox_fly0(sprite_status* p_actwk) {
 }
 
 
-static void opnbox_fly1(sprite_status* p_actwk) {
+static void opnbox_fly1(SKC_sprite_status* p_actwk) {
   chk_pl_pause(p_actwk, 12);
   puka_puka(p_actwk);
   speedset2(p_actwk);
 }
 
 
-static void opnbox_fly2(sprite_status* p_actwk) {
+static void opnbox_fly2(SKC_sprite_status* p_actwk) {
   chk_pl2_pause(p_actwk);
   puka_puka(p_actwk);
   speedset2(p_actwk);
 }
 
 
-static void opnbox_fly3(sprite_status* p_actwk) {
+static void opnbox_fly3(SKC_sprite_status* p_actwk) {
   chk_pl_pausez02(p_actwk, 12);
   puka_puka(p_actwk);
   speedset2(p_actwk);
 }
 
 
-static void opnbox_fly4(sprite_status* p_actwk) {
+static void opnbox_fly4(SKC_sprite_status* p_actwk) {
   chk_pl_pause(p_actwk, 18);
   opnbox_fly40(p_actwk);
 }
 
 
-static void opnbox_fly40(sprite_status* p_actwk) {
+static void opnbox_fly40(SKC_sprite_status* p_actwk) {
   puka_puka(p_actwk);
-  unsigned short hposi = util__to_unsigned(LONG_HIGH(g_ram.scra_h_posit) - 96);
-  if (hposi >= util__to_unsigned(LONG_HIGH(p_actwk->xposi))) {
-    g_ram.DAT_08fffaa2 = 255;
+  if ((g_ram.scra_h_posit >> 16) - 96 >= (unsigned short)fp16_get_integer(p_actwk->xposi)) {
+    g_ram.DAT_08fffaa2 = 0xFF;
   }
   else {
-    p_actwk->xposi -= SHORT_TO_LONG_HIGH(2);
+    fp16_set_integer(&p_actwk->xposi, fp16_get_integer(p_actwk->xposi) - 2);
     speedset2(p_actwk);
   }
 }
 
 
-static void opnbox_fly5(sprite_status* p_actwk) {
+static void opnbox_fly5(SKC_sprite_status* p_actwk) {
   chk_pl2_pause(p_actwk);
   opnbox_fly40(p_actwk);
 }
 
 
-static void switch_(sprite_status* p_actwk) {
+static void switch_(SKC_sprite_status* p_actwk) {
   p_actwk->r_ptr = &switch_wait0;
   enemy_init2(p_actwk, &switch_init_tbl);
 }
 
 
-void switch_wait0(sprite_status* p_actwk) {
+void switch_wait0(SKC_sprite_status* p_actwk) {
   chk_switch_ride(p_actwk);
-  if (p_actwk->cddat1 & 0x18) {
+  if (p_actwk->u.obj.cddat.plride == 1 || p_actwk->u.obj.cddat.pl2ride == 1) {
     p_actwk->r_ptr = &switch_wait1;
-    sprite_status* p_parentwk = &g_ram.actwk[p_actwk->actfree.opnbox_switch.oya];
-    SET_BIT_1(p_parentwk->actfree.opnbox.status_bitfield);
+    SKC_sprite_status* p_parentwk = &g_ram.actwk[p_actwk->u.obj.oya];
+    p_parentwk->u.obj.actflg0.unused1 = 1;
     p_actwk->patno = 12;
   }
   chk_oya_die0(p_actwk);
 }
 
 
-void switch_wait1(sprite_status* p_actwk) {
+void switch_wait1(SKC_sprite_status* p_actwk) {
   chk_switch_ride(p_actwk);
   chk_oya_die0(p_actwk);
 }
 
 
-static void switchud(sprite_status* p_actwk) {
+static void switchud(SKC_sprite_status* p_actwk) {
   p_actwk->r_ptr = &switchud_wait0;
-  SET_BIT(p_actwk->actflg, FLG_VFLIP);
+  p_actwk->actflg.vflip = 1;
   enemy_init2(p_actwk, &switch_init_tbl);
 }
 
 
-static void switchud_wait0(sprite_status* p_actwk) {
-  static short col_tbl[4] = {
+static void switchud_wait0(SKC_sprite_status* p_actwk) {
+  short col_tbl[4] = {
     -26, 52, -28, 56
   };
 
   ko_offset0(p_actwk);
   chk_switchu_ride(p_actwk);
-  sprite_status* p_playerwk = chk_emy_colt(p_actwk, col_tbl);
-  if (p_playerwk != 0) {
-    bool player1 = p_playerwk->yspeed < 0 && (p_playerwk->mstno == 2 || p_playerwk->actfree.player.character == SONIC);
-    if (player1 || p_playerwk->yspeed < 0) {
-      p_actwk->r_ptr = switchud_wait1;
-      SPRITE_STATUS_UCHAR(p_actwk, 67) -= 8;
-      sprite_status* p_parentwk = &g_ram.actwk[p_actwk->actfree.opnbox_switch.oya];
-      SET_BIT_1(p_parentwk->actfree.opnbox.status_bitfield);
-    }
+  SKC_chk_emy_colt_result result = chk_emy_colt(p_actwk, col_tbl);
+  if ((result.pl
+        && g_ram.actwk[0].yspeed < 0
+        && (g_ram.actwk[0].mstno == 2 || g_ram.actwk[0].u.play.character == SONIC))
+      || (result.pl2 && g_ram.actwk[1].yspeed < 0)) {
+    p_actwk->r_ptr = switchud_wait1;
+    p_actwk->u.obj.oya_offset.y -= 8;
+    SKC_sprite_status* p_parentwk = &g_ram.actwk[p_actwk->u.obj.oya];
+    p_parentwk->u.obj.actflg0.unused1 = 1;
   }
   chk_oya_die0(p_actwk);
 }
 
 
-static void switchud_wait1(sprite_status* p_actwk) {
+static void switchud_wait1(SKC_sprite_status* p_actwk) {
   ko_offset0(p_actwk);
   chk_switchu_ride(p_actwk);
   chk_oya_die0(p_actwk);
 }
 
 
-static void break_(sprite_status* p_actwk) {
+static void break_(SKC_sprite_status* p_actwk) {
   enemy_init0(p_actwk, &break_init_tbl);
   if (g_ram.stageno == FLYING_BATTERY_ACT_1) {
-    p_actwk->sproffset = 1102;
+    p_actwk->sproffset = 0x044E;
   }
   p_actwk->r_ptr = chk_break_fout;
   set_obox_break_pt(p_actwk);
@@ -302,21 +302,21 @@ static void break_(sprite_status* p_actwk) {
 }
 
 
-static void propera(sprite_status* p_actwk) {
+static void propera(SKC_sprite_status* p_actwk) {
   enemy_init2(p_actwk, &propera_init_tbl);
   p_actwk->r_ptr = &propera_wait0;
   propera_wait0(p_actwk);
 }
 
 
-static void propera_wait0(sprite_status* p_actwk) {
+static void propera_wait0(SKC_sprite_status* p_actwk) {
   ko_offset0(p_actwk);
   pt_chg0(p_actwk, propera_pg00);
   chk_oya_die0(p_actwk);
 }
 
 
-void friend(sprite_status* p_actwk) {
+void friend(SKC_sprite_status* p_actwk) {
   enemy_init2(p_actwk, &friend_init_tbl);
   p_actwk->r_ptr = &friend_wait0;
   p_actwk->sprvsize = 8;
@@ -325,9 +325,8 @@ void friend(sprite_status* p_actwk) {
 }
 
 
-static void friend_wait0(sprite_status* p_actwk) {
-  --p_actwk->actfree.friend_.move_countdown;
-  if (p_actwk->actfree.friend_.move_countdown < 0) {
+static void friend_wait0(SKC_sprite_status* p_actwk) {
+  if (p_actwk->u.obj.timer-- == 0) {
     p_actwk->r_ptr = &friend_move0;
     p_actwk->sprpri = PRI_1;
   }
@@ -335,17 +334,16 @@ static void friend_wait0(sprite_status* p_actwk) {
 }
 
 
-static void friend_move0(sprite_status* p_actwk) {
+static void friend_move0(SKC_sprite_status* p_actwk) {
   speedsetg20(p_actwk);
-  short unknown = ObjCheckFloorDist(p_actwk);
-  if (unknown < 0) {
-    p_actwk->yposi += SHORT_TO_LONG_HIGH(unknown);
-    p_actwk->yspeed = p_actwk->actfree.friend_.yspeed;
-    bool pl_is_right, pl_is_below;
-    short pl_x_distance, pl_y_distance;
-    chk_distance(p_actwk, &pl_is_right, &pl_is_below, &pl_x_distance, &pl_y_distance);
-    short xspeed = -512;
-    if (g_ram.act_clear_flag != 0 && pl_is_right) {
+  short yoffset = ObjCheckFloorDist(p_actwk);
+  if (yoffset < 0) {
+    short yposi = fp16_get_integer(p_actwk->yposi) + yoffset;
+    fp16_set_integer(&p_actwk->yposi, yposi);
+    p_actwk->yspeed = p_actwk->u.obj.actfree.friend.yspeed_init;
+    SKC_chk_distance_result result = chk_distance(p_actwk);
+    short xspeed = -0x200;
+    if (g_ram.act_clear_flag != 0 && result.right) {
       xspeed = -xspeed;
     }
     p_actwk->xspeed = xspeed;
@@ -355,20 +353,15 @@ static void friend_move0(sprite_status* p_actwk) {
 }
 
 
-static void friend_pg(sprite_status* p_actwk) {
-  unsigned char patno = 0;
-  if (!BIT_3_IS_SET(g_ram.systemtimer)) {
-    patno = 1;
-  }
-  p_actwk->patno = patno;
+static void friend_pg(SKC_sprite_status* p_actwk) {
+  p_actwk->patno = g_ram.systemtimer & 8 ? 0 : 1;
   chk_emy_fout0(p_actwk);
 }
 
 
-static void friend_wait1(sprite_status* p_actwk) {
+static void friend_wait1(SKC_sprite_status* p_actwk) {
   ko_offset0(p_actwk);
-  --p_actwk->actfree.friend_.move_countdown;
-  if (p_actwk->actfree.friend_.move_countdown < 0) {
+  if (p_actwk->u.obj.timer-- == 0) {
     p_actwk->r_ptr = &friend_move1;
     p_actwk->sprpri = PRI_1;
   }
@@ -376,164 +369,159 @@ static void friend_wait1(sprite_status* p_actwk) {
 }
 
 
-static void friend_move1(sprite_status* p_actwk) {
-  get_closero(p_actwk, &g_ram.actwk[0], 768, 256, 16, 0, -48 - p_actwk->userflag1);
+static void friend_move1(SKC_sprite_status* p_actwk) {
+  get_closero(p_actwk, &g_ram.actwk[0], 0x300, 0x100, 0x10, 0, -0x30 - p_actwk->u.obj.userflag);
   speedset2(p_actwk);
   chk_spd_pt(p_actwk);
   if (g_ram.act_clear_flag == 0) {
     p_actwk->r_ptr = &friend_move2;
-    SET_BIT(p_actwk->actflg, FLG_HFLIP);
+    p_actwk->actflg.hflip = 1;
   }
   friend_pg(p_actwk);
 }
 
 
-static void friend_move2(sprite_status* p_actwk) {
-  p_actwk->xposi -= SHORT_TO_LONG_HIGH(2);
+static void friend_move2(SKC_sprite_status* p_actwk) {
+  fp16_set_integer(&p_actwk->xposi, fp16_get_integer(p_actwk->xposi) - 2);
   friend_pg(p_actwk);
 }
 
 
-void chk_pl_pause(sprite_status* p_actwk, unsigned char r_no) {
-  --p_actwk->actfree.opnbox.timer;
-  if (BIT_7_IS_SET(g_ram.actwk[0].cddat1)) return;
-  if (BIT_1_IS_SET(g_ram.actwk[0].cddat1)) return;
-  if (g_ram.actwk[0].r_no >= 6) return; // unsigned
+void chk_pl_pause(SKC_sprite_status* p_actwk, unsigned char r_no) {
+  if (p_actwk->u.obj.timer-- > 0) return;
+  if (g_ram.actwk[0].u.play.cddat.unused7 == 1) return;
+  if (g_ram.actwk[0].u.play.cddat.jump == 1) return;
+  if (g_ram.actwk[0].r_no >= 6) return;
+
   p_actwk->r_no = r_no;
   set_pl_pause(p_actwk, &g_ram.actwk[0]);
-  short slot_cnt;
-  sprite_status* p_new_actwk;
-  bool created = Create_New_Sprite(&p_new_actwk, &slot_cnt);
-  if (created) {
-    p_new_actwk->r_ptr = &actclear;
+  SKC_actwkchk_result result = actwkchk();
+  if (result.actwk_ptr != 0) {
+    result.actwk_ptr->r_ptr = &actclear;
   }
 }
 
 
-void chk_pl2_pause(sprite_status* p_actwk) {
+void chk_pl2_pause(SKC_sprite_status* p_actwk) {
   if (g_ram.act_clear_flag == 0) return;
-  if (GET_ZONE(g_ram.stageno) == CARNIVAL_NIGHT) {
+
+  if (get_zone(g_ram.stageno) == CARNIVAL_NIGHT) {
     set_pl_pause(p_actwk, &g_ram.actwk[0]);
   }
-  if (BIT_7_IS_SET(p_actwk->actfree.opnbox.status_bitfield)) return;
-  if (BIT_7_IS_SET(g_ram.actwk[1].cddat1)) return;
-  if (BIT_1_IS_SET(g_ram.actwk[1].cddat1)) return;
-  if (g_ram.actwk[1].r_no >= 6) return; // unsigned
-  SET_BIT_7(p_actwk->actfree.opnbox.status_bitfield);
-  g_ram.pl2_lock_flag = 0;
-  set_pl_pause(p_actwk, &g_ram.actwk[1]);
+  if (p_actwk->u.obj.actflg0.unused7 == 0
+      && g_ram.actwk[1].u.play.cddat.unused7 == 0
+      && g_ram.actwk[1].u.play.cddat.jump == 0
+      && g_ram.actwk[1].r_no < 6) {
+    p_actwk->u.obj.actflg0.unused7 = 1;
+    g_ram.pl2_lock_flag = 0;
+    set_pl_pause(p_actwk, &g_ram.actwk[1]);
+  }
 }
 
 
-static bool chk_pl_pausez02(sprite_status* p_actwk, unsigned char r_no) {
-  --p_actwk->actfree.opnbox.timer;
-  if (p_actwk->actfree.opnbox.timer >= 0) return false;
-  if (g_ram.actwk[0].r_no >= 6) return false; // unsigned
-  if (!BIT_IS_SET(g_ram.actwk[0].actflg, FLG_ONSCREEN)) return false;
-  if (g_ram.actwk[0].actfree.player.character != SONIC) {
-    if (g_ram.miles_carry_flag == 0) return false;
-  }
-  p_actwk->xspeed = -256;
+static void chk_pl_pausez02(SKC_sprite_status* p_actwk, unsigned char r_no) {
+  if (p_actwk->u.obj.timer-- > 0) return;
+  if (g_ram.actwk[0].r_no >= 6) return;
+  if (g_ram.actwk[0].actflg.onscreen == 0) return;
+  if (g_ram.actwk[0].u.play.character != SONIC && g_ram.miles_carry_flag == 0) return;
+
+  p_actwk->xspeed = -0x100;
   p_actwk->r_no = r_no;
-  short slot_cnt;
-  sprite_status* p_new_actwk;
-  bool created = Create_New_Sprite(&p_new_actwk, &slot_cnt);
-  if (created) {
-    p_new_actwk->r_ptr = &actclear;
+  SKC_actwkchk_result result = actwkchk();
+  if (result.actwk_ptr != 0) {
+    result.actwk_ptr->r_ptr = &actclear;
   }
-  return true;
 }
 
 
-void set_pl_pause(sprite_status* p_actwk, sprite_status* p_playerwk) {
-  p_playerwk->actfree.player.control_bitfield = 129;
+void set_pl_pause(SKC_sprite_status* p_actwk, SKC_sprite_status* p_playerwk) {
+  p_playerwk->u.play.control_bitfield = 0x81;
   p_playerwk->mstno = 19;
-  p_playerwk->actfree.player.roll_status = 0;
+  p_playerwk->u.play.spindash_flag = 0;
   p_playerwk->xspeed = 0;
   p_playerwk->yspeed = 0;
   p_playerwk->mspeed = 0;
-  CLEAR_BIT(p_actwk->cddat1, CD_PLPUSH);
-  CLEAR_BIT(p_actwk->cddat1, CD_PL2PUSH);
-  CLEAR_BIT(p_playerwk->cddat1, CD_PUSH);
+  p_actwk->u.obj.cddat.plpush = 0;
+  p_actwk->u.obj.cddat.pl2push = 0;
+  p_playerwk->u.play.cddat.push = 0;
 }
 
 
-static void get_closero(sprite_status* p_actwk, sprite_status* p_other_actwk, short x_unknown, short y_unknown, short speed_add, short xposi_add, short yposi_add) {
-  short xspeed_add = speed_add;
-  short yspeed_add = speed_add;
-  if (LONG_HIGH(p_other_actwk->xposi) + xposi_add < LONG_HIGH(p_actwk->xposi)) {
-    xspeed_add = -xspeed_add;
+static void get_closero(SKC_sprite_status* p_actwk, SKC_sprite_status* p_otherwk, short max_xspeed, short max_yspeed, short accel, short xoffset, short yoffset) {
+  short other_xposi = fp16_get_integer(p_otherwk->xposi) + xoffset;
+  short accel_copy = accel;
+  if (other_xposi < fp16_get_integer(p_actwk->xposi)) {
+    accel_copy = -accel_copy;
   }
-  short xspeed = p_actwk->xspeed + xspeed_add;
-  if (xspeed <= x_unknown) {
-    x_unknown = -x_unknown;
-    if (xspeed >= x_unknown) {
-      p_actwk->xspeed = xspeed;
-    }
+  short new_xspeed = p_actwk->xspeed + accel_copy;
+  if (new_xspeed <= max_xspeed && new_xspeed >= -max_xspeed) {
+    p_actwk->xspeed = new_xspeed;
   }
-  short yspeed = 0;
+  short new_yspeed;
+
   do {
-    if (LONG_HIGH(p_other_actwk->yposi) + yposi_add < LONG_HIGH(p_actwk->yposi)) {
-      yspeed_add = -yspeed_add;
+    short other_yposi = fp16_get_integer(p_otherwk->yposi) + yoffset;
+    if (other_yposi < p_actwk->yposi) {
+      accel = -accel;
     }
-    yspeed = p_actwk->yspeed + yspeed_add;
-    if (yspeed <= y_unknown) {
-      y_unknown = -y_unknown;
-    }
-  } while (yspeed < y_unknown);
-  p_actwk->yspeed = yspeed;
+    new_yspeed = p_actwk->yspeed + accel;
+    if (new_yspeed > max_yspeed) return;
+    max_yspeed = -max_yspeed;
+  }
+  while (new_yspeed < max_yspeed);
+
+  p_actwk->yspeed = new_yspeed;
 }
 
 
-void chk_switch_ride(sprite_status* p_actwk) {
-  hitchk_data data = { 27, 4, 6, LONG_HIGH(p_actwk->xposi) };
+void chk_switch_ride(SKC_sprite_status* p_actwk) {
+  hitchk_data data = { 27, 4, 6, fp16_get_integer(p_actwk->xposi) };
   hitchk(p_actwk, data);
 }
 
 
-static void chk_switchu_ride(sprite_status* p_actwk) {
-  hitchk_data data = { 27, 5, 9, LONG_HIGH(p_actwk->xposi) };
+static void chk_switchu_ride(SKC_sprite_status* p_actwk) {
+  hitchk_data data = { 27, 5, 9, fp16_get_integer(p_actwk->xposi) };
   hitchk(p_actwk, data);
 }
 
 
-void set_obox_break_pt(sprite_status* p_actwk) {
-  static unsigned char pt_tbl[6] = {
+void set_obox_break_pt(SKC_sprite_status* p_actwk) {
+  unsigned char pt_tbl[6] = {
     2, 3, 10, 4, 11, 144
   };
 
-  p_actwk->patno = pt_tbl[p_actwk->userflag1 >> 1];
+  p_actwk->patno = pt_tbl[p_actwk->u.obj.userflag / 2];
 }
 
 
-static void set_friend_init(sprite_status* p_actwk) {
-  static short spd_tbl[4] = {
-    -896, -768, -640, -512
+static void set_friend_init(SKC_sprite_status* p_actwk) {
+  short spd_tbl[4] = {
+    -0x380, -0x300, -0x280, -0x200
   };
-  static unsigned short ofs_tbl[4] = {
-    34176, 34194, 33838, 33856
+  unsigned short ofs_tbl[4] = {
+    0x8580, 0x8592, 0x842E, 0x8440
   };
 
-  short yspeed = spd_tbl[(p_actwk->userflag1 & 6) / 2];
+  short yspeed = spd_tbl[(p_actwk->u.obj.userflag & 6) / 2];
   p_actwk->yspeed = yspeed;
-  p_actwk->actfree.friend_.yspeed = yspeed;
-  sprite_status* p_parentwk = &g_ram.actwk[p_actwk->actfree.friend_.oya];
-  if (BIT_IS_SET(p_parentwk->actflg, FLG_VFLIP)) {
+  p_actwk->u.obj.actfree.friend.yspeed_init = yspeed;
+  SKC_sprite_status* p_parentwk = &g_ram.actwk[p_actwk->u.obj.oya];
+  if (p_parentwk->actflg.vflip == 1) {
     p_actwk->r_ptr = &friend_wait1;
-    SPRITE_STATUS_UCHAR(p_actwk, 67) += 8;
+    p_actwk->u.obj.oya_offset.y += 8;
     p_actwk->yspeed = 0;
   }
-  unsigned short ofs_index = p_actwk->userflag1 & 2;
+  unsigned short ofs_index = p_actwk->u.obj.userflag & 2;
   if (g_ram.stageno == FLYING_BATTERY_ACT_1) {
     ofs_index += 4;
   }
-  p_actwk->sproffset = ofs_tbl[ofs_index * 2];
-  unsigned char* friends = &zone_friend_data[GET_ZONE(g_ram.stageno)][0];
-  unsigned char friend_id = friends[(p_actwk->userflag1 & 2) / 2];
-  p_actwk->patbase = friend_data[friend_id].patbase;
-  p_actwk->actfree.friend_.move_countdown = p_actwk->userflag1 * 4;
-  short xspeed = 512;
-  if (util__to_unsigned(LONG_HIGH(p_actwk->xposi)) < util__to_unsigned(LONG_HIGH(p_parentwk->xposi))) { // unsigned
+  p_actwk->sproffset = ofs_tbl[ofs_index / 2];
+  unsigned char friend_id = zone_friend_tbl[get_zone(g_ram.stageno)][ofs_index];
+  p_actwk->patbase = zone_friend_init_tbl[friend_id].patbase;
+  p_actwk->u.obj.timer = p_actwk->u.obj.userflag * 4;
+  short xspeed = 0x200;
+  if ((unsigned short)fp16_get_integer(p_actwk->xposi) < (unsigned short)fp16_get_integer(p_parentwk->xposi)) {
     xspeed = -xspeed;
   }
   p_actwk->xspeed = xspeed;
@@ -541,17 +529,14 @@ static void set_friend_init(sprite_status* p_actwk) {
 }
 
 
-static void chk_spd_pt(sprite_status* p_actwk) {
-  CLEAR_BIT(p_actwk->actflg, FLG_HFLIP);
-  if (p_actwk->xspeed < 0) {
-    SET_BIT(p_actwk->actflg, FLG_HFLIP);
-  }
+static void chk_spd_pt(SKC_sprite_status* p_actwk) {
+  p_actwk->actflg.hflip = p_actwk->xspeed < 0;
 }
 
 
-static enemy_init0_data opnbox_init_tbl = {
+static SKC_enemy_init0_data opnbox_init_tbl = {
   openbox_pt,
-  33940,
+  0x8494,
   PRI_4,
   32,
   32,
@@ -560,7 +545,7 @@ static enemy_init0_data opnbox_init_tbl = {
 };
 
 
-enemy_init2_data switch_init_tbl = {
+SKC_enemy_init2_data switch_init_tbl = {
   PRI_4,
   16,
   8,
@@ -569,9 +554,9 @@ enemy_init2_data switch_init_tbl = {
 };
 
 
-static enemy_init0_data break_init_tbl = {
+static SKC_enemy_init0_data break_init_tbl = {
   openbox_pt,
-  33940,
+  0x8494,
   PRI_3,
   12,
   12,
@@ -580,7 +565,7 @@ static enemy_init0_data break_init_tbl = {
 };
 
 
-static enemy_init2_data friend_init_tbl = {
+static SKC_enemy_init2_data friend_init_tbl = {
   PRI_5,
   8,
   8,
@@ -589,7 +574,7 @@ static enemy_init2_data friend_init_tbl = {
 };
 
 
-static enemy_init2_data propera_init_tbl = {
+static SKC_enemy_init2_data propera_init_tbl = {
   PRI_4,
   20,
   4,
@@ -598,7 +583,7 @@ static enemy_init2_data propera_init_tbl = {
 };
 
 
-static set_act00_data switch_set_tbl = {
+static SKC_set_act00_data switch_set_tbl = {
   0,
   {
     { &switch_, 0, 220 }
@@ -606,7 +591,7 @@ static set_act00_data switch_set_tbl = {
 };
 
 
-static set_act00_data switch_set_tblud = {
+static SKC_set_act00_data switch_set_tblud = {
   0,
   {
     { &switchud, 0, 36 }
@@ -614,7 +599,7 @@ static set_act00_data switch_set_tblud = {
 };
 
 
-static set_act00_data propera_set_tbl = {
+static SKC_set_act00_data propera_set_tbl = {
   1,
   {
     { &propera, 236, 220 },
@@ -623,7 +608,7 @@ static set_act00_data propera_set_tbl = {
 };
 
 
-set_act00_data opnbox_break_set_tbl = {
+SKC_set_act00_data opnbox_break_set_tbl = {
   4,
   {
     { &break_, 0, 248 },
@@ -635,7 +620,7 @@ set_act00_data opnbox_break_set_tbl = {
 };
 
 
-static set_act00_data friend_set_tbl = {
+static SKC_set_act00_data friend_set_tbl = {
   8,
   {
     { &friend, 0, 252 },
@@ -660,73 +645,118 @@ static set_act00_data friend_set_tbl = {
 static signed char propera_pg00[6] = { 0, 6, 7, 8, 9, -4 };
 
 
-signed char* openbox_pt[13] = {
-  openbox_pt00,
-  openbox_pt01,
-  openbox_pt02,
-  openbox_pt03,
-  openbox_pt04,
-  openbox_pt05,
-  openbox_pt06,
-  openbox_pt07,
-  openbox_pt08,
-  openbox_pt09,
-  openbox_pt10,
-  openbox_pt11,
-  openbox_pt12
+SKC_sprite_pattern* openbox_pt[13] = {
+  &openbox_pt00,
+  &openbox_pt01,
+  &openbox_pt02,
+  &openbox_pt03,
+  &openbox_pt04,
+  &openbox_pt05,
+  &openbox_pt06,
+  &openbox_pt07,
+  &openbox_pt08,
+  &openbox_pt09,
+  &openbox_pt10,
+  &openbox_pt11,
+  &openbox_pt12
 };
 
 
-static signed char openbox_pt00[62] = {
-    0,  10, -32,  13,  12,   0, -32,  -1, -32,  13,
-   12,   8,   0,   0, -16,   2,  20,   0,  -8,  -1,
-  -16,   2,  20,   8,   0,   0, -16,   6,  23,   0,
-  -24,  -1, -16,   6,  23,   8,   8,   0, -16,   2,
-   29,   0, -32,  -1, -16,   2,  29,   8,  24,   0,
-    8,  14,   0,   0, -32,  -1,   8,  14,   0,   8,
-    0,   0
+static SKC_sprite_pattern openbox_pt00 = {
+  10,
+  {
+    { -32, 13, 0x000C, -32 },
+    { -32, 13, 0x080C,   0 },
+    { -16,  2, 0x0014,  -8 },
+    { -16,  2, 0x0814,   0 },
+    { -16,  6, 0x0017, -24 },
+    { -16,  6, 0x0817,   8 },
+    { -16,  2, 0x001D, -32 },
+    { -16,  2, 0x081D,  24 },
+    {   8, 14, 0x0000, -32 },
+    {   8, 14, 0x0800,   0 }
+  }
 };
-static signed char openbox_pt01[50] = {
-    0,   8, -32,  13,  32,   0, -32,  -1, -16,   1,
-   40,   0, -16,  -1,   0,  12,  42,   0, -32,  -1,
-  -32,  13,  32,   8,   0,   0, -16,   1,  40,   8,
-    8,   0,   0,  12,  42,   8,   0,   0,   8,  14,
-    0,   0, -32,  -1,   8,  14,   0,   8,   0,   0
+static SKC_sprite_pattern openbox_pt01 = {
+  8,
+  {
+    { -32, 13, 0x0020, -32 },
+    { -16,  1, 0x0028, -16 },
+    {   0, 12, 0x002A, -32 },
+    { -32, 13, 0x0820,   0 },
+    { -16,  1, 0x0828,   8 },
+    {   0, 12, 0x082A,   0 },
+    {   8, 14, 0x0000, -32 },
+    {   8, 14, 0x0800,   0 }
+  }
 };
-static signed char openbox_pt02[14] = {
-    0,   2,  -8,   1,  46,   0,  -8,  -1,  -8,   1,
-   46,   8,   0,   0
+static SKC_sprite_pattern openbox_pt02 = {
+  2,
+  {
+    { -8, 1, 0x002E, -8 },
+    { -8, 1, 0x082E,  0 }
+  }
 };
-static signed char openbox_pt03[8] = {
-    0,   1,  -8,   5,  48,   0,  -8,  -1
+static SKC_sprite_pattern openbox_pt03 = {
+  1,
+  {
+    { -8, 5, 0x0030, -8 }
+  }
 };
-static signed char openbox_pt04[8] = {
-    0,   1,  -8,   1,  52,   0,  -4,  -1
+static SKC_sprite_pattern openbox_pt04 = {
+  1,
+  {
+    { -8, 1, 0x0034, -8 }
+  }
 };
-static signed char openbox_pt05[14] = {
-    0,   2, -12,   5,  54,   0, -16,  -1, -12,   5,
-   54,   8,   0,   0
+static SKC_sprite_pattern openbox_pt05 = {
+  2,
+  {
+    { -12, 5, 0x0036, -16 },
+    { -12, 5, 0x0836,   0 }
+  }
 };
-static signed char openbox_pt06[14] = {
-    0,   2,  -4,   8,  58,   0, -20,  -1,  -4,   4,
-   61,   0,   4,   0
+static SKC_sprite_pattern openbox_pt06 = {
+  2,
+  {
+    { -12, 8, 0x003A, -20 },
+    {  -4, 4, 0x003D,   4 }
+  }
 };
-static signed char openbox_pt07[8] = {
-    0,   1,  -4,   8,  63,   0, -12,  -1
+static SKC_sprite_pattern openbox_pt07 = {
+  1,
+  {
+    { -4, 8, 0x003F, -12 }
+  }
 };
-static signed char openbox_pt08[8] = {
-    0,   1,  -4,   0,  66,   0,  -4,  -1
+static SKC_sprite_pattern openbox_pt08 = {
+  1,
+  {
+    { -4, 0, 0x0042, -4 }
+  }
 };
-static signed char openbox_pt09[8] = {
-    0,   1,  -4,   8,  67,   0, -12,  -1
+static SKC_sprite_pattern openbox_pt09 = {
+  1,
+  {
+    { -4, 8, 0x0043, -12 }
+  }
 };
-static signed char openbox_pt10[8] = {
-    0,   1,  -8,   5,  48,   8,  -8,  -1
+static SKC_sprite_pattern openbox_pt10 = {
+  1,
+  {
+    { -8, 5, 0x0830, -8 }
+  }
 };
-static signed char openbox_pt11[8] = {
-    0,   1,  -8,   1,  52,   8,  -4,  -1
+static SKC_sprite_pattern openbox_pt11 = {
+  1,
+  {
+    { -8, 1, 0x0834, -4 }
+  }
 };
-static signed char openbox_pt12[14] = {
-    0,   2,  -5,   5,  54,   0, -16,  -1,  -5,   5,
-   54,   8,   0,   0
+static SKC_sprite_pattern openbox_pt12 = {
+  2,
+  {
+    { -5, 5, 0x0036, -16 },
+    { -5, 5, 0x0836,   0 }
+  }
 };
