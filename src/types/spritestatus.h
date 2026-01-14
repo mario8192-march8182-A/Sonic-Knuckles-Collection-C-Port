@@ -145,6 +145,14 @@ typedef struct SKC_sprite_status {
       unsigned short flagwork_index; // 0x48
       union {
         struct {
+          unsigned char* timer_data_ptr; // 0x30
+          unsigned char* timer_data2_ptr; // 0x34
+          unsigned char unknown; // 0x3A;
+          unsigned char* slope_data_ptr; // 0x3C
+          unsigned char unknown2; // 0x40
+        }
+        break_;
+        struct {
           short yspeed_init; // 0x3E
         }
         friend;
@@ -273,19 +281,6 @@ SKC_sprite_status;
       short x_destination;
       unsigned short oya;
     } actclear_part;
-    struct {
-      unsigned char reserved1[2];
-      unsigned char* breakgo_data1;
-      unsigned char* breakgo_data2;
-      unsigned char countdown;
-      unsigned char reserved2[1];
-      unsigned char break_flag;
-      unsigned char reserved3[1];
-      unsigned char* breakmove_data;
-      unsigned char level_trigger_no;
-      unsigned char reserved4[7];
-      unsigned short flagwork_index;
-    } break_;
     struct {
       short shot_countdown;
       signed char* pg_data_ptr;
