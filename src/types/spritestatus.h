@@ -1,6 +1,7 @@
 #ifndef SPRITESTATUS_H
 #define SPRITESTATUS_H
 
+#include <stdbool.h>
 #include "../constants.h"
 #include "enemyinit0data.h"
 #include "spritestatushandler.h"
@@ -198,6 +199,17 @@ typedef struct SKC_sprite_status {
           short unknown42; // 0x42
         }
         slot_ring;
+        struct {
+          short xposi_init; // 0x30
+          short yposi_init; // 0x32
+          short offset; // 0x34
+          bool reverse_dir; // 0x36
+          unsigned short push_timer; // 0x3A
+          unsigned short push_distance; // 0x3C
+          bool prev_plpush; // 0x3E
+          bool prev_pl2push; // 0x3F
+        }
+        toge;
         struct {
           unsigned short ringwk_index; // 0x30
         }
@@ -436,19 +448,6 @@ SKC_sprite_status;
       short countdown;
       unsigned char reserved1[16];
     } tloop;
-    struct {
-      unsigned char reserved1[2];
-      short orig_xposi;
-      short orig_yposi;
-      short offset;
-      unsigned short move_dir;
-      unsigned short move_countdown;
-      short push_delay;
-      unsigned short push_distance;
-      unsigned char plcddat1;
-      unsigned char pl2cddat1;
-      unsigned char reserved3[10];
-    } toge;
   } actfree;
 */
 
