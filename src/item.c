@@ -1,37 +1,41 @@
-#include "globals.h"
-#include "macros.h"
-#include "util.h"
+#include "item.h"
+#include <stdbool.h>
+#include "types/actwkchkresult.h"
 #include "types/hitchkdata.h"
 #include "types/hitchkresults.h"
-#include "item.h"
-#include "004xxxxx.h"
+#include "types/sonic3ram.h"
+#include "types/spritepattern.h"
+#include "types/spritestatus.h"
+#include "types/spritestatushandler.h"
+#include "utils/bits.h"
+#include "utils/fp16.h"
+#include "action.h"
+#include "constants.h"
 #include "hitchk.h"
 #include "toge.h"
-static sprite_status_handler item_move_tbl[5];
-static void iteminit(sprite_status* p_actwk);
-static void itemmove(sprite_status* p_actwk);
-static void itemmove3(sprite_status* p_actwk);
-static void itemmove2(sprite_status* p_actwk);
-static void itemdownsub(sprite_status* p_actwk);
-static void itemsub(sprite_status* p_actwk, sprite_status* p_playerwk, hitchk_data data, unsigned char plridebit);
-static void itemsub1(sprite_status* p_actwk, sprite_status* p_playerwk, hitchk_data data, unsigned char plridebit);
-static hitchk_results itemsub2(sprite_status* p_actwk, sprite_status* p_playerwk, hitchk_data data, unsigned char plridebit);
-static void itemget(sprite_status* p_actwk);
-static sprite_status_handler item2_move_tbl[3];
-static void item2init(sprite_status* p_actwk);
-static void item2move(sprite_status* p_actwk);
-static void item2move__sub(sprite_status* p_actwk);
-static void(*item2tbl[10])(sprite_status*, sprite_status*, unsigned short*);
-static void item2_00_item2_02(sprite_status* p_actwk, sprite_status* p_playerwk, unsigned short* p_counter);
-static void item2_01(sprite_status* p_actwk, sprite_status* p_playerwk, unsigned short* p_counter);
-static void item2_03(sprite_status* p_actwk, sprite_status* p_playerwk, unsigned short* p_counter);
-static void item2_04(sprite_status* p_actwk, sprite_status* p_playerwk, unsigned short* p_counter);
-static void item2_05(sprite_status* p_actwk, sprite_status* p_playerwk, unsigned short* p_counter);
-static void item2_06(sprite_status* p_actwk, sprite_status* p_playerwk, unsigned short* p_counter);
-static void item2_07(sprite_status* p_actwk, sprite_status* p_playerwk, unsigned short* p_counter);
-static void item2_08(sprite_status* p_actwk, sprite_status* p_playerwk, unsigned short* p_counter);
-static void item2_09(sprite_status* p_actwk, sprite_status* p_playerwk, unsigned short* p_counter);
-static void item2die(sprite_status* p_actwk);
+static void iteminit(SKC_sprite_status* p_actwk);
+static void itemmove(SKC_sprite_status* p_actwk);
+static void itemmove3(SKC_sprite_status* p_actwk);
+static void itemmove2(SKC_sprite_status* p_actwk);
+static void itemdownsub(SKC_sprite_status* p_actwk);
+static void itemsub(SKC_sprite_status* p_actwk, SKC_sprite_status* p_playerwk, hitchk_data data);
+static void itemsub1(SKC_sprite_status* p_actwk, SKC_sprite_status* p_playerwk, hitchk_data data);
+static void itemsub2(SKC_sprite_status* p_actwk, SKC_sprite_status* p_playerwk, hitchk_data data);
+static void itemget(SKC_sprite_status* p_actwk);
+static void item2init(SKC_sprite_status* p_actwk);
+static void item2move(SKC_sprite_status* p_actwk);
+static void item2move__sub(SKC_sprite_status* p_actwk);
+static void item2_00(SKC_sprite_status* p_actwk, SKC_sprite_status* p_playerwk, unsigned short* p_counter);
+static void item2_01(SKC_sprite_status* p_actwk, SKC_sprite_status* p_playerwk, unsigned short* p_counter);
+static void item2_03(SKC_sprite_status* p_actwk, SKC_sprite_status* p_playerwk, unsigned short* p_counter);
+static void item2_03__1up(SKC_sprite_status* p_actwk, SKC_sprite_status* p_playerwk, unsigned short* p_counter);
+static void item2_04(SKC_sprite_status* p_actwk, SKC_sprite_status* p_playerwk, unsigned short* p_counter);
+static void item2_05(SKC_sprite_status* p_actwk, SKC_sprite_status* p_playerwk, unsigned short* p_counter);
+static void item2_06(SKC_sprite_status* p_actwk, SKC_sprite_status* p_playerwk, unsigned short* p_counter);
+static void item2_07(SKC_sprite_status* p_actwk, SKC_sprite_status* p_playerwk, unsigned short* p_counter);
+static void item2_08(SKC_sprite_status* p_actwk, SKC_sprite_status* p_playerwk, unsigned short* p_counter);
+static void item2_09(SKC_sprite_status* p_actwk, SKC_sprite_status* p_playerwk, unsigned short* p_counter);
+static void item2die(SKC_sprite_status* p_actwk);
 static signed char* itemchg[11];
 static signed char itemchg0[4];
 static signed char itemchg1[8];
@@ -44,74 +48,74 @@ static signed char itemchg7[8];
 static signed char itemchg8[8];
 static signed char itemchg9[8];
 static signed char itemchg10[8];
-static signed char itemsp00[8];
-static signed char itemsp01[14];
-static signed char itemsp02[14];
-static signed char itemsp03[14];
-static signed char itemsp04[14];
-static signed char itemsp05[14];
-static signed char itemsp06[14];
-static signed char itemsp07[14];
-static signed char itemsp08[14];
-static signed char itemsp09[14];
-static signed char itemsp10[14];
-static signed char itemsp11[8];
+static SKC_sprite_pattern itemsp00;
+static SKC_sprite_pattern itemsp01;
+static SKC_sprite_pattern itemsp02;
+static SKC_sprite_pattern itemsp03;
+static SKC_sprite_pattern itemsp04;
+static SKC_sprite_pattern itemsp05;
+static SKC_sprite_pattern itemsp06;
+static SKC_sprite_pattern itemsp07;
+static SKC_sprite_pattern itemsp08;
+static SKC_sprite_pattern itemsp09;
+static SKC_sprite_pattern itemsp10;
+static SKC_sprite_pattern itemsp11;
+
+extern sonic3_ram g_ram;
 
 
-void item(sprite_status* p_actwk) {
+void item(SKC_sprite_status* p_actwk) {
+  SKC_sprite_status_handler item_move_tbl[5] = {
+    &iteminit,
+    &itemmove,
+    &itemget,
+    &itemmove2,
+    &itemmove3
+  };
+
   item_move_tbl[p_actwk->r_no / 2](p_actwk);
 }
 
 
-static sprite_status_handler item_move_tbl[5] = {
-  &iteminit,
-  &itemmove,
-  &itemget,
-  &itemmove2,
-  &itemmove3
-};
-
-
-static void iteminit(sprite_status* p_actwk) {
+static void iteminit(SKC_sprite_status* p_actwk) {
   p_actwk->r_no += 2;
   p_actwk->sprvsize = 15;
   p_actwk->sprhsize = 15;
   p_actwk->patbase = itempat;
-  p_actwk->sproffset = 1220;
-  SET_BIT(p_actwk->actflg, FLG_LEVELCOORDS);
+  p_actwk->sproffset = 0x04C4;
+  p_actwk->actflg.relative_coordinates = 1;
   p_actwk->sprpri = PRI_3;
   p_actwk->sprhs = 14;
   p_actwk->sprvs = 16;
-  if (p_actwk->actfree.item.flagwork_index != 0) {
-    if (BIT_0_IS_SET(g_ram.flagwork[p_actwk->actfree.item.flagwork_index - 1])) {
-      p_actwk->patno = 11;
-      p_actwk->r_ptr = &frameoutchk;
-      return;
-    }
+  if (p_actwk->u.obj.flagwork_index != 0 && BIT_IS_SET(g_ram.flagwork[p_actwk->u.obj.flagwork_index - 1], 0)) {
+    p_actwk->patno = 11;
+    p_actwk->r_ptr = &frameoutchk;
   }
-  p_actwk->colino = 70;
-  p_actwk->mstno = p_actwk->userflag1;
-  itemmove(p_actwk);
+  else {
+    p_actwk->colino = 0x46;
+    p_actwk->mstno = p_actwk->u.obj.userflag;
+    itemmove(p_actwk);
+  }
 }
 
 
-static void itemmove(sprite_status* p_actwk) {
+static void itemmove(SKC_sprite_status* p_actwk) {
   itemdownsub(p_actwk);
-  hitchk_data data = { 25, 16, 17, LONG_HIGH(p_actwk->xposi) };
-  itemsub(p_actwk, &g_ram.actwk[0], data, 3);
-  itemsub1(p_actwk, &g_ram.actwk[1], data, 4);
-  Add_Object_To_Collision_Response_List(p_actwk);
+  hitchk_data data = { 25, 16, 17, fp16_get_integer(p_actwk->xposi) };
+  itemsub(p_actwk, &g_ram.actwk[0], data);
+  itemsub1(p_actwk, &g_ram.actwk[1], data);
+  colibufferchk(p_actwk);
   patchg(p_actwk, itemchg);
   itemmove3(p_actwk);
 }
 
 
-static void itemmove3(sprite_status* p_actwk) {
+static void itemmove3(SKC_sprite_status* p_actwk) {
   frameoutchk(p_actwk);
 }
 
 
-static void itemmove2(sprite_status* p_actwk) {
+static void itemmove2(SKC_sprite_status* p_actwk) {
   if (p_actwk->patno == 11) {
     p_actwk->r_ptr = &itemmove3;
   }
@@ -120,111 +124,123 @@ static void itemmove2(sprite_status* p_actwk) {
 }
 
 
-static void itemdownsub(sprite_status* p_actwk) {
-  if (p_actwk->actfree.item.unknown == 0) return;
-  if (!BIT_IS_SET(p_actwk->actflg, FLG_VFLIP)) {
+static void itemdownsub(SKC_sprite_status* p_actwk) {
+  if (p_actwk->u.obj.actfree.item.unknown == 0) return;
+
+  if (p_actwk->actflg.vflip == 0) {
     speedset(p_actwk);
-    if (p_actwk->yspeed < 0) return;
-    short unknown = ObjCheckFloorDist(p_actwk);
-    if (unknown > 0) return;
-    p_actwk->yposi += SHORT_TO_LONG_HIGH(unknown);
-    p_actwk->yspeed = 0;
-    p_actwk->actfree.item.unknown = 0;
+    if (p_actwk->yspeed >= 0) {
+      short yoffset = ObjCheckFloorDist(p_actwk);
+      if (yoffset <= 0) {
+        short yposi = fp16_get_integer(p_actwk->yposi) + yoffset;
+        fp16_set_integer(&p_actwk->yposi, yposi);
+        p_actwk->yspeed = 0;
+        p_actwk->u.obj.actfree.item.unknown = 0;
+      }
+    }
   }
   else {
     speedset2(p_actwk);
-    p_actwk->yspeed -= 56;
+    p_actwk->yspeed -= 0x38;
     if (p_actwk->yspeed >= 0) return;
-    short unknown = ObjCheckCeilingDist(p_actwk);
-    if (unknown > 0) return;
-    p_actwk->yposi -= SHORT_TO_LONG_HIGH(unknown);
-    p_actwk->yspeed = 0;
-    p_actwk->actfree.item.unknown = 0;
-  }
-}
-
-
-static void itemsub(sprite_status* p_actwk, sprite_status* p_playerwk, hitchk_data data, unsigned char plridebit) {
-  if (BIT_IS_SET(p_actwk->cddat1, plridebit)) {
-    itemsub2(p_actwk, p_playerwk, data, plridebit);
-    return;
-  }
-  if (p_playerwk->mstno == 2) return;
-  if (p_playerwk->actfree.player.character == KNUCKLES) {
-    if (p_playerwk->actfree.player.talent_status == 1) return;
-    if (p_playerwk->actfree.player.talent_status == 3) return;
-  }
-  plhitchk_chk_coli2(p_actwk, p_playerwk, data, plridebit);
-}
-
-
-static void itemsub1(sprite_status* p_actwk, sprite_status* p_playerwk, hitchk_data data, unsigned char plridebit) {
-  if (BIT_IS_SET(p_actwk->cddat1, plridebit)) {
-    itemsub2(p_actwk, p_playerwk, data, plridebit);
-    return;
-  }
-  if (g_ram.vs_flag == 0 || p_actwk->mstno != 2) {
-    plhitchk_chk_coli2(p_actwk, p_playerwk, data, plridebit);
-  }
-}
-
-
-static hitchk_results itemsub2(sprite_status* p_actwk, sprite_status* p_playerwk, hitchk_data data, unsigned char plridebit) {
-  unsigned char width = data.sprhs * 2;
-  bool on_box = false;
-  if (!BIT_IS_SET(p_playerwk->cddat1, CD_JUMP)) {
-    short distance = LONG_HIGH(p_playerwk->xposi) - LONG_HIGH(p_actwk->xposi) + data.sprhs;
-    if (distance >= 0 && distance < width) {
-      on_box = true;
+    short yoffset = ObjCheckCeilingDist(p_actwk);
+    if (yoffset <= 0) {
+      short yposi = fp16_get_integer(p_actwk->yposi) - yoffset;
+      p_actwk->yspeed = 0;
+      p_actwk->u.obj.actfree.item.unknown = 0;
     }
   }
-  if (!on_box) {
-    CLEAR_BIT(p_playerwk->cddat1, CD_RIDE);
-    SET_BIT(p_playerwk->cddat1, CD_JUMP);
-    CLEAR_BIT(p_playerwk->cddat1, plridebit);
+}
+
+
+static void itemsub(SKC_sprite_status* p_actwk, SKC_sprite_status* p_playerwk, hitchk_data data) {
+  if (p_playerwk == &g_ram.actwk[0] && p_actwk->u.obj.cddat.plride == 1
+      || p_playerwk == &g_ram.actwk[1] && p_actwk->u.obj.cddat.pl2ride == 1) {
+    itemsub2(p_actwk, p_playerwk, data);
   }
   else {
-    MvSonicOnPtfm(data.xposi);
+    if (p_playerwk->mstno != 2
+        && (p_playerwk->u.play.character != KNUCKLES
+            || (p_playerwk->u.play.talent_status != 1 && p_playerwk->u.play.talent_status != 3))) {
+      plhitchk_chk_coli2(p_actwk, p_playerwk, data, 3);
+    }
   }
-  hitchk_results results = { 0, 0 };
-  return results;
 }
 
 
-static void itemget(sprite_status* p_actwk) {
-  if (p_actwk->cddat1 & 0x78) {
-    if (p_actwk->cddat1 & 0x28) {
-      g_ram.actwk[0].cddat1 &= 0xD7;
-      SET_BIT(g_ram.actwk[0].cddat1, CD_JUMP);
+static void itemsub1(SKC_sprite_status* p_actwk, SKC_sprite_status* p_playerwk, hitchk_data data) {
+  if (p_playerwk == &g_ram.actwk[0] && p_actwk->u.obj.cddat.plride == 1
+      || p_playerwk == &g_ram.actwk[1] && p_actwk->u.obj.cddat.pl2ride == 1) {
+    itemsub2(p_actwk, p_playerwk, data);
+  }
+  else if (g_ram.vs_flag == 0 || p_actwk->mstno != 2) {
+    plhitchk_chk_coli2(p_actwk, p_playerwk, data, 4);
+  }
+}
+
+
+static void itemsub2(SKC_sprite_status* p_actwk, SKC_sprite_status* p_playerwk, hitchk_data data) {
+  short distance = fp16_get_integer(p_playerwk->xposi) - fp16_get_integer(p_actwk->xposi) + data.sprhs;
+  if (p_playerwk->u.play.cddat.jump == 0 && distance >= 0 && (unsigned short)distance < data.sprhs * 2) {
+    MvSonicOnPtfm(data.xposi);
+  }
+  else {
+    p_playerwk->u.play.cddat.ride = 0;
+    p_playerwk->u.play.cddat.jump = 1;
+    if (p_playerwk == &g_ram.actwk[0]) {
+      p_actwk->u.obj.cddat.plride = 0;
     }
-    if (p_actwk->cddat1 & 0x50) {
-      g_ram.actwk[1].cddat1 &= 0xD7;
-      SET_BIT(g_ram.actwk[1].cddat1, CD_JUMP);
+    else {
+      p_actwk->u.obj.cddat.pl2ride = 0;
     }
   }
-  p_actwk->cddat1 &= 3;
+}
+
+
+static void itemget(SKC_sprite_status* p_actwk) {
+  if (p_actwk->u.obj.cddat.plride == 1 || p_actwk->u.obj.cddat.plpush == 1) {
+    g_ram.actwk[0].u.play.cddat.ride = 0;
+    g_ram.actwk[0].u.play.cddat.push = 0;
+    g_ram.actwk[0].u.play.cddat.jump = 1;
+  }
+  if (p_actwk->u.obj.cddat.pl2ride == 1 || p_actwk->u.obj.cddat.pl2push == 1) {
+    g_ram.actwk[1].u.play.cddat.ride = 0;
+    g_ram.actwk[1].u.play.cddat.push = 0;
+    g_ram.actwk[1].u.play.cddat.jump = 1;
+  }
+  p_actwk->u.obj.cddat.wrt = 0;
+  p_actwk->u.obj.cddat.plride = 0;
+  p_actwk->u.obj.cddat.pl2ride = 0;
+  p_actwk->u.obj.cddat.plpush = 0;
+  p_actwk->u.obj.cddat.pl2push = 0;
+  p_actwk->u.obj.cddat.die = 0;
   p_actwk->colino = 0;
-  short slot_cnt;
-  sprite_status* p_new_actwk;
-  bool created = Create_New_Sprite3(p_actwk, &p_new_actwk, &slot_cnt);
-  if (created) {
-    p_new_actwk->r_ptr = &item2;
-    util__copy_high(&p_new_actwk->xposi, &p_actwk->xposi);
-    util__copy_high(&p_new_actwk->yposi, &p_actwk->yposi);
-    p_new_actwk->mstno = p_actwk->mstno;
-    p_new_actwk->actflg = p_actwk->actflg;
-    p_new_actwk->cddat1 = p_actwk->cddat1;
-    p_new_actwk->actfree.item.player = p_actwk->actfree.item.player;
+  SKC_actwkchk_result result = actwkchk2(p_actwk);
+  if (result.actwk_ptr != 0) {
+    result.actwk_ptr->r_ptr = &item2;
+    fp16_set_integer(&result.actwk_ptr->xposi, fp16_get_integer(p_actwk->xposi));
+    fp16_set_integer(&result.actwk_ptr->yposi, fp16_get_integer(p_actwk->yposi));
+    result.actwk_ptr->mstno = p_actwk->mstno;
+    result.actwk_ptr->actflg = p_actwk->actflg;
+    result.actwk_ptr->u.obj.cddat.right = p_actwk->u.obj.cddat.right;
+    result.actwk_ptr->u.obj.cddat.down = p_actwk->u.obj.cddat.down;
+    result.actwk_ptr->u.obj.cddat.wrt = p_actwk->u.obj.cddat.wrt;
+    result.actwk_ptr->u.obj.cddat.plride = p_actwk->u.obj.cddat.plride;
+    result.actwk_ptr->u.obj.cddat.pl2ride = p_actwk->u.obj.cddat.pl2ride;
+    result.actwk_ptr->u.obj.cddat.plpush = p_actwk->u.obj.cddat.plpush;
+    result.actwk_ptr->u.obj.cddat.pl2push = p_actwk->u.obj.cddat.pl2push;
+    result.actwk_ptr->u.obj.cddat.die = p_actwk->u.obj.cddat.die;
+    result.actwk_ptr->u.obj.ko = p_actwk->u.obj.ko;
   }
-  created = Create_New_Sprite3(p_actwk, &p_new_actwk, &slot_cnt);
-  if (created) {
-    p_new_actwk->r_ptr = &bakuhatu;
-    p_new_actwk->r_no += 2;
-    util__copy_high(&p_new_actwk->xposi, &p_actwk->xposi);
-    util__copy_high(&p_new_actwk->yposi, &p_actwk->yposi);
+  result = actwkchk2(p_actwk);
+  if (result.actwk_ptr != 0) {
+    result.actwk_ptr->r_ptr = &bakuhatu;
+    result.actwk_ptr->r_no += 2;
+    fp16_set_integer(&result.actwk_ptr->xposi, fp16_get_integer(p_actwk->xposi));
+    fp16_set_integer(&result.actwk_ptr->yposi, fp16_get_integer(p_actwk->yposi));
   }
-  if (p_actwk->actfree.item.flagwork_index != 0) {
-    SET_BIT_0(g_ram.flagwork[p_actwk->actfree.item.flagwork_index - 1]);
+  if (p_actwk->u.obj.flagwork_index != 0) {
+    SET_BIT(g_ram.flagwork[p_actwk->u.obj.flagwork_index - 1], 0);
   }
   p_actwk->mstno = 10;
   p_actwk->r_ptr = &itemmove2;
@@ -232,87 +248,82 @@ static void itemget(sprite_status* p_actwk) {
 }
 
 
-void item2(sprite_status* p_actwk) {
+void item2(SKC_sprite_status* p_actwk) {
+  SKC_sprite_status_handler item2_move_tbl[3] = {
+    &item2init,
+    &item2move,
+    &item2die
+  };
+
   item2_move_tbl[p_actwk->r_no / 2](p_actwk);
 }
 
 
-static sprite_status_handler item2_move_tbl[3] = {
-  &item2init,
-  &item2move,
-  &item2die
-};
-
-
-static void item2init(sprite_status* p_actwk) {
+static void item2init(SKC_sprite_status* p_actwk) {
   p_actwk->r_no += 2;
-  p_actwk->sproffset = 33988;
-  p_actwk->actflg &= 0x24;
+  p_actwk->sproffset = 0x84C4;
+  p_actwk->actflg.relative_coordinates = 1;
+  p_actwk->actflg.static_pattern = 1;
   p_actwk->sprpri = PRI_3;
   p_actwk->sprhs = 8;
-  p_actwk->yspeed = -768;
-  if (BIT_IS_SET(p_actwk->actflg, FLG_VFLIP)) {
+  p_actwk->yspeed = -0x300;
+  if (p_actwk->actflg.vflip == 1) {
     p_actwk->yspeed = -p_actwk->yspeed;
   }
   p_actwk->patno = p_actwk->mstno + 1;
-  p_actwk->patbase = &itempat[p_actwk->mstno + 1];
+  p_actwk->patbase = itempat[p_actwk->mstno + 1]->spr;
   item2move(p_actwk);
 }
 
 
-static void item2move(sprite_status* p_actwk) {
+static void item2move(SKC_sprite_status* p_actwk) {
   item2move__sub(p_actwk);
   actionsub(p_actwk);
 }
 
 
-static void item2move__sub(sprite_status* p_actwk) {
-  if (!BIT_IS_SET(p_actwk->actflg, FLG_VFLIP)) {
-    if (p_actwk->yspeed < 0) {
-      speedset2(p_actwk);
-      p_actwk->yspeed += 24;
-      return;
-    }
+static void item2move__sub(SKC_sprite_status* p_actwk) {
+  void(*item2tbl[10])(SKC_sprite_status*, SKC_sprite_status*, unsigned short*) = {
+    &item2_00,
+    &item2_01,
+    &item2_00,
+    &item2_03,
+    &item2_04,
+    &item2_05,
+    &item2_06,
+    &item2_07,
+    &item2_08,
+    &item2_09
+  };
+
+  if (p_actwk->actflg.vflip == 0 && p_actwk->yspeed < 0) {
+    speedset2(p_actwk);
+    p_actwk->yspeed += 0x18;
+  }
+  else if (p_actwk->actflg.vflip == 1 && p_actwk->yspeed >= 0) {
+    speedset2(p_actwk);
+    p_actwk->yspeed -= 0x18;
   }
   else {
-    if (p_actwk->yspeed >= 0) {
-      speedset2(p_actwk);
-      p_actwk->yspeed -= 24;
-      return;
+    p_actwk->r_no += 2;
+    p_actwk->pattim = 29;
+    SKC_sprite_status* p_playerwk = &g_ram.actwk[p_actwk->u.obj.ko];
+    unsigned short* p_counter = &g_ram.DAT_08fffecc;
+    if (p_playerwk != &g_ram.actwk[0]) {
+      p_counter = &g_ram.DAT_08fffece;
     }
+    item2tbl[p_actwk->mstno](p_actwk, p_playerwk, p_counter);
   }
-  p_actwk->r_no += 2;
-  p_actwk->pattim = 29;
-  sprite_status* p_playerwk = &g_ram.actwk[p_actwk->actfree.item.player];
-  unsigned short* p_counter = &g_ram.DAT_08fffecc;
-  if (p_playerwk != &g_ram.actwk[0]) {
-    p_counter = &g_ram.DAT_08fffece;
-  }
-  item2tbl[p_actwk->mstno](p_actwk, p_playerwk, p_counter);
 }
 
 
-static void(*item2tbl[10])(sprite_status*, sprite_status*, unsigned short*) = {
-  &item2_00_item2_02,
-  &item2_01,
-  &item2_00_item2_02,
-  &item2_03,
-  &item2_04,
-  &item2_05,
-  &item2_06,
-  &item2_07,
-  &item2_08,
-  &item2_09
-};
-
-
-static void item2_00_item2_02(sprite_status* p_actwk, sprite_status* p_playerwk, unsigned short* p_counter) {
+static void item2_00(SKC_sprite_status* p_actwk, SKC_sprite_status* p_playerwk, unsigned short* p_counter) {
   ++*p_counter;
   togedamegesub(p_actwk, p_playerwk);
 }
 
 
-static void item2_01(sprite_status* p_actwk, sprite_status* p_playerwk, unsigned short* p_counter) {
+static void item2_01(SKC_sprite_status* p_actwk, SKC_sprite_status* p_playerwk, unsigned short* p_counter) {
   ++g_ram.DAT_08fffecc;
   ++g_ram.pl_suu;
   ++g_ram.pl_suu_f;
@@ -320,175 +331,184 @@ static void item2_01(sprite_status* p_actwk, sprite_status* p_playerwk, unsigned
 }
 
 
-static void item2_03(sprite_status* p_actwk, sprite_status* p_playerwk, unsigned short* p_counter) {
+static void item2_03(SKC_sprite_status* p_actwk, SKC_sprite_status* p_playerwk, unsigned short* p_counter) {
   ++*p_counter;
   g_ram.plring_act += 10;
-  if (g_ram.plring_act >= 999) {
-    g_ram.plring_act = 999;
+  if (g_ram.plring_act >= RING_MAX) {
+    g_ram.plring_act = RING_MAX;
   }
   g_ram.plring += 10;
-  if (g_ram.plring >= 999) {
-    g_ram.plring = 999;
+  if (g_ram.plring >= RING_MAX) {
+    g_ram.plring = RING_MAX;
   }
-  SET_BIT_0(g_ram.plring_f);
-  if (g_ram.plring >= 100) {
-    bool bit_1_clear = !BIT_1_IS_SET(g_ram.plring_f2);
-    SET_BIT_1(g_ram.plring_f2);
-    if (bit_1_clear) goto jump2;
-    if (g_ram.plring >= 200) {
-      bool bit_2_clear = !BIT_2_IS_SET(g_ram.plring_f2);
-      SET_BIT_2(g_ram.plring_f2);
-      if (bit_2_clear) goto jump2;
+  SET_BIT(g_ram.plring_f, 0);
+  if (g_ram.plring >= RING_EXTRA_LIFE_1) {
+    if (!BIT_IS_SET(g_ram.plring_f2, 1)) {
+      SET_BIT(g_ram.plring_f2, 1);
+      item2_03__1up(p_actwk, p_playerwk, p_counter);
+      return;
+    }
+    if (g_ram.plring >= RING_EXTRA_LIFE_2) {
+      if (!BIT_IS_SET(g_ram.plring_f2, 2)) {
+        SET_BIT(g_ram.plring_f2, 2);
+        item2_03__1up(p_actwk, p_playerwk, p_counter);
+        return;
+      }
     }
   }
   bgmset(51);
-  return;
+}
 
-jump2:
+
+static void item2_03__1up(SKC_sprite_status* p_actwk, SKC_sprite_status* p_playerwk, unsigned short* p_counter) {
   if (p_playerwk == &g_ram.actwk[0]) {
     item2_01(p_actwk, p_playerwk, p_counter);
   }
   else {
-    item2_00_item2_02(p_actwk, p_playerwk, p_counter);
+    item2_00(p_actwk, p_playerwk, p_counter);
   }
 }
 
 
-static void item2_04(sprite_status* p_actwk, sprite_status* p_playerwk, unsigned short* p_counter) {
+static void item2_04(SKC_sprite_status* p_actwk, SKC_sprite_status* p_playerwk, unsigned short* p_counter) {
   ++*p_counter;
-  SET_SPEEDUP(p_playerwk->cddat2);
-  p_playerwk->actfree.player.speedup_timer = 150;
-  if (p_playerwk == &g_ram.actwk[0] && g_ram.plmode != TEAM_MILES) {
-    g_ram.plmaxspdwk = 3072;
-    g_ram.pladdspdwk = 24;
-    g_ram.plretspdwk = 128;
+  p_playerwk->u.play.cddat.speedup = 1;
+  p_playerwk->u.play.speedup_timer = 150;
+  if (p_playerwk == &g_ram.actwk[0] && g_ram.play_type != PLAY_TYPE_MILES) {
+    g_ram.plmaxspdwk = 0xC00;
+    g_ram.pladdspdwk = 0x18;
+    g_ram.plretspdwk = 0x80;
   }
   else {
-    g_ram.pl2maxspdwk = 3072;
-    g_ram.pl2addspdwk = 24;
-    g_ram.pl2retspdwk = 128;
+    g_ram.pl2maxspdwk = 0xC00;
+    g_ram.pl2addspdwk = 0x18;
+    g_ram.pl2retspdwk = 0x80;
   }
   SpeedUpMusic(8);
 }
 
 
-static void item2_05(sprite_status* p_actwk, sprite_status* p_playerwk, unsigned short* p_counter) {
+static void item2_05(SKC_sprite_status* p_actwk, SKC_sprite_status* p_playerwk, unsigned short* p_counter) {
   ++*p_counter;
-  p_playerwk->cddat2 &= 0x8E;
-  SET_BARIA(p_playerwk->cddat2);
-  SET_FLAME_BARIA(p_playerwk->cddat2);
+  p_playerwk->u.play.cddat.baria = 1;
+  p_playerwk->u.play.cddat.flame_baria = 1;
+  p_playerwk->u.play.cddat.thunder_baria = 0;
+  p_playerwk->u.play.cddat.aqua_baria = 0;
   bgmset(62);
-  if (p_actwk->actfree.item.player == 0) {
-    g_ram.actwk[100].r_ptr = &flamebaria;
-    SPRITE_STATUS_USHORT(&g_ram.actwk[100], 66) = p_playerwk - g_ram.actwk;
+  if (p_actwk->u.obj.ko == 0) {
+    g_ram.actwk[ACTWK_PL_BARIA].r_ptr = &flamebaria;
+    g_ram.actwk[ACTWK_PL_BARIA].u.obj.ko = p_actwk->u.obj.ko;
   }
   else {
-    g_ram.actwk[101].r_ptr = &flamebaria;
-    SPRITE_STATUS_USHORT(&g_ram.actwk[101], 66) = p_playerwk - g_ram.actwk;
+    g_ram.actwk[ACTWK_PL2_BARIA].r_ptr = &flamebaria;
+    g_ram.actwk[ACTWK_PL2_BARIA].u.obj.ko = p_actwk->u.obj.ko;
   }
 }
 
 
-static void item2_06(sprite_status* p_actwk, sprite_status* p_playerwk, unsigned short* p_counter) {
+static void item2_06(SKC_sprite_status* p_actwk, SKC_sprite_status* p_playerwk, unsigned short* p_counter) {
   ++*p_counter;
-  p_playerwk->cddat2 &= 0x8E;
-  SET_BARIA(p_playerwk->cddat2);
-  SET_THUNDER_BARIA(p_playerwk->cddat2);
+  p_playerwk->u.play.cddat.baria = 1;
+  p_playerwk->u.play.cddat.flame_baria = 0;
+  p_playerwk->u.play.cddat.thunder_baria = 1;
+  p_playerwk->u.play.cddat.aqua_baria = 0;
   bgmset(65);
-  if (p_actwk->actfree.item.player == 0) {
-    g_ram.actwk[100].r_ptr = &thunderbaria;
-    SPRITE_STATUS_USHORT(&g_ram.actwk[100], 66) = p_playerwk - g_ram.actwk;
+  if (p_actwk->u.obj.ko == 0) {
+    g_ram.actwk[ACTWK_PL_BARIA].r_ptr = &thunderbaria;
+    g_ram.actwk[ACTWK_PL_BARIA].u.obj.ko = p_actwk->u.obj.ko;
   }
   else {
-    g_ram.actwk[101].r_ptr = &thunderbaria;
-    SPRITE_STATUS_USHORT(&g_ram.actwk[101], 66) = p_playerwk - g_ram.actwk;
+    g_ram.actwk[ACTWK_PL2_BARIA].r_ptr = &thunderbaria;
+    g_ram.actwk[ACTWK_PL2_BARIA].u.obj.ko = p_actwk->u.obj.ko;
   }
 }
 
 
-static void item2_07(sprite_status* p_actwk, sprite_status* p_playerwk, unsigned short* p_counter) {
+static void item2_07(SKC_sprite_status* p_actwk, SKC_sprite_status* p_playerwk, unsigned short* p_counter) {
   ++*p_counter;
-  p_playerwk->cddat2 &= 0x8E;
-  SET_BARIA(p_playerwk->cddat2);
-  SET_AQUA_BARIA(p_playerwk->cddat2);
+  p_playerwk->u.play.cddat.baria = 1;
+  p_playerwk->u.play.cddat.flame_baria = 0;
+  p_playerwk->u.play.cddat.thunder_baria = 0;
+  p_playerwk->u.play.cddat.aqua_baria = 1;
   bgmset(63);
-  if (p_actwk->actfree.item.player == 0) {
-    g_ram.actwk[100].r_ptr = &aquabaria;
-    SPRITE_STATUS_USHORT(&g_ram.actwk[100], 66) = p_playerwk - g_ram.actwk;
+  if (p_actwk->u.obj.ko == 0) {
+    g_ram.actwk[ACTWK_PL_BARIA].r_ptr = &aquabaria;
+    g_ram.actwk[ACTWK_PL_BARIA].u.obj.ko = p_actwk->u.obj.ko;
   }
   else {
-    g_ram.actwk[101].r_ptr = &aquabaria;
-    SPRITE_STATUS_USHORT(&g_ram.actwk[101], 66) = p_playerwk - g_ram.actwk;
+    g_ram.actwk[ACTWK_PL2_BARIA].r_ptr = &aquabaria;
+    g_ram.actwk[ACTWK_PL2_BARIA].u.obj.ko = p_actwk->u.obj.ko;
   }
 }
 
 
-static void item2_08(sprite_status* p_actwk, sprite_status* p_playerwk, unsigned short* p_counter) {
+static void item2_08(SKC_sprite_status* p_actwk, SKC_sprite_status* p_playerwk, unsigned short* p_counter) {
   ++*p_counter;
-  if (g_ram.ssonicflag != 0) return;
-  if (g_ram.smilesflag != 0) return;
-  SET_MUTEKI(p_playerwk->cddat2);
-  p_playerwk->actfree.player.muteki_timer = 150;
-  if (g_ram.bossstart == 0 && p_playerwk->userflag1 > 12) {
-    bgmset(44);
-  }
-  if (p_actwk->actfree.item.player == 0) {
-    g_ram.actwk[102].r_ptr = &muteki;
-    SPRITE_STATUS_USHORT(&g_ram.actwk[100], 66) = p_playerwk - g_ram.actwk;
-  }
-  else {
-    g_ram.actwk[106].r_ptr = &muteki;
-    SPRITE_STATUS_USHORT(&g_ram.actwk[101], 66) = p_playerwk - g_ram.actwk;
+  if (g_ram.ssonicflag == 0 && g_ram.smilesflag == 0) {
+    p_playerwk->u.play.cddat.muteki = 1;
+    p_playerwk->u.play.muteki_timer = 150;
+    if (g_ram.bossstart == 0 && p_playerwk->u.play.air_timer > 12) {
+      bgmset(44);
+    }
+    if (p_actwk->u.obj.ko == 0) {
+      g_ram.actwk[ACTWK_PL_MUTEKI].r_ptr = &muteki;
+      g_ram.actwk[ACTWK_PL_MUTEKI].u.obj.ko = p_actwk->u.obj.ko;
+    }
+    else {
+      g_ram.actwk[ACTWK_PL2_MUTEKI].r_ptr = &muteki;
+      g_ram.actwk[ACTWK_PL2_MUTEKI].u.obj.ko = p_actwk->u.obj.ko;
+    }
   }
 }
 
 
-static void item2_09(sprite_status* p_actwk, sprite_status* p_playerwk, unsigned short* p_counter) {
+static void item2_09(SKC_sprite_status* p_actwk, SKC_sprite_status* p_playerwk, unsigned short* p_counter) {
   ++*p_counter;
   g_ram.plring += 50;
   g_ram.ssonicpallet = 1;
   g_ram.ssonicpallet_next = 15;
-  g_ram.ssonicflag = 1;
   g_ram.ssonicring_timer = 60;
-  g_ram.plmaxspdwk = 2048;
-  g_ram.pladdspdwk = 24;
-  g_ram.plretspdwk = 192;
-  g_ram.actwk[0].mstno = 31;
-  switch (g_ram.plmode) {
-    case TEAM_MILES:
-      g_ram.ssonicflag = 0;
+
+  switch (g_ram.play_type) {
+    case PLAY_TYPE_SONIC_AND_MILES:
+    case PLAY_TYPE_SONIC:
+      g_ram.ssonicflag = 0xFF;
+      g_ram.actwk[0].patbase = ssonicpat;
+      g_ram.actwk[0].mstno = 31;
+      g_ram.plmaxspdwk = 0xA00;
+      g_ram.pladdspdwk = 0x30;
+      g_ram.plretspdwk = 0x100;
+      g_ram.actwk[ACTWK_PL_MUTEKI].r_ptr = &hsonicstars;
+      g_ram.actwk[ACTWK_TRAIL].r_ptr = &hypertrail;
+      break;
+    case PLAY_TYPE_MILES:
       g_ram.smilesflag = 1;
       g_ram.actwk[0].mstno = 41;
-      g_ram.pl2maxspdwk = 2048;
-      g_ram.pl2addspdwk = 24;
-      g_ram.pl2retspdwk = 192;
-      g_ram.actwk[102].r_ptr = &smilesflickies;
+      g_ram.pl2maxspdwk = 0x800;
+      g_ram.pl2addspdwk = 0x18;
+      g_ram.pl2retspdwk = 0xC0;
+      g_ram.actwk[ACTWK_PL_MUTEKI].r_ptr = &smilesflickies;
       break;
-    case TEAM_SONIC_AND_MILES:
-    case TEAM_SONIC:
-      g_ram.actwk[0].patbase = ssonicpat;
-      g_ram.ssonicflag = 255;
-      g_ram.plmaxspdwk = 2560;
-      g_ram.pladdspdwk = 48;
-      g_ram.plretspdwk = 256;
-      g_ram.actwk[102].r_ptr = &hsonicstars;
-      g_ram.actwk[96].r_ptr = &hypertrail;
-      break;
-    case TEAM_KNUCKLES:
-      g_ram.actwk[96].r_ptr = &hypertrail;
+    case PLAY_TYPE_KNUCKLES:
+      g_ram.ssonicflag = 0xFF;
+      g_ram.actwk[0].mstno = 31;
+      g_ram.plmaxspdwk = 0x800;
+      g_ram.pladdspdwk = 0x18;
+      g_ram.plretspdwk = 0xC0;
+      g_ram.actwk[ACTWK_TRAIL].r_ptr = &hypertrail;
       break;
   }
-  g_ram.actwk[0].actfree.player.control_bitfield = 129;
-  g_ram.actwk[0].actfree.player.muteki_timer = 0;
-  SET_MUTEKI(p_playerwk->cddat2);
+
+  g_ram.actwk[0].u.play.control_bitfield = 0x81;
+  g_ram.actwk[0].u.play.muteki_timer = 0;
+  p_playerwk->u.play.cddat.muteki = 1;
   soundset(159);
   bgmset(44);
 }
 
 
-static void item2die(sprite_status* p_actwk) {
-  --p_actwk->pattim;
-  if (util__to_signed(p_actwk->pattim) < 0) {
+static void item2die(SKC_sprite_status* p_actwk) {
+  if (p_actwk->pattim-- == 0) {
     frameout(p_actwk);
   }
   else {
@@ -512,100 +532,114 @@ static signed char* itemchg[11] = {
 };
 
 
-static signed char itemchg0[4] = {
-     1,    0,    1,   -1
-};
-static signed char itemchg1[8] = {
-     1,    0,    2,    2,    1,    2,    2,   -1
-};
-static signed char itemchg2[8] = {
-     1,    0,    3,    3,    1,    3,    3,   -1
-};
-static signed char itemchg3[8] = {
-     1,    0,    4,    4,    1,    4,    4,   -1
-};
-static signed char itemchg4[8] = {
-     1,    0,    5,    5,    1,    5,    5,   -1
-};
-static signed char itemchg5[8] = {
-     1,    0,    6,    6,    1,    6,    6,   -1
-};
-static signed char itemchg6[8] = {
-     1,    0,    7,    7,    1,    7,    7,   -1
-};
-static signed char itemchg7[8] = {
-     1,    0,    8,    8,    1,    8,    8,   -1
-};
-static signed char itemchg8[8] = {
-     1,    0,    9,    9,    1,    9,    9,   -1
-};
-static signed char itemchg9[8] = {
-     1,    0,   10,   10,    1,   10,  10,   -1
-};
-static signed char itemchg10[8] = {
-     2,    0,    1,   11,   -2,    1, -121,  -37
+static signed char itemchg0[4] = { 1, 0, 1, -1 };
+static signed char itemchg1[8] = { 1, 0, 2, 2, 1, 2, 2, -1 };
+static signed char itemchg2[8] = { 1, 0, 3, 3, 1, 3, 3, -1 };
+static signed char itemchg3[8] = { 1, 0, 4, 4, 1, 4, 4, -1 };
+static signed char itemchg4[8] = { 1, 0, 5, 5, 1, 5, 5, -1 };
+static signed char itemchg5[8] = { 1, 0, 6, 6, 1, 6, 6, -1 };
+static signed char itemchg6[8] = { 1, 0, 7, 7, 1, 7, 7, -1 };
+static signed char itemchg7[8] = { 1, 0, 8, 8, 1, 8, 8, -1 };
+static signed char itemchg8[8] = { 1, 0, 9, 9, 1, 9, 9, -1 };
+static signed char itemchg9[8] = { 1, 0, 10, 10, 1, 10, 10, -1 };
+static signed char itemchg10[8] = { 2, 0, 1, 11, -2, 1, -121, -37 };
+
+
+SKC_sprite_pattern* itempat[12] = {
+  &itemsp00,
+  &itemsp01,
+  &itemsp02,
+  &itemsp03,
+  &itemsp04,
+  &itemsp05,
+  &itemsp06,
+  &itemsp07,
+  &itemsp08,
+  &itemsp09,
+  &itemsp10,
+  &itemsp11
 };
 
 
-signed char* itempat[12] = {
-  itemsp00,
-  itemsp01,
-  itemsp02,
-  itemsp03,
-  itemsp04,
-  itemsp05,
-  itemsp06,
-  itemsp07,
-  itemsp08,
-  itemsp09,
-  itemsp10,
-  itemsp11
+static SKC_sprite_pattern itemsp00 = {
+  1,
+  {
+    { -16, 15, 0x0000, -16 }
+  }
 };
-
-
-static signed char itemsp00[8] = {
-     0,    1,  -16,   15,    0,    0,  -16,   -1
+static SKC_sprite_pattern itemsp01 = {
+  2,
+  {
+    { -13,  5, 0x0018,  -8 },
+    { -16, 15, 0x0000, -16 }
+  }
 };
-static signed char itemsp01[14] = {
-     0,    2,  -13,    5,   24,    0,   -8,   -1,  -16,   15,
-     0,    0,  -16,   -1
+static SKC_sprite_pattern itemsp02 = {
+  2,
+  {
+    { -13,  5, 0x0310,  -8 },
+    { -16, 15, 0x0000, -16 }
+  }
 };
-static signed char itemsp02[14] = {
-     0,    2,  -13,    5,   16,    3,   -8,   -1,  -16,   15,
-     0,    0,  -16,   -1
+static SKC_sprite_pattern itemsp03 = {
+  2,
+  {
+    { -13,  5, 0x001C,  -8 },
+    { -16, 15, 0x0000, -16 }
+  }
 };
-static signed char itemsp03[14] = {
-     0,    2,  -13,    5,   28,    0,   -8,   -1,  -16,   15,
-     0,    0,  -16,   -1
+static SKC_sprite_pattern itemsp04 = {
+  2,
+  {
+    { -13,  5, 0x2020,  -8 },
+    { -16, 15, 0x0000, -16 }
+  }
 };
-static signed char itemsp04[14] = {
-     0,    2,  -13,    5,   32,   32,   -8,   -1,  -16,   15,
-     0,    0,  -16,   -1
+static SKC_sprite_pattern itemsp05 = {
+  2,
+  {
+    { -13,  5, 0x0024,  -8 },
+    { -16, 15, 0x0000, -16 }
+  }
 };
-static signed char itemsp05[14] = {
-     0,    2,  -13,    5,   36,    0,   -8,   -1,  -16,   15,
-     0,    0,  -16,   -1
+static SKC_sprite_pattern itemsp06 = {
+  2,
+  {
+    { -13,  5, 0x0030,  -8 },
+    { -16, 15, 0x0000, -16 }
+  }
 };
-static signed char itemsp06[14] = {
-     0,    2,  -13,    5,   48,    0,   -8,   -1,  -16,   15,
-     0,    0,  -16,   -1
+static SKC_sprite_pattern itemsp07 = {
+  2,
+  {
+    { -13,  5, 0x002C,  -8 },
+    { -16, 15, 0x0000, -16 }
+  }
 };
-static signed char itemsp07[14] = {
-     0,    2,  -13,    5,   44,    0,   -8,   -1,  -16,   15,
-     0,    0,  -16,   -1
+static SKC_sprite_pattern itemsp08 = {
+  2,
+  {
+    { -13,  5, 0x0034,  -8 },
+    { -16, 15, 0x0000, -16 }
+  }
 };
-static signed char itemsp08[14] = {
-     0,    2,  -13,    5,   52,    0,   -8,   -1,  -16,   15,
-     0,    0,  -16,   -1
+static SKC_sprite_pattern itemsp09 = {
+  2,
+  {
+    { -13,  5, 0x0028,  -8 },
+    { -16, 15, 0x0000, -16 }
+  }
 };
-static signed char itemsp09[14] = {
-     0,    2,  -13,    5,   40,    0,   -8,   -1,  -16,   15,
-     0,    0,  -16,   -1
+static SKC_sprite_pattern itemsp10 = {
+  2,
+  {
+    { -13,  5, 0x0038,  -8 },
+    { -16, 15, 0x0000, -16 }
+  }
 };
-static signed char itemsp10[14] = {
-     0,    2,  -13,    5,   56,    0,   -8,   -1,  -16,   15,
-     0,    0,  -16,   -1
-};
-static signed char itemsp11[8] = {
-     0,    1,    0,   13,   16,    0,  -16,   -1
+static SKC_sprite_pattern itemsp11 = {
+  1,
+  {
+    { 0, 13, 0x0010, -16 }
+  }
 };

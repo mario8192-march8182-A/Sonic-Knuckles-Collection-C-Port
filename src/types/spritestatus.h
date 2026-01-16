@@ -166,6 +166,10 @@ typedef struct SKC_sprite_status {
         }
         gost08_ctr;
         struct {
+          unsigned char unknown; // 0x3C
+        }
+        item;
+        struct {
           short yspeed_init; // 0x3E
         }
         obox04_friend;
@@ -289,14 +293,6 @@ SKC_sprite_status;
       unsigned char counter;
       unsigned char reserved2[17];
     } hana00;
-    struct {
-      unsigned char reserved1[14];
-      unsigned char unknown;
-      unsigned char reserved2[5];
-      unsigned short player;
-      unsigned char reserved3[4];
-      unsigned short flagwork_index;
-    } item;
     struct {
       short orig_xposi;
       short plspeed;
