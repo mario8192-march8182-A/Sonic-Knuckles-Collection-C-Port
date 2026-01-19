@@ -171,6 +171,16 @@ typedef struct SKC_sprite_status {
         }
         item;
         struct {
+          short xposi_init; // 0x2E
+          bool prev_plpush; // 0x3A
+          bool prev_pl2push; // 0x3B
+          unsigned char size_type; // 0x3C
+          unsigned short push_timer; // 0x40
+          unsigned short push_distance; // 0x42
+          SKC_sprite_status_handler oya_r_ptr; // 0x44
+        }
+        iwa;
+        struct {
           short yspeed_init; // 0x3E
         }
         obox04_friend;
@@ -305,23 +315,6 @@ SKC_sprite_status;
       unsigned char counter;
       unsigned char reserved2[17];
     } hana00;
-    struct {
-      short orig_xposi;
-      short plspeed;
-      unsigned char plmstno;
-      unsigned char pl2mstno;
-      unsigned char reserved1[2];
-      short pl2speed;
-      unsigned short emyscorecnt;
-      unsigned char plcddat1;
-      unsigned char pl2cddat1;
-      unsigned char patno_part;
-      unsigned char reserved2[3];
-      short countdown;
-      short countdown2;
-      sprite_status_handler parent_r_ptr;
-      unsigned short flagwork_index;
-    } iwa;
     struct {
       unsigned char reserved1[2];
       long yposiwk;
