@@ -167,6 +167,10 @@ typedef struct SKC_sprite_status {
         }
         gost08_ctr;
         struct {
+          unsigned char counter; // 0x39
+        }
+        hana00;
+        struct {
           unsigned char unknown; // 0x3C
         }
         item;
@@ -322,14 +326,6 @@ SKC_sprite_status;
       short x_destination;
       unsigned short oya;
     } actclear_part;
-    struct {
-      short shot_countdown;
-      signed char* pg_data_ptr;
-      void(*callback_ptr)(sprite_status*);
-      unsigned char reserved1[5];
-      unsigned char counter;
-      unsigned char reserved2[17];
-    } hana00;
     struct {
       unsigned char reserved1[2];
       long yposiwk;

@@ -97,12 +97,6 @@ signed char sai00sp04[8];
 signed char sai00sp05[8];
 signed char sai00sp06[8];
 signed char sai00sp07[8];
-signed char* hana00pat[5]
-signed char hana00sp00[38];
-signed char hana00sp01[38];
-signed char hana00sp02[50];
-signed char hana00sp03[38];
-signed char hana00sp04[8];
 signed char* saru00pat[7];
 signed char saru00sp00[26];
 signed char saru00sp01[26];
@@ -680,45 +674,6 @@ signed char sai00sp06[8] = {
 };
 signed char sai00sp07[8] = {
     0,   1,   0,   8,   0,   0, -12,  -1
-};
-
-
-signed char* hana00pat[5] = {
-  hana00sp00,
-  hana00sp01,
-  hana00sp02,
-  hana00sp03,
-  hana00sp04
-};
-
-
-signed char hana00sp00[38] = {
-    0,   6, -22,   6,   7,   0, -16,  -1, -22,   6,
-    7,   8,   0,   0,   8,   0,   0,   0, -24,  -1,
-    0,   6,   1,   0, -16,  -1,   0,   6,   1,   8,
-    0,   0,   8,   0,   0,   8,  16,   0
-};
-signed char hana00sp01[38] = {
-    0,   6, -22,   6,  13,   0, -16,  -1, -22,   6,
-   13,   8,   0,   0,   8,   0,   0,   0, -24,  -1,
-    0,   6,   1,   0, -16,  -1,   0,   6,   1,   8,
-    0,   0,   8,   0,   0,   8,  16,   0
-};
-signed char hana00sp02[50] = {
-    0,   8, -30,   0,  19,   0,  -8,  -1, -22,   6,
-   20,   0, -16,  -1, -30,   0,  19,   8,   0,   0,
-  -22,   6,  20,   8,   0,   0,   8,   0,   0,   0,
-  -24,  -1,   0,   6,   1,   0, -16,  -1,   0,   6,
-    1,   8,   0,   0,   8,   0,   0,   8,  16,   0
-};
-signed char hana00sp03[38] = {
-    0,   6, -20,   6,   7,   0, -16,  -1, -20,   6,
-    7,   8,   0,   0,   8,   0,   0,   0, -24,  -1,
-    0,   6,   1,   0, -16,  -1,   0,   6,   1,   8,
-    0,   0,   8,   0,   0,   8,  16,   0
-};
-signed char hana00sp04[8] = {
-    0,   1,  -8,   5,  26,   0,  -8,  -1
 };
 
 
