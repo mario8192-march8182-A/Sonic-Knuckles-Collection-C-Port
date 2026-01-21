@@ -210,6 +210,21 @@ typedef struct SKC_sprite_status {
         }
         slot_ring;
         struct {
+          short recoil; // 0x30
+          short xposi_init; // 0x32
+          short yposi_init; // 0x34
+          short offset; // 0x36
+          bool reverse_dir; // 0x38
+          unsigned char unknown3c; // 0x3C
+        }
+        spring;
+        struct {
+          short xoffset; // 0x30
+          short yoffset; // 0x32
+          unsigned short unknown38; // 0x38
+        }
+        springsw;
+        struct {
           short xposi_init; // 0x30
           short yposi_init; // 0x32
           short offset; // 0x34
@@ -392,27 +407,6 @@ SKC_sprite_status;
       short accel;
       unsigned char reserved3[8];
     } snak00;
-    struct {
-      unsigned char reserved1[2];
-      short recoil;
-      short orig_xposi;
-      short orig_yposi;
-      short offset;
-      unsigned short move_dir;
-      unsigned short move_countdown;
-      unsigned char unknown_flag;
-      unsigned char reserved2[1];
-      unsigned short child;
-      unsigned char reserved3[10];
-    } spring;
-    struct {
-      unsigned char reserved1[2];
-      short xoffset;
-      short yoffset;
-      unsigned char reserved2[10];
-      unsigned short parent;
-      unsigned char reserved3[10];
-    } springsw;
     struct {
       unsigned char reserved1[2];
       short* p_posi;

@@ -1,14 +1,15 @@
-#ifndef SPRING_H
-#define SPRING_H
+#ifndef SKC_SPRING_H
+#define SKC_SPRING_H
 
+#include "types/spritepattern.h"
 #include "types/spritestatus.h"
 
-void sjump(sprite_status* p_actwk);
-void sjumpsub(sprite_status* p_actwk, sprite_status* p_playerwk);
+void sjump(SKC_sprite_status* p_actwk);
+void sjumpsub(SKC_sprite_status* p_actwk, SKC_sprite_status* p_playerwk);
 signed char* sjumpchg[6];
-signed char* banepat[11];
-signed char* vsbanepat[7];
-void sjumpmv(sprite_status* p_actwk);
-void sjumpsw(sprite_status* p_actwk);
+extern SKC_sprite_pattern* banepat[11];
+extern SKC_sprite_pattern* vsbanepat[7];
+void sjumpmv(SKC_sprite_status* p_actwk);
+void sjumpsw(SKC_sprite_status* p_actwk);
 
 #endif
