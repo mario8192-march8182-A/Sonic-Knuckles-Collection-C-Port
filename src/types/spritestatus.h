@@ -204,6 +204,11 @@ typedef struct SKC_sprite_status {
         }
         save;
         struct {
+          short accel_max; // 0x3E
+          short accel; // 0x40
+        }
+        sai00;
+        struct {
           short* unknown2e_ptr; // 0x2E
           long angled_xposi; // 0x34
           long angled_yposi; // 0x38
@@ -336,22 +341,6 @@ SKC_sprite_status;
       long yposiwk;
       unsigned char dir;
     } skopening_banner;
-    struct {
-      short attack_countdown;
-      unsigned char reserved1[4];
-      sprite_status_handler callback_ptr;
-      unsigned char status_bitfield;
-      unsigned char reserved2[5];
-      short accel_max;
-      short accel;
-      unsigned char reserved3[8];
-    } sai00;
-    struct {
-      unsigned char reserved1[2];
-      signed char* pg_data_ptr;
-      sprite_status_handler callback_ptr;
-      unsigned char reserved2[18];
-    } sai00_kemuri;
     struct {
       short timer;
       signed char* pg_data_ptr;
