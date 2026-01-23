@@ -88,14 +88,6 @@ unsigned short sai00_tbl03[2];
 unsigned short sai00_tbl03[2];
 unsigned short sai00_tbl03[2];
 unsigned short sai00_tbl03[2];
-signed char* saru00pat[7];
-signed char saru00sp00[26];
-signed char saru00sp01[26];
-signed char saru00sp02[26];
-signed char saru00sp03[8];
-signed char saru00sp04[8];
-signed char saru00sp05[8];
-signed char saru00sp06[8];
 signed char* snak00pat[6];
 signed char snak00sp00[8];
 signed char snak00sp01[8];
@@ -625,46 +617,6 @@ unsigned short sai00_tbl04[2] = { 0, 1074 };
 unsigned short sai00_tbl05[2] = { 0, 1125 };
 unsigned short sai00_tbl06[2] = { 0, 1221 };
 unsigned short sai00_tbl07[2] = { 0, 1314 };
-
-
-signed char* saru00pat[7] = {
-  saru00sp00,
-  saru00sp01,
-  saru00sp02,
-  saru00sp03,
-  saru00sp04,
-  saru00sp05,
-  saru00sp06
-};
-
-
-signed char saru00sp00[26] = {
-     0,    4,   -2,    0,   13,    0,   -9,   -1,  -21,   10,
-     0,    0,  -16,   -1,   -8,    5,    9,    0,   -8,   -1,
-     0,    4,   14, -128,   16,    0
-};
-signed char saru00sp01[26] = {
-     0,    4,   -3,    0,   13,    0,   -9,   -1,  -23,   10,
-     0,    0,  -16,   -1,   -8,    5,    9,    0,   -8,   -1,
-     0,    4,   14, -128,   16,    0
-};
-signed char saru00sp02[26] = {
-     0,    4,   -2,    0,   13,    0,   -9,   -1,  -21,   10,
-     0,    0,  -16,   -1,   -8,    5,    9,    0,   -8,   -1,
-     8,    4,   14, -128,   16,    0
-};
-signed char saru00sp03[8] = {
-    0,   1,  -4,   0,  16,   0,  -4,  -1
-};
-signed char saru00sp04[8] = {
-    0,   1,  -4,   0,  17,  16,  -4,  -1
-};
-signed char saru00sp05[8] = {
-    0,   1,  -4,   0,  18,   0,  -4,  -1
-};
-signed char saru00sp05[8] = {
-    0,   1,  -8,   5,  19,   0,  -8,  -1
-};
 
 
 signed char* snak00pat[6] = {
