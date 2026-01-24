@@ -88,13 +88,6 @@ unsigned short sai00_tbl03[2];
 unsigned short sai00_tbl03[2];
 unsigned short sai00_tbl03[2];
 unsigned short sai00_tbl03[2];
-signed char* snak00pat[6];
-signed char snak00sp00[8];
-signed char snak00sp01[8];
-signed char snak00sp02[8];
-signed char snak00sp03[20];
-signed char snak00sp04[20];
-signed char snak00sp05[20];
 unsigned char zone_friend_data[24][2];
 
 
@@ -617,39 +610,6 @@ unsigned short sai00_tbl04[2] = { 0, 1074 };
 unsigned short sai00_tbl05[2] = { 0, 1125 };
 unsigned short sai00_tbl06[2] = { 0, 1221 };
 unsigned short sai00_tbl07[2] = { 0, 1314 };
-
-
-signed char* snak00pat[6] = {
-  snak00sp00,
-  snak00sp01,
-  snak00sp02,
-  snak00sp03,
-  snak00sp04,
-  snak00sp05
-};
-
-
-signed char snak00sp00[8] = {
-    0,   1,  -8,   5,   0,   0,  -8,  -1
-};
-signed char snak00sp01[8] = {
-    0,   1, -12,   6,   4,   0,  -8,  -1
-};
-signed char snak00sp02[8] = {
-    0,   1,  -8,   5,  10,   0,  -8,  -1
-};
-signed char snak00sp03[20] = {
-    0,   3, -20,   5,  14,   0,   0,   0,  -4,   8,
-   23,   0,   0,   0,   4,   5,  14,  16,   0,   0
-};
-signed char snak00sp04[20] = {
-    0,   3, -20,   5,  18,   0,   0,   0,  -4,   4,
-   26,   0,   5,   0,   4,   5,  18,  16,   0,   0
-};
-signed char snak00sp05[20] = {
-    0,   3, -12,   0,  22,   0,   8,   0,  -4,   0,
-   28,   0,  16,   0,   4,   0,  22,  16,   8,   0
-};
 
 
 #define POCKY_RABBIT 0

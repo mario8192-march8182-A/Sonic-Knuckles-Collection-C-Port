@@ -371,17 +371,6 @@ SKC_sprite_status;
       short yposi;
     } skopening_nameroulette;
     struct {
-      short timer;
-      unsigned char reserved1[4];
-      sprite_status_handler callback_ptr;
-      unsigned char status_bitfield;
-      signed char puka_cnt;
-      unsigned char reserved2[4];
-      short accel_max;
-      short accel;
-      unsigned char reserved3[8];
-    } snak00;
-    struct {
       unsigned char reserved1[2];
       short* p_posi;
     } ssm_starsphere;
