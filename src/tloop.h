@@ -1,8 +1,8 @@
-#ifndef TLOOP_H
-#define TLOOP_H
+#ifndef SKC_TLOOP_H
+#define SKC_TLOOP_H
 
 #include "types/spritestatus.h"
 
-void tloop(sprite_status* p_actwk);
+void tloop(SKC_sprite_status* p_actwk);
 
 #endif

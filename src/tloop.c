@@ -1,52 +1,57 @@
-#include "globals.h"
-#include "macros.h"
-#include "util.h"
 #include "tloop.h"
-#include "004xxxxx.h"
-static void tloopinit(sprite_status* p_actwk);
-static void tloopmove(sprite_status* p_actwk);
-static void tloopmovesub(sprite_status* p_actwk);
-static void tloopmovesub__sub(sprite_status* p_actwk, sprite_status* p_playerwk, long* pldir_counter, unsigned char plridebit);
-static void tloopmovesub__rideon(sprite_status* p_actwk, sprite_status* p_playerwk, long* pldir_counter, unsigned char plridebit);
-static void tloopmovesub__jumpdown(sprite_status* p_actwk, sprite_status* p_playerwk, long* pldir_counter, unsigned char plridebit);
-static void tloopmovesub__jump1(sprite_status* p_actwk, sprite_status* p_playerwk, long* pldir_counter, unsigned char plridebit);
-static void tloopmovesub__jump11(sprite_status* p_actwk, sprite_status* p_playerwk, long* pldir_counter, unsigned char plridebit);
-static void tloopmovesub__jump2(sprite_status* p_actwk, sprite_status* p_playerwk, long* pldir_counter, unsigned char plridebit);
+#include <stdbool.h>
+#include "types/actwkchkresult.h"
+#include "types/sonic3ram.h"
+#include "types/spritestatus.h"
+#include "utils/bits.h"
+#include "utils/fp16.h"
+static void tloopinit(SKC_sprite_status* p_actwk);
+static void tloopmove(SKC_sprite_status* p_actwk);
+static void tloopmovesub(SKC_sprite_status* p_actwk);
+static void tloopmovesub__sub(SKC_sprite_status* p_actwk, SKC_sprite_status* p_playerwk, long* p_plspeed, bool* p_plride);
+static void tloopmovesub__rideon(SKC_sprite_status* p_actwk, SKC_sprite_status* p_playerwk, long* p_plspeed, bool* p_plride);
+static void tloopmovesub__jumpdown(SKC_sprite_status* p_actwk, SKC_sprite_status* p_playerwk, bool* p_plride);
+static void tloopmovesub__jump1(SKC_sprite_status* p_actwk, SKC_sprite_status* p_playerwk, bool* p_plride);
+static void tloopmovesub__jump2(SKC_sprite_status* p_actwk, SKC_sprite_status* p_playerwk, long* p_plspeed, bool* p_plride);
 static unsigned char tloopdirtbl[55];
 
+extern sonic3_ram g_ram;
 
-void tloop(sprite_status* p_actwk) {
+
+void tloop(SKC_sprite_status* p_actwk) {
   tloopinit(p_actwk);
 }
 
 
-static void tloopinit(sprite_status* p_actwk) {
+static void tloopinit(SKC_sprite_status* p_actwk) {
   p_actwk->sprhs = 208;
   p_actwk->r_ptr = &tloopmove;
   tloopmove(p_actwk);
 }
 
 
-static void tloopmove(sprite_status* p_actwk) {
+static void tloopmove(SKC_sprite_status* p_actwk) {
   tloopmovesub(p_actwk);
-  if (!(p_actwk->cddat1 & 0x18) && p_actwk->actfree.tloop.countdown != 0) {
-    --p_actwk->actfree.tloop.countdown;
-    if (p_actwk->actfree.tloop.countdown == 0) {
-      g_ram.scralim_left = 4864;
-      g_ram.scralim_right = 16384;
+  if (p_actwk->u.obj.cddat.plride == 0
+      && p_actwk->u.obj.cddat.pl2ride == 0
+      && p_actwk->u.obj.timer != 0) {
+    --p_actwk->u.obj.timer;
+    if (p_actwk->u.obj.timer == 0) {
+      g_ram.scralim_left = 0x1300;
+      g_ram.scralim_right = 0x4000;
     }
     else {
-      if (g_ram.scralim_left != 4864) {
-        if (LONG_HIGH(g_ram.actwk[0].xposi) >= 11520) { // unsigned
-          g_ram.scralim_left = 4864;
+      if (g_ram.scralim_left != 0x1300) {
+        if ((unsigned short)fp16_get_integer(g_ram.actwk[0].xposi) >= 0x2D00) {
+          g_ram.scralim_left = 0x1300;
         }
         else {
           g_ram.scralim_left -= 4;
         }
       }
-      if (g_ram.scralim_right != 16384) {
-        if (LONG_HIGH(g_ram.actwk[0].xposi) < 11520) { // unsigned
-          g_ram.scralim_right = 16384;
+      if (g_ram.scralim_right != 0x4000) {
+        if ((unsigned short)fp16_get_integer(g_ram.actwk[0].xposi) < 0x2D00) {
+          g_ram.scralim_right = 0x4000;
         }
         else {
           g_ram.scralim_right += 4;
@@ -58,129 +63,131 @@ static void tloopmove(sprite_status* p_actwk) {
 }
 
 
-static void tloopmovesub(sprite_status* p_actwk) {
-  tloopmovesub__sub(p_actwk, &g_ram.actwk[0], &p_actwk->actfree.tloop.pldir_counter, 3);
-  tloopmovesub__sub(p_actwk, &g_ram.actwk[1], &p_actwk->actfree.tloop.pl2dir_counter , 4);
+static void tloopmovesub(SKC_sprite_status* p_actwk) {
+  bool plride = p_actwk->u.obj.cddat.plride;
+  tloopmovesub__sub(p_actwk, &g_ram.actwk[0], &p_actwk->u.obj.actfree.tloop.plspeed, &plride);
+  p_actwk->u.obj.cddat.plride = plride;
+  plride = p_actwk->u.obj.cddat.pl2ride;
+  tloopmovesub__sub(p_actwk, &g_ram.actwk[1], &p_actwk->u.obj.actfree.tloop.pl2speed, &plride);
+  p_actwk->u.obj.cddat.pl2ride = plride;
 }
 
 
-static void tloopmovesub__sub(sprite_status* p_actwk, sprite_status* p_playerwk, long* pldir_counter, unsigned char plridebit) {
-  if (BIT_IS_SET(p_playerwk->cddat1, plridebit)) {
-    tloopmovesub__rideon(p_actwk, p_playerwk, pldir_counter, plridebit);
-    return;
+static void tloopmovesub__sub(SKC_sprite_status* p_actwk, SKC_sprite_status* p_playerwk, long* p_plspeed, bool* p_plride) {
+  if (*p_plride) {
+    tloopmovesub__rideon(p_actwk, p_playerwk, p_plspeed, p_plride);
   }
-  if (BIT_IS_SET(p_playerwk->cddat1, CD_JUMP)) return;
-  if (util__to_unsigned(LONG_HIGH(p_playerwk->xposi) + 16) < util__to_unsigned(LONG_HIGH(p_actwk->xposi))) return; // unsigned
-  short relative_xposi = LONG_HIGH(p_playerwk->xposi) + 16 - LONG_HIGH(p_actwk->xposi);
-  if (relative_xposi >= 64) return;
-  short relative_yposi = LONG_HIGH(p_playerwk->yposi) - LONG_HIGH(p_actwk->yposi);
-  if (relative_yposi < -90) return;
-  if (relative_yposi > 160) return;
-  if (g_ram.actwk[0].xspeed < 1536) return;
-  if (p_playerwk->actfree.player.control_bitfield != 0) return;
-  RideObject_SetRide(p_actwk, p_playerwk);
-  *pldir_counter = 0;
-  SET_BIT_6(p_playerwk->actfree.player.control_bitfield);
-  SET_BIT_1(p_playerwk->actfree.player.control_bitfield);
-  p_playerwk->mstno = 0;
-  if (p_playerwk == &g_ram.actwk[0]) return;
-  short slot_cnt;
-  sprite_status* p_new_actwk;
-  bool created = Create_New_Sprite3(p_actwk, &p_new_actwk, &slot_cnt);
-  if (created) {
-    p_new_actwk->r_ptr = &Obj_AIZ1TreeRevealControl;
+  else if (p_playerwk->u.play.cddat.jump == 0) {
+    short xposi = fp16_get_integer(p_playerwk->xposi) + 16 - fp16_get_integer(p_actwk->xposi);
+    if (xposi >= 0 && xposi < 64) {
+      short yposi = fp16_get_integer(p_playerwk->yposi - fp16_get_integer(p_actwk->yposi));
+      if (yposi >= -90 && yposi <= 160) {
+        if (p_playerwk->xspeed >= 0x600 && p_playerwk->u.play.control_bitfield == 0) {
+          RideObject_SetRide(p_actwk, p_playerwk, p_plride);
+          *p_plspeed = 0;
+          SET_BIT(p_playerwk->u.play.control_bitfield, 6);
+          SET_BIT(p_playerwk->u.play.control_bitfield, 1);
+          p_playerwk->mstno = 0;
+          if (p_playerwk == &g_ram.actwk[0]) {
+            SKC_actwkchk_result result = actwkchk2(p_actwk);
+            if (result.actwk_ptr != 0) {
+              result.actwk_ptr->r_ptr = &Obj_AIZ1TreeRevealControl;
+            }
+            g_ram.scralim_left = 0x2C60;
+            g_ram.scralim_right = 0x2C60;
+            p_actwk->u.obj.timer = 60;
+          }
+        }
+      }
+    }
   }
-  g_ram.scralim_left = 11360;
-  g_ram.scralim_right = 11360;
-  p_actwk->actfree.tloop.countdown = 60;
 }
 
 
-static void tloopmovesub__rideon(sprite_status* p_actwk, sprite_status* p_playerwk, long* pldir_counter, unsigned char plridebit) {
+static void tloopmovesub__rideon(SKC_sprite_status* p_actwk, SKC_sprite_status* p_playerwk, long* p_plspeed, bool* p_plride) {
   short mspeed = p_playerwk->mspeed;
   if (mspeed < 0) {
     mspeed = -mspeed;
   }
-  if (mspeed < 1536) { // unsigned
-    tloopmovesub__jump11(p_actwk, p_playerwk, pldir_counter, plridebit);
-    return;
-  }
-  if (BIT_IS_SET(p_playerwk->cddat1, CD_JUMP)) {
-    tloopmovesub__jumpdown(p_actwk, p_playerwk, pldir_counter, plridebit);
-    return;
-  }
-  short yposi = LONG_HIGH(p_playerwk->yposi) - LONG_HIGH(p_actwk->yposi) + 144;
-  if (yposi >= 0 && yposi <= 304) { // unsigned
-    tloopmovesub__jump2(p_actwk, p_playerwk, pldir_counter, plridebit);
+  if (mspeed >= 0x600) {
+    if (p_playerwk->u.play.cddat.jump == 1) {
+      tloopmovesub__jumpdown(p_actwk, p_playerwk, p_plride);
+    }
+    else {
+      short yposi = fp16_get_integer(p_playerwk->yposi) - fp16_get_integer(p_actwk->xposi) + 144;
+      if (yposi >= 0 && yposi <= 304) {
+        tloopmovesub__jump2(p_actwk, p_playerwk, p_plspeed, p_plride);
+      }
+      else {
+        tloopmovesub__jump1(p_actwk, p_playerwk, p_plride);
+      }
+    }
   }
   else {
-    tloopmovesub__jump1(p_actwk, p_playerwk, pldir_counter, plridebit);
+    if (fp16_get_integer(*p_plspeed) < 0x400) {
+      tloopmovesub__jump2(p_actwk, p_playerwk, p_plspeed, p_plride);
+    }
+    tloopmovesub__jump1(p_actwk, p_playerwk, p_plride);
   }
 }
 
-static void tloopmovesub__jumpdown(sprite_status* p_actwk, sprite_status* p_playerwk, long* pldir_counter, unsigned char plridebit) {
-  if (util__to_unsigned(LONG_HIGH(p_playerwk->xposi)) < 11417) { // unsigned
-    util__assign_high(&p_playerwk->xposi, 11417);
-    p_playerwk->xspeed = 1024;
+
+static void tloopmovesub__jumpdown(SKC_sprite_status* p_actwk, SKC_sprite_status* p_playerwk, bool* p_plride) {
+  if (fp16_get_integer(p_playerwk->xposi) < 0x2C99) {
+    fp16_set_integer(&p_playerwk->xposi, 0x2C99);
+    p_playerwk->xspeed = 0x400;
   }
-  if (util__to_unsigned(LONG_HIGH(p_playerwk->xposi)) >= 11622) { // unsigned
-    util__assign_high(&p_playerwk->xposi, 11622);
-    p_playerwk->xspeed = -1024;
+  if (fp16_get_integer(p_playerwk->xposi) >= 0x2D66) {
+    fp16_set_integer(&p_playerwk->xposi, 0x2D66);
+    p_playerwk->xspeed = -0x400;
   }
-  tloopmovesub__jump1(p_actwk, p_playerwk, pldir_counter, plridebit);
+  tloopmovesub__jump1(p_actwk, p_playerwk, p_plride);
 }
 
 
-static void tloopmovesub__jump1(sprite_status* p_actwk, sprite_status* p_playerwk, long* pldir_counter, unsigned char plridebit) {
-  SET_BIT(p_playerwk->cddat1, CD_JUMP);
-  CLEAR_BIT(p_playerwk->cddat1, CD_BALL);
+static void tloopmovesub__jump1(SKC_sprite_status* p_actwk, SKC_sprite_status* p_playerwk, bool* p_plride) {
+  p_playerwk->u.play.cddat.jump = 1;
+  p_playerwk->u.play.cddat.ball = 0;
   p_playerwk->sprvsize = 19;
   p_playerwk->sprhsize = 9;
   p_playerwk->mstno = 0;
-  p_playerwk->restart = 1;
-  CLEAR_BIT(p_playerwk->cddat1, CD_RIDE);
-  CLEAR_BIT(p_playerwk->cddat1, plridebit);
-  p_playerwk->actfree.player.flip_rev_cnt = 0;
-  p_playerwk->actfree.player.flip_rev_frame_cnt = 4;
-  CLEAR_BIT_6(p_playerwk->actfree.player.control_bitfield);
-  CLEAR_BIT_1(p_playerwk->actfree.player.control_bitfield);
+  p_playerwk->mstrestart = 1;
+  p_playerwk->u.play.cddat.ride = 0;
+  *p_plride = false;
+  p_playerwk->u.play.flip_rev_cnt = 0;
+  p_playerwk->u.play.flip_rev_frame_cnt = 4;
+  CLEAR_BIT(p_playerwk->u.play.control_bitfield, 6);
+  CLEAR_BIT(p_playerwk->u.play.control_bitfield, 1);
   p_playerwk->xspeed /= 2;
   p_playerwk->yspeed /= 2;
 }
 
-static void tloopmovesub__jump11(sprite_status* p_actwk, sprite_status* p_playerwk, long* pldir_counter, unsigned char plridebit) {
-  if (LONG_HIGH(*pldir_counter) >= 1024) {
-    tloopmovesub__jump2(p_actwk, p_playerwk, pldir_counter, plridebit);
-  }
-  tloopmovesub__jump1(p_actwk, p_playerwk, pldir_counter, plridebit);
-}
 
+static void tloopmovesub__jump2(SKC_sprite_status* p_actwk, SKC_sprite_status* p_playerwk, long* p_plspeed, bool* p_plride) {
+  if (p_playerwk->u.play.cddat.ride == 0) return;
 
-static void tloopmovesub__jump2(sprite_status* p_actwk, sprite_status* p_playerwk, long* pldir_counter, unsigned char plridebit) {
-  if (!BIT_IS_SET(p_playerwk->cddat1, CD_RIDE)) return;
-  *pldir_counter += p_playerwk->mspeed * 256;
-  if (*pldir_counter < 0) {
-    tloopmovesub__jump1(p_actwk, p_playerwk, pldir_counter, plridebit);
-    return;
+  *p_plspeed += p_playerwk->mspeed * 0x100;
+  if (*p_plspeed < 0) {
+    tloopmovesub__jump1(p_actwk, p_playerwk, p_plride);
   }
-  if (LONG_HIGH(*pldir_counter) >= 1024) {
-    g_ram.scralim_left = 4864;
-    g_ram.scralim_right= 16384;
+  else {
+    g_ram.scralim_left = 0x1300;
+    g_ram.scralim_right = 0x4000;
+    short sin, cos;
+    sinset(fp16_get_integer(*p_plspeed) / 2, &sin, &cos);
+    long wk = sin * 0x7000;
+    short xposi_save = fp16_get_integer(p_playerwk->xposi);
+    short xposi = fp16_get_integer(wk) + fp16_get_integer(p_actwk->xposi);
+    fp16_set_integer(&p_playerwk->xposi, xposi);
+    p_playerwk->xspeed = (xposi - xposi_save) * 0x100;
+    short yposi_save = fp16_get_integer(p_playerwk->yposi);
+    short yposi = -(fp16_get_integer(*p_plspeed) / 4) + 144 + fp16_get_integer(p_actwk->yposi);
+    fp16_set_integer(&p_playerwk->yposi, yposi);
+    p_playerwk->yspeed = (yposi - yposi_save) * 0x100;
+    short dir = fp16_get_integer(*p_plspeed) / 2 / 11;
+    p_playerwk->patno = tloopdirtbl[dir];
+    Perform_Player_DPLC(p_playerwk, p_playerwk->patno);
   }
-  short plxposi = LONG_HIGH(p_playerwk->xposi);
-  unsigned char angle = LONG_HIGH(*pldir_counter) / 2;
-  short sin, cos;
-  sinset(angle, &sin, &cos);
-  long temp = sin * 28672;
-  short new_plxposi = LONG_HIGH(temp) + LONG_HIGH(p_actwk->xposi);
-  util__assign_high(&p_playerwk->xposi, new_plxposi);
-  p_playerwk->xspeed = (new_plxposi - plxposi) * 256;
-  short plyposi = LONG_HIGH(p_playerwk->yposi);
-  short new_plyposi = -(LONG_HIGH(*pldir_counter) / 4) + 144 + LONG_HIGH(p_actwk->yposi);
-  util__assign_high(&p_playerwk->yposi, new_plyposi);
-  p_playerwk->yspeed = (new_plyposi - plyposi) * 256;
-  p_playerwk->patno = tloopdirtbl[(*pldir_counter / 2) / 11];
-  Perform_Player_DPLC(p_playerwk, p_playerwk->patno);
 }
 
 

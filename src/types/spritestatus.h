@@ -246,6 +246,11 @@ typedef struct SKC_sprite_status {
         }
         springsw;
         struct {
+          long plspeed; // 0x30
+          long pl2speed; // 0x34
+        }
+        tloop;
+        struct {
           short xposi_init; // 0x30
           short yposi_init; // 0x32
           short offset; // 0x34
@@ -392,12 +397,6 @@ SKC_sprite_status;
       short x_destination;
       unsigned short oya;
     } title_part;
-    struct {
-      long pldir_counter;
-      long pl2dir_counter;
-      short countdown;
-      unsigned char reserved1[16];
-    } tloop;
   } actfree;
 */
 
