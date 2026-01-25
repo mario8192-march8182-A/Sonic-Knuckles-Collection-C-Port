@@ -146,6 +146,15 @@ typedef struct SKC_sprite_status {
       unsigned short flagwork_index; // 0x48
       union {
         struct {
+          unsigned short part_cnt; // 0x30
+          unsigned short current_exit_no; // 0x32
+        }
+        actclear;
+        struct {
+          short xdestination; // 0x46
+        }
+        actclear_part;
+        struct {
           unsigned char* timer_data_ptr; // 0x30
           unsigned char* timer_data2_ptr; // 0x34
           unsigned char unknown; // 0x3A;
@@ -246,6 +255,10 @@ typedef struct SKC_sprite_status {
         }
         springsw;
         struct {
+          unsigned char act_start_flag; // 0x3E
+        }
+        title;
+        struct {
           long plspeed; // 0x30
           long pl2speed; // 0x34
         }
@@ -338,17 +351,6 @@ SKC_sprite_status;
       unsigned char reserved2[8];
     } enemy_uninit_0;
     struct {
-      unsigned short delay_timer;
-      unsigned short part_cnt;
-      unsigned short current_exit_no;
-      unsigned char reserved[22];
-    } actclear;
-    struct {
-      unsigned char reserved[24];
-      short x_destination;
-      unsigned short oya;
-    } actclear_part;
-    struct {
       unsigned char reserved1[2];
       long yposiwk;
       unsigned char dir;
@@ -385,7 +387,6 @@ SKC_sprite_status;
       unsigned short current_exit_no;
       unsigned char wait_flag;
       unsigned char reserved1[9];
-      unsigned char act_start_flag;
       unsigned char reserved2[5];
       unsigned char vs_flag;
       unsigned char reserved3[3];

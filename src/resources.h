@@ -1,8 +1,6 @@
 #ifndef RESOURCES_H
 
 signed char* titlepat[21]; // 00419b24
-signed char* actclearpat[59]; // 00419f7e
-unsigned char actclear_sonic_tiles[354]; // 004df1f6
 unsigned char title_sk_tiles[194]; // 004dfb7a
 unsigned char title_s3k_tiles[178]; // 004dfc3c
 unsigned char title_mushroom_hill_tiles[386]; // 004dfcee
@@ -21,12 +19,6 @@ unsigned char ricky_tiles[352]; // 00510fe4
 unsigned char pocky_tiles[340]; // 00511144
 unsigned short* sai00_tbl[8]; // 005121fe
 unsigned char opnbox_tiles[1187]; // 00532cf8
-unsigned char actclear_miles_tiles[338]; // 0054b5c4
-unsigned char actclear_tails_tiles[322]; // 0054b716
-unsigned char actclear_knuckles_tiles[626]; // 0054b858
-unsigned char actclear_tiles[802]; // 0054baca
-unsigned char title_act1_tiles[194]; // 0054bdec
-unsigned char title_act2_tiles[226]; // 0054beae
 unsigned char title_red_banner_tiles[482]; // 0054c792
 unsigned char title_angel_island_tiles[274]; // 0054c974
 unsigned char title_hydrocity_tiles[338]; // 0054ca86

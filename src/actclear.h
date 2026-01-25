@@ -3,6 +3,6 @@
 
 #include "types/spritestatus.h"
 
-void actclear(sprite_status* p_actwk);
+void actclear(SKC_sprite_status* p_actwk);
 
 #endif

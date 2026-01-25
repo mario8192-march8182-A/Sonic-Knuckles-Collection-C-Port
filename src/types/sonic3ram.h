@@ -55,7 +55,6 @@ typedef struct sonic3_ram {
   /* 08ffef3a */ unsigned short sprhmasks;
   /* 08ffef3c */ unsigned short sprtbl_pageflip;
   /* 08ffef3e */ unsigned short sprtbl_pageready;
-  /* 08ffef40 */ unsigned long DAT_08ffef40;
   /* 08ffef4b */ unsigned char dataselect_selection;
   /* 08ffef4c */ SKC_play_type nosave_plmode;
   /* 08ffef56 */ unsigned short disable_interrupts_sram;
@@ -204,7 +203,7 @@ typedef struct sonic3_ram {
   /* 08ffff84 */ unsigned short levelselect_sound;
   /* 08ffff86 */ unsigned char openingoption;
   /* 08ffff8a */ unsigned short vs_noitems;
-  /* 08ffff8e */ unsigned short frame_bonus;
+  /* 08ffff8e */ unsigned short bonustotal;
   /* 08ffff90 */ short bgm_act;
   /* 08ffff92 */ unsigned char brings;
   /* 08ffff96 */ unsigned char plcddat2_s2;

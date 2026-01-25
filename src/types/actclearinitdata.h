@@ -1,17 +1,17 @@
-#ifndef ACTCLEARINITDATA_H
-#define ACTCLEARINITDATA_H
+#ifndef SKC_ACTCLEARINITDATA_H
+#define SKC_ACTCLEARINITDATA_H
 
 #include "spritestatushandler.h"
 
-typedef struct actclear_init_data {
-  sprite_status_handler r_ptr;
-  short x_destination;
+typedef struct SKC_actclear_init_data {
+  SKC_sprite_status_handler r_ptr;
+  short xdestination;
   short xposi;
   short yposi;
   unsigned char patno;
   unsigned char sprhs;
   unsigned short exit_no;
 }
-actclear_init_data;
+SKC_actclear_init_data;
 
 #endif
