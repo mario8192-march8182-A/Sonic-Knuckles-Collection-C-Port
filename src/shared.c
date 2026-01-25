@@ -33,6 +33,7 @@
 #include "utils/stageno.h"
 #include "action.h"
 #include "constants.h"
+#include "etc.h"
 static void chk_pt_next(SKC_sprite_status* p_actwk, signed char* p_pg_data);
 static int pt_chgs0__chk_pt_next(SKC_sprite_status* p_actwk, signed char* p_pg_data);
 static int chk_tpg_next(SKC_sprite_status* p_actwk, signed char* p_pg_data);

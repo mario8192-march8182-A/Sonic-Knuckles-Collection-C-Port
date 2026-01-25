@@ -13,6 +13,7 @@
 #include "../utils/fp16.h"
 #include "../constants.h"
 #include "../emyshot.h"
+#include "../etc.h"
 #include "../shared.h"
 static void saru00_framein(SKC_sprite_status* p_actwk);
 static void saru00_init(SKC_sprite_status* p_actwk);

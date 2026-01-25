@@ -15,6 +15,7 @@
 #include "../utils/stageno.h"
 #include "../action.h"
 #include "../constants.h"
+#include "../etc.h"
 #include "../opnbox.h"
 #include "../save.h"
 #include "../shared.h"

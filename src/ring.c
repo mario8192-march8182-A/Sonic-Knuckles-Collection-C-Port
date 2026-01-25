@@ -9,6 +9,7 @@
 #include "utils/fp8.h"
 #include "action.h"
 #include "constants.h"
+#include "etc.h"
 static void ringinit(SKC_sprite_status* p_actwk);
 static void ringmove(SKC_sprite_status* p_actwk);
 static void ringget(SKC_sprite_status* p_actwk);
@@ -244,7 +245,7 @@ static void flyringinit(SKC_sprite_status* p_actwk) {
     g_ram.flyring_patcnt = 255;
     if (angle >= 0) {
       short sin, cos;
-      sinset(angle & 0xFF, &sin, &cos);
+      sinset(angle, &sin, &cos);
       xspeed = sin * (1 << (angle >> 8));
       yspeed = cos * (1 << (angle >> 8));
       signed char fraction = fp8_get_fraction(angle) + 16;

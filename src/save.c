@@ -11,6 +11,7 @@
 #include "utils/stageno.h"
 #include "action.h"
 #include "constants.h"
+#include "etc.h"
 #include "unlze.h"
 static void saveinit(SKC_sprite_status* pActwk);
 static void savemove(SKC_sprite_status* pActwk);
@@ -475,7 +476,7 @@ void o_star(SKC_sprite_status* p_actwk) {
   }
   p_actwk->u.obj.actfree.save.angle += 10;
   short sin, cos;
-  sinset(p_actwk->u.obj.actfree.save.angle & 0xFF, &sin, &cos);
+  sinset(p_actwk->u.obj.actfree.save.angle, &sin, &cos);
   sin /= 32;
   cos /= 8;
   short d1 = cos;
