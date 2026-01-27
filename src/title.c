@@ -1,27 +1,39 @@
-#include "globals.h"
-#include "macros.h"
-#include "util.h"
-#include "types/titlezonesinitdata.h"
 #include "title.h"
-#include "004xxxxx.h"
-#include "002.h"
-#include "resources.h"
+#include <stdbool.h>
+#include <string.h>
+#include "data/cg/actdigits.h"
+#include "data/cg/title.h"
+#include "data/cg/zonenames.h"
+#include "data/pat/title.h"
+#include "types/actwkchkresult.h"
+#include "types/overlayelementinitdata.h"
+#include "types/sonic3ram.h"
+#include "types/spritestatus.h"
+#include "types/spritestatushandler.h"
+#include "utils/fp16.h"
+#include "utils/stageno.h"
 #include "zone08/gost08.h"
-static void title_init(sprite_status* p_actwk);
-static void title_move0(sprite_status* p_actwk);
-static void title_move1(sprite_status* p_actwk);
-static void title_move2(sprite_status* p_actwk);
-static void title_red_banner(sprite_status* p_actwk);
-static void title_name(sprite_status* p_actwk);
-static void title_element(sprite_status* p_actwk);
-static void title_act(sprite_status* p_actwk);
-static void title_element2(sprite_status* p_actwk);
-static unsigned char* title_zones_tiles[22];
-static title_zones_init_data title_zones_init_tbl[7];
+#include "action.h"
+#include "shared.h"
+#include "unlze.h"
+static void title_init(SKC_sprite_status* p_actwk);
+static void title_move0(SKC_sprite_status* p_actwk);
+static void title_move1(SKC_sprite_status* p_actwk);
+static void title_move2(SKC_sprite_status* p_actwk);
+static void title_red_banner(SKC_sprite_status* p_actwk);
+static void title_name(SKC_sprite_status* p_actwk);
+static void title_element(SKC_sprite_status* p_actwk);
+static void title_act(SKC_sprite_status* p_actwk);
+static void title_element2(SKC_sprite_status* p_actwk);
+static unsigned char* zone_name_cg_tbl[22];
+static SKC_overlay_element_init_data title_init_tbl[7];
+
+extern sonic3_ram g_ram;
+extern bool g_sonic3_alone;
 
 
-void title(sprite_status* p_actwk) {
-  static sprite_status_handler act_tbl[4] = {
+void title(SKC_sprite_status* p_actwk) {
+  SKC_sprite_status_handler act_tbl[4] = {
     &title_init,
     &title_move0,
     &title_move1,
@@ -32,285 +44,284 @@ void title(sprite_status* p_actwk) {
 }
 
 
-static void title_init(sprite_status* p_actwk) {
-  if (g_ram.stageno == ENDING) goto LAB_frameout;
-  if (GET_ZONE(g_ram.stageno) >= AZURE_LAKE && GET_ZONE(g_ram.stageno) <= ENDLESS_MINE) { // unsigned
-    p_actwk->actfree.title.vs_flag = 255;
-LAB_frameout:
+static void title_init(SKC_sprite_status* p_actwk) {
+  if (g_ram.stageno == ENDING) {
     frameout(p_actwk);
-    return;
   }
-  Queue_Kos_Module(title_red_banner_tiles, 40960);
-  unsigned char* p_tiles = 0;
+  else if (get_zone(g_ram.stageno) >= AZURE_LAKE && get_zone(g_ram.stageno) <= ENDLESS_MINE) {
+    p_actwk->u.obj.actfree.title.vs_flag = 0xFF;
+    frameout(p_actwk);
+  }
+  unlze_moduled(&g_mdVram[0xA000], title_red_banner_cg);
+  unsigned char* p_cg;
   if (!g_sonic3_alone) {
-    p_tiles = title_sk_tiles;
-    if (g_ram.cartridge == 0) {
-      p_tiles = title_s3k_tiles;
-    }
-    Queue_Kos_Module(p_tiles, 41472);
+    p_cg = g_ram.cartridge != 0 ? title_sk_cg : title_s3k_cg;
+    unlze_moduled(&g_mdVram[0xA200], p_cg);
   }
-  p_tiles = title_act2_tiles;
-  if (g_ram.stageno != LAVA_REEF_BOSS
-      && g_ram.stageno != DEATH_EGG_BOSS
-      && GET_ACT(g_ram.stageno_i) == ACT_1) {
-    p_tiles = title_act1_tiles;
+  if (g_ram.stageno == LAVA_REEF_BOSS || g_ram.stageno == DEATH_EGG_BOSS || get_act(g_ram.stageno_i) == ACT_1) {
+    p_cg = act_digit_2_cg;
   }
-  Queue_Kos_Module(p_tiles, 42912);
-  unsigned char title_zones_index = LAVA_REEF;
-  if (g_ram.stageno != LAVA_REEF_BOSS) {
-    title_zones_index = 13;
-    if (g_ram.stageno != HIDDEN_PALACE) {
-      title_zones_index = DEATH_EGG;
-      if (g_ram.stageno != DEATH_EGG_BOSS) {
-        title_zones_index = GET_ZONE(g_ram.stageno_i);
+  else {
+    p_cg = act_digit_1_cg;
+  }
+  unlze_moduled(&g_mdVram[0xA7A0], p_cg);
+
+  switch (g_ram.stageno) {
+    case LAVA_REEF_BOSS:
+      p_cg = zone_name_cg_tbl[LAVA_REEF];
+      break;
+    case HIDDEN_PALACE:
+      p_cg = zone_name_cg_tbl[13];
+      break;
+    case DEATH_EGG_BOSS:
+      p_cg = zone_name_cg_tbl[DEATH_EGG];
+      break;
+    default:
+      p_cg = zone_name_cg_tbl[get_zone(g_ram.stageno_i)];
+      break;
+  }
+
+  unlze_moduled(&g_mdVram[0xA9A0], p_cg);
+  p_actwk->u.obj.timer = 90;
+  p_actwk->u.obj.actfree.title.current_exit_no = 0;
+  p_actwk->u.obj.actfree.title.unknown_flag = 0xFF;
+  p_actwk->r_no += 2;
+}
+
+
+static void title_move0(SKC_sprite_status* p_actwk) {
+  SKC_actwkchk_result result = actwkchk2(p_actwk);
+  if (result.actwk_ptr != 0) {
+    SKC_overlay_element_init_data* p_data;
+    int cnt;
+    if (p_actwk->u.obj.actfree.title.vs_flag == 0) {
+      if (get_zone(g_ram.stageno) < GUMBALL_MACHINE
+          || get_zone(g_ram.stageno) == LAVA_REEF_BOSS_AND_HIDDEN_PALACE
+          || g_ram.stageno == DEATH_EGG_BOSS) {
+        p_data = title_init_tbl;
+        cnt = 4;
+      }
+      else {
+        p_data = &title_init_tbl[5];
+        cnt = 2;
       }
     }
-  }
-  Queue_Kos_Module(title_zones_tiles[title_zones_index], 43424);
-  p_actwk->actfree.title.delay_timer = 90;
-  p_actwk->actfree.title.current_exit_no = 0;
-  p_actwk->actfree.title.unknown_flag = 255;
-  p_actwk->r_no += 2;
-}
+    else {
+      p_data = &title_init_tbl[4];
+      cnt = 1;
+    }
 
+    for (int i = 0; i < cnt; ++i) {
+      ++p_actwk->u.obj.actfree.title.part_cnt;
+      result.actwk_ptr->r_ptr = p_data->r_ptr;
+      result.actwk_ptr->u.obj.actfree.title_part.xdestination = p_data->xdestination;
+      fp16_set_integer(&result.actwk_ptr->xposi, p_data->xposi);
+      fp16_set_integer(&result.actwk_ptr->yposi, p_data->yposi);
+      result.actwk_ptr->patno = p_data->patno;
+      result.actwk_ptr->sprhs = p_data->sprhs;
+      result.actwk_ptr->colino = p_data->exit_no;
+      result.actwk_ptr->actflg.compound = 1;
+      result.actwk_ptr->patbase = titlepat;
+      result.actwk_ptr->u.obj.oya = p_actwk - g_ram.actwk;
+      result.actwk_ptr = actwkchk_next(result.actwk_ptr, &result.remaining_slot_cnt);
+      if (result.actwk_ptr == 0) break;
+    }
 
-static void title_move0(sprite_status* p_actwk) {
-  if (g_ram.divdev_modules != 0) return;
-  sprite_status* p_new_actwk;
-  short slot_cnt;
-  bool created = Create_New_Sprite3(p_actwk, &p_new_actwk, &slot_cnt);
-  if (!created) return;
-  title_zones_init_data* p_init_data = 0;
-  short cnt = 0;
-  if (GET_ZONE(g_ram.stageno) != LAVA_REEF_BOSS_AND_HIDDEN_PALACE && g_ram.stageno != DEATH_EGG_BOSS) {
-    p_init_data = &title_zones_init_tbl[5];
-    cnt = 1;
-    if (GET_ZONE(g_ram.stageno) >= ZONE_GUMBALL_MACHINE) goto loop;
-  }
-  p_init_data = &title_zones_init_tbl[0];
-  cnt = 3;
-  if (p_actwk->actfree.title.vs_flag != 0) {
-    p_init_data = &title_zones_init_tbl[4];
-    cnt = 0;
-  }
-
-loop:
-  do {
-    ++p_actwk->actfree.title.part_cnt;
-    p_new_actwk->r_ptr = p_init_data->r_ptr;
-    p_new_actwk->actfree.title_part.x_destination = p_init_data->x_destination;
-    util__assign_high(&p_new_actwk->xposi, p_init_data->xposi);
-    util__assign_high(&p_new_actwk->yposi, p_init_data->yposi);
-    p_new_actwk->patno = p_init_data->patno;
-    p_new_actwk->sprhs = p_init_data->sprhs;
-    p_new_actwk->colino = p_init_data->colino;
-    p_new_actwk->actflg = 1 << FLG_COMPOUND;
-    p_new_actwk->patbase = titlepat;
-    p_new_actwk->actfree.title_part.oya = p_actwk - g_ram.actwk;
-    bool created = Create_New_Sprite4(&p_new_actwk, slot_cnt);
-    if (!created) break;
-    --cnt;
-  } while (cnt != -1);
-
-  if (p_actwk->actfree.title.act_start_flag != 0) {
-    if (GET_ZONE(g_ram.stageno) == LAUNCH_BASE) {
+    if (p_actwk->u.obj.actfree.title.act_start_flag != 0 && get_zone(g_ram.stageno) == LAUNCH_BASE) {
       Load_PLC(p_actwk, 37);
     }
+    p_actwk->r_no += 2;
   }
-  p_actwk->r_no += 2;
 }
 
 
-static void title_move1(sprite_status* p_actwk) {
-  if (p_actwk->actfree.title.wait_flag != 0) {
-    p_actwk->actfree.title.wait_flag = 0;
-    return;
+static void title_move1(SKC_sprite_status* p_actwk) {
+  if (p_actwk->u.obj.actfree.title.wait_flag != 0) {
+    p_actwk->u.obj.actfree.title.wait_flag = 0;
   }
-  if (p_actwk->actfree.title.act_start_flag != 0) {
-    g_ram.pltime.hours = 0;
-    g_ram.pltime.minutes = 0;
-    g_ram.pltime.seconds = 0;
-    g_ram.pltime.frames = 0;
-    g_ram.plring = 0;
-    g_ram.plring_act = 0;
-    g_ram.plring_f2 = 0;
-    g_ram.DAT_08fffed2 = 0;
-    g_ram.pl2ring = 0;
-    g_ram.pl2ring_act = 0;
-    g_ram.pltime_f = 255;
-    g_ram.plring_f = 255;
-    g_ram.actwk[0].userflag1 = 30;
-    g_ram.actwk[1].userflag1 = 30;
-    reset_bgm(p_actwk);
-  }
-  p_actwk->actfree.title.unknown_flag = 0;
-  p_actwk->r_no += 2;
-}
-
-
-static void title_move2(sprite_status* p_actwk) {
-  if (p_actwk->actfree.title.delay_timer != 0) {
-    --p_actwk->actfree.title.delay_timer;
-    return;
-  }
-  if (p_actwk->actfree.title.part_cnt != 0) {
-    ++p_actwk->actfree.title.current_exit_no;
-    return;
-  }
-  if (p_actwk->actfree.title.vs_flag != 0) goto LAB_frameout;
-  if (g_ram.stageno == SANDOPOLIS_ACT_2) {
-    sprite_status* p_new_actwk;
-    short slot_cnt;
-    bool created = Create_New_Sprite(&p_new_actwk, &slot_cnt);
-    if (created) {
-      p_new_actwk->r_ptr = &gost08;
-    }
-  }
-  if (GET_ZONE(g_ram.stageno) != LAVA_REEF_BOSS_AND_HIDDEN_PALACE
-      && g_ram.stageno == DEATH_EGG_BOSS
-      && GET_ZONE(g_ram.stageno) >= ZONE_GUMBALL_MACHINE) {
-    goto LAB_frameout;
-  }
-  if (p_actwk->actfree.title.act_start_flag != 0) {
-    g_ram.act_start_flag = 255;
-  }
-  else if (GET_ZONE(g_ram.stageno) == DOOMSDAY) goto LAB_frameout;
-  else if (g_ram.stageno == DEATH_EGG_BOSS) goto LAB_frameout;
   else {
-    Load_PLC_Raw(p_actwk, &toge_cg_tbl);
+    if (p_actwk->u.obj.actfree.title.act_start_flag != 0) {
+      g_ram.pltime.hours = 0;
+      g_ram.pltime.minutes = 0;
+      g_ram.pltime.seconds = 0;
+      g_ram.pltime.frames = 0;
+      g_ram.plring = 0;
+      g_ram.plring_act = 0;
+      g_ram.plring_f2 = 0;
+      g_ram.DAT_08fffed2 = 0;
+      g_ram.pl2ring = 0;
+      g_ram.pl2ring_act = 0;
+      g_ram.pltime_f = 0xFF;
+      g_ram.plring_f = 0xFF;
+      g_ram.actwk[0].u.play.air_timer = 30;
+      g_ram.actwk[1].u.play.air_timer = 30;
+      reset_bgm();
+    }
+    p_actwk->u.obj.actfree.title.unknown_flag = 0;
+    p_actwk->r_no += 2;
   }
-  if (g_ram.stageno == DEATH_EGG_BOSS) goto LAB_frameout;
-  LoadEnemyArt();
-  set_friend_cg(p_actwk);
-
-LAB_frameout:
-  frameout(p_actwk);
 }
 
 
-static void title_red_banner(sprite_status* p_actwk) {
-  sprite_status* p_parentwk = &g_ram.actwk[p_actwk->actfree.title_part.oya];
-  if (p_parentwk->actfree.title.current_exit_no != 0) {
-    if (!BIT_IS_SET(p_actwk->actflg, FLG_ONSCREEN)) {
-      --p_parentwk->actfree.title.part_cnt;
+static void title_move2(SKC_sprite_status* p_actwk) {
+  if (p_actwk->u.obj.timer != 0) {
+    --p_actwk->u.obj.timer;
+  }
+  else if (p_actwk->u.obj.actfree.title.part_cnt != 0) {
+    ++p_actwk->u.obj.actfree.title.current_exit_no;
+  }
+  else {
+    if (p_actwk->u.obj.actfree.title.vs_flag == 0) {
+      if (g_ram.stageno == SANDOPOLIS_ACT_2) {
+        SKC_actwkchk_result result = actwkchk();
+        if (result.actwk_ptr != 0) {
+          result.actwk_ptr->r_ptr = &gost08;
+        }
+      }
+      else if (get_zone(g_ram.stageno) < GUMBALL_MACHINE
+               || get_zone(g_ram.stageno) == LAVA_REEF_BOSS_AND_HIDDEN_PALACE
+               || g_ram.stageno == DEATH_EGG_BOSS) {
+        if (p_actwk->u.obj.actfree.title.act_start_flag != 0) {
+          g_ram.act_start_flag = 0xFF;
+        }
+        else if (get_zone(g_ram.stageno) != DOOMSDAY && g_ram.stageno != DEATH_EGG_BOSS) {
+          Load_PLC_Raw(p_actwk, &toge_cg_tbl);
+        }
+        if (g_ram.stageno != DEATH_EGG_BOSS) {
+          LoadEnemyArt();
+          set_friend_cg(p_actwk);
+        }
+      }
+    }
+    frameout(p_actwk);
+  }
+}
+
+
+static void title_red_banner(SKC_sprite_status* p_actwk) {
+  SKC_sprite_status* p_parentwk = &g_ram.actwk[p_actwk->u.obj.oya];
+  if (p_parentwk->u.obj.actfree.title.current_exit_no != 0) {
+    if (p_actwk->actflg.onscreen == 0) {
+      --p_parentwk->u.obj.actfree.title.part_cnt;
       frameout(p_actwk);
       return;
     }
-    if (p_parentwk->actfree.title.current_exit_no >= p_actwk->colino) { // unsigned
-      p_actwk->yposi -= SHORT_TO_LONG_HIGH(32);
+    if (p_parentwk->u.obj.actfree.title.current_exit_no >= p_actwk->colino) {
+      fp16_set_integer(&p_actwk->yposi, fp16_get_integer(p_actwk->yposi) - 32);
     }
   }
-  else {
-    if (LONG_HIGH(p_actwk->yposi) != p_actwk->actfree.title_part.x_destination) {
-      p_actwk->yposi += SHORT_TO_LONG_HIGH(16);
-      p_parentwk->actfree.title.wait_flag = 255;
-    }
+  else if (fp16_get_integer(p_actwk->yposi) != p_actwk->u.obj.actfree.title_part.xdestination) {
+    fp16_set_integer(&p_actwk->yposi, fp16_get_integer(p_actwk->yposi) + 16);
+    p_parentwk->u.obj.actfree.title.wait_flag = 0xFF;
   }
   p_actwk->sprvs = 112;
   actionsub(p_actwk);
 }
 
 
-static void title_name(sprite_status* p_actwk) {
-  p_actwk->patno += GET_ZONE(g_ram.stageno_i);
-  unsigned char patno = 13;
-  if (g_ram.stageno != LAVA_REEF_BOSS) {
-    patno = 17;
-    if (g_ram.stageno != HIDDEN_PALACE) {
-      patno = 15;
-      if (g_ram.stageno != DEATH_EGG_BOSS) goto LAB_00416aab;
-    }
+static void title_name(SKC_sprite_status* p_actwk) {
+  switch (g_ram.stageno) {
+    default:
+      p_actwk->patno += get_zone(g_ram.stageno_i);
+      break;
+    case LAVA_REEF_BOSS:
+      p_actwk->patno = 13;
+      break;
+    case HIDDEN_PALACE:
+      p_actwk->patno = 17;
+      break;
+    case DEATH_EGG_BOSS:
+      p_actwk->patno = 15;
+      break;
   }
-  p_actwk->patno = patno;
 
-LAB_00416aab:
   p_actwk->r_ptr = &title_element;
 }
 
 
-static void title_element(sprite_status* p_actwk) {
-  sprite_status* p_parentwk = &g_ram.actwk[p_actwk->actfree.title_part.oya];
-  if (p_parentwk->actfree.title.current_exit_no != 0) {
-    if (!BIT_IS_SET(p_actwk->actflg, FLG_HFLIP)) {
-      --p_parentwk->actfree.title.part_cnt;
+static void title_element(SKC_sprite_status* p_actwk) {
+  SKC_sprite_status* p_parentwk = &g_ram.actwk[p_actwk->u.obj.oya];
+  if (p_parentwk->u.obj.actfree.title.current_exit_no != 0) {
+    if (p_actwk->actflg.onscreen == 0) {
+      --p_parentwk->u.obj.actfree.title.part_cnt;
       frameout(p_actwk);
       return;
     }
-    else if (p_parentwk->actfree.title.current_exit_no >= p_actwk->colino) { // unsigned
-      p_actwk->xposi += SHORT_TO_LONG_HIGH(32);
+    if (p_parentwk->u.obj.actfree.title.current_exit_no >= p_actwk->colino) {
+      fp16_set_integer(&p_actwk->xposi, fp16_get_integer(p_actwk->xposi) + 32);
     }
   }
-  else if (LONG_HIGH(p_actwk->xposi) != p_actwk->actfree.title_part.x_destination) {
-    p_actwk->xposi -= SHORT_TO_LONG_HIGH(16);
-    p_parentwk->actfree.title.wait_flag = 255;
+  else if (fp16_get_integer(p_actwk->xposi) != p_actwk->u.obj.actfree.title_part.xdestination) {
+    fp16_set_integer(&p_actwk->xposi, fp16_get_integer(p_actwk->xposi) - 16);
+    p_parentwk->u.obj.actfree.title.wait_flag = 0xFF;
   }
   actionsub(p_actwk);
 }
 
 
-static void title_act(sprite_status* p_actwk) {
+static void title_act(SKC_sprite_status* p_actwk) {
   p_actwk->r_ptr = &title_element;
-  if (GET_ZONE(g_ram.stageno) != SKY_SANCTUARY
-      && GET_ZONE(g_ram.stageno) != DOOMSDAY
+  if (get_zone(g_ram.stageno) != SKY_SANCTUARY
+      && get_zone(g_ram.stageno) != DOOMSDAY
       && g_ram.stageno != HIDDEN_PALACE) {
     title_element(p_actwk);
   }
   else {
-    sprite_status* p_parentwk = &g_ram.actwk[p_actwk->actfree.title_part.oya];
-    --p_parentwk->actfree.title.part_cnt;
+    SKC_sprite_status* p_parentwk = &g_ram.actwk[p_actwk->u.obj.oya];
+    --p_parentwk->u.obj.actfree.title.part_cnt;
     frameout(p_actwk);
   }
 }
 
 
-static void title_element2(sprite_status* p_actwk) {
-  p_actwk->actflg = 0;
-  sprite_status* p_parentwk = &g_ram.actwk[p_actwk->actfree.title_part.oya];
-  if (p_parentwk->actfree.title.current_exit_no != 0) {
-    if (LONG_HIGH(p_actwk->xposi) >= 524) { // unsigned
-      --p_parentwk->actfree.title.part_cnt;
+static void title_element2(SKC_sprite_status* p_actwk) {
+  memset(&p_actwk->actflg, 0, sizeof(p_actwk->actflg));
+  SKC_sprite_status* p_parentwk = &g_ram.actwk[p_actwk->u.obj.oya];
+  if (p_parentwk->u.obj.actfree.title.current_exit_no != 0) {
+    if ((unsigned short)fp16_get_integer(p_actwk->xposi) >= 524) {
+      --p_parentwk->u.obj.actfree.title.part_cnt;
       frameout(p_actwk);
       return;
     }
-    else if (p_parentwk->actfree.title.current_exit_no >= p_actwk->colino) { // unsigned
-      p_actwk->xposi += SHORT_TO_LONG_HIGH(32);
+    if (p_parentwk->u.obj.actfree.title.current_exit_no >= p_actwk->colino) {
+      fp16_set_integer(&p_actwk->xposi, fp16_get_integer(p_actwk->xposi) + 32);
     }
   }
-  else if (LONG_HIGH(p_actwk->xposi) != p_actwk->actfree.title_part.x_destination) {
-    p_actwk->xposi -= SHORT_TO_LONG_HIGH(16);
-    p_parentwk->actfree.title.wait_flag = 255;
+  else if (fp16_get_integer(p_actwk->xposi) != p_actwk->u.obj.actfree.title_part.xdestination) {
+    fp16_set_integer(&p_actwk->xposi, fp16_get_integer(p_actwk->xposi) - 16);
+    p_parentwk->u.obj.actfree.title.wait_flag = 0xFF;
   }
   actionsub(p_actwk);
 }
 
 
-static unsigned char* title_zones_tiles[22] = {
-  title_angel_island_tiles,
-  title_hydrocity_tiles,
-  title_marble_garden_tiles,
-  title_carnival_night_tiles,
-  title_flying_battery_tiles,
-  title_icecap_tiles,
-  title_launch_base_tiles,
-  title_mushroom_hill_tiles,
-  title_sandopolis_tiles,
-  title_lava_reef_tiles,
-  title_sky_sanctuary_tiles,
-  title_death_egg_tiles,
-  title_doomsday_tiles,
-  title_hidden_palace_tiles,
-  title_azure_lake_tiles,
-  title_balloon_park_tiles,
-  title_desert_palace_tiles,
-  title_chrome_gadget_tiles,
-  title_endless_mine_tiles,
-  title_bonus_stage_tiles,
-  title_bonus_stage_tiles,
-  title_bonus_stage_tiles
+static unsigned char* zone_name_cg_tbl[22] = {
+  angel_island_name_cg,
+  hydrocity_name_cg,
+  marble_garden_name_cg,
+  carnival_night_name_cg,
+  flying_battery_name_cg,
+  icecap_name_cg,
+  launch_base_name_cg,
+  mushroom_hill_name_cg,
+  sandopolis_name_cg,
+  lava_reef_name_cg,
+  sky_sanctuary_name_cg,
+  death_egg_name_cg,
+  doomsday_name_cg,
+  hidden_palace_name_cg,
+  azure_lake_name_cg,
+  balloon_park_name_cg,
+  desert_palace_name_cg,
+  chrome_gadget_name_cg,
+  endless_mine_name_cg,
+  bonus_stage_name_cg,
+  bonus_stage_name_cg,
+  bonus_stage_name_cg
 };
 
 
-static title_zones_init_data title_zones_init_tbl[7] = {
+static SKC_overlay_element_init_data title_init_tbl[7] = {
   { &title_name,       288, 608, 224,  4, 128, 3 },
   { &title_element,    380, 764, 256,  3,  36, 5 },
   { &title_act,        388, 836, 288,  2,  28, 7 },

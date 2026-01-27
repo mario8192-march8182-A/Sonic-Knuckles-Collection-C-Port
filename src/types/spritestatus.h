@@ -255,9 +255,18 @@ typedef struct SKC_sprite_status {
         }
         springsw;
         struct {
+          unsigned short part_cnt; // 0x30
+          unsigned short current_exit_no; // 0x32
+          unsigned char wait_flag; // 0x34
           unsigned char act_start_flag; // 0x3E
+          unsigned char vs_flag; // 0x44
+          unsigned char unknown_flag; // 0x48
         }
         title;
+        struct {
+          short xdestination; // 0x46
+        }
+        title_part;
         struct {
           long plspeed; // 0x30
           long pl2speed; // 0x34
@@ -381,23 +390,6 @@ SKC_sprite_status;
       unsigned char reserved1[2];
       short* p_posi;
     } ssm_starsphere;
-    struct {
-      short delay_timer;
-      unsigned short part_cnt;
-      unsigned short current_exit_no;
-      unsigned char wait_flag;
-      unsigned char reserved1[9];
-      unsigned char reserved2[5];
-      unsigned char vs_flag;
-      unsigned char reserved3[3];
-      unsigned char unknown_flag;
-      unsigned char reserved4[1];
-    } title;
-    struct {
-      unsigned char reserved[24];
-      short x_destination;
-      unsigned short oya;
-    } title_part;
   } actfree;
 */
 

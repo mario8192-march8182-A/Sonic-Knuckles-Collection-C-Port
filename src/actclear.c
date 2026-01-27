@@ -4,8 +4,8 @@
 #include "data/cg/actdigits.h"
 #include "data/cg/characternames.h"
 #include "data/pat/actclear.h"
-#include "types/actclearinitdata.h"
 #include "types/actwkchkresult.h"
+#include "types/overlayelementinitdata.h"
 #include "types/sonic3ram.h"
 #include "types/spritestatus.h"
 #include "types/spritestatushandler.h"
@@ -32,7 +32,7 @@ static unsigned long score_to_nibbles(SKC_sprite_status* p_actwk, unsigned short
 static unsigned long subtbl[5];
 static unsigned long subtblh[5];
 static unsigned short timebonustbl[8];
-static SKC_actclear_init_data actclear_init_tbl[12];
+static SKC_overlay_element_init_data actclear_init_tbl[12];
 
 extern sonic3_ram g_ram;
 
@@ -344,7 +344,7 @@ static unsigned short timebonustbl[8] = {
 };
 
 
-static SKC_actclear_init_data actclear_init_tbl[12] = {
+static SKC_overlay_element_init_data actclear_init_tbl[12] = {
   { &actclear_name,      224, -544, 184, 19,  72, 1 },
   { &actclear_text,      304, -464, 184, 17,  48, 1 },
   { &actclear_text,      232, 1128, 204, 16, 112, 3 },
