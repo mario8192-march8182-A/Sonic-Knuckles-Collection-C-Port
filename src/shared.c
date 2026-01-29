@@ -1031,11 +1031,9 @@ void chk_tobi_diec1(SKC_sprite_status* p_actwk, unsigned char break_type) {
 
 
 void chg_scr_lim_r(SKC_sprite_status* p_actwk) {
-  unsigned short d0 = g_ram.scralim_right;
-  unsigned long d1 = p_actwk->u.obj.scralim_unknown + 0x4000;
-  d0 += d1 >> 16;
-  if (d0 < g_ram.scralim_m_right) {
-    g_ram.scralim_right = d0;
+  unsigned short scralim_right = g_ram.scralim_right + (p_actwk->u.obj.scralim_unknown + 0x4000 >> 16);
+  if (scralim_right < g_ram.scralim_m_right) {
+    g_ram.scralim_right = scralim_right;
   }
   else {
     g_ram.scralim_right = g_ram.scralim_m_right;
@@ -1050,11 +1048,9 @@ static void emy_frameout(SKC_sprite_status* p_actwk) {
 
 
 void chg_scr_lim_l(SKC_sprite_status* p_actwk) {
-  unsigned short d0 = g_ram.scralim_left;
-  unsigned long d1 = p_actwk->u.obj.scralim_unknown + 0x4000;
-  d0 -= d1 >> 16;
-  if (d0 > g_ram.scralim_m_left) {
-    g_ram.scralim_left = d0;
+  unsigned short scralim_left = g_ram.scralim_left - (p_actwk->u.obj.scralim_unknown + 0x4000 >> 16);
+  if (scralim_left > g_ram.scralim_m_left) {
+    g_ram.scralim_left = scralim_left;
   }
   else {
     g_ram.scralim_left = g_ram.scralim_m_left;
@@ -1076,11 +1072,9 @@ void chg_scr_lim_u(SKC_sprite_status* p_actwk) {
 
 
 void chg_scr_lim_d(SKC_sprite_status* p_actwk) {
-  unsigned short d0 = g_ram.scralim_down;
-  unsigned long d1 = p_actwk->u.obj.scralim_unknown + 0x8000;
-  d0 += d1 >> 16;
-  if (d0 <= g_ram.scralim_m_down) {
-    g_ram.scralim_down = d0;
+  unsigned short scralim_down = g_ram.scralim_down + (p_actwk->u.obj.scralim_unknown + 0x8000 >> 16);
+  if (scralim_down <= g_ram.scralim_m_down) {
+    g_ram.scralim_down = scralim_down;
   }
   else {
     g_ram.scralim_down = g_ram.scralim_m_down;
