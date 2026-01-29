@@ -1064,11 +1064,9 @@ void chg_scr_lim_l(SKC_sprite_status* p_actwk) {
 
 
 void chg_scr_lim_u(SKC_sprite_status* p_actwk) {
-  unsigned short d0 = g_ram.scralim_up;
-  unsigned long d1 = p_actwk->u.obj.scralim_unknown + 0x4000;
-  d0 -= d1 >> 16;
-  if (d0 > g_ram.scralim_m_up) {
-    g_ram.scralim_up = d0;
+  short scralim_up = g_ram.scralim_up - (short)(p_actwk->u.obj.scralim_unknown + 0x4000 >> 16);
+  if (scralim_up > g_ram.scralim_m_up) {
+    g_ram.scralim_up = scralim_up;
   }
   else {
     g_ram.scralim_up = g_ram.scralim_m_up;

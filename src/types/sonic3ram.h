@@ -30,7 +30,7 @@ typedef struct sonic3_ram {
   /* 08ffee12 */ unsigned short scralim_n_down;
   /* 08ffee14 */ unsigned short scralim_left;
   /* 08ffee16 */ unsigned short scralim_right;
-  /* 08ffee18 */ unsigned short scralim_up;
+  /* 08ffee18 */ short scralim_up;
   /* 08ffee1a */ unsigned short scralim_down;
   /* 08ffee33 */ unsigned char scr_resize_no;
   /* 08ffee3a */ unsigned long vs_vscroll;
