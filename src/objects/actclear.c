@@ -13,6 +13,7 @@
 #include "../utils/fp16.h"
 #include "../utils/stageno.h"
 #include "../action.h"
+#include "../actset.h"
 #include "../constants.h"
 #include "../unlze.h"
 #include "title.h"
@@ -108,7 +109,7 @@ static void actclear_move0(SKC_sprite_status* p_actwk) {
       result.actwk_ptr->actflg.compound = 1;
       result.actwk_ptr->patbase = actclearpat;
       result.actwk_ptr->u.obj.oya = p_actwk - g_ram.actwk;
-      result.actwk_ptr = actwkchk_next(result.actwk_ptr, &result.remaining_slot_cnt);
+      result = actwkchk_next(result);
       if (result.actwk_ptr == 0) break;
     }
 

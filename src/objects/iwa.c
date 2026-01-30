@@ -13,6 +13,7 @@
 #include "../utils/fp16.h"
 #include "../utils/stageno.h"
 #include "../action.h"
+#include "../actset.h"
 #include "../constants.h"
 #include "../hitchk.h"
 static void iwainit(SKC_sprite_status* p_actwk);

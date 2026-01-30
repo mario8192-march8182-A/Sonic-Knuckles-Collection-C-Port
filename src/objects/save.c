@@ -10,6 +10,7 @@
 #include "../utils/fp16.h"
 #include "../utils/stageno.h"
 #include "../action.h"
+#include "../actset.h"
 #include "../constants.h"
 #include "../etc.h"
 #include "../unlze.h"
@@ -436,7 +437,7 @@ void o_star(SKC_sprite_status* p_actwk) {
             | g_ram.actwk[0].u.play.cddat.aqua_baria << 6
             | g_ram.actwk[0].u.play.cddat.infinite_inertia << 7;
         g_ram.plresetflag = 1;
-        Clear_SpriteRingMem();
+        actunset();
       }
       else {
         short bonus_stage_id = (g_ram.plring_s - 20) / 15;
@@ -469,7 +470,7 @@ void o_star(SKC_sprite_status* p_actwk) {
             | g_ram.actwk[0].u.play.cddat.aqua_baria << 6;
         g_ram.plcddat2_s = g_ram.plcddat2_s2;
         g_ram.plresetflag = 1;
-        Clear_SpriteRingMem();
+        actunset();
       }
     }
     p_actwk->colicnt = 0;

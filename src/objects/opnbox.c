@@ -9,6 +9,7 @@
 #include "../utils/fp16.h"
 #include "../utils/stageno.h"
 #include "../action.h"
+#include "../actset.h"
 #include "../constants.h"
 #include "../hitchk.h"
 #include "../shared.h"

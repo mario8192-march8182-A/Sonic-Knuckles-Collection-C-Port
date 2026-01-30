@@ -5,6 +5,7 @@
 #include "../../types/spritestatus.h"
 #include "../../utils/bits.h"
 #include "../../utils/fp16.h"
+#include "../../actset.h"
 #include "../../etc.h"
 static void tloopinit(SKC_sprite_status* p_actwk);
 static void tloopmove(SKC_sprite_status* p_actwk);

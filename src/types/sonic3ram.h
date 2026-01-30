@@ -3,6 +3,7 @@
 
 #include "../constants.h"
 #include "acttimer.h"
+#include "aset.h"
 #include "cchgwork.h"
 #include "spritedata.h"
 #include "spritestatus.h"
@@ -58,6 +59,8 @@ typedef struct sonic3_ram {
   /* 08ffef4b */ unsigned char dataselect_selection;
   /* 08ffef4c */ SKC_play_type nosave_plmode;
   /* 08ffef56 */ unsigned short disable_interrupts_sram;
+  /* 08ffef5a */ SKC_sprite_status_handler* act_tbl_ptr;
+  /* 08ffef64 */ unsigned short scr_y_no;
   /* 08ffef7a */ unsigned short demoid;
   /* 08ffef80 */ unsigned short ringbuffer[RINGBUFFER_SLOTS];
   /* 08fff000 */ unsigned short colorwk4[64];
@@ -93,6 +96,13 @@ typedef struct sonic3_ram {
   /* 08fff760 */ short plmaxspdwk;
   /* 08fff762 */ short pladdspdwk;
   /* 08fff764 */ short plretspdwk;
+  /* 08fff76c */ unsigned short actset_rno;
+  /* 08fff76e */ short asetposi;
+  /* 08fff770 */ short asetposi2;
+  /* 08fff772 */ SKC_aset* asetadr;
+  /* 08fff776 */ SKC_aset* asetadr2;
+  /* 08fff77a */ unsigned short flagworkcnt;
+  /* 08fff77c */ unsigned short flagworkcnt2;
   /* 08fff7aa */ unsigned char bossstart;
   /* 08fff7c3 */ unsigned char soz_darkness_level;
   /* 08fff7c6 */ unsigned char reverse_gravity_flag;

@@ -8,6 +8,7 @@
 #include "../utils/fp16.h"
 #include "../utils/fp8.h"
 #include "../action.h"
+#include "../actset.h"
 #include "../constants.h"
 #include "../etc.h"
 static void ringinit(SKC_sprite_status* p_actwk);

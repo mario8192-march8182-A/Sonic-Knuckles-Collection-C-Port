@@ -12,6 +12,7 @@
 #include "../utils/fp16.h"
 #include "../utils/stageno.h"
 #include "../action.h"
+#include "../actset.h"
 #include "../constants.h"
 static void breakinit(SKC_sprite_status* p_actwk);
 static void breakmove(SKC_sprite_status* p_actwk);

@@ -32,6 +32,7 @@
 #include "utils/fp16.h"
 #include "utils/stageno.h"
 #include "action.h"
+#include "actset.h"
 #include "constants.h"
 #include "etc.h"
 static void chk_pt_next(SKC_sprite_status* p_actwk, signed char* p_pg_data);
