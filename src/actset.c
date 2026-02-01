@@ -71,7 +71,7 @@ static void actsetinit(void) {
       g_ram.scr_x_no = 0;
     }
     else {
-      short wk = (short)(g_ram.scra_h_posit >> 16) - 128;
+      short wk = (g_ram.scra_h_posit >> 16) - 128;
       g_ram.scr_x_no = wk - wk % 128;
     }
   }
@@ -110,9 +110,9 @@ static void actsetinit(void) {
 
 
 static void actset(void) {
-  short wk = (short)(g_ram.scra_v_posit >> 16) - 128;
+  short wk = (g_ram.scra_v_posit >> 16) - 128;
   g_ram.scr_y_no = wk - wk % 128;
-  wk = (short)(g_ram.scra_h_posit >> 16) - 128;
+  wk = (g_ram.scra_h_posit >> 16) - 128;
   g_ram.scr_x_no = wk - wk % 128;
   short scra_v_up = g_ram.scra_v_posit >> 16 & 0xFF80;
   short scra_v_down = (g_ram.scra_v_posit >> 16 & 0xFF80) + 512;
@@ -122,7 +122,7 @@ static void actset(void) {
     if (scra_v_up < 0) {
       scra_v_up = (unsigned short)scra_v_up & g_ram.scrc_v;
     }
-    else if (scra_v_down > g_ram.scrc_v + 1) {
+    else if (scra_v_down > (short)g_ram.scrc_v + 1) {
       scra_v_down &= g_ram.scrc_v;
     }
     p_actnoset = &actnoset_ywrap;
@@ -208,7 +208,7 @@ static void actset2(void) {
         }
         else {
           scra_v += 384;
-          if (scra_v >= g_ram.scrc_v) {
+          if (scra_v >= (short)g_ram.scrc_v) {
             scra_v &= g_ram.scrc_v;
           }
         }
@@ -224,7 +224,7 @@ static void actset2(void) {
       if (g_ram.scralim_up < 0) {
         if (g_ram.asetposi2 != 0 || scra_v == 128) {
           scra_v += 384;
-          if (scra_v >= g_ram.scrc_v) {
+          if (scra_v >= (short)g_ram.scrc_v) {
             scra_v &= g_ram.scrc_v;
           }
         }
@@ -237,7 +237,7 @@ static void actset2(void) {
       }
       else {
         scra_v += 384;
-        if (scra_v > g_ram.scrc_v) {
+        if (scra_v > (short)g_ram.scrc_v) {
           goto end;
         }
       }

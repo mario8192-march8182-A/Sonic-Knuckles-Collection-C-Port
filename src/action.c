@@ -226,7 +226,8 @@ void patset(void) {
             work.xposi -= g_ram.scra_h_posit_copy >> 16;
             if (work.xposi + p_actwk->sprhs >= 0 && work.xposi - p_actwk->sprhs < SCREEN_WIDTH_PX) {
               work.xposi += 128;
-              work.yposi = work.yposi - (g_ram.scra_v_posit_copy >> 16) + p_actwk->sprvs & g_ram.scrc_v;
+              work.yposi = work.yposi - (g_ram.scra_v_posit_copy >> 16) + p_actwk->sprvs;
+              work.yposi = (unsigned short)work.yposi & g_ram.scrc_v;
               if (work.yposi < p_actwk->sprvs * 2 + SCREEN_HEIGHT_PX) {
                 work.yposi = work.yposi + 128 - p_actwk->sprvs;
                 p_actwk->actflg.onscreen = 1;
@@ -297,7 +298,8 @@ static void patset_compound(SKC_sprite_status* p_actwk, SKC_patset_work* p_work)
     p_work->xposi -= g_ram.scra_h_posit_copy >> 16;
     if (p_work->xposi + p_actwk->sprhs >= 0 && p_work->xposi - p_actwk->sprhs < SCREEN_WIDTH_PX) {
       p_work->xposi += 128;
-      p_work->yposi = p_work->yposi - (g_ram.scra_v_posit_copy >> 16) + p_actwk->sprvs & g_ram.scrc_v;
+      p_work->yposi = p_work->yposi - (g_ram.scra_v_posit_copy >> 16) + p_actwk->sprvs;
+      p_work->yposi = (unsigned short)p_work->yposi & g_ram.scrc_v;
       if (p_work->yposi < p_actwk->sprvs * 2 + SCREEN_HEIGHT_PX) {
         p_work->yposi = p_work->yposi + 128 - p_actwk->sprvs;
         p_actwk->actflg.onscreen = 1;
@@ -320,7 +322,8 @@ static void patset_compound(SKC_sprite_status* p_actwk, SKC_patset_work* p_work)
         p_work->yposi = p_actwk->u.compound.children[i].yposi;
         if (p_actwk->actflg.relative_coordinates == 1) {
           p_work->xposi -= (g_ram.scra_h_posit_copy >> 16) + 128;
-          p_work->yposi = p_work->yposi - (g_ram.scra_v_posit_copy >> 16) + 128 & g_ram.scrc_v;
+          p_work->yposi = p_work->yposi - (g_ram.scra_v_posit_copy >> 16) + 128;
+          p_work->yposi = (unsigned short)p_work->yposi & g_ram.scrc_v;
         }
         SKC_sprite_pattern** pp_patterns = (SKC_sprite_pattern**)p_actwk->patbase;
         SKC_sprite_pattern* p_patterns = pp_patterns[p_actwk->u.compound.children[i].patno];
@@ -419,10 +422,12 @@ static void vspatset(void) {
         }
         else {
           if (p_actwk->actflg.relative_coordinates == 1) {
-            work.xposi = work.xposi - (g_ram.scra_h_posit_copy >> 16) + p_actwk->sprhs & g_ram.scrc3;
+            work.xposi = work.xposi - (g_ram.scra_h_posit_copy >> 16) + p_actwk->sprhs;
+            work.xposi = (unsigned short)work.xposi & g_ram.scrc3;
             if (work.xposi < p_actwk->sprhs * 2 + SCREEN_WIDTH_PX) {
               work.xposi = work.xposi + 128 - p_actwk->sprhs;
-              work.yposi = work.yposi - (g_ram.scra_v_posit_copy >> 16) + p_actwk->sprvs & g_ram.scrc_v;
+              work.yposi = work.yposi - (g_ram.scra_v_posit_copy >> 16) + p_actwk->sprvs;
+              work.yposi = (unsigned short)work.yposi & g_ram.scrc_v;
               if (work.yposi < p_actwk->sprvs * 2 + SCREEN_HEIGHT_PX / 2) {
                 work.yposi = work.yposi + 128 - p_actwk->sprvs;
                 p_actwk->actflg.onscreen = 1;
@@ -473,10 +478,12 @@ static void vspatset(void) {
         }
         else {
           if (p_actwk->actflg.relative_coordinates == 1) {
-            work.xposi = work.xposi - (g_ram.vs_scra_h_posit_copy >> 16) + p_actwk->sprhs & g_ram.scrc3;
+            work.xposi = work.xposi - (g_ram.vs_scra_h_posit_copy >> 16) + p_actwk->sprhs;
+            work.xposi = (unsigned short)work.xposi & g_ram.scrc3;
             if (work.xposi < p_actwk->sprhs * 2 + SCREEN_WIDTH_PX) {
               work.xposi = work.xposi + 128 - p_actwk->sprhs;
-              work.yposi = work.yposi - (g_ram.vs_scra_v_posit_copy >> 16) + p_actwk->sprvs & g_ram.scrc_v;
+              work.yposi = work.yposi - (g_ram.vs_scra_v_posit_copy >> 16) + p_actwk->sprvs;
+              work.yposi = (unsigned short)work.yposi & g_ram.scrc_v;
               if (work.yposi < p_actwk->sprvs * 2 + SCREEN_HEIGHT_PX / 2) {
                 work.yposi = work.yposi + 128 - p_actwk->sprvs;
                 p_actwk->actflg.onscreen = 1;
@@ -511,10 +518,12 @@ static void vspatset(void) {
 
 
 static void vspatset_pl_compound(SKC_sprite_status* p_actwk, SKC_patset_work* p_work) {
-  p_work->xposi = p_work->xposi - (g_ram.scra_h_posit_copy >> 16) + p_actwk->sprhs & g_ram.scrc3;
+  p_work->xposi = p_work->xposi - (g_ram.scra_h_posit_copy >> 16) + p_actwk->sprhs;
+  p_work->xposi = (unsigned short)p_work->xposi & g_ram.scrc3;
   if (p_work->xposi < p_actwk->sprhs * 2 + SCREEN_WIDTH_PX) {
     p_work->xposi = p_work->xposi + 128 - p_actwk->sprhs;
-    p_work->yposi = p_work->yposi - (g_ram.scra_v_posit_copy >> 16) + p_actwk->sprvs & g_ram.scrc_v;
+    p_work->yposi = p_work->yposi - (g_ram.scra_v_posit_copy >> 16) + p_actwk->sprvs;
+    p_work->yposi = (unsigned short)p_work->yposi & g_ram.scrc_v;
     if (p_work->yposi < p_actwk->sprvs * 2 + SCREEN_HEIGHT_PX / 2) {
       p_work->yposi = p_work->yposi + 128 - p_actwk->sprvs;
       p_actwk->actflg.onscreen = 1;
@@ -533,9 +542,11 @@ static void vspatset_pl_compound(SKC_sprite_status* p_actwk, SKC_patset_work* p_
     if (p_work->sprite_left_cnt > 0) {
       for (int i = 0; i < p_actwk->u.compound.child_cnt; ++i) {
         p_work->xposi = p_actwk->u.compound.children[i].xposi;
-        p_work->xposi = p_work->xposi - (g_ram.scra_h_posit_copy >> 16) + 128 & g_ram.scrc3;
+        p_work->xposi = p_work->xposi - (g_ram.scra_h_posit_copy >> 16) + 128;
+        p_work->xposi = (unsigned short)p_work->xposi & g_ram.scrc3;
         p_work->yposi = p_actwk->u.compound.children[i].yposi;
-        p_work->yposi = p_work->yposi - (g_ram.scra_v_posit_copy >> 16) + 128 & g_ram.scrc_v;
+        p_work->yposi = p_work->yposi - (g_ram.scra_v_posit_copy >> 16) + 128;
+        p_work->yposi = (unsigned short)p_work->yposi & g_ram.scrc_v;
         SKC_sprite_pattern** pp_patterns = (SKC_sprite_pattern**)p_actwk->patbase;
         SKC_sprite_pattern* p_patterns = pp_patterns[p_actwk->u.compound.children[i].patno];
         if (p_patterns->cnt > 0) {
@@ -551,10 +562,12 @@ static void vspatset_pl_compound(SKC_sprite_status* p_actwk, SKC_patset_work* p_
 
 
 static void vspatset_pl2_compound(SKC_sprite_status* p_actwk, SKC_patset_work* p_work) {
-  p_work->xposi = p_work->xposi - (g_ram.vs_scra_h_posit_copy >> 16) + p_actwk->sprhs & g_ram.scrc3;
+  p_work->xposi = p_work->xposi - (g_ram.vs_scra_h_posit_copy >> 16) + p_actwk->sprhs;
+  p_work->xposi = (unsigned short)p_work->xposi & g_ram.scrc3;
   if (p_work->xposi < p_actwk->sprhs * 2 + SCREEN_WIDTH_PX) {
     p_work->xposi = p_work->xposi + 128 - p_actwk->sprhs;
-    p_work->yposi = p_work->yposi - (g_ram.vs_scra_v_posit_copy >> 16) + p_actwk->sprvs & g_ram.scrc_v;
+    p_work->yposi = p_work->yposi - (g_ram.vs_scra_v_posit_copy >> 16) + p_actwk->sprvs;
+    p_work->yposi = (unsigned short)p_work->yposi & g_ram.scrc_v;
     if (p_work->yposi < p_actwk->sprvs * 2 + SCREEN_HEIGHT_PX / 2) {
       p_work->yposi = p_work->yposi + 128 + SCREEN_HEIGHT_PX / 2 - p_actwk->sprvs;
       p_actwk->actflg.onscreen = 1;
@@ -573,9 +586,11 @@ static void vspatset_pl2_compound(SKC_sprite_status* p_actwk, SKC_patset_work* p
     if (p_work->sprite_left_cnt > 0) {
       for (int i = 0; i < p_actwk->u.compound.child_cnt; ++i) {
         p_work->xposi = p_actwk->u.compound.children[i].xposi;
-        p_work->xposi = p_work->xposi - (g_ram.vs_scra_h_posit_copy >> 16) + 128 & g_ram.scrc3;
+        p_work->xposi = p_work->xposi - (g_ram.vs_scra_h_posit_copy >> 16) + 128;
+        p_work->xposi = (unsigned short)p_work->xposi & g_ram.scrc3;
         p_work->yposi = p_actwk->u.compound.children[i].yposi;
-        p_work->yposi = p_work->yposi - (g_ram.vs_scra_v_posit_copy >> 16) + 128 & g_ram.scrc_v;
+        p_work->yposi = p_work->yposi - (g_ram.vs_scra_v_posit_copy >> 16) + 128;
+        p_work->yposi = (unsigned short)p_work->yposi & g_ram.scrc_v;
         p_work->yposi += SCREEN_HEIGHT_PX / 2;
         SKC_sprite_pattern** pp_patterns = (SKC_sprite_pattern**)p_actwk->patbase;
         SKC_sprite_pattern* p_patterns = pp_patterns[p_actwk->u.compound.children[i].patno];
