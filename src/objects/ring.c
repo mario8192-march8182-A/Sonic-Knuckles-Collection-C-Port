@@ -293,7 +293,7 @@ static void flyringmove(SKC_sprite_status* p_actwk) {
         }
       }
       if (g_ram.flyring_patcnt == 0
-          || g_ram.scralim_down + 224 < (unsigned short)fp16_get_integer(p_actwk->yposi)) {
+          || g_ram.scralim_down + SCREEN_HEIGHT_PX < (unsigned short)fp16_get_integer(p_actwk->yposi)) {
         flyringerase(p_actwk);
         return;
       }
@@ -341,7 +341,7 @@ static void flyringmoveg(SKC_sprite_status* p_actwk) {
         }
       }
       if (g_ram.flyring_patcnt == 0
-          || g_ram.scralim_down + 224 < (unsigned short)fp16_get_integer(p_actwk->yposi)) {
+          || g_ram.scralim_down + SCREEN_HEIGHT_PX < (unsigned short)fp16_get_integer(p_actwk->yposi)) {
         flyringerase(p_actwk);
         return;
       }
