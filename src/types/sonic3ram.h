@@ -60,7 +60,7 @@ typedef struct sonic3_ram {
   /* 08ffef4c */ SKC_play_type nosave_plmode;
   /* 08ffef56 */ unsigned short disable_interrupts_sram;
   /* 08ffef5a */ SKC_sprite_status_handler* act_tbl_ptr;
-  /* 08ffef64 */ unsigned short scr_y_no;
+  /* 08ffef64 */ short scr_y_no;
   /* 08ffef7a */ unsigned short demoid;
   /* 08ffef80 */ unsigned short ringbuffer[RINGBUFFER_SLOTS];
   /* 08fff000 */ unsigned short colorwk4[64];
