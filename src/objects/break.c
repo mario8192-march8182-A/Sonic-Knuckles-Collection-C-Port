@@ -543,7 +543,7 @@ static void break2down2__sub(SKC_sprite_status* p_actwk, SKC_sprite_status* p_pl
   unsigned short width = data.sprhs * 2;
   if (p_playerwk->u.play.cddat.jump == 0 && distance >= 0 && (unsigned short)distance < width) {
     if (p_actwk->u.obj.cddat.right == 1) {
-      distance = -distance + width;
+      distance = -distance + (short)width;
     }
     if (data.sprvs_ground > p_timer_data[0] - p_timer_data[distance / 16]) return;
   }

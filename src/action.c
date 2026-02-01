@@ -224,12 +224,12 @@ void patset(void) {
         else {
           if (p_actwk->actflg.relative_coordinates == 1) {
             work.xposi -= g_ram.scra_h_posit_copy >> 16;
-            if (work.xposi + p_actwk->sprhs >= 0 && work.xposi - p_actwk->sprhs < SCREEN_WIDTH_PX) {
+            if (work.xposi + (short)p_actwk->sprhs >= 0 && work.xposi - (short)p_actwk->sprhs < SCREEN_WIDTH_PX) {
               work.xposi += 128;
-              work.yposi = work.yposi - (g_ram.scra_v_posit_copy >> 16) + p_actwk->sprvs;
+              work.yposi = work.yposi - (g_ram.scra_v_posit_copy >> 16) + (short)p_actwk->sprvs;
               work.yposi = (unsigned short)work.yposi & g_ram.scrc_v;
-              if (work.yposi < p_actwk->sprvs * 2 + SCREEN_HEIGHT_PX) {
-                work.yposi = work.yposi + 128 - p_actwk->sprvs;
+              if (work.yposi < (short)p_actwk->sprvs * 2 + SCREEN_HEIGHT_PX) {
+                work.yposi = work.yposi + 128 - (short)p_actwk->sprvs;
                 p_actwk->actflg.onscreen = 1;
               }
             }
@@ -285,10 +285,10 @@ void patset(void) {
 static void patset_compound(SKC_sprite_status* p_actwk, SKC_patset_work* p_work) {
   if (p_actwk->actflg.relative_coordinates == 0) {
     p_work->xposi -= 128;
-    if (p_work->xposi + p_actwk->sprhs >= 0 && p_work->xposi - p_actwk->sprhs < SCREEN_WIDTH_PX) {
+    if (p_work->xposi + (short)p_actwk->sprhs >= 0 && p_work->xposi - (short)p_actwk->sprhs < SCREEN_WIDTH_PX) {
       p_work->xposi += 128;
       p_work->yposi -= 128;
-      if (p_work->yposi + p_actwk->sprvs >= 0 && p_work->yposi - p_actwk->sprvs < SCREEN_HEIGHT_PX) {
+      if (p_work->yposi + (short)p_actwk->sprvs >= 0 && p_work->yposi - (short)p_actwk->sprvs < SCREEN_HEIGHT_PX) {
         p_work->yposi += 128;
         p_actwk->actflg.onscreen = 1;
       }
@@ -296,12 +296,12 @@ static void patset_compound(SKC_sprite_status* p_actwk, SKC_patset_work* p_work)
   }
   else {
     p_work->xposi -= g_ram.scra_h_posit_copy >> 16;
-    if (p_work->xposi + p_actwk->sprhs >= 0 && p_work->xposi - p_actwk->sprhs < SCREEN_WIDTH_PX) {
+    if (p_work->xposi + (short)p_actwk->sprhs >= 0 && p_work->xposi - (short)p_actwk->sprhs < SCREEN_WIDTH_PX) {
       p_work->xposi += 128;
-      p_work->yposi = p_work->yposi - (g_ram.scra_v_posit_copy >> 16) + p_actwk->sprvs;
+      p_work->yposi = p_work->yposi - (g_ram.scra_v_posit_copy >> 16) + (short)p_actwk->sprvs;
       p_work->yposi = (unsigned short)p_work->yposi & g_ram.scrc_v;
-      if (p_work->yposi < p_actwk->sprvs * 2 + SCREEN_HEIGHT_PX) {
-        p_work->yposi = p_work->yposi + 128 - p_actwk->sprvs;
+      if (p_work->yposi < (short)p_actwk->sprvs * 2 + SCREEN_HEIGHT_PX) {
+        p_work->yposi = p_work->yposi + 128 - (short)p_actwk->sprvs;
         p_actwk->actflg.onscreen = 1;
       }
     }
@@ -345,7 +345,7 @@ void spatset(SKC_sprite_status* p_actwk, SKC_patset_work* p_work) {
     SKC_sprite_placement placement = p_work->placements_ptr[i];
     unsigned char yshapeoffset = yshapeoffsets[placement.etc] * p_actwk->actflg.vflip;
     unsigned char xshapeoffset = xshapeoffsets[placement.etc] * p_actwk->actflg.hflip;
-    p_data->vp = placement.yoff * (!p_actwk->actflg.vflip * 2 - 1) - yshapeoffset + p_work->yposi;
+    p_data->vp = placement.yoff * (!(short)p_actwk->actflg.vflip * 2 - 1) - yshapeoffset + p_work->yposi;
     p_data->vs = placement.etc & 3;
     p_data->hs = (placement.etc & 0xC) >> 2;
     unsigned short sproffset = placement.index + p_actwk->sproffset;
@@ -354,7 +354,7 @@ void spatset(SKC_sprite_status* p_actwk, SKC_patset_work* p_work) {
     p_data->vf = p_actwk->actflg.vflip == 0 ? !!(sproffset & 0x1000) : !!(sproffset ^ 0x1000);
     p_data->pl = (sproffset & 0x6000) >> 13;
     p_data->pr = !!(sproffset & 0x8000);
-    p_data->hp = (placement.xoff * (!p_actwk->actflg.hflip * 2 - 1) - xshapeoffset + p_work->xposi) & 0x1FF;
+    p_data->hp = (placement.xoff * (!(short)p_actwk->actflg.hflip * 2 - 1) - xshapeoffset + p_work->xposi) & 0x1FF;
     if (p_data->hp == 0) {
       ++p_data->hp;
     }
@@ -377,8 +377,8 @@ static void spatset_compound(SKC_sprite_status* p_actwk, SKC_patset_work* p_work
     SKC_sprite_placement placement = p_work->placements_ptr[i];
     unsigned char yshapeoffset = yshapeoffsets[placement.etc] * p_actwk->actflg.vflip;
     unsigned char xshapeoffset = xshapeoffsets[placement.etc] * p_actwk->actflg.hflip;
-    short yposi = placement.yoff * (!p_actwk->actflg.vflip * 2 - 1) - yshapeoffset + p_work->yposi;
-    short xposi = placement.xoff * (!p_actwk->actflg.hflip * 2 - 1) - xshapeoffset + p_work->xposi;
+    short yposi = placement.yoff * (!(short)p_actwk->actflg.vflip * 2 - 1) - yshapeoffset + p_work->yposi;
+    short xposi = placement.xoff * (!(short)p_actwk->actflg.hflip * 2 - 1) - xshapeoffset + p_work->xposi;
     if (yposi > 96 && yposi < 352 && xposi > 96 && xposi < 448) {
       p_data->vp = yposi;
       p_data->vs = placement.etc & 3;
@@ -422,14 +422,14 @@ static void vspatset(void) {
         }
         else {
           if (p_actwk->actflg.relative_coordinates == 1) {
-            work.xposi = work.xposi - (g_ram.scra_h_posit_copy >> 16) + p_actwk->sprhs;
+            work.xposi = work.xposi - (g_ram.scra_h_posit_copy >> 16) + (short)p_actwk->sprhs;
             work.xposi = (unsigned short)work.xposi & g_ram.scrc3;
-            if (work.xposi < p_actwk->sprhs * 2 + SCREEN_WIDTH_PX) {
-              work.xposi = work.xposi + 128 - p_actwk->sprhs;
-              work.yposi = work.yposi - (g_ram.scra_v_posit_copy >> 16) + p_actwk->sprvs;
+            if (work.xposi < (short)p_actwk->sprhs * 2 + SCREEN_WIDTH_PX) {
+              work.xposi = work.xposi + 128 - (short)p_actwk->sprhs;
+              work.yposi = work.yposi - (g_ram.scra_v_posit_copy >> 16) + (short)p_actwk->sprvs;
               work.yposi = (unsigned short)work.yposi & g_ram.scrc_v;
-              if (work.yposi < p_actwk->sprvs * 2 + SCREEN_HEIGHT_PX / 2) {
-                work.yposi = work.yposi + 128 - p_actwk->sprvs;
+              if (work.yposi < (short)p_actwk->sprvs * 2 + SCREEN_HEIGHT_PX / 2) {
+                work.yposi = work.yposi + 128 - (short)p_actwk->sprvs;
                 p_actwk->actflg.onscreen = 1;
               }
             }
@@ -478,14 +478,14 @@ static void vspatset(void) {
         }
         else {
           if (p_actwk->actflg.relative_coordinates == 1) {
-            work.xposi = work.xposi - (g_ram.vs_scra_h_posit_copy >> 16) + p_actwk->sprhs;
+            work.xposi = work.xposi - (g_ram.vs_scra_h_posit_copy >> 16) + (short)p_actwk->sprhs;
             work.xposi = (unsigned short)work.xposi & g_ram.scrc3;
-            if (work.xposi < p_actwk->sprhs * 2 + SCREEN_WIDTH_PX) {
-              work.xposi = work.xposi + 128 - p_actwk->sprhs;
-              work.yposi = work.yposi - (g_ram.vs_scra_v_posit_copy >> 16) + p_actwk->sprvs;
+            if (work.xposi < (short)p_actwk->sprhs * 2 + SCREEN_WIDTH_PX) {
+              work.xposi = work.xposi + 128 - (short)p_actwk->sprhs;
+              work.yposi = work.yposi - (g_ram.vs_scra_v_posit_copy >> 16) + (short)p_actwk->sprvs;
               work.yposi = (unsigned short)work.yposi & g_ram.scrc_v;
-              if (work.yposi < p_actwk->sprvs * 2 + SCREEN_HEIGHT_PX / 2) {
-                work.yposi = work.yposi + 128 - p_actwk->sprvs;
+              if (work.yposi < (short)p_actwk->sprvs * 2 + SCREEN_HEIGHT_PX / 2) {
+                work.yposi = work.yposi + 128 - (short)p_actwk->sprvs;
                 p_actwk->actflg.onscreen = 1;
               }
             }
@@ -518,14 +518,14 @@ static void vspatset(void) {
 
 
 static void vspatset_pl_compound(SKC_sprite_status* p_actwk, SKC_patset_work* p_work) {
-  p_work->xposi = p_work->xposi - (g_ram.scra_h_posit_copy >> 16) + p_actwk->sprhs;
+  p_work->xposi = p_work->xposi - (g_ram.scra_h_posit_copy >> 16) + (short)p_actwk->sprhs;
   p_work->xposi = (unsigned short)p_work->xposi & g_ram.scrc3;
-  if (p_work->xposi < p_actwk->sprhs * 2 + SCREEN_WIDTH_PX) {
-    p_work->xposi = p_work->xposi + 128 - p_actwk->sprhs;
-    p_work->yposi = p_work->yposi - (g_ram.scra_v_posit_copy >> 16) + p_actwk->sprvs;
+  if (p_work->xposi < (short)p_actwk->sprhs * 2 + SCREEN_WIDTH_PX) {
+    p_work->xposi = p_work->xposi + 128 - (short)p_actwk->sprhs;
+    p_work->yposi = p_work->yposi - (g_ram.scra_v_posit_copy >> 16) + (short)p_actwk->sprvs;
     p_work->yposi = (unsigned short)p_work->yposi & g_ram.scrc_v;
-    if (p_work->yposi < p_actwk->sprvs * 2 + SCREEN_HEIGHT_PX / 2) {
-      p_work->yposi = p_work->yposi + 128 - p_actwk->sprvs;
+    if (p_work->yposi < (short)p_actwk->sprvs * 2 + SCREEN_HEIGHT_PX / 2) {
+      p_work->yposi = p_work->yposi + 128 - (short)p_actwk->sprvs;
       p_actwk->actflg.onscreen = 1;
     }
   }
@@ -562,14 +562,14 @@ static void vspatset_pl_compound(SKC_sprite_status* p_actwk, SKC_patset_work* p_
 
 
 static void vspatset_pl2_compound(SKC_sprite_status* p_actwk, SKC_patset_work* p_work) {
-  p_work->xposi = p_work->xposi - (g_ram.vs_scra_h_posit_copy >> 16) + p_actwk->sprhs;
+  p_work->xposi = p_work->xposi - (g_ram.vs_scra_h_posit_copy >> 16) + (short)p_actwk->sprhs;
   p_work->xposi = (unsigned short)p_work->xposi & g_ram.scrc3;
-  if (p_work->xposi < p_actwk->sprhs * 2 + SCREEN_WIDTH_PX) {
-    p_work->xposi = p_work->xposi + 128 - p_actwk->sprhs;
-    p_work->yposi = p_work->yposi - (g_ram.vs_scra_v_posit_copy >> 16) + p_actwk->sprvs;
+  if (p_work->xposi < (short)p_actwk->sprhs * 2 + SCREEN_WIDTH_PX) {
+    p_work->xposi = p_work->xposi + 128 - (short)p_actwk->sprhs;
+    p_work->yposi = p_work->yposi - (g_ram.vs_scra_v_posit_copy >> 16) + (short)p_actwk->sprvs;
     p_work->yposi = (unsigned short)p_work->yposi & g_ram.scrc_v;
-    if (p_work->yposi < p_actwk->sprvs * 2 + SCREEN_HEIGHT_PX / 2) {
-      p_work->yposi = p_work->yposi + 128 + SCREEN_HEIGHT_PX / 2 - p_actwk->sprvs;
+    if (p_work->yposi < (short)p_actwk->sprvs * 2 + SCREEN_HEIGHT_PX / 2) {
+      p_work->yposi = p_work->yposi + 128 + SCREEN_HEIGHT_PX / 2 - (short)p_actwk->sprvs;
       p_actwk->actflg.onscreen = 1;
     }
   }
