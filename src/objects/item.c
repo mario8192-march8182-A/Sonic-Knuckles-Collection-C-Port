@@ -182,7 +182,7 @@ static void itemsub1(SKC_sprite_status* p_actwk, SKC_sprite_status* p_playerwk, 
 
 static void itemsub2(SKC_sprite_status* p_actwk, SKC_sprite_status* p_playerwk, hitchk_data data) {
   short distance = fp16_get_integer(p_playerwk->xposi) - fp16_get_integer(p_actwk->xposi) + data.sprhs;
-  if (p_playerwk->u.play.cddat.jump == 0 && distance >= 0 && (unsigned short)distance < data.sprhs * 2) {
+  if (p_playerwk->u.play.cddat.jump == 0 && distance >= 0 && distance < data.sprhs * 2) {
     MvSonicOnPtfm(data.xposi);
   }
   else {

@@ -541,7 +541,7 @@ static void break2down2__sub(SKC_sprite_status* p_actwk, SKC_sprite_status* p_pl
 
   short distance = fp16_get_integer(p_playerwk->xposi) - fp16_get_integer(p_actwk->xposi) + data.sprhs;
   unsigned short width = data.sprhs * 2;
-  if (p_playerwk->u.play.cddat.jump == 0 && distance >= 0 && (unsigned short)distance < width) {
+  if (p_playerwk->u.play.cddat.jump == 0 && distance >= 0 && distance < width) {
     if (p_actwk->u.obj.cddat.right == 1) {
       distance = -distance + (short)width;
     }
