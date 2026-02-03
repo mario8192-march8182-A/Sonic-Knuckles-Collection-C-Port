@@ -1,7 +1,7 @@
 #include "toge.h"
 #include <stdbool.h>
 #include "../types/hitchkdata.h"
-#include "../types/hitchkresults.h"
+#include "../types/hitchkresult.h"
 #include "../types/sonic3ram.h"
 #include "../types/spritepattern.h"
 #include "../types/spritestatus.h"
@@ -138,7 +138,12 @@ static void vstogeinit(SKC_sprite_status* p_actwk, unsigned char size_kind) {
 
 static void togemove(SKC_sprite_status* p_actwk) {
   togekind(p_actwk);
-  hitchk_data data = { p_actwk->sprhs + 11, p_actwk->sprvs, p_actwk->sprvs + 1, fp16_get_integer(p_actwk->xposi) };
+  SKC_hitchk_data data = {
+    p_actwk->sprhs + 11,
+    p_actwk->sprvs,
+    p_actwk->sprvs + 1,
+    fp16_get_integer(p_actwk->xposi)
+  };
   hitchk(p_actwk, data);
   if (p_actwk->u.obj.cddat.plride == 1) {
     togedamegesub(p_actwk, &g_ram.actwk[0]);
@@ -152,13 +157,18 @@ static void togemove(SKC_sprite_status* p_actwk) {
 
 static void togemove2(SKC_sprite_status* p_actwk) {
   togekind(p_actwk);
-  hitchk_data data = { p_actwk->sprhs + 11, p_actwk->sprvs, p_actwk->sprvs + 1, fp16_get_integer(p_actwk->xposi) };
-  hitchk_results results = hitchk(p_actwk, data);
-  if (BIT_IS_SET(results.plcoli, 0)) {
+  SKC_hitchk_data data = {
+    p_actwk->sprhs + 11,
+    p_actwk->sprvs,
+    p_actwk->sprvs + 1,
+    fp16_get_integer(p_actwk->xposi)
+  };
+  SKC_hitchk_result result = hitchk(p_actwk, data);
+  if (result.plcoli[0] == HITCHK_COLI_SIDE) {
     togedamegesub(p_actwk, &g_ram.actwk[0]);
     p_actwk->u.obj.cddat.plpush = 0;
   }
-  if (BIT_IS_SET(results.plcoli, 1)) {
+  if (result.plcoli[1] == HITCHK_COLI_SIDE) {
     togedamegesub(p_actwk, &g_ram.actwk[1]);
     p_actwk->u.obj.cddat.pl2push = 0;
   }
@@ -168,12 +178,17 @@ static void togemove2(SKC_sprite_status* p_actwk) {
 
 static void togemove3(SKC_sprite_status* p_actwk) {
   togekind(p_actwk);
-  hitchk_data data = { p_actwk->sprhs + 11, p_actwk->sprvs, p_actwk->sprvs + 1, fp16_get_integer(p_actwk->xposi) };
-  hitchk_results results = hitchk(p_actwk, data);
-  if (BIT_IS_SET(results.plcoli, 2)) {
+  SKC_hitchk_data data = {
+    p_actwk->sprhs + 11,
+    p_actwk->sprvs,
+    p_actwk->sprvs + 1,
+    fp16_get_integer(p_actwk->xposi)
+  };
+  SKC_hitchk_result result = hitchk(p_actwk, data);
+  if (result.plcoli[0] == HITCHK_COLI_BOTTOM) {
     togedamegesub(p_actwk, &g_ram.actwk[0]);
   }
-  if (BIT_IS_SET(results.plcoli, 3)) {
+  if (result.plcoli[1] == HITCHK_COLI_BOTTOM) {
     togedamegesub(p_actwk, &g_ram.actwk[1]);
   }
   frameoutchk2(p_actwk, p_actwk->u.obj.actfree.toge.xposi_init);
@@ -182,7 +197,12 @@ static void togemove3(SKC_sprite_status* p_actwk) {
 
 static void vstogemove(SKC_sprite_status* p_actwk) {
   vstogekind(p_actwk);
-  hitchk_data data = { p_actwk->sprhs + 7, p_actwk->sprvs, p_actwk->sprvs + 1, fp16_get_integer(p_actwk->xposi) };
+  SKC_hitchk_data data = {
+    p_actwk->sprhs + 7,
+    p_actwk->sprvs,
+    p_actwk->sprvs + 1,
+    fp16_get_integer(p_actwk->xposi)
+  };
   hitchk(p_actwk, data);
   if (p_actwk->u.obj.cddat.plride == 1) {
     togedamegesub(p_actwk, &g_ram.actwk[0]);
@@ -196,13 +216,18 @@ static void vstogemove(SKC_sprite_status* p_actwk) {
 
 static void vstogemove2(SKC_sprite_status* p_actwk) {
   vstogekind(p_actwk);
-  hitchk_data data = { p_actwk->sprhs + 7, p_actwk->sprvs, p_actwk->sprvs + 1, fp16_get_integer(p_actwk->xposi) };
-  hitchk_results results = hitchk(p_actwk, data);
-  if (BIT_IS_SET(results.plcoli, 0)) {
+  SKC_hitchk_data data = {
+    p_actwk->sprhs + 7,
+    p_actwk->sprvs,
+    p_actwk->sprvs + 1,
+    fp16_get_integer(p_actwk->xposi)
+  };
+  SKC_hitchk_result result = hitchk(p_actwk, data);
+  if (result.plcoli[0] == HITCHK_COLI_SIDE) {
     togedamegesub(p_actwk, &g_ram.actwk[0]);
     p_actwk->u.obj.cddat.plpush = 1;
   }
-  if (BIT_IS_SET(results.plcoli, 1)) {
+  if (result.plcoli[1] == HITCHK_COLI_SIDE) {
     togedamegesub(p_actwk, &g_ram.actwk[1]);
     p_actwk->u.obj.cddat.pl2push = 1;
   }
@@ -212,12 +237,17 @@ static void vstogemove2(SKC_sprite_status* p_actwk) {
 
 static void vstogemove3(SKC_sprite_status* p_actwk) {
   vstogekind(p_actwk);
-  hitchk_data data = { p_actwk->sprhs + 7, p_actwk->sprvs, p_actwk->sprvs + 1, fp16_get_integer(p_actwk->xposi) };
-  hitchk_results results = hitchk(p_actwk, data);
-  if (BIT_IS_SET(results.plcoli, 2)) {
+  SKC_hitchk_data data = {
+    p_actwk->sprhs + 7,
+    p_actwk->sprvs,
+    p_actwk->sprvs + 1,
+    fp16_get_integer(p_actwk->xposi)
+  };
+  SKC_hitchk_result result = hitchk(p_actwk, data);
+  if (result.plcoli[0] == HITCHK_COLI_BOTTOM) {
     togedamegesub(p_actwk, &g_ram.actwk[0]);
   }
-  if (BIT_IS_SET(results.plcoli, 3)) {
+  if (result.plcoli[1] == HITCHK_COLI_BOTTOM) {
     togedamegesub(p_actwk, &g_ram.actwk[1]);
   }
   actionsub(p_actwk);

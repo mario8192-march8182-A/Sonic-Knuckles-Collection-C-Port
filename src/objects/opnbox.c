@@ -87,7 +87,7 @@ void opnbox(SKC_sprite_status* p_actwk) {
 
   short xposi = fp16_get_integer(p_actwk->xposi);
   act_tbl[p_actwk->r_no / 2](p_actwk);
-  hitchk_data data = { 43, 24, 24, xposi };
+  SKC_hitchk_data data = { 43, 24, 24, xposi };
   hitchk(p_actwk, data);
   actionsub(p_actwk);
 }
@@ -476,13 +476,13 @@ static void get_closero(SKC_sprite_status* p_actwk, SKC_sprite_status* p_otherwk
 
 
 void chk_switch_ride(SKC_sprite_status* p_actwk) {
-  hitchk_data data = { 27, 4, 6, fp16_get_integer(p_actwk->xposi) };
+  SKC_hitchk_data data = { 27, 4, 6, fp16_get_integer(p_actwk->xposi) };
   hitchk(p_actwk, data);
 }
 
 
 static void chk_switchu_ride(SKC_sprite_status* p_actwk) {
-  hitchk_data data = { 27, 5, 9, fp16_get_integer(p_actwk->xposi) };
+  SKC_hitchk_data data = { 27, 5, 9, fp16_get_integer(p_actwk->xposi) };
   hitchk(p_actwk, data);
 }
 

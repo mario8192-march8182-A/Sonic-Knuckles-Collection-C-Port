@@ -2,7 +2,7 @@
 #include <stdbool.h>
 #include "../types/actwkchkresult.h"
 #include "../types/hitchkdata.h"
-#include "../types/hitchkresults.h"
+#include "../types/hitchkresult.h"
 #include "../types/sonic3ram.h"
 #include "../types/spritepattern.h"
 #include "../types/spritestatus.h"
@@ -276,12 +276,20 @@ static void sjumpinit_end(SKC_sprite_status* p_actwk) {
 
 
 static void sjumpmove(SKC_sprite_status* p_actwk) {
-  hitchk_data data = { 27, 8, 16, fp16_get_integer(p_actwk->xposi) };
-  plhitchk2(p_actwk, &g_ram.actwk[0], data, 3);
+  SKC_hitchk_data data = { 27, 8, 16, fp16_get_integer(p_actwk->xposi) };
+  bool plride = p_actwk->u.obj.cddat.plride;
+  bool plpush = p_actwk->u.obj.cddat.plpush;
+  plhitchk_skip_onscreen(p_actwk, &g_ram.actwk[0], data, &plride, &plpush);
+  p_actwk->u.obj.cddat.plride = plride;
+  p_actwk->u.obj.cddat.plpush = plpush;
   if (p_actwk->u.obj.cddat.plride == 1) {
     sjumpsub(p_actwk, &g_ram.actwk[0]);
   }
-  plhitchk2(p_actwk, &g_ram.actwk[1], data, 4);
+  bool pl2ride = p_actwk->u.obj.cddat.pl2ride;
+  bool pl2push = p_actwk->u.obj.cddat.pl2push;
+  plhitchk_skip_onscreen(p_actwk, &g_ram.actwk[1], data, &pl2ride, &pl2push);
+  p_actwk->u.obj.cddat.pl2ride = pl2ride;
+  p_actwk->u.obj.cddat.pl2push = pl2push;
   if (p_actwk->u.obj.cddat.pl2ride == 1) {
     sjumpsub(p_actwk, &g_ram.actwk[1]);
   }
@@ -291,12 +299,20 @@ static void sjumpmove(SKC_sprite_status* p_actwk) {
 
 
 static void vssjumpmove(SKC_sprite_status* p_actwk) {
-  hitchk_data data = { 19, 8, 16, fp16_get_integer(p_actwk->xposi) };
-  plhitchk2(p_actwk, &g_ram.actwk[0], data, 3);
+  SKC_hitchk_data data = { 19, 8, 16, fp16_get_integer(p_actwk->xposi) };
+  bool plride = p_actwk->u.obj.cddat.plride;
+  bool plpush = p_actwk->u.obj.cddat.plpush;
+  plhitchk_skip_onscreen(p_actwk, &g_ram.actwk[0], data, &plride, &plpush);
+  p_actwk->u.obj.cddat.plride = plride;
+  p_actwk->u.obj.cddat.plpush = plpush;
   if (p_actwk->u.obj.cddat.plride == 1) {
     sjumpsub(p_actwk, &g_ram.actwk[0]);
   }
-  plhitchk2(p_actwk, &g_ram.actwk[1], data, 4);
+  bool pl2ride = p_actwk->u.obj.cddat.pl2ride;
+  bool pl2push = p_actwk->u.obj.cddat.pl2push;
+  plhitchk_skip_onscreen(p_actwk, &g_ram.actwk[1], data, &pl2ride, &pl2push);
+  p_actwk->u.obj.cddat.pl2ride = pl2ride;
+  p_actwk->u.obj.cddat.pl2push = pl2push;
   if (p_actwk->u.obj.cddat.pl2ride == 1) {
     sjumpsub(p_actwk, &g_ram.actwk[1]);
   }
@@ -346,9 +362,14 @@ void sjumpsub(SKC_sprite_status* p_actwk, SKC_sprite_status* p_playerwk) {
 
 
 static void sdashmove(SKC_sprite_status* p_actwk) {
-  hitchk_data data = { 19, 14, 15, fp16_get_integer(p_actwk->xposi) };
-  hitchk_results results = plhitchk2(p_actwk, &g_ram.actwk[0], data, 3);
-  if (BIT_IS_SET(results.plcoli, 0)) {
+  SKC_hitchk_data data = { 19, 14, 15, fp16_get_integer(p_actwk->xposi) };
+  SKC_hitchk_result result;
+  bool plride = p_actwk->u.obj.cddat.plride;
+  bool plpush = p_actwk->u.obj.cddat.plpush;
+  result.plcoli[0] = plhitchk_skip_onscreen(p_actwk, &g_ram.actwk[0], data, &plride, &plpush);
+  p_actwk->u.obj.cddat.plride = plride;
+  p_actwk->u.obj.cddat.plpush = plpush;
+  if (result.plcoli[0] == HITCHK_COLI_SIDE) {
     bool right = p_actwk->u.obj.cddat.right;
     if (fp16_get_integer(p_actwk->xposi) >= fp16_get_integer(g_ram.actwk[0].xposi)) {
       right = !right;
@@ -357,8 +378,12 @@ static void sdashmove(SKC_sprite_status* p_actwk) {
       sdashsub(p_actwk, &g_ram.actwk[0]);
     }
   }
-  results = plhitchk2(p_actwk, &g_ram.actwk[1], data, 4);
-  if (BIT_IS_SET(results.plcoli, 1)) {
+  bool pl2ride = p_actwk->u.obj.cddat.pl2ride;
+  bool pl2push = p_actwk->u.obj.cddat.pl2push;
+  result.plcoli[1] = plhitchk_skip_onscreen(p_actwk, &g_ram.actwk[1], data, &pl2ride, &pl2push);
+  p_actwk->u.obj.cddat.pl2ride = pl2ride;
+  p_actwk->u.obj.cddat.pl2push = pl2push;
+  if (result.plcoli[1] == HITCHK_COLI_SIDE) {
     bool right = p_actwk->u.obj.cddat.right;
     if (fp16_get_integer(p_actwk->xposi) >= fp16_get_integer(g_ram.actwk[1].xposi)) {
       right = !right;
@@ -374,9 +399,14 @@ static void sdashmove(SKC_sprite_status* p_actwk) {
 
 
 static void vssdashmove(SKC_sprite_status* p_actwk) {
-  hitchk_data data = { 15, 12, 13, fp16_get_integer(p_actwk->xposi) };
-  hitchk_results results = plhitchk2(p_actwk, &g_ram.actwk[0], data, 3);
-  if (BIT_IS_SET(results.plcoli, 0)) {
+  SKC_hitchk_data data = { 15, 12, 13, fp16_get_integer(p_actwk->xposi) };
+  SKC_hitchk_result result;
+  bool plride = p_actwk->u.obj.cddat.plride;
+  bool plpush = p_actwk->u.obj.cddat.plpush;
+  result.plcoli[0] = plhitchk_skip_onscreen(p_actwk, &g_ram.actwk[0], data, &plride, &plpush);
+  p_actwk->u.obj.cddat.plride = plride;
+  p_actwk->u.obj.cddat.plpush = plpush;
+  if (result.plcoli[0] == HITCHK_COLI_SIDE) {
     bool right = p_actwk->u.obj.cddat.right;
     if (fp16_get_integer(p_actwk->xposi) >= fp16_get_integer(g_ram.actwk[0].xposi)) {
       right = !right;
@@ -385,8 +415,12 @@ static void vssdashmove(SKC_sprite_status* p_actwk) {
       vssdashsub(p_actwk, &g_ram.actwk[0]);
     }
   }
-  results = plhitchk2(p_actwk, &g_ram.actwk[1], data, 4);
-  if (BIT_IS_SET(results.plcoli, 1)) {
+  bool pl2ride = p_actwk->u.obj.cddat.pl2ride;
+  bool pl2push = p_actwk->u.obj.cddat.pl2push;
+  result.plcoli[1] = plhitchk_skip_onscreen(p_actwk, &g_ram.actwk[1], data, &pl2ride, &pl2push);
+  p_actwk->u.obj.cddat.pl2ride = pl2ride;
+  p_actwk->u.obj.cddat.pl2push = pl2push;
+  if (result.plcoli[1] == HITCHK_COLI_SIDE) {
     bool right = p_actwk->u.obj.cddat.right;
     if (fp16_get_integer(p_actwk->xposi) >= fp16_get_integer(g_ram.actwk[1].xposi)) {
       right = !right;
@@ -501,13 +535,22 @@ static void sdashcolichk(SKC_sprite_status* p_actwk) {
 
 
 static void sjumprmove(SKC_sprite_status* p_actwk) {
-  hitchk_data data = { 27, 8, 9, fp16_get_integer(p_actwk->xposi) };
-  hitchk_results results = plhitchk2(p_actwk, &g_ram.actwk[0], data, 3);
-  if (results.colitype == -2) {
+  SKC_hitchk_data data = { 27, 8, 9, fp16_get_integer(p_actwk->xposi) };
+  SKC_hitchk_result result;
+  bool plride = p_actwk->u.obj.cddat.plride;
+  bool plpush = p_actwk->u.obj.cddat.plpush;
+  result.plcoli[0] = plhitchk_skip_onscreen(p_actwk, &g_ram.actwk[0], data, &plride, &plpush);
+  p_actwk->u.obj.cddat.plride = plride;
+  p_actwk->u.obj.cddat.plpush = plpush;
+  if (result.plcoli[0] == HITCHK_COLI_BOTTOM) {
     sjumprsub(p_actwk, &g_ram.actwk[0]);
   }
-  results = plhitchk2(p_actwk, &g_ram.actwk[1], data, 4);
-  if (results.colitype == -2) {
+  bool pl2ride = p_actwk->u.obj.cddat.pl2ride;
+  bool pl2push = p_actwk->u.obj.cddat.pl2push;
+  result.plcoli[1] = plhitchk_skip_onscreen(p_actwk, &g_ram.actwk[1], data, &pl2ride, &pl2push);
+  p_actwk->u.obj.cddat.pl2ride = pl2ride;
+  p_actwk->u.obj.cddat.pl2push = pl2push;
+  if (result.plcoli[1] == HITCHK_COLI_BOTTOM) {
     sjumprsub(p_actwk, &g_ram.actwk[1]);
   }
   patchg(p_actwk, sjumpchg);
@@ -516,14 +559,23 @@ static void sjumprmove(SKC_sprite_status* p_actwk) {
 
 
 static void vssjumprmove(SKC_sprite_status* p_actwk) {
-  hitchk_data data = { 19, 8, 9, fp16_get_integer(p_actwk->xposi) };
-  hitchk_results results = plhitchk2(p_actwk, &g_ram.actwk[0], data, 3);
-  if (results.colitype == -2) {
+  SKC_hitchk_data data = { 19, 8, 9, fp16_get_integer(p_actwk->xposi) };
+  SKC_hitchk_result result;
+  bool plride = p_actwk->u.obj.cddat.plride;
+  bool plpush = p_actwk->u.obj.cddat.plpush;
+  result.plcoli[0] = plhitchk_skip_onscreen(p_actwk, &g_ram.actwk[0], data, &plride, &plpush);
+  p_actwk->u.obj.cddat.plride = plride;
+  p_actwk->u.obj.cddat.plpush = plpush;
+  if (result.plcoli[0] == HITCHK_COLI_BOTTOM) {
     fp16_set_integer(&g_ram.actwk[0].yposi, fp16_get_integer(g_ram.actwk[0].yposi) - 4);
     sjumprsub2(p_actwk, &g_ram.actwk[0]);
   }
-  results = plhitchk2(p_actwk, &g_ram.actwk[1], data, 4);
-  if (results.colitype == -2) {
+  bool pl2ride = p_actwk->u.obj.cddat.pl2ride;
+  bool pl2push = p_actwk->u.obj.cddat.pl2push;
+  result.plcoli[1] = plhitchk_skip_onscreen(p_actwk, &g_ram.actwk[1], data, &pl2ride, &pl2push);
+  p_actwk->u.obj.cddat.pl2ride = pl2ride;
+  p_actwk->u.obj.cddat.pl2push = pl2push;
+  if (result.plcoli[1] == HITCHK_COLI_BOTTOM) {
     fp16_set_integer(&g_ram.actwk[1].yposi, fp16_get_integer(g_ram.actwk[1].yposi) - 4);
     sjumprsub2(p_actwk, &g_ram.actwk[1]);
   }
@@ -580,12 +632,20 @@ static void sjumprsub2(SKC_sprite_status* p_actwk, SKC_sprite_status* p_playerwk
 
 
 static void sjump45move(SKC_sprite_status* p_actwk) {
-  hitchk_data data = { 27, 16, 0, fp16_get_integer(p_actwk->xposi) };
-  plhitchk_slope(p_actwk, &g_ram.actwk[0], data, sjump45tbl, 3);
+  SKC_hitchk_data data = { 27, 16, 0, fp16_get_integer(p_actwk->xposi) };
+  bool plride = p_actwk->u.obj.cddat.plride;
+  bool plpush = p_actwk->u.obj.cddat.plpush;
+  plhitchk_slope(p_actwk, &g_ram.actwk[0], data, sjump45tbl, &plride, &plpush);
+  p_actwk->u.obj.cddat.plride = plride;
+  p_actwk->u.obj.cddat.plpush = plpush;
   if (p_actwk->u.obj.cddat.plride == 1) {
     sjump45move__sub(p_actwk, &g_ram.actwk[0]);
   }
-  plhitchk_slope(p_actwk, &g_ram.actwk[1], data, sjump45tbl, 4);
+  bool pl2ride = p_actwk->u.obj.cddat.pl2ride;
+  bool pl2push = p_actwk->u.obj.cddat.pl2push;
+  plhitchk_slope(p_actwk, &g_ram.actwk[1], data, sjump45tbl, &pl2ride, &pl2push);
+  p_actwk->u.obj.cddat.pl2ride = pl2ride;
+  p_actwk->u.obj.cddat.pl2push = pl2push;
   if (p_actwk->u.obj.cddat.pl2ride == 1) {
     sjump45move__sub(p_actwk, &g_ram.actwk[1]);
   }
@@ -643,13 +703,22 @@ static void sjump45move__sub(SKC_sprite_status* p_actwk, SKC_sprite_status* p_pl
 
 
 static void sjump45rmove(SKC_sprite_status* p_actwk) {
-  hitchk_data data = { 27, 16, 0, fp16_get_integer(p_actwk->xposi) };
-  hitchk_results results = plhitchk_slope(p_actwk, &g_ram.actwk[0], data, sjump45tbl2, 3);
-  if (results.colitype == -2) {
+  SKC_hitchk_data data = { 27, 16, 0, fp16_get_integer(p_actwk->xposi) };
+  SKC_hitchk_result result;
+  bool plride = p_actwk->u.obj.cddat.plride;
+  bool plpush = p_actwk->u.obj.cddat.plpush;
+  result.plcoli[0] = plhitchk_slope(p_actwk, &g_ram.actwk[0], data, sjump45tbl2, &plride, &plpush);
+  p_actwk->u.obj.cddat.plride = plride;
+  p_actwk->u.obj.cddat.plpush = plpush;
+  if (result.plcoli[0] == HITCHK_COLI_BOTTOM) {
     sjump45rmove__sub(p_actwk, &g_ram.actwk[0]);
   }
-  results = plhitchk_slope(p_actwk, &g_ram.actwk[1], data, sjump45tbl2, 4);
-  if (results.colitype == -2) {
+  bool pl2ride = p_actwk->u.obj.cddat.pl2ride;
+  bool pl2push = p_actwk->u.obj.cddat.pl2push;
+  result.plcoli[1] = plhitchk_slope(p_actwk, &g_ram.actwk[1], data, sjump45tbl2, &pl2ride, &pl2push);
+  p_actwk->u.obj.cddat.pl2ride = pl2ride;
+  p_actwk->u.obj.cddat.pl2push = pl2push;
+  if (result.plcoli[1] == HITCHK_COLI_BOTTOM) {
     sjump45rmove__sub(p_actwk, &g_ram.actwk[1]);
   }
   patchg(p_actwk, sjumpchg);
@@ -1501,7 +1570,12 @@ static void sjumpswmove(SKC_sprite_status* p_actwk) {
   if (BIT_IS_SET(p_actwk->u.obj.userflag, 7) && g_ram.level_triggers[p_actwk->u.obj.userflag & 0xF] != 0) {
     p_parentwk->u.obj.actfree.spring.reverse_dir = true;
   }
-  hitchk_data data = { p_actwk->sprhs + 7, p_actwk->sprvs, p_actwk->sprvs + 1, fp16_get_integer(p_actwk->xposi) };
+  SKC_hitchk_data data = {
+    p_actwk->sprhs + 7,
+    p_actwk->sprvs,
+    p_actwk->sprvs + 1,
+    fp16_get_integer(p_actwk->xposi)
+  };
   hitchk(p_actwk, data);
   actionsub(p_actwk);
 }

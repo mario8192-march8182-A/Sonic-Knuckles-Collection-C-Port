@@ -19,7 +19,7 @@ static void breakmove(SKC_sprite_status* p_actwk);
 static void breakmove2(SKC_sprite_status* p_actwk);
 static void breakdown(SKC_sprite_status* p_actwk);
 static void breakdown2(SKC_sprite_status* p_actwk);
-static void breakdown2__sub(SKC_sprite_status* p_actwk, SKC_sprite_status* p_playerwk, bool pl2);
+static void breakdown2__sub(SKC_sprite_status* p_actwk, SKC_sprite_status* p_playerwk, bool* p_plride);
 static void breakdown3(SKC_sprite_status* p_actwk);
 static void break2init(SKC_sprite_status* p_actwk);
 static void break2move(SKC_sprite_status* p_actwk);
@@ -30,7 +30,7 @@ static void break2movesw(SKC_sprite_status* p_actwk);
 static void break2down(SKC_sprite_status* p_actwk);
 static void break2down1(SKC_sprite_status* p_actwk);
 static void break2down2(SKC_sprite_status* p_actwk);
-static void break2down2__sub(SKC_sprite_status* p_actwk, SKC_sprite_status* p_playerwk, hitchk_data data, unsigned char* p_timer_data, bool pl2);
+static void break2down2__sub(SKC_sprite_status* p_actwk, SKC_sprite_status* p_playerwk, SKC_hitchk_data data, unsigned char* p_timer_data, bool* p_plride);
 static void break2go(SKC_sprite_status* p_actwk, unsigned char* p_data);
 static void breakgo(SKC_sprite_status* p_actwk);
 static void breakgosub(SKC_sprite_status* p_actwk, unsigned char* p_data, SKC_sprite_status_handler p_handler);
@@ -157,7 +157,7 @@ static void breakmove(SKC_sprite_status* p_actwk) {
 
 
 static void breakmove2(SKC_sprite_status* p_actwk) {
-  hitchk_data data = { p_actwk->sprhs, 0, 0, fp16_get_integer(p_actwk->xposi) };
+  SKC_hitchk_data data = { p_actwk->sprhs, 0, 0, fp16_get_integer(p_actwk->xposi) };
   SolidObjectTopSloped2(data, p_actwk->u.obj.actfree.break_.slope_data_ptr);
   frameoutchk(p_actwk);
 }
@@ -177,22 +177,20 @@ static void breakdown2(SKC_sprite_status* p_actwk) {
   --p_actwk->u.obj.timer;
   if (p_actwk->u.obj.timer == 0) {
     p_actwk->r_ptr = &breakdown3;
-    breakdown2__sub(p_actwk, &g_ram.actwk[0], false);
-    breakdown2__sub(p_actwk, &g_ram.actwk[1], true);
+    bool plride = p_actwk->u.obj.cddat.plride;
+    breakdown2__sub(p_actwk, &g_ram.actwk[0], &plride);
+    p_actwk->u.obj.cddat.plride = plride;
+    bool pl2ride = p_actwk->u.obj.cddat.pl2ride;
+    breakdown2__sub(p_actwk, &g_ram.actwk[1], &pl2ride);
+    p_actwk->u.obj.cddat.pl2ride = pl2ride;
   }
 }
 
 
-static void breakdown2__sub(SKC_sprite_status* p_actwk, SKC_sprite_status* p_playerwk, bool pl2) {
-  if (!pl2 && p_actwk->u.obj.cddat.plride == 0) return;
-  if (pl2 && p_actwk->u.obj.cddat.pl2ride == 0) return;
+static void breakdown2__sub(SKC_sprite_status* p_actwk, SKC_sprite_status* p_playerwk, bool* p_plride) {
+  if (!*p_plride) return;
 
-  if (!pl2) {
-    p_actwk->u.obj.cddat.plride = 0;
-  }
-  else {
-    p_actwk->u.obj.cddat.pl2ride = 0;
-  }
+  *p_plride = false;
   p_playerwk->u.play.cddat.ride = 0;
   p_playerwk->u.play.cddat.push = 0;
   p_playerwk->u.play.cddat.jump = 1;
@@ -417,7 +415,7 @@ static void break2move(SKC_sprite_status* p_actwk) {
 
 
 static void break2move2(SKC_sprite_status* p_actwk) {
-  hitchk_data data = { p_actwk->sprhs, 0, 16, fp16_get_integer(p_actwk->xposi) };
+  SKC_hitchk_data data = { p_actwk->sprhs, 0, 16, fp16_get_integer(p_actwk->xposi) };
   SolidObjectTop(p_actwk, data);
   frameoutchk(p_actwk);
 }
@@ -435,7 +433,7 @@ static void break2move_koma(SKC_sprite_status* p_actwk) {
        64, -1792,   320, -1792,   576, -1792,   832, -1792
   };
 
-  hitchk_data data = { p_actwk->sprhs, 0, 16, fp16_get_integer(p_actwk->xposi) };
+  SKC_hitchk_data data = { p_actwk->sprhs, 0, 16, fp16_get_integer(p_actwk->xposi) };
   SolidObjectTop(p_actwk, data);
   if (p_actwk->u.obj.cddat.plride == 1 || p_actwk->u.obj.cddat.pl2ride == 1) {
     int actid = p_actwk->u.obj.cddat.plride == 1 ? 0 : 1;
@@ -528,31 +526,28 @@ static void break2down2(SKC_sprite_status* p_actwk) {
   if (p_actwk->u.obj.timer == 0) {
     p_actwk->r_ptr = &break2down1;
   }
-  hitchk_data data = { p_actwk->sprhs, 0, p_actwk->u.obj.timer, 0 };
-  break2down2__sub(p_actwk, &g_ram.actwk[0], data, p_actwk->u.obj.actfree.break_.timer_data_ptr, false);
-  break2down2__sub(p_actwk, &g_ram.actwk[1], data, p_actwk->u.obj.actfree.break_.timer_data_ptr, true);
+  SKC_hitchk_data data = { p_actwk->sprhs, 0, p_actwk->u.obj.timer, 0 };
+  bool plride = p_actwk->u.obj.cddat.plride;
+  break2down2__sub(p_actwk, &g_ram.actwk[0], data, p_actwk->u.obj.actfree.break_.timer_data_ptr, &plride);
+  p_actwk->u.obj.cddat.plride = plride;
+  bool pl2ride = p_actwk->u.obj.cddat.pl2ride;
+  break2down2__sub(p_actwk, &g_ram.actwk[1], data, p_actwk->u.obj.actfree.break_.timer_data_ptr, &pl2ride);
+  p_actwk->u.obj.cddat.pl2ride = pl2ride;
   frameoutchk(p_actwk);
 }
 
 
-static void break2down2__sub(SKC_sprite_status* p_actwk, SKC_sprite_status* p_playerwk, hitchk_data data, unsigned char* p_timer_data, bool pl2) {
-  if (!pl2 && p_actwk->u.obj.cddat.plride == 0) return;
-  if (pl2 && p_actwk->u.obj.cddat.pl2ride == 0) return;
+static void break2down2__sub(SKC_sprite_status* p_actwk, SKC_sprite_status* p_playerwk, SKC_hitchk_data data, unsigned char* p_timer_data, bool* p_plride) {
+  if (!*p_plride) return;
 
   short distance = fp16_get_integer(p_playerwk->xposi) - fp16_get_integer(p_actwk->xposi) + data.sprhs;
-  unsigned short width = data.sprhs * 2;
-  if (p_playerwk->u.play.cddat.jump == 0 && distance >= 0 && distance < width) {
+  if (p_playerwk->u.play.cddat.jump == 0 && distance >= 0 && distance < data.sprhs * 2) {
     if (p_actwk->u.obj.cddat.right == 1) {
-      distance = -distance + (short)width;
+      distance = -distance + (short)data.sprhs * 2;
     }
     if (data.sprvs_ground > p_timer_data[0] - p_timer_data[distance / 16]) return;
   }
-  if (!pl2) {
-    p_actwk->u.obj.cddat.plride = 0;
-  }
-  else {
-    p_actwk->u.obj.cddat.pl2ride = 0;
-  }
+  *p_plride = false;
   p_playerwk->u.play.cddat.ride = 0;
   p_playerwk->u.play.cddat.push = 0;
   p_playerwk->u.play.cddat.jump = 1;

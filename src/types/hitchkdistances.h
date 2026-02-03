@@ -1,12 +1,14 @@
-#ifndef HITCHKDISTANCES_H
-#define HITCHKDISTANCES_H
+#ifndef SKC_HITCHKDISTANCES_H
+#define SKC_HITCHKDISTANCES_H
 
-typedef struct hitchk_distances {
+typedef struct SKC_hitchk_distances {
   short left_edge;
   unsigned char max_top;
   unsigned char min_bottom;
   short max_top_coli;
+  short nearest_edge_hori;
+  short nearest_edge_vert;
 }
-hitchk_distances;
+SKC_hitchk_distances;
 
 #endif

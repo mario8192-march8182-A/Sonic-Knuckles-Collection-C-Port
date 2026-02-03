@@ -2,7 +2,7 @@
 #include <stdbool.h>
 #include "../types/actwkchkresult.h"
 #include "../types/hitchkdata.h"
-#include "../types/hitchkresults.h"
+#include "../types/hitchkresult.h"
 #include "../types/sonic3ram.h"
 #include "../types/spritepattern.h"
 #include "../types/spritestatus.h"
@@ -19,9 +19,9 @@ static void itemmove(SKC_sprite_status* p_actwk);
 static void itemmove3(SKC_sprite_status* p_actwk);
 static void itemmove2(SKC_sprite_status* p_actwk);
 static void itemdownsub(SKC_sprite_status* p_actwk);
-static void itemsub(SKC_sprite_status* p_actwk, SKC_sprite_status* p_playerwk, hitchk_data data);
-static void itemsub1(SKC_sprite_status* p_actwk, SKC_sprite_status* p_playerwk, hitchk_data data);
-static void itemsub2(SKC_sprite_status* p_actwk, SKC_sprite_status* p_playerwk, hitchk_data data);
+static void itemsub(SKC_sprite_status* p_actwk, SKC_sprite_status* p_playerwk, SKC_hitchk_data data, bool* p_plride);
+static void itemsub1(SKC_sprite_status* p_actwk, SKC_sprite_status* p_playerwk, SKC_hitchk_data data, bool* p_plride);
+static void itemsub2(SKC_sprite_status* p_actwk, SKC_sprite_status* p_playerwk, SKC_hitchk_data data, bool* p_plride);
 static void itemget(SKC_sprite_status* p_actwk);
 static void item2init(SKC_sprite_status* p_actwk);
 static void item2move(SKC_sprite_status* p_actwk);
@@ -102,9 +102,13 @@ static void iteminit(SKC_sprite_status* p_actwk) {
 
 static void itemmove(SKC_sprite_status* p_actwk) {
   itemdownsub(p_actwk);
-  hitchk_data data = { 25, 16, 17, fp16_get_integer(p_actwk->xposi) };
-  itemsub(p_actwk, &g_ram.actwk[0], data);
-  itemsub1(p_actwk, &g_ram.actwk[1], data);
+  SKC_hitchk_data data = { 25, 16, 17, fp16_get_integer(p_actwk->xposi) };
+  bool plride = p_actwk->u.obj.cddat.plride;
+  itemsub(p_actwk, &g_ram.actwk[0], data, &plride);
+  p_actwk->u.obj.cddat.plride = plride;
+  bool pl2ride = p_actwk->u.obj.cddat.pl2ride;
+  itemsub1(p_actwk, &g_ram.actwk[1], data, &pl2ride);
+  p_actwk->u.obj.cddat.pl2ride = pl2ride;
   colibufferchk(p_actwk);
   patchg(p_actwk, itemchg);
   itemmove3(p_actwk);
@@ -154,33 +158,31 @@ static void itemdownsub(SKC_sprite_status* p_actwk) {
 }
 
 
-static void itemsub(SKC_sprite_status* p_actwk, SKC_sprite_status* p_playerwk, hitchk_data data) {
-  if (p_playerwk == &g_ram.actwk[0] && p_actwk->u.obj.cddat.plride == 1
-      || p_playerwk == &g_ram.actwk[1] && p_actwk->u.obj.cddat.pl2ride == 1) {
-    itemsub2(p_actwk, p_playerwk, data);
+static void itemsub(SKC_sprite_status* p_actwk, SKC_sprite_status* p_playerwk, SKC_hitchk_data data, bool* p_plride) {
+  if (*p_plride) {
+    itemsub2(p_actwk, p_playerwk, data, p_plride);
   }
   else {
     if (p_playerwk->mstno != 2
         && (p_playerwk->u.play.character != KNUCKLES
             || (p_playerwk->u.play.talent_status != 1 && p_playerwk->u.play.talent_status != 3))) {
-      plhitchk_chk_coli2(p_actwk, p_playerwk, data, 3);
+      plhitchk_chk_coli_skip_onscreen(p_actwk, p_playerwk, data, p_plride);
     }
   }
 }
 
 
-static void itemsub1(SKC_sprite_status* p_actwk, SKC_sprite_status* p_playerwk, hitchk_data data) {
-  if (p_playerwk == &g_ram.actwk[0] && p_actwk->u.obj.cddat.plride == 1
-      || p_playerwk == &g_ram.actwk[1] && p_actwk->u.obj.cddat.pl2ride == 1) {
-    itemsub2(p_actwk, p_playerwk, data);
+static void itemsub1(SKC_sprite_status* p_actwk, SKC_sprite_status* p_playerwk, SKC_hitchk_data data, bool* p_plride) {
+  if (*p_plride) {
+    itemsub2(p_actwk, p_playerwk, data, p_plride);
   }
   else if (g_ram.vs_flag == 0 || p_actwk->mstno != 2) {
-    plhitchk_chk_coli2(p_actwk, p_playerwk, data, 4);
+    plhitchk_chk_coli_skip_onscreen(p_actwk, p_playerwk, data, p_plride);
   }
 }
 
 
-static void itemsub2(SKC_sprite_status* p_actwk, SKC_sprite_status* p_playerwk, hitchk_data data) {
+static void itemsub2(SKC_sprite_status* p_actwk, SKC_sprite_status* p_playerwk, SKC_hitchk_data data, bool* p_plride) {
   short distance = fp16_get_integer(p_playerwk->xposi) - fp16_get_integer(p_actwk->xposi) + data.sprhs;
   if (p_playerwk->u.play.cddat.jump == 0 && distance >= 0 && distance < data.sprhs * 2) {
     MvSonicOnPtfm(data.xposi);
@@ -188,12 +190,7 @@ static void itemsub2(SKC_sprite_status* p_actwk, SKC_sprite_status* p_playerwk, 
   else {
     p_playerwk->u.play.cddat.ride = 0;
     p_playerwk->u.play.cddat.jump = 1;
-    if (p_playerwk == &g_ram.actwk[0]) {
-      p_actwk->u.obj.cddat.plride = 0;
-    }
-    else {
-      p_actwk->u.obj.cddat.pl2ride = 0;
-    }
+    *p_plride = false;
   }
 }
 

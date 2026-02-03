@@ -1,12 +1,12 @@
-#ifndef HITCHKDATA_H
-#define HITCHKDATA_H
+#ifndef SKC_HITCHKDATA_H
+#define SKC_HITCHKDATA_H
 
-typedef struct hitchk_data {
+typedef struct SKC_hitchk_data {
   unsigned char sprhs;
   unsigned char sprvs_air;
   unsigned char sprvs_ground;
   short xposi;
 }
-hitchk_data;
+SKC_hitchk_data;
 
 #endif

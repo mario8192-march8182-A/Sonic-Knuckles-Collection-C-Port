@@ -3,7 +3,7 @@
 #include <stdlib.h>
 #include "../types/actwkchkresult.h"
 #include "../types/hitchkdata.h"
-#include "../types/hitchkresults.h"
+#include "../types/hitchkresult.h"
 #include "../types/iwabreakdata.h"
 #include "../types/sonic3ram.h"
 #include "../types/speed.h"
@@ -194,7 +194,12 @@ static void iwamove(SKC_sprite_status* p_actwk) {
   unsigned char pl2mstno = g_ram.actwk[1].mstno;
   p_actwk->u.obj.actfree.iwa.prev_plpush = g_ram.actwk[0].u.play.cddat.push;
   p_actwk->u.obj.actfree.iwa.prev_pl2push = g_ram.actwk[1].u.play.cddat.push;
-  hitchk_data data = { p_actwk->sprhs + 11, p_actwk->sprvs, p_actwk->sprvs + 1, fp16_get_integer(p_actwk->xposi) };
+  SKC_hitchk_data data = {
+    p_actwk->sprhs + 11,
+    p_actwk->sprvs,
+    p_actwk->sprvs + 1,
+    fp16_get_integer(p_actwk->xposi)
+  };
   hitchk(p_actwk, data);
   if (BIT_IS_SET(p_actwk->u.obj.userflag, 1)) {
     iwamovepush(p_actwk);
@@ -360,16 +365,21 @@ static void vsiwamove3(SKC_sprite_status* p_actwk) {
 static void iwamove3(SKC_sprite_status* p_actwk) {
   short plxspeed = g_ram.actwk[0].xspeed;
   short pl2xspeed = g_ram.actwk[1].xspeed;
-  hitchk_data data = { p_actwk->sprhs + 11, p_actwk->sprvs, p_actwk->sprvs + 1, fp16_get_integer(p_actwk->xposi) };
-  hitchk_results results = hitchk(p_actwk, data);
-  if (results.plcoli & 3) {
+  SKC_hitchk_data data = {
+    p_actwk->sprhs + 11,
+    p_actwk->sprvs,
+    p_actwk->sprvs + 1,
+    fp16_get_integer(p_actwk->xposi)
+  };
+  SKC_hitchk_result result = hitchk(p_actwk, data);
+  if (result.plcoli[0] == HITCHK_COLI_SIDE || result.plcoli[1] == HITCHK_COLI_SIDE) {
     bool breakable_by_knuckles = BIT_IS_SET(p_actwk->u.obj.userflag, 7);
     bool breakable = !BIT_IS_SET(p_actwk->u.obj.userflag, 7);
     bool can_break_by_touch = g_ram.ssonicflag != 0 || g_ram.actwk[0].u.play.character == KNUCKLES;
     bool can_break_as_ball = (g_ram.actwk[0].u.play.cddat.flame_baria == 1 || p_actwk->u.obj.cddat.plpush == 1)
         && g_ram.actwk[0].mstno == 2
         && abs(plxspeed) >= 0x480;
-    if (BIT_IS_SET(results.plcoli, 0)
+    if (result.plcoli[0] == HITCHK_COLI_SIDE
         && (breakable_by_knuckles && g_ram.actwk[0].u.play.character == KNUCKLES)
             || (breakable && (can_break_by_touch || can_break_as_ball))) {
       p_actwk->u.obj.cddat.plpush = 0;
@@ -467,16 +477,21 @@ static void iwamove3__ridechk(SKC_sprite_status* p_actwk) {
 static void iwamove4(SKC_sprite_status* p_actwk) {
   short plyspeed = g_ram.actwk[0].yspeed;
   short pl2yspeed = g_ram.actwk[1].yspeed;
-  hitchk_data data = { p_actwk->sprhs + 11, p_actwk->sprvs, p_actwk->sprvs + 1, fp16_get_integer(p_actwk->xposi) };
-  hitchk_results results = hitchk(p_actwk, data);
-  if (!(results.plcoli & 0xC)) {
+  SKC_hitchk_data data = {
+    p_actwk->sprhs + 11,
+    p_actwk->sprvs,
+    p_actwk->sprvs + 1,
+    fp16_get_integer(p_actwk->xposi)
+  };
+  SKC_hitchk_result result = hitchk(p_actwk, data);
+  if (result.plcoli[0] != HITCHK_COLI_BOTTOM && result.plcoli[1] != HITCHK_COLI_BOTTOM) {
     frameoutchk2(p_actwk, p_actwk->u.obj.actfree.iwa.xposi_init);
   }
   else {
-    if (BIT_IS_SET(results.plcoli, 2)) {
+    if (result.plcoli[0] == HITCHK_COLI_BOTTOM) {
       g_ram.actwk[0].yspeed = plyspeed;
     }
-    if (BIT_IS_SET(results.plcoli, 3)) {
+    if (result.plcoli[1] == HITCHK_COLI_BOTTOM) {
       g_ram.actwk[1].yspeed = pl2yspeed;
     }
     if (p_actwk->u.obj.cddat.plride == 1) {
@@ -496,7 +511,12 @@ static void iwamove4(SKC_sprite_status* p_actwk) {
 
 static void iwamovek(SKC_sprite_status* p_actwk) {
   short emyscorecnt = g_ram.emyscorecnt;
-  hitchk_data data = { p_actwk->sprhs + 11, p_actwk->sprvs, p_actwk->sprvs + 1, fp16_get_integer(p_actwk->xposi) };
+  SKC_hitchk_data data = {
+    p_actwk->sprhs + 11,
+    p_actwk->sprvs,
+    p_actwk->sprvs + 1,
+    fp16_get_integer(p_actwk->xposi)
+  };
   hitchk(p_actwk, data);
   if (p_actwk->u.obj.cddat.plride == 0 || g_ram.actwk[0].u.play.character != KNUCKLES) {
     frameoutchk(p_actwk);

@@ -1,19 +1,19 @@
-#ifndef HITCHK_H
-#define HITCHK_H
+#ifndef SKC_HITCHK_H
+#define SKC_HITCHK_H
 
+#include <stdbool.h>
 #include "types/hitchkdata.h"
-#include "types/hitchkresults.h"
+#include "types/hitchkresult.h"
 #include "types/spritestatus.h"
 
-hitchk_results hitchk(sprite_status* p_actwk, hitchk_data data);
-hitchk_results plhitchk(sprite_status* p_actwk, sprite_status* p_playerwk, hitchk_data data, unsigned char plridebit);
-hitchk_results hitchk2(sprite_status* p_actwk, hitchk_data data);
-hitchk_results plhitchk2(sprite_status* p_actwk, sprite_status* p_playerwk, hitchk_data data, unsigned char plridebit);
-hitchk_results hitchk_slope(sprite_status* p_actwk, hitchk_data data, signed char* slope_heights);
-hitchk_results plhitchk_slope(sprite_status* p_actwk, sprite_status* p_playerwk, hitchk_data data, signed char* slope_heights, unsigned char plridebit);
-hitchk_results hitchk_doubleslope(sprite_status* p_actwk, hitchk_data data, signed char* slope_heights);
-hitchk_results hitchk_bryuka(sprite_status* p_actwk, hitchk_data data, signed char* slope_heights);
-hitchk_results hitchk_offset(sprite_status* p_actwk, hitchk_data data);
-hitchk_results plhitchk_chk_coli2(sprite_status* p_actwk, sprite_status* p_playerwk, hitchk_data data, unsigned char plridebit);
+SKC_hitchk_result hitchk(SKC_sprite_status* p_actwk, SKC_hitchk_data data);
+SKC_hitchk_coli plhitchk(SKC_sprite_status* p_actwk, SKC_sprite_status* p_playerwk, SKC_hitchk_data data, bool* p_plride, bool* p_plpush);
+SKC_hitchk_result hitchk_skip_onscreen(SKC_sprite_status* p_actwk, SKC_hitchk_data data);
+SKC_hitchk_coli plhitchk_skip_onscreen(SKC_sprite_status* p_actwk, SKC_sprite_status* p_playerwk, SKC_hitchk_data data, bool* p_plride, bool* p_plpush);
+SKC_hitchk_result hitchk_slope(SKC_sprite_status* p_actwk, SKC_hitchk_data data, signed char* p_slope_heights);
+SKC_hitchk_coli plhitchk_slope(SKC_sprite_status* p_actwk, SKC_sprite_status* p_playerwk, SKC_hitchk_data data, signed char* p_slope_heights, bool* p_plride, bool* p_plpush);
+SKC_hitchk_result hitchk_bryuka(SKC_sprite_status* p_actwk, SKC_hitchk_data data, signed char* p_slope_heights);
+SKC_hitchk_result hitchk_offset(SKC_sprite_status* p_actwk, SKC_hitchk_data data);
+SKC_hitchk_coli plhitchk_chk_coli_skip_onscreen(SKC_sprite_status* p_actwk, SKC_sprite_status* p_playerwk, SKC_hitchk_data data, bool* p_plpush);
 
 #endif

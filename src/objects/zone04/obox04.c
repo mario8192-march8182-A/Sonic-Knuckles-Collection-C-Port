@@ -163,7 +163,7 @@ static void obox04_break(SKC_sprite_status* p_actwk) {
 
 
 static void chk_opnbox_ride(SKC_sprite_status* p_actwk) {
-  hitchk_data data = { 43, 24, 24, fp16_get_integer(p_actwk->xposi) };
+  SKC_hitchk_data data = { 43, 24, 24, fp16_get_integer(p_actwk->xposi) };
   hitchk(p_actwk, data);
 }
 
