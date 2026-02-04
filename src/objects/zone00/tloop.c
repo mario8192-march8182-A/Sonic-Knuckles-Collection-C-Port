@@ -7,6 +7,7 @@
 #include "../../utils/fp16.h"
 #include "../../actset.h"
 #include "../../etc.h"
+#include "../../hitchk.h"
 static void tloopinit(SKC_sprite_status* p_actwk);
 static void tloopmove(SKC_sprite_status* p_actwk);
 static void tloopmovesub(SKC_sprite_status* p_actwk);
@@ -85,7 +86,7 @@ static void tloopmovesub__sub(SKC_sprite_status* p_actwk, SKC_sprite_status* p_p
       short yposi = fp16_get_integer(p_playerwk->yposi - fp16_get_integer(p_actwk->yposi));
       if (yposi >= -90 && yposi <= 160) {
         if (p_playerwk->xspeed >= 0x600 && p_playerwk->u.play.control_bitfield == 0) {
-          RideObject_SetRide(p_actwk, p_playerwk, p_plride);
+          set_ride(p_actwk, p_playerwk, p_plride);
           *p_plspeed = 0;
           SET_BIT(p_playerwk->u.play.control_bitfield, 6);
           SET_BIT(p_playerwk->u.play.control_bitfield, 1);

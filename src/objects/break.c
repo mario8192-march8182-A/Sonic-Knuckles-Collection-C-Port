@@ -14,6 +14,7 @@
 #include "../action.h"
 #include "../actset.h"
 #include "../constants.h"
+#include "../hitchk.h"
 static void breakinit(SKC_sprite_status* p_actwk);
 static void breakmove(SKC_sprite_status* p_actwk);
 static void breakmove2(SKC_sprite_status* p_actwk);
@@ -158,7 +159,7 @@ static void breakmove(SKC_sprite_status* p_actwk) {
 
 static void breakmove2(SKC_sprite_status* p_actwk) {
   SKC_hitchk_data data = { p_actwk->sprhs, 0, 0, fp16_get_integer(p_actwk->xposi) };
-  SolidObjectTopSloped2(data, p_actwk->u.obj.actfree.break_.slope_data_ptr);
+  ridechk_sloped(p_actwk, data, p_actwk->u.obj.actfree.break_.slope_data_ptr);
   frameoutchk(p_actwk);
 }
 
@@ -416,7 +417,7 @@ static void break2move(SKC_sprite_status* p_actwk) {
 
 static void break2move2(SKC_sprite_status* p_actwk) {
   SKC_hitchk_data data = { p_actwk->sprhs, 0, 16, fp16_get_integer(p_actwk->xposi) };
-  SolidObjectTop(p_actwk, data);
+  ridechk(p_actwk, data);
   frameoutchk(p_actwk);
 }
 
@@ -434,7 +435,7 @@ static void break2move_koma(SKC_sprite_status* p_actwk) {
   };
 
   SKC_hitchk_data data = { p_actwk->sprhs, 0, 16, fp16_get_integer(p_actwk->xposi) };
-  SolidObjectTop(p_actwk, data);
+  ridechk(p_actwk, data);
   if (p_actwk->u.obj.cddat.plride == 1 || p_actwk->u.obj.cddat.pl2ride == 1) {
     int actid = p_actwk->u.obj.cddat.plride == 1 ? 0 : 1;
     if (BIT_IS_SET(g_ram.actwk[actid].u.play.eventflag, 7)) {

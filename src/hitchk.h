@@ -14,6 +14,18 @@ SKC_hitchk_result hitchk_slope(SKC_sprite_status* p_actwk, SKC_hitchk_data data,
 SKC_hitchk_coli plhitchk_slope(SKC_sprite_status* p_actwk, SKC_sprite_status* p_playerwk, SKC_hitchk_data data, signed char* p_slope_heights, bool* p_plride, bool* p_plpush);
 SKC_hitchk_result hitchk_bryuka(SKC_sprite_status* p_actwk, SKC_hitchk_data data, signed char* p_slope_heights);
 SKC_hitchk_result hitchk_offset(SKC_sprite_status* p_actwk, SKC_hitchk_data data);
-SKC_hitchk_coli plhitchk_chk_coli_skip_onscreen(SKC_sprite_status* p_actwk, SKC_sprite_status* p_playerwk, SKC_hitchk_data data, bool* p_plpush);
+SKC_hitchk_coli plhitchk_chk_coli_skip_onscreen(SKC_sprite_status* p_actwk, SKC_sprite_status* p_playerwk, SKC_hitchk_data data, bool* p_plride, bool* p_plpush);
+void ride_dai(SKC_sprite_status* p_actwk, SKC_sprite_status* p_playerwk, unsigned char sprvs_ground, short xposi);
+void ride_sloped_dai(SKC_sprite_status* p_actwk, SKC_sprite_status* p_playerwk, unsigned char sprhs, short xposi, signed char* p_slope_heights);
+SKC_hitchk_result ridechk(SKC_sprite_status* p_actwk, SKC_hitchk_data data);
+SKC_hitchk_coli plridechk(SKC_sprite_status* p_actwk, SKC_sprite_status* p_playerwk, SKC_hitchk_data data, bool* p_plride);
+SKC_hitchk_result ridechk_sloped(SKC_sprite_status* p_actwk, SKC_hitchk_data data, signed char* p_slope_heights);
+SKC_hitchk_result ridechk_sloped2(SKC_sprite_status* p_actwk, SKC_hitchk_data data, signed char* p_slope_heights);
+void hashiridechk_chk_coli(SKC_sprite_status* p_actwk, SKC_sprite_status* p_playerwk, SKC_hitchk_data data, bool* p_plride);
+void ridechk_chk_coli(SKC_sprite_status* p_actwk, SKC_sprite_status* p_playerwk, SKC_hitchk_data data, bool* p_plride);
+void ridechk_chk_coli_skip_x(SKC_sprite_status* p_actwk, SKC_sprite_status* p_playerwk, SKC_hitchk_data data, bool* p_plride);
+void ridechk_chk_coli_y(SKC_sprite_status* p_actwk, SKC_sprite_status* p_playerwk, short yposi, bool* p_plride);
+void set_ride(SKC_sprite_status* p_actwk, SKC_sprite_status* p_playerwk, bool* p_plride);
+void clear_ride(SKC_sprite_status* p_actwk, SKC_sprite_status* p_playerwk);
 
 #endif

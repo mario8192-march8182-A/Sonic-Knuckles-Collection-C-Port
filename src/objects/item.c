@@ -19,8 +19,8 @@ static void itemmove(SKC_sprite_status* p_actwk);
 static void itemmove3(SKC_sprite_status* p_actwk);
 static void itemmove2(SKC_sprite_status* p_actwk);
 static void itemdownsub(SKC_sprite_status* p_actwk);
-static void itemsub(SKC_sprite_status* p_actwk, SKC_sprite_status* p_playerwk, SKC_hitchk_data data, bool* p_plride);
-static void itemsub1(SKC_sprite_status* p_actwk, SKC_sprite_status* p_playerwk, SKC_hitchk_data data, bool* p_plride);
+static void itemsub(SKC_sprite_status* p_actwk, SKC_sprite_status* p_playerwk, SKC_hitchk_data data, bool* p_plride, bool* p_plpush);
+static void itemsub1(SKC_sprite_status* p_actwk, SKC_sprite_status* p_playerwk, SKC_hitchk_data data, bool* p_plride, bool* p_plpush);
 static void itemsub2(SKC_sprite_status* p_actwk, SKC_sprite_status* p_playerwk, SKC_hitchk_data data, bool* p_plride);
 static void itemget(SKC_sprite_status* p_actwk);
 static void item2init(SKC_sprite_status* p_actwk);
@@ -104,11 +104,15 @@ static void itemmove(SKC_sprite_status* p_actwk) {
   itemdownsub(p_actwk);
   SKC_hitchk_data data = { 25, 16, 17, fp16_get_integer(p_actwk->xposi) };
   bool plride = p_actwk->u.obj.cddat.plride;
-  itemsub(p_actwk, &g_ram.actwk[0], data, &plride);
+  bool plpush = p_actwk->u.obj.cddat.plpush;
+  itemsub(p_actwk, &g_ram.actwk[0], data, &plride, &plpush);
   p_actwk->u.obj.cddat.plride = plride;
+  p_actwk->u.obj.cddat.plpush = plpush;
   bool pl2ride = p_actwk->u.obj.cddat.pl2ride;
-  itemsub1(p_actwk, &g_ram.actwk[1], data, &pl2ride);
+  bool pl2push = p_actwk->u.obj.cddat.pl2push;
+  itemsub1(p_actwk, &g_ram.actwk[1], data, &pl2ride, &pl2push);
   p_actwk->u.obj.cddat.pl2ride = pl2ride;
+  p_actwk->u.obj.cddat.pl2push = pl2push;
   colibufferchk(p_actwk);
   patchg(p_actwk, itemchg);
   itemmove3(p_actwk);
@@ -158,7 +162,7 @@ static void itemdownsub(SKC_sprite_status* p_actwk) {
 }
 
 
-static void itemsub(SKC_sprite_status* p_actwk, SKC_sprite_status* p_playerwk, SKC_hitchk_data data, bool* p_plride) {
+static void itemsub(SKC_sprite_status* p_actwk, SKC_sprite_status* p_playerwk, SKC_hitchk_data data, bool* p_plride, bool* p_plpush) {
   if (*p_plride) {
     itemsub2(p_actwk, p_playerwk, data, p_plride);
   }
@@ -166,18 +170,18 @@ static void itemsub(SKC_sprite_status* p_actwk, SKC_sprite_status* p_playerwk, S
     if (p_playerwk->mstno != 2
         && (p_playerwk->u.play.character != KNUCKLES
             || (p_playerwk->u.play.talent_status != 1 && p_playerwk->u.play.talent_status != 3))) {
-      plhitchk_chk_coli_skip_onscreen(p_actwk, p_playerwk, data, p_plride);
+      plhitchk_chk_coli_skip_onscreen(p_actwk, p_playerwk, data, p_plride, p_plpush);
     }
   }
 }
 
 
-static void itemsub1(SKC_sprite_status* p_actwk, SKC_sprite_status* p_playerwk, SKC_hitchk_data data, bool* p_plride) {
+static void itemsub1(SKC_sprite_status* p_actwk, SKC_sprite_status* p_playerwk, SKC_hitchk_data data, bool* p_plride, bool* p_plpush) {
   if (*p_plride) {
     itemsub2(p_actwk, p_playerwk, data, p_plride);
   }
   else if (g_ram.vs_flag == 0 || p_actwk->mstno != 2) {
-    plhitchk_chk_coli_skip_onscreen(p_actwk, p_playerwk, data, p_plride);
+    plhitchk_chk_coli_skip_onscreen(p_actwk, p_playerwk, data, p_plride, p_plpush);
   }
 }
 
@@ -185,7 +189,7 @@ static void itemsub1(SKC_sprite_status* p_actwk, SKC_sprite_status* p_playerwk, 
 static void itemsub2(SKC_sprite_status* p_actwk, SKC_sprite_status* p_playerwk, SKC_hitchk_data data, bool* p_plride) {
   short distance = fp16_get_integer(p_playerwk->xposi) - fp16_get_integer(p_actwk->xposi) + data.sprhs;
   if (p_playerwk->u.play.cddat.jump == 0 && distance >= 0 && distance < data.sprhs * 2) {
-    MvSonicOnPtfm(data.xposi);
+    ride_dai(p_actwk, p_playerwk, data.sprvs_ground, data.xposi);
   }
   else {
     p_playerwk->u.play.cddat.ride = 0;
