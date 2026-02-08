@@ -12,6 +12,7 @@
 #include "../../constants.h"
 #include "../../hitchk.h"
 #include "../../shared.h"
+#include "../friend.h"
 #include "../opnbox.h"
 #include "../ring.h"
 #include "../zone08/gost08.h"

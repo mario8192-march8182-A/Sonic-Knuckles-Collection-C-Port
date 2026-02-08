@@ -13,6 +13,7 @@
 #include "../constants.h"
 #include "../hitchk.h"
 #include "../shared.h"
+#include "friend.h"
 #include "zone.h"
 static void opnbox_init(SKC_sprite_status* p_actwk);
 static void opnbox_init__set_fly(SKC_sprite_status* p_actwk);
@@ -317,7 +318,7 @@ static void propera_wait0(SKC_sprite_status* p_actwk) {
 }
 
 
-void friend(SKC_sprite_status* p_actwk) {
+void friend_(SKC_sprite_status* p_actwk) {
   enemy_init2(p_actwk, &friend_init_tbl);
   p_actwk->r_ptr = &friend_wait0;
   p_actwk->sprvsize = 8;
@@ -341,7 +342,7 @@ static void friend_move0(SKC_sprite_status* p_actwk) {
   if (yoffset < 0) {
     short yposi = fp16_get_integer(p_actwk->yposi) + yoffset;
     fp16_set_integer(&p_actwk->yposi, yposi);
-    p_actwk->yspeed = p_actwk->u.obj.actfree.friend.yspeed_init;
+    p_actwk->yspeed = p_actwk->u.obj.actfree.opnbox_friend.yspeed_init;
     SKC_chk_distance_result result = chk_distance(p_actwk);
     short xspeed = -0x200;
     if (g_ram.act_clear_flag != 0 && result.right) {
@@ -506,7 +507,7 @@ static void set_friend_init(SKC_sprite_status* p_actwk) {
 
   short yspeed = spd_tbl[(p_actwk->u.obj.userflag & 6) / 2];
   p_actwk->yspeed = yspeed;
-  p_actwk->u.obj.actfree.friend.yspeed_init = yspeed;
+  p_actwk->u.obj.actfree.opnbox_friend.yspeed_init = yspeed;
   SKC_sprite_status* p_parentwk = &g_ram.actwk[p_actwk->u.obj.oya];
   if (p_parentwk->actflg.vflip == 1) {
     p_actwk->r_ptr = &friend_wait1;

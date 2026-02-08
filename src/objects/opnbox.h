@@ -9,7 +9,7 @@
 void opnbox(SKC_sprite_status* p_actwk);
 void switch_wait0(SKC_sprite_status* p_actwk);
 void switch_wait1(SKC_sprite_status* p_actwk);
-void friend(SKC_sprite_status* p_actwk);
+void friend_(SKC_sprite_status* p_actwk);
 void chk_pl_pause(SKC_sprite_status* p_actwk, unsigned char r_no);
 void chk_pl2_pause(SKC_sprite_status* p_actwk);
 void set_pl_pause(SKC_sprite_status* p_actwk, SKC_sprite_status* p_playerwk);

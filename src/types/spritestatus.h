@@ -177,7 +177,12 @@ typedef struct SKC_sprite_status {
         }
         break_;
         struct {
-          short yspeed_init; // 0x3E
+          unsigned char type; // 0x30
+          short xspeed_init; // 0x32
+          short yspeed_init; // 0x34
+          bool masin; // 0x38
+          short yposi_init; // 0x3A
+          unsigned short points; // 0x3E
         }
         friend;
         struct {
@@ -215,6 +220,10 @@ typedef struct SKC_sprite_status {
           short xspeed; // 0x3A
         }
         opnbox;
+        struct {
+          short yspeed_init; // 0x3E
+        }
+        opnbox_friend;
         struct {
           unsigned char player; // 0x3E
         }
