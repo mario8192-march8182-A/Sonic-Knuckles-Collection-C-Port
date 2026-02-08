@@ -13,6 +13,7 @@
 #include "../actset.h"
 #include "../constants.h"
 #include "../hitchk.h"
+#include "common.h"
 #include "toge.h"
 static void iteminit(SKC_sprite_status* p_actwk);
 static void itemmove(SKC_sprite_status* p_actwk);

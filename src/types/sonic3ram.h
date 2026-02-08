@@ -81,6 +81,7 @@ typedef struct sonic3_ram {
   /* 08fff62c */ unsigned char linkdata;
   /* 08fff634 */ unsigned short clchgtim;
   /* 08fff636 */ unsigned long ranum;
+  /* 08fff63a */ unsigned short pauseflag;
   /* 08fff648 */ unsigned short waterposi;
   /* 08fff64e */ unsigned char waterflag;
   /* 08fff65e */ unsigned char ssonicpallet_next;
@@ -89,6 +90,7 @@ typedef struct sonic3_ram {
   /* 08fff66a */ unsigned short swdata2_auto;
   /* 08fff670 */ unsigned short ssonicring_timer;
   /* 08fff702 */ unsigned short fox_auto_timer;
+  /* 08fff708 */ unsigned short fox_auto_rno;
   /* 08fff711 */ unsigned char DAT_08fff711;
   /* 08fff730 */ unsigned char watermode;
   /* 08fff73e */ unsigned char miles_carry_flag;

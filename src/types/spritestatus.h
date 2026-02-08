@@ -155,6 +155,20 @@ typedef struct SKC_sprite_status {
         }
         actclear_part;
         struct {
+          bool plholding; // 0x32
+          bool pl2holding; // 0x33
+          unsigned char plnograb_timer; // 0x34
+          unsigned char pl2nograb_timer; // 0x35
+          short end1_offset; // 0x36
+          short end2_offset; // 0x38
+          bool breakable; // 0x3A
+        }
+        bar;
+        struct {
+          unsigned short points; // 0x3E
+        }
+        bakuhatu;
+        struct {
           unsigned char* timer_data_ptr; // 0x30
           unsigned char* timer_data2_ptr; // 0x34
           unsigned char unknown; // 0x3A;
@@ -205,6 +219,12 @@ typedef struct SKC_sprite_status {
           unsigned char player; // 0x3E
         }
         ring;
+        struct {
+          short offset; // 0x32
+          unsigned char pldir; // 0x34
+          unsigned char pl2dir; // 0x35
+        }
+        rollc;
         struct {
           unsigned char move_timer; // 0x39
         }
@@ -287,6 +307,10 @@ typedef struct SKC_sprite_status {
           unsigned short ringwk_index; // 0x30
         }
         tring;
+        struct {
+          bool paused;
+        }
+        water;
       }
       actfree;
     }
