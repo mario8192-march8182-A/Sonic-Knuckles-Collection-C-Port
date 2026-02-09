@@ -3,6 +3,7 @@
 
 #include "../types/spritestatus.h"
 
+void over(SKC_sprite_status* p_actwk);
 void title(SKC_sprite_status* p_actwk);
 void clear(SKC_sprite_status* p_actwk);
 

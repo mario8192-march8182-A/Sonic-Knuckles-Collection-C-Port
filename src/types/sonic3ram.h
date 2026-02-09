@@ -65,7 +65,7 @@ typedef struct sonic3_ram {
   /* 08ffef80 */ unsigned short ringbuffer[RINGBUFFER_SLOTS];
   /* 08fff000 */ unsigned short colorwk4[64];
   /* 08fff080 */ unsigned short colorwk3[64];
-  /* 08fff600 */ unsigned char gmmode;
+  /* 08fff600 */ unsigned short gmmode;
   /* 08fff602 */ unsigned short swdata1_auto;
   /* 08fff604 */ unsigned short swdata1;
   /* 08fff606 */ unsigned short swdata2;
@@ -146,6 +146,7 @@ typedef struct sonic3_ram {
   /* 08fffe16 */ unsigned char DAT_08fffe16;
   /* 08fffe18 */ unsigned char plcontinuecnt;
   /* 08fffe19 */ unsigned char ssonicflag;
+  /* 08fffe1a */ unsigned char pltimeover_f;
   /* 08fffe1b */ unsigned char plring_f2;
   /* 08fffe1c */ unsigned char pl_suu_f;
   /* 08fffe1d */ unsigned char plring_f;

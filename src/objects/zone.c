@@ -12,6 +12,7 @@
 #include "../types/spritestatus.h"
 #include "../types/spritestatushandler.h"
 #include "../utils/bits.h"
+#include "../utils/controller.h"
 #include "../utils/fp16.h"
 #include "../utils/stageno.h"
 #include "../action.h"
@@ -20,6 +21,8 @@
 #include "../shared.h"
 #include "../unlze.h"
 #include "zone08/gost08.h"
+static void over_move(SKC_sprite_status* p_actwk);
+static void over_wait(SKC_sprite_status* p_actwk);
 static void title_init(SKC_sprite_status* p_actwk);
 static void title_move0(SKC_sprite_status* p_actwk);
 static void title_move1(SKC_sprite_status* p_actwk);
@@ -48,6 +51,11 @@ static unsigned long subtbl[5];
 static unsigned long subtblh[5];
 static unsigned short timebonustbl[8];
 static SKC_overlay_element_init_data clear_init_tbl[12];
+static SKC_sprite_pattern* overpat[4];
+static SKC_sprite_pattern oversp00;
+static SKC_sprite_pattern oversp01;
+static SKC_sprite_pattern oversp02;
+static SKC_sprite_pattern oversp03;
 static SKC_sprite_pattern* titlepat[21];
 static SKC_sprite_pattern titlesp00;
 static SKC_sprite_pattern titlesp01;
@@ -132,6 +140,54 @@ static SKC_sprite_pattern clearsp58;
 
 extern sonic3_ram g_ram;
 extern bool g_sonic3_alone;
+
+
+void over(SKC_sprite_status* p_actwk) {
+  if (p_actwk->patno == 0) {
+    save_game_lives_continues();
+  }
+  short xposi = !BIT_IS_SET(p_actwk->patno, 0) ? 80 : 496;
+  fp16_set_integer(&p_actwk->xposi, xposi);
+  fp16_set_integer(&p_actwk->yposi, 240);
+  p_actwk->patbase = overpat;
+  p_actwk->sproffset = 0x879C;
+  p_actwk->sprpri = PRI_0;
+  p_actwk->r_ptr = &over_move;
+  over_move(p_actwk);
+}
+
+
+static void over_move(SKC_sprite_status* p_actwk) {
+  if (fp16_get_integer(p_actwk->xposi) != 288) {
+    short xoffset = (unsigned short)fp16_get_integer(p_actwk->xposi) < 288 ? 16 : -16;
+    fp16_set_integer(&p_actwk->xposi, fp16_get_integer(p_actwk->xposi) + xoffset);
+    actionsub(p_actwk);
+  }
+  else {
+    p_actwk->u.obj.timer = 480;
+    p_actwk->r_ptr = &over_wait;
+  }
+}
+
+
+static void over_wait(SKC_sprite_status* p_actwk) {
+  g_ram.colibuffer[0] = 0;
+  if (!BIT_IS_SET(p_actwk->patno, 0)) {
+    if (!are_buttons_pressed(g_ram.swdata1, PAD_A | PAD_B | PAD_C | PAD_S)
+        && !are_buttons_pressed(g_ram.swdata2, PAD_A | PAD_B | PAD_C | PAD_S)
+        && p_actwk->u.obj.timer != 0) {
+      --p_actwk->u.obj.timer;
+    }
+    else if (g_ram.pltimeover_f == 0) {
+      g_ram.gmmode = g_ram.plcontinuecnt != 0 ? 20 : 0;
+    }
+    else {
+      memset(&g_ram.pltime_s, 0, sizeof(g_ram.pltime_s));
+      g_ram.gameflag = 1;
+    }
+  }
+  actionsub(p_actwk);
+}
 
 
 void title(SKC_sprite_status* p_actwk) {
@@ -754,6 +810,44 @@ static SKC_overlay_element_init_data clear_init_tbl[12] = {
   { &clear_ringbonus, 376, 1464, 256,  1,  64, 7 },
   { &clear_text,      212, 1364, 284, 11,  48, 9 },
   { &clear_total,     376, 1528, 284,  1,  64, 9 }
+};
+
+
+static SKC_sprite_pattern* overpat[4] = {
+  &oversp00,
+  &oversp01,
+  &oversp02,
+  &oversp03
+};
+
+
+static SKC_sprite_pattern oversp00 = {
+  2,
+  {
+    { -8, 13, 0x0000, -72 },
+    { -8, 13, 0x0008, -40 }
+  }
+};
+static SKC_sprite_pattern oversp01 = {
+  2,
+  {
+    { -8, 13, 0x0014, 8 },
+    { -8, 13, 0x000C, 40 }
+  }
+};
+static SKC_sprite_pattern oversp02 = {
+  2,
+  {
+    { -8,  9, 0x001C, -60 },
+    { -8, 13, 0x0008, -36 }
+  }
+};
+static SKC_sprite_pattern oversp03 = {
+  2,
+  {
+    { -8, 13, 0x0014, 12 },
+    { -8, 13, 0x000C, 44 }
+  }
 };
 
 
