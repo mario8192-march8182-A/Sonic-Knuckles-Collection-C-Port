@@ -399,7 +399,7 @@ void chk_pl_pause(SKC_sprite_status* p_actwk, unsigned char r_no) {
   set_pl_pause(p_actwk, &g_ram.actwk[0]);
   SKC_actwkchk_result result = actwkchk();
   if (result.actwk_ptr != 0) {
-    result.actwk_ptr->r_ptr = &actclear;
+    result.actwk_ptr->r_ptr = &clear;
   }
 }
 
@@ -431,7 +431,7 @@ static void chk_pl_pausez02(SKC_sprite_status* p_actwk, unsigned char r_no) {
   p_actwk->r_no = r_no;
   SKC_actwkchk_result result = actwkchk();
   if (result.actwk_ptr != 0) {
-    result.actwk_ptr->r_ptr = &actclear;
+    result.actwk_ptr->r_ptr = &clear;
   }
 }
 

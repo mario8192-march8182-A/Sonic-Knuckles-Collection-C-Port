@@ -4,6 +4,6 @@
 #include "../types/spritestatus.h"
 
 void title(SKC_sprite_status* p_actwk);
-void actclear(SKC_sprite_status* p_actwk);
+void clear(SKC_sprite_status* p_actwk);
 
 #endif

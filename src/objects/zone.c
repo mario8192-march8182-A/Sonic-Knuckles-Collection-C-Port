@@ -1,9 +1,9 @@
 #include "zone.h"
 #include <stdbool.h>
 #include <string.h>
-#include "../data/cg/actclear.h"
 #include "../data/cg/actdigits.h"
 #include "../data/cg/characternames.h"
+#include "../data/cg/clear.h"
 #include "../data/cg/title.h"
 #include "../data/cg/zonenames.h"
 #include "../types/actwkchkresult.h"
@@ -31,23 +31,23 @@ static void title_act(SKC_sprite_status* p_actwk);
 static void title_element2(SKC_sprite_status* p_actwk);
 static unsigned char* zone_name_cg_tbl[22];
 static SKC_overlay_element_init_data title_init_tbl[7];
-static void actclear_init(SKC_sprite_status* p_actwk);
-static void actclear_move0(SKC_sprite_status* p_actwk);
-static void actclear_move1(SKC_sprite_status* p_actwk);
-static void actclear_move2(SKC_sprite_status* p_actwk);
-static void actclear_name(SKC_sprite_status* p_actwk);
-static void actclear_text(SKC_sprite_status* p_actwk);
-static void actclear_timebonus(SKC_sprite_status* p_actwk);
-static void actclear_ringbonus(SKC_sprite_status* p_actwk);
-static void actclear_total(SKC_sprite_status* p_actwk);
-static void actclear_bonus(SKC_sprite_status* p_actwk, unsigned short bonus);
-static void actclear_bonus_move(SKC_sprite_status* p_actwk, unsigned short bonus);
-static bool actclear_part_move(SKC_sprite_status* p_actwk);
+static void clear_init(SKC_sprite_status* p_actwk);
+static void clear_move0(SKC_sprite_status* p_actwk);
+static void clear_move1(SKC_sprite_status* p_actwk);
+static void clear_move2(SKC_sprite_status* p_actwk);
+static void clear_name(SKC_sprite_status* p_actwk);
+static void clear_text(SKC_sprite_status* p_actwk);
+static void clear_timebonus(SKC_sprite_status* p_actwk);
+static void clear_ringbonus(SKC_sprite_status* p_actwk);
+static void clear_total(SKC_sprite_status* p_actwk);
+static void clear_bonus(SKC_sprite_status* p_actwk, unsigned short bonus);
+static void clear_bonus_move(SKC_sprite_status* p_actwk, unsigned short bonus);
+static bool clear_part_move(SKC_sprite_status* p_actwk);
 static unsigned long score_to_nibbles(SKC_sprite_status* p_actwk, unsigned short score);
 static unsigned long subtbl[5];
 static unsigned long subtblh[5];
 static unsigned short timebonustbl[8];
-static SKC_overlay_element_init_data actclear_init_tbl[12];
+static SKC_overlay_element_init_data clear_init_tbl[12];
 static SKC_sprite_pattern* titlepat[21];
 static SKC_sprite_pattern titlesp00;
 static SKC_sprite_pattern titlesp01;
@@ -69,66 +69,66 @@ static SKC_sprite_pattern titlesp16;
 static SKC_sprite_pattern titlesp17;
 static SKC_sprite_pattern titlesp18;
 static SKC_sprite_pattern titlesp20;
-static SKC_sprite_pattern* actclearpat[59];
-static SKC_sprite_pattern actclearsp00;
-static SKC_sprite_pattern actclearsp01;
-static SKC_sprite_pattern actclearsp02;
-static SKC_sprite_pattern actclearsp03;
-static SKC_sprite_pattern actclearsp04;
-static SKC_sprite_pattern actclearsp05;
-static SKC_sprite_pattern actclearsp06;
-static SKC_sprite_pattern actclearsp07;
-static SKC_sprite_pattern actclearsp08;
-static SKC_sprite_pattern actclearsp09;
-static SKC_sprite_pattern actclearsp10;
-static SKC_sprite_pattern actclearsp11;
-static SKC_sprite_pattern actclearsp12;
-static SKC_sprite_pattern actclearsp13;
-static SKC_sprite_pattern actclearsp14;
-static SKC_sprite_pattern actclearsp15;
-static SKC_sprite_pattern actclearsp16;
-static SKC_sprite_pattern actclearsp17;
-static SKC_sprite_pattern actclearsp18;
-static SKC_sprite_pattern actclearsp19;
-static SKC_sprite_pattern actclearsp20;
-static SKC_sprite_pattern actclearsp21;
-static SKC_sprite_pattern actclearsp22;
-static SKC_sprite_pattern actclearsp23;
-static SKC_sprite_pattern actclearsp24;
-static SKC_sprite_pattern actclearsp25;
-static SKC_sprite_pattern actclearsp26;
-static SKC_sprite_pattern actclearsp27;
-static SKC_sprite_pattern actclearsp28;
-static SKC_sprite_pattern actclearsp29;
-static SKC_sprite_pattern actclearsp30;
-static SKC_sprite_pattern actclearsp31;
-static SKC_sprite_pattern actclearsp32;
-static SKC_sprite_pattern actclearsp33;
-static SKC_sprite_pattern actclearsp34;
-static SKC_sprite_pattern actclearsp35;
-static SKC_sprite_pattern actclearsp36;
-static SKC_sprite_pattern actclearsp37;
-static SKC_sprite_pattern actclearsp38;
-static SKC_sprite_pattern actclearsp39;
-static SKC_sprite_pattern actclearsp40;
-static SKC_sprite_pattern actclearsp41;
-static SKC_sprite_pattern actclearsp42;
-static SKC_sprite_pattern actclearsp43;
-static SKC_sprite_pattern actclearsp44;
-static SKC_sprite_pattern actclearsp45;
-static SKC_sprite_pattern actclearsp46;
-static SKC_sprite_pattern actclearsp47;
-static SKC_sprite_pattern actclearsp48;
-static SKC_sprite_pattern actclearsp49;
-static SKC_sprite_pattern actclearsp50;
-static SKC_sprite_pattern actclearsp51;
-static SKC_sprite_pattern actclearsp52;
-static SKC_sprite_pattern actclearsp53;
-static SKC_sprite_pattern actclearsp54;
-static SKC_sprite_pattern actclearsp55;
-static SKC_sprite_pattern actclearsp56;
-static SKC_sprite_pattern actclearsp57;
-static SKC_sprite_pattern actclearsp58;
+static SKC_sprite_pattern* clearpat[59];
+static SKC_sprite_pattern clearsp00;
+static SKC_sprite_pattern clearsp01;
+static SKC_sprite_pattern clearsp02;
+static SKC_sprite_pattern clearsp03;
+static SKC_sprite_pattern clearsp04;
+static SKC_sprite_pattern clearsp05;
+static SKC_sprite_pattern clearsp06;
+static SKC_sprite_pattern clearsp07;
+static SKC_sprite_pattern clearsp08;
+static SKC_sprite_pattern clearsp09;
+static SKC_sprite_pattern clearsp10;
+static SKC_sprite_pattern clearsp11;
+static SKC_sprite_pattern clearsp12;
+static SKC_sprite_pattern clearsp13;
+static SKC_sprite_pattern clearsp14;
+static SKC_sprite_pattern clearsp15;
+static SKC_sprite_pattern clearsp16;
+static SKC_sprite_pattern clearsp17;
+static SKC_sprite_pattern clearsp18;
+static SKC_sprite_pattern clearsp19;
+static SKC_sprite_pattern clearsp20;
+static SKC_sprite_pattern clearsp21;
+static SKC_sprite_pattern clearsp22;
+static SKC_sprite_pattern clearsp23;
+static SKC_sprite_pattern clearsp24;
+static SKC_sprite_pattern clearsp25;
+static SKC_sprite_pattern clearsp26;
+static SKC_sprite_pattern clearsp27;
+static SKC_sprite_pattern clearsp28;
+static SKC_sprite_pattern clearsp29;
+static SKC_sprite_pattern clearsp30;
+static SKC_sprite_pattern clearsp31;
+static SKC_sprite_pattern clearsp32;
+static SKC_sprite_pattern clearsp33;
+static SKC_sprite_pattern clearsp34;
+static SKC_sprite_pattern clearsp35;
+static SKC_sprite_pattern clearsp36;
+static SKC_sprite_pattern clearsp37;
+static SKC_sprite_pattern clearsp38;
+static SKC_sprite_pattern clearsp39;
+static SKC_sprite_pattern clearsp40;
+static SKC_sprite_pattern clearsp41;
+static SKC_sprite_pattern clearsp42;
+static SKC_sprite_pattern clearsp43;
+static SKC_sprite_pattern clearsp44;
+static SKC_sprite_pattern clearsp45;
+static SKC_sprite_pattern clearsp46;
+static SKC_sprite_pattern clearsp47;
+static SKC_sprite_pattern clearsp48;
+static SKC_sprite_pattern clearsp49;
+static SKC_sprite_pattern clearsp50;
+static SKC_sprite_pattern clearsp51;
+static SKC_sprite_pattern clearsp52;
+static SKC_sprite_pattern clearsp53;
+static SKC_sprite_pattern clearsp54;
+static SKC_sprite_pattern clearsp55;
+static SKC_sprite_pattern clearsp56;
+static SKC_sprite_pattern clearsp57;
+static SKC_sprite_pattern clearsp58;
 
 extern sonic3_ram g_ram;
 extern bool g_sonic3_alone;
@@ -434,21 +434,21 @@ static SKC_overlay_element_init_data title_init_tbl[7] = {
 };
 
 
-void actclear(SKC_sprite_status* p_actwk) {
+void clear(SKC_sprite_status* p_actwk) {
   SKC_sprite_status_handler act_tbl[5] = {
-    &actclear_init,
-    &actclear_move0,
-    &actclear_move1,
-    &actclear_move2
+    &clear_init,
+    &clear_move0,
+    &clear_move1,
+    &clear_move2
   };
 
   act_tbl[p_actwk->r_no / 2](p_actwk);
 }
 
 
-static void actclear_init(SKC_sprite_status* p_actwk) {
+static void clear_init(SKC_sprite_status* p_actwk) {
   bgmset(225);
-  unlze_moduled(&g_mdVram[0xA400], actclear_cg);
+  unlze_moduled(&g_mdVram[0xA400], clear_cg);
   bool is_act_1 = g_ram.stageno != LAVA_REEF_BOSS && get_act(g_ram.stageno_i) == ACT_1;
   unsigned char* p_cg = is_act_1 ? act_digit_1_cg : act_digit_2_cg;
   p_actwk->u.obj.userflag = is_act_1 ? 0 : 0xFF;
@@ -485,25 +485,25 @@ static void actclear_init(SKC_sprite_status* p_actwk) {
   g_ram.ringbonus = g_ram.plring * 10;
   g_ram.bonustotal = 0;
   p_actwk->u.obj.timer = 360;
-  p_actwk->u.obj.actfree.actclear.part_cnt = 12;
+  p_actwk->u.obj.actfree.clear.part_cnt = 12;
   p_actwk->r_no += 2;
 }
 
 
-static void actclear_move0(SKC_sprite_status* p_actwk) {
+static void clear_move0(SKC_sprite_status* p_actwk) {
   SKC_actwkchk_result result = actwkchk2(p_actwk);
   if (result.actwk_ptr != 0) {
     for (int i = 0; i < 12; ++i) {
-      result.actwk_ptr->r_ptr = actclear_init_tbl[i].r_ptr;
-      result.actwk_ptr->u.obj.actfree.actclear_part.xdestination = actclear_init_tbl[i].xdestination;
-      fp16_set_integer(&result.actwk_ptr->xposi, actclear_init_tbl[i].xposi);
+      result.actwk_ptr->r_ptr = clear_init_tbl[i].r_ptr;
+      result.actwk_ptr->u.obj.actfree.clear_part.xdestination = clear_init_tbl[i].xdestination;
+      fp16_set_integer(&result.actwk_ptr->xposi, clear_init_tbl[i].xposi);
       p_actwk->r_no = fp16_get_integer(result.actwk_ptr->xposi) < 0 ? 0 : 0xFF;
-      fp16_set_integer(&result.actwk_ptr->yposi, actclear_init_tbl[i].yposi);
-      result.actwk_ptr->patno = actclear_init_tbl[i].patno;
-      result.actwk_ptr->sprhs = actclear_init_tbl[i].sprhs;
-      result.actwk_ptr->colino = actclear_init_tbl[i].exit_no;
+      fp16_set_integer(&result.actwk_ptr->yposi, clear_init_tbl[i].yposi);
+      result.actwk_ptr->patno = clear_init_tbl[i].patno;
+      result.actwk_ptr->sprhs = clear_init_tbl[i].sprhs;
+      result.actwk_ptr->colino = clear_init_tbl[i].exit_no;
       result.actwk_ptr->actflg.compound = 1;
-      result.actwk_ptr->patbase = actclearpat;
+      result.actwk_ptr->patbase = clearpat;
       result.actwk_ptr->u.obj.oya = p_actwk - g_ram.actwk;
       result = actwkchk_next(result);
       if (result.actwk_ptr == 0) break;
@@ -519,7 +519,7 @@ static void actclear_move0(SKC_sprite_status* p_actwk) {
 }
 
 
-static void actclear_move1(SKC_sprite_status* p_actwk) {
+static void clear_move1(SKC_sprite_status* p_actwk) {
   if (p_actwk->u.obj.timer != 0) {
     --p_actwk->u.obj.timer;
     if (p_actwk->u.obj.timer == 289) {
@@ -553,18 +553,18 @@ static void actclear_move1(SKC_sprite_status* p_actwk) {
       }
       p_actwk->u.obj.timer = 90;
       p_actwk->r_no += 2;
-      actclear_move2(p_actwk);
+      clear_move2(p_actwk);
     }
   }
 }
 
 
-static void actclear_move2(SKC_sprite_status* p_actwk) {
+static void clear_move2(SKC_sprite_status* p_actwk) {
   if (p_actwk->u.obj.timer != 0) {
     --p_actwk->u.obj.timer;
   }
-  else if (p_actwk->u.obj.actfree.actclear.part_cnt != 0) {
-    ++p_actwk->u.obj.actfree.actclear.current_exit_no;
+  else if (p_actwk->u.obj.actfree.clear.part_cnt != 0) {
+    ++p_actwk->u.obj.actfree.clear.current_exit_no;
   }
   else if (get_zone(g_ram.stageno) == SKY_SANCTUARY
            || get_zone(g_ram.stageno) == LAVA_REEF_BOSS_AND_HIDDEN_PALACE
@@ -590,7 +590,7 @@ static void actclear_move2(SKC_sprite_status* p_actwk) {
 }
 
 
-static void actclear_name(SKC_sprite_status* p_actwk) {
+static void clear_name(SKC_sprite_status* p_actwk) {
   switch (g_ram.play_type) {
     case PLAY_TYPE_SONIC:
     case PLAY_TYPE_SONIC_AND_MILES:
@@ -601,64 +601,64 @@ static void actclear_name(SKC_sprite_status* p_actwk) {
       if (!BIT_IS_SET(g_ram.mdstatus, 7)) {
         ++p_actwk->patno;
         fp16_set_integer(&p_actwk->xposi, fp16_get_integer(p_actwk->xposi) + 8);
-        p_actwk->u.obj.actfree.actclear_part.xdestination += 8;
+        p_actwk->u.obj.actfree.clear_part.xdestination += 8;
         p_actwk->sprhs -= 8;
       }
       break;
     case PLAY_TYPE_KNUCKLES:
       p_actwk->patno += 3;
       p_actwk->xposi -= 48;
-      p_actwk->u.obj.actfree.actclear_part.xdestination -= 48;
+      p_actwk->u.obj.actfree.clear_part.xdestination -= 48;
       p_actwk->sprhs += 48;
       break;
   }
 
   SKC_sprite_status* p_parentwk = &g_ram.actwk[p_actwk->u.obj.oya];
   p_actwk->sproffset = p_parentwk->u.obj.userflag == 0 ? 0 : 40;
-  p_actwk->r_ptr = &actclear_text;
-  actclear_text(p_actwk);
+  p_actwk->r_ptr = &clear_text;
+  clear_text(p_actwk);
 }
 
 
-static void actclear_text(SKC_sprite_status* p_actwk) {
-  bool fout = actclear_part_move(p_actwk);
+static void clear_text(SKC_sprite_status* p_actwk) {
+  bool fout = clear_part_move(p_actwk);
   if (!fout) {
     actionsub(p_actwk);
   }
 }
 
 
-static void actclear_timebonus(SKC_sprite_status* p_actwk) {
-  bool fout = actclear_part_move(p_actwk);
+static void clear_timebonus(SKC_sprite_status* p_actwk) {
+  bool fout = clear_part_move(p_actwk);
   if (!fout) {
-    actclear_bonus(p_actwk, g_ram.timebonus);
+    clear_bonus(p_actwk, g_ram.timebonus);
   }
 }
 
 
-static void actclear_ringbonus(SKC_sprite_status* p_actwk) {
-  bool fout = actclear_part_move(p_actwk);
+static void clear_ringbonus(SKC_sprite_status* p_actwk) {
+  bool fout = clear_part_move(p_actwk);
   if (!fout) {
-    actclear_bonus(p_actwk, g_ram.ringbonus);
+    clear_bonus(p_actwk, g_ram.ringbonus);
   }
 }
 
 
-static void actclear_total(SKC_sprite_status* p_actwk) {
-  bool fout = actclear_part_move(p_actwk);
+static void clear_total(SKC_sprite_status* p_actwk) {
+  bool fout = clear_part_move(p_actwk);
   if (!fout) {
-    actclear_bonus(p_actwk, g_ram.bonustotal);
+    clear_bonus(p_actwk, g_ram.bonustotal);
   }
 }
 
 
-static void actclear_bonus(SKC_sprite_status* p_actwk, unsigned short bonus) {
-  actclear_bonus_move(p_actwk, bonus);
+static void clear_bonus(SKC_sprite_status* p_actwk, unsigned short bonus) {
+  clear_bonus_move(p_actwk, bonus);
   actionsub(p_actwk);
 }
 
 
-static void actclear_bonus_move(SKC_sprite_status* p_actwk, unsigned short bonus) {
+static void clear_bonus_move(SKC_sprite_status* p_actwk, unsigned short bonus) {
   p_actwk->u.compound.child_cnt = 7;
   unsigned long decimal_bonus = rotate_long_left(score_to_nibbles(p_actwk, bonus), 4);
   short xposi = fp16_get_integer(p_actwk->xposi - 56);
@@ -679,15 +679,15 @@ static void actclear_bonus_move(SKC_sprite_status* p_actwk, unsigned short bonus
 }
 
 
-static bool actclear_part_move(SKC_sprite_status* p_actwk) {
+static bool clear_part_move(SKC_sprite_status* p_actwk) {
   SKC_sprite_status* p_parentwk = &g_ram.actwk[p_actwk->u.obj.oya];
-  if (p_parentwk->u.obj.actfree.actclear.current_exit_no != 0) {
+  if (p_parentwk->u.obj.actfree.clear.current_exit_no != 0) {
     if (p_actwk->actflg.onscreen == 0) {
-      --p_parentwk->u.obj.actfree.actclear.part_cnt;
+      --p_parentwk->u.obj.actfree.clear.part_cnt;
       frameout(p_actwk);
       return true;
     }
-    if (p_parentwk->u.obj.actfree.actclear.current_exit_no >= p_actwk->colino) {
+    if (p_parentwk->u.obj.actfree.clear.current_exit_no >= p_actwk->colino) {
       short xposi = -32;
       if (p_actwk->r_no != 0) {
         xposi = -xposi;
@@ -699,8 +699,8 @@ static bool actclear_part_move(SKC_sprite_status* p_actwk) {
   else {
     short xspeed = 16;
     short xposi = fp16_get_integer(p_actwk->xposi);
-    if (xposi != p_actwk->u.obj.actfree.actclear_part.xdestination) {
-      if (xposi >= p_actwk->u.obj.actfree.actclear_part.xdestination) {
+    if (xposi != p_actwk->u.obj.actfree.clear_part.xdestination) {
+      if (xposi >= p_actwk->u.obj.actfree.clear_part.xdestination) {
         xspeed = -xspeed;
       }
       xposi += xspeed;
@@ -741,19 +741,19 @@ static unsigned short timebonustbl[8] = {
 };
 
 
-static SKC_overlay_element_init_data actclear_init_tbl[12] = {
-  { &actclear_name,      224, -544, 184, 19,  72, 1 },
-  { &actclear_text,      304, -464, 184, 17,  48, 1 },
-  { &actclear_text,      232, 1128, 204, 16, 112, 3 },
-  { &actclear_text,      352, 1248, 188, 15,  56, 3 },
-  { &actclear_text,      192, 1216, 240, 14,  32, 5 },
-  { &actclear_text,      232, 1256, 240, 12,  48, 5 },
-  { &actclear_timebonus, 376, 1400, 240,  1,  64, 5 },
-  { &actclear_text,      192, 1280, 256, 13,  32, 7 },
-  { &actclear_text,      232, 1320, 256, 12,  48, 7 },
-  { &actclear_ringbonus, 376, 1464, 256,  1,  64, 7 },
-  { &actclear_text,      212, 1364, 284, 11,  48, 9 },
-  { &actclear_total,     376, 1528, 284,  1,  64, 9 }
+static SKC_overlay_element_init_data clear_init_tbl[12] = {
+  { &clear_name,      224, -544, 184, 19,  72, 1 },
+  { &clear_text,      304, -464, 184, 17,  48, 1 },
+  { &clear_text,      232, 1128, 204, 16, 112, 3 },
+  { &clear_text,      352, 1248, 188, 15,  56, 3 },
+  { &clear_text,      192, 1216, 240, 14,  32, 5 },
+  { &clear_text,      232, 1256, 240, 12,  48, 5 },
+  { &clear_timebonus, 376, 1400, 240,  1,  64, 5 },
+  { &clear_text,      192, 1280, 256, 13,  32, 7 },
+  { &clear_text,      232, 1320, 256, 12,  48, 7 },
+  { &clear_ringbonus, 376, 1464, 256,  1,  64, 7 },
+  { &clear_text,      212, 1364, 284, 11,  48, 9 },
+  { &clear_total,     376, 1528, 284,  1,  64, 9 }
 };
 
 
@@ -1055,132 +1055,132 @@ static SKC_sprite_pattern titlesp20 = {
 };
 
 
-static SKC_sprite_pattern* actclearpat[59] = {
-  &actclearsp00,
-  &actclearsp01,
-  &actclearsp02,
-  &actclearsp03,
-  &actclearsp04,
-  &actclearsp05,
-  &actclearsp06,
-  &actclearsp07,
-  &actclearsp08,
-  &actclearsp09,
-  &actclearsp10,
-  &actclearsp11,
-  &actclearsp12,
-  &actclearsp13,
-  &actclearsp14,
-  &actclearsp15,
-  &actclearsp16,
-  &actclearsp17,
-  &actclearsp18,
-  &actclearsp19,
-  &actclearsp20,
-  &actclearsp21,
-  &actclearsp22,
-  &actclearsp23,
-  &actclearsp24,
-  &actclearsp25,
-  &actclearsp26,
-  &actclearsp27,
-  &actclearsp28,
-  &actclearsp29,
-  &actclearsp30,
-  &actclearsp31,
-  &actclearsp32,
-  &actclearsp33,
-  &actclearsp34,
-  &actclearsp35,
-  &actclearsp36,
-  &actclearsp37,
-  &actclearsp38,
-  &actclearsp39,
-  &actclearsp41,
-  &actclearsp42,
-  &actclearsp43,
-  &actclearsp44,
-  &actclearsp52,
-  &actclearsp53,
-  &actclearsp45,
-  &actclearsp46,
-  &actclearsp47,
-  &actclearsp48,
-  &actclearsp49,
-  &actclearsp50,
-  &actclearsp51,
-  &actclearsp54,
-  &actclearsp55,
-  &actclearsp56,
-  &actclearsp57,
-  &actclearsp58,
-  &actclearsp40
+static SKC_sprite_pattern* clearpat[59] = {
+  &clearsp00,
+  &clearsp01,
+  &clearsp02,
+  &clearsp03,
+  &clearsp04,
+  &clearsp05,
+  &clearsp06,
+  &clearsp07,
+  &clearsp08,
+  &clearsp09,
+  &clearsp10,
+  &clearsp11,
+  &clearsp12,
+  &clearsp13,
+  &clearsp14,
+  &clearsp15,
+  &clearsp16,
+  &clearsp17,
+  &clearsp18,
+  &clearsp19,
+  &clearsp20,
+  &clearsp21,
+  &clearsp22,
+  &clearsp23,
+  &clearsp24,
+  &clearsp25,
+  &clearsp26,
+  &clearsp27,
+  &clearsp28,
+  &clearsp29,
+  &clearsp30,
+  &clearsp31,
+  &clearsp32,
+  &clearsp33,
+  &clearsp34,
+  &clearsp35,
+  &clearsp36,
+  &clearsp37,
+  &clearsp38,
+  &clearsp39,
+  &clearsp41,
+  &clearsp42,
+  &clearsp43,
+  &clearsp44,
+  &clearsp52,
+  &clearsp53,
+  &clearsp45,
+  &clearsp46,
+  &clearsp47,
+  &clearsp48,
+  &clearsp49,
+  &clearsp50,
+  &clearsp51,
+  &clearsp54,
+  &clearsp55,
+  &clearsp56,
+  &clearsp57,
+  &clearsp58,
+  &clearsp40
 };
-static SKC_sprite_pattern actclearsp00 = {
+static SKC_sprite_pattern clearsp00 = {
    0,
    {}
 };
-static SKC_sprite_pattern actclearsp01 = {
+static SKC_sprite_pattern clearsp01 = {
   1,
   {
     { 0, 1, 0xA520, 0 }
   }
 };
-static SKC_sprite_pattern actclearsp02 = {
+static SKC_sprite_pattern clearsp02 = {
   1,
   {
     { 0, 1, 0xA522, 0 }
   }
 };
-static SKC_sprite_pattern actclearsp03 = {
+static SKC_sprite_pattern clearsp03 = {
   1,
   {
     { 0, 1, 0xA524, 0 }
   }
 };
-static SKC_sprite_pattern actclearsp04 = {
+static SKC_sprite_pattern clearsp04 = {
   1,
   {
     { 0, 1, 0xA526, 0 }
   }
 };
-static SKC_sprite_pattern actclearsp05 = {
+static SKC_sprite_pattern clearsp05 = {
   1,
   {
     { 0, 1, 0xA528, 0 }
   }
 };
-static SKC_sprite_pattern actclearsp06 = {
+static SKC_sprite_pattern clearsp06 = {
   1,
   {
     { 0, 1, 0xA52A, 0 }
   }
 };
-static SKC_sprite_pattern actclearsp07 = {
+static SKC_sprite_pattern clearsp07 = {
   1,
   {
     { 0, 1, 0xA52C, 0 }
   }
 };
-static SKC_sprite_pattern actclearsp08 = {
+static SKC_sprite_pattern clearsp08 = {
   1,
   {
     { 0, 1, 0xA52E, 0 }
   }
 };
-static SKC_sprite_pattern actclearsp09 = {
+static SKC_sprite_pattern clearsp09 = {
   1,
   {
     { 0, 1, 0xA530, 0 }
   }
 };
-static SKC_sprite_pattern actclearsp10 = {
+static SKC_sprite_pattern clearsp10 = {
   1,
   {
     { 0, 1, 0xA532, 0 }
   }
 };
-static SKC_sprite_pattern actclearsp11 = {
+static SKC_sprite_pattern clearsp11 = {
   3,
   {
     {   0,  1, 0xA544,  0 },
@@ -1188,7 +1188,7 @@ static SKC_sprite_pattern actclearsp11 = {
     { -10,  6, 0x8534, 36 }
   }
 };
-static SKC_sprite_pattern actclearsp12 = {
+static SKC_sprite_pattern clearsp12 = {
   3,
   {
     {   0, 13, 0xA53A,  0 },
@@ -1196,26 +1196,26 @@ static SKC_sprite_pattern actclearsp12 = {
     { -10,  6, 0x8534, 36 }
   }
 };
-static SKC_sprite_pattern actclearsp13 = {
+static SKC_sprite_pattern clearsp13 = {
   1,
   {
     { 0, 13, 0xA6D2, 0 }
   }
 };
-static SKC_sprite_pattern actclearsp14 = {
+static SKC_sprite_pattern clearsp14 = {
   1,
   {
     { 0, 13, 0xA6DA, 0 }
   }
 };
-static SKC_sprite_pattern actclearsp15 = {
+static SKC_sprite_pattern clearsp15 = {
   2,
   {
     { 16,  9, 0x854A,  0 },
     {  0, 15, 0x8568, 17 }
   }
 };
-static SKC_sprite_pattern actclearsp16 = {
+static SKC_sprite_pattern clearsp16 = {
   6,
   {
     { 0,  5, 0x8560,  0 },
@@ -1226,7 +1226,7 @@ static SKC_sprite_pattern actclearsp16 = {
     { 0, 13, 0x8550, 80 }
   }
 };
-static SKC_sprite_pattern actclearsp17 = {
+static SKC_sprite_pattern clearsp17 = {
   3,
   {
     { 0, 5, 0x8550,  0 },
@@ -1234,7 +1234,7 @@ static SKC_sprite_pattern actclearsp17 = {
     { 0, 5, 0x8560, 30 }
   }
 };
-static SKC_sprite_pattern actclearsp18 = {
+static SKC_sprite_pattern clearsp18 = {
   3,
   {
     { 0, 13, 0x850F,  0 },
@@ -1242,7 +1242,7 @@ static SKC_sprite_pattern actclearsp18 = {
     { 0,  5, 0x851F, 64 }
   }
 };
-static SKC_sprite_pattern actclearsp19 = {
+static SKC_sprite_pattern clearsp19 = {
   3,
   {
     { 0, 13, 0x8578,  1 },
@@ -1250,7 +1250,7 @@ static SKC_sprite_pattern actclearsp19 = {
     { 0,  1, 0x8588, 65 }
   }
 };
-static SKC_sprite_pattern actclearsp20 = {
+static SKC_sprite_pattern clearsp20 = {
   3,
   {
     { 0, 13, 0x8578,  6 },
@@ -1258,14 +1258,14 @@ static SKC_sprite_pattern actclearsp20 = {
     { 0,  1, 0x8588, 70 }
   }
 };
-static SKC_sprite_pattern actclearsp21 = {
+static SKC_sprite_pattern clearsp21 = {
   2,
   {
     { 0, 13, 0x8578,  1 },
     { 0, 13, 0x8580, 33 }
   }
 };
-static SKC_sprite_pattern actclearsp22 = {
+static SKC_sprite_pattern clearsp22 = {
   4,
   {
     { 0, 13, 0x8578,   4 },
@@ -1274,7 +1274,7 @@ static SKC_sprite_pattern actclearsp22 = {
     { 0,  9, 0x8590, 100 }
   }
 };
-static SKC_sprite_pattern actclearsp23 = {
+static SKC_sprite_pattern clearsp23 = {
   5,
   {
     {   0, 13, 0xE6CA, -96 },
@@ -1284,7 +1284,7 @@ static SKC_sprite_pattern actclearsp23 = {
     { -10,  6, 0x85CC, -60 }
   }
 };
-static SKC_sprite_pattern actclearsp24 = {
+static SKC_sprite_pattern clearsp24 = {
   4,
   {
     {   0, 13, 0xE6D2,  0 },
@@ -1293,7 +1293,7 @@ static SKC_sprite_pattern actclearsp24 = {
     { -10,  6, 0x85CC, 76 }
   }
 };
-static SKC_sprite_pattern actclearsp25 = {
+static SKC_sprite_pattern clearsp25 = {
   3,
   {
     {   0, 13, 0xE57F,  0 },
@@ -1301,7 +1301,7 @@ static SKC_sprite_pattern actclearsp25 = {
     { -10,  6, 0x85CC, 52 }
   }
 };
-static SKC_sprite_pattern actclearsp26 = {
+static SKC_sprite_pattern clearsp26 = {
   3,
   {
     {   0, 13, 0xE58D,  0 },
@@ -1309,49 +1309,49 @@ static SKC_sprite_pattern actclearsp26 = {
     { -10,  6, 0x85CC, 60 }
   }
 };
-static SKC_sprite_pattern actclearsp27 = {
+static SKC_sprite_pattern clearsp27 = {
   1,
   {
     { -8, 5, 0xC56F, -8 }
   }
 };
-static SKC_sprite_pattern actclearsp28 = {
+static SKC_sprite_pattern clearsp28 = {
   1,
   {
     { -8, 5, 0xC56B, -8 }
   }
 };
-static SKC_sprite_pattern actclearsp29 = {
+static SKC_sprite_pattern clearsp29 = {
   1,
   {
     { -8, 5, 0xC573, -8 }
   }
 };
-static SKC_sprite_pattern actclearsp30 = {
+static SKC_sprite_pattern clearsp30 = {
   1,
   {
     { -8, 5, 0xA56B, -8 }
   }
 };
-static SKC_sprite_pattern actclearsp31 = {
+static SKC_sprite_pattern clearsp31 = {
   1,
   {
     { -8, 5, 0x857B, -8 }
   }
 };
-static SKC_sprite_pattern actclearsp32 = {
+static SKC_sprite_pattern clearsp32 = {
   1,
   {
     { -8, 5, 0x8577, -8 }
   }
 };
-static SKC_sprite_pattern actclearsp33 = {
+static SKC_sprite_pattern clearsp33 = {
   1,
   {
     { -8, 5, 0xA56F, -8 }
   }
 };
-static SKC_sprite_pattern actclearsp34 = {
+static SKC_sprite_pattern clearsp34 = {
   12,
   {
     { 0, 5, 0x8559, -96 },
@@ -1368,7 +1368,7 @@ static SKC_sprite_pattern actclearsp34 = {
     { 0, 5, 0x8533,  80 }
   }
 };
-static SKC_sprite_pattern actclearsp35 = {
+static SKC_sprite_pattern clearsp35 = {
   4,
   {
     { 0, 5, 0x8537,  0 },
@@ -1377,7 +1377,7 @@ static SKC_sprite_pattern actclearsp35 = {
     { 0, 5, 0x8523, 56 }
   }
 };
-static SKC_sprite_pattern actclearsp36 = {
+static SKC_sprite_pattern clearsp36 = {
   12,
   {
     { 0, 5, 0x852B, -100 },
@@ -1394,20 +1394,20 @@ static SKC_sprite_pattern actclearsp36 = {
     { 0, 5, 0x852F,   84 }
   }
 };
-static SKC_sprite_pattern actclearsp37 = {
+static SKC_sprite_pattern clearsp37 = {
   2,
   {
     { 0, 5, 0x8541, 72 },
     { 0, 5, 0x8541, 86 }
   }
 };
-static SKC_sprite_pattern actclearsp38 = {
+static SKC_sprite_pattern clearsp38 = {
   1,
   {
     { 0, 5, 0x8559, 100 }
   }
 };
-static SKC_sprite_pattern actclearsp39 = {
+static SKC_sprite_pattern clearsp39 = {
   3,
   {
     { 0, 5, 0xE549,  0 },
@@ -1415,7 +1415,7 @@ static SKC_sprite_pattern actclearsp39 = {
     { 0, 9, 0xE565, 32 }
   }
 };
-static SKC_sprite_pattern actclearsp40 = {
+static SKC_sprite_pattern clearsp40 = {
   3,
   {
     { 0, 5, 0xE52B,  0 },
@@ -1423,32 +1423,32 @@ static SKC_sprite_pattern actclearsp40 = {
     { 0, 5, 0xE549, 32 }
   }
 };
-static SKC_sprite_pattern actclearsp41 = {
+static SKC_sprite_pattern clearsp41 = {
   2,
   {
     { 0, 5, 0xE527,  0 },
     { 0, 5, 0xE533, 15 }
   }
 };
-static SKC_sprite_pattern actclearsp42 = {
+static SKC_sprite_pattern clearsp42 = {
   1,
   {
     { -24, 10, 0x859D, -12 }
   }
 };
-static SKC_sprite_pattern actclearsp43 = {
+static SKC_sprite_pattern clearsp43 = {
   1,
   {
     { -24, 10, 0x85A6, -12 }
   }
 };
-static SKC_sprite_pattern actclearsp44 = {
+static SKC_sprite_pattern clearsp44 = {
   1,
   {
     { -24, 10, 0x85AF, -12 }
   }
 };
-static SKC_sprite_pattern actclearsp45 = {
+static SKC_sprite_pattern clearsp45 = {
   7,
   {
     { 0, 5, 0xE52B, -64 },
@@ -1460,7 +1460,7 @@ static SKC_sprite_pattern actclearsp45 = {
     { 0, 5, 0xE54D,  48 }
   }
 };
-static SKC_sprite_pattern actclearsp46 = {
+static SKC_sprite_pattern clearsp46 = {
   12,
   {
     { 0, 5, 0xE53B, -96 },
@@ -1477,7 +1477,7 @@ static SKC_sprite_pattern actclearsp46 = {
     { 0, 5, 0xE533,  80 }
   }
 };
-static SKC_sprite_pattern actclearsp47 = {
+static SKC_sprite_pattern clearsp47 = {
   12,
   {
     { 0, 5, 0x8559, -100 },
@@ -1494,7 +1494,7 @@ static SKC_sprite_pattern actclearsp47 = {
     { 0, 5, 0x852F,   84 }
   }
 };
-static SKC_sprite_pattern actclearsp48 = {
+static SKC_sprite_pattern clearsp48 = {
   5,
   {
     {   0, 13, 0xA6CA, -96 },
@@ -1504,7 +1504,7 @@ static SKC_sprite_pattern actclearsp48 = {
     { -10,  6, 0x85CC, -60 }
   }
 };
-static SKC_sprite_pattern actclearsp49 = {
+static SKC_sprite_pattern clearsp49 = {
   4,
   {
     {   0, 13, 0xA6D2,  0 },
@@ -1513,7 +1513,7 @@ static SKC_sprite_pattern actclearsp49 = {
     { -10,  6, 0x85CC, 76 }
   }
 };
-static SKC_sprite_pattern actclearsp50 = {
+static SKC_sprite_pattern clearsp50 = {
   3,
   {
     {   0, 13, 0xA57F,  0 },
@@ -1521,7 +1521,7 @@ static SKC_sprite_pattern actclearsp50 = {
     { -10,  6, 0x85CC, 52 }
   }
 };
-static SKC_sprite_pattern actclearsp51 = {
+static SKC_sprite_pattern clearsp51 = {
   3,
   {
     {   0, 13, 0xA58D,  0 },
@@ -1529,7 +1529,7 @@ static SKC_sprite_pattern actclearsp51 = {
     { -10,  6, 0x85CC, 60 }
   }
 };
-static SKC_sprite_pattern actclearsp52 = {
+static SKC_sprite_pattern clearsp52 = {
   3,
   {
     { 0, 5, 0x8549,  0 },
@@ -1537,7 +1537,7 @@ static SKC_sprite_pattern actclearsp52 = {
     { 0, 9, 0x8565, 32 }
   }
 };
-static SKC_sprite_pattern actclearsp53 = {
+static SKC_sprite_pattern clearsp53 = {
   3,
   {
     { 0, 5, 0x852B,  0 },
@@ -1545,14 +1545,14 @@ static SKC_sprite_pattern actclearsp53 = {
     { 0, 5, 0x8549, 32 }
   }
 };
-static SKC_sprite_pattern actclearsp54 = {
+static SKC_sprite_pattern clearsp54 = {
   2,
   {
     { 0, 5, 0x8527,  0 },
     { 0, 5, 0x8533, 15 }
   }
 };
-static SKC_sprite_pattern actclearsp55 = {
+static SKC_sprite_pattern clearsp55 = {
   5,
   {
     {   0, 13, 0x86CA, -96 },
@@ -1562,7 +1562,7 @@ static SKC_sprite_pattern actclearsp55 = {
     { -10,  6, 0x85CC, -60 }
   }
 };
-static SKC_sprite_pattern actclearsp56 = {
+static SKC_sprite_pattern clearsp56 = {
   4,
   {
     {   0, 13, 0x86D2,  0 },
@@ -1571,7 +1571,7 @@ static SKC_sprite_pattern actclearsp56 = {
     { -10,  6, 0x85CC, 76 }
   }
 };
-static SKC_sprite_pattern actclearsp57 = {
+static SKC_sprite_pattern clearsp57 = {
   3,
   {
     {   0, 13, 0x857F,  0 },
@@ -1579,7 +1579,7 @@ static SKC_sprite_pattern actclearsp57 = {
     { -10,  6, 0x85CC, 52 }
   }
 };
-static SKC_sprite_pattern actclearsp58 = {
+static SKC_sprite_pattern clearsp58 = {
   3,
   {
     {   0, 13, 0x858D,  0 },

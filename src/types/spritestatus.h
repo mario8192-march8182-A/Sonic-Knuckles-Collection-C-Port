@@ -146,15 +146,6 @@ typedef struct SKC_sprite_status {
       unsigned short flagwork_index; // 0x48
       union {
         struct {
-          unsigned short part_cnt; // 0x30
-          unsigned short current_exit_no; // 0x32
-        }
-        actclear;
-        struct {
-          short xdestination; // 0x46
-        }
-        actclear_part;
-        struct {
           bool plholding; // 0x32
           bool pl2holding; // 0x33
           unsigned char plnograb_timer; // 0x34
@@ -176,6 +167,15 @@ typedef struct SKC_sprite_status {
           unsigned char unknown2; // 0x40
         }
         break_;
+        struct {
+          unsigned short part_cnt; // 0x30
+          unsigned short current_exit_no; // 0x32
+        }
+        clear;
+        struct {
+          short xdestination; // 0x46
+        }
+        clear_part;
         struct {
           unsigned char type; // 0x30
           short xspeed_init; // 0x32
