@@ -6,6 +6,7 @@
 #include "types/spritepattern.h"
 #include "types/spriteplacement.h"
 #include "types/spritestatus.h"
+#include "utils/bits.h"
 #include "utils/fp16.h"
 #include "utils/stageno.h"
 static SKC_sprite_status* action0(SKC_sprite_status* p_actwk, int cnt);
@@ -602,5 +603,65 @@ static void vspatset_pl2_compound(SKC_sprite_status* p_actwk, SKC_patset_work* p
         }
       }
     }
+  }
+}
+
+
+void frameoutchk(SKC_sprite_status* p_actwk) {
+  short chunk_xposi = fp16_get_integer(p_actwk->xposi) - fp16_get_integer(p_actwk->xposi) % 128 - g_ram.scr_x_no;
+  if ((unsigned short)chunk_xposi <= 640) {
+    actionsub(p_actwk);
+  }
+  else {
+    if (p_actwk->u.obj.flagwork_index != 0) {
+      CLEAR_BIT(g_ram.flagwork[p_actwk->u.obj.flagwork_index - 1], 7);
+    }
+    frameout(p_actwk);
+  }
+}
+
+
+void frameoutchk2(SKC_sprite_status* p_actwk, short xposi) {
+  short chunk_xposi = xposi - xposi % 128 - g_ram.scr_x_no;
+  if ((unsigned short)chunk_xposi <= 640) {
+    actionsub(p_actwk);
+  }
+  else {
+    if (p_actwk->u.obj.flagwork_index != 0) {
+      CLEAR_BIT(g_ram.flagwork[p_actwk->u.obj.flagwork_index - 1], 7);
+    }
+    frameout(p_actwk);
+  }
+}
+
+
+void frameoutchk3(SKC_sprite_status* p_actwk) {
+  short chunk_xposi = fp16_get_integer(p_actwk->xposi) - fp16_get_integer(p_actwk->xposi) % 128 - g_ram.scr_x_no;
+  if ((unsigned short) chunk_xposi > 640) {
+    if (p_actwk->u.obj.flagwork_index != 0) {
+      CLEAR_BIT(g_ram.flagwork[p_actwk->u.obj.flagwork_index - 1], 7);
+    }
+    frameout(p_actwk);
+  }
+}
+
+
+void frameoutchkc(SKC_sprite_status* p_actwk) {
+  short xposi = fp16_get_integer(p_actwk->xposi);
+  frameoutchkc0(p_actwk, xposi);
+}
+
+
+void frameoutchkc0(SKC_sprite_status* p_actwk, short xposi) {
+  short chunk_xposi = xposi - xposi % 128 - g_ram.scr_x_no;
+  if ((unsigned short)chunk_xposi <= 640) {
+    colibufferchk(p_actwk);
+    actionsub(p_actwk);
+  }
+  else {
+    if (p_actwk->u.obj.flagwork_index != 0) {
+      CLEAR_BIT(g_ram.flagwork[p_actwk->u.obj.flagwork_index - 1], 7);
+    }
+    frameout(p_actwk);
   }
 }

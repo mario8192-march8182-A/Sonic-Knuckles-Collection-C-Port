@@ -5,6 +5,7 @@
 #include "../../types/spritestatus.h"
 #include "../../utils/bits.h"
 #include "../../utils/fp16.h"
+#include "../../action.h"
 #include "../../actset.h"
 #include "../../etc.h"
 #include "../../hitchk.h"

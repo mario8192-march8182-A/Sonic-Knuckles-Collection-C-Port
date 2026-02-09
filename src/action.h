@@ -15,5 +15,10 @@ void patchg(SKC_sprite_status* p_actwk, signed char** p_chg_data);
 void time_patchg(SKC_sprite_status* p_actwk, signed char** p_chg_data);
 void patset(void);
 void spatset(SKC_sprite_status* p_actwk, SKC_patset_work* p_work);
+void frameoutchk(SKC_sprite_status* p_actwk);
+void frameoutchk2(SKC_sprite_status* p_actwk, short xposi);
+void frameoutchk3(SKC_sprite_status* p_actwk);
+void frameoutchkc(SKC_sprite_status* p_actwk);
+void frameoutchkc0(SKC_sprite_status* p_actwk, short xposi);
 
 #endif
