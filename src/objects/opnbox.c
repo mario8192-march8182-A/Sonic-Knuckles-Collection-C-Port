@@ -13,7 +13,7 @@
 #include "../constants.h"
 #include "../hitchk.h"
 #include "../shared.h"
-#include "actclear.h"
+#include "zone.h"
 static void opnbox_init(SKC_sprite_status* p_actwk);
 static void opnbox_init__set_fly(SKC_sprite_status* p_actwk);
 static void opnbox_wait0(SKC_sprite_status* p_actwk);
