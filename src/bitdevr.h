@@ -1,6 +1,6 @@
-#ifndef BITDEVR_H
-#define BITDEVR_H
+#ifndef SKC_BITDEVR_H
+#define SKC_BITDEVR_H
 
-void bitdevr(unsigned long* p_destination, unsigned char* p_source, unsigned char* p_bitdevwk);
+void bitdevr(unsigned char* p_destination, unsigned char* p_source);
 
 #endif

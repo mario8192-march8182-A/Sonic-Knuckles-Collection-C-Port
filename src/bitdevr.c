@@ -1,131 +1,126 @@
-#include <stdbool.h>
-#include "macros.h"
-#include "types/bitdevrwk.h"
 #include "bitdevr.h"
-static void bitdevr_decompress(bitdevrwk* p_wk, unsigned char* p_bitdevwk, void(*p_write)(unsigned long, bitdevrwk*));
-static void bitdevr_decompress_inline(bitdevrwk* p_wk);
-static void bitdevr_write(unsigned long pixels, bitdevrwk* p_wk);
-static void bitdevr_xorwrite(unsigned long pixels, bitdevrwk* p_wk);
-static unsigned char* bitdevr_codetable(unsigned char* p_source, unsigned short* p_bitdevwk);
+#include <stdbool.h>
+#include "types/bitdevrcodetableentry.h"
+#include "types/bitdevrwork.h"
+typedef unsigned char*(*SKC_bitdevr_write_handler)(unsigned char*, SKC_bitdevr_work*);
+static unsigned char* process_inline_data(unsigned char* p_source, SKC_bitdevr_work* p_work);
+static unsigned char* write_pixels(unsigned char* p_destination, SKC_bitdevr_work* p_work);
+static unsigned char* write_xor_pixels(unsigned char* p_destination, SKC_bitdevr_work* p_work);
+static unsigned char* build_codetable(unsigned char* p_source, SKC_bitdevr_codetable_entry (*codetable)[256]);
 
 
-// 00410d9c
-void bitdevr(unsigned long* p_destination, unsigned char* p_source, unsigned char* p_bitdevwk) {
-  bitdevrwk wk = { p_destination, p_source };
-  void(*p_write)(unsigned long, bitdevrwk*) = &bitdevr_write;
-  unsigned short patcnt = *((unsigned short*)wk.p_source);
-  wk.p_source += 2;
-  bool xor_mode = patcnt & 0x8000;
-  if (xor_mode) {
-    p_write = &bitdevr_xorwrite;
-  }
-  wk.row_cnt = patcnt << 3;
-  wk.pixel_cnt = 8;
-  wk.p_source = bitdevr_codetable(wk.p_source, (unsigned short*)p_bitdevwk);
-
-  wk.data = *wk.p_source++ << 8;
-  wk.data |= *wk.p_source++;
-  wk.shift = 16;
-  bitdevr_decompress(&wk, p_bitdevwk, p_write);
-}
-
-
-// 00410eaa
-static void bitdevr_decompress(bitdevrwk* p_wk, unsigned char* p_bitdevwk, void(*p_write)(unsigned long, bitdevrwk*)) {
-  unsigned long pixels = 0;
+void bitdevr(unsigned char* p_destination, unsigned char* p_source) {
+  SKC_bitdevr_write_handler p_write_handler = !(p_source[1] & 0x80) ? &write_pixels : &write_xor_pixels;
+  unsigned short pat_cnt = p_source[0] | (p_source[1] & 0x7F) << 8;
+  p_source += 2;
+  SKC_bitdevr_codetable_entry codetable[256];
+  p_source = build_codetable(p_source, &codetable);
+  SKC_bitdevr_work work = {
+    .buffer = p_source[0] << 8 | p_source[1],
+    .row_cnt = pat_cnt * 8,
+    .pixel_cnt = 8,
+    .shift = 16
+  };
+  p_source += 2;
   bool done = false;
 
   do {
-    unsigned short code = p_wk->data >> (p_wk->shift - 8);
-    if ((code & 0xFF) >= 252) {
-      bitdevr_decompress_inline(p_wk);
+    unsigned char code = (work.buffer >> work.shift - 8) & 0xFF;
+    if (code >= 0xFC) {
+      p_source = process_inline_data(p_source, &work);
     }
     else {
-      code = (code & 0xFF) * 2;
-      unsigned char codebits_cnt = p_bitdevwk[code + 1];
-      p_wk->shift -= codebits_cnt;
-      if (p_wk->shift < 9) {
-        p_wk->shift += 8;
-        p_wk->data <<= 8;
-        p_wk->data |= *p_wk->p_source++;
+      work.shift -= codetable[code].code_len;
+      if (work.shift < 9) {
+        work.shift += 8;
+        work.buffer <<= 8;
+        work.buffer |= *p_source++;
       }
-      p_wk->palette_index = p_bitdevwk[code] & 0xF;
-      p_wk->index_repeatcnt = (p_bitdevwk[code] & 0xF0) >> 4;
+      work.palette_index = codetable[code].palette_index;
+      work.index_repeat_cnt = codetable[code].index_repeat_cnt;
     }
 
-    do {
-      pixels <<= 4;
-      pixels |= p_wk->palette_index;
-      --p_wk->pixel_cnt;
-      if (p_wk->pixel_cnt == 0) {
-        (*p_write)(pixels, p_wk);
-        if (p_wk->row_cnt == 0) {
+    for (int i = 0; i < work.index_repeat_cnt; ++i) {
+      work.pixels <<= 4;
+      work.pixels |= work.palette_index;
+      --work.pixel_cnt;
+      if (work.pixel_cnt == 0) {
+        p_destination = (*p_write_handler)(p_destination, &work);
+        if (work.row_cnt == 0) {
           done = true;
           break;
         }
-        pixels = 0;
-        p_wk->pixel_cnt = 8;
+        work.pixels = 0;
+        work.pixel_cnt = 8;
       }
-    } while (p_wk->index_repeatcnt-- != 0);
+    }
   } while (!done);
 }
 
 
-static void bitdevr_decompress_inline(bitdevrwk* p_wk) {
-  p_wk->shift -= 6; // inline data signal bits
-  if (p_wk->shift < 9) {
-    p_wk->shift += 8;
-    p_wk->data <<= 8;
-    p_wk->data |= *p_wk->p_source++;
+static unsigned char* process_inline_data(unsigned char* p_source, SKC_bitdevr_work* p_work) {
+  p_work->shift -= 6; // inline data signal bits
+  if (p_work->shift < 9) {
+    p_work->shift += 8;
+    p_work->buffer <<= 8;
+    p_work->buffer |= *p_source++;
   }
-  p_wk->shift -= 7; // inline data bits
-  p_wk->palette_index = p_wk->data >> p_wk->shift & 0xF;
-  p_wk->index_repeatcnt = (p_wk->data >> p_wk->shift & 0x70) >> 4;
-  if (p_wk->shift < 9) {
-    p_wk->shift += 8;
-    p_wk->data <<= 8;
-    p_wk->data |= *p_wk->p_source++;
+  p_work->shift -= 7; // inline data bits
+  p_work->palette_index = p_work->buffer >> p_work->shift & 0x0F;
+  p_work->index_repeat_cnt = ((p_work->buffer >> p_work->shift & 0x70) >> 4) + 1;
+  if (p_work->shift < 9) {
+    p_work->shift += 8;
+    p_work->buffer <<= 8;
+    p_work->buffer |= *p_source++;
   }
+  return p_source;
 }
 
 
-// 004111cf
-static void bitdevr_write(unsigned long pixels, bitdevrwk* p_wk) {
-  pixels = BYTESWAP(pixels);
-  *p_wk->p_destination++ = pixels;
-  --p_wk->row_cnt;
+static unsigned char* write_pixels(unsigned char* p_destination, SKC_bitdevr_work* p_work) {
+  *p_destination++ = (p_work->pixels & 0xFF000000) >> 24;
+  *p_destination++ = (p_work->pixels & 0x00FF0000) >> 16;
+  *p_destination++ = (p_work->pixels & 0x0000FF00) >> 8;
+  *p_destination++ = p_work->pixels & 0x000000FF;
+  --p_work->row_cnt;
+  return p_destination;
 }
 
 
-// 0041120a
-static void bitdevr_xorwrite(unsigned long pixels, bitdevrwk* p_wk) {
-  p_wk->prev_pixels ^= pixels;
-  *p_wk->p_destination++ = BYTESWAP(p_wk->prev_pixels);
-  --p_wk->row_cnt;
+static unsigned char* write_xor_pixels(unsigned char* p_destination, SKC_bitdevr_work* p_work) {
+  p_work->prev_pixels ^= p_work->pixels;
+  *p_destination++ = (p_work->pixels & 0xFF000000) >> 24;
+  *p_destination++ = (p_work->pixels & 0x00FF0000) >> 16;
+  *p_destination++ = (p_work->pixels & 0x0000FF00) >> 8;
+  *p_destination++ = p_work->pixels & 0x000000FF;
+  --p_work->row_cnt;
+  return p_destination;
 }
 
 
-// 00411257
-static unsigned char* bitdevr_codetable(unsigned char* p_source, unsigned short* p_bitdevwk) {
-  unsigned short data = *p_source++;
-  while (data != 255) {
-    unsigned short byte1 = data;
+static unsigned char* build_codetable(unsigned char* p_source, SKC_bitdevr_codetable_entry (*codetable)[256]) {
+  unsigned char data = *p_source++;
+
+  while (data != 0xFF) {
+    unsigned char byte1 = data;
     while (!((data = *p_source++) & 0x80)) {
-      unsigned char byte2 = data;
-      unsigned char palette_index = byte1 & 0xF;
-      unsigned char indexrepeat_cnt = (byte2 & 0x70) >> 4;
-      unsigned char codebits_cnt = byte2 & 0xF;
-      unsigned short codetable_entry = codebits_cnt << 8 | indexrepeat_cnt << 4 | palette_index;
-      if (codebits_cnt == 8) {
+      SKC_bitdevr_codetable_entry entry = {
+        .palette_index = byte1 & 0x0F,
+        .index_repeat_cnt = ((data & 0x70) >> 4) + 1,
+        .code_len = data & 0x0F
+      };
+      if (entry.code_len == 8) {
         unsigned short code = *p_source++;
-        p_bitdevwk[code] = codetable_entry;
+        (*codetable)[code] = entry;
       }
       else {
-        unsigned short code = *p_source++ << (8 - codebits_cnt);
-        unsigned short cnt = 1 << (8 - codebits_cnt);
-        do {
-          p_bitdevwk[code++] = codetable_entry;
-        } while (--cnt != 0);
+        unsigned char code = *p_source++ << (8 - entry.code_len);
+        unsigned short cnt = 1 << (8 - entry.code_len);
+
+        for (int i = 0; i < cnt; ++i) {
+          (*codetable)[code] = entry;
+          ++code;
+        }
       }
     }
   }

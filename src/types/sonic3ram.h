@@ -14,7 +14,6 @@ typedef struct sonic3_ram {
   /* 08ff0000 */ unsigned char chunkmappings128[0x8000];
   /* 08ff8000 */ unsigned char levellayout[0x1000];
   /* 08ff9000 */ unsigned char blockmappings16[0x1800];
-  /* 08ffaa00 */ unsigned char bitdevwk[512];
   /* 08ffac00 */ unsigned char pbuffer[PBUFFER_LEVELS][PBUFFER_LEVEL_SLOTS];
   /* 08ffb000 */ SKC_sprite_status actwk[ACTWK_SLOTS];
   /* 08ffd000 */ unsigned char zoombuffer[0x1000];
