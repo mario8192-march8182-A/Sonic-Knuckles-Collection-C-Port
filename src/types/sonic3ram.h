@@ -44,11 +44,12 @@ typedef struct sonic3_ram {
   /* 08ffee7c */ long scra_v_posit;
   /* 08ffee80 */ long scra_h_posit_copy;
   /* 08ffee84 */ long scra_v_posit_copy;
+  /* 08ffeea6 */ unsigned short vint_rno;
   /* 08ffeea8 */ unsigned short scrc3;
   /* 08ffeeaa */ unsigned short scrc_v;
   /* 08ffeebc */ short frame_offset_x;
   /* 08ffeec0 */ unsigned short scr_evta;
-  /* 08ffeec6 */ unsigned char event_flag_3;
+  /* 08ffeec6 */ unsigned short event_flag_3;
   /* 08ffeecc */ short scr_shake_flg;
   /* 08ffeed2 */ unsigned short DAT_08ffeed2;
   /* 08ffeeea */ unsigned short vscrollbuff[40];

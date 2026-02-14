@@ -15,6 +15,7 @@
 #include "../shared.h"
 #include "friend.h"
 #include "zone.h"
+#include "zone00/bs00m.h"
 static void opnbox_init(SKC_sprite_status* p_actwk);
 static void opnbox_init__set_fly(SKC_sprite_status* p_actwk);
 static void opnbox_wait0(SKC_sprite_status* p_actwk);

@@ -9,6 +9,7 @@
 #include "../objects/save.h"
 #include "../objects/spring.h"
 #include "../objects/toge.h"
+#include "../objects/zone00/bs00m.h"
 #include "../objects/zone00/hana00.h"
 #include "../objects/zone00/sai00.h"
 #include "../objects/zone00/saru00.h"
@@ -162,8 +163,8 @@ SKC_sprite_status_handler s3_act_tbl[256] = {
   &sai00,
   &saru00,
   &snak00,
-  0,//&bs00m0_body,
-  0,//&bs00m1_body,
+  &bs00m0_body,
+  &bs00m1_body,
   0,//&bs00b0,
   0,//&shak01,
   0,//&hdai01,

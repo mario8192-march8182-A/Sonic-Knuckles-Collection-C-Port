@@ -100,7 +100,7 @@ typedef struct SKC_sprite_status {
       }
       actflg0;
       struct {
-        unsigned char cnt; // 0x39
+        signed char cnt; // 0x39
         short accel_max; // 0x3E
         short accel; // 0x40
       }
