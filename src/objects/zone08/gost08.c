@@ -15,6 +15,7 @@
 #include "../../utils/stageno.h"
 #include "../../action.h"
 #include "../../constants.h"
+#include "../../dev.h"
 #include "../../etc.h"
 #include "../../shared.h"
 #include "../opnbox.h"
@@ -357,7 +358,7 @@ static void set_openbox_cg(SKC_sprite_status* p_actwk) {
     }
   };
 
-  Load_PLC_Raw(p_actwk, &opnbox_cg_tbl);
+  divdevset2(&opnbox_cg_tbl);
 }
 
 

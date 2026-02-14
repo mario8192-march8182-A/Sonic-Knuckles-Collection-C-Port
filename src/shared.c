@@ -34,6 +34,7 @@
 #include "action.h"
 #include "actset.h"
 #include "constants.h"
+#include "dev.h"
 #include "etc.h"
 #include "objects/common.h"
 static void chk_pt_next(SKC_sprite_status* p_actwk, signed char* p_pg_data);
@@ -2572,7 +2573,7 @@ static void midbos_die2_init(SKC_sprite_status* p_actwk) {
   p_actwk->r_ptr = &midbos_die2;
   g_ram.bossstart = 0;
   set_act05(p_actwk, &kanban_set_tbl);
-  Load_PLC_Raw(p_actwk, &kanbst_cg_tbl);
+  divdevset2(&kanbst_cg_tbl);
   cg_reset();
 }
 
@@ -2938,7 +2939,7 @@ void wrt_player0(SKC_sprite_status* p_playerwk) {
 
 
 void set_friend_cg(SKC_sprite_status* p_actwk) {
-  Load_PLC_Raw(p_actwk, &bakuhatu_cg_tbl);
+  divdevset2(&bakuhatu_cg_tbl);
   set_friend_cg0(p_actwk);
 }
 
@@ -3069,7 +3070,7 @@ void set_friend_cg0(SKC_sprite_status* p_actwk) {
     &z0d_z17
   };
 
-  Load_PLC_Raw(p_actwk, cg_tbl[get_zone(g_ram.stageno)]);
+  divdevset(cg_tbl[get_zone(g_ram.stageno)]);
 }
 
 

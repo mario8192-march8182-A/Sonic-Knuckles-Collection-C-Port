@@ -134,6 +134,18 @@ static unsigned char* build_codetable(unsigned char* p_source, SKC_bitdevr_codet
 }
 
 
+void divdevset(unsigned short id) {
+  divdevset2(divdevtbl[id]);
+}
+
+
+void divdevset2(SKC_cg_data* p_data) {
+  for (int i = 0; i < p_data->cnt; ++i) {
+    bitdevr(&g_mdVram[p_data->data[i].offset], p_data->data[i].cg_ptr);
+  }
+}
+
+
 void mapdevr(unsigned short* p_destination, unsigned char* p_source, unsigned short offset) {
   unsigned char inline_copy_len = *p_source++;
   unsigned char bitfield = *p_source++ << 3;

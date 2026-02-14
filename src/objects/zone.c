@@ -286,7 +286,7 @@ static void title_move0(SKC_sprite_status* p_actwk) {
     }
 
     if (p_actwk->u.obj.actfree.title.act_start_flag != 0 && get_zone(g_ram.stageno) == LAUNCH_BASE) {
-      Load_PLC(p_actwk, 37);
+      divdevset(37);
     }
     p_actwk->r_no += 2;
   }
@@ -343,7 +343,7 @@ static void title_move2(SKC_sprite_status* p_actwk) {
           g_ram.act_start_flag = 0xFF;
         }
         else if (get_zone(g_ram.stageno) != DOOMSDAY && g_ram.stageno != DEATH_EGG_BOSS) {
-          Load_PLC_Raw(p_actwk, &toge_cg_tbl);
+          divdevset2(&toge_cg_tbl);
         }
         if (g_ram.stageno != DEATH_EGG_BOSS) {
           LoadEnemyArt();
