@@ -1,7 +1,7 @@
 #ifndef UNLZE_H
 #define UNLZE_H
 
-unsigned char* unlze(unsigned char* p_destination, unsigned char* p_source, unsigned short* p_readbyte_cnt);
+unsigned short unlze(unsigned char** pp_destination, unsigned char* p_source);
 void unlze_moduled(unsigned char* p_destination, unsigned char* p_source);
 
 #endif
