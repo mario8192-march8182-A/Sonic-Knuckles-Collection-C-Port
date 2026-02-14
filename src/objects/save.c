@@ -12,8 +12,8 @@
 #include "../action.h"
 #include "../actset.h"
 #include "../constants.h"
+#include "../dev.h"
 #include "../etc.h"
-#include "../unlze.h"
 static void saveinit(SKC_sprite_status* pActwk);
 static void savemove(SKC_sprite_status* pActwk);
 static void savemove__sub(SKC_sprite_status* p_actwk, SKC_sprite_status* p_playerwk, unsigned char markerno);
