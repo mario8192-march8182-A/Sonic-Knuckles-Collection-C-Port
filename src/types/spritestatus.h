@@ -177,6 +177,12 @@ typedef struct SKC_sprite_status {
         }
         clear_part;
         struct {
+          signed char unknown39; // 0x39
+          signed char unknown3a; // 0x3A
+          signed char unknown3b; // 0x3B
+        }
+        explosion;
+        struct {
           unsigned char type; // 0x30
           short xspeed_init; // 0x32
           short yspeed_init; // 0x34

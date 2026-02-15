@@ -13,6 +13,7 @@
 #include "../constants.h"
 #include "../hitchk.h"
 #include "../shared.h"
+#include "explosion.h"
 #include "friend.h"
 #include "zone.h"
 #include "zone00/bs00m.h"
