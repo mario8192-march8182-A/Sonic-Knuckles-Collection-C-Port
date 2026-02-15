@@ -15,6 +15,7 @@
 #include "../friend.h"
 #include "../opnbox.h"
 #include "../ring.h"
+#include "../zone04/mous04.h"
 #include "../zone08/gost08.h"
 static void obox04_switch(SKC_sprite_status* p_actwk);
 static void obox04_friend(SKC_sprite_status* p_actwk);
