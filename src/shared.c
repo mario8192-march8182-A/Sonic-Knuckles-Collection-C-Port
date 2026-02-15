@@ -709,8 +709,8 @@ int pg_get_fast(SKC_sprite_status* p_actwk) {
 
 int pg_get_fast0(SKC_sprite_status* p_actwk, signed char* p_pg_data) {
   int ret = 0;
-  if (p_actwk->u.obj.actflg0.flash == 0) {
-    p_actwk->u.obj.actflg0.flash = 1;
+  if (p_actwk->u.obj.actflg0.end == 0) {
+    p_actwk->u.obj.actflg0.end = 1;
     p_actwk->u.obj.get_fast_slow.pattim = *p_pg_data;
     p_actwk->u.obj.get_fast_slow.flash_duration = 0;
   }
@@ -741,7 +741,7 @@ int pg_get_fast0(SKC_sprite_status* p_actwk, signed char* p_pg_data) {
 static int pg_get_fast0__chk_flash(SKC_sprite_status* p_actwk, signed char* p_pg_data) {
   ++p_actwk->u.obj.get_fast_slow.flash_duration;
   if (p_actwk->u.obj.get_fast_slow.flash_duration >= p_pg_data[1]) {
-    p_actwk->u.obj.actflg0.flash = 0;
+    p_actwk->u.obj.actflg0.end = 0;
     p_actwk->u.obj.get_fast_slow.flash_duration = 0;
     p_actwk->u.obj.callback_ptr(p_actwk);
   }
@@ -755,8 +755,8 @@ void pg_get_slow(SKC_sprite_status* p_actwk) {
 
 
 void pg_get_slow0(SKC_sprite_status* p_actwk, signed char* p_pg_data) {
-  if (p_actwk->u.obj.actflg0.flash == 0) {
-    p_actwk->u.obj.actflg0.flash = 1;
+  if (p_actwk->u.obj.actflg0.end == 0) {
+    p_actwk->u.obj.actflg0.end = 1;
     p_actwk->u.obj.get_fast_slow.flash_duration = 0;
   }
   if (p_actwk->pattim-- == 0) {
@@ -782,7 +782,7 @@ void pg_get_slow0(SKC_sprite_status* p_actwk, signed char* p_pg_data) {
 static void pg_get_slow0__chk_flash(SKC_sprite_status* p_actwk, signed char* p_pg_data) {
   ++p_actwk->u.obj.get_fast_slow.flash_duration;
   if (p_actwk->u.obj.get_fast_slow.flash_duration >= p_pg_data[1]) {
-    p_actwk->u.obj.actflg0.flash = 0;
+    p_actwk->u.obj.actflg0.end = 0;
     p_actwk->u.obj.get_fast_slow.flash_duration = 0;
     p_actwk->u.obj.callback_ptr(p_actwk);
   }
@@ -2799,7 +2799,7 @@ static void flashout_act__cnt(SKC_sprite_status* p_actwk) {
   if (p_actwk->u.obj.fade.step_cnt-- == 0) {
     if (p_actwk->u.obj.userflag != 0) {
       p_actwk->r_ptr = &flashin_act;
-      p_actwk->u.obj.actflg0.flash = 1;
+      p_actwk->u.obj.actflg0.end = 1;
     }
     else {
       g_ram.fade_flag = 0;
@@ -3274,7 +3274,7 @@ static void mask_spr0__wait0(SKC_sprite_status* p_actwk) {
 static void mask_spr0__wait1(SKC_sprite_status* p_actwk) {
   g_ram.sprhmasks = 0xFF;
   SKC_sprite_status* p_parentwk = &g_ram.actwk[p_actwk->u.obj.oya];
-  if (p_actwk->u.obj.actflg0.flash == 0) {
+  if (p_actwk->u.obj.actflg0.end == 0) {
     actionsub(p_actwk);
   }
   else {

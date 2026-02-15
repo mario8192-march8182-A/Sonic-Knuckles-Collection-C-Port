@@ -47,7 +47,7 @@ void obox04(SKC_sprite_status* p_actwk) {
   if (p_actwk->u.obj.flagwork_index != 0 && BIT_IS_SET(g_ram.flagwork[p_actwk->u.obj.flagwork_index - 1], 0)) {
     p_actwk->r_ptr = &obox04_wait1;
     p_actwk->patno = 1;
-    p_actwk->u.obj.actflg0.flash = 1;
+    p_actwk->u.obj.actflg0.end = 1;
   }
 }
 
@@ -80,7 +80,7 @@ static void obox04_switch(SKC_sprite_status* p_actwk) {
   enemy_init2(p_actwk, &switch_init_tbl);
   p_actwk->r_ptr = &switch_wait0;
   SKC_sprite_status* p_parentwk = &g_ram.actwk[p_actwk->u.obj.oya];
-  if (p_parentwk->u.obj.actflg0.flash == 1) {
+  if (p_parentwk->u.obj.actflg0.end == 1) {
     p_actwk->r_ptr = &switch_wait1;
     p_actwk->patno = 12;
   }

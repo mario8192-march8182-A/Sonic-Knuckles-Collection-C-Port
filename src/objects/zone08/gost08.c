@@ -375,7 +375,7 @@ void obox08(SKC_sprite_status* p_actwk) {
   if (g_ram.markerno != 0 || g_ram.actwk[0].u.play.character == KNUCKLES) {
     p_actwk->r_ptr = &obox04_wait1;
     p_actwk->patno = 1;
-    p_actwk->u.obj.actflg0.flash = 1;
+    p_actwk->u.obj.actflg0.end = 1;
   }
 }
 

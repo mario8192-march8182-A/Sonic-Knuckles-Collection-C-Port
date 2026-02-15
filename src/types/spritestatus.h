@@ -94,7 +94,7 @@ typedef struct SKC_sprite_status {
         unsigned int unused2 : 1;
         unsigned int fura_right : 1;
         unsigned int ko_die : 1;
-        unsigned int flash : 1;
+        unsigned int end : 1;
         unsigned int flicker : 1;
         unsigned int unused7 : 1;
       }
