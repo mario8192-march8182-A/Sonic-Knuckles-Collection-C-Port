@@ -219,6 +219,7 @@ SKC_sprite_status* set_act04(SKC_sprite_status* p_actwk, SKC_set_act04_data* p_d
     result.actwk_ptr->patbase = p_actwk->patbase;
     result.actwk_ptr->sproffset = p_actwk->sproffset;
     result.actwk_ptr->r_ptr = p_data->data[i].r_ptr;
+    result.actwk_ptr->u.obj.enemy_init0_data_ptr = p_data->data[i].enemy_init0_data_ptr;
     result.actwk_ptr->u.obj.pg_data_ptr = p_data->data[i].pg_data_ptr;
     result.actwk_ptr->u.obj.callback_ptr = p_data->data[i].callback_ptr;
     result.actwk_ptr->u.obj.userflag = i * 2;
