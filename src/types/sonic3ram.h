@@ -106,6 +106,7 @@ typedef struct sonic3_ram {
   /* 08fff77a */ unsigned short flagworkcnt;
   /* 08fff77c */ unsigned short flagworkcnt2;
   /* 08fff7aa */ unsigned char bossstart;
+  /* 08fff7c1 */ unsigned char DAT_08fff7c1;
   /* 08fff7c3 */ unsigned char soz_darkness_level;
   /* 08fff7c6 */ unsigned char reverse_gravity_flag;
   /* 08fff7cb */ unsigned char pl2_lock_flag;

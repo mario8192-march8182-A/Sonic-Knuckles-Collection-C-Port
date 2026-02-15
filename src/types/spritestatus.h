@@ -160,6 +160,14 @@ typedef struct SKC_sprite_status {
         }
         bakuhatu;
         struct {
+          unsigned char wait_shot_timer; // 0x39
+          unsigned short timer_init; // 0x3A
+          bool upside_down; // 0x3C
+          unsigned char r_no_save; // 0x3D
+          short xspeed_save; // 0x3E
+        }
+        betl04;
+        struct {
           unsigned char* timer_data_ptr; // 0x30
           unsigned char* timer_data2_ptr; // 0x34
           unsigned char unknown; // 0x3A;

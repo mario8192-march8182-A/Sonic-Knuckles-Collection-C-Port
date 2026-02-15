@@ -15,6 +15,7 @@
 #include "../objects/zone00/saru00.h"
 #include "../objects/zone00/snak00.h"
 #include "../objects/zone00/tloop.h"
+#include "../objects/zone04/betl04.h"
 #include "../objects/zone04/mous04.h"
 #include "../objects/zone04/obox04.h"
 #include "../objects/zone08/gost08.h"
@@ -188,7 +189,7 @@ SKC_sprite_status_handler s3_act_tbl[256] = {
   0,//&bat03,
   0,//&bs03m0,
   0,//&bs03b0,
-  0,//&betl04,
+  &betl04,
   &mous04,
   0,//&bs04m0,
   0,//&bs04m1,
