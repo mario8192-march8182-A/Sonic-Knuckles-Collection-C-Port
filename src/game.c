@@ -116,20 +116,20 @@ static void init_vdp() {
   g_ram.vscrolla = 0;
   g_ram.vscrollb = 0;
   g_ram.hscroll = 0;
-  memset(g_mdVram, 0, sizeof(g_mdVram));
+  memset(g_vram, 0, sizeof(g_vram));
 }
 
 
 // 0041a75c
 void scrinit() {
-  memset(g_mdVram, 0, 64);
+  memset(g_vram, 0, 64);
 
   if (g_ram.vs_flag != 0) {
-    memset(&g_mdVram[0x8000], 0, 0x4000);
+    memset(&g_vram[0x8000], 0, 0x4000);
   }
 
-  memset(&g_mdVram[0xC000], 0, 0x1000);
-  memset(&g_mdVram[0xE000], 0, 0x1000);
+  memset(&g_vram[0xC000], 0, 0x1000);
+  memset(&g_vram[0xE000], 0, 0x1000);
 
   g_ram.vscrolla = 0;
   g_ram.vscrollb = 0;
@@ -796,9 +796,9 @@ void load_string_vram(unsigned char* p_text, unsigned long vramoffset, unsigned 
   unsigned short mapping_cnt = FUN_00824b55(p_text, coloroffset);
   vramoffset += 0xC000;
   vramoffset &= 0xFFFF;
-  g_pLevelSelectVram = (unsigned short*)&g_mdVram[vramoffset];
+  g_pLevelSelectVram = (unsigned short*)&g_vram[vramoffset];
   memcpy(g_pLevelSelectVram, &g_ram.chunkmappings128[0x7000], mapping_cnt * 2);
-  g_pLevelSelectVram = (unsigned short*)&g_mdVram[vramoffset + 128];
+  g_pLevelSelectVram = (unsigned short*)&g_vram[vramoffset + 128];
   memcpy(g_pLevelSelectVram, &g_ram.chunkmappings128[0x7080], mapping_cnt * 2);
 }
 

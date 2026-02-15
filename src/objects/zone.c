@@ -210,11 +210,11 @@ static void title_init(SKC_sprite_status* p_actwk) {
     p_actwk->u.obj.actfree.title.vs_flag = 0xFF;
     frameout(p_actwk);
   }
-  unlze_moduled(&g_mdVram[0xA000], title_red_banner_cg);
+  unlze_moduled(&g_vram[0xA000], title_red_banner_cg);
   unsigned char* p_cg;
   if (!g_sonic3_alone) {
     p_cg = g_ram.cartridge != 0 ? title_sk_cg : title_s3k_cg;
-    unlze_moduled(&g_mdVram[0xA200], p_cg);
+    unlze_moduled(&g_vram[0xA200], p_cg);
   }
   if (g_ram.stageno == LAVA_REEF_BOSS || g_ram.stageno == DEATH_EGG_BOSS || get_act(g_ram.stageno_i) == ACT_1) {
     p_cg = act_digit_2_cg;
@@ -222,7 +222,7 @@ static void title_init(SKC_sprite_status* p_actwk) {
   else {
     p_cg = act_digit_1_cg;
   }
-  unlze_moduled(&g_mdVram[0xA7A0], p_cg);
+  unlze_moduled(&g_vram[0xA7A0], p_cg);
 
   switch (g_ram.stageno) {
     case LAVA_REEF_BOSS:
@@ -239,7 +239,7 @@ static void title_init(SKC_sprite_status* p_actwk) {
       break;
   }
 
-  unlze_moduled(&g_mdVram[0xA9A0], p_cg);
+  unlze_moduled(&g_vram[0xA9A0], p_cg);
   p_actwk->u.obj.timer = 90;
   p_actwk->u.obj.actfree.title.current_exit_no = 0;
   p_actwk->u.obj.actfree.title.unknown_flag = 0xFF;
@@ -504,11 +504,11 @@ void clear(SKC_sprite_status* p_actwk) {
 
 static void clear_init(SKC_sprite_status* p_actwk) {
   bgmset(225);
-  unlze_moduled(&g_mdVram[0xA400], clear_cg);
+  unlze_moduled(&g_vram[0xA400], clear_cg);
   bool is_act_1 = g_ram.stageno != LAVA_REEF_BOSS && get_act(g_ram.stageno_i) == ACT_1;
   unsigned char* p_cg = is_act_1 ? act_digit_1_cg : act_digit_2_cg;
   p_actwk->u.obj.userflag = is_act_1 ? 0 : 0xFF;
-  unlze_moduled(&g_mdVram[0xAD00], p_cg);
+  unlze_moduled(&g_vram[0xAD00], p_cg);
 
   switch (g_ram.play_type) {
     case PLAY_TYPE_SONIC_AND_MILES:
@@ -524,7 +524,7 @@ static void clear_init(SKC_sprite_status* p_actwk) {
       break;
   }
 
-  unsigned char* p_vram = p_actwk->u.obj.userflag == 0 ? &g_mdVram[0xAF00] : &g_mdVram[0xB400];
+  unsigned char* p_vram = p_actwk->u.obj.userflag == 0 ? &g_vram[0xAF00] : &g_vram[0xB400];
   unlze_moduled(p_vram, p_cg);
   g_ram.pltime_f = 0;
   unsigned short seconds = g_ram.pltime.minutes * 60 + g_ram.pltime.seconds;

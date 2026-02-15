@@ -415,7 +415,7 @@ void o_starinit(SKC_sprite_status* p_actwk) {
   else {
     p_cg = white_star_ring_cg;
   }
-  unlze_moduled(&g_mdVram[0xBD80], p_cg);
+  unlze_moduled(&g_vram[0xBD80], p_cg);
 }
 
 

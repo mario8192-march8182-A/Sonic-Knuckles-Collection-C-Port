@@ -169,7 +169,7 @@ DWORD WINAPI gameThreadStartRoutine(void* pParameter) {
     memset(&g_ram, 0, sizeof(g_ram));
     g_bResetMdRam = FALSE;
   }
-  memset(g_mdVram, 0, 0x10000);
+  memset(g_vram, 0, 0x10000);
 
   SET_MDREGION_OVERSEAS(g_ram.mdstatus);
 
@@ -310,7 +310,7 @@ int allocRamAndVram() {
   }
 
   memset(&g_ram, 0, sizeof(g_ram));
-  memset(g_mdVram, 0, 0x10000);
+  memset(g_vram, 0, 0x10000);
   memset(g_pixelBuffer, 0, 0x23000);
 
   return 0;
@@ -670,7 +670,7 @@ void blitGraphics() {
     else {
       memset(g_convertedHscrollbuff, 0, sizeof(g_convertedHscrollbuff));
     }
-    g_pVdpReadPos = &g_mdVram[g_vdpScrollPlaneBOffset];
+    g_pVdpReadPos = &g_vram[g_vdpScrollPlaneBOffset];
     FUN_00415039();
     for (int i = 0; i < 20; ++i) {
       g_mdVsram[i] = g_ram.vscrollbuff[i];
@@ -684,7 +684,7 @@ void blitGraphics() {
     else {
       memset(g_convertedHscrollbuff, 0, sizeof(g_convertedHscrollbuff));
     }
-    g_pVdpReadPos = &g_mdVram[g_vdpScrollPlaneAOffset];
+    g_pVdpReadPos = &g_vram[g_vdpScrollPlaneAOffset];
     FUN_00414f70();
   }
   else {
@@ -705,7 +705,7 @@ void blitGraphics() {
     else {
       memset(g_convertedHscrollbuff, 0, sizeof(g_convertedHscrollbuff));
     }
-    g_pVdpReadPos = &g_mdVram[g_vdpScrollPlaneBOffset];
+    g_pVdpReadPos = &g_vram[g_vdpScrollPlaneBOffset];
 
     switch (DAT_00854de8) {
       case 0:
@@ -743,7 +743,7 @@ void blitGraphics() {
     else {
       memset(g_convertedHscrollbuff, 0, sizeof(g_convertedHscrollbuff));
     }
-    g_pVdpReadPos = &g_mdVram[g_vdpScrollPlaneAOffset];
+    g_pVdpReadPos = &g_vram[g_vdpScrollPlaneAOffset];
 
     switch (DAT_00854de8) {
       case 0:
@@ -751,7 +751,7 @@ void blitGraphics() {
           FUN_0040ee9e();
           g_vscrollCopy = 0;
           memset(g_convertedHscrollbuff, 0, sizeof(g_convertedHscrollbuff));
-          g_pVdpReadPos = &g_mdVram[0x8000];
+          g_pVdpReadPos = &g_vram[0x8000];
           FUN_0040ef0c();
         }
         else {

@@ -497,6 +497,6 @@
 /* 00856ec0 */ BOOL g_joystickAvailability[32];
 /* 00856f40 */ int g_kbKeysEdit[2][5];
 /* 00856f68 */ UINT g_joystickCnt;
-/* 08000000 */ BYTE g_mdVram[0x10000];
+/* 08000000 */ BYTE g_vram[0x10000];
 /* 00831758 */ BYTE g_pixelBuffer[0x23000];
 /* 08ff0000 */ sonic3_ram g_ram;

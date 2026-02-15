@@ -141,7 +141,7 @@ void divdevset(unsigned short id) {
 
 void divdevset2(SKC_cg_data* p_data) {
   for (int i = 0; i < p_data->cnt; ++i) {
-    bitdevr(&g_mdVram[p_data->data[i].offset], p_data->data[i].cg_ptr);
+    bitdevr(&g_vram[p_data->data[i].offset], p_data->data[i].cg_ptr);
   }
 }
 

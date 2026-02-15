@@ -125,8 +125,8 @@ void specialstagemode() {
   init_graphics();
   init_specmodevars();
   set_palette(g_ram.colorwk2);
-  bitdevr((unsigned long*)&g_mdVram[0xB7E0], largetext_tiles, g_ram.bitdevwk);
-  bitdevr((unsigned long*)&g_mdVram[0x32E0], specialstagemode_sklogo_cg, g_ram.bitdevwk);
+  bitdevr((unsigned long*)&g_vram[0xB7E0], largetext_tiles, g_ram.bitdevwk);
+  bitdevr((unsigned long*)&g_vram[0x32E0], specialstagemode_sklogo_cg, g_ram.bitdevwk);
   unsigned char* p_chunkmappings = unlze(g_ram.chunkmappings128, specialstagemode_characters_cg, 0);
   p_chunkmappings = unlze(p_chunkmappings, specialstagemode_charactersprites_cg, 0);
   copy_data_vram(g_ram.chunkmappings128, 0, (p_chunkmappings - g_ram.chunkmappings128) / 2);
@@ -150,7 +150,7 @@ void specialstagemode() {
   }
   g_ram.actwk[0].r_ptr = &menu_init;
   g_ram.actwk[1].r_ptr = &copyright_init;
-  bitdevr((unsigned long*)&g_mdVram[0xB640], specialstagemode_copyright_cg, g_ram.bitdevwk);
+  bitdevr((unsigned long*)&g_vram[0xB640], specialstagemode_copyright_cg, g_ram.bitdevwk);
   g_ram.actwk[2].r_ptr = &character_init;
   action();
   patset();

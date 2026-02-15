@@ -138,7 +138,7 @@ static void blit_scanline_ver1(unsigned short* p_scrollplane, unsigned char vscr
 
 // 0040f00c
 static unsigned char* blit_8pixels_ver1(unsigned char* p_pixelbuffer, unsigned short tile, unsigned char vscroll_low) {
-  unsigned long* p_vram = (unsigned long*)&g_mdVram[(tile & 0x7FF) << 5];
+  unsigned long* p_vram = (unsigned long*)&g_vram[(tile & 0x7FF) << 5];
   unsigned long pixels;
   if (IS_TILE_VFLIP(tile)) {
     pixels = p_vram[7 - vscroll_low];
@@ -201,7 +201,7 @@ static unsigned char* blit_8pixels_ver1(unsigned char* p_pixelbuffer, unsigned s
 
 // 0040f32d
 static unsigned char* blit_remainingpixels_ver1(unsigned char* p_pixelbuffer, unsigned short tile, unsigned char vscroll_low, unsigned char hscroll_low) {
-  unsigned long* p_vram = (unsigned long*)&g_mdVram[(tile & 0x7FF) << 5];
+  unsigned long* p_vram = (unsigned long*)&g_vram[(tile & 0x7FF) << 5];
   unsigned long pixels;
   if (IS_TILE_VFLIP(tile)) {
     pixels = p_vram[7 - vscroll_low];
@@ -264,7 +264,7 @@ static unsigned char* blit_remainingpixels_ver1(unsigned char* p_pixelbuffer, un
 
 // 0040f401
 static unsigned char* blit_remainingpixels_ver2(unsigned char* p_pixelbuffer, unsigned short tile, unsigned char vscroll_low, unsigned char hscroll_low) {
-  unsigned long* p_vram = (unsigned long*)&g_mdVram[(tile & 0x7FF) << 5];
+  unsigned long* p_vram = (unsigned long*)&g_vram[(tile & 0x7FF) << 5];
   unsigned long pixels;
   if (IS_TILE_VFLIP(tile)) {
     pixels = p_vram[7 - vscroll_low];
@@ -387,7 +387,7 @@ static void blit_scanline_ver2(unsigned short* p_scrollplane, unsigned char vscr
 
 // 0040f62c
 static unsigned char* blit_8pixels_ver2(unsigned char* p_pixelbuffer, unsigned short tile, unsigned char vscroll_low) {
-  unsigned long* p_vram = (unsigned long*)&g_mdVram[(tile & 0x7FF) << 5];
+  unsigned long* p_vram = (unsigned long*)&g_vram[(tile & 0x7FF) << 5];
   unsigned long pixels;
   if (IS_TILE_VFLIP(tile)) {
     pixels = p_vram[7 - vscroll_low];
@@ -423,7 +423,7 @@ static unsigned char* blit_8pixels_ver2(unsigned char* p_pixelbuffer, unsigned s
 
 // 0040f778
 static unsigned char* blit_remainingpixels_ver3(unsigned char* p_pixelbuffer, unsigned short tile, unsigned char vscroll_low, unsigned char hscroll_low) {
-  unsigned long* p_vram = (unsigned long*)&g_mdVram[(tile & 0x7FF) << 5];
+  unsigned long* p_vram = (unsigned long*)&g_vram[(tile & 0x7FF) << 5];
   unsigned long pixels;
   if (IS_TILE_VFLIP(tile)) {
     pixels = p_vram[7 - vscroll_low];
@@ -460,7 +460,7 @@ static unsigned char* blit_remainingpixels_ver3(unsigned char* p_pixelbuffer, un
 
 // 0040f810
 static unsigned char* blit_remainingpixels_ver4(unsigned char* p_pixelbuffer, unsigned short tile, unsigned char vscroll_low, unsigned char hscroll_low) {
-  unsigned long* p_vram = (unsigned long*)&g_mdVram[(tile & 0x7FF) << 5];
+  unsigned long* p_vram = (unsigned long*)&g_vram[(tile & 0x7FF) << 5];
   unsigned long pixels;
   if (IS_TILE_VFLIP(tile)) {
     pixels = p_vram[7 - vscroll_low];
@@ -734,7 +734,7 @@ void FUN_0040fd4f(unsigned long* p_surface, long pitch) {
 
 // 00410384
 void copy_map_vram(unsigned short* p_source, unsigned short offset, unsigned long row_cnt, unsigned long cell_cnt) {
-  unsigned short* p_destination = (unsigned short*)&g_mdVram[offset];
+  unsigned short* p_destination = (unsigned short*)&g_vram[offset];
   unsigned long row_offset = (128 - (cell_cnt + 1) * 2) / 2;
   for (int row = row_cnt + 1; row != 0 ; --row) {
     for (int cell = cell_cnt + 1; cell != 0 ; --cell) {
@@ -747,7 +747,7 @@ void copy_map_vram(unsigned short* p_source, unsigned short offset, unsigned lon
 
 // 00410426
 void copy_data_vram(void* p_source, unsigned short offset, unsigned short size) {
-  memcpy(&g_mdVram[offset], p_source, size * 2);
+  memcpy(&g_vram[offset], p_source, size * 2);
 }
 
 
@@ -1126,7 +1126,7 @@ static void blit_scanline_ver7(unsigned short* p_scrollplane, unsigned char vscr
 
 //00414a58
 static unsigned char* blit_8pixels_ver3(unsigned char* p_pixelbuffer, unsigned short tile, unsigned char vscroll_low) {
-  unsigned long* p_vram = (unsigned long*)&g_mdVram[(tile & 0x7FF) << 5];
+  unsigned long* p_vram = (unsigned long*)&g_vram[(tile & 0x7FF) << 5];
   unsigned long pixels;
   if (IS_TILE_VFLIP(tile)) {
     pixels = p_vram[7 - vscroll_low];
@@ -1190,7 +1190,7 @@ static unsigned char* blit_8pixels_ver3(unsigned char* p_pixelbuffer, unsigned s
 
 // 00414dc1
 static unsigned char* blit_remainingpixels_ver5(unsigned char* p_pixelbuffer, unsigned short tile, unsigned char vscroll_low, unsigned char hscroll_low) {
-  unsigned long* p_vram = (unsigned long*)&g_mdVram[(tile & 0x7FF) << 5];
+  unsigned long* p_vram = (unsigned long*)&g_vram[(tile & 0x7FF) << 5];
   unsigned long pixels;
   if (IS_TILE_VFLIP(tile)) {
     pixels = p_vram[7 - vscroll_low];
@@ -1260,7 +1260,7 @@ static unsigned char* blit_remainingpixels_ver5(unsigned char* p_pixelbuffer, un
 
 // 00414e9f
 static unsigned char* blit_remainingpixels_ver6(unsigned char* p_pixelbuffer, unsigned short tile, unsigned char vscroll_low, unsigned char hscroll_low) {
-  unsigned long* p_vram = (unsigned long*)&g_mdVram[(tile & 0x7FF) << 5];
+  unsigned long* p_vram = (unsigned long*)&g_vram[(tile & 0x7FF) << 5];
   unsigned long pixels;
   if (IS_TILE_VFLIP(tile)) {
     pixels = p_vram[7 - vscroll_low];
@@ -1429,7 +1429,7 @@ void blit_sprite_noprio(Sprite* p_sprite) {
   do {
     unsigned long scanline_pixel_cnt = p_sprite->w;
     long x = p_sprite->x;
-    unsigned long* p_vram = (unsigned long*)&g_mdVram[p_sprite->vram_offset + (y - p_sprite->y) * 4];
+    unsigned long* p_vram = (unsigned long*)&g_vram[p_sprite->vram_offset + (y - p_sprite->y) * 4];
 
     do {
       if (x >= 320) break;
@@ -1489,7 +1489,7 @@ void blit_sprite_hflip_noprio(Sprite* p_sprite) {
   do {
     unsigned long scanline_pixel_cnt = p_sprite->w;
     long x = p_sprite->x;
-    unsigned long* p_vram = (unsigned long*)&g_mdVram[p_sprite->vram_offset + (y - p_sprite->y) * 4];
+    unsigned long* p_vram = (unsigned long*)&g_vram[p_sprite->vram_offset + (y - p_sprite->y) * 4];
     p_vram += (p_sprite->w - 1) * p_sprite->h;
 
     do {
@@ -1550,7 +1550,7 @@ void blit_sprite_vflip_noprio(Sprite* p_sprite) {
   do {
     unsigned long scanline_pixel_cnt = p_sprite->w;
     long x = p_sprite->x;
-    unsigned long* p_vram = (unsigned long*)&g_mdVram[p_sprite->vram_offset + (p_sprite->y + p_sprite->h - y - 1) * 4];
+    unsigned long* p_vram = (unsigned long*)&g_vram[p_sprite->vram_offset + (p_sprite->y + p_sprite->h - y - 1) * 4];
 
     do {
       if (x >= 320) break;
@@ -1610,7 +1610,7 @@ void blit_sprite_hvflip_noprio(Sprite* p_sprite) {
   do {
     unsigned long scanline_pixel_cnt = p_sprite->w;
     long x = p_sprite->x;
-    unsigned long* p_vram = (unsigned long*)&g_mdVram[p_sprite->vram_offset + (p_sprite->y + p_sprite->h - y - 1) * 4];
+    unsigned long* p_vram = (unsigned long*)&g_vram[p_sprite->vram_offset + (p_sprite->y + p_sprite->h - y - 1) * 4];
     p_vram += (p_sprite->w - 1) * p_sprite->h;
 
     do {
@@ -1724,7 +1724,7 @@ void blit_sprite_masked(Sprite* p_sprite) {
     if (g_spriteMasks[y] == 0) {
       unsigned long scanline_pixel_cnt = p_sprite->w;
       long x = p_sprite->x;
-      unsigned long* p_vram = (unsigned long*)&g_mdVram[p_sprite->vram_offset + (y - p_sprite->y) * 4];
+      unsigned long* p_vram = (unsigned long*)&g_vram[p_sprite->vram_offset + (y - p_sprite->y) * 4];
 
       do {
         if (x >= 320) break;
@@ -1789,7 +1789,7 @@ void blit_sprite_masked_hflip(Sprite* p_sprite) {
     if (g_spriteMasks[y] == 0) {
       unsigned long scanline_pixel_cnt = p_sprite->w;
       long x = p_sprite->x;
-      unsigned long* p_vram = (unsigned long*)&g_mdVram[p_sprite->vram_offset + (y - p_sprite->y) * 4];
+      unsigned long* p_vram = (unsigned long*)&g_vram[p_sprite->vram_offset + (y - p_sprite->y) * 4];
       p_vram += (p_sprite->w - 1) * p_sprite->h;
 
       do {
@@ -1855,7 +1855,7 @@ void blit_sprite_masked_vflip(Sprite* p_sprite) {
     if (g_spriteMasks[y] == 0) {
       unsigned long scanline_pixel_cnt = p_sprite->w;
       long x = p_sprite->x;
-      unsigned long* p_vram = (unsigned long*)&g_mdVram[p_sprite->vram_offset + (p_sprite->y + p_sprite->h - y - 1) * 4];
+      unsigned long* p_vram = (unsigned long*)&g_vram[p_sprite->vram_offset + (p_sprite->y + p_sprite->h - y - 1) * 4];
 
       do {
         if (x >= 320) break;
@@ -1920,7 +1920,7 @@ void blit_sprite_masked_hvflip(Sprite* p_sprite) {
     if (g_spriteMasks[y] == 0) {
       unsigned long scanline_pixel_cnt = p_sprite->w;
       long x = p_sprite->x;
-      unsigned long* p_vram = (unsigned long*)&g_mdVram[p_sprite->vram_offset + (p_sprite->y + p_sprite->h - y - 1) * 4];
+      unsigned long* p_vram = (unsigned long*)&g_vram[p_sprite->vram_offset + (p_sprite->y + p_sprite->h - y - 1) * 4];
       p_vram += (p_sprite->w - 1) * p_sprite->h;
 
       do {
@@ -1981,7 +1981,7 @@ void blit_sprite(Sprite* p_sprite) {
   do {
     unsigned long scanline_pixel_cnt = p_sprite->w;
     long x = p_sprite->x;
-    unsigned long* p_vram = (unsigned long*)&g_mdVram[p_sprite->vram_offset + (y - p_sprite->y) * 4];
+    unsigned long* p_vram = (unsigned long*)&g_vram[p_sprite->vram_offset + (y - p_sprite->y) * 4];
 
     do {
       if (x >= 320) break;
@@ -2041,7 +2041,7 @@ void blit_sprite_hflip(Sprite* p_sprite) {
   do {
     unsigned long scanline_pixel_cnt = p_sprite->w;
     long x = p_sprite->x;
-    unsigned long* p_vram = (unsigned long*)&g_mdVram[p_sprite->vram_offset + (y - p_sprite->y) * 4];
+    unsigned long* p_vram = (unsigned long*)&g_vram[p_sprite->vram_offset + (y - p_sprite->y) * 4];
     p_vram += (p_sprite->w - 1) * p_sprite->h;
 
     do {
@@ -2102,7 +2102,7 @@ void blit_sprite_vflip(Sprite* p_sprite) {
   do {
     unsigned long scanline_pixel_cnt = p_sprite->w;
     long x = p_sprite->x;
-    unsigned long* p_vram = (unsigned long*)&g_mdVram[p_sprite->vram_offset + (p_sprite->y + p_sprite->h - y - 1) * 4];
+    unsigned long* p_vram = (unsigned long*)&g_vram[p_sprite->vram_offset + (p_sprite->y + p_sprite->h - y - 1) * 4];
 
     do {
       if (x >= 320) break;
@@ -2162,7 +2162,7 @@ void blit_sprite_hvflip(Sprite* p_sprite) {
   do {
     unsigned long scanline_pixel_cnt = p_sprite->w;
     long x = p_sprite->x;
-    unsigned long* p_vram = (unsigned long*)&g_mdVram[p_sprite->vram_offset + (p_sprite->y + p_sprite->h - y - 1) * 4];
+    unsigned long* p_vram = (unsigned long*)&g_vram[p_sprite->vram_offset + (p_sprite->y + p_sprite->h - y - 1) * 4];
     p_vram += (p_sprite->w - 1) * p_sprite->h;
 
     do {

@@ -62,7 +62,7 @@ void levelselect() {
   DAT_00854dec = 0;
   memset(g_ram.pbuffer, 0, sizeof(g_ram.pbuffer));
   memset(g_ram.actwk, 0, sizeof(g_ram.actwk) + 52);
-  bitdevr((unsigned long*)&g_mdVram[512], levelselect_main_cg, g_ram.bitdevwk);
+  bitdevr((unsigned long*)&g_vram[512], levelselect_main_cg, g_ram.bitdevwk);
   mapdevr((unsigned short*)&g_ram.decompressed, levelselect_main_map, 0x6000);
   copy_map_vram((unsigned short*)g_ram.decompressed, 0xE000, 27, 39);
   memset(g_ram.decompressed, 0, 0x8C0);
@@ -393,7 +393,7 @@ static void set_selectioncolor(unsigned short coloroffset) {
   unsigned short index = pos.y1 * 80 + pos.x1;
   unsigned short* p_decompressed = (unsigned short*)&g_ram.decompressed[index];
   index = (pos.y1 << 7) + pos.x1 + 0xC000;
-  g_pLevelSelectVram = (unsigned short*)&g_mdVram[index];
+  g_pLevelSelectVram = (unsigned short*)&g_vram[index];
 
   for (int i = 0; i < 15; ++i) {
     *g_pLevelSelectVram++ = *p_decompressed++ + coloroffset;
@@ -403,7 +403,7 @@ static void set_selectioncolor(unsigned short coloroffset) {
     index = pos.y2 * 80 + pos.x2;
     p_decompressed = (unsigned short*)&g_ram.decompressed[index];
     index = (pos.y2 << 7) + pos.x2 + 0xC000;
-    g_pLevelSelectVram = (unsigned short*)&g_mdVram[index];
+    g_pLevelSelectVram = (unsigned short*)&g_vram[index];
     *g_pLevelSelectVram++ = *p_decompressed++ + coloroffset;
   }
   unsigned char soundtest = 32;
@@ -426,16 +426,16 @@ static void set_selectioncolor(unsigned short coloroffset) {
 
 // 00415e32
 static void set_plmodedigits(unsigned short coloroffset) {
-  g_pLevelSelectVram = (unsigned short*)&g_mdVram[0xC19C];
+  g_pLevelSelectVram = (unsigned short*)&g_vram[0xC19C];
   set_digits(g_ram.levelselect_plmode, coloroffset);
 }
 
 
 // 00415e4f
 static void set_sounddigits(unsigned short coloroffset) {
-  g_pLevelSelectVram = (unsigned short*)&g_mdVram[0xCB46];
+  g_pLevelSelectVram = (unsigned short*)&g_vram[0xCB46];
   if (g_sonic3_alone) {
-    g_pLevelSelectVram = (unsigned short*)&g_mdVram[0xC846];
+    g_pLevelSelectVram = (unsigned short*)&g_vram[0xC846];
   }
   set_digits(g_ram.levelselect_sound, coloroffset);
 }
@@ -554,9 +554,9 @@ static void s3levelselect() {
   DAT_00854dec = 0;
   memset(g_ram.pbuffer, 0, sizeof(g_ram.pbuffer));
   memset(g_ram.actwk, 0, sizeof(g_ram.actwk) + 52);
-  bitdevr((unsigned long*)&g_mdVram[512], levelselect_main_cg, g_ram.bitdevwk);
-  bitdevr((unsigned long*)&g_mdVram[0xE00], levelselect_menubox_cg, g_ram.bitdevwk);
-  bitdevr((unsigned long*)&g_mdVram[0x1200], levelselect_zoneicons_cg, g_ram.bitdevwk);
+  bitdevr((unsigned long*)&g_vram[512], levelselect_main_cg, g_ram.bitdevwk);
+  bitdevr((unsigned long*)&g_vram[0xE00], levelselect_menubox_cg, g_ram.bitdevwk);
+  bitdevr((unsigned long*)&g_vram[0x1200], levelselect_zoneicons_cg, g_ram.bitdevwk);
   mapdevr((unsigned short*)&g_ram.decompressed, levelselect_main_map, 0x6000);
   copy_map_vram((unsigned short*)g_ram.decompressed, 0xE000, 27, 39);
   mapdevr((unsigned short*)g_ram.decompressed, DAT_004297e0, 0);
@@ -736,9 +736,9 @@ static void s3levelselect() {
 
 // 00428f88
 static void setwhoplaydigits(unsigned short coloroffset) {
-  g_pLevelSelectVram = (unsigned short*)&g_mdVram[0xC1B8];
+  g_pLevelSelectVram = (unsigned short*)&g_vram[0xC1B8];
   set_digits(g_ram.whoplay1, coloroffset);
-  g_pLevelSelectVram = (unsigned short*)&g_mdVram[0xC1C0];
+  g_pLevelSelectVram = (unsigned short*)&g_vram[0xC1C0];
   set_digits(g_ram.whoplay2, coloroffset);
 }
 
