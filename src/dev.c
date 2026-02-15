@@ -13,6 +13,8 @@ static unsigned short get_inline_copy(unsigned char** pp_source, SKC_mapdevr_wor
 static void prepare_next_entry(unsigned char** pp_source, SKC_mapdevr_work* p_work);
 static unsigned char get_next_bit(unsigned char** pp_source, unsigned short* p_buffer, unsigned char* p_buffer_len);
 
+extern unsigned char g_vram[0x10000];
+
 
 void bitdevr(unsigned char* p_destination, unsigned char* p_source) {
   SKC_bitdevr_write_handler p_write_handler = !(p_source[1] & 0x80) ? &write_pixels : &write_xor_pixels;
