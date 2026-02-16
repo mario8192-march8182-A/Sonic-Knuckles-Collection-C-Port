@@ -10,6 +10,7 @@
 #include "../objects/spring.h"
 #include "../objects/toge.h"
 #include "../objects/zone00/bs00m.h"
+#include "../objects/zone00/falltree.h"
 #include "../objects/zone00/hana00.h"
 #include "../objects/zone00/sai00.h"
 #include "../objects/zone00/saru00.h"
@@ -66,7 +67,7 @@ SKC_sprite_status_handler s3_act_tbl[256] = {
   0,//&bryuka,
   0,//&rollhashi,
   0,//&brhashi,
-  0,//&falltree,
+  &falltree,
   0,//&togetree,
   0,//&bgspr,
   0,//&bgsprp,

@@ -191,6 +191,12 @@ typedef struct SKC_sprite_status {
         }
         explosion;
         struct {
+          unsigned short unknown32; // 0x32
+          unsigned short unknown34; // 0x34
+          bool invisible; // 0x36
+        }
+        falltree;
+        struct {
           unsigned char type; // 0x30
           short xspeed_init; // 0x32
           short yspeed_init; // 0x34
