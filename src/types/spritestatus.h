@@ -255,6 +255,12 @@ typedef struct SKC_sprite_status {
         }
         rollc;
         struct {
+          signed char* slope_heights_ptr; // 0x32
+          signed char patno_chg; // 0x36
+          unsigned char patno_max; // 0x37
+        }
+        rollhashi;
+        struct {
           unsigned char move_timer; // 0x39
         }
         saru00;
