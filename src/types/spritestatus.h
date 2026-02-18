@@ -339,6 +339,14 @@ typedef struct SKC_sprite_status {
         }
         toge;
         struct {
+          short yposi_init; // 0x30
+          unsigned char rotation; // 0x32
+          unsigned char bitfield; // 0x34
+          unsigned char patcnt_save; // 0x35
+          unsigned char f64d_save; // 0x36
+        }
+        togetree;
+        struct {
           unsigned short ringwk_index; // 0x30
         }
         tring;

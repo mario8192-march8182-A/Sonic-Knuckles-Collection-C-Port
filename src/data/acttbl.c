@@ -17,6 +17,7 @@
 #include "../objects/zone00/saru00.h"
 #include "../objects/zone00/snak00.h"
 #include "../objects/zone00/tloop.h"
+#include "../objects/zone00/togetree.h"
 #include "../objects/zone04/betl04.h"
 #include "../objects/zone04/mous04.h"
 #include "../objects/zone04/obox04.h"
@@ -69,7 +70,7 @@ SKC_sprite_status_handler s3_act_tbl[256] = {
   &rollhashi,
   0,//&brhashi,
   &falltree,
-  0,//&togetree,
+  &togetree,
   0,//&bgspr,
   0,//&bgsprp,
   0,//&rollpole,

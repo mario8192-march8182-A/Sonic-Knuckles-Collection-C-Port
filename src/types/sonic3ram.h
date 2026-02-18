@@ -83,6 +83,7 @@ typedef struct sonic3_ram {
   /* 08fff636 */ unsigned long ranum;
   /* 08fff63a */ unsigned short pauseflag;
   /* 08fff648 */ unsigned short waterposi;
+  /* 08fff64d */ unsigned char DAT_08fff64d;
   /* 08fff64e */ unsigned char waterflag;
   /* 08fff65e */ unsigned char ssonicpallet_next;
   /* 08fff65f */ unsigned char ssonicpallet;
