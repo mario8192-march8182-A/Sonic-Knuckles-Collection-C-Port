@@ -632,7 +632,7 @@ void set_ride(SKC_sprite_status* p_actwk, SKC_sprite_status* p_playerwk, bool* p
     }
   }
   p_playerwk->u.play.ride_obj = p_actwk - g_ram.actwk;
-  p_playerwk->direc1 = 0;
+  p_playerwk->direc.b.b0 = 0;
   p_playerwk->yspeed = 0;
   p_playerwk->mspeed = p_playerwk->xspeed;
   p_playerwk->u.play.cddat.ride = 1;

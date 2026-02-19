@@ -484,7 +484,7 @@ static void rollcmove2__sub(SKC_sprite_status* p_actwk, SKC_sprite_status* p_pla
             p_playerwk->u.play.spindash_flag = BIT_IS_SET(p_actwk->u.obj.userflag, 7) ? 1 : 0x81;
             if (BIT_IS_SET(p_actwk->u.obj.userflag, 6)) {
               p_playerwk->u.play.cddat.jump = 0;
-              p_playerwk->direc1 = 64;
+              p_playerwk->direc.b.b0 = 64;
               p_playerwk->mspeed = p_playerwk->yspeed;
               p_playerwk->xspeed = 0;
             }
@@ -508,7 +508,7 @@ static void rollcmove2__sub(SKC_sprite_status* p_actwk, SKC_sprite_status* p_pla
             p_playerwk->u.play.spindash_flag = BIT_IS_SET(p_actwk->u.obj.userflag, 7) ? 1 : 0x81;
             if (BIT_IS_SET(p_actwk->u.obj.userflag, 6)) {
               p_playerwk->u.play.cddat.jump = 0;
-              p_playerwk->direc1 = 64;
+              p_playerwk->direc.b.b0 = 64;
             }
           }
           ballchange(p_playerwk);

@@ -38,8 +38,15 @@ typedef struct SKC_sprite_status {
   unsigned char patcnt; // 0x23
   unsigned char pattim; // 0x24
   unsigned char pattimm; // 0x25
-  signed char direc1; // 0x26
-  signed char direc2; // 0x27
+  union {
+    struct {
+      unsigned char b0; // 0x26
+      unsigned char b1; // 0x27
+    }
+    b;
+    unsigned short w; // 0x26
+  }
+  direc;
   unsigned char colino; // 0x28
   unsigned char colicnt; // 0x29
   union {

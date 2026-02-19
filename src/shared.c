@@ -2610,13 +2610,13 @@ void chk_boss_set(SKC_sprite_status* p_actwk, unsigned short* p_limit_data, SKC_
     frameoutchk3(p_actwk);
   }
   else {
-    CLEAR_BIT(p_actwk->direc2, 7);
+    CLEAR_BIT(p_actwk->direc.b.b1, 7);
     if (g_ram.scra_v_posit >> 16 > p_limit_data[4]) {
-      SET_BIT(p_actwk->direc2, 7);
+      SET_BIT(p_actwk->direc.b.b1, 7);
     }
-    CLEAR_BIT(p_actwk->direc2, 6);
+    CLEAR_BIT(p_actwk->direc.b.b1, 6);
     if (g_ram.scra_h_posit >> 16 > p_limit_data[6]) {
-      SET_BIT(p_actwk->direc2, 6);
+      SET_BIT(p_actwk->direc.b.b1, 6);
     }
     p_actwk->r_ptr = p_return;
   }
@@ -2635,13 +2635,13 @@ void fix_scr_l(SKC_sprite_status* p_actwk) {
 
 
 void chk_scr_bgm(SKC_sprite_status* p_actwk) {
-  if (!BIT_IS_SET(p_actwk->direc2, 0) && p_actwk->u.obj.timer-- == 0) {
-    g_ram.bgm_act = p_actwk->direc1;
-    bgmset(p_actwk->direc1);
-    SET_BIT(p_actwk->direc2, 0);
+  if (!BIT_IS_SET(p_actwk->direc.b.b1, 0) && p_actwk->u.obj.timer-- == 0) {
+    g_ram.bgm_act = p_actwk->direc.b.b0;
+    bgmset(p_actwk->direc.b.b0);
+    SET_BIT(p_actwk->direc.b.b1, 0);
   }
-  if (!BIT_IS_SET(p_actwk->direc2, 1)) {
-    if (!BIT_IS_SET(p_actwk->direc2, 7)) {
+  if (!BIT_IS_SET(p_actwk->direc.b.b1, 1)) {
+    if (!BIT_IS_SET(p_actwk->direc.b.b1, 7)) {
       if (g_ram.scra_v_posit >> 16 >= g_ram.scralim_b_up) {
         chk_scr_bgm__set_v_bit(p_actwk);
       }
@@ -2655,8 +2655,8 @@ void chk_scr_bgm(SKC_sprite_status* p_actwk) {
       }
     }
   }
-  if (!BIT_IS_SET(p_actwk->direc2, 2)) {
-    if (!BIT_IS_SET(p_actwk->direc2, 6)) {
+  if (!BIT_IS_SET(p_actwk->direc.b.b1, 2)) {
+    if (!BIT_IS_SET(p_actwk->direc.b.b1, 6)) {
       if (g_ram.scra_h_posit >> 16 >= g_ram.scralim_b_left) { // chk_l
         chk_scr_bgm__set_h_bit(p_actwk);
       }
@@ -2673,24 +2673,26 @@ void chk_scr_bgm(SKC_sprite_status* p_actwk) {
       }
     }
   }
-  if ((p_actwk->direc2 & 7) == 7) {
-    p_actwk->direc2 = 0;
+  if (BIT_IS_SET(p_actwk->direc.b.b1, 0)
+      && BIT_IS_SET(p_actwk->direc.b.b1, 1)
+      && BIT_IS_SET(p_actwk->direc.b.b1, 2)) {
+    p_actwk->direc.b.b1 = 0;
     p_actwk->mspeed = 0;
-    p_actwk->direc1 = 0;
+    p_actwk->direc.b.b0 = 0;
     p_actwk->u.obj.callback_ptr(p_actwk);
   }
 }
 
 
 static void chk_scr_bgm__set_v_bit(SKC_sprite_status* p_actwk) {
-  SET_BIT(p_actwk->direc2, 1);
+  SET_BIT(p_actwk->direc.b.b1, 1);
   g_ram.scralim_up = g_ram.scralim_b_up;
   g_ram.scralim_n_down = g_ram.scralim_b_down;
 }
 
 
 static void chk_scr_bgm__set_h_bit(SKC_sprite_status* p_actwk) {
-  SET_BIT(p_actwk->direc2, 2);
+  SET_BIT(p_actwk->direc.b.b1, 2);
   g_ram.scralim_left = g_ram.scralim_b_left;
   g_ram.scralim_right = g_ram.scralim_b_right;
 }

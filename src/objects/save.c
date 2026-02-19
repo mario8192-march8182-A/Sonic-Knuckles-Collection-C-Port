@@ -147,8 +147,10 @@ static void savemove3(SKC_sprite_status* p_actwk) {
     frameout(p_actwk);
   }
   else {
-    unsigned char angle = p_actwk->direc1 - 64;
-    p_actwk->direc1 -= 16;
+    unsigned char angle = p_actwk->direc.b.b0 - 64;
+    angle &= 0xFF;
+    p_actwk->direc.b.b0 -= 16;
+    p_actwk->direc.b.b0 &= 0xFF;
     short sin, cos;
     sinset(angle, &sin, &cos);
     long cos_l = cos * 3072;
