@@ -6,6 +6,7 @@
 #include "../objects/ring.h"
 #include "../objects/iwa.h"
 #include "../objects/opnbox.h"
+#include "../objects/rope.h"
 #include "../objects/save.h"
 #include "../objects/spring.h"
 #include "../objects/toge.h"
@@ -30,7 +31,7 @@ SKC_sprite_status_handler s3_act_tbl[256] = {
   &tloop,
   &break_,
   &iwa,
-  0,//&rope,
+  &rope,
   &sjump,
   &toge,
   &miki00,

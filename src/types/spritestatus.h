@@ -268,6 +268,27 @@ typedef struct SKC_sprite_status {
         }
         rollhashi;
         struct {
+          unsigned short unknown2ew; // 0x2E
+          unsigned short unknown30w; // 0x30
+          unsigned char plholding; // 0x32
+          unsigned char pl2holding; // 0x33
+          unsigned char plnograb_timer; // 0x34
+          unsigned char pl2nograb_timer; // 0x35
+          unsigned short part_cnt; // 0x36
+          unsigned short unknown38w; // 0x38
+          unsigned short unknown3aw; // 0x3A
+          unsigned char handle; // 0x40
+          unsigned short unknown42w; // 0x42
+          unsigned short unknown44w; // 0x44
+          short xdestination; // 0x46
+        }
+        rope;
+        struct {
+          short prev_xposi; // 0x42
+          short prev_yposi; // 0x44
+        }
+        rope_handle;
+        struct {
           unsigned char move_timer; // 0x39
         }
         saru00;
