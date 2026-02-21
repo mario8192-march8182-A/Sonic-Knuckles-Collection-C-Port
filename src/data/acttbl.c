@@ -37,7 +37,7 @@ SKC_sprite_status_handler s3_act_tbl[256] = {
   &miki00,
   &joint00,
   &ring,
-  0,//&ropeswing,
+  &ropeswing,
   0,//&brkabe,
   0,//&hjump,
   &break2,

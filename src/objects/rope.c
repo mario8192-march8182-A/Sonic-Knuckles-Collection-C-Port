@@ -29,6 +29,14 @@ static void handlemove(SKC_sprite_status* p_actwk);
 static void handlesub(SKC_sprite_status* p_actwk, SKC_sprite_status* p_playerwk, unsigned short swdata, unsigned char* p_plholding, unsigned char* p_plnograb_timer);
 static void handlesub__rolljumpsub(SKC_sprite_status* p_playerwk);
 static void handlesub__kcheck(SKC_sprite_status* p_actwk, SKC_sprite_status* p_playerwk, unsigned short swdata);
+static void ropeswinginit(SKC_sprite_status* p_actwk);
+static void ropeswinginit__sub(SKC_sprite_status* p_actwk);
+static void ropeswingmove(SKC_sprite_status* p_actwk);
+static void ropeswingfoutchk(SKC_sprite_status* p_actwk);
+static void ropeswingmove2(SKC_sprite_status* p_actwk);
+static void ropeswingmove3(SKC_sprite_status* p_actwk);
+static void ropeswingposiset(SKC_sprite_status* p_actwk);
+static void handleswingmove(SKC_sprite_status* p_actwk);
 static SKC_sprite_pattern ropesp00;
 static SKC_sprite_pattern ropesp01;
 static SKC_sprite_pattern ropesp02;
@@ -568,6 +576,172 @@ static void handlesub__kcheck(SKC_sprite_status* p_actwk, SKC_sprite_status* p_p
   }
   else {
     p_actwk->pattimm = 0;
+  }
+}
+
+
+void ropeswing(SKC_sprite_status* p_actwk) {
+  ropeswinginit(p_actwk);
+}
+
+
+static void ropeswinginit(SKC_sprite_status* p_actwk) {
+  p_actwk->r_ptr = &ropeswingmove;
+  ropeswinginit__sub(p_actwk);
+  p_actwk->patno = 33;
+  SKC_sprite_status* p_prev_actwk = p_actwk;
+  SKC_actwkchk_result result;
+  short xposi = fp16_get_integer(p_actwk->xposi);
+  short yposi = fp16_get_integer(p_actwk->yposi);
+  unsigned char cnt = p_actwk->u.obj.userflag & 0x0F;
+
+  for (int i = 0; i < cnt; ++i) {
+    result = actwkchk2(p_prev_actwk);
+    if (result.actwk_ptr == 0) break;
+    if (i == 0) {
+      result.actwk_ptr->u.obj.actfree.rope.unknown44w = 0xFE50;
+      result.actwk_ptr->u.obj.actfree.rope.unknown38w = 0x800;
+      result.actwk_ptr->r_ptr = &ropeswingmove2;
+      result.actwk_ptr->u.obj.actfree.rope.unknown42w = (p_actwk->u.obj.userflag & 0xF0) << 8;
+    }
+    else {
+      result.actwk_ptr->r_ptr = &ropeswingmove3;
+    }
+    result.actwk_ptr->u.obj.oya = p_prev_actwk - g_ram.actwk;
+    p_prev_actwk->u.obj.ko = result.actwk_ptr - g_ram.actwk;
+    ropeswinginit__sub(result.actwk_ptr);
+    fp16_set_integer(&result.actwk_ptr->xposi, xposi);
+    fp16_set_integer(&result.actwk_ptr->yposi, yposi);
+    yposi += 16;
+    ++p_actwk->u.obj.actfree.rope.part_cnt;
+    result.actwk_ptr->u.obj.actfree.rope.part_cnt = p_actwk->u.obj.actfree.rope.part_cnt;
+  }
+
+  if (result.actwk_ptr != 0) {
+    result.actwk_ptr->r_ptr = &handleswingmove;
+    result.actwk_ptr->patno = 32;
+    p_actwk->u.obj.actfree.rope.handle = result.actwk_ptr - g_ram.actwk;
+  }
+  ropeswingmove(p_actwk);
+}
+
+
+static void ropeswinginit__sub(SKC_sprite_status* p_actwk) {
+  p_actwk->actflg.relative_coordinates = 1;
+  p_actwk->sprhs = 8;
+  p_actwk->sprvs = 8;
+  p_actwk->sprpri = PRI_4;
+  p_actwk->patbase = ropepat;
+  p_actwk->sproffset = 0x041B;
+}
+
+
+static void ropeswingmove(SKC_sprite_status* p_actwk) {
+  ropeswingfoutchk(p_actwk);
+}
+
+
+static void ropeswingfoutchk(SKC_sprite_status* p_actwk) {
+  short chunk_xposi = fp16_get_integer(p_actwk->xposi) - fp16_get_integer(p_actwk->xposi) % 128 - g_ram.scr_x_no;
+  if (chunk_xposi <= 640) {
+    actionsub(p_actwk);
+  }
+  else {
+    SKC_sprite_status* p_parentwk = &g_ram.actwk[p_actwk->u.obj.ko];
+
+    for (int i = 0; i < p_actwk->u.obj.actfree.rope.part_cnt; ++i) {
+      SKC_sprite_status* p_childwk = &g_ram.actwk[p_parentwk->u.obj.ko];
+      frameout(p_parentwk);
+      p_parentwk = p_childwk;
+    }
+
+    if (p_actwk->u.obj.flagwork_index != 0) {
+      CLEAR_BIT(g_ram.flagwork[p_actwk->u.obj.flagwork_index - 1], 7);
+    }
+    frameout(p_actwk);
+  }
+}
+
+
+static void ropeswingmove2(SKC_sprite_status* p_actwk) {
+  if (true) {
+    short sin, cos;
+    sinset(g_ram.ropeswing_angle >> 8, &sin, &cos);
+    p_actwk->direc.w = (unsigned short)sin * 44;
+    p_actwk->direc.w &= 0xFFFF;
+    p_actwk->u.obj.actfree.rope.unknown3aw = (unsigned short)sin * 44 / 8;
+    p_actwk->u.obj.actfree.rope.unknown3aw &= 0xFFFF;
+    p_actwk->patno = ((p_actwk->direc.w >> 8) + 4) / 8;
+    actionsub(p_actwk);
+  }
+  else {
+    if (p_actwk->u.obj.actfree.rope.unknown2ew == 0) {
+      p_actwk->u.obj.actfree.rope.unknown44w += p_actwk->u.obj.actfree.rope.unknown38w >> 8;
+      p_actwk->u.obj.actfree.rope.unknown44w &= 0xFFFF;
+      p_actwk->u.obj.actfree.rope.unknown42w += p_actwk->u.obj.actfree.rope.unknown44w;
+      p_actwk->u.obj.actfree.rope.unknown42w &= 0xFFFF;
+      if (p_actwk->u.obj.actfree.rope.unknown42w >> 8 < 128) {
+        p_actwk->u.obj.actfree.rope.unknown2ew = 1;
+      }
+    }
+    else {
+      p_actwk->u.obj.actfree.rope.unknown44w -= p_actwk->u.obj.actfree.rope.unknown38w >> 8;
+      p_actwk->u.obj.actfree.rope.unknown44w &= 0xFFFF;
+      p_actwk->u.obj.actfree.rope.unknown42w += p_actwk->u.obj.actfree.rope.unknown44w;
+      p_actwk->u.obj.actfree.rope.unknown42w &= 0xFFFF;
+      if (p_actwk->u.obj.actfree.rope.unknown42w >> 8 >= 128) {
+        p_actwk->u.obj.actfree.rope.unknown2ew = 0;
+      }
+    }
+    p_actwk->direc.w = p_actwk->u.obj.actfree.rope.unknown42w;
+    p_actwk->u.obj.actfree.rope.unknown3aw = p_actwk->u.obj.actfree.rope.unknown42w / 8;
+    p_actwk->patno = ((p_actwk->direc.w >> 8) + 4) / 8;
+    actionsub(p_actwk);
+  }
+}
+
+
+static void ropeswingmove3(SKC_sprite_status* p_actwk) {
+  SKC_sprite_status* p_parentwk = &g_ram.actwk[p_actwk->u.obj.oya];
+  p_actwk->u.obj.actfree.rope.unknown3aw = p_parentwk->u.obj.actfree.rope.unknown3aw;
+  p_actwk->direc.w = p_parentwk->direc.w + p_actwk->u.obj.actfree.rope.unknown3aw;
+  p_actwk->direc.w &= 0xFFFF;
+  p_actwk->patno = ((p_actwk->direc.w >> 8) + 4) / 8;
+  ropeswingposiset(p_actwk);
+  actionsub(p_actwk);
+}
+
+
+static void ropeswingposiset(SKC_sprite_status* p_actwk) {
+  SKC_sprite_status* p_parentwk = &g_ram.actwk[p_actwk->u.obj.oya];
+  unsigned char angle = (p_actwk->direc.w >> 8) + 4;
+  angle = angle - angle % 8;
+  short sin, cos;
+  sinset(angle, &sin, &cos);
+  short xposi = (-sin + 8) / 16 + fp16_get_integer(p_parentwk->xposi);
+  fp16_set_integer(&p_actwk->xposi, xposi);
+  short yposi = (cos + 8) / 16 + fp16_get_integer(p_parentwk->yposi);
+}
+
+
+static void handleswingmove(SKC_sprite_status* p_actwk) {
+  short xposi_save = fp16_get_integer(p_actwk->xposi);
+  short yposi_save = fp16_get_integer(p_actwk->yposi);
+  ropeswingposiset(p_actwk);
+  if (xposi_save != fp16_get_integer(p_actwk->xposi)) {
+    p_actwk->u.obj.actfree.rope_handle.prev_xposi = xposi_save;
+  }
+  if (yposi_save != fp16_get_integer(p_actwk->yposi)) {
+    p_actwk->u.obj.actfree.rope_handle.prev_yposi = yposi_save;
+  }
+  handlesub(p_actwk, &g_ram.actwk[0], g_ram.swdata1_auto, &p_actwk->u.obj.actfree.rope.plholding, &p_actwk->u.obj.actfree.rope.plnograb_timer);
+  handlesub(p_actwk, &g_ram.actwk[1], g_ram.swdata2_auto, &p_actwk->u.obj.actfree.rope.pl2holding, &p_actwk->u.obj.actfree.rope.pl2nograb_timer);
+  bool plnoholding = !BIT_IS_SET(p_actwk->u.obj.actfree.rope.plholding, 0)
+                  && !BIT_IS_SET(p_actwk->u.obj.actfree.rope.plholding, 7)
+                  && !BIT_IS_SET(p_actwk->u.obj.actfree.rope.pl2holding, 0)
+                  && !BIT_IS_SET(p_actwk->u.obj.actfree.rope.pl2holding, 7);
+  if (plnoholding || p_actwk->u.obj.actfree.rope.unknown30w == 0) {
+    actionsub(p_actwk);
   }
 }
 
