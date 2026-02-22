@@ -299,7 +299,7 @@ SKC_sprite_status_handler sk_act_tbl[185] = {
   0,//&brkabe,
   0,//&hjump,
   &break2,
-  0,//&hbar,
+  &hbar,
   0,//&Obj_MHZMushroomPlatform,
   0,//&Obj_MHZMushroomParachute,
   0,//&Obj_MHZMushroomCatapult,

@@ -90,6 +90,9 @@ typedef struct sonic3_ram {
   /* 08fff667 */ unsigned char smilesflag;
   /* 08fff66a */ unsigned short swdata2_auto;
   /* 08fff670 */ unsigned short ssonicring_timer;
+  /* 08fff676 */ unsigned short custom_follow_flag;
+  /* 08fff678 */ long custom_follow_xposi;
+  /* 08fff67c */ long custom_follow_yposi;
   /* 08fff702 */ unsigned short fox_auto_timer;
   /* 08fff708 */ unsigned short fox_auto_rno;
   /* 08fff711 */ unsigned char DAT_08fff711;

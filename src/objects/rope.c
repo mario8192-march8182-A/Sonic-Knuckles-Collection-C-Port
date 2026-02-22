@@ -37,6 +37,17 @@ static void ropeswingmove2(SKC_sprite_status* p_actwk);
 static void ropeswingmove3(SKC_sprite_status* p_actwk);
 static void ropeswingposiset(SKC_sprite_status* p_actwk);
 static void handleswingmove(SKC_sprite_status* p_actwk);
+static void hbarinit(SKC_sprite_status* p_actwk);
+static void hbarinit__sub(SKC_sprite_status* p_actwk);
+static void hbarmove(SKC_sprite_status* p_actwk);
+static void hbarroll(SKC_sprite_status* p_actwk);
+static void hbarstop(SKC_sprite_status* p_actwk);
+static void hbarfoutchk(SKC_sprite_status* p_actwk);
+static void hbarmove2(SKC_sprite_status* p_actwk);
+static void hbarposiset(SKC_sprite_status* p_actwk);
+static void hbarhandlemove(SKC_sprite_status* p_actwk);
+static void hbarhandlesub(SKC_sprite_status* p_actwk, SKC_sprite_status* p_playerwk, unsigned short swdata, unsigned char* p_plholding, unsigned char* p_plnograb_timer);
+static void hbarhandlesub__rolljumpsub(SKC_sprite_status* p_playerwk);
 static SKC_sprite_pattern ropesp00;
 static SKC_sprite_pattern ropesp01;
 static SKC_sprite_pattern ropesp02;
@@ -743,6 +754,382 @@ static void handleswingmove(SKC_sprite_status* p_actwk) {
   if (plnoholding || p_actwk->u.obj.actfree.rope.unknown30w == 0) {
     actionsub(p_actwk);
   }
+}
+
+
+void hbar(SKC_sprite_status* p_actwk) {
+  hbarinit(p_actwk);
+}
+
+
+static void hbarinit(SKC_sprite_status* p_actwk) {
+  p_actwk->r_ptr = &hbarmove;
+  hbarinit__sub(p_actwk);
+  p_actwk->patno = 35;
+  SKC_sprite_status* p_prev_actwk = p_actwk;
+  SKC_actwkchk_result result;
+  short xposi = fp16_get_integer(p_actwk->xposi);
+  short yposi = fp16_get_integer(p_actwk->yposi);
+
+  for (int i = 0; i < 2; ++i) {
+    result = actwkchk2(p_prev_actwk);
+    if (result.actwk_ptr == 0) break;
+    if (i == 0) {
+      result.actwk_ptr->r_ptr = &hbarmove2;
+    }
+    result.actwk_ptr->u.obj.oya = p_prev_actwk - g_ram.actwk;
+    p_prev_actwk->u.obj.ko = result.actwk_ptr - g_ram.actwk;
+    hbarinit__sub(result.actwk_ptr);
+    fp16_set_integer(&result.actwk_ptr->xposi, xposi);
+    fp16_set_integer(&result.actwk_ptr->yposi, yposi);
+    yposi += 16;
+    ++p_actwk->u.obj.actfree.rope.part_cnt;
+    result.actwk_ptr->u.obj.actfree.rope.part_cnt = p_actwk->u.obj.actfree.rope.part_cnt;
+  }
+
+  if (result.actwk_ptr != 0) {
+    result.actwk_ptr->r_ptr = &hbarhandlemove;
+    result.actwk_ptr->patno = 34;
+    result.actwk_ptr->u.obj.actfree.rope.unknown42w = (unsigned short)fp16_get_integer(result.actwk_ptr->xposi);
+    result.actwk_ptr->u.obj.actfree.rope.unknown42w &= 0xFFFF;
+    result.actwk_ptr->u.obj.actfree.rope.unknown44w = (unsigned short)fp16_get_integer(result.actwk_ptr->yposi);
+    result.actwk_ptr->u.obj.actfree.rope.unknown44w &= 0xFFFF;
+    p_actwk->u.obj.actfree.rope.handle = result.actwk_ptr - g_ram.actwk;
+  }
+  hbarmove(p_actwk);
+}
+
+
+static void hbarinit__sub(SKC_sprite_status* p_actwk) {
+  p_actwk->actflg.relative_coordinates = 1;
+  p_actwk->sprhs = 8;
+  p_actwk->sprvs = 8;
+  p_actwk->sprpri = PRI_4;
+  p_actwk->patbase = ropepat;
+  p_actwk->sproffset = 0x0455;
+}
+
+
+static void hbarmove(SKC_sprite_status* p_actwk) {
+  SKC_sprite_status* p_handlewk = &g_ram.actwk[p_actwk->u.obj.actfree.rope.handle];
+  if (BIT_IS_SET(p_handlewk->u.obj.actfree.rope.plholding, 7)
+      || BIT_IS_SET(p_handlewk->u.obj.actfree.rope.pl2holding, 7)) {
+    p_actwk->r_ptr = &hbarroll;
+    p_handlewk->u.obj.actfree.rope.unknown30w = 1;
+    p_actwk->direc.w = 0;
+    p_actwk->u.obj.actfree.rope.unknown3aw = 0x800;
+  }
+  hbarfoutchk(p_actwk);
+}
+
+
+static void hbarroll(SKC_sprite_status* p_actwk) {
+  unsigned char angle = p_actwk->direc.w >> 8;
+  if (angle > 128) {
+    angle = 256 - angle;
+  }
+  p_actwk->direc.w -= p_actwk->u.obj.actfree.rope.unknown3aw - angle * 2;
+  p_actwk->direc.w &= 0xFFFF;
+  angle = (p_actwk->direc.w >> 8) - (p_actwk->direc.w >> 8) % 8;
+  if (angle == 64) {
+    soundset(126);
+  }
+  p_actwk->sprpri = p_actwk->direc.w < 128 ? PRI_4 : PRI_5;
+  SKC_sprite_status* p_handlewk = &g_ram.actwk[p_actwk->u.obj.actfree.rope.handle];
+  if (p_handlewk->u.obj.actfree.rope.plholding != 0) {
+    g_ram.custom_follow_flag = 1;
+    fp16_set_integer(&g_ram.custom_follow_xposi, fp16_get_integer(p_actwk->xposi));
+    fp16_set_integer(&g_ram.custom_follow_yposi, fp16_get_integer(p_actwk->yposi));
+  }
+  if (p_handlewk->u.obj.actfree.rope.plholding == 0 && p_handlewk->u.obj.actfree.rope.pl2holding == 0) {
+    if ((p_actwk->direc.w >> 8) + 8 < 16) {
+      p_actwk->r_ptr = &hbarstop;
+      p_actwk->u.obj.actfree.rope.unknown42w = 0;
+      p_actwk->u.obj.actfree.rope.unknown44w = 0xFD00;
+      p_actwk->u.obj.actfree.rope.unknown38w = 0x1000;
+      p_actwk->u.obj.actfree.rope.unknown2ew = 0;
+      p_handlewk->u.obj.actfree.rope.unknown30w = 2;
+    }
+  }
+  hbarfoutchk(p_actwk);
+}
+
+
+static void hbarstop(SKC_sprite_status* p_actwk) {
+  if (p_actwk->u.obj.actfree.rope.unknown2ew == 0) {
+    p_actwk->u.obj.actfree.rope.unknown44w += p_actwk->u.obj.actfree.rope.unknown38w >> 8;
+    p_actwk->u.obj.actfree.rope.unknown44w &= 0xFFFF;
+    p_actwk->u.obj.actfree.rope.unknown42w += p_actwk->u.obj.actfree.rope.unknown44w;
+    p_actwk->u.obj.actfree.rope.unknown42w &= 0xFFFF;
+    if (p_actwk->u.obj.actfree.rope.unknown42w >> 8 < 128) {
+      p_actwk->u.obj.actfree.rope.unknown44w -= p_actwk->u.obj.actfree.rope.unknown44w / 16;
+      p_actwk->u.obj.actfree.rope.unknown44w &= 0xFFFF;
+      p_actwk->u.obj.actfree.rope.unknown2ew = 1;
+      if (p_actwk->u.obj.actfree.rope.unknown38w != 0xC00) {
+        p_actwk->u.obj.actfree.rope.unknown38w -= 0x40;
+        p_actwk->u.obj.actfree.rope.unknown38w &= 0xFFFF;
+      }
+      else {
+        p_actwk->r_ptr = &hbarmove;
+        p_actwk->u.obj.actfree.rope.unknown38w = 0;
+        SKC_sprite_status* p_handlewk = &g_ram.actwk[p_actwk->u.obj.actfree.rope.handle];
+        p_handlewk->u.obj.actfree.rope.unknown30w = 0;
+        p_actwk->u.obj.actfree.rope.unknown42w = (unsigned short)fp16_get_integer(p_handlewk->xposi);
+        p_actwk->u.obj.actfree.rope.unknown42w &= 0xFFFF;
+        p_actwk->u.obj.actfree.rope.unknown44w = (unsigned short)fp16_get_integer(p_handlewk->yposi);
+        p_actwk->u.obj.actfree.rope.unknown44w &= 0xFFFF;
+      }
+    }
+  }
+  else {
+    p_actwk->u.obj.actfree.rope.unknown44w -= p_actwk->u.obj.actfree.rope.unknown38w >> 8;
+    p_actwk->u.obj.actfree.rope.unknown44w &= 0xFFFF;
+    p_actwk->u.obj.actfree.rope.unknown42w += p_actwk->u.obj.actfree.rope.unknown44w;
+    p_actwk->u.obj.actfree.rope.unknown42w &= 0xFFFF;
+    if (p_actwk->u.obj.actfree.rope.unknown42w >> 8 >= 128) {
+      p_actwk->u.obj.actfree.rope.unknown44w -= p_actwk->u.obj.actfree.rope.unknown44w / 16;
+      p_actwk->u.obj.actfree.rope.unknown44w &= 0xFFFF;
+      p_actwk->u.obj.actfree.rope.unknown2ew = 0;
+      if (p_actwk->u.obj.actfree.rope.unknown38w != 0xC00) {
+        p_actwk->u.obj.actfree.rope.unknown38w -= 0x40;
+        p_actwk->u.obj.actfree.rope.unknown38w &= 0xFFFF;
+      }
+      else {
+        p_actwk->r_ptr = &hbarmove;
+        p_actwk->u.obj.actfree.rope.unknown38w = 0;
+        SKC_sprite_status* p_handlewk = &g_ram.actwk[p_actwk->u.obj.actfree.rope.handle];
+        p_handlewk->u.obj.actfree.rope.unknown30w = 0;
+        p_actwk->u.obj.actfree.rope.unknown42w = (unsigned short)fp16_get_integer(p_handlewk->xposi);
+        p_actwk->u.obj.actfree.rope.unknown42w &= 0xFFFF;
+        p_actwk->u.obj.actfree.rope.unknown44w = (unsigned short)fp16_get_integer(p_handlewk->yposi);
+        p_actwk->u.obj.actfree.rope.unknown44w &= 0xFFFF;
+      }
+    }
+  }
+  p_actwk->direc.w = p_actwk->u.obj.actfree.rope.unknown42w;
+  p_actwk->sprpri = p_actwk->direc.w < 128 ? PRI_4 : PRI_5;
+  p_actwk->u.obj.actfree.rope.unknown3aw = p_actwk->u.obj.actfree.rope.unknown42w / 8;
+  SKC_sprite_status* p_childwk = &g_ram.actwk[p_actwk->u.obj.ko];
+  p_childwk->u.obj.actfree.rope.unknown3aw = p_actwk->u.obj.actfree.rope.unknown3aw;
+  SKC_sprite_status* p_handlewk = &g_ram.actwk[p_actwk->u.obj.actfree.rope.handle];
+  if (BIT_IS_SET(p_handlewk->u.obj.actfree.rope.plholding, 7)
+      || BIT_IS_SET(p_handlewk->u.obj.actfree.rope.pl2holding, 7)) {
+    p_actwk->r_ptr = &hbarroll;
+    p_handlewk->u.obj.actfree.rope.unknown30w = 1;
+    p_actwk->u.obj.actfree.rope.unknown3aw = 0x800;
+  }
+  hbarfoutchk(p_actwk);
+}
+
+
+static void hbarfoutchk(SKC_sprite_status* p_actwk) {
+  short chunk_xposi = fp16_get_integer(p_actwk->xposi) - fp16_get_integer(p_actwk->xposi) % 128 - g_ram.scr_x_no;
+  if (chunk_xposi <= 640) {
+    actionsub(p_actwk);
+  }
+  else {
+    SKC_sprite_status* p_parentwk = &g_ram.actwk[p_actwk->u.obj.ko];
+
+    for (int i = 0; i < p_actwk->u.obj.actfree.rope.part_cnt; ++i) {
+      SKC_sprite_status* p_childwk = &g_ram.actwk[p_parentwk->u.obj.ko];
+      frameout(p_parentwk);
+      p_parentwk = p_childwk;
+    }
+
+    if (p_actwk->u.obj.flagwork_index != 0) {
+      CLEAR_BIT(g_ram.flagwork[p_actwk->u.obj.flagwork_index - 1], 7);
+    }
+    frameout(p_actwk);
+  }
+}
+
+
+static void hbarmove2(SKC_sprite_status* p_actwk) {
+  SKC_sprite_status* p_childwk = &g_ram.actwk[p_actwk->u.obj.ko];
+  p_actwk->direc.w = p_childwk->direc.w;
+  p_actwk->patno = ((p_actwk->direc.w >> 8) + 4) / 8;
+  fp16_set_integer(&p_actwk->xposi, fp16_get_integer(p_childwk->xposi));
+  fp16_set_integer(&p_actwk->yposi, fp16_get_integer(p_childwk->yposi));
+  actionsub(p_actwk);
+}
+
+
+static void hbarposiset(SKC_sprite_status* p_actwk) {
+  SKC_sprite_status* p_parentwk = &g_ram.actwk[p_actwk->u.obj.oya];
+  unsigned char angle = (p_actwk->direc.w >> 8) + 4;
+  angle = angle - angle % 8;
+  short sin, cos;
+  sinset(angle, &sin, &cos);
+  short xposi = (-sin + 8) / 16 + fp16_get_integer(p_parentwk->xposi);
+  fp16_set_integer(&p_actwk->xposi, xposi);
+  short yposi = (cos + 8) / 16 + fp16_get_integer(p_parentwk->yposi);
+  fp16_set_integer(&p_actwk->yposi, yposi);
+}
+
+
+static void hbarhandlemove(SKC_sprite_status* p_actwk) {
+  short xposi_save = fp16_get_integer(p_actwk->xposi);
+  short yposi_save = fp16_get_integer(p_actwk->yposi);
+  hbarposiset(p_actwk);
+  if (xposi_save != fp16_get_integer(p_actwk->xposi)) {
+    p_actwk->u.obj.actfree.rope_handle.prev_xposi = xposi_save;
+  }
+  if (yposi_save != fp16_get_integer(p_actwk->yposi)) {
+    p_actwk->u.obj.actfree.rope_handle.prev_yposi = yposi_save;
+  }
+  hbarhandlesub(p_actwk, &g_ram.actwk[0], g_ram.swdata1_auto, &p_actwk->u.obj.actfree.rope.plholding, &p_actwk->u.obj.actfree.rope.plnograb_timer);
+  hbarhandlesub(p_actwk, &g_ram.actwk[1], g_ram.swdata2_auto, &p_actwk->u.obj.actfree.rope.pl2holding, &p_actwk->u.obj.actfree.rope.pl2nograb_timer);
+  bool plnoholding = !BIT_IS_SET(p_actwk->u.obj.actfree.rope.plholding, 0)
+                  && !BIT_IS_SET(p_actwk->u.obj.actfree.rope.plholding, 7)
+                  && !BIT_IS_SET(p_actwk->u.obj.actfree.rope.pl2holding, 0)
+                  && !BIT_IS_SET(p_actwk->u.obj.actfree.rope.pl2holding, 7);
+  if (plnoholding || p_actwk->u.obj.actfree.rope.unknown30w == 0) {
+    actionsub(p_actwk);
+  }
+}
+
+
+static void hbarhandlesub(SKC_sprite_status* p_actwk, SKC_sprite_status* p_playerwk, unsigned short swdata, unsigned char* p_plholding, unsigned char* p_plnograb_timer) {
+  unsigned char tbl[16] = {
+    145, 145, 144, 144, 144, 144, 144, 144, 146, 146, 146, 146, 146, 146, 145, 145
+  };
+  unsigned char tbl2[16] = {
+    120, 120, 127, 127, 126, 126, 125, 125, 124, 124, 123, 123, 122, 122, 121, 121
+  };
+  struct {
+    signed char x;
+    signed char y;
+  }
+  offsettbl[8] = {
+    {   0,  24 },
+    { -18,  19 },
+    { -24,   0 },
+    { -18, -19 },
+    {   0, -24 },
+    {  18, -19 },
+    {  24,   0 },
+    {  18,  19 }
+  };
+
+  if (BIT_IS_SET(*p_plholding, 0) || BIT_IS_SET(*p_plholding, 7)) {
+    if (p_playerwk->actflg.onscreen == 1 && p_playerwk->r_no < 4 && g_ram.editmode == 0) {
+      if (are_buttons_pressed(swdata, PAD_A | PAD_B | PAD_C)) {
+        p_playerwk->u.play.control_bitfield = 0;
+        CLEAR_BIT(*p_plholding, 0);
+        CLEAR_BIT(*p_plholding, 7);
+        if (p_actwk->u.obj.actfree.rope.unknown30w != 1) {
+          p_playerwk->xspeed = (fp16_get_integer(p_actwk->xposi) - p_actwk->u.obj.actfree.rope_handle.prev_xposi);
+          p_playerwk->xspeed *= 128;
+          p_playerwk->yspeed = (fp16_get_integer(p_actwk->yposi) - p_actwk->u.obj.actfree.rope_handle.prev_yposi);
+          p_playerwk->yspeed *= 128;
+          *p_plnograb_timer = 60;
+          if (are_buttons_down(swdata, PAD_L)) {
+            p_playerwk->xspeed = -0x200;
+          }
+          if (are_buttons_down(swdata, PAD_R)) {
+            p_playerwk->yspeed -= 0x380;
+          }
+          hbarhandlesub__rolljumpsub(p_playerwk);
+        }
+        else {
+          *p_plnograb_timer = 60;
+          SKC_sprite_status* p_parentwk = &g_ram.actwk[p_actwk->u.obj.oya];
+          short sin, cos;
+          sinset(p_parentwk->direc.w >> 8, &sin, &cos);
+          p_playerwk->xspeed = cos * 12;
+          p_playerwk->yspeed = sin * 12;
+          hbarhandlesub__rolljumpsub(p_playerwk);
+        }
+      }
+      else {
+        if (p_actwk->u.obj.actfree.rope.unknown30w == 0) {
+          fp16_set_integer(&p_playerwk->xposi, fp16_get_integer(p_actwk->xposi));
+          fp16_set_integer(&p_playerwk->yposi, fp16_get_integer(p_actwk->yposi) + 20);
+          SKC_sprite_status* p_parentwk = &g_ram.actwk[p_actwk->u.obj.oya];
+          unsigned char index = p_parentwk->direc.w >> 8;
+          if (p_playerwk->u.play.cddat.left == 1) {
+            index = 256 - index;
+          }
+          index = (index + 8) / 16;
+          p_playerwk->patno = tbl[index];
+        }
+        else {
+          SKC_sprite_status* p_parentwk = &g_ram.actwk[p_actwk->u.obj.oya];
+          unsigned char index = p_parentwk->direc.w >> 8;
+          if (p_playerwk->u.play.cddat.left == 1) {
+            index = 256 - index;
+          }
+          index = (index + 16) / 32 * 2;
+          p_playerwk->patno = tbl2[index];
+          p_playerwk->mstno = 0;
+          index &= 0xFE;
+          signed char xoffset = offsettbl[index].x;
+          signed char yoffset = offsettbl[index].y;
+          if (p_playerwk->u.play.cddat.left == 1) {
+            xoffset = -xoffset;
+          }
+          unsigned char angle = (p_playerwk->direc.w >> 8) + 4 & 0xF8;
+          short sin, cos;
+          sinset(angle, &sin, &cos);
+          short xposi = (-sin + 8) / 16 + fp16_get_integer(p_parentwk->xposi) + xoffset;
+          fp16_set_integer(&p_playerwk->xposi, xposi);
+          short yposi = (cos + 8) / 16 + fp16_get_integer(p_parentwk->yposi) + yoffset;
+          fp16_set_integer(&p_playerwk->yposi, yposi);
+        }
+        p_playerwk->actflg.vflip = 0;
+        p_playerwk->actflg.hflip = p_playerwk->u.play.cddat.left;
+        Perform_Player_DPLC(p_playerwk, p_playerwk->patno);
+      }
+    }
+    else {
+      p_playerwk->u.play.control_bitfield = 0;
+      CLEAR_BIT(*p_plholding, 0);
+      CLEAR_BIT(*p_plholding, 7);
+      *p_plnograb_timer = 60;
+    }
+  }
+  else {
+    if (*p_plnograb_timer != 0) {
+    --*p_plnograb_timer;
+    }
+    if (*p_plnograb_timer == 0) {
+      short xposi = fp16_get_integer(p_playerwk->xposi) - fp16_get_integer(p_actwk->xposi) + 16;
+      short yposi = fp16_get_integer(p_playerwk->yposi) - fp16_get_integer(p_actwk->yposi) + 16;
+      if ((unsigned short)xposi < 32 && (unsigned short)yposi < 40
+          && (p_playerwk->xspeed >= 0x400 || yposi < 24)) {
+        short xspeed = p_playerwk->xspeed;
+
+        do {
+          if (p_playerwk->u.play.control_bitfield == 0 && p_playerwk->r_no < 4 && g_ram.editmode == 0) {
+            p_playerwk->xspeed = 0;
+            p_playerwk->yspeed = 0;
+            p_playerwk->mspeed = 0;
+            fp16_set_integer(&p_playerwk->xposi, fp16_get_integer(p_actwk->xposi));
+            fp16_set_integer(&p_playerwk->yposi, fp16_get_integer(p_actwk->yposi) + 20);
+            p_playerwk->mstno = 20;
+            p_playerwk->u.play.spindash_flag = 0;
+            p_playerwk->u.play.control_bitfield = 3;
+            p_playerwk->actflg.vflip = 0;
+            SET_BIT(*p_plholding, 0);
+          }
+        }
+        while (xspeed < 0x400);
+
+        SET_BIT(*p_plholding, 7);
+        soundset(74);
+      }
+    }
+  }
+}
+
+
+static void hbarhandlesub__rolljumpsub(SKC_sprite_status* p_playerwk) {
+  p_playerwk->u.play.cddat.jump = 1;
+  p_playerwk->u.play.jump_flag = 1;
+  p_playerwk->sprvsize = 14;
+  p_playerwk->sprhsize = 7;
+  p_playerwk->mstno = 2;
+  p_playerwk->u.play.cddat.ball = 1;
 }
 
 
