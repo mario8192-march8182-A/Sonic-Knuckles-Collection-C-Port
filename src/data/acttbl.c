@@ -10,6 +10,7 @@
 #include "../objects/save.h"
 #include "../objects/spring.h"
 #include "../objects/toge.h"
+#include "../objects/zone00/appeariwa.h"
 #include "../objects/zone00/bs00m.h"
 #include "../objects/zone00/falltree.h"
 #include "../objects/zone00/hana00.h"
@@ -66,7 +67,7 @@ SKC_sprite_status_handler s3_act_tbl[256] = {
   &rollc,
   &scopec,
   &scoli,
-  0,//&appeariwa,
+  &appeariwa,
   0,//&bryuka,
   &rollhashi,
   0,//&brhashi,

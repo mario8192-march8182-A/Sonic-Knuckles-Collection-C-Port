@@ -153,6 +153,12 @@ typedef struct SKC_sprite_status {
       unsigned short flagwork_index; // 0x48
       union {
         struct {
+          unsigned short mask; // 0x32
+          unsigned short delay; // 0x34
+          bool visible; // 0x36
+        }
+        appeariwa;
+        struct {
           bool plholding; // 0x32
           bool pl2holding; // 0x33
           unsigned char plnograb_timer; // 0x34
