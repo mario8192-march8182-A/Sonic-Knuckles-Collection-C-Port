@@ -14,6 +14,7 @@
 #include "../objects/zone00/bs00m.h"
 #include "../objects/zone00/falltree.h"
 #include "../objects/zone00/hana00.h"
+#include "../objects/zone00/hashi.h"
 #include "../objects/zone00/rollhashi.h"
 #include "../objects/zone00/sai00.h"
 #include "../objects/zone00/saru00.h"
@@ -70,13 +71,13 @@ SKC_sprite_status_handler s3_act_tbl[256] = {
   &appeariwa,
   0,//&bryuka,
   &rollhashi,
-  0,//&brhashi,
+  &brhashi,
   &falltree,
   &togetree,
   0,//&bgspr,
   0,//&bgsprp,
   0,//&rollpole,
-  0,//&evhashi,
+  &evhashi,
   0,//&switch_,
   &save,
   0,//&bgsprz,

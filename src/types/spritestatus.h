@@ -189,6 +189,12 @@ typedef struct SKC_sprite_status {
         }
         break_;
         struct {
+          unsigned char main_timer_init; // 0x35
+          unsigned char child_timer_init; // 0x36
+          unsigned char child_timer_increase; // 0x37
+        }
+        brhashi;
+        struct {
           unsigned short part_cnt; // 0x30
           unsigned short current_exit_no; // 0x32
         }
@@ -197,6 +203,15 @@ typedef struct SKC_sprite_status {
           short xdestination; // 0x46
         }
         clear_part;
+        struct {
+          short xposi_init; // 0x30
+          short yposi_init; // 0x32
+          short angle_mod; // 0x34
+          bool dropping; // 0x36
+          unsigned short angle; // 0x38
+          unsigned char ko2; // 0x3E
+        }
+        evhashi;
         struct {
           signed char unknown39; // 0x39
           signed char unknown3a; // 0x3A
