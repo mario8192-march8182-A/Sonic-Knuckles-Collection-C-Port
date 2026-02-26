@@ -10,6 +10,7 @@
 #include "../objects/rope.h"
 #include "../objects/save.h"
 #include "../objects/spring.h"
+#include "../objects/switch.h"
 #include "../objects/toge.h"
 #include "../objects/zone00/appeariwa.h"
 #include "../objects/zone00/bs00m.h"
@@ -79,7 +80,7 @@ SKC_sprite_status_handler s3_act_tbl[256] = {
   &bgsprp,
   0,//&rollpole,
   &evhashi,
-  0,//&switch_,
+  &switch_,
   &save,
   &bgsprz,
   &bar,
@@ -337,7 +338,7 @@ SKC_sprite_status_handler sk_act_tbl[185] = {
   &bgsprp,
   0,//&break3,
   0,//&Obj_LRZTurbineSprites,
-  0,//&switch_
+  &switch_,
   &save,
   &bgsprz,
   0,//&bar0
