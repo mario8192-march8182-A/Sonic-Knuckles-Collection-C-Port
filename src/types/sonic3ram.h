@@ -129,6 +129,7 @@ typedef struct sonic3_ram {
   /* 08fffa9a */ unsigned char emy_wrt_flg[EMY_WRT_FLG_SLOTS];
   /* 08fffaa2 */ unsigned char DAT_08fffaa2;
   /* 08fffaa3 */ unsigned char DAT_08fffaa3;
+  /* 08fffaa6 */ unsigned char save_obj;
   /* 08fffaa8 */ unsigned char act_clear_flag;
   /* 08fffaa9 */ unsigned char DAT_08fffaa9;
   /* 08fffaaa */ unsigned char act_start_flag;

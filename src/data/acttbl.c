@@ -4,6 +4,7 @@
 #include "../objects/break.h"
 #include "../objects/common.h"
 #include "../objects/item.h"
+#include "../objects/itemug.h"
 #include "../objects/ring.h"
 #include "../objects/iwa.h"
 #include "../objects/opnbox.h"
@@ -157,7 +158,7 @@ SKC_sprite_status_handler s3_act_tbl[256] = {
   0,//&Obj_FBZPiston,
   0,//&Obj_FBZPlatformBlocks,
   0,//&Obj_FBZMissileLauncher,
-  0,//&itemug,
+  &itemug,
   &opnbox,
   0,//&nuckle,
   0,//&nucksw,
@@ -415,7 +416,7 @@ SKC_sprite_status_handler sk_act_tbl[185] = {
   0,//&Obj_SSZBouncyCloud,
   0,//&Obj_SSZCollapsingColumn,
   0,//&Obj_SSZFloatingPlatform,
-  0,//&itemug,
+  &itemug,
   &opnbox,
   0,//&nuckle,
   0,//&nucksw,
