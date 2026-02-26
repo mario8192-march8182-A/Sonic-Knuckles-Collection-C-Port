@@ -181,6 +181,11 @@ typedef struct SKC_sprite_status {
         }
         betl04;
         struct {
+          short xposi_init; // 0x30
+          short yposi_init; // 0x32
+        }
+        bgsprz;
+        struct {
           unsigned char* timer_data_ptr; // 0x30
           unsigned char* timer_data2_ptr; // 0x34
           unsigned char unknown; // 0x3A;

@@ -1,5 +1,6 @@
 #include "../types/spritestatushandler.h"
 #include "../shared.h"
+#include "../objects/bgspr.h"
 #include "../objects/break.h"
 #include "../objects/common.h"
 #include "../objects/item.h"
@@ -74,13 +75,13 @@ SKC_sprite_status_handler s3_act_tbl[256] = {
   &brhashi,
   &falltree,
   &togetree,
-  0,//&bgspr,
-  0,//&bgsprp,
+  &bgspr,
+  &bgsprp,
   0,//&rollpole,
   &evhashi,
   0,//&switch_,
   &save,
-  0,//&bgsprz,
+  &bgsprz,
   &bar,
   0,//&wave
   0,//&fan,
@@ -332,13 +333,13 @@ SKC_sprite_status_handler sk_act_tbl[185] = {
   0,//&Obj_LRZOrbitingSpikeBallVertical,
   0,//&dai09,
   0,//&Obj_LRZSolidRock,
-  0,//&bgspr,
-  0,//&bgsprp,
+  &bgspr,
+  &bgsprp,
   0,//&break3,
   0,//&Obj_LRZTurbineSprites,
   0,//&switch_
   &save,
-  0,//&bgsprz,
+  &bgsprz,
   0,//&bar0
   0,//&Obj_LRZSpikeBallLauncher,
   0,//&Obj_SOZQuicksand,

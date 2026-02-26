@@ -11,6 +11,7 @@
 #include "../action.h"
 #include "../constants.h"
 #include "../etc.h"
+#include "bgspr.h"
 static void ropeinit(SKC_sprite_status* p_actwk);
 static void ropeinit__sub(SKC_sprite_status* p_actwk);
 static void ropemove(SKC_sprite_status* p_actwk);
