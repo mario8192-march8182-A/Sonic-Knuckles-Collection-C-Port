@@ -451,7 +451,7 @@ typedef struct SKC_sprite_status {
       unsigned char spindash_flag; // 0x3D
       unsigned short spindash_ctr; // 0x3E
       unsigned char jump_flag; // 0x40
-      unsigned char unused41;
+      unsigned char force_direc_up_timer; // 0x41
       unsigned short ride_obj; // 0x42
       unsigned char height; // 0x44
       unsigned char width; // 0x45

@@ -11,8 +11,8 @@
 
 typedef struct sonic3_ram {
   /* 08ff0000 */ unsigned char decompressed[0xA800];
-  /* 08ff0000 */ unsigned char chunkmappings128[0x8000];
-  /* 08ff8000 */ unsigned char levellayout[0x1000];
+  /* 08ff0000 */ unsigned char screens[0x8000];
+  /* 08ff8000 */ unsigned char stage_layout[0x1000];
   /* 08ff9000 */ unsigned char blockmappings16[0x1800];
   /* 08ffac00 */ unsigned char pbuffer[PBUFFER_LEVELS][PBUFFER_LEVEL_SLOTS];
   /* 08ffb000 */ SKC_sprite_status actwk[ACTWK_SLOTS];
@@ -34,6 +34,8 @@ typedef struct sonic3_ram {
   /* 08ffee1a */ short scralim_down;
   /* 08ffee33 */ unsigned char scr_resize_no;
   /* 08ffee3a */ unsigned long vs_vscroll;
+  /* 08ffee3e */ short scr_h_posit_ofs;
+  /* 08ffee40 */ short scr_v_posit_ofs;
   /* 08ffee4e */ unsigned short stageno_i;
   /* 08ffee50 */ short colorcycle;
   /* 08ffee60 */ long vs_scra_h_posit;
@@ -47,6 +49,7 @@ typedef struct sonic3_ram {
   /* 08ffeea6 */ unsigned short vint_rno;
   /* 08ffeea8 */ unsigned short scrc3;
   /* 08ffeeaa */ unsigned short scrc_v;
+  /* 08ffeeae */ unsigned short scr_row;
   /* 08ffeebc */ short frame_offset_x;
   /* 08ffeec0 */ unsigned short scr_evta;
   /* 08ffeec6 */ unsigned short event_flag_3;
@@ -87,6 +90,7 @@ typedef struct sonic3_ram {
   /* 08fff64e */ unsigned char waterflag;
   /* 08fff65e */ unsigned char ssonicpallet_next;
   /* 08fff65f */ unsigned char ssonicpallet;
+  /* 08fff664 */ unsigned char scd_bg_flag;
   /* 08fff667 */ unsigned char smilesflag;
   /* 08fff66a */ unsigned short swdata2_auto;
   /* 08fff670 */ unsigned short ssonicring_timer;
@@ -102,6 +106,7 @@ typedef struct sonic3_ram {
   /* 08fff760 */ short plmaxspdwk;
   /* 08fff762 */ short pladdspdwk;
   /* 08fff764 */ short plretspdwk;
+  /* 08fff768 */ unsigned char dirstk[4];
   /* 08fff76c */ unsigned short actset_rno;
   /* 08fff76e */ short asetposi;
   /* 08fff770 */ short asetposi2;
@@ -109,7 +114,10 @@ typedef struct sonic3_ram {
   /* 08fff776 */ SKC_aset* asetadr2;
   /* 08fff77a */ unsigned short flagworkcnt;
   /* 08fff77c */ unsigned short flagworkcnt2;
+  /* 08fff796 */ unsigned char* scdadr;
   /* 08fff7aa */ unsigned char bossstart;
+  /* 08fff7b4 */ unsigned char* scd0adr;
+  /* 08fff7b8 */ unsigned char* scd1adr;
   /* 08fff7c1 */ unsigned char DAT_08fff7c1;
   /* 08fff7c3 */ unsigned char soz_darkness_level;
   /* 08fff7c6 */ unsigned char reverse_gravity_flag;
