@@ -1,4 +1,5 @@
 #include "betl04.h"
+#include "../../types/dircolresult.h"
 #include "../../types/enemyinit0data.h"
 #include "../../types/enemyinit2data.h"
 #include "../../types/setact00data.h"
@@ -9,6 +10,7 @@
 #include "../../utils/fp16.h"
 #include "../../action.h"
 #include "../../constants.h"
+#include "../../dircol.h"
 #include "../../shared.h"
 #include "../emyshot.h"
 static void betl04plus6(SKC_sprite_status* p_actwk);
@@ -166,9 +168,9 @@ static void betl04_shot0(SKC_sprite_status* p_actwk) {
 static void betl04_up0(SKC_sprite_status* p_actwk) {
   p_actwk->yspeed += -0x20;
   speedset2(p_actwk);
-  short yoffset = ObjCheckCeilingDist(p_actwk);
-  if (yoffset < 0) {
-    fp16_set_integer(&p_actwk->yposi, fp16_get_integer(p_actwk->yposi) + yoffset);
+  SKC_dircol_result result = emycol_u(p_actwk);
+  if (result.offset < 0) {
+    fp16_set_integer(&p_actwk->yposi, fp16_get_integer(p_actwk->yposi) + result.offset);
     p_actwk->r_no = 12;
     p_actwk->yspeed = 0;
   }
@@ -185,9 +187,9 @@ static void betl04_up1(SKC_sprite_status* p_actwk) {
 static void betl04_down0(SKC_sprite_status* p_actwk) {
   p_actwk->yspeed += 0x20;
   speedset2(p_actwk);
-  short yoffset = ObjCheckFloorDist(p_actwk);
-  if (yoffset < 0) {
-    fp16_set_integer(&p_actwk->yposi, fp16_get_integer(p_actwk->yposi) + yoffset);
+  SKC_dircol_result result = emycol_d(p_actwk);
+  if (result.offset < 0) {
+    fp16_set_integer(&p_actwk->yposi, fp16_get_integer(p_actwk->yposi) + result.offset);
     p_actwk->r_no = p_actwk->u.obj.actfree.betl04.r_no_save;
     p_actwk->xspeed = p_actwk->u.obj.actfree.betl04.xspeed_save;
     p_actwk->yspeed = 0;

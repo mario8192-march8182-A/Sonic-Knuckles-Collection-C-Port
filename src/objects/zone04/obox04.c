@@ -1,5 +1,6 @@
 #include "obox04.h"
 #include "../../data/pat/zone04/obox04.h"
+#include "../../types/dircolresult.h"
 #include "../../types/enemyinit2data.h"
 #include "../../types/hitchkdata.h"
 #include "../../types/setact00data.h"
@@ -10,6 +11,7 @@
 #include "../../utils/stageno.h"
 #include "../../action.h"
 #include "../../constants.h"
+#include "../../dircol.h"
 #include "../../hitchk.h"
 #include "../../shared.h"
 #include "../explosion.h"
@@ -134,9 +136,9 @@ static void obox04_friend_wait0(SKC_sprite_status* p_actwk) {
 
 static void obox04_friend_move0(SKC_sprite_status* p_actwk) {
   speedsetg20(p_actwk);
-  short yoffset = ObjCheckFloorDist(p_actwk);
-  if (yoffset < 0) {
-    fp16_set_integer(&p_actwk->yposi, fp16_get_integer(p_actwk->yposi) + yoffset);
+  SKC_dircol_result result = emycol_d(p_actwk);
+  if (result.offset < 0) {
+    fp16_set_integer(&p_actwk->yposi, fp16_get_integer(p_actwk->yposi) + result.offset);
     p_actwk->yspeed = p_actwk->u.obj.actfree.obox04_friend.yspeed_init;
   }
   p_actwk->patno = BIT_IS_SET(g_ram.systemtimer, 3) ? 0 : 1;

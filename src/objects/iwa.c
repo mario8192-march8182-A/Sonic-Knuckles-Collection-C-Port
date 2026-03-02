@@ -2,6 +2,7 @@
 #include <stdbool.h>
 #include <stdlib.h>
 #include "../types/actwkchkresult.h"
+#include "../types/dircolresult.h"
 #include "../types/hitchkdata.h"
 #include "../types/hitchkresult.h"
 #include "../types/iwabreakdata.h"
@@ -15,6 +16,7 @@
 #include "../action.h"
 #include "../actset.h"
 #include "../constants.h"
+#include "../dircol.h"
 #include "../hitchk.h"
 static void iwainit(SKC_sprite_status* p_actwk);
 static void iwamove(SKC_sprite_status* p_actwk);
@@ -179,8 +181,8 @@ static void iwainit(SKC_sprite_status* p_actwk) {
       if (flag != 0) {
         fp16_set_integer(&p_actwk->xposi, fp16_get_integer(p_actwk->xposi) - flag);
         p_actwk->u.obj.actfree.iwa.push_distance = -flag + 64;
-        short yoffset = ObjCheckFloorDist(p_actwk);
-        fp16_set_integer(&p_actwk->yposi, fp16_get_integer(p_actwk->yposi) + yoffset);
+        SKC_dircol_result result = emycol_d(p_actwk);
+        fp16_set_integer(&p_actwk->yposi, fp16_get_integer(p_actwk->yposi) + result.offset);
       }
     }
   }
@@ -568,8 +570,8 @@ static void iwamovepush__sub(SKC_sprite_status* p_actwk, SKC_sprite_status* p_pl
     --p_actwk->u.obj.actfree.iwa.push_distance;
     fp16_set_integer(&p_actwk->xposi, fp16_get_integer(p_actwk->xposi) - 1);
     fp16_set_integer(&p_playerwk->xposi, fp16_get_integer(p_playerwk->xposi) - 1);
-    short yoffset = ObjCheckFloorDist(p_actwk);
-    fp16_set_integer(&p_actwk->yposi, fp16_get_integer(p_actwk->yposi) + yoffset);
+    SKC_dircol_result result = emycol_d(p_actwk);
+    fp16_set_integer(&p_actwk->yposi, fp16_get_integer(p_actwk->yposi) + result.offset);
     if (p_actwk->u.obj.flagwork_index != 0) {
       g_ram.flagwork[p_actwk->u.obj.flagwork_index - 1] = -(p_actwk->u.obj.actfree.iwa.push_distance - 64);
       SET_BIT(g_ram.flagwork[p_actwk->u.obj.flagwork_index - 1], 7);

@@ -1,6 +1,7 @@
 #include "item.h"
 #include <stdbool.h>
 #include "../types/actwkchkresult.h"
+#include "../types/dircolresult.h"
 #include "../types/hitchkdata.h"
 #include "../types/hitchkresult.h"
 #include "../types/sonic3ram.h"
@@ -12,6 +13,7 @@
 #include "../action.h"
 #include "../actset.h"
 #include "../constants.h"
+#include "../dircol.h"
 #include "../hitchk.h"
 #include "common.h"
 #include "toge.h"
@@ -140,9 +142,9 @@ static void itemdownsub(SKC_sprite_status* p_actwk) {
   if (p_actwk->actflg.vflip == 0) {
     speedset(p_actwk);
     if (p_actwk->yspeed >= 0) {
-      short yoffset = ObjCheckFloorDist(p_actwk);
-      if (yoffset <= 0) {
-        short yposi = fp16_get_integer(p_actwk->yposi) + yoffset;
+      SKC_dircol_result result = emycol_d(p_actwk);
+      if (result.offset <= 0) {
+        short yposi = fp16_get_integer(p_actwk->yposi) + result.offset;
         fp16_set_integer(&p_actwk->yposi, yposi);
         p_actwk->yspeed = 0;
         p_actwk->u.obj.actfree.item.unknown = 0;
@@ -153,9 +155,9 @@ static void itemdownsub(SKC_sprite_status* p_actwk) {
     speedset2(p_actwk);
     p_actwk->yspeed -= 0x38;
     if (p_actwk->yspeed >= 0) return;
-    short yoffset = ObjCheckCeilingDist(p_actwk);
-    if (yoffset <= 0) {
-      short yposi = fp16_get_integer(p_actwk->yposi) - yoffset;
+    SKC_dircol_result result = emycol_u(p_actwk);
+    if (result.offset <= 0) {
+      short yposi = fp16_get_integer(p_actwk->yposi) - result.offset;
       p_actwk->yspeed = 0;
       p_actwk->u.obj.actfree.item.unknown = 0;
     }

@@ -8,6 +8,7 @@
 #include "types/cgdata.h"
 #include "types/chkdistanceresult.h"
 #include "types/chkemycoltresult.h"
+#include "types/dircolresult.h"
 #include "types/enemyinit0data.h"
 #include "types/enemyinit1data.h"
 #include "types/enemyinit2data.h"
@@ -35,6 +36,7 @@
 #include "actset.h"
 #include "constants.h"
 #include "dev.h"
+#include "dircol.h"
 #include "etc.h"
 #include "objects/common.h"
 static void chk_pt_next(SKC_sprite_status* p_actwk, signed char* p_pg_data);
@@ -849,9 +851,9 @@ void dec_timer(SKC_sprite_status* p_actwk) {
 void emy_fall_col(SKC_sprite_status* p_actwk) {
   if (p_actwk->yspeed < 0) return;
 
-  short yoffset = ObjCheckFloorDist(p_actwk);
-  if (yoffset <= 0) {
-    p_actwk->yposi += yoffset * 0x10000;
+  SKC_dircol_result result = emycol_d(p_actwk);
+  if (result.offset <= 0) {
+    p_actwk->yposi += result.offset * 0x10000;
     p_actwk->u.obj.callback_ptr(p_actwk);
   }
 }
@@ -860,9 +862,9 @@ void emy_fall_col(SKC_sprite_status* p_actwk) {
 bool emy_down_col(SKC_sprite_status* p_actwk) {
   bool ret = false;
   long xposi = p_actwk->xposi + p_actwk->xspeed * 0x100;
-  short yoffset = ObjCheckFloorDist2(p_actwk, xposi);
-  if (yoffset >= -1 && yoffset < 12) {
-    fp16_set_integer(&p_actwk->yposi, fp16_get_integer(p_actwk->yposi) + yoffset);
+  SKC_dircol_result result = emycol_d2(p_actwk, xposi);
+  if (result.offset >= -1 && result.offset < 12) {
+    fp16_set_integer(&p_actwk->yposi, fp16_get_integer(p_actwk->yposi) + result.offset);
   }
   else {
     p_actwk->u.obj.callback_ptr(p_actwk);
@@ -872,19 +874,19 @@ bool emy_down_col(SKC_sprite_status* p_actwk) {
 }
 
 
-void emy_right_col(SKC_sprite_status* p_actwk) {
-  short xoffset = ObjCheckRightWallDist(p_actwk);
-  if (xoffset < 0) {
-    p_actwk->xposi += xoffset * 0x10000;
+void emy_right_col(SKC_sprite_status* p_actwk, short sprhs) {
+  SKC_dircol_result result = emycol_r(p_actwk, sprhs);
+  if (result.offset < 0) {
+    p_actwk->xposi += result.offset * 0x10000;
     p_actwk->u.obj.callback_ptr(p_actwk);
   }
 }
 
 
-void emy_left_col(SKC_sprite_status* p_actwk) {
-  short xoffset = ObjCheckLeftWallDist(p_actwk);
-  if (xoffset < 0) {
-    p_actwk->xposi += xoffset * 0x10000;
+void emy_left_col(SKC_sprite_status* p_actwk, short sprhs) {
+  SKC_dircol_result result = emycol_l(p_actwk, sprhs);
+  if (result.offset < 0) {
+    p_actwk->xposi += result.offset * 0x10000;
     p_actwk->u.obj.callback_ptr(p_actwk);
   }
 }

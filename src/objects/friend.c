@@ -1,5 +1,6 @@
 #include "friend.h"
 #include "../types/actwkchkresult.h"
+#include "../types/dircolresult.h"
 #include "../types/friendinitdata.h"
 #include "../types/point.h"
 #include "../types/setact05data.h"
@@ -13,6 +14,7 @@
 #include "../action.h"
 #include "../actset.h"
 #include "../constants.h"
+#include "../dircol.h"
 #include "../etc.h"
 #include "../shared.h"
 #define POCKY_RABBIT 0
@@ -244,9 +246,9 @@ static void friendmove(SKC_sprite_status* p_actwk) {
   else {
     speedset(p_actwk);
     if (p_actwk->yspeed >= 0) {
-      short yoffset = ObjCheckFloorDist(p_actwk);
-      if (yoffset < 0) {
-        fp16_set_integer(&p_actwk->yposi, fp16_get_integer(p_actwk->yposi) + yoffset);
+      SKC_dircol_result result = emycol_d(p_actwk);
+      if (result.offset < 0) {
+        fp16_set_integer(&p_actwk->yposi, fp16_get_integer(p_actwk->yposi) + result.offset);
         p_actwk->xspeed = p_actwk->u.obj.actfree.friend.xspeed_init;
         p_actwk->yspeed = p_actwk->u.obj.actfree.friend.yspeed_init;
         p_actwk->patno = 1;
@@ -265,9 +267,9 @@ static void friendjump(SKC_sprite_status* p_actwk) {
   speedset(p_actwk);
   p_actwk->patno = p_actwk->yspeed >= 0 ? 1 : 0;
   if (p_actwk->yspeed >= 0) {
-    short yoffset = ObjCheckFloorDist(p_actwk);
-    if (yoffset < 0) {
-      fp16_set_integer(&p_actwk->yposi, fp16_get_integer(p_actwk->yposi) + yoffset);
+    SKC_dircol_result result = emycol_d(p_actwk);
+    if (result.offset < 0) {
+      fp16_set_integer(&p_actwk->yposi, fp16_get_integer(p_actwk->yposi) + result.offset);
       p_actwk->yspeed = p_actwk->u.obj.actfree.friend.yspeed_init;
     }
   }
@@ -287,9 +289,9 @@ static void friendfly(SKC_sprite_status* p_actwk) {
   speedset2(p_actwk);
   p_actwk->yspeed += 0x18;
   if (p_actwk->yspeed >= 0) {
-    short yoffset = ObjCheckFloorDist(p_actwk);
-    if (yoffset < 0) {
-      fp16_set_integer(&p_actwk->yposi, fp16_get_integer(p_actwk->yposi) + yoffset);
+    SKC_dircol_result result = emycol_d(p_actwk);
+    if (result.offset < 0) {
+      fp16_set_integer(&p_actwk->yposi, fp16_get_integer(p_actwk->yposi) + result.offset);
       p_actwk->yspeed = p_actwk->u.obj.actfree.friend.yspeed_init;
       if (p_actwk->u.obj.userflag != 0 && p_actwk->u.obj.userflag != 10) {
         p_actwk->xspeed = -p_actwk->xspeed;

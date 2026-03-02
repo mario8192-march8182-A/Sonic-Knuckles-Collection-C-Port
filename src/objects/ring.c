@@ -1,5 +1,6 @@
 #include "ring.h"
 #include "../types/actwkchkresult.h"
+#include "../types/dircolresult.h"
 #include "../types/sonic3ram.h"
 #include "../types/spritepattern.h"
 #include "../types/spritestatus.h"
@@ -10,6 +11,7 @@
 #include "../action.h"
 #include "../actset.h"
 #include "../constants.h"
+#include "../dircol.h"
 #include "../etc.h"
 static void ringinit(SKC_sprite_status* p_actwk);
 static void ringmove(SKC_sprite_status* p_actwk);
@@ -284,9 +286,9 @@ static void flyringmove(SKC_sprite_status* p_actwk) {
   if (p_actwk->yspeed >= 0) {
     if (!(((g_ram.systemtimer & 0xFF) + (p_actwk - g_ram.actwk - 1)) & 7)) {
       if (p_actwk->actflg.onscreen == 1) {
-        short yoffset = RingCheckFloorDist(p_actwk);
-        if (yoffset < 0) {
-          short yposi = fp16_get_integer(p_actwk->yposi) + yoffset;
+        SKC_dircol_result result = flyringcol_d(p_actwk);
+        if (result.offset < 0) {
+          short yposi = fp16_get_integer(p_actwk->yposi) + result.offset;
           fp16_set_integer(&p_actwk->yposi, yposi);
           p_actwk->yspeed -= p_actwk->yspeed / 4;
           p_actwk->yspeed = -p_actwk->yspeed;
@@ -332,9 +334,9 @@ static void flyringmoveg(SKC_sprite_status* p_actwk) {
   if (p_actwk->yspeed >= 0) {
     if (!(((g_ram.systemtimer & 0xFF) + (p_actwk - g_ram.actwk - 1)) & 7)) {
       if (p_actwk->actflg.onscreen == 1) {
-        short yoffset = RingCheckFloorDist_ReverseGravity(p_actwk);
-        if (yoffset < 0) {
-          short yposi = fp16_get_integer(p_actwk->yposi) - yoffset;
+        SKC_dircol_result result = flyringcol_u(p_actwk);
+        if (result.offset < 0) {
+          short yposi = fp16_get_integer(p_actwk->yposi) - result.offset;
           fp16_set_integer(&p_actwk->yposi, yposi);
           p_actwk->yspeed -= p_actwk->yspeed / 4;
           p_actwk->yspeed = -p_actwk->yspeed;

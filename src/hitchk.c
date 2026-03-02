@@ -1,11 +1,13 @@
 #include "hitchk.h"
 #include <stdbool.h>
 #include <stdlib.h>
+#include "types/dircolresult.h"
 #include "types/hitchkdistances.h"
 #include "types/sonic3ram.h"
 #include "types/spritestatus.h"
 #include "utils/bits.h"
 #include "utils/fp16.h"
+#include "dircol.h"
 static SKC_hitchk_coli plhitchk_bryuka(SKC_sprite_status* p_actwk, SKC_sprite_status* p_playerwk, SKC_hitchk_data data, signed char* p_slope_heights, bool* p_plride, bool* p_plpush);
 static SKC_hitchk_coli plhitchk_offset(SKC_sprite_status* p_actwk, SKC_sprite_status* p_playerwk, SKC_hitchk_data data, bool* p_plride, bool* p_plpush);
 static SKC_hitchk_coli plhitchk_offset_chk_coli(SKC_sprite_status* p_actwk, SKC_sprite_status* p_playerwk, SKC_hitchk_data data, bool* p_plride, bool* p_plpush);
@@ -677,16 +679,16 @@ static void ridechk_sloped2_chk_coli(SKC_sprite_status* p_actwk, SKC_sprite_stat
 
 void clear_ride(SKC_sprite_status* p_actwk, SKC_sprite_status* p_playerwk) {
   if (p_actwk->u.obj.cddat.plride == 1) {
-    short d1 = SonicOnObjHitFloor(&g_ram.actwk[0]);
-    if (d1 <= 0) {
+    SKC_dircol_result result = landchk_d(&g_ram.actwk[0]);
+    if (result.offset <= 0) {
       p_playerwk->u.play.cddat.ride = 0;
       p_playerwk->u.play.cddat.jump = 1;
       p_actwk->u.obj.cddat.plride = 0;
     }
   }
   if (p_actwk->u.obj.cddat.pl2ride == 1) {
-    short d1 = SonicOnObjHitFloor(&g_ram.actwk[1]);
-    if (d1 <= 0) {
+    SKC_dircol_result result = landchk_d(&g_ram.actwk[1]);
+    if (result.offset <= 0) {
       p_playerwk->u.play.cddat.ride = 0;
       p_playerwk->u.play.cddat.jump = 1;
       p_actwk->u.obj.cddat.pl2ride = 0;

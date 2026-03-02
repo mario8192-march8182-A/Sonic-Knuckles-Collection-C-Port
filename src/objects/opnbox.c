@@ -1,6 +1,7 @@
 #include "opnbox.h"
 #include "../types/chkdistanceresult.h"
 #include "../types/chkemycoltresult.h"
+#include "../types/dircolresult.h"
 #include "../types/hitchkdata.h"
 #include "../types/sonic3ram.h"
 #include "../types/spritepattern.h"
@@ -11,6 +12,7 @@
 #include "../action.h"
 #include "../actset.h"
 #include "../constants.h"
+#include "../dircol.h"
 #include "../hitchk.h"
 #include "../shared.h"
 #include "explosion.h"
@@ -340,9 +342,9 @@ static void friend_wait0(SKC_sprite_status* p_actwk) {
 
 static void friend_move0(SKC_sprite_status* p_actwk) {
   speedsetg20(p_actwk);
-  short yoffset = ObjCheckFloorDist(p_actwk);
-  if (yoffset < 0) {
-    short yposi = fp16_get_integer(p_actwk->yposi) + yoffset;
+  SKC_dircol_result result = emycol_d(p_actwk);
+  if (result.offset < 0) {
+    short yposi = fp16_get_integer(p_actwk->yposi) + result.offset;
     fp16_set_integer(&p_actwk->yposi, yposi);
     p_actwk->yspeed = p_actwk->u.obj.actfree.opnbox_friend.yspeed_init;
     SKC_chk_distance_result result = chk_distance(p_actwk);

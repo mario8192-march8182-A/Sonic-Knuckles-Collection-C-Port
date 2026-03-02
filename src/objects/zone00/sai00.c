@@ -2,6 +2,7 @@
 #include "../../data/cg/zone00/sai00.h"
 #include "../../data/pat/zone00/sai00.h"
 #include "../../types/chkdistanceresult.h"
+#include "../../types/dircolresult.h"
 #include "../../types/setact00data.h"
 #include "../../types/sonic3ram.h"
 #include "../../types/spritestatus.h"
@@ -13,6 +14,7 @@
 #include "../../utils/stageno.h"
 #include "../../action.h"
 #include "../../constants.h"
+#include "../../dircol.h"
 #include "../../shared.h"
 static void sai00_framein(SKC_sprite_status* p_actwk);
 static void sai00_init(SKC_sprite_status* p_actwk);
@@ -285,9 +287,9 @@ static bool sai00_down_col(SKC_sprite_status* p_actwk, SKC_sprite_status_handler
     xoffset = -xoffset;
   }
   short xposi = fp16_get_integer(p_actwk->xposi) + xoffset;
-  short yoffset = ObjCheckFloorDist2(p_actwk, xposi);
-  if (yoffset >= -1 && yoffset < 12) {
-    fp16_set_integer(&p_actwk->yposi, fp16_get_integer(p_actwk->yposi) + yoffset);
+  SKC_dircol_result result = emycol_d2(p_actwk, xposi);
+  if (result.offset >= -1 && result.offset < 12) {
+    fp16_set_integer(&p_actwk->yposi, fp16_get_integer(p_actwk->yposi) + result.offset);
     return false;
   }
   p_callback(p_actwk);
