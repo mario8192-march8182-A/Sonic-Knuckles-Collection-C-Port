@@ -1,11 +1,64 @@
-#include "colortbl.h"
+#include "types/colortblentry.h"
 
+unsigned short sega_color[64];
+unsigned short opening_color[16];
+unsigned short stageselect_color[64];
+unsigned short menu_color[64];
+unsigned short knuckles_color[16];
+unsigned short angelisland1_color[48];
+unsigned short angelisland12_color[48];
+unsigned short angelisland2_color[48];
+unsigned short angelislandboss_color[48];
+unsigned short angelisland1water_color[64];
+unsigned short angelisland2water_color[64];
+unsigned short hydrocity1_color[48];
+unsigned short hydrocity2_color[48];
+unsigned short hydrocity1water_color[64];
+unsigned short hydrocity2water_color[64];
+unsigned short marblegarden_color[48];
+unsigned short carnivalnight_color[48];
+unsigned short carnivalnight2water_color[64];
+unsigned short flyingbattery1_color[48];
+unsigned short flyingbattery2_color[48];
+unsigned short icecap1_color[48];
+unsigned short icecap2_color[48];
+unsigned short icecap2water_color[64];
+unsigned short launchbase1_color[48];
+unsigned short launchbase2_color[48];
+unsigned short launchbasewater_color[64];
+unsigned short launchbasewater2_color[48];
+unsigned short mushroomhill1_color[48];
+unsigned short mushroomhill2_color[48];
+unsigned short sandopolis1_color[48];
+unsigned short sandopolis2_color[48];
+unsigned short sandopolis12_color[48];
+unsigned short sandopolis22_color[48];
+unsigned short lavareef1_color[48];
+unsigned short lavareef2_color[48];
+unsigned short skysanctuary1_color[48];
+unsigned short skysanctuary2_color[48];
+unsigned short ending1_color[48];
+unsigned short ending2_color[48];
+unsigned short deathegg1_color[48];
+unsigned short deathegg2_color[48];
+unsigned short doomsday_color[48];
+unsigned short azurelake_color[48];
+unsigned short balloonpark_color[48];
+unsigned short desertpalace_color[48];
+unsigned short chromegadget_color[48];
+unsigned short endlessmine_color[48];
+unsigned short gumballmachine_color[48];
+unsigned short rollingjump_color[48];
+unsigned short slotmachine_color[48];
+unsigned short lavareefboss_color[48];
+unsigned short hiddenpalace_color[48];
+unsigned short deatheggboss_color[48];
 
-colortbl_entry colortbl[66] = {
+SKC_colortbl_entry colortbl[66] = {
   { sega_color, 0, 31 },
-  { title_color, 32, 7 },
-  { levelselect_color, 0, 31 },
-  { &levelselect_color[48], 0, 7 },
+  { opening_color, 32, 7 },
+  { stageselect_color, 0, 31 },
+  { &stageselect_color[48], 0, 7 },
   { menu_color, 0, 31 },
   { knuckles_color, 0, 7 },
   { sega_color, 0, 31 },
@@ -76,10 +129,10 @@ unsigned short sega_color[64] = {
   0x000, 0x000, 0xA22, 0xC42, 0xE44, 0xE66, 0xEEE, 0xAAA, 0x888, 0x444, 0x8AE, 0x46A, 0x00E, 0x008, 0x0AE, 0x08E,
   0x000, 0x000, 0x060, 0x080, 0x0A0, 0x044, 0xEEE, 0xAAA, 0x888, 0x444, 0x666, 0x48E, 0x0EE, 0x088, 0x6AE, 0x000
 };
-unsigned short title_color[16] = {
+unsigned short opening_color[16] = {
   0x000, 0x000, 0x222, 0xA66, 0xEA8, 0xECA, 0xEEE, 0x0AE, 0x08E, 0x06C, 0x8CE, 0xEEC, 0x04A, 0x006, 0x000, 0x000
 };
-unsigned short levelselect_color[64] = {
+unsigned short stageselect_color[64] = {
   0x000, 0x000, 0x000, 0x000, 0x000, 0x000, 0x000, 0x000, 0x000, 0x000, 0x000, 0x000, 0x000, 0x000, 0x000, 0xEEE,
   0x000, 0x024, 0x246, 0x468, 0x68A, 0x8AC, 0xACE, 0x8AC, 0x68A, 0x468, 0xACE, 0xACE, 0x246, 0x024, 0x000, 0x000,
   0x000, 0x024, 0x246, 0x468, 0x68A, 0x8AC, 0xACE, 0x8AC, 0x68A, 0x468, 0x024, 0x246, 0x8AC, 0x68A, 0x000, 0x0EE,

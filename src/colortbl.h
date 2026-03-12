@@ -1,12 +1,12 @@
-#ifndef COLORTBL_H
-#define COLORTBL_H
+#ifndef SKC_COLORTBL_H
+#define SKC_COLORTBL_H
 
 #include "types/colortblentry.h"
 
-colortbl_entry colortbl[66];
+SKC_colortbl_entry colortbl[66];
 unsigned short sega_color[64];
-unsigned short title_color[16];
-unsigned short levelselect_color[64];
+unsigned short opening_color[16];
+unsigned short stageselect_color[64];
 unsigned short menu_color[64];
 unsigned short knuckles_color[16];
 unsigned short angelisland1_color[48];

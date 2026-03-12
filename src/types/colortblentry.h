@@ -1,11 +1,11 @@
-#ifndef COLORTBLENTRY_H
-#define COLORTBLENTRY_H
+#ifndef SKC_COLORTBLENTRY_H
+#define SKC_COLORTBLENTRY_H
 
-typedef struct colortbl_entry {
+typedef struct SKC_colortbl_entry {
   unsigned short* p_palette;
   unsigned short offset;
   unsigned short cnt;
 }
-colortbl_entry;
+SKC_colortbl_entry;
 
 #endif
