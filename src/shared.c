@@ -1089,6 +1089,30 @@ void chg_scr_lim_d(SKC_sprite_status* p_actwk) {
 }
 
 
+SKC_set_act05_data chglimr_set_tbl = {
+  0,
+  &chg_scr_lim_r
+};
+
+
+SKC_set_act05_data chgliml_set_tbl = {
+  0,
+  &chg_scr_lim_l
+};
+
+
+SKC_set_act05_data chglimu_set_tbl = {
+  0,
+  &chg_scr_lim_u
+};
+
+
+SKC_set_act05_data chglimd_set_tbl = {
+  0,
+  &chg_scr_lim_d
+};
+
+
 SKC_chk_distance_result chk_distance(SKC_sprite_status* p_actwk) {
   SKC_chk_distance_result result = { false, false, 0, 0 };
   result.xdistance = fp16_get_integer(p_actwk->xposi) - fp16_get_integer(g_ram.actwk[0].xposi);
