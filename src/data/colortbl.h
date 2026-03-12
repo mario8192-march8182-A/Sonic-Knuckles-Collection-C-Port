@@ -1,7 +1,7 @@
 #ifndef SKC_COLORTBL_H
 #define SKC_COLORTBL_H
 
-#include "types/colortblentry.h"
+#include "../types/colortblentry.h"
 
 SKC_colortbl_entry colortbl[66];
 unsigned short sega_color[64];

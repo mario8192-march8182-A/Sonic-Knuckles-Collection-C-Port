@@ -1,4 +1,4 @@
-#include "types/colortblentry.h"
+#include "../types/colortblentry.h"
 
 unsigned short sega_color[64];
 unsigned short opening_color[16];
