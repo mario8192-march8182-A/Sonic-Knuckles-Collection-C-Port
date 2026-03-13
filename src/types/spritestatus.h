@@ -181,6 +181,10 @@ typedef struct SKC_sprite_status {
         }
         betl04;
         struct {
+          short accel; // 0x40
+        }
+        bg0a;
+        struct {
           short xposi_init; // 0x30
           short yposi_init; // 0x32
         }
@@ -199,6 +203,10 @@ typedef struct SKC_sprite_status {
           unsigned char child_timer_increase; // 0x37
         }
         brhashi;
+        struct {
+          unsigned char tbl_index; // 0x39
+        }
+        cchg0320_act;
         struct {
           unsigned short part_cnt; // 0x30
           unsigned short current_exit_no; // 0x32
@@ -239,6 +247,11 @@ typedef struct SKC_sprite_status {
         }
         friend;
         struct {
+          unsigned short left_limit;
+          unsigned short right_limit;
+        }
+        friend07;
+        struct {
           unsigned char darkness_level; // 0x42
           unsigned char sequence_no; // 0x43
         }
@@ -251,6 +264,10 @@ typedef struct SKC_sprite_status {
           unsigned char counter; // 0x39
         }
         hana00;
+        struct {
+          short scra_h_posit; // 0x3A
+        }
+        hscroll_chk;
         struct {
           unsigned char unknown; // 0x3C
         }
@@ -265,6 +282,27 @@ typedef struct SKC_sprite_status {
           SKC_sprite_status_handler oya_r_ptr; // 0x44
         }
         iwa;
+        struct {
+          unsigned char tbl_index; // 0x39
+        }
+        nuckle030;
+        struct {
+          short xposi_init; // 0x3A
+          bool prev_dir; // 0x3C
+          unsigned char remaining_wobbles; // 0x39
+          short xspeed_init; // 0x3E
+          short xspeed_accel; // 0x40
+        }
+        nuckle061_dai;
+        struct {
+          signed char yspeed_mod; // 0x39
+          unsigned short timer_init; // 0x3E;
+        }
+        nuckle071;
+        struct {
+          unsigned short wrt_index; // 0x42
+        }
+        nuckle072;
         struct {
           short yspeed_init; // 0x3E
         }

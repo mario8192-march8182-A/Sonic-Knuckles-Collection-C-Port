@@ -7,6 +7,7 @@
 #include "../objects/itemug.h"
 #include "../objects/ring.h"
 #include "../objects/iwa.h"
+#include "../objects/nuckle.h"
 #include "../objects/opnbox.h"
 #include "../objects/rope.h"
 #include "../objects/save.h"
@@ -160,14 +161,14 @@ SKC_sprite_status_handler s3_act_tbl[256] = {
   0,//&Obj_FBZMissileLauncher,
   &itemug,
   &opnbox,
-  0,//&nuckle,
-  0,//&nucksw,
+  &nuckle,
+  &nucksw,
   0,//&Obj_AIZPlaneIntro,
   0,//&bgring,
   0,//&gumbgrip,
   0,//&gumbbane,
-  0,//&setbryuka,
-  0,//&cchgsw,
+  &setbryuka,
+  &cchgsw,
   0,//&fixspr,
   0,//&mask_spr,
   &hana00,
@@ -230,7 +231,7 @@ SKC_sprite_status_handler s3_act_tbl[256] = {
   0,//&box06_base1,
   0,//&embl06,
   &ring,
-  0,//&tekotu,
+  &tekotu,
   0,//&bs06m0,
   0,//&bs06b0,
   0,//&bs06b1,
@@ -418,14 +419,14 @@ SKC_sprite_status_handler sk_act_tbl[185] = {
   0,//&Obj_SSZFloatingPlatform,
   &itemug,
   &opnbox,
-  0,//&nuckle,
-  0,//&nucksw,
+  &nuckle,
+  &nucksw,
   0,//&Obj_AIZPlaneIntro,
   0,//&bgring,
   0,//&gumbgrip,
   0,//&gumbbane,
-  0,//&setbryuka,
-  0,//&cchgsw,
+  &setbryuka,
+  &cchgsw,
   0,//&fixspr,
   0,//&mask_spr,
   0,//&mole07,
@@ -463,7 +464,7 @@ SKC_sprite_status_handler sk_act_tbl[185] = {
   &obox08,
   0,//&dai093,
   0,//&ev0910,
-  0,//&sw0a00,
+  &sw0a00,
   0,//&caos09,
   0,//&cchg09,
   0,//&embl0a,
