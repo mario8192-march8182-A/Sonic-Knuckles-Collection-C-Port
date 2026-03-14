@@ -4,6 +4,7 @@
 #include <stdbool.h>
 #include "../constants.h"
 #include "enemyinit0data.h"
+#include "speed.h"
 #include "spritestatushandler.h"
 
 typedef struct SKC_sprite_status {
@@ -203,6 +204,10 @@ typedef struct SKC_sprite_status {
           unsigned char child_timer_increase; // 0x37
         }
         brhashi;
+        struct {
+          SKC_speed* spdtbl_ptr; // 0x3C
+        }
+        bryuka;
         struct {
           unsigned char tbl_index; // 0x39
         }

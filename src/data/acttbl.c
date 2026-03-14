@@ -2,6 +2,7 @@
 #include "../shared.h"
 #include "../objects/bgspr.h"
 #include "../objects/break.h"
+#include "../objects/bryuka.h"
 #include "../objects/common.h"
 #include "../objects/item.h"
 #include "../objects/itemug.h"
@@ -73,7 +74,7 @@ SKC_sprite_status_handler s3_act_tbl[256] = {
   &scopec,
   &scoli,
   &appeariwa,
-  0,//&bryuka,
+  &bryuka,
   &rollhashi,
   &brhashi,
   &falltree,
@@ -331,7 +332,7 @@ SKC_sprite_status_handler sk_act_tbl[185] = {
   &scopec,
   &scoli,
   0,//&Obj_LRZFlameThrower,
-  0,//&bryuka,
+  &bryuka,
   0,//&Obj_LRZOrbitingSpikeBallHorizontal,
   0,//&Obj_LRZOrbitingSpikeBallVertical,
   0,//&dai09,
