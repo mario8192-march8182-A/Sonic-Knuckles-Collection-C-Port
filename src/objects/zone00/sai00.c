@@ -1,6 +1,7 @@
 #include "sai00.h"
 #include "../../data/cg/zone00/sai00.h"
 #include "../../data/pat/zone00/sai00.h"
+#include "../../data/wrt/zone00/sai00.h"
 #include "../../types/chkdistanceresult.h"
 #include "../../types/dircolresult.h"
 #include "../../types/setact00data.h"
