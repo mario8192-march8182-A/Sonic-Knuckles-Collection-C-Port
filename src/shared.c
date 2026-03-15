@@ -38,6 +38,7 @@
 #include "dev.h"
 #include "dircol.h"
 #include "etc.h"
+#include "sound.h"
 #include "objects/common.h"
 static void chk_pt_next(SKC_sprite_status* p_actwk, signed char* p_pg_data);
 static int pt_chgs0__chk_pt_next(SKC_sprite_status* p_actwk, signed char* p_pg_data);

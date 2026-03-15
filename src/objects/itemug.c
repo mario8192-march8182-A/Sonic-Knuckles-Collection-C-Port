@@ -7,6 +7,7 @@
 #include "../constants.h"
 #include "../action.h"
 #include "../shared.h"
+#include "../sound.h"
 #include "item.h"
 static void itemug_wait0(SKC_sprite_status* p_actwk);
 static SKC_enemy_init0_data itemug_init_tbl;

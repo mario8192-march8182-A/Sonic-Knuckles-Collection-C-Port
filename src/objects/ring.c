@@ -13,6 +13,7 @@
 #include "../constants.h"
 #include "../dircol.h"
 #include "../etc.h"
+#include "../sound.h"
 static void ringinit(SKC_sprite_status* p_actwk);
 static void ringmove(SKC_sprite_status* p_actwk);
 static void ringget(SKC_sprite_status* p_actwk);

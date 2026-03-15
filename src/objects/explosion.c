@@ -8,6 +8,7 @@
 #include "../action.h"
 #include "../etc.h"
 #include "../shared.h"
+#include "../sound.h"
 #include "common.h"
 static void bsexp_move(SKC_sprite_status* p_actwk);
 static void set_ran_posi(SKC_sprite_status* p_actwk, SKC_sprite_status* p_new_actwk);

@@ -15,6 +15,7 @@
 #include "../constants.h"
 #include "../dircol.h"
 #include "../hitchk.h"
+#include "../sound.h"
 #include "common.h"
 #include "toge.h"
 static void iteminit(SKC_sprite_status* p_actwk);

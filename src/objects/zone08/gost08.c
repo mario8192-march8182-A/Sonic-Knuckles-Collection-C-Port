@@ -18,6 +18,7 @@
 #include "../../dev.h"
 #include "../../etc.h"
 #include "../../shared.h"
+#include "../../sound.h"
 #include "../opnbox.h"
 #include "../save.h"
 #include "../zone04/obox04.h"

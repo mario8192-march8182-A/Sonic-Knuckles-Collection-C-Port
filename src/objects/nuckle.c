@@ -47,6 +47,7 @@
 #include "../etc.h"
 #include "../hitchk.h"
 #include "../shared.h"
+#include "../sound.h"
 #include "bryuka.h"
 #include "explosion.h"
 #include "friend.h"

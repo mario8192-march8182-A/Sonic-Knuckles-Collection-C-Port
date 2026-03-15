@@ -13,6 +13,7 @@
 #include "../../constants.h"
 #include "../../dev.h"
 #include "../../shared.h"
+#include "../../sound.h"
 #include "../explosion.h"
 static void bs00m0_body_init(SKC_sprite_status* p_actwk);
 static void bs00m0_body_wait0(SKC_sprite_status* p_actwk);

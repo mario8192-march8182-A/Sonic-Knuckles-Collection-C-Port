@@ -15,6 +15,7 @@
 #include "../actset.h"
 #include "../constants.h"
 #include "../hitchk.h"
+#include "../sound.h"
 static void sjumpinit(SKC_sprite_status* p_actwk);
 static void sjumpswinit(SKC_sprite_status* p_actwk);
 static void sdash_init(SKC_sprite_status* p_actwk);

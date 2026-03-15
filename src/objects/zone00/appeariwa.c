@@ -9,6 +9,7 @@
 #include "../../actset.h"
 #include "../../constants.h"
 #include "../../hitchk.h"
+#include "../../sound.h"
 static unsigned short appeariwainittbl[16];
 static void appeariwainit(SKC_sprite_status* p_actwk);
 static void appeariwamove(SKC_sprite_status* p_actwk);

@@ -16,6 +16,7 @@
 #include "../../constants.h"
 #include "../../dircol.h"
 #include "../../shared.h"
+#include "../../sound.h"
 static void sai00_framein(SKC_sprite_status* p_actwk);
 static void sai00_init(SKC_sprite_status* p_actwk);
 static void sai00_wait(SKC_sprite_status* p_actwk);

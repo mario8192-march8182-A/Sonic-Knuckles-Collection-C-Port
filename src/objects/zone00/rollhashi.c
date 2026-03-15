@@ -11,6 +11,7 @@
 #include "../../actset.h"
 #include "../../constants.h"
 #include "../../hitchk.h"
+#include "../../sound.h"
 static void rollhashiinit(SKC_sprite_status* p_actwk);
 static void rollhashimove(SKC_sprite_status* p_actwk);
 static void rollhashimove2(SKC_sprite_status* p_actwk);

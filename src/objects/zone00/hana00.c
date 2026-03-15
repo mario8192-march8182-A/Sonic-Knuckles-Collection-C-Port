@@ -6,6 +6,7 @@
 #include "../../utils/bits.h"
 #include "../../action.h"
 #include "../../shared.h"
+#include "../../sound.h"
 #include "../emyshot.h"
 static void hana00_framein(SKC_sprite_status* p_actwk);
 static void hana00_init(SKC_sprite_status* p_actwk);

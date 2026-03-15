@@ -14,6 +14,7 @@
 #include "../../dircol.h"
 #include "../../hitchk.h"
 #include "../../shared.h"
+#include "../../sound.h"
 #include "../explosion.h"
 #include "../friend.h"
 #include "../opnbox.h"

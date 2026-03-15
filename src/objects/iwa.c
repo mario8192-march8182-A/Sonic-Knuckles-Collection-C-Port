@@ -18,6 +18,7 @@
 #include "../constants.h"
 #include "../dircol.h"
 #include "../hitchk.h"
+#include "../sound.h"
 static void iwainit(SKC_sprite_status* p_actwk);
 static void iwamove(SKC_sprite_status* p_actwk);
 static void iwamove__sub2(SKC_sprite_status* p_actwk, SKC_sprite_status* p_playerwk, unsigned char prev_plmstno);

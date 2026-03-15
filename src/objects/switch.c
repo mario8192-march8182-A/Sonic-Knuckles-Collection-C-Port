@@ -7,6 +7,7 @@
 #include "../utils/stageno.h"
 #include "../action.h"
 #include "../hitchk.h"
+#include "../sound.h"
 static void switchinit(SKC_sprite_status* p_actwk);
 static void switchmove(SKC_sprite_status* p_actwk);
 static void switchmove2(SKC_sprite_status* p_actwk);

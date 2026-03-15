@@ -13,6 +13,7 @@
 #include "../../constants.h"
 #include "../../etc.h"
 #include "../../hitchk.h"
+#include "../../sound.h"
 #include "../common.h"
 static void brhashiinit(SKC_sprite_status* p_actwk);
 static void brhashiinit2(SKC_sprite_status* p_actwk);

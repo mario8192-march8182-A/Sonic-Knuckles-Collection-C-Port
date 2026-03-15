@@ -13,6 +13,7 @@
 #include "../action.h"
 #include "../constants.h"
 #include "../hitchk.h"
+#include "../sound.h"
 static void togeinit(SKC_sprite_status* p_actwk);
 static void vstogeinit(SKC_sprite_status* p_actwk, unsigned char size_kind);
 static void togemove(SKC_sprite_status* p_actwk);

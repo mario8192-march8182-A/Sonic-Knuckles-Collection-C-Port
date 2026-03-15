@@ -15,6 +15,7 @@
 #include "../../constants.h"
 #include "../../etc.h"
 #include "../../shared.h"
+#include "../../sound.h"
 #include "../emyshot.h"
 static void saru00_framein(SKC_sprite_status* p_actwk);
 static void saru00_init(SKC_sprite_status* p_actwk);
