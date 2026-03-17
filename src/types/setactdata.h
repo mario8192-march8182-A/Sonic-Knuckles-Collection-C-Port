@@ -1,7 +1,7 @@
 #ifndef SKC_SETACTDATA_H
 #define SKC_SETACTDATA_H
 
-#include "enemyinit0data.h"
+#include "enemyinitdata.h"
 #include "spritestatushandler.h"
 
 typedef struct SKC_set_act00_data {

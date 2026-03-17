@@ -3,7 +3,7 @@
 
 #include <stdbool.h>
 #include "../constants.h"
-#include "enemyinit0data.h"
+#include "enemyinitdata.h"
 #include "speed.h"
 #include "spritestatushandler.h"
 

@@ -1,7 +1,7 @@
 #ifndef SKC_OPNBOX_H
 #define SKC_OPNBOX_H
 
-#include "../types/enemyinit2data.h"
+#include "../types/enemyinitdata.h"
 #include "../types/setactdata.h"
 #include "../types/spritepattern.h"
 #include "../types/spritestatus.h"

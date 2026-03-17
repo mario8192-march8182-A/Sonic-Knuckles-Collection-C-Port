@@ -1,7 +1,7 @@
 #ifndef SKC_OBOX04_H
 #define SKC_OBOX04_H
 
-#include "../../types/enemyinit0data.h"
+#include "../../types/enemyinitdata.h"
 #include "../../types/setactdata.h"
 #include "../../types/spritestatus.h"
 

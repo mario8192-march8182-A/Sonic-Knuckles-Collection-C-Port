@@ -1,7 +1,7 @@
 #ifndef SKC_NUCKLE_H
 #define SKC_NUCKLE_H
 
-#include "../types/enemyinit0data.h"
+#include "../types/enemyinitdata.h"
 #include "../types/spritepattern.h"
 #include "../types/spritestatus.h"
 #include "../types/wrtdata.h"
