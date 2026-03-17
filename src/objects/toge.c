@@ -2,6 +2,7 @@
 #include <stdbool.h>
 #include "../types/hitchkdata.h"
 #include "../types/hitchkresult.h"
+#include "../types/size.h"
 #include "../types/sonic3ram.h"
 #include "../types/spritepattern.h"
 #include "../types/spritestatus.h"
@@ -66,11 +67,7 @@ static void togeinit(SKC_sprite_status* p_actwk) {
     vstogeinit(p_actwk, size_kind);
   }
   else {
-    struct {
-      unsigned char sprhs;
-      unsigned char sprvs;
-    }
-    togetbl[8] = {
+    SKC_size togetbl[8] = {
       { 16, 16 },
       { 32, 16 },
       { 48, 16 },
@@ -81,8 +78,8 @@ static void togeinit(SKC_sprite_status* p_actwk) {
       { 16, 64 }
     };
 
-    p_actwk->sprhs = togetbl[size_kind].sprhs;
-    p_actwk->sprvs = togetbl[size_kind].sprvs;
+    p_actwk->sprhs = togetbl[size_kind].w;
+    p_actwk->sprvs = togetbl[size_kind].h;
     p_actwk->r_ptr = &togemove;
     p_actwk->patbase = togepat;
     p_actwk->sproffset = get_zone(g_ram.stageno) != FLYING_BATTERY ? 0x049C : 0x0200;
@@ -104,11 +101,7 @@ static void togeinit(SKC_sprite_status* p_actwk) {
 
 
 static void vstogeinit(SKC_sprite_status* p_actwk, unsigned char size_kind) {
-  struct {
-    unsigned char sprhs;
-    unsigned char sprvs;
-  }
-  vstogetbl[8] = {
+  SKC_size vstogetbl[8] = {
     { 12, 12 },
     { 24, 12 },
     { 36, 12 },
@@ -119,8 +112,8 @@ static void vstogeinit(SKC_sprite_status* p_actwk, unsigned char size_kind) {
     { 12, 48 }
   };
 
-  p_actwk->sprhs = vstogetbl[size_kind].sprhs;
-  p_actwk->sprvs = vstogetbl[size_kind].sprvs;
+  p_actwk->sprhs = vstogetbl[size_kind].w;
+  p_actwk->sprvs = vstogetbl[size_kind].h;
   p_actwk->r_ptr = &vstogemove;
   p_actwk->patbase = vstogepat;
   p_actwk->sproffset = 0x0391;

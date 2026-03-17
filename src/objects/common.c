@@ -4,6 +4,7 @@
 #include "../types/hitchkdata.h"
 #include "../types/hitchkresult.h"
 #include "../types/point.h"
+#include "../types/size.h"
 #include "../types/sonic3ram.h"
 #include "../types/spritepattern.h"
 #include "../types/spritestatus.h"
@@ -1236,11 +1237,7 @@ void block(SKC_sprite_status* p_actwk) {
 
 
 static void blockinit(SKC_sprite_status* p_actwk) {
-  struct {
-    unsigned char sprhs;
-    unsigned char sprvs;
-  }
-  blocktbl[4] = {
+  SKC_size blocktbl[4] = {
     { 16, 16 },
     { 32, 16 },
     { 48, 16 },
@@ -1248,8 +1245,8 @@ static void blockinit(SKC_sprite_status* p_actwk) {
   };
 
   p_actwk->patno = p_actwk->u.obj.userflag;
-  p_actwk->sprhs = blocktbl[p_actwk->u.obj.userflag].sprhs;
-  p_actwk->sprvs = blocktbl[p_actwk->u.obj.userflag].sprvs;
+  p_actwk->sprhs = blocktbl[p_actwk->u.obj.userflag].w;
+  p_actwk->sprvs = blocktbl[p_actwk->u.obj.userflag].h;
   p_actwk->patbase = blockpat;
   p_actwk->sproffset = 0x43D4;
   p_actwk->actflg.relative_coordinates = 1;

@@ -6,6 +6,7 @@
 #include "../types/hitchkdata.h"
 #include "../types/hitchkresult.h"
 #include "../types/iwabreakdata.h"
+#include "../types/size.h"
 #include "../types/sonic3ram.h"
 #include "../types/speed.h"
 #include "../types/spritepattern.h"
@@ -111,11 +112,7 @@ void vsiwa(SKC_sprite_status* p_actwk) {
 
 
 static void iwainit(SKC_sprite_status* p_actwk) {
-  struct {
-    unsigned char sprhs;
-    unsigned char sprvs;
-  }
-  iwainittbl[8] = {
+  SKC_size iwainittbl[8] = {
     { 24, 39 },
     { 24, 23 },
     { 24, 15 },
@@ -128,9 +125,9 @@ static void iwainit(SKC_sprite_status* p_actwk) {
 
   unsigned char size_type = p_actwk->u.obj.userflag >> 4 & 7;
   p_actwk->patno = size_type;
-  p_actwk->sprhs = iwainittbl[size_type].sprhs;
-  p_actwk->sprvs = iwainittbl[size_type].sprvs;
-  p_actwk->sprvsize = iwainittbl[size_type].sprvs;
+  p_actwk->sprhs = iwainittbl[size_type].w;
+  p_actwk->sprvs = iwainittbl[size_type].h;
+  p_actwk->sprvsize = iwainittbl[size_type].h;
   p_actwk->actflg.relative_coordinates = 1;
   p_actwk->sprpri = PRI_4;
   p_actwk->u.obj.actfree.iwa.xposi_init = fp16_get_integer(p_actwk->xposi);
