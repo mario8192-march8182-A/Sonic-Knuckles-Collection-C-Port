@@ -1219,7 +1219,7 @@ void pollWindowsControllers() {
       g_joystick1ButtonsDown |= 2;
     }
     if (g_joystickEnoughButtons[0]) {
-      if (g_debugMode != 0) {
+      if (g_debug_mode != 0) {
         if (joyinfoex.dwButtons & 1) {
           g_joystick1ButtonsDown |= 0x40;
         }
@@ -1267,7 +1267,7 @@ void pollWindowsControllers() {
       g_joystick2ButtonsDown |= 2;
     }
     if (g_joystickEnoughButtons[1]) {
-      if (g_debugMode != 0) {
+      if (g_debug_mode != 0) {
         if (joyinfoex.dwButtons & 1) {
           g_joystick2ButtonsDown |= 0x40;
         }
@@ -1334,7 +1334,7 @@ void pollWindowsControllers() {
       if (GetAsyncKeyState(VK_ESCAPE) < 0) {
         g_kbKeysP1Down |= 0x10;
       }
-      if (g_debugMode != 0) {
+      if (g_debug_mode != 0) {
         if (GetAsyncKeyState(VK_SPACE) < 0) {
           g_kbKeysP1Down |= 0x80;
         }
@@ -1370,7 +1370,7 @@ void pollWindowsControllers() {
     if (GetAsyncKeyState(VK_ESCAPE) < 0) {
       g_kbKeysP2Down |= 0x10;
     }
-    if (g_debugMode != 0) {
+    if (g_debug_mode != 0) {
       if (GetAsyncKeyState(VK_TAB) < 0) {
         g_kbKeysP2Down |= 0x80;
       }

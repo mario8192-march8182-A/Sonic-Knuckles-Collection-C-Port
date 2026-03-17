@@ -314,7 +314,7 @@ bool playdamageset(sprite_status* p_playerwk, sprite_status* p_attack_actwk) {
     ring_cnt = g_ram.pl2ring;
   }
   if (!BIT_0_IS_SET(p_playerwk->cddat2)) {
-    if (g_debugMode == 0) {
+    if (g_debug_mode == 0) {
       if (BIT_7_IS_SET(p_playerwk->actfree.player.eventflag)) goto jump0;
       if (ring_cnt == 0) goto die;
       sprite_status* p_new_actwk;

@@ -48,7 +48,7 @@ extern int g_startGameMode;
 extern BOOL g_bTrial;
 extern int g_sonicGameMode;
 extern int g_langMode;
-extern int g_debugMode;
+extern int g_debug_mode;
 extern BOOL BOOL_00831198;
 extern BOOL g_bDemo;
 extern CGame g_game;
@@ -97,7 +97,7 @@ void CGame::readConfig() {
   m_options[OPTIONS_SHOWFRAMECOUNT] = iniFile.getInt("ShowFrameCount", 0);
   m_options[OPTIONS_ENABLEFRAMECAPTURE] = iniFile.getInt("EnableFrameCapture", 1);
   m_options[OPTIONS_MUKAIDROPFRAME] = iniFile.getInt("MukaiDropFrame", 1);
-  g_debugMode = iniFile.getInt("DebugMode", 0);
+  g_debug_mode = iniFile.getInt("DebugMode", 0);
   g_useModeX = iniFile.getInt("UseModeX", g_useModeX);
   g_noSoundEffect = iniFile.getInt("NoSoundEffect", g_noSoundEffect);
   iniFile.readInt("BGMMode", &g_bgmMode, g_bgmMode);
@@ -105,7 +105,7 @@ void CGame::readConfig() {
   if (g_bgmMode < 0 || g_bgmMode > 2) {
     g_bgmMode = 1;
   }
-  if (g_debugMode != 0) {
+  if (g_debug_mode != 0) {
     g_startGameMode = 2;
   }
   else {
@@ -317,7 +317,7 @@ LRESULT CGame::realWndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) {
 BOOL CGame::loadMenu(HWND hWnd, LPARAM lParam) {
   m_hMenu = LoadMenu(g_hInstance, MAKEINTRESOURCE(IDM_BASE + g_langMode));
 
-  if (g_debugMode == 0) {
+  if (g_debug_mode == 0) {
     HMENU hSubMenu = GetSubMenu(m_hMenu, 1);
     DeleteMenu(hSubMenu, 5, MF_BYPOSITION);
     DeleteMenu(hSubMenu, 5, MF_BYPOSITION);
@@ -644,7 +644,7 @@ int CGame::init() {
   wndClass.lpszClassName = "SonicWndClass";
   RegisterClass(&wndClass);
 
-  if (g_debugMode != 0) {
+  if (g_debug_mode != 0) {
     m_hWnd = CreateWindowEx(0, "SonicWndClass", g_debugWindowTitles[g_sonicGameMode], WS_MINIMIZEBOX | WS_THICKFRAME | WS_SYSMENU | WS_CAPTION, 0, 0, CW_USEDEFAULT, CW_USEDEFAULT, 0, 0, g_hInstance, 0);
   }
   else {
@@ -869,7 +869,7 @@ void CGame::updateScreen() {
   long pitch;
   if (pGraphics->lockBuffer((void**)&pSurface, &pitch) != 0) return;
 
-  if (g_debugMode != 0) {
+  if (g_debug_mode != 0) {
     if (g_useModeX == 0 && pGraphics->getVideoMode() & 4) {
       for (int i = 0; i < 32; ++i) {
         memset(&pSurface[i * pitch], 0, 640);
