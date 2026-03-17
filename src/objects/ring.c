@@ -10,6 +10,7 @@
 #include "../utils/fp8.h"
 #include "../action.h"
 #include "../actset.h"
+#include "../coli.h"
 #include "../constants.h"
 #include "../dircol.h"
 #include "../etc.h"

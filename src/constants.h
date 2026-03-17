@@ -55,9 +55,7 @@ sonic_game_modes;
 #define ACTWK_PL2_MUTEKI 106
 #define ACTWK_TRAIL 96
 
-#define COLBUFFER_SLOTS 64
-#define COLBUFFER_SLOT_SIZE 2
-#define COLBUFFER_MAX_SIZE 126
+#define COLIBUFFER_SLOTS 64
 
 #define RINGWK_SLOTS 512
 

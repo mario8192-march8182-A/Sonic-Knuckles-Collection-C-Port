@@ -12,6 +12,7 @@
 #include "../utils/fp8.h"
 #include "../utils/stageno.h"
 #include "../action.h"
+#include "../coli.h"
 #include "../constants.h"
 #include "../hitchk.h"
 #include "../sound.h"

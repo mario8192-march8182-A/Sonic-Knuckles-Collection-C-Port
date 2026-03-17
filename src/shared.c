@@ -23,6 +23,7 @@
 #include "utils/stageno.h"
 #include "action.h"
 #include "actset.h"
+#include "coli.h"
 #include "constants.h"
 #include "dev.h"
 #include "dircol.h"

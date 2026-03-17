@@ -18,7 +18,7 @@ typedef struct sonic3_ram {
   /* 08ffb000 */ SKC_sprite_status actwk[ACTWK_SLOTS];
   /* 08ffd000 */ unsigned char zoombuffer[0x1000];
   /* 08ffe000 */ unsigned short hscrollbuff[448];
-  /* 08ffe380 */ unsigned short colibuffer[COLBUFFER_SLOTS];
+  /* 08ffe380 */ unsigned char colibuffer[COLIBUFFER_SLOTS];
   /* 08ffe400 */ unsigned char direc_x[256];
   /* 08ffe438 */ unsigned short specspherecnt;
   /* 08ffe442 */ unsigned short specringcnt;

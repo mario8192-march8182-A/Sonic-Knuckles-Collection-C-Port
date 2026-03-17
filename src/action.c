@@ -9,6 +9,7 @@
 #include "utils/bits.h"
 #include "utils/fp16.h"
 #include "utils/stageno.h"
+#include "coli.h"
 static SKC_sprite_status* action0(SKC_sprite_status* p_actwk, int cnt);
 static void vsaction(SKC_sprite_status* p_actwk);
 static SKC_sprite_status* vsaction0(SKC_sprite_status* p_actwk, int cnt);

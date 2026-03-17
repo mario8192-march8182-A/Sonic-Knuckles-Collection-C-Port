@@ -47,7 +47,7 @@ static void itemug_wait0(SKC_sprite_status* p_actwk) {
       p_savewk->u.obj.actflg0.puka_down = 0;
       p_actwk->r_ptr = &item;
       p_actwk->r_no = 2;
-      p_actwk->u.obj.actfree.item.unknown = 4;
+      p_actwk->u.obj.actfree.item.r_no1 = 4;
       p_actwk->yspeed = -0x500;
       soundset(68);
       if (p_actwk->actflg.hflip == 1) {

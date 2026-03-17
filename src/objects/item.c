@@ -12,6 +12,7 @@
 #include "../utils/fp16.h"
 #include "../action.h"
 #include "../actset.h"
+#include "../coli.h"
 #include "../constants.h"
 #include "../dircol.h"
 #include "../hitchk.h"
@@ -138,7 +139,7 @@ static void itemmove2(SKC_sprite_status* p_actwk) {
 
 
 static void itemdownsub(SKC_sprite_status* p_actwk) {
-  if (p_actwk->u.obj.actfree.item.unknown == 0) return;
+  if (p_actwk->u.obj.actfree.item.r_no1 == 0) return;
 
   if (p_actwk->actflg.vflip == 0) {
     speedset(p_actwk);
@@ -148,7 +149,7 @@ static void itemdownsub(SKC_sprite_status* p_actwk) {
         short yposi = fp16_get_integer(p_actwk->yposi) + result.offset;
         fp16_set_integer(&p_actwk->yposi, yposi);
         p_actwk->yspeed = 0;
-        p_actwk->u.obj.actfree.item.unknown = 0;
+        p_actwk->u.obj.actfree.item.r_no1 = 0;
       }
     }
   }
@@ -160,7 +161,7 @@ static void itemdownsub(SKC_sprite_status* p_actwk) {
     if (result.offset <= 0) {
       short yposi = fp16_get_integer(p_actwk->yposi) - result.offset;
       p_actwk->yspeed = 0;
-      p_actwk->u.obj.actfree.item.unknown = 0;
+      p_actwk->u.obj.actfree.item.r_no1 = 0;
     }
   }
 }

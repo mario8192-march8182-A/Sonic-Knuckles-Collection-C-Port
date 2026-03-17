@@ -274,7 +274,7 @@ typedef struct SKC_sprite_status {
         }
         hscroll_chk;
         struct {
-          unsigned char unknown; // 0x3C
+          unsigned char r_no1; // 0x3C
         }
         item;
         struct {

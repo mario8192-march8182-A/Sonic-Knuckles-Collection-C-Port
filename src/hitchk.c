@@ -7,6 +7,7 @@
 #include "types/spritestatus.h"
 #include "utils/bits.h"
 #include "utils/fp16.h"
+#include "coli.h"
 #include "dircol.h"
 static SKC_hitchk_coli plhitchk_bryuka(SKC_sprite_status* p_actwk, SKC_sprite_status* p_playerwk, SKC_hitchk_data data, signed char* p_slope_heights, bool* p_plride, bool* p_plpush);
 static SKC_hitchk_coli plhitchk_offset(SKC_sprite_status* p_actwk, SKC_sprite_status* p_playerwk, SKC_hitchk_data data, bool* p_plride, bool* p_plpush);
