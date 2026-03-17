@@ -3,7 +3,7 @@
 #include "../../types/dircolresult.h"
 #include "../../types/enemyinit2data.h"
 #include "../../types/hitchkdata.h"
-#include "../../types/setact00data.h"
+#include "../../types/setactdata.h"
 #include "../../types/sonic3ram.h"
 #include "../../types/spritestatus.h"
 #include "../../utils/bits.h"

@@ -3,7 +3,7 @@
 #include "../types/dircolresult.h"
 #include "../types/friendinitdata.h"
 #include "../types/point.h"
-#include "../types/setact05data.h"
+#include "../types/setactdata.h"
 #include "../types/sonic3ram.h"
 #include "../types/speed.h"
 #include "../types/spritepattern.h"

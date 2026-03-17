@@ -1,6 +1,6 @@
 #include "hana00.h"
 #include "../../data/pat/zone00/hana00.h"
-#include "../../types/setact01data.h"
+#include "../../types/setactdata.h"
 #include "../../types/spritestatus.h"
 #include "../../types/spritestatushandler.h"
 #include "../../utils/bits.h"

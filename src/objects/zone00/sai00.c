@@ -4,7 +4,7 @@
 #include "../../data/wrt/zone00/sai00.h"
 #include "../../types/chkdistanceresult.h"
 #include "../../types/dircolresult.h"
-#include "../../types/setact00data.h"
+#include "../../types/setactdata.h"
 #include "../../types/sonic3ram.h"
 #include "../../types/spritestatus.h"
 #include "../../types/spritestatushandler.h"

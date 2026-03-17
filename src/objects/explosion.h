@@ -2,7 +2,7 @@
 #define SKC_EXPLOSION_H
 
 #include "../types/enemyinit0data.h"
-#include "../types/setact00data.h"
+#include "../types/setactdata.h"
 #include "../types/spritepattern.h"
 #include "../types/spritestatus.h"
 

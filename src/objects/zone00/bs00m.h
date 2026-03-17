@@ -1,7 +1,7 @@
 #ifndef SKC_BS00M_H
 #define SKC_BS00M_H
 
-#include "../../types/setact00data.h"
+#include "../../types/setactdata.h"
 #include "../../types/spritestatus.h"
 
 void bs00m0_body(SKC_sprite_status* p_actwk);

@@ -2,7 +2,7 @@
 #define SKC_OPNBOX_H
 
 #include "../types/enemyinit2data.h"
-#include "../types/setact00data.h"
+#include "../types/setactdata.h"
 #include "../types/spritepattern.h"
 #include "../types/spritestatus.h"
 

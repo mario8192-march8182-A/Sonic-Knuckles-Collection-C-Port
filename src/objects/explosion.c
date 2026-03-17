@@ -1,6 +1,6 @@
 #include "explosion.h"
 #include "../types/enemyinit0data.h"
-#include "../types/setact00data.h"
+#include "../types/setactdata.h"
 #include "../types/sonic3ram.h"
 #include "../types/spritestatus.h"
 #include "../types/spritestatushandler.h"

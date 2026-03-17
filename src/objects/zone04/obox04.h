@@ -2,7 +2,7 @@
 #define SKC_OBOX04_H
 
 #include "../../types/enemyinit0data.h"
-#include "../../types/setact00data.h"
+#include "../../types/setactdata.h"
 #include "../../types/spritestatus.h"
 
 void obox04(SKC_sprite_status* p_actwk);
