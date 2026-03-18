@@ -1,6 +1,7 @@
 #ifndef SKC_ACTION_H
 #define SKC_ACTION_H
 
+#include "types/actflg.h"
 #include "types/patsetwork.h"
 #include "types/spritestatus.h"
 
@@ -14,7 +15,7 @@ void actionsub(SKC_sprite_status* p_actwk);
 void patchg(SKC_sprite_status* p_actwk, signed char** p_chg_data);
 void time_patchg(SKC_sprite_status* p_actwk, signed char** p_chg_data);
 void patset(void);
-void spatset(SKC_sprite_status* p_actwk, SKC_patset_work* p_work);
+void spatset(SKC_patset_work* p_work, SKC_actflg actflg, unsigned short sproffset);
 void frameoutchk(SKC_sprite_status* p_actwk);
 void frameoutchk2(SKC_sprite_status* p_actwk, short xposi);
 void frameoutchk3(SKC_sprite_status* p_actwk);

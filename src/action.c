@@ -1,5 +1,6 @@
 #include "action.h"
 #include <string.h>
+#include "types/actflg.h"
 #include "types/patsetwork.h"
 #include "types/sonic3ram.h"
 #include "types/spritedata.h"
@@ -16,7 +17,7 @@ static SKC_sprite_status* vsaction0(SKC_sprite_status* p_actwk, int cnt);
 static void patset_compound(SKC_sprite_status* p_actwk, SKC_patset_work* p_work);
 static unsigned char xshapeoffsets[16];
 static unsigned char yshapeoffsets[16];
-static void spatset_compound(SKC_sprite_status* p_actwk, SKC_patset_work* p_work);
+static void spatset_compound(SKC_patset_work* p_work, SKC_actflg actflg, unsigned short sproffset);
 static void vspatset(void);
 static void vspatset_pl_compound(SKC_sprite_status* p_actwk, SKC_patset_work* p_work);
 static void vspatset_pl2_compound(SKC_sprite_status* p_actwk, SKC_patset_work* p_work);
@@ -250,7 +251,7 @@ void patset(void) {
               work.placements_ptr = (SKC_sprite_placement*)p_actwk->patbase;
             }
             if (work.placement_cnt > 0) {
-              spatset(p_actwk, &work);
+              spatset(&work, p_actwk->actflg, p_actwk->sproffset);
             }
           }
         }
@@ -315,7 +316,7 @@ static void patset_compound(SKC_sprite_status* p_actwk, SKC_patset_work* p_work)
       if (p_patterns->cnt > 0) {
         p_work->placement_cnt = p_patterns->cnt;
         p_work->placements_ptr = p_patterns->spr;
-        spatset_compound(p_actwk, p_work);
+        spatset_compound(p_work, p_actwk->actflg, p_actwk->sproffset);
       }
     }
     if (p_work->sprite_left_cnt > 0) {
@@ -332,7 +333,7 @@ static void patset_compound(SKC_sprite_status* p_actwk, SKC_patset_work* p_work)
         if (p_patterns->cnt > 0) {
           p_work->placement_cnt = p_patterns->cnt;
           p_work->placements_ptr = p_patterns->spr;
-          spatset_compound(p_actwk, p_work);
+          spatset_compound(p_work, p_actwk->actflg, p_actwk->sproffset);
           if (p_work->sprite_left_cnt == 0) break;
         }
       }
@@ -341,22 +342,22 @@ static void patset_compound(SKC_sprite_status* p_actwk, SKC_patset_work* p_work)
 }
 
 
-void spatset(SKC_sprite_status* p_actwk, SKC_patset_work* p_work) {
+void spatset(SKC_patset_work* p_work, SKC_actflg actflg, unsigned short sproffset) {
   for (int i = 0; i < p_work->placement_cnt; ++i) {
     SKC_sprite_data* p_data = p_work->sprite_tbl_ptr;
     SKC_sprite_placement placement = p_work->placements_ptr[i];
-    unsigned char yshapeoffset = yshapeoffsets[placement.etc] * p_actwk->actflg.vflip;
-    unsigned char xshapeoffset = xshapeoffsets[placement.etc] * p_actwk->actflg.hflip;
-    p_data->vp = placement.yoff * (!(short)p_actwk->actflg.vflip * 2 - 1) - yshapeoffset + p_work->yposi;
+    unsigned char yshapeoffset = yshapeoffsets[placement.etc] * actflg.vflip;
+    unsigned char xshapeoffset = xshapeoffsets[placement.etc] * actflg.hflip;
+    p_data->vp = placement.yoff * (!(short)actflg.vflip * 2 - 1) - yshapeoffset + p_work->yposi;
     p_data->vs = placement.etc & 3;
     p_data->hs = (placement.etc & 0xC) >> 2;
-    unsigned short sproffset = placement.index + p_actwk->sproffset;
-    p_data->gfx = sproffset & 0x7FF;
-    p_data->hf = p_actwk->actflg.hflip == 0 ? !!(sproffset & 0x800) : !!(sproffset ^ 0x800);
-    p_data->vf = p_actwk->actflg.vflip == 0 ? !!(sproffset & 0x1000) : !!(sproffset ^ 0x1000);
-    p_data->pl = (sproffset & 0x6000) >> 13;
-    p_data->pr = !!(sproffset & 0x8000);
-    p_data->hp = (placement.xoff * (!(short)p_actwk->actflg.hflip * 2 - 1) - xshapeoffset + p_work->xposi) & 0x1FF;
+    unsigned short wk = placement.index + sproffset;
+    p_data->gfx = wk & 0x7FF;
+    p_data->hf = actflg.hflip == 0 ? !!(wk & 0x800) : !!(wk ^ 0x800);
+    p_data->vf = actflg.vflip == 0 ? !!(wk & 0x1000) : !!(wk ^ 0x1000);
+    p_data->pl = (wk & 0x6000) >> 13;
+    p_data->pr = !!(wk & 0x8000);
+    p_data->hp = (placement.xoff * (!(short)actflg.hflip * 2 - 1) - xshapeoffset + p_work->xposi) & 0x1FF;
     if (p_data->hp == 0) {
       ++p_data->hp;
     }
@@ -373,24 +374,24 @@ static unsigned char xshapeoffsets[16] = { 8, 8, 8, 8, 16, 16, 16, 16, 24, 24, 2
 static unsigned char yshapeoffsets[16] = { 8, 16, 24, 32, 8, 16, 24, 32, 8, 16, 24, 32, 8, 16, 24, 32 };
 
 
-static void spatset_compound(SKC_sprite_status* p_actwk, SKC_patset_work* p_work) {
+static void spatset_compound(SKC_patset_work* p_work, SKC_actflg actflg, unsigned short sproffset) {
   for (int i = 0; i < p_work->placement_cnt; ++i) {
     SKC_sprite_data* p_data = p_work->sprite_tbl_ptr;
     SKC_sprite_placement placement = p_work->placements_ptr[i];
-    unsigned char yshapeoffset = yshapeoffsets[placement.etc] * p_actwk->actflg.vflip;
-    unsigned char xshapeoffset = xshapeoffsets[placement.etc] * p_actwk->actflg.hflip;
-    short yposi = placement.yoff * (!(short)p_actwk->actflg.vflip * 2 - 1) - yshapeoffset + p_work->yposi;
-    short xposi = placement.xoff * (!(short)p_actwk->actflg.hflip * 2 - 1) - xshapeoffset + p_work->xposi;
+    unsigned char yshapeoffset = yshapeoffsets[placement.etc] * actflg.vflip;
+    unsigned char xshapeoffset = xshapeoffsets[placement.etc] * actflg.hflip;
+    short yposi = placement.yoff * (!(short)actflg.vflip * 2 - 1) - yshapeoffset + p_work->yposi;
+    short xposi = placement.xoff * (!(short)actflg.hflip * 2 - 1) - xshapeoffset + p_work->xposi;
     if (yposi > 96 && yposi < 352 && xposi > 96 && xposi < 448) {
       p_data->vp = yposi;
       p_data->vs = placement.etc & 3;
       p_data->hs = (placement.etc & 0xC) >> 2;
-      unsigned short sproffset = placement.index + p_actwk->sproffset;
-      p_data->gfx = sproffset & 0x7FF;
-      p_data->hf = p_actwk->actflg.hflip == 0 ? !!(sproffset & 0x800) : !!(sproffset ^ 0x800);
-      p_data->vf = p_actwk->actflg.vflip == 0 ? !!(sproffset & 0x1000) : !!(sproffset ^ 0x1000);
-      p_data->pl = (sproffset & 0x6000) >> 13;
-      p_data->pr = !!(sproffset & 0x8000);
+      unsigned short wk = placement.index + sproffset;
+      p_data->gfx = wk & 0x7FF;
+      p_data->hf = actflg.hflip == 0 ? !!(wk & 0x800) : !!(wk ^ 0x800);
+      p_data->vf = actflg.vflip == 0 ? !!(wk & 0x1000) : !!(wk ^ 0x1000);
+      p_data->pl = (wk & 0x6000) >> 13;
+      p_data->pr = !!(wk & 0x8000);
       p_data->hp = xposi;
       ++p_work->sprite_tbl_ptr;
       --p_work->sprite_left_cnt;
@@ -450,7 +451,7 @@ static void vspatset(void) {
               work.placements_ptr = (SKC_sprite_placement*)p_actwk->patbase;
             }
             if (work.placement_cnt > 0) {
-              spatset(p_actwk, &work);
+              spatset(&work, p_actwk->actflg, p_actwk->sproffset);
             }
           }
         }
@@ -506,7 +507,7 @@ static void vspatset(void) {
               work.placements_ptr = (SKC_sprite_placement*)p_actwk->patbase;
             }
             if (work.placement_cnt > 0) {
-              spatset(p_actwk, &work);
+              spatset(&work, p_actwk->actflg, p_actwk->sproffset);
             }
           }
         }
@@ -538,7 +539,7 @@ static void vspatset_pl_compound(SKC_sprite_status* p_actwk, SKC_patset_work* p_
       if (p_patterns->cnt > 0) {
         p_work->placement_cnt = p_patterns->cnt;
         p_work->placements_ptr = p_patterns->spr;
-        spatset_compound(p_actwk, p_work);
+        spatset_compound(p_work, p_actwk->actflg, p_actwk->sproffset);
       }
     }
     if (p_work->sprite_left_cnt > 0) {
@@ -554,7 +555,7 @@ static void vspatset_pl_compound(SKC_sprite_status* p_actwk, SKC_patset_work* p_
         if (p_patterns->cnt > 0) {
           p_work->placement_cnt = p_patterns->cnt;
           p_work->placements_ptr = p_patterns->spr;
-          spatset_compound(p_actwk, p_work);
+          spatset_compound(p_work, p_actwk->actflg, p_actwk->sproffset);
           if (p_work->sprite_left_cnt == 0) break;
         }
       }
@@ -582,7 +583,7 @@ static void vspatset_pl2_compound(SKC_sprite_status* p_actwk, SKC_patset_work* p
       if (p_patterns->cnt > 0) {
         p_work->placement_cnt = p_patterns->cnt;
         p_work->placements_ptr = p_patterns->spr;
-        spatset_compound(p_actwk, p_work);
+        spatset_compound(p_work, p_actwk->actflg, p_actwk->sproffset);
       }
     }
     if (p_work->sprite_left_cnt > 0) {
@@ -599,7 +600,7 @@ static void vspatset_pl2_compound(SKC_sprite_status* p_actwk, SKC_patset_work* p
         if (p_patterns->cnt > 0) {
           p_work->placement_cnt = p_patterns->cnt;
           p_work->placements_ptr = p_patterns->spr;
-          spatset_compound(p_actwk, p_work);
+          spatset_compound(p_work, p_actwk->actflg, p_actwk->sproffset);
           if (p_work->sprite_left_cnt == 0) break;
         }
       }
