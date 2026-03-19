@@ -28,6 +28,7 @@
 #include "dev.h"
 #include "dircol.h"
 #include "etc.h"
+#include "score.h"
 #include "sound.h"
 #include "objects/common.h"
 static void chk_pt_next(SKC_sprite_status* p_actwk, signed char* p_pg_data);
@@ -2205,8 +2206,8 @@ void set_emy_die0(SKC_sprite_status* p_actwk) {
     prev_emyscorecnt = 6;
   }
   p_actwk->u.obj.score_id = g_ram.emyscorecnt < 32 ? prev_emyscorecnt : 10;
-  unsigned short score = g_ram.emyscorecnt < 32 ? escoretbl[prev_emyscorecnt / 2] : 1000;
-  scoreup(score);
+  unsigned short points = g_ram.emyscorecnt < 32 ? escoretbl[prev_emyscorecnt / 2] : 1000;
+  scoreup(points);
   p_actwk->r_ptr = &bakuhatu;
   p_actwk->r_no = 0;
 }

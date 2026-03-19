@@ -86,6 +86,7 @@ typedef struct sonic3_ram {
   /* 08fff624 */ unsigned char vdp_hint_cache;
   /* 08fff626 */ unsigned char startcolor;
   /* 08fff627 */ unsigned char colorcnt;
+  /* 08fff628 */ unsigned short DAT_08fff628;
   /* 08fff62a */ unsigned char int_flg;
   /* 08fff62c */ unsigned char linkdata;
   /* 08fff634 */ unsigned short clchgtim;
@@ -272,7 +273,7 @@ typedef struct sonic3_ram {
   /* 08ffffd2 */ unsigned short nextdemoid;
   /* 08ffffd4 */ unsigned char specmode;
   /* 08ffffd8 */ unsigned char mdstatus;
-  /* 08ffffda */ unsigned char DAT_08ffffda;
+  /* 08ffffda */ unsigned short debugflag;
   /* 08ffffe0 */ unsigned char levelselectcheat;
   /* 08ffffe1 */ unsigned char slowmotioncheat;
   /* 08ffffe2 */ unsigned short editmodecheat;

@@ -14,5 +14,9 @@ inline unsigned long rotate_long_left(unsigned long value, unsigned char bits) {
   unsigned long result = (value << bits | value >> 32 - bits) & 0xFFFFFFFF;
   return result;
 }
+inline unsigned long rotate_long_right(unsigned long value, unsigned char bits) {
+  unsigned long result = (value >> bits | value << 32 - bits) & 0xFFFFFFFF;
+  return result;
+}
 
 #endif

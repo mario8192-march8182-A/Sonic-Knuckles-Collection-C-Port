@@ -19,6 +19,7 @@
 #include "../actset.h"
 #include "../constants.h"
 #include "../dev.h"
+#include "../score.h"
 #include "../shared.h"
 #include "../sound.h"
 #include "zone08/gost08.h"
@@ -47,7 +48,7 @@ static void clear_total(SKC_sprite_status* p_actwk);
 static void clear_bonus(SKC_sprite_status* p_actwk, unsigned short bonus);
 static void clear_bonus_move(SKC_sprite_status* p_actwk, unsigned short bonus);
 static bool clear_part_move(SKC_sprite_status* p_actwk);
-static unsigned long score_to_nibbles(SKC_sprite_status* p_actwk, unsigned short score);
+static unsigned long score_to_nibbles(SKC_sprite_status* p_actwk, unsigned short points);
 static unsigned long subtbl[5];
 static unsigned long subtblh[5];
 static unsigned short timebonustbl[8];
@@ -769,9 +770,9 @@ static bool clear_part_move(SKC_sprite_status* p_actwk) {
 }
 
 
-static unsigned long score_to_nibbles(SKC_sprite_status* p_actwk, unsigned short score) {
+static unsigned long score_to_nibbles(SKC_sprite_status* p_actwk, unsigned short points) {
   unsigned long result = 0;
-  unsigned long wk = score;
+  unsigned long wk = points;
 
   for (int i = 0; i < 5; ++i) {
     unsigned long wk2 = wk % subtbl[i];
