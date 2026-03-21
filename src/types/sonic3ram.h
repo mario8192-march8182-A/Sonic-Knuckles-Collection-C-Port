@@ -6,6 +6,7 @@
 #include "aset.h"
 #include "cchgwork.h"
 #include "spritedata.h"
+#include "spritepattern.h"
 #include "spritestatus.h"
 #include "spritestatushandler.h"
 
@@ -130,6 +131,7 @@ typedef struct sonic3_ram {
   /* 08fff7c1 */ unsigned char DAT_08fff7c1;
   /* 08fff7c3 */ unsigned char soz_darkness_level;
   /* 08fff7c6 */ unsigned char reverse_gravity_flag;
+  /* 08fff7c8 */ unsigned char DAT_08fff7c8;
   /* 08fff7ca */ unsigned char pl_input_lock_flag;
   /* 08fff7cb */ unsigned char pl2_input_lock_flag;
   /* 08fff7d0 */ unsigned short emyscorecnt;
@@ -168,7 +170,10 @@ typedef struct sonic3_ram {
   /* 08fffc80 */ unsigned short colorwk2[64];
   /* 08fffe02 */ unsigned short gameflag;
   /* 08fffe04 */ unsigned short gametimer;
+  /* 08fffe06 */ unsigned short editno;
   /* 08fffe08 */ unsigned short editmode;
+  /* 08fffe0a */ unsigned char edittimer;
+  /* 08fffe0b */ signed char edit_spd;
   /* 08fffe0c */ unsigned long systemtimer;
   /* 08fffe10 */ unsigned short stageno;
   /* 08fffe12 */ unsigned char pl_suu;
@@ -268,6 +273,7 @@ typedef struct sonic3_ram {
   /* 08ffffbe */ unsigned short openinganimframe;
   /* 08ffffc0 */ unsigned long extrascore;
   /* 08ffffc4 */ unsigned long extrascore2;
+  /* 08ffffca */ SKC_sprite_pattern** plpatbase;
   /* 08ffffce */ unsigned short plsproffset;
   /* 08ffffd0 */ unsigned short demoflag;
   /* 08ffffd2 */ unsigned short nextdemoid;
