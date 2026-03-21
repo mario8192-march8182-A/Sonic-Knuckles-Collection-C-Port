@@ -209,6 +209,13 @@ typedef struct SKC_sprite_status {
         }
         clear;
         struct {
+          unsigned short hvsize; // 0x32
+          bool plupleft; // 0x34
+          bool pl2upleft; // 0x35
+          bool editupleft; // 0x36
+        }
+        colichg;
+        struct {
           short xdestination; // 0x46
         }
         clear_part;

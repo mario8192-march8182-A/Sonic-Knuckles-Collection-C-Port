@@ -6,6 +6,7 @@
 #include "objects/bgspr.h"
 #include "objects/break.h"
 #include "objects/bryuka.h"
+#include "objects/colichg.h"
 #include "objects/common.h"
 #include "objects/item.h"
 #include "objects/iwa.h"

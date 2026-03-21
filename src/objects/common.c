@@ -17,6 +17,7 @@
 #include "../constants.h"
 #include "../hitchk.h"
 #include "../sound.h"
+#include "colichg.h"
 #include "friend.h"
 #include "toge.h"
 static void bakuhatuinit(SKC_sprite_status* p_actwk);

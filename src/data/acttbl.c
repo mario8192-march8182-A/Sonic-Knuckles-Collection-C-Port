@@ -3,6 +3,7 @@
 #include "../objects/bgspr.h"
 #include "../objects/break.h"
 #include "../objects/bryuka.h"
+#include "../objects/colichg.h"
 #include "../objects/common.h"
 #include "../objects/item.h"
 #include "../objects/itemug.h"
@@ -34,7 +35,7 @@
 SKC_sprite_status_handler s3_act_tbl[256] = {
   &ring,
   &item,
-  0,//&colichg,
+  &colichg,
   &tloop,
   &break_,
   &iwa,
@@ -292,7 +293,7 @@ SKC_sprite_status_handler s3_act_tbl[256] = {
 SKC_sprite_status_handler sk_act_tbl[185] = {
   &ring,
   &item,
-  0,//&colichg,
+  &colichg,
   0,//&Obj_MHZTwistedVine,
   &break_,
   &iwa,
