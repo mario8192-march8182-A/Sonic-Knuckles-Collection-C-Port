@@ -216,6 +216,14 @@ typedef struct SKC_sprite_status {
         }
         colichg;
         struct {
+          unsigned short hvsize; // 0x32
+          bool plupleft; // 0x34
+          bool pl2upleft; // 0x35
+          unsigned char plcnt; // 0x36
+          unsigned char pl2cnt; // 0x37
+        }
+        colichg2;
+        struct {
           short xdestination; // 0x46
         }
         clear_part;

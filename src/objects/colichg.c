@@ -20,6 +20,10 @@ static SKC_sprite_pattern colichgsp02;
 static SKC_sprite_pattern colichgsp04;
 static SKC_sprite_pattern colichgsp05;
 static SKC_sprite_pattern colichgsp06;
+static void colichg2movev(SKC_sprite_status* p_actwk);
+static void colichg2movevsub(SKC_sprite_status* p_actwk, SKC_sprite_status* p_playerwk, bool* p_left, unsigned char* p_plcnt);
+static void colichg2moveh(SKC_sprite_status* p_actwk);
+static void colichg2movehsub(SKC_sprite_status* p_actwk, SKC_sprite_status* p_playerwk, bool* p_up, unsigned char* p_plcnt);
 
 extern sonic3_ram g_ram;
 
@@ -271,3 +275,278 @@ static SKC_sprite_pattern colichgsp06 = {
     { -8, 5, 0x0000,  112 }
   }
 };
+
+
+void colichg2(SKC_sprite_status* p_actwk) {
+  unsigned short sizetbl[4] = {
+    32, 64, 128, 256
+  };
+
+  p_actwk->patbase = colichgpat;
+  p_actwk->sproffset = 0x26BC;
+  p_actwk->actflg.relative_coordinates = 1;
+  p_actwk->sprhs = 64;
+  p_actwk->sprvs = 64;
+  p_actwk->sprpri = PRI_5;
+  if (BIT_IS_SET(p_actwk->u.obj.userflag, 2)) {
+    p_actwk->patno = p_actwk->u.obj.userflag & 7;
+    p_actwk->u.obj.actfree.colichg2.hvsize = sizetbl[p_actwk->u.obj.userflag & 3];
+    if ((unsigned short)fp16_get_integer(p_actwk->yposi) < (unsigned short)fp16_get_integer(g_ram.actwk[0].yposi)) {
+      p_actwk->u.obj.actfree.colichg2.plupleft = true;
+    }
+    if ((unsigned short)fp16_get_integer(p_actwk->yposi) < (unsigned short)fp16_get_integer(g_ram.actwk[1].yposi)) {
+      p_actwk->u.obj.actfree.colichg2.pl2upleft = true;
+    }
+    p_actwk->r_ptr = &colichg2moveh;
+  }
+  else {
+    p_actwk->patno = p_actwk->u.obj.userflag & 3;
+    p_actwk->u.obj.actfree.colichg2.hvsize = sizetbl[p_actwk->u.obj.userflag & 3];
+    if ((unsigned short)fp16_get_integer(p_actwk->xposi) < (unsigned short)fp16_get_integer(g_ram.actwk[0].xposi)) {
+      p_actwk->u.obj.actfree.colichg2.plupleft = true;
+    }
+    if ((unsigned short)fp16_get_integer(p_actwk->xposi) < (unsigned short)fp16_get_integer(g_ram.actwk[1].xposi)) {
+      p_actwk->u.obj.actfree.colichg2.pl2upleft = true;
+    }
+    p_actwk->r_ptr = &colichg2movev;
+  }
+  p_actwk->r_ptr(p_actwk);
+}
+
+
+static void colichg2movev(SKC_sprite_status* p_actwk) {
+  if (g_ram.editmode == 0) {
+    colichg2movevsub(p_actwk, &g_ram.actwk[0], &p_actwk->u.obj.actfree.colichg2.plupleft, &p_actwk->u.obj.actfree.colichg2.plcnt);
+    colichg2movevsub(p_actwk, &g_ram.actwk[1], &p_actwk->u.obj.actfree.colichg2.pl2upleft, &p_actwk->u.obj.actfree.colichg2.pl2cnt);
+    frameoutchk3(p_actwk);
+  }
+  else {
+    frameoutchk(p_actwk);
+  }
+}
+
+
+static void colichg2movevsub(SKC_sprite_status* p_actwk, SKC_sprite_status* p_playerwk, bool* p_left, unsigned char* p_plcnt) {
+  short yposi_above = fp16_get_integer(p_actwk->yposi) - (short)p_actwk->u.obj.actfree.colichg2.hvsize;
+  short yposi_below = fp16_get_integer(p_actwk->yposi) + (short)p_actwk->u.obj.actfree.colichg2.hvsize;
+  short distance = abs(fp16_get_integer(p_playerwk->xposi) - fp16_get_integer(p_actwk->xposi));
+  if (!*p_left) {
+    if ((unsigned short)fp16_get_integer(p_actwk->xposi) <= (unsigned short)fp16_get_integer(p_playerwk->xposi)) {
+      *p_left = true;
+      if ((unsigned short)fp16_get_integer(p_playerwk->yposi) >= yposi_above
+          && (unsigned short)fp16_get_integer(p_playerwk->yposi) < yposi_below
+          && (!BIT_IS_SET(p_actwk->u.obj.userflag, 7) || p_playerwk->u.play.cddat.jump == 0)
+          && distance < 64) {
+        if (p_actwk->actflg.hflip == 0) {
+          if (!BIT_IS_SET(p_actwk->u.obj.userflag, 3)) {
+            if (p_playerwk->u.play.top_solid_bit == 12) {
+              *p_plcnt = 0;
+              p_playerwk->u.play.top_solid_bit = 12;
+              p_playerwk->u.play.lrb_solid_bit = 13;
+            }
+            else {
+              ++*p_plcnt;
+              if (*p_plcnt == 2) {
+                *p_plcnt = 0;
+              }
+              else {
+                p_playerwk->u.play.top_solid_bit = 12;
+                p_playerwk->u.play.lrb_solid_bit = 13;
+              }
+            }
+          }
+          else {
+            if (p_playerwk->u.play.top_solid_bit == 12) {
+              *p_plcnt = 0;
+            }
+            else {
+              ++*p_plcnt;
+              if (*p_plcnt == 2) {
+                *p_plcnt = 0;
+              }
+              else {
+                p_playerwk->u.play.top_solid_bit = 14;
+                p_playerwk->u.play.lrb_solid_bit = 15;
+              }
+            }
+          }
+        }
+        if (!BIT_IS_SET(p_actwk->u.obj.userflag, 5)) {
+          CLEAR_BIT(p_playerwk->sproffset, 15);
+        }
+        else {
+          SET_BIT(p_playerwk->sproffset, 15);
+        }
+      }
+    }
+  }
+  else {
+    if ((unsigned short)fp16_get_integer(p_actwk->xposi) > (unsigned short)fp16_get_integer(p_playerwk->xposi)) {
+      *p_left = false;
+      if ((unsigned short)fp16_get_integer(p_playerwk->yposi) >= (unsigned short)yposi_above
+          && (unsigned short)fp16_get_integer(p_playerwk->yposi) < (unsigned short)yposi_below
+          && (!BIT_IS_SET(p_actwk->u.obj.userflag, 7) || p_playerwk->u.play.cddat.jump == 0)
+          && distance < 64) {
+        if (p_actwk->actflg.hflip == 0) {
+          if (!BIT_IS_SET(p_actwk->u.obj.userflag, 4)) {
+            if (p_playerwk->u.play.top_solid_bit == 12) {
+              *p_plcnt = 0;
+              p_playerwk->u.play.top_solid_bit = 12;
+              p_playerwk->u.play.lrb_solid_bit = 13;
+            }
+            else {
+              ++*p_plcnt;
+              if (*p_plcnt == 2) {
+                *p_plcnt = 0;
+              }
+              else {
+                p_playerwk->u.play.top_solid_bit = 12;
+                p_playerwk->u.play.lrb_solid_bit = 13;
+              }
+            }
+          }
+          else {
+            if (p_playerwk->u.play.top_solid_bit == 12) {
+              *p_plcnt = 0;
+            }
+            else {
+              ++*p_plcnt;
+              if (*p_plcnt == 2) {
+                *p_plcnt = 0;
+              }
+              else {
+                p_playerwk->u.play.top_solid_bit = 14;
+                p_playerwk->u.play.lrb_solid_bit = 15;
+              }
+            }
+          }
+        }
+        if (!BIT_IS_SET(p_actwk->u.obj.userflag, 6)) {
+          CLEAR_BIT(p_playerwk->sproffset, 15);
+        }
+        else {
+          SET_BIT(p_playerwk->sproffset, 15);
+        }
+      }
+    }
+  }
+}
+
+
+static void colichg2moveh(SKC_sprite_status* p_actwk) {
+  if (g_ram.editmode == 0) {
+    colichg2movehsub(p_actwk, &g_ram.actwk[0], &p_actwk->u.obj.actfree.colichg2.plupleft, &p_actwk->u.obj.actfree.colichg2.plcnt);
+    colichg2movehsub(p_actwk, &g_ram.actwk[1], &p_actwk->u.obj.actfree.colichg2.pl2upleft, &p_actwk->u.obj.actfree.colichg2.pl2cnt);
+    frameoutchk3(p_actwk);
+  }
+  else {
+    frameoutchk(p_actwk);
+  }
+}
+
+
+static void colichg2movehsub(SKC_sprite_status* p_actwk, SKC_sprite_status* p_playerwk, bool* p_up, unsigned char* p_plcnt) {
+  short xposi_left = fp16_get_integer(p_actwk->xposi) - p_actwk->u.obj.actfree.colichg.hvsize;
+  short xposi_right = fp16_get_integer(p_actwk->xposi) + p_actwk->u.obj.actfree.colichg.hvsize;
+  short distance = abs(fp16_get_integer(p_playerwk->yposi) - fp16_get_integer(p_actwk->yposi));
+  if (!*p_up) {
+    if ((unsigned short)fp16_get_integer(p_actwk->yposi) <= (unsigned short)fp16_get_integer(p_playerwk->yposi)) {
+      *p_up = true;
+      if ((unsigned short)fp16_get_integer(p_playerwk->xposi) >= xposi_left
+          && (unsigned short)fp16_get_integer(p_playerwk->xposi) < xposi_right
+          && (!BIT_IS_SET(p_actwk->u.obj.userflag, 7) || p_playerwk->u.play.cddat.jump == 0)
+          && distance < 64) {
+        if (p_actwk->actflg.hflip == 0) {
+          if (!BIT_IS_SET(p_actwk->u.obj.userflag, 3)) {
+            if (p_playerwk->u.play.top_solid_bit == 12) {
+              *p_plcnt = 0;
+              p_playerwk->u.play.top_solid_bit = 12;
+              p_playerwk->u.play.lrb_solid_bit = 13;
+            }
+            else {
+              ++*p_plcnt;
+              if (*p_plcnt == 2) {
+                *p_plcnt = 0;
+              }
+              else {
+                p_playerwk->u.play.top_solid_bit = 12;
+                p_playerwk->u.play.lrb_solid_bit = 13;
+              }
+            }
+          }
+          else {
+            if (p_playerwk->u.play.top_solid_bit == 12) {
+              *p_plcnt = 0;
+            }
+            else {
+              ++*p_plcnt;
+              if (*p_plcnt == 2) {
+                *p_plcnt = 0;
+              }
+              else {
+                p_playerwk->u.play.top_solid_bit = 14;
+                p_playerwk->u.play.lrb_solid_bit = 15;
+              }
+            }
+          }
+        }
+        if (!BIT_IS_SET(p_actwk->u.obj.userflag, 5)) {
+          CLEAR_BIT(p_playerwk->sproffset, 15);
+        }
+        else {
+          SET_BIT(p_playerwk->sproffset, 15);
+        }
+      }
+    }
+  }
+  else {
+    if ((unsigned short)fp16_get_integer(p_actwk->yposi) > (unsigned short)fp16_get_integer(p_playerwk->yposi)) {
+      *p_up = false;
+      if ((unsigned short)fp16_get_integer(p_playerwk->xposi) >= (unsigned short)xposi_left
+          && (unsigned short)fp16_get_integer(p_playerwk->xposi) < (unsigned short)xposi_right
+          && (!BIT_IS_SET(p_actwk->u.obj.userflag, 7) || p_playerwk->u.play.cddat.jump == 0)
+          && distance < 64) {
+        if (p_actwk->actflg.hflip == 0) {
+          if (!BIT_IS_SET(p_actwk->u.obj.userflag, 4)) {
+            if (p_playerwk->u.play.top_solid_bit == 12) {
+              *p_plcnt = 0;
+              p_playerwk->u.play.top_solid_bit = 12;
+              p_playerwk->u.play.lrb_solid_bit = 13;
+            }
+            else {
+              ++*p_plcnt;
+              if (*p_plcnt == 2) {
+                *p_plcnt = 0;
+              }
+              else {
+                p_playerwk->u.play.top_solid_bit = 12;
+                p_playerwk->u.play.lrb_solid_bit = 13;
+              }
+            }
+          }
+          else {
+            if (p_playerwk->u.play.top_solid_bit == 12) {
+              *p_plcnt = 0;
+            }
+            else {
+              ++*p_plcnt;
+              if (*p_plcnt == 2) {
+                *p_plcnt = 0;
+              }
+              else {
+                p_playerwk->u.play.top_solid_bit = 14;
+                p_playerwk->u.play.lrb_solid_bit = 15;
+              }
+            }
+          }
+        }
+        if (!BIT_IS_SET(p_actwk->u.obj.userflag, 6)) {
+          CLEAR_BIT(p_playerwk->sproffset, 15);
+        }
+        else {
+          SET_BIT(p_playerwk->sproffset, 15);
+        }
+      }
+    }
+  }
+}
