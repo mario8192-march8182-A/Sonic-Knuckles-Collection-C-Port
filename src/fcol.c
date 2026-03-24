@@ -1,6 +1,7 @@
 #include "fcol.h"
 #include <stdbool.h>
 #include <stdlib.h>
+#include "data/scd.h"
 #include "types/sonic3ram.h"
 #include "types/spritestatus.h"
 #include "utils/fp16.h"
