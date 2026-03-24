@@ -1,6 +1,7 @@
 #include "shared.h"
 #include <stdbool.h>
 #include <string.h>
+#include "data/cg/friend.h"
 #include "types/actwkchkresult.h"
 #include "types/cchgcntinfo.h"
 #include "types/cchgitem.h"
