@@ -142,6 +142,7 @@ typedef struct sonic3_ram {
   /* 08fff7f0 */ unsigned char actanimcounters[8][2];
   /* 08fff800 */ SKC_sprite_data ramf8[SPRITE_COUNT_LIMIT];
   /* 08ff7880 */ SKC_sprite_data vssprtbl[3][SPRITE_COUNT_LIMIT];
+  /* 08fffa82 */ short DAT_08fffa82;
   /* 08fffa84 */ short DAT_08fffa84;
   /* 08fffa92 */ short scralim_m_right;
   /* 08fffa94 */ short scralim_m_left;

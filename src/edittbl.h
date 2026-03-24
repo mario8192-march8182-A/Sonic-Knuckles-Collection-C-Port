@@ -3,6 +3,7 @@
 #include "data/pat/zone00/saru00.h"
 #include "data/pat/zone00/snak00.h"
 #include "data/pat/zone04/obox04.h"
+#include "data/pat/zone0a/egjr0a.h"
 #include "objects/bgspr.h"
 #include "objects/break.h"
 #include "objects/bryuka.h"
@@ -27,3 +28,4 @@
 #include "objects/zone04/betl04.h"
 #include "objects/zone04/mous04.h"
 #include "objects/zone04/obox04.h"
+#include "objects/zone0a/egjr0a.h"

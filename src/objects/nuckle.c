@@ -9,6 +9,7 @@
 #include "../data/cg/zone07/sw0700.h"
 #include "../data/cg/zone07/sw0701.h"
 #include "../data/cg/zone0a/deth0a.h"
+#include "../data/cg/zone0a/egjr0a.h"
 #include "../data/cg/zone0a/kumo0a.h"
 #include "../data/cg/zone0a/nk0a00.h"
 #include "../data/pat/nuckle.h"
@@ -51,6 +52,7 @@
 #include "switch.h"
 #include "zone.h"
 #include "zone00/bs00m.h"
+#include "zone0a/egjr0a.h"
 static void nuckle000(SKC_sprite_status* p_actwk);
 static void nuckle000_init(SKC_sprite_status* p_actwk);
 static void nuckle000_wait0(SKC_sprite_status* p_actwk);

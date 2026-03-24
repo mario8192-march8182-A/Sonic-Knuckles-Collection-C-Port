@@ -961,9 +961,9 @@ static SKC_edit_data edittbl0a0 = {
     //{ &Obj_SSZSwingingCarrier, DAT_007c46d6, 0x4348, 1, 0x00 },
     //{ &Obj_SSZSwingingCarrier, DAT_007c46d6, 0x4348, 4, 0x80 },
     //{ &Obj_SSZRetractingSpring, DAT_007c491c, 0x03A2, 3, 0x00 },
-    //{ &egjr0a,  egjr0apat,  0x0500, 0, 0x00 },
-    //{ &egjr0a,  egjr0apat,  0x0500, 0, 0x02 },
-    //{ &egjr0a,  egjr0apat,  0x0500, 0, 0x04 }
+    { &egjr0a,  egjr0apat,  0x0500, 0, 0x00 },
+    { &egjr0a,  egjr0apat,  0x0500, 0, 0x02 },
+    { &egjr0a,  egjr0apat,  0x0500, 0, 0x04 }
   }
 };
 static SKC_edit_data edittbl0b0 = {

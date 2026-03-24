@@ -82,6 +82,8 @@ typedef struct SKC_sprite_status {
         long yposi; // 0x34
         unsigned short vram_offset; // 0x3A
         unsigned char unknown; // 0x40
+        unsigned char unknown2; // 0x41
+        unsigned char* p_cg; // 0x42
       }
       zoom;
       signed char* pg_data_ptr; // 0x30
@@ -227,6 +229,12 @@ typedef struct SKC_sprite_status {
           short xdestination; // 0x46
         }
         clear_part;
+        struct {
+          short prev_yposi; // 0x30
+          short yposi_save; // 0x32
+          short unknown3c; // 0x3C;
+        }
+        egjr0a;
         struct {
           short xposi_init; // 0x30
           short yposi_init; // 0x32
