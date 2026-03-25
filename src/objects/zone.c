@@ -22,6 +22,7 @@
 #include "../score.h"
 #include "../shared.h"
 #include "../sound.h"
+#include "kanban.h"
 #include "zone08/gost08.h"
 static void over_move(SKC_sprite_status* p_actwk);
 static void over_wait(SKC_sprite_status* p_actwk);

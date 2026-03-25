@@ -302,6 +302,11 @@ typedef struct SKC_sprite_status {
         }
         iwa;
         struct {
+          short xposi_init; // 0x3A
+          unsigned short tbl_index; // 0x3E
+        }
+        kanban;
+        struct {
           unsigned char tbl_index; // 0x39
         }
         nuckle030;

@@ -162,6 +162,7 @@ typedef struct sonic3_ram {
   /* 08fffab4 */ short scralim_b_left;
   /* 08fffab6 */ short scralim_b_right;
   /* 08fffab8 */ unsigned char DAT_08fffab8_bitfield;
+  /* 08fffabe */ unsigned char DAT_08fffabe;
   /* 08fffabf */ unsigned char fade_flag;
   /* 08fffacd */ unsigned char DAT_08fffacd;
   /* 08ffface */ unsigned short DAT_08ffface;

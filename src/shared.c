@@ -1,6 +1,7 @@
 #include "shared.h"
 #include <stdbool.h>
 #include <string.h>
+#include "data/cg/kanban.h"
 #include "data/cg/friend.h"
 #include "types/actwkchkresult.h"
 #include "types/cchgcntinfo.h"
@@ -32,6 +33,7 @@
 #include "score.h"
 #include "sound.h"
 #include "objects/common.h"
+#include "objects/kanban.h"
 static void chk_pt_next(SKC_sprite_status* p_actwk, signed char* p_pg_data);
 static int pt_chgs0__chk_pt_next(SKC_sprite_status* p_actwk, signed char* p_pg_data);
 static int chk_tpg_next(SKC_sprite_status* p_actwk, signed char* p_pg_data);
