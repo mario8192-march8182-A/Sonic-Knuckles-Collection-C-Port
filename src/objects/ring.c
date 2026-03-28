@@ -20,8 +20,8 @@ static void ringmove(SKC_sprite_status* p_actwk);
 static void ringget(SKC_sprite_status* p_actwk);
 static void ringdie(SKC_sprite_status* p_actwk);
 static void ringerase(SKC_sprite_status* p_actwk);
-static void ringgetsub0(SKC_sprite_status* p_actwk);
-static void ringgetsub1(SKC_sprite_status* p_actwk);
+static void ringgetsub0(void);
+static void ringgetsub1(void);
 static void ringgetsub1__1up(void);
 static void ringgetsub2__1up(void);
 static void flyringg(SKC_sprite_status* p_actwk);
@@ -96,7 +96,7 @@ static void ringget(SKC_sprite_status* p_actwk) {
   p_actwk->r_no += 2;
   p_actwk->colino = 0;
   p_actwk->sprpri = PRI_1;
-  ringgetsub(p_actwk);
+  ringgetsub();
   ringdie(p_actwk);
 }
 
@@ -112,20 +112,20 @@ static void ringerase(SKC_sprite_status* p_actwk) {
 }
 
 
-void ringgetsub(SKC_sprite_status* p_actwk) {
-  ringgetsub0(p_actwk);
+void ringgetsub(void) {
+  ringgetsub0();
 }
 
 
-static void ringgetsub0(SKC_sprite_status* p_actwk) {
+static void ringgetsub0(void) {
   if (g_ram.plring_act < RING_MAX) {
     ++g_ram.plring_act;
   }
-  ringgetsub1(p_actwk);
+  ringgetsub1();
 }
 
 
-static void ringgetsub1(SKC_sprite_status* p_actwk) {
+static void ringgetsub1(void) {
   if (g_ram.plring < RING_MAX) {
     ++g_ram.plring;
     SET_BIT(g_ram.plring_f, 0);
@@ -155,7 +155,7 @@ static void ringgetsub1__1up(void) {
 }
 
 
-void ringgetsub2(SKC_sprite_status* p_actwk) {
+void ringgetsub2(void) {
   if (g_ram.pl2ring_act < 999) {
     ++g_ram.pl2ring_act;
   }
@@ -163,7 +163,7 @@ void ringgetsub2(SKC_sprite_status* p_actwk) {
     ++g_ram.pl2ring;
   }
   if (g_ram.vs_flag == 0) {
-    ringgetsub1(p_actwk);
+    ringgetsub1();
   }
   else {
     SET_BIT(g_ram.pl2ring_f, 0);
@@ -313,7 +313,7 @@ static void flyringget(SKC_sprite_status* p_actwk) {
   p_actwk->r_no += 2;
   p_actwk->colino = 0;
   p_actwk->sprpri = PRI_1;
-  ringgetsub(p_actwk);
+  ringgetsub();
   flyringdie(p_actwk);
 }
 
@@ -403,7 +403,8 @@ static void tringmove(SKC_sprite_status* p_actwk) {
         CLEAR_BIT(g_ram.flagwork[p_actwk->u.obj.flagwork_index - 1], 7);
       }
       if (p_actwk->u.obj.actfree.tring.ringwk_index != 0) {
-        g_ram.ringwk[p_actwk->u.obj.actfree.tring.ringwk_index - 1] = 0;
+        g_ram.ringwk[p_actwk->u.obj.actfree.tring.ringwk_index - 1].pattim = 0;
+        g_ram.ringwk[p_actwk->u.obj.actfree.tring.ringwk_index - 1].patno = 0;
       }
       frameout(p_actwk);
     }
@@ -415,7 +416,7 @@ static void tringget(SKC_sprite_status* p_actwk) {
   p_actwk->colino = 0;
   p_actwk->sprpri = PRI_1;
   --g_ram.actring;
-  ringgetsub(p_actwk);
+  ringgetsub();
   p_actwk->r_ptr = &tringdie;
   p_actwk->r_no = 0;
   tringdie(p_actwk);
@@ -569,7 +570,7 @@ static void slot_ring_move(SKC_sprite_status* p_actwk) {
   }
   else {
     --*p_actwk->u.obj.actfree.slot_ring.unknown2e_ptr;
-    ringgetsub(p_actwk);
+    ringgetsub();
     p_actwk->r_no += 2;
     slot_ring_get(p_actwk);
   }

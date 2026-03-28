@@ -365,7 +365,8 @@ void actunset(void) {
 
   while (g_ram.ringbuffer[0] > 0) {
     if (*p_ringbuffer != 0) {
-      g_ram.ringwk[*p_ringbuffer - 1] = -1;
+      g_ram.ringwk[*p_ringbuffer - 1].pattim = -1;
+      g_ram.ringwk[*p_ringbuffer - 1].patno = -1;
       *p_ringbuffer = 0;
       --g_ram.ringbuffer[0];
     }

@@ -5,8 +5,8 @@
 #include "../types/spritestatus.h"
 
 void ring(SKC_sprite_status* p_actwk);
-void ringgetsub(SKC_sprite_status* p_actwk);
-void ringgetsub2(SKC_sprite_status* p_actwk);
+void ringgetsub();
+void ringgetsub2();
 void flyring(SKC_sprite_status* p_actwk);
 void tring(SKC_sprite_status* p_actwk);
 extern SKC_sprite_pattern* ringpat[9];

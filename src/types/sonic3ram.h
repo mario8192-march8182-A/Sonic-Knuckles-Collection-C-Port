@@ -5,6 +5,8 @@
 #include "acttimer.h"
 #include "aset.h"
 #include "cchgwork.h"
+#include "point.h"
+#include "ringwkentry.h"
 #include "spritedata.h"
 #include "spritepattern.h"
 #include "spritestatus.h"
@@ -26,7 +28,7 @@ typedef struct sonic3_ram {
   /* 08ffe600 */ unsigned char competitionmode_savedata[84];
   /* 08ffe660 */ unsigned long p_saveslot;
   /* 08ffe6ac */ unsigned char main_savedata[84];
-  /* 08ffe700 */ short ringwk[RINGWK_SLOTS];
+  /* 08ffe700 */ SKC_ringwk_entry ringwk[RINGWK_SLOTS];
   /* 08ffeb00 */ unsigned char flagwork[FLAGWORK_SLOTS];
   /* 08ffee0a */ unsigned short pl_scr_lock_flag;
   /* 08ffee12 */ short scralim_n_down;
@@ -39,6 +41,9 @@ typedef struct sonic3_ram {
   /* 08ffee3a */ unsigned long vs_vscroll;
   /* 08ffee3e */ short scr_h_posit_ofs;
   /* 08ffee40 */ short scr_v_posit_ofs;
+  /* 08ffee42 */ SKC_point* ringactadr;
+  /* 08ffee46 */ SKC_point* ringactadr2;
+  /* 08ffee4a */ SKC_ringwk_entry* ringwkadr;
   /* 08ffee4e */ unsigned short stageno_i;
   /* 08ffee50 */ short colorcycle;
   /* 08ffee60 */ long vs_scra_h_posit;
@@ -109,6 +114,7 @@ typedef struct sonic3_ram {
   /* 08fff67c */ long custom_follow_yposi;
   /* 08fff702 */ unsigned short fox_auto_timer;
   /* 08fff708 */ unsigned short fox_auto_rno;
+  /* 08fff710 */ unsigned char ringactset_rno;
   /* 08fff711 */ unsigned char DAT_08fff711;
   /* 08fff730 */ unsigned char watermode;
   /* 08fff73e */ unsigned char miles_carry_flag;
@@ -244,7 +250,8 @@ typedef struct sonic3_ram {
   /* 08fffed2 */ unsigned long DAT_08fffed2;
   /* 08fffed6 */ unsigned long DAT_08fffed6;
   /* 08ffff02 */ unsigned short DAT_08ffff02;
-  /* 08ffff04 */ short actring;
+  /* 08ffff04 */ unsigned short actring;
+  /* 08ffff06 */ unsigned short DAT_08ffff06;
   /* 08ffff08 */ SKC_play_type play_type;
   /* 08ffff0a */ SKC_play_type levelselect_play_type;
   /* 08ffff60 */ unsigned char divdev_modules;

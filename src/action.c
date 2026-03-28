@@ -11,6 +11,7 @@
 #include "utils/fp16.h"
 #include "utils/stageno.h"
 #include "coli.h"
+#include "ringact.h"
 #include "score.h"
 static SKC_sprite_status* action0(SKC_sprite_status* p_actwk, int cnt);
 static void vsaction(SKC_sprite_status* p_actwk);
@@ -214,7 +215,7 @@ void patset(void) {
     };
     if (g_ram.DAT_08fff711 != 0) {
       score(&work);
-      patset_rings(&work);
+      ringpatset(&work);
     }
     for (int level = 0; level < PBUFFER_LEVELS; ++level) {
       for (int slot = 1; slot < g_ram.pbuffer[level][0] + 1; ++slot) {

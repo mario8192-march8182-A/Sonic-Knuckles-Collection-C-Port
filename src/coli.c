@@ -10,6 +10,7 @@
 #include "actset.h"
 #include "constants.h"
 #include "etc.h"
+#include "ringact.h"
 #include "shared.h"
 #include "sound.h"
 #include "objects/ring.h"
@@ -49,7 +50,7 @@ void vspcol(SKC_sprite_status* p_playerwk) {
 
 
 void pcol(SKC_sprite_status* p_playerwk) {
-  Test_Ring_Collisions();
+  ringcol(p_playerwk);
   pcolbaria(p_playerwk);
   if (p_playerwk->u.play.character == SONIC
       && p_playerwk->u.play.cddat.baria == 0
