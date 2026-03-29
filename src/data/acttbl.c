@@ -2,6 +2,7 @@
 #include "../shared.h"
 #include "../objects/bgspr.h"
 #include "../objects/break.h"
+#include "../objects/break3.h"
 #include "../objects/bryuka.h"
 #include "../objects/colichg.h"
 #include "../objects/common.h"
@@ -340,7 +341,7 @@ SKC_sprite_status_handler sk_act_tbl[185] = {
   0,//&Obj_LRZSolidRock,
   &bgspr,
   &bgsprp,
-  0,//&break3,
+  &break3,
   0,//&Obj_LRZTurbineSprites,
   &switch_,
   &save,

@@ -192,6 +192,11 @@ typedef struct SKC_sprite_status {
         }
         break_;
         struct {
+          unsigned char unknown; // 0x32
+          unsigned char patno_offset; // 0x34
+        }
+        break3;
+        struct {
           unsigned char main_timer_init; // 0x35
           unsigned char child_timer_init; // 0x36
           unsigned char child_timer_increase; // 0x37

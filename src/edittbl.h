@@ -6,6 +6,7 @@
 #include "data/pat/zone0a/egjr0a.h"
 #include "objects/bgspr.h"
 #include "objects/break.h"
+#include "objects/break3.h"
 #include "objects/bryuka.h"
 #include "objects/colichg.h"
 #include "objects/common.h"

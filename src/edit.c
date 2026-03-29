@@ -884,7 +884,7 @@ static SKC_edit_data edittbl090 = {
     { &bgspr,   bgsprpat,    0xC3A1, 32, 0x20 },
     { &bgspr,   bgsprpat,    0xC3A1, 33, 0x21 },
     { &bgspr,   bgsprpat,    0xC0D3, 34, 0x22 },
-    //{ &break3,  break090pat, 0xC0D3,  8, 0x00 },
+    { &break3,  break090pat, 0xC0D3,  8, 0x00 },
     { &iwa,     iwapat9,     0x40D3,  8, 0x44 },
     { &iwa,     iwapat9,     0x40D3,  9, 0x51 },
     { &iwa,     iwapat9,     0x40D3, 10, 0x68 },
