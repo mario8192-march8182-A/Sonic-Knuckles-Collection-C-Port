@@ -2,7 +2,6 @@
 #include <stdbool.h>
 #include "../../data/cg/zone0a/egjr0a.h"
 #include "../../data/pat/zone0a/egjr0a.h"
-#include "../../types/chkdistanceresult.h"
 #include "../../types/enemyinitdata.h"
 #include "../../types/setactdata.h"
 #include "../../types/sonic3ram.h"

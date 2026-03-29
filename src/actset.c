@@ -3,7 +3,6 @@
 #include <string.h>
 #include "data/acttbl.h"
 #include "data/asettbl.h"
-#include "types/actwkchkresult.h"
 #include "types/aset.h"
 #include "types/sonic3ram.h"
 #include "types/spritestatus.h"

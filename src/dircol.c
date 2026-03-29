@@ -1,5 +1,4 @@
 #include "dircol.h"
-#include "types/dircolresult.h"
 #include "types/sonic3ram.h"
 #include "types/spritestatus.h"
 #include "utils/fp16.h"

@@ -4,13 +4,25 @@
 #include <stdbool.h>
 #include "types/cchgcntinfo.h"
 #include "types/cgdata.h"
-#include "types/chkdistanceresult.h"
-#include "types/chkemycoltresult.h"
 #include "types/enemyinitdata.h"
 #include "types/setactdata.h"
 #include "types/spritestatus.h"
 #include "types/wrtdata.h"
 #include "types/wrtinitdata.h"
+
+typedef struct SKC_chk_distance_result {
+  bool right;
+  bool below;
+  short xdistance;
+  short ydistance;
+}
+SKC_chk_distance_result;
+
+typedef struct SKC_chk_emy_colt_result {
+  bool pl;
+  bool pl2;
+}
+SKC_chk_emy_colt_result;
 
 void enemy_init0(SKC_sprite_status* p_actwk, SKC_enemy_init0_data* p_data);
 void enemy_init1(SKC_sprite_status* p_actwk, SKC_enemy_init1_data* p_data);

@@ -1,7 +1,6 @@
 #include "hitchk.h"
 #include <stdbool.h>
 #include <stdlib.h>
-#include "types/dircolresult.h"
 #include "types/hitchkdistances.h"
 #include "types/sonic3ram.h"
 #include "types/spritestatus.h"

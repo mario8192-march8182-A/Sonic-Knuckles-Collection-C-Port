@@ -1,5 +1,4 @@
 #include "betl04.h"
-#include "../../types/dircolresult.h"
 #include "../../types/enemyinitdata.h"
 #include "../../types/setactdata.h"
 #include "../../types/sonic3ram.h"

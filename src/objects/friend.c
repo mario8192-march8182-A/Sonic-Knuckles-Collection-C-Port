@@ -1,6 +1,4 @@
 #include "friend.h"
-#include "../types/actwkchkresult.h"
-#include "../types/dircolresult.h"
 #include "../types/friendinitdata.h"
 #include "../types/point.h"
 #include "../types/setactdata.h"

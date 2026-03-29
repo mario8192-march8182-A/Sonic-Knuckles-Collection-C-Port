@@ -1,8 +1,13 @@
 #ifndef SKC_DIRCOL_H
 #define SKC_DIRCOL_H
 
-#include "types/dircolresult.h"
 #include "types/spritestatus.h"
+
+typedef struct SKC_dircol_result {
+  signed char offset;
+  unsigned char direc;
+}
+SKC_dircol_result;
 
 SKC_dircol_result dircolm(SKC_sprite_status* p_actwk, unsigned char direc);
 SKC_dircol_result dircol2(SKC_sprite_status* p_actwk, unsigned char direc);

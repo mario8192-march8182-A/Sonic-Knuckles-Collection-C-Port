@@ -2,9 +2,28 @@
 #define SKC_HITCHK_H
 
 #include <stdbool.h>
-#include "types/hitchkdata.h"
-#include "types/hitchkresult.h"
 #include "types/spritestatus.h"
+
+typedef enum SKC_hitchk_coli {
+  HITCHK_COLI_NONE = 0,
+  HITCHK_COLI_SIDE = 1,
+  HITCHK_COLI_BOTTOM = -2,
+  HITCHK_COLI_TOP = -1
+}
+SKC_hitchk_coli;
+
+typedef struct SKC_hitchk_data {
+  unsigned short sprhs;
+  unsigned short sprvs_air;
+  unsigned short sprvs_ground;
+  short xposi;
+}
+SKC_hitchk_data;
+
+typedef struct SKC_hitchk_result {
+  SKC_hitchk_coli plcoli[2];
+}
+SKC_hitchk_result;
 
 SKC_hitchk_result hitchk(SKC_sprite_status* p_actwk, SKC_hitchk_data data);
 SKC_hitchk_coli plhitchk(SKC_sprite_status* p_actwk, SKC_sprite_status* p_playerwk, SKC_hitchk_data data, bool* p_plride, bool* p_plpush);

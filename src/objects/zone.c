@@ -6,7 +6,6 @@
 #include "../data/cg/clear.h"
 #include "../data/cg/title.h"
 #include "../data/cg/zonenames.h"
-#include "../types/actwkchkresult.h"
 #include "../types/overlayelementinitdata.h"
 #include "../types/sonic3ram.h"
 #include "../types/spritestatus.h"

@@ -1,6 +1,5 @@
 #include "bryuka.h"
 #include <stdbool.h>
-#include "../types/hitchkdata.h"
 #include "../types/sonic3ram.h"
 #include "../types/speed.h"
 #include "../types/spritepattern.h"

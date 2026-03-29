@@ -1,8 +1,6 @@
 #include "obox04.h"
 #include "../../data/pat/zone04/obox04.h"
-#include "../../types/dircolresult.h"
 #include "../../types/enemyinitdata.h"
-#include "../../types/hitchkdata.h"
 #include "../../types/setactdata.h"
 #include "../../types/sonic3ram.h"
 #include "../../types/spritestatus.h"

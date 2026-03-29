@@ -2,7 +2,6 @@
 #include <stdbool.h>
 #include <string.h>
 #include "data/ringacttbl.h"
-#include "types/actwkchkresult.h"
 #include "types/patsetwork.h"
 #include "types/point.h"
 #include "types/ringwkentry.h"

@@ -1,7 +1,5 @@
 #include "toge.h"
 #include <stdbool.h>
-#include "../types/hitchkdata.h"
-#include "../types/hitchkresult.h"
 #include "../types/size.h"
 #include "../types/sonic3ram.h"
 #include "../types/spritepattern.h"

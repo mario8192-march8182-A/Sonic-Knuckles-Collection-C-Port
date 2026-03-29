@@ -1,6 +1,5 @@
 #include "tloop.h"
 #include <stdbool.h>
-#include "../../types/actwkchkresult.h"
 #include "../../types/sonic3ram.h"
 #include "../../types/spritestatus.h"
 #include "../../utils/bits.h"

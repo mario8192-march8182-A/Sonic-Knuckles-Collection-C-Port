@@ -1,8 +1,13 @@
 #ifndef SKC_ACTSET_H
 #define SKC_ACTSET_H
 
-#include "types/actwkchkresult.h"
 #include "types/spritestatus.h"
+
+typedef struct SKC_actwkchk_result {
+  SKC_sprite_status* actwk_ptr;
+  int remaining_slot_cnt;
+}
+SKC_actwkchk_result;
 
 void actsetchk(void);
 SKC_actwkchk_result actwkchk_next(SKC_actwkchk_result result);

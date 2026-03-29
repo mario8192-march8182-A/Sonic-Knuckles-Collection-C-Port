@@ -1,6 +1,4 @@
 #include "falltree.h"
-#include "../../types/actwkchkresult.h"
-#include "../../types/hitchkdata.h"
 #include "../../types/sonic3ram.h"
 #include "../../types/spritepattern.h"
 #include "../../types/spritestatus.h"

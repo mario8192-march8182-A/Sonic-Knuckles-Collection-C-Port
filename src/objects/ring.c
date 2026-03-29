@@ -1,6 +1,4 @@
 #include "ring.h"
-#include "../types/actwkchkresult.h"
-#include "../types/dircolresult.h"
 #include "../types/sonic3ram.h"
 #include "../types/spritepattern.h"
 #include "../types/spritestatus.h"

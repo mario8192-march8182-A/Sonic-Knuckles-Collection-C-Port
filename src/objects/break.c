@@ -1,9 +1,7 @@
 #include "break.h"
 #include <stdbool.h>
-#include "../types/actwkchkresult.h"
 #include "../types/break2initdata.h"
 #include "../types/break2timerdata.h"
-#include "../types/hitchkdata.h"
 #include "../types/sonic3ram.h"
 #include "../types/spritepattern.h"
 #include "../types/spritestatus.h"

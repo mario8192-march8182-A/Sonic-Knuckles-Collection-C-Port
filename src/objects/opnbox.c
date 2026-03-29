@@ -1,8 +1,4 @@
 #include "opnbox.h"
-#include "../types/chkdistanceresult.h"
-#include "../types/chkemycoltresult.h"
-#include "../types/dircolresult.h"
-#include "../types/hitchkdata.h"
 #include "../types/sonic3ram.h"
 #include "../types/spritepattern.h"
 #include "../types/spritestatus.h"

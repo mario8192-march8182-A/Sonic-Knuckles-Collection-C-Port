@@ -1,7 +1,6 @@
 #include "edit.h"
 #include "edittbl.h"
 #include <stdbool.h>
-#include "types/actwkchkresult.h"
 #include "types/editdata.h"
 #include "types/sonic3ram.h"
 #include "types/spritestatus.h"

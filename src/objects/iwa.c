@@ -1,10 +1,6 @@
 #include "iwa.h"
 #include <stdbool.h>
 #include <stdlib.h>
-#include "../types/actwkchkresult.h"
-#include "../types/dircolresult.h"
-#include "../types/hitchkdata.h"
-#include "../types/hitchkresult.h"
 #include "../types/iwabreakdata.h"
 #include "../types/size.h"
 #include "../types/sonic3ram.h"

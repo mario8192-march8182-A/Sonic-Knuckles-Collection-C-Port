@@ -1,8 +1,5 @@
 #include "common.h"
 #include <stdbool.h>
-#include "../types/actwkchkresult.h"
-#include "../types/hitchkdata.h"
-#include "../types/hitchkresult.h"
 #include "../types/point.h"
 #include "../types/size.h"
 #include "../types/sonic3ram.h"

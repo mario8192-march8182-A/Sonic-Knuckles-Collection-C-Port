@@ -1,6 +1,5 @@
 #include "rope.h"
 #include <stdbool.h>
-#include "../types/actwkchkresult.h"
 #include "../types/sonic3ram.h"
 #include "../types/spritepattern.h"
 #include "../types/spritestatus.h"

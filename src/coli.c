@@ -1,6 +1,5 @@
 #include "coli.h"
 #include <stdbool.h>
-#include "types/actwkchkresult.h"
 #include "types/size.h"
 #include "types/sonic3ram.h"
 #include "types/spritestatus.h"

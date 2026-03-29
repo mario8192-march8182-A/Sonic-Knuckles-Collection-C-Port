@@ -1,7 +1,6 @@
 #include "save.h"
 #include <stdbool.h>
 #include "../data/cg/save.h"
-#include "../types/actwkchkresult.h"
 #include "../types/sonic3ram.h"
 #include "../types/spritepattern.h"
 #include "../types/spritestatus.h"

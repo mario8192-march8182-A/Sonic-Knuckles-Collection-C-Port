@@ -1,5 +1,4 @@
 #include "switch.h"
-#include "../types/hitchkdata.h"
 #include "../types/sonic3ram.h"
 #include "../types/spritestatus.h"
 #include "../utils/bits.h"

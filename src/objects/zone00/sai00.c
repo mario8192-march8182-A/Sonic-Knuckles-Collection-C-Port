@@ -2,8 +2,6 @@
 #include "../../data/cg/zone00/sai00.h"
 #include "../../data/pat/zone00/sai00.h"
 #include "../../data/wrt/zone00/sai00.h"
-#include "../../types/chkdistanceresult.h"
-#include "../../types/dircolresult.h"
 #include "../../types/setactdata.h"
 #include "../../types/sonic3ram.h"
 #include "../../types/spritestatus.h"

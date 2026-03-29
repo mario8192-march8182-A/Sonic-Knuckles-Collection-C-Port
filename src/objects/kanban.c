@@ -1,9 +1,6 @@
 #include "kanban.h"
 #include <stdbool.h>
 #include "../data/cg/kanban.h"
-#include "../types/actwkchkresult.h"
-#include "../types/chkemycoltresult.h"
-#include "../types/dircolresult.h"
 #include "../types/enemyinitdata.h"
 #include "../types/setactdata.h"
 #include "../types/sonic3ram.h"
