@@ -144,7 +144,7 @@ typedef struct sonic3_ram {
   /* 08fff7d2 */ unsigned short timebonus;
   /* 08fff7d4 */ unsigned short ringbonus;
   /* 08fff7da */ short scr_x_no;
-  /* 08fff7e0 */ unsigned char level_triggers[LEVEL_TRIGGERS_SLOTS];
+  /* 08fff7e0 */ unsigned char stage_triggers[STAGE_TRIGGERS_SLOTS];
   /* 08fff7f0 */ unsigned char actanimcounters[8][2];
   /* 08fff800 */ SKC_sprite_data ramf8[SPRITE_COUNT_LIMIT];
   /* 08ff7880 */ SKC_sprite_data vssprtbl[3][SPRITE_COUNT_LIMIT];

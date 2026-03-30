@@ -1565,7 +1565,7 @@ static void sjumpswmove(SKC_sprite_status* p_actwk) {
   fp16_set_integer(&p_actwk->xposi, xposi);
   short yposi = fp16_get_integer(p_parentwk->yposi) + p_actwk->u.obj.actfree.springsw.yoffset;
   fp16_set_integer(&p_actwk->yposi, yposi);
-  if (BIT_IS_SET(p_actwk->u.obj.userflag, 7) && g_ram.level_triggers[p_actwk->u.obj.userflag & 0xF] != 0) {
+  if (BIT_IS_SET(p_actwk->u.obj.userflag, 7) && g_ram.stage_triggers[p_actwk->u.obj.userflag & 0xF] != 0) {
     p_parentwk->u.obj.actfree.spring.reverse_dir = true;
   }
   SKC_hitchk_data data = {
@@ -1581,7 +1581,7 @@ static void sjumpswmove(SKC_sprite_status* p_actwk) {
 
 static void sjumpswmove2(SKC_sprite_status* p_actwk) {
   if (!BIT_IS_SET(p_actwk->u.obj.userflag, 7)) return;
-  if (g_ram.level_triggers[p_actwk->u.obj.userflag & 0xF] == 0) return;
+  if (g_ram.stage_triggers[p_actwk->u.obj.userflag & 0xF] == 0) return;
 
   SKC_sprite_status* p_parentwk = &g_ram.actwk[p_actwk->u.obj.oya];
   p_parentwk->u.obj.actfree.spring.reverse_dir = true;

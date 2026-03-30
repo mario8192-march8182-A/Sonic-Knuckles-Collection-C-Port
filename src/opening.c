@@ -316,7 +316,7 @@ void opening() {
   g_ram.timebonus = 0;
   g_ram.ringbonus = 0;
   g_ram.scr_x_no = 0;
-  memset(g_ram.level_triggers, 0, LEVEL_TRIGGERS_SLOTS);
+  memset(g_ram.stage_triggers, 0, STAGE_TRIGGERS_SLOTS);
   memset(g_ram.actanimcounters, 0, 16);
   // END memset(DAT_08fff700, 0. 256)
   // START memset(DAT_08ffee00, 0, 256)

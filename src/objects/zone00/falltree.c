@@ -51,7 +51,7 @@ static unsigned short falltreeinittbl[16] = {
 
 void falltree(SKC_sprite_status* p_actwk) {
   if ((fp16_get_integer(p_actwk->xposi) == 0x26B0 || fp16_get_integer(p_actwk->xposi) == 0x2700)
-      && g_ram.level_triggers[0] != 0) {
+      && g_ram.stage_triggers[0] != 0) {
     frameout(p_actwk);
   }
   else {
