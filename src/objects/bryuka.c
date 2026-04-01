@@ -10,6 +10,7 @@
 #include "../action.h"
 #include "../constants.h"
 #include "../hitchk.h"
+#include "brkabe.h"
 static void bryukainit(SKC_sprite_status* p_actwk);
 static void bryukamove(SKC_sprite_status* p_actwk);
 static void bryukamove__sub2(SKC_sprite_status* p_actwk, SKC_sprite_status* p_playerwk, unsigned char prev_mstno);

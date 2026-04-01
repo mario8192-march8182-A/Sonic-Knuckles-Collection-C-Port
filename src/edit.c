@@ -291,7 +291,7 @@ static SKC_edit_data edittbl001 = {
     { &iwa,       iwapat2,      0x42E9,  1, 0x13 },
     { &iwa,       iwapat2,      0x42E9,  2, 0x23 },
     { &break_,    break001pat,  0x4001,  0, 0x00 },
-    //{ &brkabe,    brkabepat,    0x4001,  0, 0x00 },
+    { &brkabe,    brkabepat,    0x4001,  0, 0x00 },
     { &appeariwa, appeariwapat, 0x4001,  5, 0x07 },
     { &bryuka,    bryukapat2,   0x4001,  0, 0x00 },
     //{ &rollhashi, rollhashipat, 0x42E9,  5, 0x50 },
@@ -373,8 +373,8 @@ static SKC_edit_data edittbl010 = {
     //{ &hashi,     hashi01pat,   0x4038,  0, 0x90 },
     { &itaicoli,  scolipat,     0x86BC,  0, 0x00 },
     { &killcoli,  scolipat,     0x86BC,  0, 0x00 },
-    //{ &brkabe,    brkabe01pat,  0x6001,  0, 0x00 },
-    //{ &brkabe,    brkabe01pat,  0x4350,  2, 0x02 }
+    { &brkabe,    brkabe01pat,  0x6001,  0, 0x00 },
+    { &brkabe,    brkabe01pat,  0x4350,  2, 0x02 }
   }
 };
 static SKC_edit_data edittbl020 = {
@@ -402,7 +402,7 @@ static SKC_edit_data edittbl020 = {
     { &break2,    break020pat,  0x4001,  0, 0x08 },
     { &break2,    break020pat,  0x4001,  3, 0x18 },
     { &break2,    break020pat,  0x4001,  6, 0x28 },
-    //{ &brkabe,    brkabe02pat,  0x4001,  0, 0x00 },
+    { &brkabe,    brkabe02pat,  0x4001,  0, 0x00 },
     //{ &dai,       dai02pat,     0x4001,  0, 0x04 },
     //{ &airhammer, airhammerpat, 0x4001,  0, 0x0A },
     //{ &turndai,   turndaipat,   0x435F,  1, 0x00 },
@@ -451,8 +451,8 @@ static SKC_edit_data edittbl030 = {
     //{ &baloon,   baloonpat,   0x0351, 15, 0x03 },
     //{ &baloon,   baloonpat,   0x0351, 20, 0x04 },
     { &switch_,  switch03pat, 0x441A,  2, 0x00 },
-    //{ &brkabe,   brkabe03pat, 0x4420,  0, 0x00 },
-    //{ &brkabe,   brkabe03pat, 0x4420,  2, 0x02 },
+    { &brkabe,   brkabe03pat, 0x4420,  0, 0x00 },
+    { &brkabe,   brkabe03pat, 0x4420,  2, 0x02 },
     //{ &rollpipe, ringpat,     0x86BC,  0, 0x00 },
     //{ &awa,      awapat,      0x845C, 19, 0x81 },
     { &bryuka,   bryukapat3,  0x4430,  0, 0x01 },
@@ -725,7 +725,7 @@ static SKC_edit_data edittbl061 = {
     //{ &dai06,     dai06pat,     0x43C3,  0, 0x0D },
     //{ &rollelev,  rollelevpat,  0x440D,  0, 0x00 },
     //{ &relevprop, rollelevpat,  0x440D,  3, 0x06 },
-    //{ &brkabe,    brkabe06pat,  0x22EA,  0, 0x00 },
+    { &brkabe,    brkabe06pat,  0x22EA,  0, 0x00 },
     { &bgspr,     bgsprpat,     0x440D, 20, 0x14 },
     { &bgspr,     bgsprpat,     0x2433, 21, 0x15 },
     { &bgspr,     bgsprpat,     0x2433, 22, 0x16 }
@@ -766,7 +766,7 @@ static SKC_edit_data edittbl070 = {
     { &bgspr,   bgsprpat,    0xE40E, 28, 0x1C },
     { &bgspr,   bgsprpat,    0x441E, 29, 0x1D },
     { &bgspr,   bgsprpat,    0x0347, 30, 0x1E },
-    //{ &brkabe,  brkabe07pat, 0x434B,  0, 0x00 },
+    { &brkabe,  brkabe07pat, 0x434B,  0, 0x00 },
     { &hbar,    ropepat,     0x0455, 35, 0x00 }
   }
 };
@@ -806,8 +806,8 @@ static SKC_edit_data edittbl080 = {
     //{ &Obj_SOZSolidSprites, DAT_007b6341, 0x4001, 0, 0x00 },
     //{ &Obj_SOZSolidSprites, DAT_007b6341, 0x4001, 1, 0x01 },
     { &break2,   break081pat, 0x4001,  0, 0x00 },
-    //{ &brkabe,   brkabe03pat, 0x448C,  0, 0x00 },
-    //{ &brkabe,   brkabe03pat, 0x448C,  4, 0x04 }
+    { &brkabe,   brkabe03pat, 0x448C,  0, 0x00 },
+    { &brkabe,   brkabe03pat, 0x448C,  4, 0x04 }
   }
 };
 static SKC_edit_data edittbl081 = {
@@ -848,8 +848,8 @@ static SKC_edit_data edittbl081 = {
     //{ &Obj_SOZLightSwitch, DAT_007b3c29, 0x03AF, 7, 0x04 },
     //{ &Obj_SOZSandCork, DAT_007b619d, 0x43BD, 0, 0x20 },
     { &bgspr,    bgsprpat,    0x03AF, 47, 0x2F },
-    //{ &brkabe,   brkabe03pat, 0x448C,  0, 0x00 },
-    //{ &brkabe,   brkabe03pat, 0x448C,  4, 0x04 }
+    { &brkabe,   brkabe03pat, 0x448C,  0, 0x00 },
+    { &brkabe,   brkabe03pat, 0x448C,  4, 0x04 }
   }
 };
 static SKC_edit_data edittbl090 = {
@@ -929,7 +929,7 @@ static SKC_edit_data edittbl091 = {
     //{ &Obj_LRZSolidRock, LAB_007af0a2, 0x6090, 0, 0x00 },
     //{ &Obj_LRZSolidRock, LAB_007af0a2, 0x6090, 0, 0x40 },
     { &switch_, switch09pat, 0x2429,  2, 0x40 },
-    //{ &brkabe,  brkabe09pat, 0x640D,  0, 0x00 },
+    { &brkabe,  brkabe09pat, 0x640D,  0, 0x00 },
     { &break2,  break091pat, 0x4090,  0, 0x00 },
     { &iwa,     iwapat92,    0x640D,  8, 0xF4 },
     //{ &Obj_LRZTurbineSprites, DAT_007af8e0, 0xA3AD, 0, 0x00 },

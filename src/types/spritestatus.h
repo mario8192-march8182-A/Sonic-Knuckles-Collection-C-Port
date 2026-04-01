@@ -203,6 +203,11 @@ typedef struct SKC_sprite_status {
         }
         brhashi;
         struct {
+          SKC_speed* spdtbl_ptr; // 0x34
+          SKC_speed* spdtbl2_ptr; // 0x38
+        }
+        brkabe;
+        struct {
           SKC_speed* spdtbl_ptr; // 0x3C
         }
         bryuka;

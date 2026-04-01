@@ -3,6 +3,7 @@
 #include "../objects/bgspr.h"
 #include "../objects/break.h"
 #include "../objects/break3.h"
+#include "../objects/brkabe.h"
 #include "../objects/bryuka.h"
 #include "../objects/colichg.h"
 #include "../objects/common.h"
@@ -47,7 +48,7 @@ SKC_sprite_status_handler s3_act_tbl[256] = {
   &joint00,
   &ring,
   &ropeswing,
-  0,//&brkabe,
+  &brkabe,
   0,//&hjump,
   &break2,
   0,//&rshoot,
@@ -305,7 +306,7 @@ SKC_sprite_status_handler sk_act_tbl[185] = {
   0,//&Obj_MHZStickyVine,
   0,//&Obj_MHZSwingBarHorizontal,
   0,//&Obj_MHZSwingBarVertical,
-  0,//&brkabe,
+  &brkabe,
   0,//&hjump,
   &break2,
   &hbar,
