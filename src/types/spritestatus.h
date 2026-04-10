@@ -216,6 +216,10 @@ typedef struct SKC_sprite_status {
         }
         cchg0320_act;
         struct {
+          unsigned char tbl_index; // 0x3A
+        }
+        cchg09;
+        struct {
           unsigned short part_cnt; // 0x30
           unsigned short current_exit_no; // 0x32
         }
@@ -240,11 +244,25 @@ typedef struct SKC_sprite_status {
         }
         clear_part;
         struct {
+          signed char yoffset_init;
+        }
+        clen0930;
+        struct {
           short prev_yposi; // 0x30
           short yposi_save; // 0x32
           short unknown3c; // 0x3C;
         }
         egjr0a;
+        struct {
+          unsigned short timer_init; // 0x30
+          unsigned char dir; // 0x32
+          unsigned char speed_rev_timer_init; // 0x33
+          unsigned char speed_rev_timer; // 0x39
+          unsigned short unknown3a; // 0x3A
+          unsigned char posi; // 0x3C
+          signed char speed; // 0x41
+        }
+        embl_hand;
         struct {
           short xposi_init; // 0x30
           short yposi_init; // 0x32
@@ -312,10 +330,21 @@ typedef struct SKC_sprite_status {
         }
         iwa;
         struct {
+          unsigned char plangle; // 0x3C
+          unsigned char pl2angle; // 0x3D
+        }
+        iwa091;
+        struct {
           short xposi_init; // 0x3A
           unsigned short tbl_index; // 0x3E
         }
         kanban;
+        struct {
+          unsigned char footwk_pg_loop_cnt; // 0x39
+          short accel; // 0x40
+          unsigned short wrt_index; // 0x44
+        }
+        nk0930;
         struct {
           unsigned char tbl_index; // 0x39
         }

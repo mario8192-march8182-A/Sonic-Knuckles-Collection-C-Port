@@ -46,6 +46,7 @@ typedef struct sonic3_ram {
   /* 08ffee4a */ SKC_ringwk_entry* ringwkadr;
   /* 08ffee4e */ unsigned short stageno_i;
   /* 08ffee50 */ short colorcycle;
+  /* 08ffee5e */ unsigned char notitle;
   /* 08ffee60 */ long vs_scra_h_posit;
   /* 08ffee64 */ long vs_scra_v_posit;
   /* 08ffee68 */ long vs_scra_h_posit_copy;
@@ -61,6 +62,7 @@ typedef struct sonic3_ram {
   /* 08ffeeae */ unsigned short scr_row;
   /* 08ffeebc */ short frame_offset_x;
   /* 08ffeec0 */ unsigned short scr_evta;
+  /* 08ffeec4 */ unsigned short DAT_08ffeec4;
   /* 08ffeec6 */ unsigned short event_flag_3;
   /* 08ffeecc */ short scr_shake_flg;
   /* 08ffeed2 */ unsigned short DAT_08ffeed2;
@@ -75,6 +77,8 @@ typedef struct sonic3_ram {
   /* 08ffef4c */ SKC_play_type nosave_plmode;
   /* 08ffef56 */ unsigned short disable_interrupts_sram;
   /* 08ffef5a */ SKC_sprite_status_handler* act_tbl_ptr;
+  /* 08ffef5e */ unsigned short plring_s3;
+  /* 08ffef60 */ act_timer pltime_s3;
   /* 08ffef64 */ short scr_y_no;
   /* 08ffef7a */ unsigned short demoid;
   /* 08ffef80 */ unsigned short ringbuffer[RINGBUFFER_SLOTS];
@@ -162,12 +166,16 @@ typedef struct sonic3_ram {
   /* 08fffaa8 */ unsigned char act_clear_flag;
   /* 08fffaa9 */ unsigned char DAT_08fffaa9;
   /* 08fffaaa */ unsigned char act_start_flag;
+  /* 08fffaac */ unsigned char DAT_08fffaac;
   /* 08fffaad */ unsigned char gost08_count;
+  /* 08fffaae */ unsigned char DAT_08fffaae_obj;
   /* 08fffab0 */ short scralim_b_up;
   /* 08fffab2 */ short scralim_b_down;
   /* 08fffab4 */ short scralim_b_left;
   /* 08fffab6 */ short scralim_b_right;
   /* 08fffab8 */ unsigned char DAT_08fffab8_bitfield;
+  /* 08fffaba */ unsigned char DAT_08fffaba_obj;
+  /* 08fffabd */ unsigned char DAT_08fffabd;
   /* 08fffabe */ unsigned char DAT_08fffabe;
   /* 08fffabf */ unsigned char fade_flag;
   /* 08fffacd */ unsigned char DAT_08fffacd;

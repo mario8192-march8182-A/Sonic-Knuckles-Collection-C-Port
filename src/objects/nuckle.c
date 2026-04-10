@@ -48,6 +48,7 @@
 #include "switch.h"
 #include "zone.h"
 #include "zone00/bs00m.h"
+#include "zone09/nuckle09.h"
 #include "zone0a/egjr0a.h"
 static void nuckle000(SKC_sprite_status* p_actwk);
 static void nuckle000_init(SKC_sprite_status* p_actwk);
