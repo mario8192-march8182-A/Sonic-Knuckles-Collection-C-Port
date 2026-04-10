@@ -367,28 +367,18 @@ static void sdashmove(SKC_sprite_status* p_actwk) {
   result.plcoli[0] = plhitchk_skip_onscreen(p_actwk, &g_ram.actwk[0], data, &plride, &plpush);
   p_actwk->u.obj.cddat.plride = plride;
   p_actwk->u.obj.cddat.plpush = plpush;
-  if (result.plcoli[0] == HITCHK_COLI_SIDE) {
-    bool right = p_actwk->u.obj.cddat.right;
-    if (fp16_get_integer(p_actwk->xposi) >= fp16_get_integer(g_ram.actwk[0].xposi)) {
-      right = !right;
-    }
-    if (!right) {
-      sdashsub(p_actwk, &g_ram.actwk[0]);
-    }
+  bool plleft = fp16_get_integer(p_actwk->xposi) >= fp16_get_integer(g_ram.actwk[0].xposi);
+  if (result.plcoli[0] == HITCHK_COLI_SIDE && p_actwk->u.obj.cddat.right == plleft) {
+    sdashsub(p_actwk, &g_ram.actwk[0]);
   }
   bool pl2ride = p_actwk->u.obj.cddat.pl2ride;
   bool pl2push = p_actwk->u.obj.cddat.pl2push;
   result.plcoli[1] = plhitchk_skip_onscreen(p_actwk, &g_ram.actwk[1], data, &pl2ride, &pl2push);
   p_actwk->u.obj.cddat.pl2ride = pl2ride;
   p_actwk->u.obj.cddat.pl2push = pl2push;
-  if (result.plcoli[1] == HITCHK_COLI_SIDE) {
-    bool right = p_actwk->u.obj.cddat.right;
-    if (fp16_get_integer(p_actwk->xposi) >= fp16_get_integer(g_ram.actwk[1].xposi)) {
-      right = !right;
-    }
-    if (!right) {
-      sdashsub(p_actwk, &g_ram.actwk[1]);
-    }
+  bool pl2left = fp16_get_integer(p_actwk->xposi) >= fp16_get_integer(g_ram.actwk[1].xposi);
+  if (result.plcoli[1] == HITCHK_COLI_SIDE && p_actwk->u.obj.cddat.right == pl2left) {
+    sdashsub(p_actwk, &g_ram.actwk[1]);
   }
   sdashcolichk(p_actwk);
   patchg(p_actwk, sjumpchg);
