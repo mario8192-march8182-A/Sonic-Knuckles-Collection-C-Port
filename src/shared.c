@@ -3,6 +3,7 @@
 #include <string.h>
 #include "data/cg/kanban.h"
 #include "data/cg/friend.h"
+#include "data/cg/item.h"
 #include "types/cchgcntinfo.h"
 #include "types/cchgitem.h"
 #include "types/cchgwork.h"
