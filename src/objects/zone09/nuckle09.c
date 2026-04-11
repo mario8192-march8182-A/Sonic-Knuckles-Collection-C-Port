@@ -3,6 +3,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include "../../data/colortbl.h"
+#include "../../data/sintbl.h"
 #include "../../data/cg/clen.h"
 #include "../../data/cg/zone09/iwa091.h"
 #include "../../data/cg/zone09/nk0931.h"
