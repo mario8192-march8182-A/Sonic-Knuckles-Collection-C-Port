@@ -1,6 +1,7 @@
 #include "kanban.h"
 #include <stdbool.h>
 #include "../data/cg/kanban.h"
+#include "../data/cg/toge.h"
 #include "../types/enemyinitdata.h"
 #include "../types/setactdata.h"
 #include "../types/sonic3ram.h"
