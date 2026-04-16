@@ -340,6 +340,14 @@ typedef struct SKC_sprite_status {
         }
         kanban;
         struct {
+          short xposi_init; // 0x30
+          short unknown32; // 0x32
+          short unknown34; // 0x34
+          short unknown36; // 0x36
+          short unknown38; // 0x38
+        }
+        magnet;
+        struct {
           unsigned char footwk_pg_loop_cnt; // 0x39
           short accel; // 0x40
           unsigned short wrt_index; // 0x44
@@ -439,6 +447,15 @@ typedef struct SKC_sprite_status {
           short accel; // 0x40
         }
         sai00;
+        struct {
+          unsigned char plmode; // 0x30
+          unsigned char pl2mode; // 0x31
+          unsigned char pltimer; // 0x32
+          unsigned char pl2timer; // 0x33
+          unsigned char timer_init; // 0x34
+          unsigned short sound_ctr; // 0x36
+        }
+        shooter3;
         struct {
           short* unknown2e_ptr; // 0x2E
           long angled_xposi; // 0x34

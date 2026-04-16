@@ -439,7 +439,7 @@ static SKC_edit_data edittbl030 = {
     //{ &elev03,   elev03pat,   0x43BE,  0, 0x00 },
     //{ &lid,      lidpat,      0x43F0,  0, 0x00 },
     //{ &light,    lightpat,    0x4404,  0, 0x00 },
-    //{ &magnet,   magnetpat,   0x43E8,  0, 0x80 },
+    { &magnet,   magnetpat,   0x43E8,  0, 0x80 },
     //{ &rolldai,  rolldaipat,  0x438E,  0, 0x00 },
     //{ &door,     doorhpat,    0x4416,  0, 0x80 },
     //{ &bobin,    bobinpat,    0x4364,  0, 0x80 },

@@ -28,6 +28,7 @@
 #include "objects/zone00/snak00.h"
 #include "objects/zone00/togetree.h"
 #include "objects/zone04/betl04.h"
+#include "objects/zone04/magnet.h"
 #include "objects/zone04/mous04.h"
 #include "objects/zone04/obox04.h"
 #include "objects/zone0a/egjr0a.h"
