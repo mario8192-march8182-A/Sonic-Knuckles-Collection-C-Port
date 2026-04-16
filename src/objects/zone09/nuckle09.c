@@ -30,6 +30,7 @@
 #include "../../shared.h"
 #include "../../sound.h"
 #include "../common.h"
+#include "../eggmbl.h"
 #include "../explosion.h"
 #include "../nuckle.h"
 #include "../zone00/bs00m.h"
