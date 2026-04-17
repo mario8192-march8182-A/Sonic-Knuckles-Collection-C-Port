@@ -38,6 +38,7 @@
 #include "../dircol.h"
 #include "../etc.h"
 #include "../hitchk.h"
+#include "../reloader.h"
 #include "../shared.h"
 #include "../sound.h"
 #include "brkabe.h"

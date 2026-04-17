@@ -27,6 +27,7 @@
 #include "dev.h"
 #include "dircol.h"
 #include "etc.h"
+#include "reloader.h"
 #include "score.h"
 #include "sound.h"
 #include "objects/common.h"

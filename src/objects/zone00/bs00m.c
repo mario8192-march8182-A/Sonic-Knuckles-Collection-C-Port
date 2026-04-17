@@ -11,6 +11,7 @@
 #include "../../coli.h"
 #include "../../constants.h"
 #include "../../dev.h"
+#include "../../reloader.h"
 #include "../../shared.h"
 #include "../../sound.h"
 #include "../explosion.h"
