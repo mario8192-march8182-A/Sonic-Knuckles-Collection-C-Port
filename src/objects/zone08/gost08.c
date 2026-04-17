@@ -1,5 +1,6 @@
 #include "gost08.h"
 #include <stdbool.h>
+#include "../../data/cg/opnbox.h"
 #include "../../data/cg/zone08/gost08.h"
 #include "../../data/pat/zone08/gost08.h"
 #include "../../data/playpositbl.h"

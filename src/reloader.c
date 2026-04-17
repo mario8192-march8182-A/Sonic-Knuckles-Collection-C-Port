@@ -3,6 +3,7 @@
 #include "data/colortbl.h"
 #include "data/cg/friend.h"
 #include "data/cg/item.h"
+#include "data/cg/opnbox.h"
 #include "data/cg/toge.h"
 #include "types/cgdata.h"
 #include "types/sonic3ram.h"
