@@ -1,6 +1,7 @@
 #include "reloader.h"
 #include <string.h>
 #include "data/colortbl.h"
+#include "data/cg/bakuhatu.h"
 #include "data/cg/friend.h"
 #include "data/cg/item.h"
 #include "data/cg/opnbox.h"
