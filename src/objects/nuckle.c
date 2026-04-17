@@ -3,6 +3,7 @@
 #include <string.h>
 #include "../data/colortbl.h"
 #include "../data/cg/nuckle.h"
+#include "../data/cg/switch.h"
 #include "../data/cg/zone07/egbomb07.h"
 #include "../data/cg/zone07/nk0701.h"
 #include "../data/cg/zone07/nkopen.h"
