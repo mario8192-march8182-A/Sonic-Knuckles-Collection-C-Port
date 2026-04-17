@@ -5,6 +5,7 @@
 #include "../../data/colortbl.h"
 #include "../../data/sintbl.h"
 #include "../../data/cg/clen.h"
+#include "../../data/cg/eggmbl.h"
 #include "../../data/cg/zone09/iwa091.h"
 #include "../../data/cg/zone09/nk0931.h"
 #include "../../data/pat/zone09/door09.h"
