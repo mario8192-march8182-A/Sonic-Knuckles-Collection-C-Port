@@ -8,7 +8,6 @@
 #include "../utils/fp16.h"
 #include "../utils/stageno.h"
 #include "../action.h"
-#include "../constants.h"
 #include "../hitchk.h"
 #include "brkabe.h"
 static void bryukainit(SKC_sprite_status* p_actwk);

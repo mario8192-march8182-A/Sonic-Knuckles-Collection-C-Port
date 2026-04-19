@@ -7,7 +7,6 @@
 #include "../utils/bits.h"
 #include "../utils/fp16.h"
 #include "../action.h"
-#include "../constants.h"
 static void colichgmovev(SKC_sprite_status* p_actwk);
 static void vscolichgmovev(SKC_sprite_status* p_actwk);
 static void colichgmovevsub(SKC_sprite_status* p_actwk, SKC_sprite_status* p_playerwk, bool* p_left);

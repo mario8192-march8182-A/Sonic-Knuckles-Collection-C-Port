@@ -11,7 +11,6 @@
 #include "../action.h"
 #include "../actset.h"
 #include "../coli.h"
-#include "../constants.h"
 #include "../hitchk.h"
 #include "../sound.h"
 #include "colichg.h"

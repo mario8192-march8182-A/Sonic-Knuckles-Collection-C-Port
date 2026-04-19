@@ -10,7 +10,6 @@
 #include "../utils/stageno.h"
 #include "../action.h"
 #include "../actset.h"
-#include "../constants.h"
 #include "../dev.h"
 #include "../etc.h"
 #include "../sound.h"

@@ -11,7 +11,6 @@
 #include "../utils/fp16.h"
 #include "../utils/stageno.h"
 #include "../action.h"
-#include "../constants.h"
 #include "../dev.h"
 #include "../shared.h"
 #include "explosion.h"

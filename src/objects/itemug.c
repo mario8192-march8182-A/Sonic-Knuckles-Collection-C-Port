@@ -4,7 +4,6 @@
 #include "../types/spritestatus.h"
 #include "../utils/bits.h"
 #include "../utils/fp16.h"
-#include "../constants.h"
 #include "../action.h"
 #include "../shared.h"
 #include "../sound.h"

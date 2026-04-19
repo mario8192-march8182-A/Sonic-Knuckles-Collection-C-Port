@@ -10,7 +10,6 @@
 #include "../utils/stageno.h"
 #include "../action.h"
 #include "../actset.h"
-#include "../constants.h"
 #include "../hitchk.h"
 #include "../sound.h"
 static void sjumpinit(SKC_sprite_status* p_actwk);

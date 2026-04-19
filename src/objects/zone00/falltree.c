@@ -7,7 +7,6 @@
 #include "../../utils/stageno.h"
 #include "../../action.h"
 #include "../../actset.h"
-#include "../../constants.h"
 #include "../../hitchk.h"
 static unsigned short falltreeinittbl[16];
 static void falltreeinit(SKC_sprite_status* p_actwk);

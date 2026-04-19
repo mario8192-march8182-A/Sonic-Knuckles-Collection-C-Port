@@ -1,25 +1,6 @@
 #ifndef CONSTANTS_H
 #define CONSTANTS_H
 
-typedef enum SKC_character_id {
-  SONIC = 0,
-  MILES = 1,
-  KNUCKLES = 2
-}
-SKC_character_id;
-
-typedef enum SKC_sprite_priority_id {
-  PRI_0 = 0,
-  PRI_1 = 128,
-  PRI_2 = 256,
-  PRI_3 = 384,
-  PRI_4 = 512,
-  PRI_5 = 640,
-  PRI_6 = 768,
-  PRI_7 = 896
-}
-SKC_sprite_priority_id;
-
 typedef enum SKC_play_type {
   PLAY_TYPE_SONIC_AND_MILES = 0,
   PLAY_TYPE_SONIC = 1,

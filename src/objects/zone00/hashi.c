@@ -8,7 +8,6 @@
 #include "../../utils/fp16.h"
 #include "../../action.h"
 #include "../../actset.h"
-#include "../../constants.h"
 #include "../../etc.h"
 #include "../../hitchk.h"
 #include "../../sound.h"

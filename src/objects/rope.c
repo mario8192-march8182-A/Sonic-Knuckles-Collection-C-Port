@@ -8,7 +8,6 @@
 #include "../utils/fp16.h"
 #include "../actset.h"
 #include "../action.h"
-#include "../constants.h"
 #include "../etc.h"
 #include "../sound.h"
 #include "bgspr.h"

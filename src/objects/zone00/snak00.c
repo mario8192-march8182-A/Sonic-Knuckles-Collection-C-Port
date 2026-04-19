@@ -6,7 +6,6 @@
 #include "../../types/spritestatus.h"
 #include "../../types/spritestatushandler.h"
 #include "../../action.h"
-#include "../../constants.h"
 #include "../../shared.h"
 static void snak00_framein(SKC_sprite_status* p_actwk);
 static void snak00_init(SKC_sprite_status* p_actwk);

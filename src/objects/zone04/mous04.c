@@ -6,7 +6,6 @@
 #include "../../types/spritestatus.h"
 #include "../../types/spritestatushandler.h"
 #include "../../action.h"
-#include "../../constants.h"
 #include "../../shared.h"
 static void mous04_from_box(SKC_sprite_status* p_actwk);
 static void mous04_init(SKC_sprite_status* p_actwk);

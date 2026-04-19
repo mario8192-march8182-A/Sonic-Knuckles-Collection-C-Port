@@ -11,7 +11,6 @@
 #include "../utils/stageno.h"
 #include "../action.h"
 #include "../coli.h"
-#include "../constants.h"
 #include "../hitchk.h"
 #include "../sound.h"
 static void togeinit(SKC_sprite_status* p_actwk);

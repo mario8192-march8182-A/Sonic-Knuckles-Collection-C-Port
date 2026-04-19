@@ -7,7 +7,6 @@
 #include "../../action.h"
 #include "../../actset.h"
 #include "../../coli.h"
-#include "../../constants.h"
 #include "../../etc.h"
 #include "../../hitchk.h"
 static void togetreeinit(SKC_sprite_status* p_actwk);

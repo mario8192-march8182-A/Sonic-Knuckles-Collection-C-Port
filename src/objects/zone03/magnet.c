@@ -6,7 +6,6 @@
 #include "../../utils/fp16.h"
 #include "../../utils/fp8.h"
 #include "../../action.h"
-#include "../../constants.h"
 #include "../../sound.h"
 static void magnetinit(SKC_sprite_status* p_actwk);
 static void magnetmove(SKC_sprite_status* p_actwk);

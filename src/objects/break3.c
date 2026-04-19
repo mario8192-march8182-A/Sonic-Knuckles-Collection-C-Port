@@ -7,7 +7,6 @@
 #include "../types/spritestatushandler.h"
 #include "../utils/bits.h"
 #include "../utils/fp16.h"
-#include "../constants.h"
 #include "../action.h"
 #include "../actset.h"
 #include "../hitchk.h"

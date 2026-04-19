@@ -6,7 +6,6 @@
 #include "../../types/spritestatus.h"
 #include "../../utils/fp16.h"
 #include "../../action.h"
-#include "../../constants.h"
 #include "../../dircol.h"
 #include "../../shared.h"
 #include "../emyshot.h"

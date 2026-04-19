@@ -8,7 +8,6 @@
 #include "../../utils/fp16.h"
 #include "../../utils/stageno.h"
 #include "../../action.h"
-#include "../../constants.h"
 #include "../../dircol.h"
 #include "../../hitchk.h"
 #include "../../shared.h"

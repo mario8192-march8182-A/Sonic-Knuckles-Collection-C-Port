@@ -34,7 +34,6 @@
 #include "../utils/stageno.h"
 #include "../action.h"
 #include "../actset.h"
-#include "../constants.h"
 #include "../dev.h"
 #include "../dircol.h"
 #include "../etc.h"

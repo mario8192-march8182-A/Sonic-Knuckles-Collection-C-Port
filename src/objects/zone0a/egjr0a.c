@@ -10,7 +10,6 @@
 #include "../../utils/bits.h"
 #include "../../utils/fp16.h"
 #include "../../action.h"
-#include "../../constants.h"
 #include "../../dev.h"
 #include "../../etc.h"
 #include "../../shared.h"

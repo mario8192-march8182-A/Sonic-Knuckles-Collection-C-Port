@@ -15,7 +15,6 @@
 #include "../../utils/stageno.h"
 #include "../../action.h"
 #include "../../coli.h"
-#include "../../constants.h"
 #include "../../dev.h"
 #include "../../etc.h"
 #include "../../shared.h"

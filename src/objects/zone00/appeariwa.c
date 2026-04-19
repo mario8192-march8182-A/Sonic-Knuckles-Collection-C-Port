@@ -5,7 +5,6 @@
 #include "../../utils/fp16.h"
 #include "../../action.h"
 #include "../../actset.h"
-#include "../../constants.h"
 #include "../../hitchk.h"
 #include "../../sound.h"
 static unsigned short appeariwainittbl[16];

@@ -5,7 +5,6 @@
 #include "../types/spritestatushandler.h"
 #include "../utils/fp16.h"
 #include "../action.h"
-#include "../constants.h"
 static void bgsprinit(SKC_sprite_status* p_actwk);
 static SKC_sprite_pattern bgsprsp00;
 static SKC_sprite_pattern bgsprsp01;
