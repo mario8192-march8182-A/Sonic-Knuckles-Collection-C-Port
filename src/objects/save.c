@@ -209,14 +209,7 @@ void playsave2(SKC_sprite_status* p_actwk) {
   g_ram.scra_v_posit_s2 = g_ram.scra_v_posit >> 16;
   g_ram.waterposi_s2 = g_ram.waterposi;
   g_ram.waterflag_s2 = g_ram.waterflag;
-  g_ram.plcddat2_s2 = g_ram.actwk[0].u.play.cddat.baria
-      | g_ram.actwk[0].u.play.cddat.muteki << 1
-      | g_ram.actwk[0].u.play.cddat.speedup << 2
-      | g_ram.actwk[0].u.play.cddat.unusedb << 3
-      | g_ram.actwk[0].u.play.cddat.flame_baria << 4
-      | g_ram.actwk[0].u.play.cddat.thunder_baria << 5
-      | g_ram.actwk[0].u.play.cddat.aqua_baria << 6
-      | g_ram.actwk[0].u.play.cddat.infinite_inertia << 7;
+  g_ram.plpowerdat_s2 = g_ram.actwk[0].u.play.powerdat;
 }
 
 
@@ -431,14 +424,7 @@ void o_star(SKC_sprite_status* p_actwk) {
         g_ram.stageno_i = GUMBALL_MACHINE_ACT_1;
         g_ram.markerno = 0;
         g_ram.gameflag = 1;
-        g_ram.plcddat2_s2 = g_ram.actwk[0].u.play.cddat.baria
-            | g_ram.actwk[0].u.play.cddat.muteki << 1
-            | g_ram.actwk[0].u.play.cddat.speedup << 2
-            | g_ram.actwk[0].u.play.cddat.unusedb << 3
-            | g_ram.actwk[0].u.play.cddat.flame_baria << 4
-            | g_ram.actwk[0].u.play.cddat.thunder_baria << 5
-            | g_ram.actwk[0].u.play.cddat.aqua_baria << 6
-            | g_ram.actwk[0].u.play.cddat.infinite_inertia << 7;
+        g_ram.plpowerdat_s2 = g_ram.actwk[0].u.play.powerdat;
         g_ram.plresetflag = 1;
         actunset();
       }
@@ -467,11 +453,12 @@ void o_star(SKC_sprite_status* p_actwk) {
         g_ram.plring_f2_s = g_ram.plring_f2;
         g_ram.markerno = 0;
         g_ram.gameflag = 1;
-        g_ram.plcddat2_s2 = g_ram.actwk[0].u.play.cddat.baria
-            | g_ram.actwk[0].u.play.cddat.flame_baria << 4
-            | g_ram.actwk[0].u.play.cddat.thunder_baria << 5
-            | g_ram.actwk[0].u.play.cddat.aqua_baria << 6;
-        g_ram.plcddat2_s = g_ram.plcddat2_s2;
+        g_ram.plpowerdat_s2 = g_ram.actwk[0].u.play.powerdat;
+        g_ram.plpowerdat_s2.muteki = 0;
+        g_ram.plpowerdat_s2.speedup = 0;
+        g_ram.plpowerdat_s2.unused3 = 0;
+        g_ram.plpowerdat_s2.infinite_inertia = 0;
+        g_ram.plpowerdat_s = g_ram.plpowerdat_s2;
         g_ram.plresetflag = 1;
         actunset();
       }

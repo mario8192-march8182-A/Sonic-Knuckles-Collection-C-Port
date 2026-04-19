@@ -6,7 +6,7 @@
 void emyshot(SKC_sprite_status* p_actwk) {
   enemy_init0(p_actwk, p_actwk->u.obj.enemy_init0_data_ptr);
   p_actwk->r_ptr = &emyshot_move;
-  p_actwk->u.obj.cddat.baria_bounce = 1;
+  p_actwk->u.obj.powerdat.baria_bounce = 1;
   emyshot_move(p_actwk);
 }
 

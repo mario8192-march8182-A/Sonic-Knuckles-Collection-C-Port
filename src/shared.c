@@ -2220,7 +2220,7 @@ void set_pl_damage(SKC_sprite_status* p_actwk, SKC_sprite_status* p_playerwk) {
 
 
 bool chk_pl_attack(SKC_sprite_status* p_actwk, SKC_sprite_status* p_playerwk) {
-  if (p_playerwk->u.play.cddat.muteki == 1) return true;
+  if (p_playerwk->u.play.powerdat.muteki == 1) return true;
   if (p_playerwk->mstno == 9 || p_playerwk->mstno == 2) return true;
 
   switch (p_playerwk->u.play.character) {
@@ -2539,7 +2539,7 @@ static void set_bgm_act__cnt(SKC_sprite_status* p_actwk) {
 void reset_bgm(void) {
   short bgm_id = bgm_tbl[get_zone(g_ram.stageno_i) * 2 + get_act(g_ram.stageno_i)];
   g_ram.bgm_act = bgm_id;
-  if (g_ram.actwk[0].u.play.cddat.muteki == 1) {
+  if (g_ram.actwk[0].u.play.powerdat.muteki == 1) {
     bgm_id = 44;
   }
   bgmset(bgm_id);
@@ -3453,5 +3453,5 @@ void chg_super(void) {
 
   g_ram.actwk[0].u.play.control_bitfield = 0x81;
   g_ram.actwk[0].u.play.muteki_timer = 0;
-  g_ram.actwk[0].u.play.cddat.muteki = 1;
+  g_ram.actwk[0].u.play.powerdat.muteki = 1;
 }

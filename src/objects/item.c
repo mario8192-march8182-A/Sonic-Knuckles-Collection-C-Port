@@ -375,7 +375,7 @@ static void item2_03__1up(SKC_sprite_status* p_actwk, SKC_sprite_status* p_playe
 
 static void item2_04(SKC_sprite_status* p_actwk, SKC_sprite_status* p_playerwk, unsigned short* p_counter) {
   ++*p_counter;
-  p_playerwk->u.play.cddat.speedup = 1;
+  p_playerwk->u.play.powerdat.speedup = 1;
   p_playerwk->u.play.speedup_timer = 150;
   if (p_playerwk == &g_ram.actwk[0] && g_ram.play_type != PLAY_TYPE_MILES) {
     g_ram.plmaxspdwk = 0xC00;
@@ -393,10 +393,10 @@ static void item2_04(SKC_sprite_status* p_actwk, SKC_sprite_status* p_playerwk, 
 
 static void item2_05(SKC_sprite_status* p_actwk, SKC_sprite_status* p_playerwk, unsigned short* p_counter) {
   ++*p_counter;
-  p_playerwk->u.play.cddat.baria = 1;
-  p_playerwk->u.play.cddat.flame_baria = 1;
-  p_playerwk->u.play.cddat.thunder_baria = 0;
-  p_playerwk->u.play.cddat.aqua_baria = 0;
+  p_playerwk->u.play.powerdat.baria = 1;
+  p_playerwk->u.play.powerdat.flame_baria = 1;
+  p_playerwk->u.play.powerdat.thunder_baria = 0;
+  p_playerwk->u.play.powerdat.aqua_baria = 0;
   bgmset(62);
   if (p_actwk->u.obj.ko == 0) {
     g_ram.actwk[ACTWK_PL_BARIA].r_ptr = &flamebaria;
@@ -411,10 +411,10 @@ static void item2_05(SKC_sprite_status* p_actwk, SKC_sprite_status* p_playerwk, 
 
 static void item2_06(SKC_sprite_status* p_actwk, SKC_sprite_status* p_playerwk, unsigned short* p_counter) {
   ++*p_counter;
-  p_playerwk->u.play.cddat.baria = 1;
-  p_playerwk->u.play.cddat.flame_baria = 0;
-  p_playerwk->u.play.cddat.thunder_baria = 1;
-  p_playerwk->u.play.cddat.aqua_baria = 0;
+  p_playerwk->u.play.powerdat.baria = 1;
+  p_playerwk->u.play.powerdat.flame_baria = 0;
+  p_playerwk->u.play.powerdat.thunder_baria = 1;
+  p_playerwk->u.play.powerdat.aqua_baria = 0;
   bgmset(65);
   if (p_actwk->u.obj.ko == 0) {
     g_ram.actwk[ACTWK_PL_BARIA].r_ptr = &thunderbaria;
@@ -429,10 +429,10 @@ static void item2_06(SKC_sprite_status* p_actwk, SKC_sprite_status* p_playerwk, 
 
 static void item2_07(SKC_sprite_status* p_actwk, SKC_sprite_status* p_playerwk, unsigned short* p_counter) {
   ++*p_counter;
-  p_playerwk->u.play.cddat.baria = 1;
-  p_playerwk->u.play.cddat.flame_baria = 0;
-  p_playerwk->u.play.cddat.thunder_baria = 0;
-  p_playerwk->u.play.cddat.aqua_baria = 1;
+  p_playerwk->u.play.powerdat.baria = 1;
+  p_playerwk->u.play.powerdat.flame_baria = 0;
+  p_playerwk->u.play.powerdat.thunder_baria = 0;
+  p_playerwk->u.play.powerdat.aqua_baria = 1;
   bgmset(63);
   if (p_actwk->u.obj.ko == 0) {
     g_ram.actwk[ACTWK_PL_BARIA].r_ptr = &aquabaria;
@@ -448,7 +448,7 @@ static void item2_07(SKC_sprite_status* p_actwk, SKC_sprite_status* p_playerwk, 
 static void item2_08(SKC_sprite_status* p_actwk, SKC_sprite_status* p_playerwk, unsigned short* p_counter) {
   ++*p_counter;
   if (g_ram.ssonicflag == 0 && g_ram.smilesflag == 0) {
-    p_playerwk->u.play.cddat.muteki = 1;
+    p_playerwk->u.play.powerdat.muteki = 1;
     p_playerwk->u.play.muteki_timer = 150;
     if (g_ram.bossstart == 0 && p_playerwk->u.play.air_timer > 12) {
       bgmset(44);
@@ -504,7 +504,7 @@ static void item2_09(SKC_sprite_status* p_actwk, SKC_sprite_status* p_playerwk, 
 
   g_ram.actwk[0].u.play.control_bitfield = 0x81;
   g_ram.actwk[0].u.play.muteki_timer = 0;
-  p_playerwk->u.play.cddat.muteki = 1;
+  p_playerwk->u.play.powerdat.muteki = 1;
   soundset(159);
   bgmset(44);
 }

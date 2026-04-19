@@ -474,14 +474,7 @@ static void ev0910_wait4(SKC_sprite_status* p_actwk) {
   if ((unsigned short)fp16_get_integer(g_ram.actwk[0].yposi) < 0x4C0) return;
 
   g_ram.notitle = 0xFF;
-  g_ram.plcddat2_s2 = g_ram.actwk[0].u.play.cddat.baria
-      | g_ram.actwk[0].u.play.cddat.muteki << 1
-      | g_ram.actwk[0].u.play.cddat.speedup << 2
-      | g_ram.actwk[0].u.play.cddat.unusedb << 3
-      | g_ram.actwk[0].u.play.cddat.flame_baria << 4
-      | g_ram.actwk[0].u.play.cddat.thunder_baria << 5
-      | g_ram.actwk[0].u.play.cddat.aqua_baria << 6
-      | g_ram.actwk[0].u.play.cddat.infinite_inertia << 7;
+  g_ram.plpowerdat_s2 = g_ram.actwk[0].u.play.powerdat;
   set_stageno(LAVA_REEF_BOSS);
 }
 
@@ -2611,7 +2604,7 @@ static void nk0930_pl_damage(SKC_sprite_status* p_actwk, SKC_sprite_status* p_pl
 
 
 static void nk0930_pl_damage0(SKC_sprite_status* p_actwk, SKC_sprite_status* p_playerwk) {
-  if (p_playerwk->u.play.cddat.muteki == 1) return;
+  if (p_playerwk->u.play.powerdat.muteki == 1) return;
 
   set_pl_damage(p_actwk, p_playerwk);
 }
@@ -2638,7 +2631,7 @@ static void chk_nk0930_col__sub(SKC_sprite_status* p_actwk, SKC_sprite_status* p
   bool left = (unsigned short)fp16_get_integer(p_playerwk->xposi) < (unsigned short)fp16_get_integer(p_actwk->xposi);
   short distance = abs(fp16_get_integer(p_playerwk->yposi) - fp16_get_integer(p_actwk->yposi));
   if (left == p_playerwk->actflg.hflip && distance < 16) { // front
-    if (p_playerwk->mstno != 2 && p_playerwk->u.play.cddat.muteki == 1) {
+    if (p_playerwk->mstno != 2 && p_playerwk->u.play.powerdat.muteki == 1) {
       damg0_init(p_actwk, p_playerwk);
     }
     else {
@@ -2647,7 +2640,7 @@ static void chk_nk0930_col__sub(SKC_sprite_status* p_actwk, SKC_sprite_status* p
     }
   }
   else { // behind
-    if (p_playerwk->mstno != 2 && p_playerwk->u.play.cddat.muteki == 1) {
+    if (p_playerwk->mstno != 2 && p_playerwk->u.play.powerdat.muteki == 1) {
       damg0_init(p_actwk, p_playerwk);
     }
     else {

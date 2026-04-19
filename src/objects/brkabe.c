@@ -183,7 +183,7 @@ static void brkabemove(SKC_sprite_status* p_actwk) {
     if (result.plcoli[0] == HITCHK_COLI_SIDE || result.plcoli[1] == HITCHK_COLI_SIDE) {
       SKC_sprite_status* p_playerwk = &g_ram.actwk[0];
       bool can_break_by_touch = g_ram.ssonicflag != 0 || p_playerwk->u.play.character == KNUCKLES;
-      bool can_break_as_ball = (p_playerwk->u.play.cddat.flame_baria == 1 || p_playerwk->u.play.cddat.push == 1)
+      bool can_break_as_ball = (p_playerwk->u.play.powerdat.flame_baria == 1 || p_playerwk->u.play.cddat.push == 1)
           && p_playerwk->mstno == 2
           && abs(plxspeed) >= 0x480;
       if (result.plcoli[0] == HITCHK_COLI_SIDE && (can_break_by_touch || can_break_as_ball)) {

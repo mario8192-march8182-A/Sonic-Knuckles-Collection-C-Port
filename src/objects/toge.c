@@ -248,7 +248,7 @@ static void vstogemove3(SKC_sprite_status* p_actwk) {
 
 
 void togedamegesub(SKC_sprite_status* p_actwk, SKC_sprite_status* p_playerwk) {
-  if (p_playerwk->u.play.cddat.muteki == 1) return;
+  if (p_playerwk->u.play.powerdat.muteki == 1) return;
   if (p_playerwk->u.play.invulnerability_timer != 0) return;
   if (p_playerwk->r_no >= 4) return;
 

@@ -285,7 +285,7 @@ static void bs00m0_die0(SKC_sprite_status* p_actwk) {
 void bs00m0_jet(SKC_sprite_status* p_actwk) {
   ko_offset1(p_actwk);
   enemy_init1(p_actwk, &jet00m0_init_tbl);
-  p_actwk->u.obj.cddat.flame_baria_die = 1;
+  p_actwk->u.obj.powerdat.flame_baria_die = 1;
   p_actwk->u.obj.pg_data_ptr = jet00m0_pg00;
   p_actwk->r_ptr = &bs00m0_jet_pchg;
   chk_oya_diec1(p_actwk);
@@ -491,7 +491,7 @@ static void bs00m0_napm_down(SKC_sprite_status* p_actwk) {
 
 static void bs00m0_kaen0_init(SKC_sprite_status* p_actwk) {
   enemy_init0(p_actwk, &kaen00m0_init_tbl);
-  p_actwk->u.obj.cddat.flame_baria_die = 1;
+  p_actwk->u.obj.powerdat.flame_baria_die = 1;
   p_actwk->u.obj.callback_ptr = &kaen_move_init0;
   set_timer(p_actwk, 6);
 }

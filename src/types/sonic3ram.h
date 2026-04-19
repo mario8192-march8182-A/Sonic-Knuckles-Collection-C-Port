@@ -223,7 +223,7 @@ typedef struct sonic3_ram {
   /* 08fffe43 */ unsigned char plring_f2_s;
   /* 08fffe44 */ short scralim_down_s;
   /* 08fffe46 */ unsigned char scr_resize_no_s;
-  /* 08fffe47 */ unsigned char plcddat2_s;
+  /* 08fffe47 */ SKC_play_powerdat plpowerdat_s;
   /* 08fffe48 */ unsigned char marker_flag;
   /* 08fffe49 */ unsigned char markerno_s2;
   /* 08fffe4a */ unsigned short stageno_s2;
@@ -274,7 +274,7 @@ typedef struct sonic3_ram {
   /* 08ffff8e */ unsigned short bonustotal;
   /* 08ffff90 */ short bgm_act;
   /* 08ffff92 */ unsigned char brings;
-  /* 08ffff96 */ unsigned char plcddat2_s2;
+  /* 08ffff96 */ SKC_play_powerdat plpowerdat_s2;
   /* 08ffff97 */ unsigned char plresetflag;
   /* 08ffff9a */ unsigned short stageno_is;
   /* 08ffff9c */ unsigned short stageno_is2;

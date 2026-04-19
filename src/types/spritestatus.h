@@ -19,6 +19,30 @@ typedef struct SKC_actflg {
 }
 SKC_actflg;
 
+typedef struct SKC_play_cddat {
+  unsigned int left : 1;
+  unsigned int jump : 1;
+  unsigned int ball : 1;
+  unsigned int ride : 1;
+  unsigned int ballj : 1;
+  unsigned int push : 1;
+  unsigned int underwater : 1;
+  unsigned int unused7 : 1;
+}
+SKC_play_cddat;
+
+typedef struct SKC_play_powerdat {
+  unsigned int baria : 1;
+  unsigned int muteki : 1;
+  unsigned int speedup : 1;
+  unsigned int unused3 : 1;
+  unsigned int flame_baria : 1;
+  unsigned int thunder_baria : 1;
+  unsigned int aqua_baria : 1;
+  unsigned int infinite_inertia : 1;
+}
+SKC_play_powerdat;
+
 typedef struct SKC_sprite_status {
   SKC_sprite_status_handler r_ptr; // 0x00
   SKC_actflg actflg; // 0x04
@@ -63,16 +87,19 @@ typedef struct SKC_sprite_status {
         unsigned int plpush : 1;
         unsigned int pl2push : 1;
         unsigned int die : 1;
-        unsigned int unused8 : 1;
-        unsigned int unused9 : 1;
-        unsigned int unuseda : 1;
+      }
+      cddat;
+      struct { // 0x2B
+        unsigned int unused0 : 1;
+        unsigned int unused1 : 1;
+        unsigned int unused2 : 1;
         unsigned int baria_bounce : 1;
         unsigned int flame_baria_die : 1;
         unsigned int thunder_baria_die : 1;
         unsigned int aqua_baria_die : 1;
-        unsigned int unusedf : 1;
+        unsigned int unused7 : 1;
       }
-      cddat;
+      powerdat;
       unsigned short userflag; // 0x2C
       unsigned short timer; // 0x2E
       struct {
@@ -542,25 +569,8 @@ typedef struct SKC_sprite_status {
     }
     obj;
     struct {
-      struct { // 0x2A
-        unsigned int left : 1;
-        unsigned int jump : 1;
-        unsigned int ball : 1;
-        unsigned int ride : 1;
-        unsigned int ballj : 1;
-        unsigned int push : 1;
-        unsigned int underwater : 1;
-        unsigned int unused7 : 1;
-        unsigned int baria : 1;
-        unsigned int muteki : 1;
-        unsigned int speedup : 1;
-        unsigned int unusedb : 1;
-        unsigned int flame_baria : 1;
-        unsigned int thunder_baria : 1;
-        unsigned int aqua_baria : 1;
-        unsigned int infinite_inertia : 1;
-      }
-      cddat;
+      SKC_play_cddat cddat; // 0x2A
+      SKC_play_powerdat powerdat; // 0x2B
       unsigned char air_timer; // 0x2C
       unsigned char flip_mst; // 0x2D
       unsigned char control_bitfield; // 0x2E

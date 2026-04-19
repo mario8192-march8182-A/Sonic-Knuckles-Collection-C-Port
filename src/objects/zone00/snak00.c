@@ -154,7 +154,7 @@ static void snak00_fire(SKC_sprite_status* p_actwk) {
   enemy_init2(p_actwk, &snak00_fire_init_tbl);
   p_actwk->r_ptr = &snak00_fire_wait0;
   p_actwk->u.obj.callback_ptr = &set_emy_fout0;
-  p_actwk->u.obj.cddat.flame_baria_die = 1;
+  p_actwk->u.obj.powerdat.flame_baria_die = 1;
   chk_oya_die0(p_actwk);
 }
 
