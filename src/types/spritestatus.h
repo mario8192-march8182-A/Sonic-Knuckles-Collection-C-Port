@@ -3,10 +3,21 @@
 
 #include <stdbool.h>
 #include "../constants.h"
-#include "actflg.h"
 #include "enemyinitdata.h"
 #include "speed.h"
 #include "spritestatushandler.h"
+
+typedef struct SKC_actflg {
+  unsigned int hflip : 1;
+  unsigned int vflip : 1;
+  unsigned int relative_coordinates : 1;
+  unsigned int vspl : 1;
+  unsigned int vspl2 : 1;
+  unsigned int static_pattern : 1;
+  unsigned int compound : 1;
+  unsigned int onscreen : 1;
+}
+SKC_actflg;
 
 typedef struct SKC_sprite_status {
   SKC_sprite_status_handler r_ptr; // 0x00

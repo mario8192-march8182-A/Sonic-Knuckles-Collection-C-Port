@@ -1,7 +1,6 @@
 #ifndef SKC_ACTION_H
 #define SKC_ACTION_H
 
-#include "types/actflg.h"
 #include "types/patsetwork.h"
 #include "types/spritestatus.h"
 

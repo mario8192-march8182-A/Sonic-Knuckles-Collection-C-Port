@@ -2,7 +2,6 @@
 #include <stdbool.h>
 #include <string.h>
 #include "data/cg/score.h"
-#include "types/actflg.h"
 #include "types/patsetwork.h"
 #include "types/sonic3ram.h"
 #include "types/spritepattern.h"

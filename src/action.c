@@ -1,6 +1,5 @@
 #include "action.h"
 #include <string.h>
-#include "types/actflg.h"
 #include "types/patsetwork.h"
 #include "types/sonic3ram.h"
 #include "types/spritedata.h"
