@@ -3315,7 +3315,7 @@ void pl_move_right(SKC_sprite_status* p_actwk) {
     p_actwk->u.obj.timer = 31;
     swdata = PAD_A << 8 | PAD_R << 8 | PAD_A | PAD_R;
   }
-  g_ram.swdata1_auto = swdata;
+  g_ram.swdata = swdata;
 }
 
 

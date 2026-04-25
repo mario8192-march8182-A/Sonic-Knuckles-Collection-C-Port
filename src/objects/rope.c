@@ -409,7 +409,7 @@ static void handlemove(SKC_sprite_status* p_actwk) {
   if (yposi_save != fp16_get_integer(p_actwk->yposi)) {
     p_actwk->u.obj.actfree.rope_handle.prev_yposi = yposi_save;
   }
-  handlesub(p_actwk, &g_ram.actwk[0], g_ram.swdata1_auto, &p_actwk->u.obj.actfree.rope.plholding, &p_actwk->u.obj.actfree.rope.plnograb_timer);
+  handlesub(p_actwk, &g_ram.actwk[0], g_ram.swdata, &p_actwk->u.obj.actfree.rope.plholding, &p_actwk->u.obj.actfree.rope.plnograb_timer);
   handlesub(p_actwk, &g_ram.actwk[1], g_ram.swdata2_auto, &p_actwk->u.obj.actfree.rope.pl2holding, &p_actwk->u.obj.actfree.rope.pl2nograb_timer);
   bool plnoholding = !BIT_IS_SET(p_actwk->u.obj.actfree.rope.plholding, 0)
                   && !BIT_IS_SET(p_actwk->u.obj.actfree.rope.plholding, 7)
@@ -745,7 +745,7 @@ static void handleswingmove(SKC_sprite_status* p_actwk) {
   if (yposi_save != fp16_get_integer(p_actwk->yposi)) {
     p_actwk->u.obj.actfree.rope_handle.prev_yposi = yposi_save;
   }
-  handlesub(p_actwk, &g_ram.actwk[0], g_ram.swdata1_auto, &p_actwk->u.obj.actfree.rope.plholding, &p_actwk->u.obj.actfree.rope.plnograb_timer);
+  handlesub(p_actwk, &g_ram.actwk[0], g_ram.swdata, &p_actwk->u.obj.actfree.rope.plholding, &p_actwk->u.obj.actfree.rope.plnograb_timer);
   handlesub(p_actwk, &g_ram.actwk[1], g_ram.swdata2_auto, &p_actwk->u.obj.actfree.rope.pl2holding, &p_actwk->u.obj.actfree.rope.pl2nograb_timer);
   bool plnoholding = !BIT_IS_SET(p_actwk->u.obj.actfree.rope.plholding, 0)
                   && !BIT_IS_SET(p_actwk->u.obj.actfree.rope.plholding, 7)
@@ -977,7 +977,7 @@ static void hbarhandlemove(SKC_sprite_status* p_actwk) {
   if (yposi_save != fp16_get_integer(p_actwk->yposi)) {
     p_actwk->u.obj.actfree.rope_handle.prev_yposi = yposi_save;
   }
-  hbarhandlesub(p_actwk, &g_ram.actwk[0], g_ram.swdata1_auto, &p_actwk->u.obj.actfree.rope.plholding, &p_actwk->u.obj.actfree.rope.plnograb_timer);
+  hbarhandlesub(p_actwk, &g_ram.actwk[0], g_ram.swdata, &p_actwk->u.obj.actfree.rope.plholding, &p_actwk->u.obj.actfree.rope.plnograb_timer);
   hbarhandlesub(p_actwk, &g_ram.actwk[1], g_ram.swdata2_auto, &p_actwk->u.obj.actfree.rope.pl2holding, &p_actwk->u.obj.actfree.rope.pl2nograb_timer);
   bool plnoholding = !BIT_IS_SET(p_actwk->u.obj.actfree.rope.plholding, 0)
                   && !BIT_IS_SET(p_actwk->u.obj.actfree.rope.plholding, 7)

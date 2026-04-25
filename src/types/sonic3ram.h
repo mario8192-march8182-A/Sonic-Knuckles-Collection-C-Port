@@ -85,7 +85,7 @@ typedef struct sonic3_ram {
   /* 08fff000 */ unsigned short colorwk4[64];
   /* 08fff080 */ unsigned short colorwk3[64];
   /* 08fff600 */ unsigned short gmmode;
-  /* 08fff602 */ unsigned short swdata1_auto;
+  /* 08fff602 */ unsigned short swdata;
   /* 08fff604 */ unsigned short swdata1;
   /* 08fff606 */ unsigned short swdata2;
   /* 08fff614 */ unsigned short demotimer;

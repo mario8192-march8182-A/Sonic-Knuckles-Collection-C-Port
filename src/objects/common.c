@@ -1127,7 +1127,7 @@ static void watermove(SKC_sprite_status* p_actwk) {
   p_actwk->u.compound.children[0].xposi = fp16_get_integer(p_actwk->xposi) + 192;
   p_actwk->u.compound.children[0].yposi = fp16_get_integer(p_actwk->yposi);
   if (!p_actwk->u.obj.actfree.water.paused) {
-    if (are_buttons_pressed(g_ram.swdata1_auto, PAD_S) || are_buttons_pressed(g_ram.swdata2_auto, PAD_S)) {
+    if (are_buttons_pressed(g_ram.swdata, PAD_S) || are_buttons_pressed(g_ram.swdata2_auto, PAD_S)) {
       p_actwk->patno += 3;
       p_actwk->u.obj.actfree.water.paused = true;
     }
