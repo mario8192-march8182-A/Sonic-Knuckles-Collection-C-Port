@@ -185,7 +185,7 @@ void playsave1(SKC_sprite_status* p_actwk) {
   g_ram.scralim_down_s = g_ram.scralim_down;
   g_ram.scra_h_posit_s = g_ram.scra_h_posit >> 16;
   g_ram.scra_v_posit_s = g_ram.scra_v_posit >> 16;
-  g_ram.waterposi_s = g_ram.waterposi;
+  g_ram.waterposi_m_s = g_ram.waterposi_m;
   g_ram.waterflag_s = g_ram.waterflag;
 }
 
@@ -206,7 +206,7 @@ void playsave2(SKC_sprite_status* p_actwk) {
   g_ram.scralim_down_s2 = g_ram.scralim_down;
   g_ram.scra_h_posit_s2 = g_ram.scra_h_posit >> 16;
   g_ram.scra_v_posit_s2 = g_ram.scra_v_posit >> 16;
-  g_ram.waterposi_s2 = g_ram.waterposi;
+  g_ram.waterposi_m_s2 = g_ram.waterposi_m;
   g_ram.waterflag_s2 = g_ram.waterflag;
   g_ram.plpowerdat_s2 = g_ram.actwk[0].u.play.powerdat;
 }
@@ -240,7 +240,7 @@ void playload(SKC_sprite_status* p_actwk) {
     g_ram.scra_h_posit = g_ram.scra_h_posit_s << 16 | g_ram.scra_h_posit & 0x0000FFFF;
     g_ram.scra_v_posit = g_ram.scra_v_posit_s << 16 | g_ram.scra_v_posit & 0x0000FFFF;
     if (g_ram.watermode != 0) {
-      g_ram.waterposi = g_ram.waterposi_s;
+      g_ram.waterposi_m = g_ram.waterposi_m_s;
       g_ram.waterflag = g_ram.waterflag_s;
     }
   }
@@ -267,7 +267,7 @@ static void playload2(SKC_sprite_status* p_actwk) {
   g_ram.scra_h_posit = g_ram.scra_h_posit_s2 << 16 | g_ram.scra_h_posit & 0x0000FFFF;
   g_ram.scra_v_posit = g_ram.scra_v_posit_s2 << 16 | g_ram.scra_v_posit & 0x0000FFFF;
   if (g_ram.watermode != 0) {
-    g_ram.waterposi = g_ram.waterposi_s2;
+    g_ram.waterposi_m = g_ram.waterposi_m_s2;
     g_ram.waterflag = g_ram.waterflag_s2;
   }
 }

@@ -3141,7 +3141,7 @@ static void switchact_010(SKC_sprite_status* p_actwk) {
 
 static void switchact_030(SKC_sprite_status* p_actwk) {
   g_ram.scr_shake_flg = 20;
-  g_ram.waterposi = (g_ram.scra_v_posit >> 16) + 256;
+  g_ram.waterposi_m = (g_ram.scra_v_posit >> 16) + 256;
   g_ram.watermoveposi = 0x350;
   g_ram.DAT_08fffaa3 = 0xFF;
   soundset(87);
