@@ -126,10 +126,11 @@ SKC_dircol_result dircol2(SKC_sprite_status* p_actwk, unsigned char direc) {
 
 
 static SKC_dircol_result dircolchk(signed char scd0, signed char scd1, unsigned char direc) {
-  SKC_dircol_result result = { scd1, g_ram.dirstk[2] };
+  SKC_dircol_result result = { scd1, scd0, g_ram.dirstk[2] };
   if (scd1 > scd0) {
     result.direc = g_ram.dirstk[0];
     result.offset = scd0;
+    result.offset2 = scd1;
   }
   if (result.direc & 1) {
     result.direc = direc;
@@ -139,7 +140,7 @@ static SKC_dircol_result dircolchk(signed char scd0, signed char scd1, unsigned 
 
 
 static SKC_dircol_result dircolchk1(signed char scd, unsigned char direc) {
-  SKC_dircol_result result = { scd, g_ram.dirstk[0] };
+  SKC_dircol_result result = { scd, scd, g_ram.dirstk[0] };
   if (result.direc & 1) {
     result.direc = direc;
   }

@@ -5,6 +5,7 @@
 
 typedef struct SKC_dircol_result {
   signed char offset;
+  signed char offset2;
   unsigned char direc;
 }
 SKC_dircol_result;
