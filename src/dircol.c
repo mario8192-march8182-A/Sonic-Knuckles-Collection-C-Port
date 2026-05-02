@@ -348,6 +348,20 @@ SKC_dircol_result emycol_u(SKC_sprite_status* p_actwk) {
 }
 
 
+SKC_dircol_result edgechk_u2(SKC_sprite_status* p_actwk, short xposi) {
+  short yposi = fp16_get_integer(p_actwk->yposi) - (short)p_actwk->sprvsize ^ 15;
+  return edgechk_u3(p_actwk, xposi, yposi);
+}
+
+
+SKC_dircol_result edgechk_u3(SKC_sprite_status* p_actwk, short xposi, short yposi) {
+  g_ram.scdadr = p_actwk->u.play.top_solid_bit == 12 ? g_ram.scd0adr : g_ram.scd1adr;
+  g_ram.dirstk[0] = 0;
+  signed char scd = scd2chk(xposi, yposi, -16, 0x0800, p_actwk->u.play.top_solid_bit, &g_ram.dirstk[0]);
+  return dircolchk1(scd, 0);
+}
+
+
 SKC_dircol_result flyringcol_u(SKC_sprite_status* p_actwk) {
   short xposi = fp16_get_integer(p_actwk->xposi);
   short yposi = fp16_get_integer(p_actwk->yposi) - (short)p_actwk->sprvsize ^ 15;

@@ -37,6 +37,8 @@ SKC_dircol_result dircol_u2(SKC_sprite_status* p_actwk);
 SKC_dircol_result dircol_u3(SKC_sprite_status* p_actwk, short xposi, short yposi);
 SKC_dircol_result vsdircol_u(SKC_sprite_status* p_actwk, short xposi, short yposi);
 SKC_dircol_result emycol_u(SKC_sprite_status* p_actwk);
+SKC_dircol_result edgechk_u2(SKC_sprite_status* p_actwk, short xposi);
+SKC_dircol_result edgechk_u3(SKC_sprite_status* p_actwk, short xposi, short yposi);
 SKC_dircol_result flyringcol_u(SKC_sprite_status* p_actwk);
 SKC_dircol_result dircol_l(SKC_sprite_status* p_actwk);
 SKC_dircol_result rideobjcol_l(SKC_sprite_status* p_actwk, unsigned char solid_bit);
