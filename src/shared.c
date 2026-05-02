@@ -65,6 +65,7 @@ static void fox_auto__cnt(SKC_sprite_status* p_actwk);
 static void shake_se_act__cnt(SKC_sprite_status* p_actwk);
 
 extern sonic3_ram g_ram;
+extern unsigned char g_vram[0x10000];
 
 
 void enemy_init0(SKC_sprite_status* p_actwk, SKC_enemy_init0_data* p_data) {
@@ -1456,16 +1457,15 @@ void set_emy_wchg(SKC_sprite_status* p_actwk, SKC_wrt_data* p_data) {
 
   p_actwk->u.obj.wrt.prev_patno = p_actwk->patno;
   unsigned short vram_adr = (p_actwk->sproffset & 0x7FF) << 5;
-  unsigned short* wrtpat = p_data->wrtpat[p_actwk->patno];
-  unsigned short cnt = *wrtpat++;
+  unsigned short* p_wrtpat = p_data->wrtpat[p_actwk->patno];
+  unsigned short cnt = *p_wrtpat++ + 1;
 
-  for (int i = 0; i < cnt + 1; ++i) {
-    unsigned short instruction = *wrtpat++;
-    unsigned char* source = p_data->pat + ((instruction & 0xFFF0) * 2);
-    unsigned short word_cnt = ((instruction & 0xF) + 1) * 16;
-    unsigned short destination = vram_adr;
-    vram_adr += word_cnt * 2;
-    copy_data_vram(source, destination, word_cnt);
+  for (int i = 0; i < cnt; ++i) {
+    unsigned short command = *p_wrtpat++;
+    unsigned char* p_source = p_data->pat + ((command & 0xFFF0) * 2);
+    unsigned short size = ((command & 0x000F) + 1) * 32;
+    memcpy(&g_vram[vram_adr], p_source, size);
+    vram_adr += size;
   }
 }
 
