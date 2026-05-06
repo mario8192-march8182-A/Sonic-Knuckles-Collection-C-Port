@@ -145,7 +145,7 @@ static bool fcol_r(SKC_sprite_status* p_actwk) {
       }
       return true;
     }
-    if (g_ram.stageno == ANGEL_ISLAND_ACT_1_INTRO) {
+    if (g_ram.stageno == ANGEL_ISLAND_ACT_1) {
       /* This is a workaround for the loop that can be entered from the bottom. */
       p_actwk->direc.b.b0 = 192;
       p_actwk->u.play.force_direc_up_timer = 3;

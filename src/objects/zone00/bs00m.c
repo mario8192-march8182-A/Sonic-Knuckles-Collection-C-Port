@@ -261,7 +261,7 @@ static void body_rway_init0(SKC_sprite_status* p_actwk) {
   bgmset(-31);
   p_actwk->xspeed = 0x400;
   p_actwk->yspeed = 0;
-  p_actwk->u.obj.timer = g_ram.stageno != ANGEL_ISLAND_ACT_1_INTRO ? 64 : 288;
+  p_actwk->u.obj.timer = g_ram.stageno != ANGEL_ISLAND_ACT_1 ? 64 : 288;
   p_actwk->u.obj.callback_ptr = &set_emy_fout0;
   g_ram.event_flag_3 = 0xFF;
 }
