@@ -1850,7 +1850,7 @@ static void ev0700_fout0(SKC_sprite_status* p_actwk) {
   g_ram.pl2_input_lock_flag = 0;
   g_ram.pl_scr_lock_flag = 0;
   memset(&g_ram.swdata, 0, sizeof(g_ram.swdata));
-  memset(&g_ram.swdata2_auto, 0, sizeof(g_ram.swdata2_auto));
+  memset(&g_ram.swdata0, 0, sizeof(g_ram.swdata0));
   g_ram.actwk[1].mstno = 5;
   g_ram.markerno = 1;
   g_ram.plxposi_s = 0x190;
@@ -1866,7 +1866,7 @@ static void ev0700m(SKC_sprite_status* p_actwk) {
   fp16_set_integer(&p_actwk->xposi, 0x371);
   p_actwk->r_ptr = &ev0700m_wait0;
   g_ram.pl2_input_lock_flag = 0xFF;
-  memset(&g_ram.swdata2_auto, 0, sizeof(g_ram.swdata2_auto));
+  memset(&g_ram.swdata0, 0, sizeof(g_ram.swdata0));
   pl_spd_clr(&g_ram.actwk[1]);
   ev0700m_wait0(p_actwk);
 }
@@ -1883,12 +1883,12 @@ static void ev0700m_wait0(SKC_sprite_status* p_actwk) {
     else if (g_ram.actwk[1].actflg.onscreen == 1) {
       p_actwk->r_ptr = &ev0700m;
       g_ram.pl2_input_lock_flag = 0;
-      memset(&g_ram.swdata2_auto, 0, sizeof(g_ram.swdata2_auto));
+      memset(&g_ram.swdata0, 0, sizeof(g_ram.swdata0));
     }
   }
   else {
     g_ram.pl2_input_lock_flag = 0;
-    memset(&g_ram.swdata2_auto, 0, sizeof(g_ram.swdata2_auto));
+    memset(&g_ram.swdata0, 0, sizeof(g_ram.swdata0));
     frameout(p_actwk);
   }
 }
@@ -2156,7 +2156,7 @@ static void nuckle071_wait1_init(SKC_sprite_status* p_actwk) {
   g_ram.pl_input_lock_flag = 0xFF;
   g_ram.pl2_input_lock_flag = 0xFF;
   memset(&g_ram.swdata, 0, sizeof(g_ram.swdata));
-  memset(&g_ram.swdata2_auto, 0, sizeof(g_ram.swdata2_auto));
+  memset(&g_ram.swdata0, 0, sizeof(g_ram.swdata0));
 }
 
 
@@ -2311,7 +2311,7 @@ static void ev0701_move0(SKC_sprite_status* p_actwk) {
     g_ram.pl_input_lock_flag = 0;
     g_ram.pl2_input_lock_flag = 0;
     memset(&g_ram.swdata, 0, sizeof(g_ram.swdata));
-    memset(&g_ram.swdata2_auto, 0, sizeof(g_ram.swdata2_auto));
+    memset(&g_ram.swdata0, 0, sizeof(g_ram.swdata0));
     p_playerwk->u.play.control_bitfield = 0;
     CLEAR_BIT(p_playerwk->sproffset, 15);
     p_playerwk->mstno = 0;

@@ -3362,7 +3362,7 @@ void fox_auto(SKC_sprite_status* p_actwk) {
 
 static void fox_auto__cnt(SKC_sprite_status* p_actwk) {
   if (g_ram.pl2_input_lock_flag != 0) {
-    memset(&g_ram.swdata2_auto, 0, sizeof(g_ram.swdata2_auto));
+    memset(&g_ram.swdata0, 0, sizeof(g_ram.swdata0));
   }
   else {
     memset(&g_ram.swdata2, 0, sizeof(g_ram.swdata2));
