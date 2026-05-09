@@ -11,6 +11,7 @@
 #include "spritepattern.h"
 #include "spritestatus.h"
 #include "spritestatushandler.h"
+#include "swdata.h"
 
 typedef struct sonic3_ram {
   /* 08ff0000 */ unsigned char decompressed[0xA800];
@@ -85,9 +86,9 @@ typedef struct sonic3_ram {
   /* 08fff000 */ unsigned short colorwk4[64];
   /* 08fff080 */ unsigned short colorwk3[64];
   /* 08fff600 */ unsigned short gmmode;
-  /* 08fff602 */ unsigned short swdata;
-  /* 08fff604 */ unsigned short swdata1;
-  /* 08fff606 */ unsigned short swdata2;
+  /* 08fff602 */ SKC_swdata swdata;
+  /* 08fff604 */ SKC_swdata swdata1;
+  /* 08fff606 */ SKC_swdata swdata2;
   /* 08fff614 */ unsigned short demotimer;
   /* 08fff616 */ short vscrolla;
   /* 08fff618 */ short vscrollb;
@@ -112,7 +113,7 @@ typedef struct sonic3_ram {
   /* 08fff65f */ unsigned char ssonicpallet;
   /* 08fff664 */ unsigned char scd_bg_flag;
   /* 08fff667 */ unsigned char smilesflag;
-  /* 08fff66a */ unsigned short swdata2_auto;
+  /* 08fff66a */ SKC_swdata swdata2_auto;
   /* 08fff670 */ unsigned short ssonicring_timer;
   /* 08fff676 */ unsigned short custom_follow_flag;
   /* 08fff678 */ long custom_follow_xposi;

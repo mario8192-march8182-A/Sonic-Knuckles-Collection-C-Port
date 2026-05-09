@@ -11,7 +11,6 @@
 #include "../types/spritestatus.h"
 #include "../types/spritestatushandler.h"
 #include "../utils/bits.h"
-#include "../utils/controller.h"
 #include "../utils/fp16.h"
 #include "../utils/stageno.h"
 #include "../action.h"
@@ -176,8 +175,8 @@ static void over_move(SKC_sprite_status* p_actwk) {
 static void over_wait(SKC_sprite_status* p_actwk) {
   g_ram.colibuffer[0] = 0;
   if (!BIT_IS_SET(p_actwk->patno, 0)) {
-    if (!are_buttons_pressed(g_ram.swdata1, PAD_A | PAD_B | PAD_C | PAD_S)
-        && !are_buttons_pressed(g_ram.swdata2, PAD_A | PAD_B | PAD_C | PAD_S)
+    if (!are_any_face_buttons_used(g_ram.swdata1.pressed)
+        && !are_any_face_buttons_used(g_ram.swdata2.pressed)
         && p_actwk->u.obj.timer != 0) {
       --p_actwk->u.obj.timer;
     }

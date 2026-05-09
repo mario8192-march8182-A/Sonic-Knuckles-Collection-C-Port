@@ -3,8 +3,8 @@
 #include "../types/sonic3ram.h"
 #include "../types/spritepattern.h"
 #include "../types/spritestatus.h"
+#include "../types/swdata.h"
 #include "../utils/bits.h"
-#include "../utils/controller.h"
 #include "../utils/fp16.h"
 #include "../actset.h"
 #include "../action.h"
@@ -26,9 +26,9 @@ static void ropemove3(SKC_sprite_status* p_actwk);
 static void ropemove4(SKC_sprite_status* p_actwk);
 static void ropeposiset(SKC_sprite_status* p_actwk);
 static void handlemove(SKC_sprite_status* p_actwk);
-static void handlesub(SKC_sprite_status* p_actwk, SKC_sprite_status* p_playerwk, unsigned short swdata, unsigned char* p_plholding, unsigned char* p_plnograb_timer);
+static void handlesub(SKC_sprite_status* p_actwk, SKC_sprite_status* p_playerwk, SKC_swdata swdata, unsigned char* p_plholding, unsigned char* p_plnograb_timer);
 static void handlesub__rolljumpsub(SKC_sprite_status* p_playerwk);
-static void handlesub__kcheck(SKC_sprite_status* p_actwk, SKC_sprite_status* p_playerwk, unsigned short swdata);
+static void handlesub__kcheck(SKC_sprite_status* p_actwk, SKC_sprite_status* p_playerwk, SKC_swdata swdata);
 static void ropeswinginit(SKC_sprite_status* p_actwk);
 static void ropeswinginit__sub(SKC_sprite_status* p_actwk);
 static void ropeswingmove(SKC_sprite_status* p_actwk);
@@ -46,7 +46,7 @@ static void hbarfoutchk(SKC_sprite_status* p_actwk);
 static void hbarmove2(SKC_sprite_status* p_actwk);
 static void hbarposiset(SKC_sprite_status* p_actwk);
 static void hbarhandlemove(SKC_sprite_status* p_actwk);
-static void hbarhandlesub(SKC_sprite_status* p_actwk, SKC_sprite_status* p_playerwk, unsigned short swdata, unsigned char* p_plholding, unsigned char* p_plnograb_timer);
+static void hbarhandlesub(SKC_sprite_status* p_actwk, SKC_sprite_status* p_playerwk, SKC_swdata swdata, unsigned char* p_plholding, unsigned char* p_plnograb_timer);
 static void hbarhandlesub__rolljumpsub(SKC_sprite_status* p_playerwk);
 static SKC_sprite_pattern ropesp00;
 static SKC_sprite_pattern ropesp01;
@@ -421,7 +421,7 @@ static void handlemove(SKC_sprite_status* p_actwk) {
 }
 
 
-static void handlesub(SKC_sprite_status* p_actwk, SKC_sprite_status* p_playerwk, unsigned short swdata, unsigned char* p_plholding, unsigned char* p_plnograb_timer) {
+static void handlesub(SKC_sprite_status* p_actwk, SKC_sprite_status* p_playerwk, SKC_swdata swdata, unsigned char* p_plholding, unsigned char* p_plnograb_timer) {
   unsigned char tbl[16] = {
     145, 145, 144, 144, 144, 144, 144, 144, 146, 146, 146, 146, 146, 146, 145, 145
   };
@@ -446,7 +446,7 @@ static void handlesub(SKC_sprite_status* p_actwk, SKC_sprite_status* p_playerwk,
   if (BIT_IS_SET(*p_plholding, 0) || BIT_IS_SET(*p_plholding, 7)) {
     if (!BIT_IS_SET(*p_plholding, 7)) {
       if (p_playerwk->actflg.onscreen == 1 && p_playerwk->r_no < 4) {
-        if (are_buttons_pressed(swdata, PAD_A | PAD_B | PAD_C)) {
+        if (are_any_trg_buttons_used(swdata.pressed)) {
           p_playerwk->u.play.control_bitfield = 0;
           CLEAR_BIT(*p_plholding, 0);
           if (p_actwk->u.obj.actfree.rope.unknown30w != 1) {
@@ -455,10 +455,10 @@ static void handlesub(SKC_sprite_status* p_actwk, SKC_sprite_status* p_playerwk,
             p_playerwk->yspeed = fp16_get_integer(p_actwk->yposi) - p_actwk->u.obj.actfree.rope_handle.prev_yposi;
             p_playerwk->yspeed *= 128;
             *p_plnograb_timer = 60;
-            if (are_buttons_down(swdata, PAD_L)) {
+            if (swdata.down.l == 1) {
               p_playerwk->xspeed = -0x200;
             }
-            if (are_buttons_down(swdata, PAD_R)) {
+            if (swdata.down.r == 1) {
               p_playerwk->yspeed -= 0x380;
             }
             handlesub__rolljumpsub(p_playerwk);
@@ -568,17 +568,26 @@ static void handlesub__rolljumpsub(SKC_sprite_status* p_playerwk) {
 }
 
 
-static void handlesub__kcheck(SKC_sprite_status* p_actwk, SKC_sprite_status* p_playerwk, unsigned short swdata) {
-  unsigned char ktbl[10] = {
-    PAD_L, PAD_L, PAD_L, PAD_R, PAD_R, PAD_R, PAD_U, PAD_U, PAD_U, 0
+static void handlesub__kcheck(SKC_sprite_status* p_actwk, SKC_sprite_status* p_playerwk, SKC_swdata swdata) {
+  SKC_pad ktbl[10] = {
+    { .l = 1 },
+    { .l = 1 },
+    { .l = 1 },
+    { .r = 1 },
+    { .r = 1 },
+    { .r = 1 },
+    { .u = 1 },
+    { .u = 1 },
+    { .u = 1 },
+    { 0 }
   };
 
   if (p_playerwk != &g_ram.actwk[0]) return;
-  if (swdata == 0) return;
+  if (!are_any_buttons_used(swdata.down) && !are_any_buttons_used(swdata.pressed)) return;
 
-  if ((swdata & 0xFF) == ktbl[p_actwk->pattimm]) {
+  if (are_same_buttons_used(swdata.pressed, ktbl[p_actwk->pattimm])) {
     ++p_actwk->pattimm;
-    if (ktbl[p_actwk->pattimm] == 0) {
+    if (!are_any_buttons_used(ktbl[p_actwk->pattimm])) {
       g_ram.levelselectcheat = 1;
       g_ram.slowmotioncheat = 1;
       soundset(51);
@@ -989,7 +998,7 @@ static void hbarhandlemove(SKC_sprite_status* p_actwk) {
 }
 
 
-static void hbarhandlesub(SKC_sprite_status* p_actwk, SKC_sprite_status* p_playerwk, unsigned short swdata, unsigned char* p_plholding, unsigned char* p_plnograb_timer) {
+static void hbarhandlesub(SKC_sprite_status* p_actwk, SKC_sprite_status* p_playerwk, SKC_swdata swdata, unsigned char* p_plholding, unsigned char* p_plnograb_timer) {
   unsigned char tbl[16] = {
     145, 145, 144, 144, 144, 144, 144, 144, 146, 146, 146, 146, 146, 146, 145, 145
   };
@@ -1013,7 +1022,7 @@ static void hbarhandlesub(SKC_sprite_status* p_actwk, SKC_sprite_status* p_playe
 
   if (BIT_IS_SET(*p_plholding, 0) || BIT_IS_SET(*p_plholding, 7)) {
     if (p_playerwk->actflg.onscreen == 1 && p_playerwk->r_no < 4 && g_ram.editmode == 0) {
-      if (are_buttons_pressed(swdata, PAD_A | PAD_B | PAD_C)) {
+      if (are_any_trg_buttons_used(swdata.pressed)) {
         p_playerwk->u.play.control_bitfield = 0;
         CLEAR_BIT(*p_plholding, 0);
         CLEAR_BIT(*p_plholding, 7);
@@ -1023,10 +1032,10 @@ static void hbarhandlesub(SKC_sprite_status* p_actwk, SKC_sprite_status* p_playe
           p_playerwk->yspeed = (fp16_get_integer(p_actwk->yposi) - p_actwk->u.obj.actfree.rope_handle.prev_yposi);
           p_playerwk->yspeed *= 128;
           *p_plnograb_timer = 60;
-          if (are_buttons_down(swdata, PAD_L)) {
+          if (swdata.down.l == 1) {
             p_playerwk->xspeed = -0x200;
           }
-          if (are_buttons_down(swdata, PAD_R)) {
+          if (swdata.down.r == 1) {
             p_playerwk->yspeed -= 0x380;
           }
           hbarhandlesub__rolljumpsub(p_playerwk);

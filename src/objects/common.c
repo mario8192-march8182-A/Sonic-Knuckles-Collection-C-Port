@@ -5,8 +5,8 @@
 #include "../types/sonic3ram.h"
 #include "../types/spritepattern.h"
 #include "../types/spritestatus.h"
+#include "../types/swdata.h"
 #include "../utils/bits.h"
-#include "../utils/controller.h"
 #include "../utils/fp16.h"
 #include "../action.h"
 #include "../actset.h"
@@ -59,11 +59,11 @@ static SKC_sprite_pattern scolisp1;
 static SKC_sprite_pattern scolisp2;
 static void barinit(SKC_sprite_status* p_actwk);
 static void barmove(SKC_sprite_status* p_actwk);
-static void barmove__sub(SKC_sprite_status* p_actwk, SKC_sprite_status* p_playerwk, unsigned short swdata, bool* p_plholding, unsigned char* p_plnograb_timer);
+static void barmove__sub(SKC_sprite_status* p_actwk, SKC_sprite_status* p_playerwk, SKC_swdata swdata, bool* p_plholding, unsigned char* p_plnograb_timer);
 static void barbreak(SKC_sprite_status* p_actwk);
 static void barmove2(SKC_sprite_status* p_actwk);
 static void barmoveh(SKC_sprite_status* p_actwk);
-static void barmoveh__sub(SKC_sprite_status* p_actwk, SKC_sprite_status* p_playerwk, unsigned short swdata, bool* p_plholding, unsigned char* p_plnograb_timer);
+static void barmoveh__sub(SKC_sprite_status* p_actwk, SKC_sprite_status* p_playerwk, SKC_swdata swdata, bool* p_plholding, unsigned char* p_plnograb_timer);
 static void barbreak2(SKC_sprite_status* p_actwk);
 static unsigned char bar_timertbl[24];
 static SKC_point bar_positbl[16];
@@ -759,23 +759,23 @@ static void barmove(SKC_sprite_status* p_actwk) {
 }
 
 
-static void barmove__sub(SKC_sprite_status* p_actwk, SKC_sprite_status* p_playerwk, unsigned short swdata, bool* p_plholding, unsigned char* p_plnograb_timer) {
+static void barmove__sub(SKC_sprite_status* p_actwk, SKC_sprite_status* p_playerwk, SKC_swdata swdata, bool* p_plholding, unsigned char* p_plnograb_timer) {
   if (*p_plholding) {
     short yposi = fp16_get_integer(p_actwk->yposi) - p_actwk->u.obj.actfree.bar.end1_offset;
-    if (are_buttons_down(swdata, PAD_U)) {
+    if (swdata.down.u == 1) {
       fp16_set_integer(&p_playerwk->yposi, fp16_get_integer(p_playerwk->yposi) - 1);
       if ((unsigned short)yposi >= (unsigned short)fp16_get_integer(p_playerwk->yposi)) {
         fp16_set_integer(&p_playerwk->yposi, yposi);
       }
     }
     yposi += p_actwk->u.obj.actfree.bar.end2_offset;
-    if (are_buttons_down(swdata, PAD_D)) {
+    if (swdata.down.d == 1) {
       fp16_set_integer(&p_playerwk->yposi, fp16_get_integer(p_playerwk->yposi) + 1);
       if ((unsigned short)yposi < (unsigned short)fp16_get_integer(p_playerwk->yposi)) {
         fp16_set_integer(&p_playerwk->yposi, yposi);
       }
     }
-    if (are_buttons_pressed(swdata, PAD_A | PAD_B | PAD_C)) {
+    if (are_any_trg_buttons_used(swdata.pressed)) {
       *p_plholding = false;
       *p_plnograb_timer = 60;
       CLEAR_BIT(p_playerwk->u.play.control_bitfield, 0);
@@ -873,23 +873,23 @@ static void barmoveh(SKC_sprite_status* p_actwk) {
 }
 
 
-static void barmoveh__sub(SKC_sprite_status* p_actwk, SKC_sprite_status* p_playerwk, unsigned short swdata, bool* p_plholding, unsigned char* p_plnograb_timer) {
+static void barmoveh__sub(SKC_sprite_status* p_actwk, SKC_sprite_status* p_playerwk, SKC_swdata swdata, bool* p_plholding, unsigned char* p_plnograb_timer) {
   if (*p_plholding) {
     short xposi = fp16_get_integer(p_actwk->yposi) - p_actwk->u.obj.actfree.bar.end1_offset;
-    if (are_buttons_down(swdata, PAD_L)) {
+    if (swdata.down.l == 1) {
       fp16_set_integer(&p_playerwk->xposi, fp16_get_integer(p_playerwk->xposi) - 1);
       if ((unsigned short)xposi >= (unsigned short)fp16_get_integer(p_playerwk->xposi)) {
         fp16_set_integer(&p_playerwk->xposi, xposi);
       }
     }
     xposi += p_actwk->u.obj.actfree.bar.end2_offset;
-    if (are_buttons_down(swdata, PAD_R)) {
+    if (swdata.down.r == 1) {
       fp16_set_integer(&p_playerwk->yposi, fp16_get_integer(p_playerwk->yposi) + 1);
       if ((unsigned short)xposi < (unsigned short)fp16_get_integer(p_playerwk->xposi)) {
         fp16_set_integer(&p_playerwk->xposi, xposi);
       }
     }
-    if (are_buttons_pressed(swdata, PAD_A | PAD_B | PAD_C)) {
+    if (are_any_trg_buttons_used(swdata.pressed)) {
       *p_plholding = false;
       *p_plnograb_timer = 60;
       CLEAR_BIT(p_playerwk->u.play.control_bitfield, 0);
@@ -1127,7 +1127,7 @@ static void watermove(SKC_sprite_status* p_actwk) {
   p_actwk->u.compound.children[0].xposi = fp16_get_integer(p_actwk->xposi) + 192;
   p_actwk->u.compound.children[0].yposi = fp16_get_integer(p_actwk->yposi);
   if (!p_actwk->u.obj.actfree.water.paused) {
-    if (are_buttons_pressed(g_ram.swdata, PAD_S) || are_buttons_pressed(g_ram.swdata2_auto, PAD_S)) {
+    if (g_ram.swdata.pressed.s == 1 || g_ram.swdata2_auto.pressed.s == 1) {
       p_actwk->patno += 3;
       p_actwk->u.obj.actfree.water.paused = true;
     }

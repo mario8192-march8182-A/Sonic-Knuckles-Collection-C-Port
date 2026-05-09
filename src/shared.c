@@ -14,10 +14,10 @@
 #include "types/sonic3ram.h"
 #include "types/spritestatus.h"
 #include "types/spritestatushandler.h"
+#include "types/swdata.h"
 #include "types/wrtdata.h"
 #include "types/wrtinitdata.h"
 #include "utils/bits.h"
-#include "utils/controller.h"
 #include "utils/fp16.h"
 #include "utils/stageno.h"
 #include "action.h"
@@ -2249,12 +2249,12 @@ bool chk_gacha_gacha(SKC_sprite_status* p_actwk) {
     p_actwk->u.obj.gacha.lr_cnt = 5;
     p_actwk->u.obj.gacha.timer = 60;
   }
-  unsigned short swdata = p_actwk->u.obj.gacha.pad == 0 ? g_ram.swdata1 : g_ram.swdata2;
-  if (!are_buttons_pressed(swdata, PAD_L | PAD_R)) return false;
-  unsigned short prev_swdata = p_actwk->u.obj.gacha.prev_swdata;
+  SKC_swdata swdata = p_actwk->u.obj.gacha.pad == 0 ? g_ram.swdata1 : g_ram.swdata2;
+  if (swdata.pressed.l == 0 && swdata.pressed.r == 0) return false;
+  SKC_swdata prev_swdata = p_actwk->u.obj.gacha.prev_swdata;
   p_actwk->u.obj.gacha.prev_swdata = swdata;
-  if (are_buttons_pressed(prev_swdata, PAD_L) == are_buttons_pressed(swdata, PAD_L)) return false;
-  if (are_buttons_pressed(prev_swdata, PAD_R) == are_buttons_pressed(swdata, PAD_R)) return false;
+  if (prev_swdata.pressed.l == swdata.pressed.l) return false;
+  if (prev_swdata.pressed.r == swdata.pressed.r) return false;
   if (p_actwk->u.obj.gacha.lr_cnt-- > 0) return false;
   return true;
 }
@@ -3306,14 +3306,15 @@ static void mask_spr0__wait1(SKC_sprite_status* p_actwk) {
 
 
 void pl_move_right(SKC_sprite_status* p_actwk) {
-  unsigned short swdata = PAD_R << 8 | PAD_R;
+  SKC_swdata swdata = { .down.r = 1, .pressed.r = 1 };
   if (p_actwk->u.obj.timer != 0) {
     --p_actwk->u.obj.timer;
-    swdata = PAD_A << 8 | PAD_R << 8 | PAD_R;
+    swdata.down.a = 1;
   }
   if (g_ram.actwk[0].u.play.cddat.push == 1) {
     p_actwk->u.obj.timer = 31;
-    swdata = PAD_A << 8 | PAD_R << 8 | PAD_A | PAD_R;
+    swdata.down.a = 1;
+    swdata.pressed.a = 1;
   }
   g_ram.swdata = swdata;
 }
@@ -3361,10 +3362,10 @@ void fox_auto(SKC_sprite_status* p_actwk) {
 
 static void fox_auto__cnt(SKC_sprite_status* p_actwk) {
   if (g_ram.pl2_input_lock_flag != 0) {
-    g_ram.swdata2_auto = 0;
+    memset(&g_ram.swdata2_auto, 0, sizeof(g_ram.swdata2_auto));
   }
   else {
-    g_ram.swdata2 = 0;
+    memset(&g_ram.swdata2, 0, sizeof(g_ram.swdata2));
     frameout(p_actwk);
   }
 }

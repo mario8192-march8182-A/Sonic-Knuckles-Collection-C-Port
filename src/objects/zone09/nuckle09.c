@@ -17,7 +17,6 @@
 #include "../../types/spritestatus.h"
 #include "../../types/spritestatushandler.h"
 #include "../../utils/bits.h"
-#include "../../utils/controller.h"
 #include "../../utils/fp16.h"
 #include "../../utils/fp8.h"
 #include "../../utils/stageno.h"
@@ -443,7 +442,7 @@ static void ev0910_wait1(SKC_sprite_status* p_actwk) {
 
   p_actwk->r_ptr = &ev0910_wait2;
   g_ram.pl_input_lock_flag = 0xFF;
-  g_ram.swdata = 0;
+  memset(&g_ram.swdata, 0, sizeof(g_ram.swdata));
 }
 
 
@@ -1744,7 +1743,7 @@ static void ev0930(SKC_sprite_status* p_actwk) {
   p_actwk->r_ptr = &ev0930_wait0;
   pl_spd_clr(&g_ram.actwk[0]);
   g_ram.pl_input_lock_flag = 0xFF;
-  g_ram.swdata = 0;
+  memset(&g_ram.swdata, 0, sizeof(g_ram.swdata));
   SKC_actwkchk_result result = actwkchk();
   if (result.actwk_ptr != 0) {
     result.actwk_ptr->r_ptr = &fox_auto;
@@ -1756,7 +1755,9 @@ static void ev0930(SKC_sprite_status* p_actwk) {
 static void ev0930_wait0(SKC_sprite_status* p_actwk) {
   if (g_ram.actwk[0].u.play.cddat.jump == 1) return;
 
-  g_ram.swdata = PAD_R << 8 | PAD_R;
+  memset(&g_ram.swdata, 0, sizeof(g_ram.swdata));
+  g_ram.swdata.down.r = 1;
+  g_ram.swdata.pressed.r = 1;
   if (fp16_get_integer(g_ram.actwk[0].xposi) >= 0x15A8) {
     p_actwk->r_ptr = &ev0930_wait1;
     g_ram.pl_scr_lock_flag = 0xFF;
@@ -1775,7 +1776,7 @@ static void set_pl_stop(SKC_sprite_status* p_playerwk) {
   p_playerwk->u.play.control_bitfield = 0x83;
   p_playerwk->patno = p_playerwk->u.play.character != SONIC ? 196 : 176;
   p_playerwk->mstno = 7;
-  g_ram.swdata = 0;
+  memset(&g_ram.swdata, 0, sizeof(g_ram.swdata));
   pl_spd_clr(p_playerwk);
   wrt_player();
 }
@@ -1796,7 +1797,9 @@ static void ev0930_wait2(SKC_sprite_status* p_actwk) {
   p_actwk->r_ptr = &ev0930_move0;
   g_ram.actwk[0].u.play.control_bitfield = 0;
   g_ram.pl_input_lock_flag = 0xFF;
-  g_ram.swdata = PAD_R << 8 | PAD_R;
+  memset(&g_ram.swdata, 0, sizeof(g_ram.swdata));
+  g_ram.swdata.down.r = 1;
+  g_ram.swdata.pressed.r = 1;
 }
 
 
@@ -1842,12 +1845,20 @@ static void ev0930_move1(SKC_sprite_status* p_actwk) {
 
 static void ev0930_move2(SKC_sprite_status* p_actwk) {
   short distance = fp16_get_integer(g_ram.actwk[0].xposi) - 0x1892;
-  g_ram.swdata = distance < 0 ? PAD_R << 8 | PAD_R : PAD_L << 8 | PAD_L;
+  memset(&g_ram.swdata, 0, sizeof(g_ram.swdata));
+  if (distance < 0) {
+    g_ram.swdata.down.r = 1;
+    g_ram.swdata.pressed.r = 1;
+  }
+  else {
+    g_ram.swdata.down.l = 1;
+    g_ram.swdata.pressed.l = 1;
+  }
   if (abs(distance) <= 4) {
     p_actwk->r_ptr = &ev0930_wait4;
     p_actwk->u.obj.timer = 63;
     g_ram.DAT_08fffaac = 0xFF;
-    g_ram.swdata = 0;
+    memset(&g_ram.swdata, 0, sizeof(g_ram.swdata));
     pl_spd_clr(&g_ram.actwk[0]);
     wrt_player();
   }

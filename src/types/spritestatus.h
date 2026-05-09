@@ -5,6 +5,7 @@
 #include "enemyinitdata.h"
 #include "speed.h"
 #include "spritestatushandler.h"
+#include "swdata.h"
 
 typedef struct SKC_actflg {
   unsigned int hflip : 1;
@@ -180,7 +181,7 @@ typedef struct SKC_sprite_status {
       }
       radius;
       struct {
-        unsigned short prev_swdata; // 0x3A
+        SKC_swdata prev_swdata; // 0x3A
         unsigned char lr_cnt; // 0x3C
         unsigned char timer; // 0x3D
         unsigned char pad; // 0x3E

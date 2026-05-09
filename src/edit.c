@@ -5,7 +5,6 @@
 #include "types/sonic3ram.h"
 #include "types/spritestatus.h"
 #include "types/spritestatushandler.h"
-#include "utils/controller.h"
 #include "utils/fp16.h"
 #include "utils/stageno.h"
 #include "action.h"
@@ -99,14 +98,12 @@ static void editmove(SKC_sprite_status* p_actwk) {
 
 
 static void editwalk(SKC_sprite_status* p_actwk, SKC_edit_data* p_data) {
-  bool buttons_depressed = !are_buttons_pressed(g_ram.swdata1, PAD_U | PAD_D | PAD_L | PAD_R);
-  bool buttons_up = !are_buttons_down(g_ram.swdata1, PAD_U | PAD_D | PAD_L | PAD_R);
-  if (buttons_depressed && buttons_up) {
+  if (!are_any_dir_buttons_used(g_ram.swdata1.pressed) && !are_any_dir_buttons_used(g_ram.swdata1.down)) {
     g_ram.edittimer = 12;
     g_ram.edit_spd = 15;
   }
   else {
-    if (buttons_depressed && !buttons_up) {
+    if (!are_any_dir_buttons_used(g_ram.swdata1.pressed) && are_any_dir_buttons_used(g_ram.swdata1.down)) {
       --g_ram.edittimer;
       if (g_ram.edittimer == 0) {
         g_ram.edittimer = 1;
@@ -119,39 +116,39 @@ static void editwalk(SKC_sprite_status* p_actwk, SKC_edit_data* p_data) {
     long edit_spd = (g_ram.edit_spd + 1) * 0x40000;
     long xposi = p_actwk->xposi;
     long yposi = p_actwk->yposi;
-    if (are_buttons_down(g_ram.swdata1, PAD_U)) {
+    if (g_ram.swdata1.down.u == 1) {
       yposi -= edit_spd;
       long scralim_up = g_ram.scralim_up << 16;
       if (yposi < scralim_up) {
         yposi = scralim_up;
       }
     }
-    if (are_buttons_down(g_ram.swdata1, PAD_D)) {
+    if (g_ram.swdata1.down.d == 1) {
       yposi += edit_spd;
       long scralim_n_down = g_ram.scralim_n_down + 223 << 16;
       if (yposi >= scralim_n_down) {
         yposi = scralim_n_down;
       }
     }
-    if (are_buttons_down(g_ram.swdata1, PAD_L)) {
+    if (g_ram.swdata1.down.l == 1) {
       xposi -= edit_spd;
       if (xposi < 0) {
         xposi = 0;
       }
     }
-    if (are_buttons_down(g_ram.swdata1, PAD_R)) {
+    if (g_ram.swdata1.down.r == 1) {
       xposi += edit_spd;
     }
     p_actwk->xposi = xposi;
     p_actwk->yposi = yposi;
   }
-  if (are_buttons_down(g_ram.swdata1, PAD_A)) {
-    if (are_buttons_pressed(g_ram.swdata1, PAD_C)) {
+  if (g_ram.swdata1.down.a == 1) {
+    if (g_ram.swdata1.pressed.c == 1) {
       if (g_ram.editno-- == 0) {
         g_ram.editno = p_data->cnt - 1;
       }
     }
-    else if (are_buttons_pressed(g_ram.swdata1, PAD_A)) {
+    else if (g_ram.swdata1.pressed.a == 1) {
       ++g_ram.editno;
       if (p_data->cnt <= g_ram.editno) {
         g_ram.editno = 0;
@@ -160,7 +157,7 @@ static void editwalk(SKC_sprite_status* p_actwk, SKC_edit_data* p_data) {
     editpatchg(p_actwk, p_data);
   }
   else {
-    if (are_buttons_pressed(g_ram.swdata1, PAD_C)) {
+    if (g_ram.swdata1.pressed.c == 1) {
       SKC_actwkchk_result result = actwkchk();
       if (result.actwk_ptr != 0) {
         fp16_set_integer(&result.actwk_ptr->xposi, fp16_get_integer(p_actwk->xposi));
@@ -181,7 +178,7 @@ static void editwalk(SKC_sprite_status* p_actwk, SKC_edit_data* p_data) {
         return;
       }
     }
-    if (are_buttons_pressed(g_ram.swdata1, PAD_B)) {
+    if (g_ram.swdata1.pressed.b == 1) {
       g_ram.editmode = 0;
       scoreinit();
       g_ram.plscore_f = 1;
