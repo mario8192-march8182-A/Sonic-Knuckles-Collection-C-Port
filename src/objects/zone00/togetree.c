@@ -45,7 +45,7 @@ static void togetreeinit(SKC_sprite_status* p_actwk) {
   p_actwk->actflg.relative_coordinates = 1;
   p_actwk->sprpri = PRI_4;
   p_actwk->u.obj.actfree.togetree.yposi_init = fp16_get_integer(p_actwk->yposi);
-  p_actwk->u.obj.actfree.togetree.f64d_save = g_ram.DAT_08fff64d;
+  p_actwk->u.obj.actfree.togetree.water_flag_save = g_ram.water_flag;
   SKC_actwkchk_result result = actwkchk2(p_actwk);
   if (result.actwk_ptr != 0) {
     result.actwk_ptr->r_ptr = &togetreemove2;
@@ -67,8 +67,8 @@ static void togetreemove(SKC_sprite_status* p_actwk) {
   if (BIT_IS_SET(p_actwk->u.obj.actfree.togetree.bitfield, 7)) {
     rideon = true;
   }
-  else if (p_actwk->u.obj.actfree.togetree.f64d_save != g_ram.DAT_08fff64d) {
-    p_actwk->u.obj.actfree.togetree.f64d_save = g_ram.DAT_08fff64d;
+  else if (p_actwk->u.obj.actfree.togetree.water_flag_save != g_ram.water_flag) {
+    p_actwk->u.obj.actfree.togetree.water_flag_save = g_ram.water_flag;
     SET_BIT(p_actwk->u.obj.actfree.togetree.bitfield, 0);
     SET_BIT(p_actwk->u.obj.actfree.togetree.bitfield, 7);
     rideon = true;

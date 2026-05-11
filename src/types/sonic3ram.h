@@ -106,7 +106,7 @@ typedef struct sonic3_ram {
   /* 08fff646 */ unsigned short waterposi;
   /* 08fff648 */ unsigned short waterposi_m;
   /* 08fff64a */ unsigned short watermoveposi;
-  /* 08fff64d */ unsigned char DAT_08fff64d;
+  /* 08fff64d */ unsigned char water_flag;
   /* 08fff64e */ unsigned char waterflag;
   /* 08fff650 */ unsigned char pal_anim_ctr0;
   /* 08fff65e */ unsigned char ssonicpallet_next;

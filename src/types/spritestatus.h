@@ -572,7 +572,7 @@ typedef struct SKC_sprite_status {
           unsigned char rotation; // 0x32
           unsigned char bitfield; // 0x34
           unsigned char patcnt_save; // 0x35
-          unsigned char f64d_save; // 0x36
+          unsigned char water_flag_save; // 0x36
         }
         togetree;
         struct {
