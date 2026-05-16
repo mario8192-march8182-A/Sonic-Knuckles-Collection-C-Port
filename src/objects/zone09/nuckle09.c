@@ -2683,13 +2683,13 @@ void nk0930_wrt(SKC_sprite_status* p_actwk) {
   if (p_actwk->patno == p_actwk->u.obj.wrt.prev_patno) return;
 
   p_actwk->u.obj.wrt.prev_patno = p_actwk->patno;
-  unsigned char* p_wrtpat = nkmiles_wrtpat_tbl[p_actwk->patno];
-  unsigned short cnt = p_wrtpat[0] << 8 | p_wrtpat[1];
-  p_wrtpat += 2;
+  unsigned short* p_wrtpat = nkmiles_wrtpat_tbl[p_actwk->patno];
+  unsigned short cnt = *p_wrtpat++;
   unsigned short vram_adr = 0x9B40;
 
   for (int i = 0; i < cnt; ++i) {
-    unsigned short command = p_wrtpat[0] << 8 | p_wrtpat[1];
+    unsigned short command = *p_wrtpat++;
+    command = command << 8 | command >> 8;
     unsigned char* p_source = &nkmiles_cg[(command & 0x0FFF) * 32];
     unsigned short size = (((command & 0xF000) >> 12) + 1) * 32;
     memcpy(&g_vram[vram_adr], p_source, size);
@@ -2702,13 +2702,13 @@ static void nk0930_effect_wrt(SKC_sprite_status* p_actwk) {
   if (p_actwk->patno == p_actwk->u.obj.wrt.prev_patno) return;
 
   p_actwk->u.obj.wrt.prev_patno = p_actwk->patno;
-  unsigned char* p_wrtpat = effect_wrtpat_tbl[p_actwk->patno];
-  unsigned short cnt = p_wrtpat[0] << 8 | p_wrtpat[1];
-  p_wrtpat += 2;
+  unsigned short* p_wrtpat = effect_wrtpat_tbl[p_actwk->patno];
+  unsigned short cnt = *p_wrtpat++;
   unsigned short vram_adr = 0xA000;
 
   for (int i = 0; i < cnt; ++i) {
-    unsigned short command = p_wrtpat[0] << 8 | p_wrtpat[1];
+    unsigned short command = *p_wrtpat++;
+    command = command << 8 | command >> 8;
     unsigned char* p_source = &effect_cg[(command & 0x0FFF) * 32];
     unsigned short size = (((command & 0xF000) >> 12) + 1) * 32;
     memcpy(&g_vram[vram_adr], p_source, size);
