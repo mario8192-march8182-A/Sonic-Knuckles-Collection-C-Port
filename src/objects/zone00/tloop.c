@@ -8,6 +8,7 @@
 #include "../../actset.h"
 #include "../../etc.h"
 #include "../../hitchk.h"
+#include "../player.h"
 static void tloopinit(SKC_sprite_status* p_actwk);
 static void tloopmove(SKC_sprite_status* p_actwk);
 static void tloopmovesub(SKC_sprite_status* p_actwk);
@@ -189,7 +190,7 @@ static void tloopmovesub__jump2(SKC_sprite_status* p_actwk, SKC_sprite_status* p
     p_playerwk->yspeed = (yposi - yposi_save) * 0x100;
     short dir = fp16_get_integer(*p_plspeed) / 2 / 11;
     p_playerwk->patno = tloopdirtbl[dir];
-    Perform_Player_DPLC(p_playerwk, p_playerwk->patno);
+    playwrt1(p_playerwk, p_playerwk->patno);
   }
 }
 

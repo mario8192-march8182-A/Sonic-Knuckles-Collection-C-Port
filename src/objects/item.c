@@ -1,5 +1,6 @@
 #include "item.h"
 #include <stdbool.h>
+#include "../data/pat/play.h"
 #include "../types/sonic3ram.h"
 #include "../types/spritepattern.h"
 #include "../types/spritestatus.h"
@@ -476,7 +477,7 @@ static void item2_09(SKC_sprite_status* p_actwk, SKC_sprite_status* p_playerwk, 
     case PLAY_TYPE_SONIC_AND_MILES:
     case PLAY_TYPE_SONIC:
       g_ram.ssonicflag = 0xFF;
-      g_ram.actwk[0].patbase = ssonicpat;
+      g_ram.actwk[0].patbase = splaypat;
       g_ram.actwk[0].mstno = 31;
       g_ram.plmaxspdwk = 0xA00;
       g_ram.pladdspdwk = 0x30;

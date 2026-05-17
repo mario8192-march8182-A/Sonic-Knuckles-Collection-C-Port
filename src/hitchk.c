@@ -8,6 +8,7 @@
 #include "utils/fp16.h"
 #include "coli.h"
 #include "dircol.h"
+#include "objects/player.h"
 static SKC_hitchk_coli plhitchk_bryuka(SKC_sprite_status* p_actwk, SKC_sprite_status* p_playerwk, SKC_hitchk_data data, signed char* p_slope_heights, bool* p_plride, bool* p_plpush);
 static SKC_hitchk_coli plhitchk_offset(SKC_sprite_status* p_actwk, SKC_sprite_status* p_playerwk, SKC_hitchk_data data, bool* p_plride, bool* p_plpush);
 static SKC_hitchk_coli plhitchk_offset_chk_coli(SKC_sprite_status* p_actwk, SKC_sprite_status* p_playerwk, SKC_hitchk_data data, bool* p_plride, bool* p_plpush);
@@ -641,7 +642,7 @@ void set_ride(SKC_sprite_status* p_actwk, SKC_sprite_status* p_playerwk, bool* p
   *p_plride = true;
   if (p_playerwk->u.play.cddat.jump == 1) {
     p_playerwk->u.play.cddat.jump = 0;
-    Player_TouchFloor();
+    jumpcolsub0(p_playerwk);
   }
 }
 

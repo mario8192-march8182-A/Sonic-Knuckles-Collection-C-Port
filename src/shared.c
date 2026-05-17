@@ -4,6 +4,7 @@
 #include "data/cg/kanban.h"
 #include "data/cg/friend.h"
 #include "data/cg/item.h"
+#include "data/pat/play.h"
 #include "types/cchgcntinfo.h"
 #include "types/cchgitem.h"
 #include "types/cchgwork.h"
@@ -32,6 +33,7 @@
 #include "sound.h"
 #include "objects/common.h"
 #include "objects/kanban.h"
+#include "objects/player.h"
 static void chk_pt_next(SKC_sprite_status* p_actwk, signed char* p_pg_data);
 static int pt_chgs0__chk_pt_next(SKC_sprite_status* p_actwk, signed char* p_pg_data);
 static int chk_tpg_next(SKC_sprite_status* p_actwk, signed char* p_pg_data);
@@ -2947,7 +2949,7 @@ void wrt_player(void) {
 
 
 static SKC_sprite_status_handler play_wrt_tbl[3] = {
-  &wrt_play,
+  &playwrt,
   &wrt_fox,
   &wrt_knuckles
 };
@@ -3431,7 +3433,7 @@ void chg_super(void) {
     case PLAY_TYPE_SONIC_AND_MILES:
     case PLAY_TYPE_SONIC:
     default:
-      g_ram.actwk[0].patbase = ssonicpat;
+      g_ram.actwk[0].patbase = splaypat;
       g_ram.ssonicflag = 0xFF;
       g_ram.plmaxspdwk = 0xA00;
       g_ram.pladdspdwk = 0x30;

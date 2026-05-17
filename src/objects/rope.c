@@ -11,6 +11,7 @@
 #include "../etc.h"
 #include "../sound.h"
 #include "bgspr.h"
+#include "player.h"
 static void ropeinit(SKC_sprite_status* p_actwk);
 static void ropeinit__sub(SKC_sprite_status* p_actwk);
 static void ropemove(SKC_sprite_status* p_actwk);
@@ -511,7 +512,7 @@ static void handlesub(SKC_sprite_status* p_actwk, SKC_sprite_status* p_playerwk,
           }
           p_playerwk->actflg.vflip = 0;
           p_playerwk->actflg.hflip = p_playerwk->u.play.cddat.left;
-          Perform_Player_DPLC(p_playerwk, p_playerwk->patno);
+          playwrt1(p_playerwk, p_playerwk->patno);
         }
       }
       else {
@@ -1087,7 +1088,7 @@ static void hbarhandlesub(SKC_sprite_status* p_actwk, SKC_sprite_status* p_playe
         }
         p_playerwk->actflg.vflip = 0;
         p_playerwk->actflg.hflip = p_playerwk->u.play.cddat.left;
-        Perform_Player_DPLC(p_playerwk, p_playerwk->patno);
+        playwrt1(p_playerwk, p_playerwk->patno);
       }
     }
     else {

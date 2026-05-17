@@ -456,7 +456,7 @@ void o_star(SKC_sprite_status* p_actwk) {
         g_ram.plpowerdat_s2.muteki = 0;
         g_ram.plpowerdat_s2.speedup = 0;
         g_ram.plpowerdat_s2.unused3 = 0;
-        g_ram.plpowerdat_s2.infinite_inertia = 0;
+        g_ram.plpowerdat_s2.mizuflag = 0;
         g_ram.plpowerdat_s = g_ram.plpowerdat_s2;
         g_ram.plresetflag = 1;
         actunset();

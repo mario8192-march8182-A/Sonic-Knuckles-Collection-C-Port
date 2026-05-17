@@ -13,6 +13,7 @@
 #include "ringact.h"
 #include "shared.h"
 #include "sound.h"
+#include "objects/player.h"
 #include "objects/ring.h"
 #include "objects/toge.h"
 static void pcol0(SKC_sprite_status* p_playerwk, short xposi, short yposi, short sprhs, short sprvs);
@@ -385,7 +386,7 @@ void playdamageset(SKC_sprite_status* p_playerwk, SKC_sprite_status* p_coliwk) {
     }
   }
   p_playerwk->r_no = 4;
-  Player_TouchFloor();
+  jumpcolsub0(p_playerwk);
   p_playerwk->u.play.powerdat.muteki = 1;
   p_playerwk->xspeed = p_playerwk->u.play.cddat.underwater == 0 ? -0x200 : -0x100;
   p_playerwk->yspeed = p_playerwk->u.play.cddat.underwater == 0 ? -0x400 : -0x200;
@@ -412,7 +413,7 @@ static void playdieset0(SKC_sprite_status* p_playerwk, short sound_command) {
   memset(&p_playerwk->u.play.powerdat, 0, sizeof(p_playerwk->u.play.powerdat));
   p_playerwk->u.play.eventflag = 0;
   p_playerwk->r_no = 6;
-  Player_TouchFloor();
+  jumpcolsub0(p_playerwk);
   p_playerwk->u.play.cddat.jump = 1;
   p_playerwk->yspeed = -0x700;
   p_playerwk->xspeed = 0;

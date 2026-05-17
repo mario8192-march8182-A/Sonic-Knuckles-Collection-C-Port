@@ -70,7 +70,7 @@ static void editinit(SKC_sprite_status* p_actwk) {
   fp16_set_integer(&g_ram.actwk[0].yposi, yposi);
   g_ram.scra_v_posit = (g_ram.scra_v_posit >> 16 & g_ram.scrc_v) << 16 | g_ram.scra_v_posit & 0x0000FFFF;
   g_ram.pl_scr_lock_flag = 0;
-  g_ram.DAT_08fff7c8 = 0;
+  g_ram.watercoliflag = 0;
   if (p_actwk->u.play.cddat.underwater == 1) {
     p_actwk->u.play.cddat.underwater = 0;
     plairset(p_actwk);

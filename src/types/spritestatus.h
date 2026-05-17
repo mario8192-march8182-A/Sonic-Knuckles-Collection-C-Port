@@ -39,7 +39,7 @@ typedef struct SKC_play_powerdat {
   unsigned int flame_baria : 1;
   unsigned int thunder_baria : 1;
   unsigned int aqua_baria : 1;
-  unsigned int infinite_inertia : 1;
+  unsigned int mizuflag : 1;
 }
 SKC_play_powerdat;
 
@@ -591,7 +591,11 @@ typedef struct SKC_sprite_status {
       SKC_play_cddat cddat; // 0x2A
       SKC_play_powerdat powerdat; // 0x2B
       unsigned char air_timer; // 0x2C
-      unsigned char flip_mst; // 0x2D
+      struct { // 0x2D
+        unsigned int type : 7;
+        unsigned int reverse : 1;
+      }
+      flip_mst;
       unsigned char control_bitfield; // 0x2E
       unsigned char talent_status; // 0x2F
       unsigned char flip_rev_cnt; // 0x30
@@ -607,7 +611,7 @@ typedef struct SKC_sprite_status {
       unsigned char angle_below; // 0x3B
       unsigned char convex_flag; // 0x3C
       unsigned char spindash_flag; // 0x3D
-      unsigned short spindash_ctr; // 0x3E
+      short spindash_ctr; // 0x3E
       unsigned char jump_flag; // 0x40
       unsigned char force_direc_up_timer; // 0x41
       unsigned short ride_obj; // 0x42
