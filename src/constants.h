@@ -31,7 +31,9 @@ sonic_game_modes;
 #define ACTWK_DYNAMIC_START 3
 #define ACTWK_RESERVED_START 93
 #define ACTWK_PL_AWA 94
+#define ACTWK_PL2_AWA 95
 #define ACTWK_TRAIL 96
+#define ACTWK_MILES_TAILS 97
 #define ACTWK_PL_EFFECT 98
 #define ACTWK_PL2_EFFECT 99
 #define ACTWK_PL_BARIA 100

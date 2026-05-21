@@ -27,6 +27,7 @@
 #include "../etc.h"
 #include "../fcol.h"
 #include "../sound.h"
+#include "fox.h"
 #include "zone.h"
 static void vsplayinit(SKC_sprite_status* p_playerwk, SKC_play_work work);
 static void vsplaymove(SKC_sprite_status* p_playerwk, SKC_play_work work);
@@ -2189,7 +2190,7 @@ void play00die_sub(SKC_sprite_status* p_playerwk, SKC_play_work work) {
     if (g_ram.vs_flag == 0) {
       if (p_playerwk->u.play.character == MILES && g_ram.play_type != PLAY_TYPE_MILES) {
         p_playerwk->r_no = 2;
-        fox_auto_wait_init0(p_playerwk);
+        foxcpu_wait0_init(p_playerwk);
       }
       else {
         p_playerwk->r_no = 8;

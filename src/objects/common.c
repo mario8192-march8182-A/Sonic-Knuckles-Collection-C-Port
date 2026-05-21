@@ -392,7 +392,7 @@ static void rollcmove(SKC_sprite_status* p_actwk) {
   }
   else {
     rollcmove__sub(p_actwk, &g_ram.actwk[0], &p_actwk->u.obj.actfree.rollc.pldir);
-    if (g_ram.fox_auto_rno != 4) {
+    if (g_ram.foxcpu_rno != 4) {
       rollcmove__sub(p_actwk, &g_ram.actwk[1], &p_actwk->u.obj.actfree.rollc.pl2dir);
     }
     frameoutchk3(p_actwk);
@@ -462,7 +462,7 @@ static void rollcmove2(SKC_sprite_status* p_actwk) {
   }
   else {
     rollcmove2__sub(p_actwk, &g_ram.actwk[0], &p_actwk->u.obj.actfree.rollc.pldir);
-    if (g_ram.fox_auto_rno != 4) {
+    if (g_ram.foxcpu_rno != 4) {
       rollcmove2__sub(p_actwk, &g_ram.actwk[1], &p_actwk->u.obj.actfree.rollc.pl2dir);
     }
     frameoutchk3(p_actwk);

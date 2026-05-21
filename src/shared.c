@@ -34,6 +34,7 @@
 #include "objects/common.h"
 #include "objects/kanban.h"
 #include "objects/player.h"
+#include "objects/fox.h"
 static void chk_pt_next(SKC_sprite_status* p_actwk, signed char* p_pg_data);
 static int pt_chgs0__chk_pt_next(SKC_sprite_status* p_actwk, signed char* p_pg_data);
 static int chk_tpg_next(SKC_sprite_status* p_actwk, signed char* p_pg_data);
@@ -2950,7 +2951,7 @@ void wrt_player(void) {
 
 static SKC_sprite_status_handler play_wrt_tbl[3] = {
   &playwrt,
-  &wrt_fox,
+  &foxwrt,
   &wrt_knuckles
 };
 
@@ -3355,7 +3356,7 @@ void fox_auto(SKC_sprite_status* p_actwk) {
   }
   else {
     g_ram.pl2_input_lock_flag = 1;
-    g_ram.fox_auto_timer = 0;
+    g_ram.foxcpu_timer = 0;
     p_actwk->r_ptr = &fox_auto__cnt;
     fox_auto__cnt(p_actwk);
   }

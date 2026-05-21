@@ -31,6 +31,7 @@
 #include "../common.h"
 #include "../eggmbl.h"
 #include "../explosion.h"
+#include "../fox.h"
 #include "../nuckle.h"
 #include "../zone00/bs00m.h"
 static void nuckle090_init(SKC_sprite_status* p_actwk);
@@ -407,7 +408,7 @@ void ev0910(SKC_sprite_status* p_actwk) {
     p_actwk->r_ptr = &ev0910_wait0;
     SKC_actwkchk_result result = actwkchk();
     if (result.actwk_ptr != 0) {
-      result.actwk_ptr->r_ptr = &fox_auto;
+      result.actwk_ptr->r_ptr = &foxcpu;
     }
     ev0910_wait0(p_actwk);
   }
@@ -1746,7 +1747,7 @@ static void ev0930(SKC_sprite_status* p_actwk) {
   memset(&g_ram.swdata, 0, sizeof(g_ram.swdata));
   SKC_actwkchk_result result = actwkchk();
   if (result.actwk_ptr != 0) {
-    result.actwk_ptr->r_ptr = &fox_auto;
+    result.actwk_ptr->r_ptr = &foxcpu;
   }
   g_ram.scralim_n_down = 0x300;
 }
@@ -1831,7 +1832,7 @@ static void ev0930_wait3(SKC_sprite_status* p_actwk) {
   g_ram.pl_input_lock_flag = 0xFF;
   SKC_actwkchk_result result = actwkchk();
   if (result.actwk_ptr != 0) {
-    result.actwk_ptr->r_ptr = &fox_auto;
+    result.actwk_ptr->r_ptr = &foxcpu;
   }
 }
 
