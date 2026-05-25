@@ -35,6 +35,7 @@
 #include "objects/kanban.h"
 #include "objects/player.h"
 #include "objects/fox.h"
+#include "objects/knuckles.h"
 static void chk_pt_next(SKC_sprite_status* p_actwk, signed char* p_pg_data);
 static int pt_chgs0__chk_pt_next(SKC_sprite_status* p_actwk, signed char* p_pg_data);
 static int chk_tpg_next(SKC_sprite_status* p_actwk, signed char* p_pg_data);
@@ -2952,7 +2953,7 @@ void wrt_player(void) {
 static SKC_sprite_status_handler play_wrt_tbl[3] = {
   &playwrt,
   &foxwrt,
-  &wrt_knuckles
+  &knuckleswrt
 };
 
 

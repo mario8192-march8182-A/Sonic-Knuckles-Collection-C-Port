@@ -99,6 +99,7 @@ typedef struct sonic3_ram {
   /* 08ffef5e */ unsigned short plring_s3;
   /* 08ffef60 */ act_timer pltime_s3;
   /* 08ffef64 */ short scr_y_no;
+  /* 08ffef66 */ short scr_shake_flg2;
   /* 08ffef7a */ unsigned short demoid;
   /* 08ffef80 */ unsigned short ringbuffer[RINGBUFFER_SLOTS];
   /* 08fff000 */ unsigned short colorwk4[64];
@@ -157,6 +158,11 @@ typedef struct sonic3_ram {
   /* 08fff74a */ unsigned char DAT_08fff74a;
   /* 08fff74b */ unsigned char DAT_08fff74b;
   /* 08fff74c */ short foxyspeed;
+  /* 08fff74e */ struct {
+                   SKC_play_cddat cd;
+                   SKC_play_powerdat power;
+                 }
+                 glide_flag;
   /* 08fff760 */ short plmaxspdwk;
   /* 08fff762 */ short pladdspdwk;
   /* 08fff764 */ short plretspdwk;

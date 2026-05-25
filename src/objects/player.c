@@ -28,6 +28,7 @@
 #include "../fcol.h"
 #include "../sound.h"
 #include "fox.h"
+#include "knuckles.h"
 #include "zone.h"
 static void vsplayinit(SKC_sprite_status* p_playerwk, SKC_play_work work);
 static void vsplaymove(SKC_sprite_status* p_playerwk, SKC_play_work work);

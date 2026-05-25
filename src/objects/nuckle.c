@@ -2,6 +2,7 @@
 #include <stdbool.h>
 #include <string.h>
 #include "../data/colortbl.h"
+#include "../data/cg/knuckles.h"
 #include "../data/cg/nuckle.h"
 #include "../data/cg/switch.h"
 #include "../data/cg/zone07/egbomb07.h"
@@ -13,8 +14,10 @@
 #include "../data/cg/zone0a/egjr0a.h"
 #include "../data/cg/zone0a/kumo0a.h"
 #include "../data/cg/zone0a/nk0a00.h"
+#include "../data/pat/knuckles.h"
 #include "../data/pat/nuckle.h"
 #include "../data/pat/zone06/bomb06.h"
+#include "../data/wrt/knuckles.h"
 #include "../data/wrt/nuckle.h"
 #include "../types/cgdata.h"
 #include "../types/enemyinitdata.h"
@@ -3405,14 +3408,14 @@ static void nkmiles_wrt(SKC_sprite_status* p_actwk) {
   if (p_actwk->patno == p_actwk->u.obj.wrt.prev_patno) return;
 
   p_actwk->u.obj.wrt.prev_patno = p_actwk->patno;
-  unsigned short* p_wrtpat = nkmiles_wrtpat_tbl[p_actwk->patno];
+  unsigned short* p_wrtpat = knuckleswrtpat[p_actwk->patno];
   unsigned short cnt = *p_wrtpat++;
   unsigned short vram_adr = 0xD400;
 
   for (int i = 0; i < cnt; ++i) {
     unsigned short command = *p_wrtpat++;
     command = command << 8 | command >> 8;
-    unsigned char* p_source = &nkmiles_cg[(command & 0x0FFF) * 32];
+    unsigned char* p_source = &knuckles_cg[(command & 0x0FFF) * 32];
     unsigned short size = (((command & 0xF000) >> 12) + 1) * 32;
     memcpy(&g_vram[vram_adr], p_source, size);
     vram_adr += size;
