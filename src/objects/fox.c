@@ -3140,7 +3140,6 @@ void foxwrt0(unsigned char patno) {
 static void foxwrt1(unsigned short* p_wrtpat, unsigned short cnt, unsigned short vram_adr, unsigned char* p_cg) {
   for (int i = 0; i < cnt; ++i) {
     unsigned short command = *p_wrtpat++;
-    command = command << 8 | command >> 8;
     unsigned char* p_source = &p_cg[(command & 0x0FFF) * 32];
     unsigned short size = (((command & 0xF000) >> 12) + 1) * 32;
     memcpy(&g_vram[vram_adr], p_source, size);
@@ -3434,7 +3433,6 @@ static void vsfoxwrt(SKC_sprite_status* p_playerwk) {
 static void vsfoxwrt0(unsigned short* p_wrtpat, unsigned short cnt, unsigned short vram_adr, unsigned char* p_cg) {
   for (int i = 0; i < cnt; ++i) {
     unsigned short command = *p_wrtpat++;
-    command = command << 8 | command >> 8;
     unsigned char* p_source = &p_cg[(command & 0x0FFF) * 32];
     unsigned short size = (((command & 0xF000) >> 12) + 1) * 32;
     memcpy(&g_vram[vram_adr], p_source, size);

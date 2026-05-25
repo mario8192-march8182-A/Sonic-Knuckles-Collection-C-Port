@@ -3414,7 +3414,6 @@ static void nkmiles_wrt(SKC_sprite_status* p_actwk) {
 
   for (int i = 0; i < cnt; ++i) {
     unsigned short command = *p_wrtpat++;
-    command = command << 8 | command >> 8;
     unsigned char* p_source = &knuckles_cg[(command & 0x0FFF) * 32];
     unsigned short size = (((command & 0xF000) >> 12) + 1) * 32;
     memcpy(&g_vram[vram_adr], p_source, size);
