@@ -40,31 +40,31 @@ static SKC_dircol_result climbcol(SKC_sprite_status* p_playerwk, short yposi);
 static void glide_move_surmount(SKC_sprite_status* p_playerwk);
 static void glide_patchg(SKC_sprite_status* p_playerwk);
 static void glide_chk(SKC_sprite_status* p_playerwk, SKC_play_work work);
-static void knucklesballwalk(SKC_sprite_status* p_playerwk, SKC_play_work work);
-static void knucklesballjump(SKC_sprite_status* p_playerwk, SKC_play_work work);
-static void knuckleslevermove(SKC_sprite_status* p_playerwk, SKC_play_work work);
-static void knuckleslmovecol(SKC_sprite_status* p_playerwk);
+static void ballwalk(SKC_sprite_status* p_playerwk, SKC_play_work work);
+static void balljump(SKC_sprite_status* p_playerwk, SKC_play_work work);
+static void levermove(SKC_sprite_status* p_playerwk, SKC_play_work work);
+static void lmovecol(SKC_sprite_status* p_playerwk);
 static void nkwalk_l(SKC_sprite_status* p_playerwk, SKC_play_work work);
 static void nkwalk_r(SKC_sprite_status* p_playerwk, SKC_play_work work);
-static void knucklesballlmove(SKC_sprite_status* p_playerwk, SKC_play_work work);
-static void knucklesballwalk_l(SKC_sprite_status* p_playerwk, short plretspdwk);
-static void knucklesballwalk_r(SKC_sprite_status* p_playerwk, short plretspdwk);
-static void knucklesjumpmove(SKC_sprite_status* p_playerwk, SKC_play_work work);
-static bool knucklesjumpchk(SKC_sprite_status* p_playerwk);
-static void knucklesjumpchk2(SKC_sprite_status* p_playerwk, SKC_play_work work);
-static void knucklesjumpchk3(SKC_sprite_status* p_playerwk, SKC_play_work work);
+static void balllmove(SKC_sprite_status* p_playerwk, SKC_play_work work);
+static void ballwalk_l(SKC_sprite_status* p_playerwk, short plretspdwk);
+static void ballwalk_r(SKC_sprite_status* p_playerwk, short plretspdwk);
+static void jumpmove(SKC_sprite_status* p_playerwk, SKC_play_work work);
+static bool jumpchk(SKC_sprite_status* p_playerwk);
+static void jumpchk2(SKC_sprite_status* p_playerwk, SKC_play_work work);
+static void jumpchk3(SKC_sprite_status* p_playerwk, SKC_play_work work);
 static void glidecol(SKC_sprite_status* p_playerwk);
-static void knucklesjumpcolsub(SKC_sprite_status* p_playerwk);
-static void knucklesjumpcolsub1(SKC_sprite_status* p_playerwk);
+static void jumpcolsub(SKC_sprite_status* p_playerwk);
+static void jumpcolsub1(SKC_sprite_status* p_playerwk);
 static void knuckles_damage(SKC_sprite_status* p_playerwk, SKC_play_work work);
 static void knuckles_damage_sub(SKC_sprite_status* p_playerwk);
 static void knuckles_die(SKC_sprite_status* p_playerwk, SKC_play_work work);
 static void knuckles_erase(SKC_sprite_status* p_playerwk, SKC_play_work work);
 static void knuckles_appear(SKC_sprite_status* p_playerwk, SKC_play_work work);
 static void knuckles_drown(SKC_sprite_status* p_playerwk, SKC_play_work work);
-static void knucklespatchgmainwrt(SKC_sprite_status* p_playerwk);
-static void knucklespatchgmain(SKC_sprite_status* p_playerwk);
-static void knucklespatchgmain2(SKC_sprite_status* p_playerwk, unsigned char* p_chg);
+static void patchgmainwrt(SKC_sprite_status* p_playerwk);
+static void patchgmain(SKC_sprite_status* p_playerwk);
+static void patchgmain2(SKC_sprite_status* p_playerwk, unsigned char* p_chg);
 static void knucklesrunchg(SKC_sprite_status* p_playerwk, unsigned char patno);
 static void knucklesrunchg2(SKC_sprite_status* p_playerwk);
 static void knucklesrunchg3(SKC_sprite_status* p_playerwk);
@@ -194,8 +194,8 @@ static void knuckles_move(SKC_sprite_status* p_playerwk, SKC_play_work work) {
   void(*act_tbl[4])(SKC_sprite_status*, SKC_play_work) = {
     &knuckleswalk,
     &knucklesjump,
-    &knucklesballwalk,
-    &knucklesballjump
+    &ballwalk,
+    &balljump
   };
 
   if (g_ram.debugflag != 0) {
@@ -236,7 +236,7 @@ static void knuckles_move(SKC_sprite_status* p_playerwk, SKC_play_work work) {
     p_playerwk->mstno = p_playerwk->mstrestart;
   }
   if (!BIT_IS_SET(p_playerwk->u.play.control_bitfield, 1)) {
-    knucklespatchgmain(p_playerwk);
+    patchgmain(p_playerwk);
     if (g_ram.reverse_gravity_flag != 0) {
       p_playerwk->actflg.vflip ^= 1;
     }
@@ -330,10 +330,10 @@ static void nkwaterchk(SKC_sprite_status* p_playerwk, SKC_play_work work) {
 
 
 static void knuckleswalk(SKC_sprite_status* p_playerwk, SKC_play_work work) {
-  if (spinchk(p_playerwk, work) || knucklesjumpchk(p_playerwk)) return;
+  if (spinchk(p_playerwk, work) || jumpchk(p_playerwk)) return;
 
   keispd(p_playerwk);
-  knuckleslevermove(p_playerwk, work);
+  levermove(p_playerwk, work);
   ballchk(p_playerwk);
   limitchk(p_playerwk);
   speedset2_g(p_playerwk);
@@ -360,8 +360,8 @@ static void knuckleswalk(SKC_sprite_status* p_playerwk, SKC_play_work work) {
 
 static void knucklesjump(SKC_sprite_status* p_playerwk, SKC_play_work work) {
   if (p_playerwk->u.play.talent_status == 0) {
-    knucklesjumpchk2(p_playerwk, work);
-    knucklesjumpmove(p_playerwk, work);
+    jumpchk2(p_playerwk, work);
+    jumpmove(p_playerwk, work);
     limitchk(p_playerwk);
     speedset_g(p_playerwk);
     if (p_playerwk->u.play.cddat.underwater == 1) {
@@ -515,7 +515,7 @@ static void fall_from_wall(SKC_sprite_status* p_playerwk) {
 
 
 static void glide_move_fall(SKC_sprite_status* p_playerwk, SKC_play_work work) {
-  knucklesjumpmove(p_playerwk, work);
+  jumpmove(p_playerwk, work);
   p_playerwk->yspeed += 0x38;
   if (p_playerwk->u.play.cddat.underwater == 1) {
     p_playerwk->yspeed -= 0x28;
@@ -935,11 +935,11 @@ static void glide_chk(SKC_sprite_status* p_playerwk, SKC_play_work work) {
 }
 
 
-static void knucklesballwalk(SKC_sprite_status* p_playerwk, SKC_play_work work) {
-  if (p_playerwk->u.play.spindash_flag == 0 && knucklesjumpchk(p_playerwk)) return;
+static void ballwalk(SKC_sprite_status* p_playerwk, SKC_play_work work) {
+  if (p_playerwk->u.play.spindash_flag == 0 && jumpchk(p_playerwk)) return;
 
   keispd2(p_playerwk);
-  knucklesballlmove(p_playerwk, work);
+  balllmove(p_playerwk, work);
   limitchk(p_playerwk);
   speedset2_g(p_playerwk);
   fcol_g(p_playerwk);
@@ -963,9 +963,9 @@ static void knucklesballwalk(SKC_sprite_status* p_playerwk, SKC_play_work work) 
 }
 
 
-static void knucklesballjump(SKC_sprite_status* p_playerwk, SKC_play_work work) {
-  knucklesjumpchk2(p_playerwk, work);
-  knucklesjumpmove(p_playerwk, work);
+static void balljump(SKC_sprite_status* p_playerwk, SKC_play_work work) {
+  jumpchk2(p_playerwk, work);
+  jumpmove(p_playerwk, work);
   limitchk(p_playerwk);
   speedset_g(p_playerwk);
   if (p_playerwk->u.play.cddat.underwater == 1) {
@@ -976,7 +976,7 @@ static void knucklesballjump(SKC_sprite_status* p_playerwk, SKC_play_work work) 
 }
 
 
-static void knuckleslevermove(SKC_sprite_status* p_playerwk, SKC_play_work work) {
+static void levermove(SKC_sprite_status* p_playerwk, SKC_play_work work) {
   if (p_playerwk->u.play.powerdat.mizuflag == 0) {
     bool looking = false;
     bool skip_center = false;
@@ -1131,11 +1131,11 @@ static void knuckleslevermove(SKC_sprite_status* p_playerwk, SKC_play_work work)
   sinset(p_playerwk->direc.b.b0, &sin, &cos);
   p_playerwk->xspeed = cos * p_playerwk->mspeed / 0x100;
   p_playerwk->yspeed = sin * p_playerwk->mspeed / 0x100;
-  knuckleslmovecol(p_playerwk);
+  lmovecol(p_playerwk);
 }
 
 
-static void knuckleslmovecol(SKC_sprite_status* p_playerwk) {
+static void lmovecol(SKC_sprite_status* p_playerwk) {
   if (BIT_IS_SET(p_playerwk->u.play.control_bitfield, 6)) return;
   if ((p_playerwk->direc.b.b0 & 0x3F) && (p_playerwk->direc.b.b0 + 64 & 0xFF) >= 128) return;
   if (p_playerwk->mspeed == 0) return;
@@ -1249,16 +1249,16 @@ static void nkwalk_r(SKC_sprite_status* p_playerwk, SKC_play_work work) {
 }
 
 
-static void knucklesballlmove(SKC_sprite_status* p_playerwk, SKC_play_work work) {
+static void balllmove(SKC_sprite_status* p_playerwk, SKC_play_work work) {
   short pladdspdwk = *work.pladdspdwk_ptr / 2;
   short plretspdwk = 0x20;
   if (!BIT_IS_SET(p_playerwk->u.play.spindash_flag, 7) && p_playerwk->u.play.powerdat.mizuflag == 0) {
     if (p_playerwk->u.play.hlock_timer == 0) {
       if (g_ram.swdata.down.l == 1) {
-        knucklesballwalk_l(p_playerwk, plretspdwk);
+        ballwalk_l(p_playerwk, plretspdwk);
       }
       if (g_ram.swdata.down.r == 1) {
-        knucklesballwalk_r(p_playerwk, plretspdwk);
+        ballwalk_r(p_playerwk, plretspdwk);
       }
     }
     if (g_ram.ssonicflag != 0) {
@@ -1311,11 +1311,11 @@ static void knucklesballlmove(SKC_sprite_status* p_playerwk, SKC_play_work work)
   if (p_playerwk->xspeed < -0x1000) {
     p_playerwk->xspeed = -0x1000;
   }
-  knuckleslmovecol(p_playerwk);
+  lmovecol(p_playerwk);
 }
 
 
-static void knucklesballwalk_l(SKC_sprite_status* p_playerwk, short plretspdwk) {
+static void ballwalk_l(SKC_sprite_status* p_playerwk, short plretspdwk) {
   if (p_playerwk->mspeed <= 0) {
     p_playerwk->u.play.cddat.left = 1;
     p_playerwk->mstno = 2;
@@ -1329,7 +1329,7 @@ static void knucklesballwalk_l(SKC_sprite_status* p_playerwk, short plretspdwk) 
 }
 
 
-static void knucklesballwalk_r(SKC_sprite_status* p_playerwk, short plretspdwk) {
+static void ballwalk_r(SKC_sprite_status* p_playerwk, short plretspdwk) {
   if (p_playerwk->mspeed >= 0) {
     p_playerwk->u.play.cddat.left = 0;
     p_playerwk->mstno = 2;
@@ -1343,7 +1343,7 @@ static void knucklesballwalk_r(SKC_sprite_status* p_playerwk, short plretspdwk) 
 }
 
 
-static void knucklesjumpmove(SKC_sprite_status* p_playerwk, SKC_play_work work) {
+static void jumpmove(SKC_sprite_status* p_playerwk, SKC_play_work work) {
   short pladdspdwk = *work.pladdspdwk_ptr * 2;
   if (p_playerwk->u.play.cddat.ballj == 0) {
     short cal_speed = p_playerwk->xspeed;
@@ -1392,7 +1392,7 @@ static void knucklesjumpmove(SKC_sprite_status* p_playerwk, SKC_play_work work) 
 }
 
 
-static bool knucklesjumpchk(SKC_sprite_status* p_playerwk) {
+static bool jumpchk(SKC_sprite_status* p_playerwk) {
   if (!are_any_trg_buttons_used(g_ram.swdata.pressed)) return false;
 
   unsigned char cal_direc = p_playerwk->direc.b.b0;
@@ -1435,7 +1435,7 @@ static bool knucklesjumpchk(SKC_sprite_status* p_playerwk) {
 }
 
 
-static void knucklesjumpchk2(SKC_sprite_status* p_playerwk, SKC_play_work work) {
+static void jumpchk2(SKC_sprite_status* p_playerwk, SKC_play_work work) {
   if (p_playerwk->u.play.jump_flag != 0) {
     short cal_speed = p_playerwk->u.play.cddat.underwater == 0 ? -0x400 : -0x200;
     if (cal_speed > p_playerwk->yspeed) {
@@ -1444,7 +1444,7 @@ static void knucklesjumpchk2(SKC_sprite_status* p_playerwk, SKC_play_work work) 
       }
     }
     else {
-      knucklesjumpchk3(p_playerwk, work);
+      jumpchk3(p_playerwk, work);
     }
   }
   else if (p_playerwk->u.play.spindash_flag == 0 && p_playerwk->yspeed < -0xFC0) {
@@ -1453,7 +1453,7 @@ static void knucklesjumpchk2(SKC_sprite_status* p_playerwk, SKC_play_work work) 
 }
 
 
-static void knucklesjumpchk3(SKC_sprite_status* p_playerwk, SKC_play_work work) {
+static void jumpchk3(SKC_sprite_status* p_playerwk, SKC_play_work work) {
   if (p_playerwk->u.play.talent_status != 0) return;
   if (!are_any_trg_buttons_used(g_ram.swdata.pressed)) return;
 
@@ -1632,13 +1632,13 @@ static void glidecol(SKC_sprite_status* p_playerwk) {
 }
 
 
-static void knucklesjumpcolsub(SKC_sprite_status* p_playerwk) {
+static void jumpcolsub(SKC_sprite_status* p_playerwk) {
   if (p_playerwk->u.play.spindash_flag == 0) {
     p_playerwk->mstno = 0;
     knucklesjumpcolsub0(p_playerwk);
   }
   else {
-    knucklesjumpcolsub1(p_playerwk);
+    jumpcolsub1(p_playerwk);
   }
 }
 
@@ -1660,11 +1660,11 @@ void knucklesjumpcolsub0(SKC_sprite_status* p_playerwk) {
     }
     fp16_set_integer(&p_playerwk->yposi, fp16_get_integer(p_playerwk->yposi) + yoffset);
   }
-  knucklesjumpcolsub1(p_playerwk);
+  jumpcolsub1(p_playerwk);
 }
 
 
-static void knucklesjumpcolsub1(SKC_sprite_status* p_playerwk) {
+static void jumpcolsub1(SKC_sprite_status* p_playerwk) {
   p_playerwk->u.play.cddat.jump = 0;
   p_playerwk->u.play.cddat.push = 0;
   p_playerwk->u.play.cddat.ballj = 0;
@@ -1700,7 +1700,7 @@ static void knuckles_damage(SKC_sprite_status* p_playerwk, SKC_play_work work) {
     knuckles_damage_sub(p_playerwk);
     limitchk(p_playerwk);
     playposiwkset(p_playerwk);
-    knucklespatchgmainwrt(p_playerwk);
+    patchgmainwrt(p_playerwk);
     actionsub(p_playerwk);
   }
 }
@@ -1738,7 +1738,7 @@ static void knuckles_die(SKC_sprite_status* p_playerwk, SKC_play_work work) {
     play00die_sub(p_playerwk, work);
     speedset_g(p_playerwk);
     playposiwkset(p_playerwk);
-    knucklespatchgmainwrt(p_playerwk);
+    patchgmainwrt(p_playerwk);
   }
 }
 
@@ -1757,7 +1757,7 @@ static void knuckles_appear(SKC_sprite_status* p_playerwk, SKC_play_work work) {
   if (g_ram.DAT_08ffee00 == 0 && g_ram.DAT_08ffee02 == 0) {
     p_playerwk->r_no = 2;
   }
-  knucklespatchgmainwrt(p_playerwk);
+  patchgmainwrt(p_playerwk);
   actionsub(p_playerwk);
 }
 
@@ -1771,14 +1771,14 @@ static void knuckles_drown(SKC_sprite_status* p_playerwk, SKC_play_work work) {
     speedset2_g(p_playerwk);
     p_playerwk->yspeed += 0x10;
     playposiwkset(p_playerwk);
-    knucklespatchgmainwrt(p_playerwk);
+    patchgmainwrt(p_playerwk);
     actionsub(p_playerwk);
   }
 }
 
 
-static void knucklespatchgmainwrt(SKC_sprite_status* p_playerwk) {
-  knucklespatchgmain(p_playerwk);
+static void patchgmainwrt(SKC_sprite_status* p_playerwk) {
+  patchgmain(p_playerwk);
   if (g_ram.reverse_gravity_flag != 0) {
     p_playerwk->actflg.vflip ^= 1;
   }
@@ -1786,7 +1786,7 @@ static void knucklespatchgmainwrt(SKC_sprite_status* p_playerwk) {
 }
 
 
-static void knucklespatchgmain(SKC_sprite_status* p_playerwk) {
+static void patchgmain(SKC_sprite_status* p_playerwk) {
   if (p_playerwk->mstno != p_playerwk->mstrestart) {
     p_playerwk->mstrestart = p_playerwk->mstno;
     p_playerwk->patcnt = 0;
@@ -1802,13 +1802,13 @@ static void knucklespatchgmain(SKC_sprite_status* p_playerwk) {
     p_playerwk->actflg.vflip = 0;
     if (p_playerwk->pattim-- == 0) {
       p_playerwk->pattim = p_chg[0];
-      knucklespatchgmain2(p_playerwk, p_chg);
+      patchgmain2(p_playerwk, p_chg);
     }
   }
 }
 
 
-static void knucklespatchgmain2(SKC_sprite_status* p_playerwk, unsigned char* p_chg) {
+static void patchgmain2(SKC_sprite_status* p_playerwk, unsigned char* p_chg) {
   unsigned char patno = p_chg[p_playerwk->patcnt + 1];
   if (patno < 252) {
     p_playerwk->patno = patno;
@@ -1899,7 +1899,7 @@ static void knucklesrunchg2(SKC_sprite_status* p_playerwk) {
       cal_speed = 0;
     }
     p_playerwk->pattim = cal_speed / 0x100;
-    knucklespatchgmain2(p_playerwk, p_chg);
+    patchgmain2(p_playerwk, p_chg);
   }
 }
 
@@ -1912,7 +1912,7 @@ static void knucklesrunchg3(SKC_sprite_status* p_playerwk) {
     cal_speed = 0;
   }
   p_playerwk->pattim = cal_speed / 0x100;
-  knucklespatchgmain2(p_playerwk, nkchg04);
+  patchgmain2(p_playerwk, nkchg04);
 }
 
 

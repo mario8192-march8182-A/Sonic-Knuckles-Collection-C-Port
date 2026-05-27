@@ -28,11 +28,11 @@ static void vsfoxmove(SKC_sprite_status* p_playerwk, SKC_play_work work);
 static void vsfoxwalk(SKC_sprite_status* p_playerwk, SKC_play_work work);
 static void vsfoxjump(SKC_sprite_status* p_playerwk, SKC_play_work work);
 static void vsflychk(SKC_sprite_status* p_playerwk);
-static void vsfoxballwalk(SKC_sprite_status* p_playerwk, SKC_play_work work);
-static void vsfoxballjump(SKC_sprite_status* p_playerwk, SKC_play_work work);
-static void vsfoxballchk(SKC_sprite_status* p_playerwk);
-static void vsfoxballset(SKC_sprite_status* p_playerwk);
-static bool vsfoxspinchk(SKC_sprite_status* p_playerwk, SKC_play_work work);
+static void vsballwalk(SKC_sprite_status* p_playerwk, SKC_play_work work);
+static void vsballjump(SKC_sprite_status* p_playerwk, SKC_play_work work);
+static void vsballchk(SKC_sprite_status* p_playerwk);
+static void vsballset(SKC_sprite_status* p_playerwk);
+static bool vsspinchk(SKC_sprite_status* p_playerwk, SKC_play_work work);
 static void fox00init(SKC_sprite_status* p_playerwk, SKC_play_work work);
 static void fox00move(SKC_sprite_status* p_playerwk, SKC_play_work work);
 static void foxpowercnt(SKC_sprite_status* p_playerwk, SKC_play_work work);
@@ -63,37 +63,37 @@ static void fox00walk(SKC_sprite_status* p_playerwk, SKC_play_work work);
 static void fox00jump(SKC_sprite_status* p_playerwk, SKC_play_work work);
 static void flyswimchk(SKC_sprite_status* p_playerwk);
 static void setflyswim(SKC_sprite_status* p_playerwk);
-static void foxball00walk(SKC_sprite_status* p_playerwk, SKC_play_work work);
-static void foxball00jump(SKC_sprite_status* p_playerwk, SKC_play_work work);
-static void foxlevermove(SKC_sprite_status* p_playerwk, SKC_play_work work);
-static void foxlmovecol(SKC_sprite_status* p_playerwk);
+static void ball00walk(SKC_sprite_status* p_playerwk, SKC_play_work work);
+static void ball00jump(SKC_sprite_status* p_playerwk, SKC_play_work work);
+static void levermove(SKC_sprite_status* p_playerwk, SKC_play_work work);
+static void lmovecol(SKC_sprite_status* p_playerwk);
 static void foxwalk_l(SKC_sprite_status* p_playerwk, SKC_play_work work);
 static void foxwalk_r(SKC_sprite_status* p_playerwk, SKC_play_work work);
-static void foxballlmove(SKC_sprite_status* p_playerwk, SKC_play_work work);
-static void foxballwalk_l(SKC_sprite_status* p_playerwk, short plretspdwk);
-static void foxballwalk_r(SKC_sprite_status* p_playerwk, short plretspdwk);
-static void foxjumpmove(SKC_sprite_status* p_playerwk, SKC_play_work work);
+static void balllmove(SKC_sprite_status* p_playerwk, SKC_play_work work);
+static void ballwalk_l(SKC_sprite_status* p_playerwk, short plretspdwk);
+static void ballwalk_r(SKC_sprite_status* p_playerwk, short plretspdwk);
+static void jumpmove(SKC_sprite_status* p_playerwk, SKC_play_work work);
 static void foxlimitchk(SKC_sprite_status* p_playerwk);
-static void foxlimitset(SKC_sprite_status* p_playerwk, short cal_limit);
+static void limitset(SKC_sprite_status* p_playerwk, short cal_limit);
 static void foxballchk(SKC_sprite_status* p_playerwk);
-static void foxballset(SKC_sprite_status* p_playerwk);
-static bool foxjumpchk(SKC_sprite_status* p_playerwk);
-static void foxjumpchk2(SKC_sprite_status* p_playerwk, SKC_play_work work);
-static void foxjumpchk3(SKC_sprite_status* p_playerwk, SKC_play_work work);
+static void ballset(SKC_sprite_status* p_playerwk);
+static bool jumpchk(SKC_sprite_status* p_playerwk);
+static void jumpchk2(SKC_sprite_status* p_playerwk, SKC_play_work work);
+static void jumpchk3(SKC_sprite_status* p_playerwk, SKC_play_work work);
 static bool foxspinchk(SKC_sprite_status* p_playerwk, SKC_play_work work);
 static void foxjumpcolchk(SKC_sprite_status* p_playerwk);
-static void foxjumpcolsub(SKC_sprite_status* p_playerwk);
-static void foxjumpcolsub1(SKC_sprite_status* p_playerwk);
+static void jumpcolsub(SKC_sprite_status* p_playerwk);
+static void jumpcolsub1(SKC_sprite_status* p_playerwk);
 static void fox00damage(SKC_sprite_status* p_playerwk, SKC_play_work work);
 static void fox00damage_sub(SKC_sprite_status* p_playerwk);
 static void fox00die(SKC_sprite_status* p_playerwk, SKC_play_work work);
 static void fox00erase(SKC_sprite_status* p_playerwk, SKC_play_work work);
 static void fox00appear(SKC_sprite_status* p_playerwk, SKC_play_work work);
 static void fox00drown(SKC_sprite_status* p_playerwk, SKC_play_work work);
-static void foxpatchgmainwrt(SKC_sprite_status* p_playerwk);
-static void foxpatchgmain(SKC_sprite_status* p_playerwk);
-static void foxpatchgmain0(SKC_sprite_status* p_actwk, unsigned char** pp_chg);
-static void foxpatchgmain2(SKC_sprite_status* p_actwk, unsigned char* p_chg);
+static void patchgmainwrt(SKC_sprite_status* p_playerwk);
+static void patchgmain(SKC_sprite_status* p_playerwk);
+static void patchgmain0(SKC_sprite_status* p_actwk, unsigned char** pp_chg);
+static void patchgmain2(SKC_sprite_status* p_actwk, unsigned char* p_chg);
 static void foxrunchg(SKC_sprite_status* p_actwk, unsigned char patno);
 static void foxrunchg2(SKC_sprite_status* p_actwk, unsigned char patno);
 static void foxrunchg3(SKC_sprite_status* p_actwk);
@@ -143,9 +143,9 @@ static unsigned char foxchg40[5];
 static unsigned char foxchg41[15];
 static void foxtailswrt(SKC_sprite_status* p_actwk);
 static void foxwrt1(unsigned short* p_wrtpat, unsigned short cnt, unsigned short vram_adr, unsigned char* p_cg);
-static void vsfoxpatchgmain(SKC_sprite_status* p_playerwk);
-static void vsfoxpatchgmain0(SKC_sprite_status* p_actwk, unsigned char** pp_chg);
-static void vsfoxpatchgmain2(SKC_sprite_status* p_actwk, unsigned char* p_chg);
+static void vspatchgmain(SKC_sprite_status* p_playerwk);
+static void vspatchgmain0(SKC_sprite_status* p_actwk, unsigned char** pp_chg);
+static void vspatchgmain2(SKC_sprite_status* p_actwk, unsigned char* p_chg);
 static void vsfoxrunchg(SKC_sprite_status* p_actwk, unsigned char patno);
 static void vsfoxflipchg(SKC_sprite_status* p_actwk);
 static void vsfoxrunchg2(SKC_sprite_status* p_actwk, unsigned char patno);
@@ -313,8 +313,8 @@ static void vsfoxmove(SKC_sprite_status* p_playerwk, SKC_play_work work) {
   void(*act_tbl[4])(SKC_sprite_status*, SKC_play_work) = {
     &vsfoxwalk,
     &vsfoxjump,
-    &vsfoxballwalk,
-    &vsfoxballjump
+    &vsballwalk,
+    &vsballjump
   };
 
   if (g_ram.debugflag != 0 && p_playerwk == &g_ram.actwk[0] && g_ram.swdata1.pressed.b == 1) {
@@ -348,7 +348,7 @@ static void vsfoxmove(SKC_sprite_status* p_playerwk, SKC_play_work work) {
     p_playerwk->u.play.angle_front = g_ram.dirstk[0];
     p_playerwk->u.play.angle_below = g_ram.dirstk[2];
     if (!BIT_IS_SET(p_playerwk->u.play.control_bitfield, 1)) {
-      vsfoxpatchgmain(p_playerwk);
+      vspatchgmain(p_playerwk);
       vsfoxwrt(p_playerwk);
     }
     if (!BIT_IS_SET(p_playerwk->u.play.control_bitfield, 5)
@@ -360,11 +360,11 @@ static void vsfoxmove(SKC_sprite_status* p_playerwk, SKC_play_work work) {
 
 
 static void vsfoxwalk(SKC_sprite_status* p_playerwk, SKC_play_work work) {
-  if (vsfoxspinchk(p_playerwk, work) || foxjumpchk(p_playerwk)) return;
+  if (vsspinchk(p_playerwk, work) || jumpchk(p_playerwk)) return;
 
   keispd(p_playerwk);
-  foxlevermove(p_playerwk, work);
-  vsfoxballchk(p_playerwk);
+  levermove(p_playerwk, work);
+  vsballchk(p_playerwk);
   speedset2(p_playerwk);
   fcol(p_playerwk);
   fallchk(p_playerwk);
@@ -373,8 +373,8 @@ static void vsfoxwalk(SKC_sprite_status* p_playerwk, SKC_play_work work) {
 
 static void vsfoxjump(SKC_sprite_status* p_playerwk, SKC_play_work work) {
   if (p_playerwk->u.play.talent_status == 0) {
-    foxjumpchk2(p_playerwk, work);
-    foxjumpmove(p_playerwk, work);
+    jumpchk2(p_playerwk, work);
+    jumpmove(p_playerwk, work);
     speedset(p_playerwk);
     if (p_playerwk->u.play.cddat.underwater == 1) {
       p_playerwk->yspeed -= 0x28;
@@ -384,7 +384,7 @@ static void vsfoxjump(SKC_sprite_status* p_playerwk, SKC_play_work work) {
   }
   else {
     vsflychk(p_playerwk);
-    foxjumpmove(p_playerwk, work);
+    jumpmove(p_playerwk, work);
     speedset2(p_playerwk);
     direcchg(p_playerwk);
     foxjumpcolchk(p_playerwk);
@@ -433,20 +433,20 @@ static void vsflychk(SKC_sprite_status* p_playerwk) {
 }
 
 
-static void vsfoxballwalk(SKC_sprite_status* p_playerwk, SKC_play_work work) {
-  if (p_playerwk->u.play.spindash_flag == 0 && foxjumpchk(p_playerwk)) return;
+static void vsballwalk(SKC_sprite_status* p_playerwk, SKC_play_work work) {
+  if (p_playerwk->u.play.spindash_flag == 0 && jumpchk(p_playerwk)) return;
 
   keispd2(p_playerwk);
-  foxballlmove(p_playerwk, work);
+  balllmove(p_playerwk, work);
   speedset2(p_playerwk);
   fcol(p_playerwk);
   fallchk(p_playerwk);
 }
 
 
-static void vsfoxballjump(SKC_sprite_status* p_playerwk, SKC_play_work work) {
-  foxjumpchk2(p_playerwk, work);
-  foxjumpmove(p_playerwk, work);
+static void vsballjump(SKC_sprite_status* p_playerwk, SKC_play_work work) {
+  jumpchk2(p_playerwk, work);
+  jumpmove(p_playerwk, work);
   speedset(p_playerwk);
   if (p_playerwk->u.play.cddat.underwater == 1) {
     p_playerwk->yspeed -= 0x28;
@@ -456,17 +456,17 @@ static void vsfoxballjump(SKC_sprite_status* p_playerwk, SKC_play_work work) {
 }
 
 
-static void vsfoxballchk(SKC_sprite_status* p_playerwk) {
+static void vsballchk(SKC_sprite_status* p_playerwk) {
   if (p_playerwk->u.play.powerdat.mizuflag == 1) return;
   if (abs(p_playerwk->mspeed < 0x80)) return;
   if (g_ram.swdata0.down.l == 1 || g_ram.swdata0.down.r == 1) return;
   if (g_ram.swdata0.down.d == 0) return;
 
-  vsfoxballset(p_playerwk);
+  vsballset(p_playerwk);
 }
 
 
-static void vsfoxballset(SKC_sprite_status* p_playerwk) {
+static void vsballset(SKC_sprite_status* p_playerwk) {
   if (p_playerwk->u.play.cddat.ball == 1) return;
 
   p_playerwk->u.play.cddat.ball = 1;
@@ -481,7 +481,7 @@ static void vsfoxballset(SKC_sprite_status* p_playerwk) {
 }
 
 
-static bool vsfoxspinchk(SKC_sprite_status* p_playerwk, SKC_play_work work) {
+static bool vsspinchk(SKC_sprite_status* p_playerwk, SKC_play_work work) {
   short spd_tbl[9] = {
     0x800, 0x880, 0x900, 0x980, 0xA00, 0xA80, 0xB00, 0xB80, 0xC00
   };
@@ -650,8 +650,8 @@ static void fox00move(SKC_sprite_status* p_playerwk, SKC_play_work work) {
   void(*fox00_move_tbl[4])(SKC_sprite_status*, SKC_play_work) = {
     &fox00walk,
     &fox00jump,
-    &foxball00walk,
-    &foxball00jump
+    &ball00walk,
+    &ball00jump
   };
 
   if (g_ram.play_type == PLAY_TYPE_MILES && g_ram.debugflag != 0) {
@@ -710,7 +710,7 @@ static void fox00move(SKC_sprite_status* p_playerwk, SKC_play_work work) {
     p_playerwk->mstno = p_playerwk->mstrestart;
   }
   if (!BIT_IS_SET(p_playerwk->u.play.control_bitfield, 1)) {
-    foxpatchgmain(p_playerwk);
+    patchgmain(p_playerwk);
     if (g_ram.reverse_gravity_flag != 0) {
       p_playerwk->actflg.vflip ^= 1;
     }
@@ -1656,9 +1656,9 @@ static void fox00walk(SKC_sprite_status* p_playerwk, SKC_play_work work) {
     g_ram.actwk[0].u.play.cddat.jump = 1;
     g_ram.miles_carry_flag = 0;
   }
-  if (!foxspinchk(p_playerwk, work) && !foxjumpchk(p_playerwk)) {
+  if (!foxspinchk(p_playerwk, work) && !jumpchk(p_playerwk)) {
     keispd(p_playerwk);
-    foxlevermove(p_playerwk, work);
+    levermove(p_playerwk, work);
     foxballchk(p_playerwk);
     foxlimitchk(p_playerwk);
     speedset2_g(p_playerwk);
@@ -1686,8 +1686,8 @@ static void fox00walk(SKC_sprite_status* p_playerwk, SKC_play_work work) {
 
 static void fox00jump(SKC_sprite_status* p_playerwk, SKC_play_work work) {
   if (p_playerwk->u.play.talent_status == 0) {
-    foxjumpchk2(p_playerwk, work);
-    foxjumpmove(p_playerwk, work);
+    jumpchk2(p_playerwk, work);
+    jumpmove(p_playerwk, work);
     foxlimitchk(p_playerwk);
     speedset_g(p_playerwk);
     if (p_playerwk->u.play.cddat.underwater == 1) {
@@ -1698,7 +1698,7 @@ static void fox00jump(SKC_sprite_status* p_playerwk, SKC_play_work work) {
   }
   else {
     flyswimchk(p_playerwk);
-    foxjumpmove(p_playerwk, work);
+    jumpmove(p_playerwk, work);
     foxlimitchk(p_playerwk);
     speedset2_g(p_playerwk);
     direcchg(p_playerwk);
@@ -1786,15 +1786,15 @@ static void setflyswim(SKC_sprite_status* p_playerwk) {
 }
 
 
-static void foxball00walk(SKC_sprite_status* p_playerwk, SKC_play_work work) {
+static void ball00walk(SKC_sprite_status* p_playerwk, SKC_play_work work) {
   if (g_ram.miles_carry_flag != 0) {
     g_ram.actwk[0].u.play.control_bitfield = 0;
     g_ram.actwk[0].u.play.cddat.jump = 1;
     g_ram.miles_carry_flag = 0;
   }
-  if (p_playerwk->u.play.spindash_flag != 0 || !foxjumpchk(p_playerwk)) {
+  if (p_playerwk->u.play.spindash_flag != 0 || !jumpchk(p_playerwk)) {
     keispd2(p_playerwk);
-    foxballlmove(p_playerwk, work);
+    balllmove(p_playerwk, work);
     foxlimitchk(p_playerwk);
     speedset2_g(p_playerwk);
     fcol_g(p_playerwk);
@@ -1819,14 +1819,14 @@ static void foxball00walk(SKC_sprite_status* p_playerwk, SKC_play_work work) {
 }
 
 
-static void foxball00jump(SKC_sprite_status* p_playerwk, SKC_play_work work) {
+static void ball00jump(SKC_sprite_status* p_playerwk, SKC_play_work work) {
   if (g_ram.miles_carry_flag != 0) {
     g_ram.actwk[0].u.play.control_bitfield = 0;
     g_ram.actwk[0].u.play.cddat.jump = 1;
     g_ram.miles_carry_flag = 0;
   }
-  foxjumpchk2(p_playerwk, work);
-  foxjumpmove(p_playerwk, work);
+  jumpchk2(p_playerwk, work);
+  jumpmove(p_playerwk, work);
   foxlimitchk(p_playerwk);
   speedset_g(p_playerwk);
   if (p_playerwk->u.play.cddat.underwater == 1) {
@@ -1837,7 +1837,7 @@ static void foxball00jump(SKC_sprite_status* p_playerwk, SKC_play_work work) {
 }
 
 
-static void foxlevermove(SKC_sprite_status* p_playerwk, SKC_play_work work) {
+static void levermove(SKC_sprite_status* p_playerwk, SKC_play_work work) {
   if (p_playerwk->u.play.powerdat.mizuflag == 0) {
     bool looking = false;
     bool skip_center = false;
@@ -1960,11 +1960,11 @@ static void foxlevermove(SKC_sprite_status* p_playerwk, SKC_play_work work) {
   sinset(p_playerwk->direc.b.b0, &sin, &cos);
   p_playerwk->xspeed = cos * p_playerwk->mspeed / 0x100;
   p_playerwk->yspeed = sin * p_playerwk->mspeed / 0x100;
-  foxlmovecol(p_playerwk);
+  lmovecol(p_playerwk);
 }
 
 
-static void foxlmovecol(SKC_sprite_status* p_playerwk) {
+static void lmovecol(SKC_sprite_status* p_playerwk) {
   if (BIT_IS_SET(p_playerwk->u.play.control_bitfield, 6)) return;
   if ((p_playerwk->direc.b.b0 & 0x3F) && (p_playerwk->direc.b.b0 + 64 & 0xFF) >= 128) return;
   if (p_playerwk->mspeed == 0) return;
@@ -2078,16 +2078,16 @@ static void foxwalk_r(SKC_sprite_status* p_playerwk, SKC_play_work work) {
 }
 
 
-static void foxballlmove(SKC_sprite_status* p_playerwk, SKC_play_work work) {
+static void balllmove(SKC_sprite_status* p_playerwk, SKC_play_work work) {
   short pladdspdwk = *work.pladdspdwk_ptr / 2;
   short plretspdwk = 0x20;
   if (!BIT_IS_SET(p_playerwk->u.play.spindash_flag, 7) && p_playerwk->u.play.powerdat.mizuflag == 0) {
     if (p_playerwk->u.play.hlock_timer == 0) {
       if (g_ram.swdata0.down.l == 1) {
-        foxballwalk_l(p_playerwk, plretspdwk);
+        ballwalk_l(p_playerwk, plretspdwk);
       }
       if (g_ram.swdata0.down.r == 1) {
-        foxballwalk_r(p_playerwk, plretspdwk);
+        ballwalk_r(p_playerwk, plretspdwk);
       }
     }
     if (g_ram.smilesflag != 0) {
@@ -2140,11 +2140,11 @@ static void foxballlmove(SKC_sprite_status* p_playerwk, SKC_play_work work) {
   if (p_playerwk->xspeed < -0x1000) {
     p_playerwk->xspeed = -0x1000;
   }
-  foxlmovecol(p_playerwk);
+  lmovecol(p_playerwk);
 }
 
 
-static void foxballwalk_l(SKC_sprite_status* p_playerwk, short plretspdwk) {
+static void ballwalk_l(SKC_sprite_status* p_playerwk, short plretspdwk) {
   if (p_playerwk->mspeed <= 0) {
     p_playerwk->u.play.cddat.left = 1;
     p_playerwk->mstno = 2;
@@ -2158,7 +2158,7 @@ static void foxballwalk_l(SKC_sprite_status* p_playerwk, short plretspdwk) {
 }
 
 
-static void foxballwalk_r(SKC_sprite_status* p_playerwk, short plretspdwk) {
+static void ballwalk_r(SKC_sprite_status* p_playerwk, short plretspdwk) {
   if (p_playerwk->mspeed >= 0) {
     p_playerwk->u.play.cddat.left = 0;
     p_playerwk->mstno = 2;
@@ -2172,7 +2172,7 @@ static void foxballwalk_r(SKC_sprite_status* p_playerwk, short plretspdwk) {
 }
 
 
-static void foxjumpmove(SKC_sprite_status* p_playerwk, SKC_play_work work) {
+static void jumpmove(SKC_sprite_status* p_playerwk, SKC_play_work work) {
   short pladdspdwk = *work.pladdspdwk_ptr * 2;
   if (p_playerwk->u.play.cddat.ballj == 0) {
     short cal_speed = p_playerwk->xspeed;
@@ -2225,12 +2225,12 @@ static void foxlimitchk(SKC_sprite_status* p_playerwk) {
   long cal_position = p_playerwk->xposi + p_playerwk->xspeed * 0x100;
   short cal_limit_l = g_ram.scralim_left + 16;
   if (cal_limit_l > fp16_get_integer(cal_position)) {
-    foxlimitset(p_playerwk, cal_limit_l);
+    limitset(p_playerwk, cal_limit_l);
   }
   else {
     short cal_limit_r = g_ram.scralim_right + 296;
     if (cal_limit_r >= fp16_get_integer(cal_position)) {
-      foxlimitset(p_playerwk, cal_limit_r);
+      limitset(p_playerwk, cal_limit_r);
     }
   }
   if (g_ram.DAT_08fff665 == 0) {
@@ -2242,7 +2242,7 @@ static void foxlimitchk(SKC_sprite_status* p_playerwk) {
 }
 
 
-static void foxlimitset(SKC_sprite_status* p_playerwk, short cal_limit) {
+static void limitset(SKC_sprite_status* p_playerwk, short cal_limit) {
   fp16_set_integer(&p_playerwk->xposi, cal_limit);
   fp16_set_fraction(&p_playerwk->xposi, 0);
   p_playerwk->xspeed = 0;
@@ -2256,7 +2256,7 @@ static void foxballchk(SKC_sprite_status* p_playerwk) {
 
   if (g_ram.swdata0.down.d == 1) {
     if (abs(p_playerwk->mspeed) >= 0x100) {
-      foxballset(p_playerwk);
+      ballset(p_playerwk);
     }
     else if (p_playerwk->u.play.cddat.ride == 0) {
       p_playerwk->mstno = 8;
@@ -2268,7 +2268,7 @@ static void foxballchk(SKC_sprite_status* p_playerwk) {
 }
 
 
-static void foxballset(SKC_sprite_status* p_playerwk) {
+static void ballset(SKC_sprite_status* p_playerwk) {
   if (p_playerwk->u.play.cddat.ball == 1) return;
 
   p_playerwk->u.play.cddat.ball = 1;
@@ -2286,7 +2286,7 @@ static void foxballset(SKC_sprite_status* p_playerwk) {
 }
 
 
-static bool foxjumpchk(SKC_sprite_status* p_playerwk) {
+static bool jumpchk(SKC_sprite_status* p_playerwk) {
   if (!are_any_trg_buttons_used(g_ram.swdata0.pressed)) return false;
 
   unsigned char cal_direc = p_playerwk->direc.b.b0;
@@ -2329,7 +2329,7 @@ static bool foxjumpchk(SKC_sprite_status* p_playerwk) {
 }
 
 
-static void foxjumpchk2(SKC_sprite_status* p_playerwk, SKC_play_work work) {
+static void jumpchk2(SKC_sprite_status* p_playerwk, SKC_play_work work) {
   if (p_playerwk->u.play.jump_flag != 0) {
     short cal_speed = p_playerwk->u.play.cddat.underwater == 0 ? -0x400 : -0x200;
     if (cal_speed > p_playerwk->yspeed) {
@@ -2338,7 +2338,7 @@ static void foxjumpchk2(SKC_sprite_status* p_playerwk, SKC_play_work work) {
       }
     }
     else {
-      foxjumpchk3(p_playerwk, work);
+      jumpchk3(p_playerwk, work);
     }
   }
   else if (p_playerwk->u.play.spindash_flag == 0 && p_playerwk->yspeed < -0xFC0) {
@@ -2347,7 +2347,7 @@ static void foxjumpchk2(SKC_sprite_status* p_playerwk, SKC_play_work work) {
 }
 
 
-static void foxjumpchk3(SKC_sprite_status* p_playerwk, SKC_play_work work) {
+static void jumpchk3(SKC_sprite_status* p_playerwk, SKC_play_work work) {
   if (p_playerwk->u.play.talent_status != 0) return;
   if (!are_any_trg_buttons_used(g_ram.swdata0.pressed)) return;
   if (g_ram.play_type != PLAY_TYPE_MILES && g_ram.foxcpu_timer == 0) return;
@@ -2530,7 +2530,7 @@ static void foxjumpcolchk(SKC_sprite_status* p_playerwk) {
             else {
               p_playerwk->yspeed = 0;
               p_playerwk->mspeed = p_playerwk->xspeed;
-              foxjumpcolsub(p_playerwk);
+              jumpcolsub(p_playerwk);
               return;
             }
           }
@@ -2540,7 +2540,7 @@ static void foxjumpcolchk(SKC_sprite_status* p_playerwk) {
               p_playerwk->yspeed = 0xFC0;
             }
           }
-          foxjumpcolsub(p_playerwk);
+          jumpcolsub(p_playerwk);
           p_playerwk->mspeed = p_playerwk->yspeed;
           if (p_playerwk->direc.b.b0 >= 128) {
             p_playerwk->mspeed = -p_playerwk->mspeed;
@@ -2586,7 +2586,7 @@ static void foxjumpcolchk(SKC_sprite_status* p_playerwk) {
           p_playerwk->direc.b.b0 = result.direc;
           p_playerwk->yspeed = 0;
           p_playerwk->mspeed = p_playerwk->xspeed;
-          foxjumpcolsub(p_playerwk);
+          jumpcolsub(p_playerwk);
         }
       }
       break;
@@ -2613,7 +2613,7 @@ static void foxjumpcolchk(SKC_sprite_status* p_playerwk) {
         }
         else {
           p_playerwk->direc.b.b0 = result.direc;
-          foxjumpcolsub(p_playerwk);
+          jumpcolsub(p_playerwk);
           p_playerwk->mspeed = p_playerwk->yspeed;
           if (p_playerwk->direc.b.b0 >= 128) {
             p_playerwk->mspeed = -p_playerwk->mspeed;
@@ -2649,7 +2649,7 @@ static void foxjumpcolchk(SKC_sprite_status* p_playerwk) {
           p_playerwk->direc.b.b0 = result.direc;
           p_playerwk->yspeed = 0;
           p_playerwk->mspeed = p_playerwk->xspeed;
-          foxjumpcolsub(p_playerwk);
+          jumpcolsub(p_playerwk);
         }
       }
       break;
@@ -2658,13 +2658,13 @@ static void foxjumpcolchk(SKC_sprite_status* p_playerwk) {
 }
 
 
-static void foxjumpcolsub(SKC_sprite_status* p_playerwk) {
+static void jumpcolsub(SKC_sprite_status* p_playerwk) {
   if (p_playerwk->u.play.spindash_flag == 0) {
     p_playerwk->mstno = 0;
     foxjumpcolsub0(p_playerwk);
   }
   else {
-    foxjumpcolsub1(p_playerwk);
+    jumpcolsub1(p_playerwk);
   }
 }
 
@@ -2686,11 +2686,11 @@ void foxjumpcolsub0(SKC_sprite_status* p_playerwk) {
     }
     fp16_set_integer(&p_playerwk->yposi, fp16_get_integer(p_playerwk->yposi) + yoffset);
   }
-  foxjumpcolsub1(p_playerwk);
+  jumpcolsub1(p_playerwk);
 }
 
 
-static void foxjumpcolsub1(SKC_sprite_status* p_playerwk) {
+static void jumpcolsub1(SKC_sprite_status* p_playerwk) {
   p_playerwk->u.play.cddat.jump = 0;
   p_playerwk->u.play.cddat.push = 0;
   p_playerwk->u.play.cddat.ballj = 0;
@@ -2728,7 +2728,7 @@ static void fox00damage(SKC_sprite_status* p_playerwk, SKC_play_work work) {
     fox00damage_sub(p_playerwk);
     foxlimitchk(p_playerwk);
     playposiwkset(p_playerwk);
-    foxpatchgmainwrt(p_playerwk);
+    patchgmainwrt(p_playerwk);
     actionsub(p_playerwk);
   }
 }
@@ -2771,7 +2771,7 @@ static void fox00die(SKC_sprite_status* p_playerwk, SKC_play_work work) {
     play00die_sub(p_playerwk, work);
     speedset_g(p_playerwk);
     playposiwkset(p_playerwk);
-    foxpatchgmainwrt(p_playerwk);
+    patchgmainwrt(p_playerwk);
     actionsub(p_playerwk);
   }
 }
@@ -2791,7 +2791,7 @@ static void fox00appear(SKC_sprite_status* p_playerwk, SKC_play_work work) {
   if (g_ram.DAT_08ffee04 == 0 && g_ram.DAT_08ffee06 == 0) {
     p_playerwk->r_no = 2;
   }
-  foxpatchgmainwrt(p_playerwk);
+  patchgmainwrt(p_playerwk);
   actionsub(p_playerwk);
 }
 
@@ -2805,32 +2805,32 @@ static void fox00drown(SKC_sprite_status* p_playerwk, SKC_play_work work) {
   speedset2_g(p_playerwk);
   p_playerwk->yspeed += 0x10;
   playposiwkset(p_playerwk);
-  foxpatchgmainwrt(p_playerwk);
+  patchgmainwrt(p_playerwk);
   actionsub(p_playerwk);
 }
 
 
-static void foxpatchgmainwrt(SKC_sprite_status* p_playerwk) {
+static void patchgmainwrt(SKC_sprite_status* p_playerwk) {
   if (g_ram.vs_flag == 0) {
-    foxpatchgmain(p_playerwk);
+    patchgmain(p_playerwk);
     if (g_ram.reverse_gravity_flag != 0) {
       p_playerwk->actflg.vflip ^= 1;
     }
     foxwrt(p_playerwk);
   }
   else {
-    vsfoxpatchgmain(p_playerwk);
+    vspatchgmain(p_playerwk);
     vsfoxwrt(p_playerwk);
   }
 }
 
 
-static void foxpatchgmain(SKC_sprite_status* p_playerwk) {
-  foxpatchgmain0(p_playerwk, foxchg);
+static void patchgmain(SKC_sprite_status* p_playerwk) {
+  patchgmain0(p_playerwk, foxchg);
 }
 
 
-static void foxpatchgmain0(SKC_sprite_status* p_actwk, unsigned char** pp_chg) {
+static void patchgmain0(SKC_sprite_status* p_actwk, unsigned char** pp_chg) {
   if (p_actwk->mstno != p_actwk->mstrestart) {
     p_actwk->mstrestart = p_actwk->mstno;
     p_actwk->patcnt = 0;
@@ -2846,13 +2846,13 @@ static void foxpatchgmain0(SKC_sprite_status* p_actwk, unsigned char** pp_chg) {
     p_actwk->actflg.vflip = 0;
     if (p_actwk->pattim-- == 0) {
       p_actwk->pattim = p_chg[0];
-      foxpatchgmain2(p_actwk, p_chg);
+      patchgmain2(p_actwk, p_chg);
     }
   }
 }
 
 
-static void foxpatchgmain2(SKC_sprite_status* p_actwk, unsigned char* p_chg) {
+static void patchgmain2(SKC_sprite_status* p_actwk, unsigned char* p_chg) {
   unsigned char patno = p_chg[p_actwk->patcnt + 1];
   if (patno < 252) {
     p_actwk->patno = patno;
@@ -2947,7 +2947,7 @@ static void foxrunchg2(SKC_sprite_status* p_actwk, unsigned char patno) {
         cal_speed = 0;
       }
       p_actwk->pattim = cal_speed / 0x100;
-      foxpatchgmain2(p_actwk, p_chg);
+      patchgmain2(p_actwk, p_chg);
     }
   }
 }
@@ -2962,7 +2962,7 @@ static void foxrunchg3(SKC_sprite_status* p_actwk) {
   }
   cal_speed /= 0x40;
   p_actwk->pattim = cal_speed % 0x100;
-  foxpatchgmain2(p_actwk, foxchg04);
+  patchgmain2(p_actwk, foxchg04);
 }
 
 
@@ -3004,7 +3004,7 @@ static void foxrunchg4(SKC_sprite_status* p_actwk) {
   }
   unsigned char patno_add = angle / 8 & 0xC;
   p_actwk->pattim = 3;
-  foxpatchgmain2(p_actwk, foxtailschg03);
+  patchgmain2(p_actwk, foxtailschg03);
   p_actwk->patno += patno_add;
 }
 
@@ -3148,12 +3148,12 @@ static void foxwrt1(unsigned short* p_wrtpat, unsigned short cnt, unsigned short
 }
 
 
-static void vsfoxpatchgmain(SKC_sprite_status* p_playerwk) {
-  vsfoxpatchgmain0(p_playerwk, vsfoxchg);
+static void vspatchgmain(SKC_sprite_status* p_playerwk) {
+  vspatchgmain0(p_playerwk, vsfoxchg);
 }
 
 
-static void vsfoxpatchgmain0(SKC_sprite_status* p_actwk, unsigned char** pp_chg) {
+static void vspatchgmain0(SKC_sprite_status* p_actwk, unsigned char** pp_chg) {
   if (p_actwk->mstno != p_actwk->mstrestart) {
     p_actwk->mstrestart = p_actwk->mstno;
     p_actwk->patcnt = 0;
@@ -3169,13 +3169,13 @@ static void vsfoxpatchgmain0(SKC_sprite_status* p_actwk, unsigned char** pp_chg)
     p_actwk->actflg.vflip = 0;
     if (p_actwk->pattim-- == 0) {
       p_actwk->pattim = p_chg[0];
-      vsfoxpatchgmain2(p_actwk, p_chg);
+      vspatchgmain2(p_actwk, p_chg);
     }
   }
 }
 
 
-static void vsfoxpatchgmain2(SKC_sprite_status* p_actwk, unsigned char* p_chg) {
+static void vspatchgmain2(SKC_sprite_status* p_actwk, unsigned char* p_chg) {
   unsigned char patno = p_chg[p_actwk->patcnt + 1];
   if (patno < 240) {
     p_actwk->patno = patno;
@@ -3296,7 +3296,7 @@ static void vsfoxrunchg2(SKC_sprite_status* p_actwk, unsigned char patno) {
     p_actwk->pattim = cal_speed / 0x100;
     p_actwk->actflg.hflip = p_actwk->u.play.cddat.left;
     p_actwk->actflg.vflip = 0;
-    vsfoxpatchgmain2(p_actwk, p_chg);
+    vspatchgmain2(p_actwk, p_chg);
   }
 }
 
@@ -3312,7 +3312,7 @@ static void vsfoxrunchg3(SKC_sprite_status* p_actwk) {
   p_actwk->pattim = cal_speed % 0x100;
   p_actwk->actflg.hflip = p_actwk->u.play.cddat.left;
   p_actwk->actflg.vflip = 0;
-  vsfoxpatchgmain2(p_actwk, vsfoxchg04);
+  vspatchgmain2(p_actwk, vsfoxchg04);
 }
 
 
@@ -3339,7 +3339,7 @@ static void vsfoxrunchg4(SKC_sprite_status* p_actwk) {
   }
   unsigned char patno_add = (angle / 32 & 3) * 3;
   p_actwk->pattim = 3;
-  vsfoxpatchgmain2(p_actwk, vsfoxtailschg02);
+  vspatchgmain2(p_actwk, vsfoxtailschg02);
   p_actwk->patno += patno_add;
 }
 
@@ -3481,7 +3481,7 @@ static void foxtailsmove(SKC_sprite_status* p_actwk) {
     p_actwk->u.play.invulnerability_timer = mstno;
     p_actwk->mstno = mstno_tbl[mstno];
   }
-  foxpatchgmain0(p_actwk, foxtailschg);
+  patchgmain0(p_actwk, foxtailschg);
   if (g_ram.reverse_gravity_flag != 0 && p_actwk->mstno != 3) {
     p_actwk->actflg.vflip ^= 1;
   }
@@ -3559,7 +3559,7 @@ static void vsfoxtailsmove(SKC_sprite_status* p_actwk) {
     p_actwk->u.play.invulnerability_timer = mstno;
     p_actwk->mstno = mstno_tbl[mstno];
   }
-  vsfoxpatchgmain0(p_actwk, vsfoxtailschg);
+  vspatchgmain0(p_actwk, vsfoxtailschg);
   vsfoxtailswrt(p_actwk);
   actionsub(p_actwk);
 }
