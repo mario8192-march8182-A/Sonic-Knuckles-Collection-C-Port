@@ -222,7 +222,7 @@ static void flyringinit(SKC_sprite_status* p_actwk) {
   if (flyring_cnt >= FLYRING_MAX) {
     flyring_cnt = FLYRING_MAX;
   }
-  short angle = 648;
+  unsigned short direction = 0x288;
   short xspeed, yspeed;
   SKC_sprite_status* p_new_actwk = p_actwk;
 
@@ -246,24 +246,24 @@ static void flyringinit(SKC_sprite_status* p_actwk) {
     p_new_actwk->colino = 0x47;
     p_new_actwk->sprhs = 8;
     g_ram.flyring_patcnt = 255;
-    if (angle >= 0) {
+    if (direction < 0x8000) {
       short sin, cos;
-      sinset(angle, &sin, &cos);
-      xspeed = sin * (1 << (angle >> 8));
-      yspeed = cos * (1 << (angle >> 8));
-      signed char fraction = fp8_get_fraction(angle) + 16;
-      fp8_set_fraction(&angle, fraction);
-      if (fraction > 0) {
-        angle -= 128;
-        if (angle < 0) {
-          angle = 648;
+      sinset(direction & 0xFF, &sin, &cos);
+      xspeed = sin * (1 << (direction >> 8));
+      yspeed = cos * (1 << (direction >> 8));
+      direction = direction & 0xFF00 | direction + 16 & 0x00FF;
+      if ((direction & 0xFF) < 16) {
+        direction -= 128;
+        direction &= 0xFFFF;
+        if (direction > 0xFF80) {
+          direction = 0x288;
         }
       }
     }
     p_new_actwk->xspeed = xspeed;
     p_new_actwk->yspeed = yspeed;
     xspeed = -xspeed;
-    angle = -angle;
+    direction = ~direction + 1 & 0xFFFF;
   }
 
   soundset(-71);
