@@ -5,6 +5,7 @@
 #include "../types/spritestatus.h"
 #include "../types/swdata.h"
 #include "../utils/bits.h"
+#include "../utils/direction.h"
 #include "../utils/fp16.h"
 #include "../actset.h"
 #include "../action.h"
@@ -211,18 +212,17 @@ static void ropefall(SKC_sprite_status* p_actwk) {
 
 
 static void roperoll(SKC_sprite_status* p_actwk) {
-  unsigned char angle = p_actwk->direc.w >> 8;
-  if (angle > 128) {
-    angle = 256 - angle;
+  unsigned char direction = p_actwk->direc.w >> 8;
+  if (direction > 128) {
+    direction = direction_hmirror(direction);
   }
-  p_actwk->direc.w -= p_actwk->u.obj.actfree.rope.unknown3aw - angle * 2;
-  p_actwk->direc.w &= 0xFFFF;
+  p_actwk->direc.w = fpdirection_sub(p_actwk->direc.w, p_actwk->u.obj.actfree.rope.unknown3aw - direction * 2);
   SKC_sprite_status* p_handlewk = &g_ram.actwk[p_actwk->u.obj.actfree.rope.handle];
   if (!BIT_IS_SET(p_handlewk->u.obj.actfree.rope.plholding, 0)
       && !BIT_IS_SET(p_handlewk->u.obj.actfree.rope.plholding, 7)
       && !BIT_IS_SET(p_handlewk->u.obj.actfree.rope.pl2holding, 0)
       && !BIT_IS_SET(p_handlewk->u.obj.actfree.rope.pl2holding, 7)
-      && (p_actwk->direc.w >> 8) + 8 < 16) {
+      && direction_sum(p_actwk->direc.w >> 8, 8) < 16) {
     p_actwk->r_ptr = &ropestop;
     p_actwk->u.obj.actfree.rope.unknown42w = 0;
     p_actwk->u.obj.actfree.rope.unknown44w = 0xFD00;
@@ -286,11 +286,11 @@ static void ropestop(SKC_sprite_status* p_actwk) {
 
 
 static void ropestop2(SKC_sprite_status* p_actwk) {
-  unsigned char angle = p_actwk->u.obj.actfree.rope.unknown38w >> 8;
+  unsigned char direction = p_actwk->u.obj.actfree.rope.unknown38w >> 8;
   p_actwk->u.obj.actfree.rope.unknown38w += 0x200;
   p_actwk->u.obj.actfree.rope.unknown38w &= 0xFFFF;
   short sin, cos;
-  sinset(angle, &sin, &cos);
+  sinset(direction, &sin, &cos);
   sin *= 4;
   if (sin == 0x400) {
     sin = 0x3FF;
@@ -329,11 +329,11 @@ static void ropefoutchk(SKC_sprite_status* p_actwk) {
 
 static void ropemove2(SKC_sprite_status* p_actwk) {
   if (p_actwk->u.obj.actfree.rope.unknown2ew == 0) {
-    unsigned char angle = p_actwk->u.obj.actfree.rope.unknown38w >> 8;
+    unsigned char direction = p_actwk->u.obj.actfree.rope.unknown38w >> 8;
     p_actwk->u.obj.actfree.rope.unknown38w += 0x200;
     p_actwk->u.obj.actfree.rope.unknown38w &= 0xFFFF;
     short sin, cos;
-    sinset(angle, &sin, &cos);
+    sinset(direction, &sin, &cos);
     sin *= 4;
     if (sin == 0x400) {
       sin = 0x3FF;
@@ -342,17 +342,17 @@ static void ropemove2(SKC_sprite_status* p_actwk) {
     p_actwk->u.obj.actfree.rope.unknown3aw &= 0xFFFF;
   }
   else {
-    unsigned char angle = p_actwk->u.obj.actfree.rope.unknown38w >> 8;
+    unsigned char direction = p_actwk->u.obj.actfree.rope.unknown38w >> 8;
     p_actwk->u.obj.actfree.rope.unknown38w += 0x100;
     p_actwk->u.obj.actfree.rope.unknown38w &= 0xFFFF;
     short sin, cos;
-    sinset(angle, &sin, &cos);
+    sinset(direction, &sin, &cos);
     sin *= 8;
     p_actwk->u.obj.actfree.rope.unknown3aw = (unsigned short)sin;
     p_actwk->u.obj.actfree.rope.unknown3aw &= 0xFFFF;
   }
   p_actwk->direc.w = p_actwk->u.obj.actfree.rope.unknown3aw;
-  p_actwk->patno = ((p_actwk->direc.w >> 8) + 4) / 8;
+  p_actwk->patno = direction_sum(p_actwk->direc.w >> 8, 4) / 8;
   SKC_sprite_status* p_parentwk = &g_ram.actwk[p_actwk->u.obj.oya];
   fp16_set_integer(&p_actwk->xposi, fp16_get_integer(p_parentwk->xposi));
   fp16_set_integer(&p_actwk->yposi, fp16_get_integer(p_parentwk->yposi));
@@ -363,7 +363,7 @@ static void ropemove2(SKC_sprite_status* p_actwk) {
 static void roperoll2(SKC_sprite_status* p_actwk) {
   SKC_sprite_status* p_parentwk = &g_ram.actwk[p_actwk->u.obj.oya];
   p_actwk->direc.w = p_parentwk->direc.w;
-  p_actwk->patno = ((p_actwk->direc.w >> 8) + 4) / 8;
+  p_actwk->patno = direction_sum(p_actwk->direc.w >> 8, 4) / 8;
   SKC_sprite_status* p_childwk = &g_ram.actwk[p_actwk->u.obj.ko];
   fp16_set_integer(&p_actwk->xposi, fp16_get_integer(p_childwk->xposi));
   fp16_set_integer(&p_actwk->yposi, fp16_get_integer(p_childwk->yposi));
@@ -374,9 +374,8 @@ static void roperoll2(SKC_sprite_status* p_actwk) {
 static void ropemove3(SKC_sprite_status* p_actwk) {
   SKC_sprite_status* p_parentwk = &g_ram.actwk[p_actwk->u.obj.oya];
   p_actwk->u.obj.actfree.rope.unknown3aw = p_parentwk->u.obj.actfree.rope.unknown3aw;
-  p_actwk->direc.w = p_parentwk->direc.w + p_actwk->u.obj.actfree.rope.unknown3aw;
-  p_actwk->direc.w &= 0xFFFF;
-  p_actwk->patno = ((p_actwk->direc.w >> 8) + 4) / 8;
+  p_actwk->direc.w = fpdirection_sum(p_parentwk->direc.w, p_actwk->u.obj.actfree.rope.unknown3aw);
+  p_actwk->patno = direction_sum(p_actwk->direc.w >> 8, 4) / 8;
   ropemove4(p_actwk);
 }
 
@@ -389,10 +388,9 @@ static void ropemove4(SKC_sprite_status* p_actwk) {
 
 static void ropeposiset(SKC_sprite_status* p_actwk) {
   SKC_sprite_status* p_parentwk = &g_ram.actwk[p_actwk->u.obj.oya];
-  unsigned char angle = (p_actwk->direc.w >> 8) + 4;
-  angle = angle - angle % 8;
+  unsigned char direction = direction_sum(p_actwk->direc.w >> 8, 4) & 0xF8;
   short sin, cos;
-  sinset(angle, &sin, &cos);
+  sinset(direction, &sin, &cos);
   short xposi = (-sin + 8) / 16 + fp16_get_integer(p_parentwk->xposi);
   fp16_set_integer(&p_actwk->xposi, xposi);
   short yposi = (cos + 8) / 16;
@@ -480,20 +478,20 @@ static void handlesub(SKC_sprite_status* p_actwk, SKC_sprite_status* p_playerwk,
             fp16_set_integer(&p_playerwk->xposi, fp16_get_integer(p_actwk->xposi));
             fp16_set_integer(&p_playerwk->yposi, fp16_get_integer(p_actwk->yposi) + 20);
             SKC_sprite_status* p_parentwk = &g_ram.actwk[p_actwk->u.obj.oya];
-            unsigned char index = p_parentwk->direc.w >> 8;
+            unsigned char direction = p_parentwk->direc.w >> 8;
             if (p_playerwk->u.play.cddat.left == 1) {
-              index = 256 - index;
+              direction = direction_hmirror(direction);
             }
-            index = (index + 8) / 16;
+            unsigned char index = direction_sum(direction, 8) / 16;
             p_playerwk->patno = tbl[index];
           }
           else {
             SKC_sprite_status* p_parentwk = &g_ram.actwk[p_actwk->u.obj.oya];
-            unsigned char index = p_parentwk->direc.w >> 8;
+            unsigned char direction = p_parentwk->direc.w >> 8;
             if (p_playerwk->u.play.cddat.left == 1) {
-              index = 256 - index;
+              direction = direction_hmirror(direction);
             }
-            index = (index + 16) / 32 * 2;
+            unsigned char index = direction_sum(direction, 16) / 32 * 2;
             p_playerwk->patno = tbl2[index];
             p_playerwk->mstno = 0;
             index &= 0xFE;
@@ -502,9 +500,9 @@ static void handlesub(SKC_sprite_status* p_actwk, SKC_sprite_status* p_playerwk,
             if (p_playerwk->u.play.cddat.left == 1) {
               xoffset = -xoffset;
             }
-            unsigned char angle = (p_playerwk->direc.w >> 8) + 4 & 0xF8;
+            direction = direction_sum(p_playerwk->direc.w >> 8, 4) & 0xF8;
             short sin, cos;
-            sinset(angle, &sin, &cos);
+            sinset(direction, &sin, &cos);
             short xposi = (-sin + 8) / 16 + fp16_get_integer(p_parentwk->xposi) + xoffset;
             fp16_set_integer(&p_playerwk->xposi, xposi);
             short yposi = (cos + 8) / 16 + fp16_get_integer(p_parentwk->yposi) + yoffset;
@@ -687,12 +685,12 @@ static void ropeswingfoutchk(SKC_sprite_status* p_actwk) {
 static void ropeswingmove2(SKC_sprite_status* p_actwk) {
   if (true) {
     short sin, cos;
-    sinset(g_ram.ropeswing_angle >> 8, &sin, &cos);
+    sinset(g_ram.ropeswing_dir >> 8, &sin, &cos);
     p_actwk->direc.w = (unsigned short)sin * 44;
     p_actwk->direc.w &= 0xFFFF;
     p_actwk->u.obj.actfree.rope.unknown3aw = (unsigned short)sin * 44 / 8;
     p_actwk->u.obj.actfree.rope.unknown3aw &= 0xFFFF;
-    p_actwk->patno = ((p_actwk->direc.w >> 8) + 4) / 8;
+    p_actwk->patno = direction_sum(p_actwk->direc.w >> 8, 4) / 8;
     actionsub(p_actwk);
   }
   else {
@@ -716,7 +714,7 @@ static void ropeswingmove2(SKC_sprite_status* p_actwk) {
     }
     p_actwk->direc.w = p_actwk->u.obj.actfree.rope.unknown42w;
     p_actwk->u.obj.actfree.rope.unknown3aw = p_actwk->u.obj.actfree.rope.unknown42w / 8;
-    p_actwk->patno = ((p_actwk->direc.w >> 8) + 4) / 8;
+    p_actwk->patno = direction_sum(p_actwk->direc.w >> 8, 4) / 8;
     actionsub(p_actwk);
   }
 }
@@ -725,9 +723,8 @@ static void ropeswingmove2(SKC_sprite_status* p_actwk) {
 static void ropeswingmove3(SKC_sprite_status* p_actwk) {
   SKC_sprite_status* p_parentwk = &g_ram.actwk[p_actwk->u.obj.oya];
   p_actwk->u.obj.actfree.rope.unknown3aw = p_parentwk->u.obj.actfree.rope.unknown3aw;
-  p_actwk->direc.w = p_parentwk->direc.w + p_actwk->u.obj.actfree.rope.unknown3aw;
-  p_actwk->direc.w &= 0xFFFF;
-  p_actwk->patno = ((p_actwk->direc.w >> 8) + 4) / 8;
+  p_actwk->direc.w = fpdirection_sum(p_parentwk->direc.w, p_actwk->u.obj.actfree.rope.unknown3aw);
+  p_actwk->patno = direction_sum(p_actwk->direc.w >> 8, 4) / 8;
   ropeswingposiset(p_actwk);
   actionsub(p_actwk);
 }
@@ -735,10 +732,9 @@ static void ropeswingmove3(SKC_sprite_status* p_actwk) {
 
 static void ropeswingposiset(SKC_sprite_status* p_actwk) {
   SKC_sprite_status* p_parentwk = &g_ram.actwk[p_actwk->u.obj.oya];
-  unsigned char angle = (p_actwk->direc.w >> 8) + 4;
-  angle = angle - angle % 8;
+  unsigned char direction = direction_sum(p_actwk->direc.w >> 8, 4) & 0xF8;
   short sin, cos;
-  sinset(angle, &sin, &cos);
+  sinset(direction, &sin, &cos);
   short xposi = (-sin + 8) / 16 + fp16_get_integer(p_parentwk->xposi);
   fp16_set_integer(&p_actwk->xposi, xposi);
   short yposi = (cos + 8) / 16 + fp16_get_integer(p_parentwk->yposi);
@@ -834,14 +830,12 @@ static void hbarmove(SKC_sprite_status* p_actwk) {
 
 
 static void hbarroll(SKC_sprite_status* p_actwk) {
-  unsigned char angle = p_actwk->direc.w >> 8;
-  if (angle > 128) {
-    angle = 256 - angle;
+  unsigned char direction = p_actwk->direc.w >> 8;
+  if (direction > 128) {
+    direction = direction_hmirror(direction);
   }
-  p_actwk->direc.w -= p_actwk->u.obj.actfree.rope.unknown3aw - angle * 2;
-  p_actwk->direc.w &= 0xFFFF;
-  angle = (p_actwk->direc.w >> 8) - (p_actwk->direc.w >> 8) % 8;
-  if (angle == 64) {
+  p_actwk->direc.w = fpdirection_sub(p_actwk->direc.w, p_actwk->u.obj.actfree.rope.unknown3aw - direction * 2);
+  if ((p_actwk->direc.w >> 8 & 0xF8) == 64) {
     soundset(126);
   }
   p_actwk->sprpri = p_actwk->direc.w < 128 ? PRI_4 : PRI_5;
@@ -852,7 +846,7 @@ static void hbarroll(SKC_sprite_status* p_actwk) {
     fp16_set_integer(&g_ram.custom_follow_yposi, fp16_get_integer(p_actwk->yposi));
   }
   if (p_handlewk->u.obj.actfree.rope.plholding == 0 && p_handlewk->u.obj.actfree.rope.pl2holding == 0) {
-    if ((p_actwk->direc.w >> 8) + 8 < 16) {
+    if (direction_sum(p_actwk->direc.w >> 8, 8) < 16) {
       p_actwk->r_ptr = &hbarstop;
       p_actwk->u.obj.actfree.rope.unknown42w = 0;
       p_actwk->u.obj.actfree.rope.unknown44w = 0xFD00;
@@ -957,7 +951,7 @@ static void hbarfoutchk(SKC_sprite_status* p_actwk) {
 static void hbarmove2(SKC_sprite_status* p_actwk) {
   SKC_sprite_status* p_childwk = &g_ram.actwk[p_actwk->u.obj.ko];
   p_actwk->direc.w = p_childwk->direc.w;
-  p_actwk->patno = ((p_actwk->direc.w >> 8) + 4) / 8;
+  p_actwk->patno = direction_sum(p_actwk->direc.w >> 8, 4) / 8;
   fp16_set_integer(&p_actwk->xposi, fp16_get_integer(p_childwk->xposi));
   fp16_set_integer(&p_actwk->yposi, fp16_get_integer(p_childwk->yposi));
   actionsub(p_actwk);
@@ -966,10 +960,9 @@ static void hbarmove2(SKC_sprite_status* p_actwk) {
 
 static void hbarposiset(SKC_sprite_status* p_actwk) {
   SKC_sprite_status* p_parentwk = &g_ram.actwk[p_actwk->u.obj.oya];
-  unsigned char angle = (p_actwk->direc.w >> 8) + 4;
-  angle = angle - angle % 8;
+  unsigned char direction = direction_sum(p_actwk->direc.w >> 8, 4) & 0xF8;
   short sin, cos;
-  sinset(angle, &sin, &cos);
+  sinset(direction, &sin, &cos);
   short xposi = (-sin + 8) / 16 + fp16_get_integer(p_parentwk->xposi);
   fp16_set_integer(&p_actwk->xposi, xposi);
   short yposi = (cos + 8) / 16 + fp16_get_integer(p_parentwk->yposi);
@@ -1056,20 +1049,20 @@ static void hbarhandlesub(SKC_sprite_status* p_actwk, SKC_sprite_status* p_playe
           fp16_set_integer(&p_playerwk->xposi, fp16_get_integer(p_actwk->xposi));
           fp16_set_integer(&p_playerwk->yposi, fp16_get_integer(p_actwk->yposi) + 20);
           SKC_sprite_status* p_parentwk = &g_ram.actwk[p_actwk->u.obj.oya];
-          unsigned char index = p_parentwk->direc.w >> 8;
+          unsigned char direction = p_parentwk->direc.w >> 8;
           if (p_playerwk->u.play.cddat.left == 1) {
-            index = 256 - index;
+            direction = direction_hmirror(direction);
           }
-          index = (index + 8) / 16;
+          unsigned char index = direction_sum(direction, 8) / 16;
           p_playerwk->patno = tbl[index];
         }
         else {
           SKC_sprite_status* p_parentwk = &g_ram.actwk[p_actwk->u.obj.oya];
-          unsigned char index = p_parentwk->direc.w >> 8;
+          unsigned char direction = p_parentwk->direc.w >> 8;
           if (p_playerwk->u.play.cddat.left == 1) {
-            index = 256 - index;
+            direction = direction_hmirror(direction);
           }
-          index = (index + 16) / 32 * 2;
+          unsigned char index = direction_sum(direction, 16) / 32 * 2;
           p_playerwk->patno = tbl2[index];
           p_playerwk->mstno = 0;
           index &= 0xFE;
@@ -1078,9 +1071,9 @@ static void hbarhandlesub(SKC_sprite_status* p_actwk, SKC_sprite_status* p_playe
           if (p_playerwk->u.play.cddat.left == 1) {
             xoffset = -xoffset;
           }
-          unsigned char angle = (p_playerwk->direc.w >> 8) + 4 & 0xF8;
+          direction = direction_sum(p_playerwk->direc.w >> 8, 4) & 0xF8;
           short sin, cos;
-          sinset(angle, &sin, &cos);
+          sinset(direction, &sin, &cos);
           short xposi = (-sin + 8) / 16 + fp16_get_integer(p_parentwk->xposi) + xoffset;
           fp16_set_integer(&p_playerwk->xposi, xposi);
           short yposi = (cos + 8) / 16 + fp16_get_integer(p_parentwk->yposi) + yoffset;

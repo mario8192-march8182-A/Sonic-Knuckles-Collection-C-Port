@@ -6,12 +6,12 @@
 typedef struct SKC_dircol_result {
   signed char offset;
   signed char offset2;
-  unsigned char direc;
+  unsigned char direction;
 }
 SKC_dircol_result;
 
-SKC_dircol_result dircolm(SKC_sprite_status* p_actwk, unsigned char direc);
-SKC_dircol_result dircol2(SKC_sprite_status* p_actwk, unsigned char direc);
+SKC_dircol_result dircolm(SKC_sprite_status* p_actwk, unsigned char direction);
+SKC_dircol_result dircol2(SKC_sprite_status* p_actwk, unsigned char direction);
 SKC_dircol_result dircol_d(SKC_sprite_status* p_actwk);
 SKC_dircol_result dircol_d2(SKC_sprite_status* p_actwk);
 SKC_dircol_result dircol_d3(SKC_sprite_status* p_actwk, short xposi, short yposi);

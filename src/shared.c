@@ -19,6 +19,7 @@
 #include "types/wrtdata.h"
 #include "types/wrtinitdata.h"
 #include "utils/bits.h"
+#include "utils/direction.h"
 #include "utils/fp16.h"
 #include "utils/stageno.h"
 #include "action.h"
@@ -1197,7 +1198,7 @@ void speedseta1g(SKC_sprite_status* p_actwk, SKC_sprite_status* p_playerwk, shor
 
 void circle_radius(SKC_sprite_status* p_actwk) {
   short sin, cos;
-  sinset(p_actwk->u.obj.radius.angle, &sin, &cos);
+  sinset(p_actwk->u.obj.radius.direction, &sin, &cos);
   short d2 = p_actwk->u.obj.radius.unknown * sin % 0x10000;
   short d3 = p_actwk->u.obj.radius.unknown * cos % 0x10000;
   SKC_sprite_status* p_parentwk = &g_ram.actwk[p_actwk->u.obj.oya];
@@ -1210,7 +1211,7 @@ void circle_radius(SKC_sprite_status* p_actwk) {
 
 void circle_move(SKC_sprite_status* p_actwk, unsigned char bit_offset) {
   short sin, cos;
-  sinset(p_actwk->u.obj.radius.angle, &sin, &cos);
+  sinset(p_actwk->u.obj.radius.direction, &sin, &cos);
   long sin_l = sin * 0x10000;
   long cos_l = cos * 0x10000;
   sin_l /= 1 << bit_offset;
@@ -1223,7 +1224,7 @@ void circle_move(SKC_sprite_status* p_actwk, unsigned char bit_offset) {
 
 void circle_mover(SKC_sprite_status* p_actwk, unsigned char bit_offset) {
   short sin, cos;
-  sinset(p_actwk->u.obj.radius.angle, &sin, &cos);
+  sinset(p_actwk->u.obj.radius.direction, &sin, &cos);
   long sin_l = sin * 0x10000;
   long cos_l = cos * 0x10000;
   sin_l /= 1 << bit_offset;
@@ -1239,7 +1240,7 @@ void circle_mover(SKC_sprite_status* p_actwk, unsigned char bit_offset) {
 
 void circle_moveo(SKC_sprite_status* p_actwk, unsigned char bit_offset) {
   short sin, cos;
-  sinset(p_actwk->u.obj.radius.angle, &sin, &cos);
+  sinset(p_actwk->u.obj.radius.direction, &sin, &cos);
   long sin_l = sin * 0x10000;
   long cos_l = cos * 0x10000;
   sin_l /= 1 << bit_offset;
@@ -1262,10 +1263,10 @@ void circle_movet(SKC_sprite_status* p_actwk, unsigned char* p_sin_data) {
 
 static SKC_point get_radius_point(SKC_sprite_status* p_actwk, unsigned char* p_sin_data) {
   SKC_point point;
-  short d0 = p_actwk->u.obj.radius.angle % 64;
+  short d0 = p_actwk->u.obj.radius.direction % 64;
   short d4 = -d0 - 1;
 
-  switch (p_actwk->u.obj.radius.angle / 64) {
+  switch (p_actwk->u.obj.radius.direction / 64) {
     case 0: // dir00_3f
       point.x = p_sin_data[d0];
       point.y = p_sin_data[64 + d4];
@@ -1313,18 +1314,18 @@ void sin_movety(SKC_sprite_status* p_actwk, unsigned char* p_sin_data) {
 void sin_movex(SKC_sprite_status* p_actwk, unsigned char* p_sin_data) {
   short point_x;
 
-  switch (p_actwk->u.obj.radius.angle / 64) {
+  switch (p_actwk->u.obj.radius.direction / 64) {
     case 0: // rightdown
-      point_x = p_sin_data[p_actwk->u.obj.radius.angle];
+      point_x = p_sin_data[p_actwk->u.obj.radius.direction];
       break;
     case 1: // rightup
-      point_x = p_sin_data[127 - p_actwk->u.obj.radius.angle];
+      point_x = p_sin_data[127 - p_actwk->u.obj.radius.direction];
       break;
     case 2: // leftup
-      point_x = -p_sin_data[p_actwk->u.obj.radius.angle % 64];
+      point_x = -p_sin_data[p_actwk->u.obj.radius.direction % 64];
       break;
     case 3: // leftdown
-      point_x = -p_sin_data[255 - p_actwk->u.obj.radius.angle];
+      point_x = -p_sin_data[255 - p_actwk->u.obj.radius.direction];
       break;
   }
 
@@ -1342,18 +1343,18 @@ void sin_movex(SKC_sprite_status* p_actwk, unsigned char* p_sin_data) {
 void sin_movey(SKC_sprite_status* p_actwk, unsigned char* p_sin_data) {
   short point_y;
 
-  switch (p_actwk->u.obj.radius.angle / 64) {
+  switch (p_actwk->u.obj.radius.direction / 64) {
     case 0: // rightdown
-      point_y = p_sin_data[p_actwk->u.obj.radius.angle];
+      point_y = p_sin_data[p_actwk->u.obj.radius.direction];
       break;
     case 1: // rightup
-      point_y = p_sin_data[127 - p_actwk->u.obj.radius.angle];
+      point_y = p_sin_data[127 - p_actwk->u.obj.radius.direction];
       break;
     case 2: // leftup
-      point_y = -p_sin_data[p_actwk->u.obj.radius.angle % 64];
+      point_y = -p_sin_data[p_actwk->u.obj.radius.direction % 64];
       break;
     case 3: // leftdown
-      point_y = -p_sin_data[255 - p_actwk->u.obj.radius.angle];
+      point_y = -p_sin_data[255 - p_actwk->u.obj.radius.direction];
       break;
   }
 
@@ -2235,8 +2236,8 @@ bool chk_pl_attack(SKC_sprite_status* p_actwk, SKC_sprite_status* p_playerwk) {
       if (p_playerwk->u.play.talent_status != 0 && p_playerwk->u.play.cddat.underwater == 0) {
         short xposi = fp16_get_integer(p_playerwk->xposi) - fp16_get_integer(p_actwk->xposi);
         short yposi = fp16_get_integer(p_playerwk->yposi) - fp16_get_integer(p_actwk->yposi);
-        short angle = atan(xposi, yposi) - 32;
-        if (angle < 64) return true;
+        short direction = direction_sub(atan(xposi, yposi), 32);
+        if (direction < 64) return true;
       }
       break;
     case KNUCKLES:

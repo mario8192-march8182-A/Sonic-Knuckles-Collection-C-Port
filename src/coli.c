@@ -6,6 +6,7 @@
 #include "types/spritestatus.h"
 #include "types/spritestatushandler.h"
 #include "utils/bits.h"
+#include "utils/direction.h"
 #include "utils/fp16.h"
 #include "actset.h"
 #include "constants.h"
@@ -258,8 +259,8 @@ static void pcolnomal(SKC_sprite_status* p_playerwk, SKC_sprite_status* p_coliwk
         else {
           short x = fp16_get_integer(p_playerwk->xposi) - fp16_get_integer(p_coliwk->xposi);
           short y = fp16_get_integer(p_playerwk->yposi) - fp16_get_integer(p_coliwk->yposi);
-          short angle = atan(x, y) - 32;
-          if ((unsigned short)angle >= 64) {
+          unsigned char direction = direction_sub(atan(x, y), 32);
+          if (direction >= 64) {
             pcolplay(p_playerwk, p_coliwk);
             return;
           }
@@ -340,9 +341,9 @@ static void pcolplay(SKC_sprite_status* p_playerwk, SKC_sprite_status* p_coliwk)
 static void bariabounce(SKC_sprite_status* p_playerwk, SKC_sprite_status* p_coliwk) {
   short x = fp16_get_integer(p_playerwk->xposi) - fp16_get_integer(p_coliwk->xposi);
   short y = fp16_get_integer(p_playerwk->yposi) - fp16_get_integer(p_coliwk->yposi);
-  unsigned char angle = atan(x, y) & 0xFF;
+  unsigned char direction = atan(x, y);
   short sin, cos;
-  sinset(angle, &sin, &cos);
+  sinset(direction, &sin, &cos);
   p_coliwk->xspeed = cos * -0x800 / 0x100;
   p_coliwk->yspeed = sin * -0x800 / 0x100;
   p_coliwk->colino = 0;

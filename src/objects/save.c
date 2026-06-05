@@ -6,6 +6,7 @@
 #include "../types/spritestatus.h"
 #include "../types/spritestatushandler.h"
 #include "../utils/bits.h"
+#include "../utils/direction.h"
 #include "../utils/fp16.h"
 #include "../utils/stageno.h"
 #include "../action.h"
@@ -146,12 +147,10 @@ static void savemove3(SKC_sprite_status* p_actwk) {
     frameout(p_actwk);
   }
   else {
-    unsigned char angle = p_actwk->direc.b.b0 - 64;
-    angle &= 0xFF;
-    p_actwk->direc.b.b0 -= 16;
-    p_actwk->direc.b.b0 &= 0xFF;
+    unsigned char direction = direction_sub(p_actwk->direc.b.b0, 64);
+    p_actwk->direc.b.b0 = direction_sub(p_actwk->direc.b.b0, 16);
     short sin, cos;
-    sinset(angle, &sin, &cos);
+    sinset(direction, &sin, &cos);
     long cos_l = cos * 3072;
     short xposi = fp16_get_integer(cos_l) + p_actwk->u.obj.actfree.save.oya_xposi;
     fp16_set_integer(&p_actwk->xposi, xposi);
@@ -363,7 +362,7 @@ static SKC_sprite_pattern starsp02 = {
 
 void o_starinit(SKC_sprite_status* p_actwk) {
   SKC_sprite_status* p_new_actwk;
-  unsigned short angle = 0;
+  unsigned short direction = 0;
 
   for (int i = 0; i < 4; ++i) {
     SKC_actwkchk_result result = actwkchk();
@@ -384,8 +383,8 @@ void o_starinit(SKC_sprite_status* p_actwk) {
     result.actwk_ptr->patno = 1;
     result.actwk_ptr->xspeed = -0x400;
     result.actwk_ptr->yspeed = 0;
-    p_actwk->u.obj.actfree.save.angle = angle;
-    angle += 64;
+    p_actwk->u.obj.actfree.save.direction = direction;
+    direction = fpdirection_sum(direction, 64);
   }
 
   unsigned char* p_cg;
@@ -464,13 +463,13 @@ void o_star(SKC_sprite_status* p_actwk) {
     }
     p_actwk->colicnt = 0;
   }
-  p_actwk->u.obj.actfree.save.angle += 10;
+  p_actwk->u.obj.actfree.save.direction = direction_sum(p_actwk->u.obj.actfree.save.direction, 10);
   short sin, cos;
-  sinset(p_actwk->u.obj.actfree.save.angle, &sin, &cos);
+  sinset(p_actwk->u.obj.actfree.save.direction, &sin, &cos);
   sin /= 32;
   cos /= 8;
   short d1 = cos;
-  short d2 = (p_actwk->u.obj.actfree.save.angle & 0x3E0) / 32;
+  short d2 = (p_actwk->u.obj.actfree.save.direction & 0x3E0) / 32;
   if (d2 > 16) {
     d1 = -d1;
     d2 %= 16;

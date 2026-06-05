@@ -3,6 +3,6 @@
 
 unsigned long random(void);
 void sinset(unsigned char angle, short* p_sin, short* p_cos);
-short atan(short x, short y);
+unsigned char atan(short x, short y);
 
 #endif

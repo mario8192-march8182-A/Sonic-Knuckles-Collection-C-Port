@@ -5,6 +5,7 @@
 #include "../types/spritestatus.h"
 #include "../types/spritestatushandler.h"
 #include "../utils/bits.h"
+#include "../utils/direction.h"
 #include "../utils/fp16.h"
 #include "../utils/fp8.h"
 #include "../utils/stageno.h"
@@ -342,7 +343,7 @@ void sjumpsub(SKC_sprite_status* p_actwk, SKC_sprite_status* p_playerwk) {
     p_playerwk->u.play.flip_rev_cnt = BIT_IS_SET(p_actwk->u.obj.userflag, 1) ? 0 : 1;
     p_playerwk->u.play.flip_rev_frame_cnt = 4;
     if (p_playerwk->u.play.cddat.left == 1) {
-      p_playerwk->direc.b.b1 = 256 - p_playerwk->direc.b.b1;
+      p_playerwk->direc.b.b1 = direction_hmirror(p_playerwk->direc.b.b1);
       p_playerwk->mspeed = -p_playerwk->mspeed;
     }
   }
@@ -465,7 +466,7 @@ static void sdashsub2(SKC_sprite_status* p_actwk, SKC_sprite_status* p_playerwk)
     p_playerwk->u.play.flip_rev_cnt = !BIT_IS_SET(p_actwk->u.obj.userflag, 1) ? 1 : 3;
     p_playerwk->u.play.flip_rev_frame_cnt = 8;
     if (p_playerwk->u.play.cddat.left == 1) {
-      p_playerwk->direc.b.b1 = 256 - p_playerwk->direc.b.b1;
+      p_playerwk->direc.b.b1 = direction_hmirror(p_playerwk->direc.b.b1);
       p_playerwk->mspeed = -p_playerwk->mspeed;
     }
   }
@@ -597,7 +598,7 @@ static void sjumprsub2(SKC_sprite_status* p_actwk, SKC_sprite_status* p_playerwk
     p_playerwk->u.play.flip_rev_cnt = BIT_IS_SET(p_actwk->u.obj.userflag, 1) ? 0 : 1;
     p_playerwk->u.play.flip_rev_frame_cnt = 4;
     if (p_playerwk->u.play.cddat.left == 1) {
-      p_playerwk->direc.b.b1 = 256 - p_playerwk->direc.b.b1;
+      p_playerwk->direc.b.b1 = direction_hmirror(p_playerwk->direc.b.b1);
       p_playerwk->mspeed = -p_playerwk->mspeed;
     }
   }
@@ -673,7 +674,7 @@ static void sjump45move__sub(SKC_sprite_status* p_actwk, SKC_sprite_status* p_pl
     p_playerwk->u.play.flip_rev_cnt = BIT_IS_SET(p_actwk->u.obj.userflag, 1) ? 1 : 3;
     p_playerwk->u.play.flip_rev_frame_cnt = 8;
     if (p_playerwk->u.play.cddat.left == 1) {
-      p_playerwk->direc.b.b1 = 256 - p_playerwk->direc.b.b1;
+      p_playerwk->direc.b.b1 = direction_hmirror(p_playerwk->direc.b.b1);
       p_playerwk->mspeed = -p_playerwk->mspeed;
     }
   }
@@ -736,7 +737,7 @@ static void sjump45rmove__sub(SKC_sprite_status* p_actwk, SKC_sprite_status* p_p
     p_playerwk->u.play.flip_rev_cnt = BIT_IS_SET(p_actwk->u.obj.userflag, 1) ? 1 : 3;
     p_playerwk->u.play.flip_rev_frame_cnt = 8;
     if (p_playerwk->u.play.cddat.left == 1) {
-      p_playerwk->direc.b.b1 = 256 - p_playerwk->direc.b.b1;
+      p_playerwk->direc.b.b1 = direction_hmirror(p_playerwk->direc.b.b1);
       p_playerwk->mspeed = -p_playerwk->mspeed;
     }
   }

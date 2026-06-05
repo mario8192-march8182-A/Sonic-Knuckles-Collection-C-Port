@@ -7,6 +7,7 @@
 #include "../../types/spritestatus.h"
 #include "../../types/spritestatushandler.h"
 #include "../../utils/bits.h"
+#include "../../utils/direction.h"
 #include "../../utils/fp16.h"
 #include "../../action.h"
 #include "../../etc.h"
@@ -204,20 +205,20 @@ static void saru00_arm_base(SKC_sprite_status* p_actwk) {
 
 
 static void arm_base_up(SKC_sprite_status* p_actwk) {
-  unsigned char angle = p_actwk->u.obj.actfree.saru00_arm.angle;
+  unsigned char direction = p_actwk->u.obj.actfree.saru00_arm.direction;
   if (p_actwk->u.obj.actflg0.fura_right == 1) { // right
-    angle += 4;
-    if (angle < 128) {
-      p_actwk->u.obj.actfree.saru00_arm.angle = angle;
+    direction = direction_sum(direction, 4);
+    if (direction < 128) {
+      p_actwk->u.obj.actfree.saru00_arm.direction = direction;
     }
     else {
       p_actwk->r_no = 2;
     }
   }
   else { // left
-    angle -=4;
-    if (angle > 128) {
-      p_actwk->u.obj.actfree.saru00_arm.angle = angle;
+    direction = direction_sub(direction, 4);
+    if (direction > 128) {
+      p_actwk->u.obj.actfree.saru00_arm.direction = direction;
     }
     else {
       p_actwk->r_no = 2;
@@ -243,18 +244,18 @@ static void arm_base_ura(SKC_sprite_status* p_actwk) {
 
 
 static void arm_base_ura1(SKC_sprite_status* p_actwk) {
-  unsigned char angle;
+  unsigned char direction;
   if (p_actwk->u.obj.actflg0.fura_right == 1) { // right
-    saru00_add_dir(p_actwk, p_actwk->u.obj.actfree.saru00_arm.dir);
-    angle = p_actwk->u.obj.actfree.saru00_arm.angle - 32;
+    saru00_add_dir(p_actwk, p_actwk->u.obj.actfree.saru00_arm.direction);
+    direction = direction_sub(p_actwk->u.obj.actfree.saru00_arm.direction, 32);
   }
   else { // left
-    saru00_add_dir(p_actwk, p_actwk->u.obj.actfree.saru00_arm.dir);
-    angle = p_actwk->u.obj.actfree.saru00_arm.angle - 128;
+    saru00_add_dir(p_actwk, p_actwk->u.obj.actfree.saru00_arm.direction);
+    direction = direction_sub(p_actwk->u.obj.actfree.saru00_arm.direction, 128);
   }
-  if (angle >= 96) {
-    p_actwk->u.obj.actfree.saru00_arm.dir = -p_actwk->u.obj.actfree.saru00_arm.dir;
-    saru00_add_dir(p_actwk, p_actwk->u.obj.actfree.saru00_arm.dir);
+  if (direction >= 96) {
+    p_actwk->u.obj.actfree.saru00_arm.direction = direction_hmirror(p_actwk->u.obj.actfree.saru00_arm.direction);
+    saru00_add_dir(p_actwk, p_actwk->u.obj.actfree.saru00_arm.direction);
   }
   dec_timer(p_actwk);
 }
@@ -274,14 +275,14 @@ static void saru00_shot_init(SKC_sprite_status* p_actwk) {
 static void arm_base_shot0(SKC_sprite_status* p_actwk) {
   if (p_actwk->u.obj.actflg0.fura_right == 1) { // right
     saru00_add_dir(p_actwk, 4);
-    if (p_actwk->u.obj.actfree.saru00_arm.angle >= 192) {
+    if (p_actwk->u.obj.actfree.saru00_arm.direction >= 192) {
       p_actwk->r_no = 6;
       p_actwk->u.obj.actflg0.unused2 = 1;
     }
   }
   else { // left
     saru00_add_dir(p_actwk, -4);
-    if (p_actwk->u.obj.actfree.saru00_arm.angle <= 64) {
+    if (p_actwk->u.obj.actfree.saru00_arm.direction <= 64) {
       p_actwk->r_no = 6;
       p_actwk->u.obj.actflg0.unused2 = 1;
     }
@@ -292,17 +293,17 @@ static void arm_base_shot0(SKC_sprite_status* p_actwk) {
 static void arm_base_shot1(SKC_sprite_status* p_actwk) {
   if (p_actwk->u.obj.actflg0.fura_right == 1) { // right
     saru00_add_dir(p_actwk, -8);
-    if (p_actwk->u.obj.actfree.saru00_arm.angle <= 96) {
+    if (p_actwk->u.obj.actfree.saru00_arm.direction <= 96) {
       p_actwk->r_no = 8;
-      p_actwk->u.obj.actfree.saru00_arm.angle = 96;
+      p_actwk->u.obj.actfree.saru00_arm.direction = 96;
       p_actwk->u.obj.actflg0.unused1 = 0;
     }
   }
   else { // left
     saru00_add_dir(p_actwk, 8);
-    if (p_actwk->u.obj.actfree.saru00_arm.angle >= 160) {
+    if (p_actwk->u.obj.actfree.saru00_arm.direction >= 160) {
       p_actwk->r_no = 8;
-      p_actwk->u.obj.actfree.saru00_arm.angle = 160;
+      p_actwk->u.obj.actfree.saru00_arm.direction = 160;
       p_actwk->u.obj.actflg0.unused1 = 0;
     }
   }
@@ -312,17 +313,17 @@ static void arm_base_shot1(SKC_sprite_status* p_actwk) {
 static void arm_base_shot2(SKC_sprite_status* p_actwk) {
   if (p_actwk->u.obj.actflg0.fura_right == 0) { // right
     saru00_add_dir(p_actwk, -2);
-    if (p_actwk->u.obj.actfree.saru00_arm.angle <= 128) {
+    if (p_actwk->u.obj.actfree.saru00_arm.direction <= 128) {
       p_actwk->r_no = 10;
-      p_actwk->u.obj.actfree.saru00_arm.angle = 128;
+      p_actwk->u.obj.actfree.saru00_arm.direction = 128;
       ura1_init0(p_actwk);
     }
   }
   else { // left
     saru00_add_dir(p_actwk, 2);
-    if (p_actwk->u.obj.actfree.saru00_arm.angle >= 128) {
+    if (p_actwk->u.obj.actfree.saru00_arm.direction >= 128) {
       p_actwk->r_no = 10;
-      p_actwk->u.obj.actfree.saru00_arm.angle = 128;
+      p_actwk->u.obj.actfree.saru00_arm.direction = 128;
       ura1_init0(p_actwk);
     }
   }
@@ -457,7 +458,7 @@ static bool saru00_chk_shot(SKC_sprite_status* p_actwk) {
 
 
 static void saru00_add_dir(SKC_sprite_status* p_actwk, signed char offset) {
-  p_actwk->u.obj.actfree.saru00_arm.angle += offset;
+  p_actwk->u.obj.actfree.saru00_arm.direction = direction_sum(p_actwk->u.obj.actfree.saru00_arm.direction, offset);
 }
 
 
@@ -466,7 +467,7 @@ static void other_move(SKC_sprite_status* p_actwk) {
   if (p_actwk->u.obj.actfree.saru00_arm.unknown3b == 0) {
     p_actwk->u.obj.actfree.saru00_arm.unknown3b = p_actwk->u.obj.actfree.saru00_arm.unknown3a;
     SKC_sprite_status* p_parentwk = &g_ram.actwk[p_actwk->u.obj.oya];
-    p_actwk->u.obj.actfree.saru00_arm.angle = p_parentwk->u.obj.actfree.saru00_arm.angle;
+    p_actwk->u.obj.actfree.saru00_arm.direction = p_parentwk->u.obj.actfree.saru00_arm.direction;
   }
   circle_move(p_actwk, 5);
 }
@@ -499,7 +500,7 @@ static void chk_hand_shot(SKC_sprite_status* p_actwk) {
       SKC_sprite_status* p_basewk = &g_ram.actwk[p_actwk->u.obj.ko];
       if (p_basewk->u.obj.actflg0.unused2 == 1) {
         SKC_sprite_status* p_elbow = &g_ram.actwk[p_actwk->u.obj.actfree.saru00_arm.elbow];
-        if (p_actwk->u.obj.actfree.saru00_arm.angle < 132) {
+        if (p_actwk->u.obj.actfree.saru00_arm.direction < 132) {
           chk_hand_shot__set(p_actwk);
         }
       }
@@ -510,7 +511,7 @@ static void chk_hand_shot(SKC_sprite_status* p_actwk) {
       SKC_sprite_status* p_basewk = &g_ram.actwk[p_actwk->u.obj.ko];
       if (p_basewk->u.obj.actflg0.unused2 == 1) {
         SKC_sprite_status* p_elbow = &g_ram.actwk[p_actwk->u.obj.actfree.saru00_arm.elbow];
-        if (p_actwk->u.obj.actfree.saru00_arm.angle >= 124) {
+        if (p_actwk->u.obj.actfree.saru00_arm.direction >= 124) {
           p_actwk->sproffset = 0x2548;
           chk_hand_shot__set(p_actwk);
         }
@@ -533,11 +534,11 @@ static void chk_hand_shot__set(SKC_sprite_status* p_actwk) {
 
 static void set_arm_timer(SKC_sprite_status* p_actwk) {
   random();
-  short dir = 1;
+  short side = 1;
   if (BIT_IS_SET(g_ram.ranum, 0)) {
-    dir = -dir;
+    side = -side;
   }
-  p_actwk->u.obj.actfree.saru00_arm.dir = dir;
+  p_actwk->u.obj.actfree.saru00_arm.side = side;
   p_actwk->u.obj.timer = g_ram.ranum & 60;
 }
 

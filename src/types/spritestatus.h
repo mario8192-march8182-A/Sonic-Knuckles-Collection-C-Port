@@ -177,7 +177,7 @@ typedef struct SKC_sprite_status {
       wrt;
       struct {
         short unknown; // 0x3A
-        unsigned char angle; // 0x3C
+        unsigned char direction; // 0x3C
       }
       radius;
       struct {
@@ -312,7 +312,7 @@ typedef struct SKC_sprite_status {
         egjr0a;
         struct {
           unsigned short timer_init; // 0x30
-          unsigned char dir; // 0x32
+          unsigned char direction; // 0x32
           unsigned char speed_rev_timer_init; // 0x33
           unsigned char speed_rev_timer; // 0x39
           unsigned short unknown3a; // 0x3A
@@ -323,9 +323,9 @@ typedef struct SKC_sprite_status {
         struct {
           short xposi_init; // 0x30
           short yposi_init; // 0x32
-          short angle_mod; // 0x34
+          short direc_mod; // 0x34
           bool dropping; // 0x36
-          unsigned short angle; // 0x38
+          unsigned short direction; // 0x38
           unsigned char ko2; // 0x3E
         }
         evhashi;
@@ -387,8 +387,8 @@ typedef struct SKC_sprite_status {
         }
         iwa;
         struct {
-          unsigned char plangle; // 0x3C
-          unsigned char pl2angle; // 0x3D
+          unsigned char pldirec; // 0x3C
+          unsigned char pl2direc; // 0x3D
         }
         iwa091;
         struct {
@@ -487,15 +487,15 @@ typedef struct SKC_sprite_status {
         struct {
           unsigned char unknown3a; // 0x3A
           unsigned char unknown3b; // 0x3B
-          unsigned char angle; // 0x3C
+          unsigned char direction; // 0x3C
           unsigned char elbow; // 0x3E
-          signed char dir; // 0x40
+          signed char side; // 0x40
         }
         saru00_arm;
         struct {
           short oya_xposi; // 0x30
           short oya_yposi; // 0x32
-          unsigned short angle; // 0x34
+          unsigned short direction; // 0x34
           unsigned short counter; // 0x36
         }
         save;
@@ -607,8 +607,8 @@ typedef struct SKC_sprite_status {
       unsigned char eventflag; // 0x37
       SKC_character_id character; // 0x38
       unsigned char lever_ctr; // 0x39
-      unsigned char angle_front; // 0x3A
-      unsigned char angle_below; // 0x3B
+      unsigned char direc_front; // 0x3A
+      unsigned char direc_below; // 0x3B
       unsigned char convex_flag; // 0x3C
       unsigned char spindash_flag; // 0x3D
       short spindash_ctr; // 0x3E

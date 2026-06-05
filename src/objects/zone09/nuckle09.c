@@ -20,6 +20,7 @@
 #include "../../types/spritestatus.h"
 #include "../../types/spritestatushandler.h"
 #include "../../utils/bits.h"
+#include "../../utils/direction.h"
 #include "../../utils/fp16.h"
 #include "../../utils/fp8.h"
 #include "../../utils/stageno.h"
@@ -212,8 +213,8 @@ static void piyo09_wait1(SKC_sprite_status* p_actwk);
 static void piyo09_fout0_init(SKC_sprite_status* p_actwk);
 static void iwa091_pg(SKC_sprite_status* p_actwk);
 static void chk_iwa091_col(SKC_sprite_status* p_actwk);
-static void chk_iwa091_col__chk_catch(SKC_sprite_status* p_actwk, SKC_sprite_status* p_playerwk, bool* p_plbit, unsigned char* p_plangle);
-static void chk_iwa091_col__chk_col(SKC_sprite_status* p_actwk, SKC_sprite_status* p_playerwk, bool* p_plbit, unsigned char* p_plangle, unsigned char patno);
+static void chk_iwa091_col__chk_catch(SKC_sprite_status* p_actwk, SKC_sprite_status* p_playerwk, bool* p_plbit, unsigned char* p_pldirec);
+static void chk_iwa091_col__chk_col(SKC_sprite_status* p_actwk, SKC_sprite_status* p_playerwk, bool* p_plbit, unsigned char* p_pldirec, unsigned char patno);
 static void chk_nk0930_rev(SKC_sprite_status* p_actwk, bool right);
 static void nk0930_pl_damage(SKC_sprite_status* p_actwk, SKC_sprite_status* p_playerwk);
 static void nk0930_pl_damage0(SKC_sprite_status* p_actwk, SKC_sprite_status* p_playerwk);
@@ -2269,14 +2270,14 @@ static void embl0930_handb_wait0(SKC_sprite_status* p_actwk) {
 
 void embl0930_rhand(SKC_sprite_status* p_actwk) {
   p_actwk->u.obj.actflg0.fura_right = 1;
-  p_actwk->u.obj.radius.angle = 64;
+  p_actwk->u.obj.radius.direction = 64;
   p_actwk->u.obj.actfree.embl_hand.speed = 1;
   embl0930_lhand0(p_actwk);
 }
 
 
 void embl0930_lhand(SKC_sprite_status* p_actwk) {
-  p_actwk->u.obj.radius.angle = 192;
+  p_actwk->u.obj.radius.direction = 192;
   p_actwk->u.obj.actfree.embl_hand.speed = -1;
   embl0930_lhand0(p_actwk);
 }
@@ -2289,9 +2290,9 @@ static void embl0930_lhand0(SKC_sprite_status* p_actwk) {
 
   enemy_init2(p_actwk, &embl0930_lhand_init_tbl);
   p_actwk->r_ptr = &embl0930_lhand_wait0;
-  p_actwk->direc.b.b0 = p_actwk->u.obj.radius.angle;
+  p_actwk->direc.b.b0 = p_actwk->u.obj.radius.direction;
   unsigned char index = p_actwk->u.obj.userflag / 2 + (p_actwk->u.obj.actflg0.fura_right == 1 ? 10 : 0);
-  p_actwk->u.obj.actfree.embl_hand.dir = dir_tbl[index];
+  p_actwk->u.obj.actfree.embl_hand.direction = dir_tbl[index];
   if (p_actwk->u.obj.userflag == 18) {
     p_actwk->u.obj.actflg0.unused2 = 1;
   }
@@ -2355,15 +2356,14 @@ static void embl0930_lhand_move10(SKC_sprite_status* p_actwk) {
 
 
 static void embl0930_lhand_move2(SKC_sprite_status* p_actwk) {
-  short wk = (short)p_actwk->u.obj.actfree.embl_hand.dir - (short)p_actwk->u.obj.radius.angle;
-  unsigned char angle = (unsigned short)wk & 0xFF;
-  bool gt = p_actwk->u.obj.actfree.embl_hand.dir > p_actwk->u.obj.radius.angle;
+  unsigned char direction = direction_sub(p_actwk->u.obj.actfree.embl_hand.direction,
+                                          p_actwk->u.obj.radius.direction);
+  bool gt = p_actwk->u.obj.actfree.embl_hand.direction > p_actwk->u.obj.radius.direction;
   if (gt) {
-    angle = 256 - angle;
+    direction = direction_hmirror(direction);
   }
-  if (angle >= 4) {
-    p_actwk->u.obj.radius.angle += !gt ? 4 : -4;
-    p_actwk->u.obj.radius.angle &= 0xFF;
+  if (direction >= 4) {
+    p_actwk->u.obj.radius.direction = direction_sum(p_actwk->u.obj.radius.direction, !gt ? 4 : -4);
   }
   else {
     p_actwk->r_ptr = &embl0930_lhand_move3;
@@ -2422,13 +2422,13 @@ static void embl0930_lhand_wait1(SKC_sprite_status* p_actwk) {
 
 
 static void embl0930_lhand_move5(SKC_sprite_status* p_actwk) {
-  bool gt = p_actwk->direc.b.b0 > p_actwk->u.obj.radius.angle;
-  unsigned char angle = (unsigned short)((short)p_actwk->direc.b.b0 - (short)p_actwk->u.obj.radius.angle) & 0xFF;
+  bool gt = p_actwk->direc.b.b0 > p_actwk->u.obj.radius.direction;
+  unsigned char direction = direction_sub(p_actwk->direc.b.b0, p_actwk->u.obj.radius.direction);
   if (gt) {
-    angle = 256 - angle;
+    direction = direction_hmirror(direction);
   }
-  if (angle >= 2) {
-    p_actwk->u.obj.radius.angle += !gt ? 2 : -2;
+  if (direction >= 2) {
+    p_actwk->u.obj.radius.direction += !gt ? 2 : -2;
   }
   else {
     p_actwk->r_ptr = &embl0930_lhand_move6;
@@ -2554,16 +2554,16 @@ static void iwa091_pg(SKC_sprite_status* p_actwk) {
 static void chk_iwa091_col(SKC_sprite_status* p_actwk) {
   bool plbit = p_actwk->u.obj.actflg0.puka_down;
   bool pl2bit = p_actwk->u.obj.actflg0.unused1;
-  chk_iwa091_col__chk_col(p_actwk, &g_ram.actwk[0], &plbit, &p_actwk->u.obj.actfree.iwa091.plangle, 141);
-  chk_iwa091_col__chk_col(p_actwk, &g_ram.actwk[1], &pl2bit, &p_actwk->u.obj.actfree.iwa091.pl2angle, 138);
-  chk_iwa091_col__chk_catch(p_actwk, &g_ram.actwk[0], &plbit, &p_actwk->u.obj.actfree.iwa091.plangle);
-  chk_iwa091_col__chk_catch(p_actwk, &g_ram.actwk[0], &pl2bit, &p_actwk->u.obj.actfree.iwa091.pl2angle);
+  chk_iwa091_col__chk_col(p_actwk, &g_ram.actwk[0], &plbit, &p_actwk->u.obj.actfree.iwa091.pldirec, 141);
+  chk_iwa091_col__chk_col(p_actwk, &g_ram.actwk[1], &pl2bit, &p_actwk->u.obj.actfree.iwa091.pl2direc, 138);
+  chk_iwa091_col__chk_catch(p_actwk, &g_ram.actwk[0], &plbit, &p_actwk->u.obj.actfree.iwa091.pldirec);
+  chk_iwa091_col__chk_catch(p_actwk, &g_ram.actwk[0], &pl2bit, &p_actwk->u.obj.actfree.iwa091.pl2direc);
   p_actwk->u.obj.actflg0.puka_down = plbit;
   p_actwk->u.obj.actflg0.unused1 = pl2bit;
 }
 
 
-static void chk_iwa091_col__chk_catch(SKC_sprite_status* p_actwk, SKC_sprite_status* p_playerwk, bool* p_plbit, unsigned char* p_plangle) {
+static void chk_iwa091_col__chk_catch(SKC_sprite_status* p_actwk, SKC_sprite_status* p_playerwk, bool* p_plbit, unsigned char* p_pldirec) {
   if (!*p_plbit) return;
 
   if (p_playerwk->pattim-- == 0) {
@@ -2573,10 +2573,10 @@ static void chk_iwa091_col__chk_catch(SKC_sprite_status* p_actwk, SKC_sprite_sta
     p_playerwk->actflg.hflip = BIT_IS_SET(patcnt, 0);
     p_playerwk->actflg.vflip = BIT_IS_SET(patcnt, 1);
   }
-  unsigned char angle = *p_plangle;
-  *p_plangle += 2;
+  unsigned char direction = *p_pldirec;
+  *p_pldirec = direction_sum(*p_pldirec , 2);
   short sin, cos;
-  sinset(angle, &sin, &cos);
+  sinset(direction, &sin, &cos);
   short xposi = fp16_get_integer(p_playerwk->xposi) + sin / 8;
   fp16_set_integer(&p_playerwk->xposi, xposi);
   short yposi = fp16_get_integer(p_playerwk->yposi) + cos / 8;
@@ -2584,7 +2584,7 @@ static void chk_iwa091_col__chk_catch(SKC_sprite_status* p_actwk, SKC_sprite_sta
 }
 
 
-static void chk_iwa091_col__chk_col(SKC_sprite_status* p_actwk, SKC_sprite_status* p_playerwk, bool* p_plbit, unsigned char* p_plangle, unsigned char patno) {
+static void chk_iwa091_col__chk_col(SKC_sprite_status* p_actwk, SKC_sprite_status* p_playerwk, bool* p_plbit, unsigned char* p_pldirec, unsigned char patno) {
   short col_tbl[4] = {
     -32, 64, -32, 64
   };
@@ -2601,7 +2601,7 @@ static void chk_iwa091_col__chk_col(SKC_sprite_status* p_actwk, SKC_sprite_statu
   p_playerwk->pattim = 0;
   p_playerwk->patcnt = 0;
   wrt_player0(p_playerwk);
-  *p_plangle = chk_pl_angle(p_actwk, p_playerwk);
+  *p_pldirec = chk_pl_angle(p_actwk, p_playerwk);
 }
 
 

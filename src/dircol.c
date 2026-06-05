@@ -2,25 +2,26 @@
 #include "types/sonic3ram.h"
 #include "types/spritestatus.h"
 #include "utils/fp16.h"
+#include "utils/direction.h"
 #include "fcol.h"
-static SKC_dircol_result dircol(SKC_sprite_status* p_actwk, unsigned char direc);
-static SKC_dircol_result vsdircolm(SKC_sprite_status* p_actwk, unsigned char direc);
-static SKC_dircol_result vsdircol(SKC_sprite_status* p_actwk, unsigned char direc);
-static SKC_dircol_result dircolchk(signed char scd0, signed char scd1, unsigned char direc);
-static SKC_dircol_result dircolchk1(signed char scd, unsigned char direc);
+static SKC_dircol_result dircol(SKC_sprite_status* p_actwk, unsigned char direction);
+static SKC_dircol_result vsdircolm(SKC_sprite_status* p_actwk, unsigned char direction);
+static SKC_dircol_result vsdircol(SKC_sprite_status* p_actwk, unsigned char direction);
+static SKC_dircol_result dircolchk(signed char scd0, signed char scd1, unsigned char direction);
+static SKC_dircol_result dircolchk1(signed char scd, unsigned char direction);
 
 extern sonic3_ram g_ram;
 
 
-SKC_dircol_result dircolm(SKC_sprite_status* p_actwk, unsigned char direc) {
+SKC_dircol_result dircolm(SKC_sprite_status* p_actwk, unsigned char direction) {
   if (g_ram.vs_flag != 0) {
-    return vsdircolm(p_actwk, direc);
+    return vsdircolm(p_actwk, direction);
   }
-  return dircol(p_actwk, direc);
+  return dircol(p_actwk, direction);
 }
 
 
-static SKC_dircol_result dircol(SKC_sprite_status* p_actwk, unsigned char direc) {
+static SKC_dircol_result dircol(SKC_sprite_status* p_actwk, unsigned char direction) {
   g_ram.scdadr = p_actwk->u.play.top_solid_bit == 12 ? g_ram.scd0adr : g_ram.scd1adr;
   long xposi = p_actwk->xposi + (long)p_actwk->xspeed * 0x100;
   long yspeed = p_actwk->yspeed;
@@ -28,35 +29,34 @@ static SKC_dircol_result dircol(SKC_sprite_status* p_actwk, unsigned char direc)
     yspeed = -yspeed;
   }
   long yposi = p_actwk->yposi + yspeed * 0x100;
-  g_ram.dirstk[0] = direc;
-  g_ram.dirstk[2] = direc;
-  unsigned char direc_wrk = direc + 32;
-  direc_wrk &= 0xFF;
-  if (direc_wrk >= 128) {
-    direc_wrk = direc;
-    if (direc_wrk >= 128) {
-      --direc_wrk;
+  g_ram.dirstk[0] = direction;
+  g_ram.dirstk[2] = direction;
+  unsigned char direction_wk = direction_sum(direction, 32);
+  if (direction_wk >= 128) {
+    direction_wk = direction;
+    if (direction_wk >= 128) {
+      direction_wk = direction_sub(direction_wk, 1);
     }
-    direc_wrk += 32;
+    direction_wk = direction_sum(direction_wk, 32);
   }
   else {
-    direc_wrk = direc;
-    if (direc_wrk >= 128) {
-      ++direc_wrk;
+    direction_wk = direction;
+    if (direction_wk >= 128) {
+      direction_wk = direction_sum(direction_wk, 1);
     }
-    direc_wrk += 31;
+    direction_wk = direction_sum(direction_wk, 31);
   }
   SKC_dircol_result result;
 
-  switch (direc_wrk & 0xC0) {
+  switch (direction_wk & 0xC0) {
     case   0: result = dircol_d3(p_actwk, xposi, yposi);
     case 128: result = dircol_u3(p_actwk, xposi, yposi);
     default:
-      if (g_ram.vs_flag == 0 && !(direc & 0x38)) {
+      if (g_ram.vs_flag == 0 && !(direction & 0x38)) {
         yposi += 8;
       }
 
-      switch (direc_wrk & 0xC0) {
+      switch (direction_wk & 0xC0) {
         case 64: result = dircol_l3(p_actwk, xposi, yposi);
         default: result = dircol_r3(p_actwk, xposi, yposi);
       }
@@ -67,36 +67,35 @@ static SKC_dircol_result dircol(SKC_sprite_status* p_actwk, unsigned char direc)
 }
 
 
-static SKC_dircol_result vsdircolm(SKC_sprite_status* p_actwk, unsigned char direc) {
-  return vsdircol(p_actwk, direc);
+static SKC_dircol_result vsdircolm(SKC_sprite_status* p_actwk, unsigned char direction) {
+  return vsdircol(p_actwk, direction);
 }
 
 
-static SKC_dircol_result vsdircol(SKC_sprite_status* p_actwk, unsigned char direc) {
+static SKC_dircol_result vsdircol(SKC_sprite_status* p_actwk, unsigned char direction) {
   g_ram.scdadr = p_actwk->u.play.top_solid_bit == 12 ? g_ram.scd0adr : g_ram.scd1adr;
   long xposi = p_actwk->xposi + (long)p_actwk->xspeed * 0x100;
   long yposi = p_actwk->yposi + (long)p_actwk->yspeed * 0x100;
-  g_ram.dirstk[0] = direc;
-  g_ram.dirstk[2] = direc;
-  unsigned char direc_wrk = direc + 32;
-  direc_wrk &= 0xFF;
-  if (direc_wrk >= 128) {
-    direc_wrk = direc;
-    if (direc_wrk >= 128) {
-      --direc_wrk;
+  g_ram.dirstk[0] = direction;
+  g_ram.dirstk[2] = direction;
+  unsigned char direction_wk = direction_sum(direction, 32);
+  if (direction_wk >= 128) {
+    direction_wk = direction;
+    if (direction_wk >= 128) {
+      direction_wk = direction_sub(direction_wk, 1);
     }
-    direc_wrk += 32;
+    direction_wk = direction_sum(direction_wk, 32);
   }
   else {
-    direc_wrk = direc;
-    if (direc_wrk >= 128) {
-      ++direc_wrk;
+    direction_wk = direction;
+    if (direction_wk >= 128) {
+      direction_wk = direction_sum(direction_wk, 1);
     }
-    direc_wrk += 31;
+    direction_wk = direction_sum(direction_wk, 31);
   }
   SKC_dircol_result result;
 
-  switch (direc_wrk & 0xC0) {
+  switch (direction_wk & 0xC0) {
     case   0: result = vsdircol_d(p_actwk, xposi, yposi);
     case 128: result = vsdircol_u(p_actwk, xposi, yposi);
     case  64: result = vsdircol_l(p_actwk, xposi, yposi);
@@ -107,14 +106,14 @@ static SKC_dircol_result vsdircol(SKC_sprite_status* p_actwk, unsigned char dire
 }
 
 
-SKC_dircol_result dircol2(SKC_sprite_status* p_actwk, unsigned char direc) {
+SKC_dircol_result dircol2(SKC_sprite_status* p_actwk, unsigned char direction) {
   g_ram.scdadr = p_actwk->u.play.top_solid_bit == 12 ? g_ram.scd0adr : g_ram.scd1adr;
-  g_ram.dirstk[0] = direc;
-  g_ram.dirstk[2] = direc;
-  unsigned char direc_wrk = direc + 32;
+  g_ram.dirstk[0] = direction;
+  g_ram.dirstk[2] = direction;
+  unsigned char direction_wk = direction_sum(direction, 32);
   SKC_dircol_result result;
 
-  switch (direc_wrk & 0xC0) {
+  switch (direction_wk & 0xC0) {
     case  64: result = dircol_l(p_actwk); break;
     case 128: result = dircol_u(p_actwk); break;
     case 192: result = dircol_r(p_actwk); break;
@@ -125,24 +124,24 @@ SKC_dircol_result dircol2(SKC_sprite_status* p_actwk, unsigned char direc) {
 }
 
 
-static SKC_dircol_result dircolchk(signed char scd0, signed char scd1, unsigned char direc) {
+static SKC_dircol_result dircolchk(signed char scd0, signed char scd1, unsigned char direction) {
   SKC_dircol_result result = { scd1, scd0, g_ram.dirstk[2] };
   if (scd1 > scd0) {
-    result.direc = g_ram.dirstk[0];
+    result.direction = g_ram.dirstk[0];
     result.offset = scd0;
     result.offset2 = scd1;
   }
-  if (result.direc & 1) {
-    result.direc = direc;
+  if (result.direction & 1) {
+    result.direction = direction;
   }
   return result;
 }
 
 
-static SKC_dircol_result dircolchk1(signed char scd, unsigned char direc) {
+static SKC_dircol_result dircolchk1(signed char scd, unsigned char direction) {
   SKC_dircol_result result = { scd, scd, g_ram.dirstk[0] };
-  if (result.direc & 1) {
-    result.direc = direc;
+  if (result.direction & 1) {
+    result.direction = direction;
   }
   return result;
 }

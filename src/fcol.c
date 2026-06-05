@@ -7,6 +7,7 @@
 #include "utils/fp16.h"
 #include "utils/fp8.h"
 #include "utils/bits.h"
+#include "utils/direction.h"
 #include "utils/stageno.h"
 static signed char dirchk(SKC_sprite_status* p_actwk, signed char scd0, signed char scd1);
 static bool fcol_d(SKC_sprite_status* p_actwk);
@@ -36,25 +37,24 @@ bool fcol(SKC_sprite_status* p_actwk) {
   }
   g_ram.dirstk[0] = 3;
   g_ram.dirstk[2] = 3;
-  unsigned char direc = p_actwk->direc.b.b0 + 32;
-  direc &= 0xFF;
-  if (direc >= 128) {
-    direc = p_actwk->direc.b.b0;
-    if (direc >= 128) {
-      --direc;
+  unsigned char direction = direction_sum(p_actwk->direc.b.b0, 32);
+  if (direction >= 128) {
+    direction = p_actwk->direc.b.b0;
+    if (direction >= 128) {
+      direction = direction_sub(direction, 1);
     }
-    direc += 32;
+    direction = direction_sum(direction, 32);
   }
   else {
-    direc = p_actwk->direc.b.b0;
-    if (direc >= 128) {
-      ++direc;
+    direction = p_actwk->direc.b.b0;
+    if (direction >= 128) {
+      direction = direction_sum(direction, 1);
     }
-    direc += 31;
+    direction = direction_sum(direction, 31);
   }
   bool coli = false;
 
-  switch (direc & 0xC0) {
+  switch (direction & 0xC0) {
     case  64: coli = fcol_l(p_actwk); break;
     case 128: coli = fcol_u(p_actwk); break;
     case 192: coli = fcol_r(p_actwk); break;
@@ -66,19 +66,18 @@ bool fcol(SKC_sprite_status* p_actwk) {
 
 
 static signed char dirchk(SKC_sprite_status* p_actwk, signed char scd0, signed char scd1) {
-  unsigned char dir = g_ram.dirstk[2];
+  unsigned char direction = g_ram.dirstk[2];
   if (scd1 > scd0) {
-    dir = g_ram.dirstk[0];
+    direction = g_ram.dirstk[0];
     scd1 = scd0;
   }
-  if (!(dir & 1)) {
-    unsigned char dir_wk = dir - p_actwk->direc.b.b0;
-    dir_wk &= 0xFF;
-    if (dir_wk >= 128) {
-      dir_wk = 256 - dir_wk;
+  if (!(direction & 1)) {
+    unsigned char direction_wk = direction_sub(direction, p_actwk->direc.b.b0);
+    if (direction_wk >= 128) {
+      direction_wk = direction_hmirror(direction_wk);
     }
-    if (dir_wk < 32) {
-      p_actwk->direc.b.b0 = dir;
+    if (direction_wk < 32) {
+      p_actwk->direc.b.b0 = direction;
     }
     else {
       p_actwk->direc.b.b0 = (p_actwk->direc.b.b0 + 32) & 0xC0;
@@ -283,16 +282,16 @@ static signed char scdchk(short xposi, short yposi, short yoffset, unsigned shor
   if (scd_no == 0) {
     return scdend(xposi, yposi, yoffset, blk_msk, solid_bit, p_dirstk, p_layout);
   }
-  unsigned char dir_wk = scddirtbl[scd_no];
+  unsigned char direction_wk = scddirtbl[scd_no];
   short xposi_wk = xposi;
   if (BIT_IS_SET(blk_no, 10)) {
     xposi_wk = -xposi_wk - 1;
-    dir_wk = 256 - dir_wk;
+    direction_wk = direction_hmirror(direction_wk);
   }
   if (BIT_IS_SET(blk_no, 11)) {
-    dir_wk = (256 - ((dir_wk + 64) & 0xFF)) - 64 & 0xFF;
+    direction_wk = direction_vmirror(direction_wk);
   }
-  *p_dirstk = dir_wk;
+  *p_dirstk = direction_wk;
   xposi_wk = (unsigned short)xposi_wk & 0x000F;
   signed char scd_data = scdtbl[scd_no][xposi_wk];
   blk_no ^= blk_msk;
@@ -327,16 +326,16 @@ static signed char scdchk2(short xposi, short yposi, unsigned short blk_msk, uns
   if (scd_no == 0) {
     return 15 - (signed char)((unsigned short)yposi & 0x000F);
   }
-  unsigned char dir_wk = scddirtbl[scd_no];
+  unsigned char direction_wk = scddirtbl[scd_no];
   short xposi_wk = xposi;
   if (BIT_IS_SET(blk_no, 10)) {
     xposi_wk = -xposi_wk - 1;
-    dir_wk = 256 - dir_wk;
+    direction_wk = direction_hmirror(direction_wk);
   }
   if (BIT_IS_SET(blk_no, 11)) {
-    dir_wk = (256 - ((dir_wk + 64) & 0xFF)) - 64 & 0xFF;
+    direction_wk = direction_vmirror(direction_wk);
   }
-  *p_dirstk = dir_wk;
+  *p_dirstk = direction_wk;
   xposi_wk = (unsigned short)xposi_wk & 0x000F;
   signed char scd_data = scdtbl[scd_no][xposi_wk];
   blk_no ^= blk_msk;
@@ -384,16 +383,16 @@ static unsigned char flyringscdchk(short xposi, short yposi, short yoffset, unsi
   if (scd_no == 0) {
     return 16;
   }
-  unsigned char dir_wk = scddirtbl[scd_no];
+  unsigned char direction_wk = scddirtbl[scd_no];
   short xposi_wk = xposi;
   if (BIT_IS_SET(blk_no, 10)) {
     xposi_wk = -xposi_wk - 1;
-    dir_wk = 256 - dir_wk;
+    direction_wk = direction_hmirror(direction_wk);
   }
   if (BIT_IS_SET(blk_no, 11)) {
-    dir_wk = (256 - ((dir_wk + 64) & 0xFF)) - 64 & 0xFF;
+    direction_wk = direction_vmirror(direction_wk);
   }
-  *p_dirstk = dir_wk;
+  *p_dirstk = direction_wk;
   xposi_wk = (unsigned short)xposi_wk & 0x000F;
   signed char scd_data = scdtbl[scd_no][xposi_wk];
   blk_no ^= blk_msk;
@@ -452,16 +451,16 @@ static signed char scdchk_r(short xposi, short yposi, short yoffset, unsigned sh
   if (scd_no == 0) {
     return scdend_r(xposi, yposi, yoffset, blk_msk, solid_bit, p_dirstk, p_layout);
   }
-  unsigned char dir_wk = scddirtbl[scd_no];
+  unsigned char direction_wk = scddirtbl[scd_no];
   short yposi_wk = yposi;
   if (BIT_IS_SET(blk_no, 11)) {
     yposi_wk = -yposi_wk - 1;
-    dir_wk = (256 - ((dir_wk + 64) & 0xFF)) - 64 & 0xFF;
+    direction_wk = direction_vmirror(direction_wk);
   }
   if (BIT_IS_SET(blk_no, 10)) {
-    dir_wk = 256 - dir_wk;
+    direction_wk = direction_hmirror(direction_wk);
   }
-  *p_dirstk = dir_wk;
+  *p_dirstk = direction_wk;
   yposi_wk = (unsigned short)yposi_wk & 0x000F;
   signed char scd_data = scdtbl[scd_no][yposi_wk];
   blk_no ^= blk_msk;
@@ -508,16 +507,16 @@ static signed char scdchk2_r(short xposi, short yposi, unsigned short blk_msk, u
   if (scd_no == 0) {
     return 15 - (signed char)((unsigned short)xposi & 0x000F);
   }
-  unsigned char dir_wk = scddirtbl[scd_no];
+  unsigned char direction_wk = scddirtbl[scd_no];
   short yposi_wk = yposi;
   if (BIT_IS_SET(blk_no, 11)) {
     yposi_wk = -yposi_wk - 1;
-    dir_wk = (256 - ((dir_wk + 64) & 0xFF)) - 64 & 0xFF;
+    direction_wk = direction_vmirror(direction_wk);
   }
   if (BIT_IS_SET(blk_no, 10)) {
-    dir_wk = 256 - dir_wk;
+    direction_wk = direction_hmirror(direction_wk);
   }
-  *p_dirstk = dir_wk;
+  *p_dirstk = direction_wk;
   yposi_wk = (unsigned short)yposi_wk & 0x000F;
   signed char scd_data = scdtbl2[scd_no][yposi_wk];
   blk_no ^= blk_msk;

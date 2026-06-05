@@ -290,7 +290,7 @@ typedef struct sonic3_ram {
   /* 08fffeb3 */ unsigned char ring_patno;
   /* 08fffeb6 */ unsigned char flyring_patcnt;
   /* 08fffeb7 */ unsigned char flyring_patno;
-  /* 08fffeba */ unsigned short ropeswing_angle;
+  /* 08fffeba */ unsigned short ropeswing_dir;
   /* 08fffebe */ unsigned char pl2ring_f;
   /* 08fffebf */ unsigned char pl2ring_f2;
   /* 08fffec0 */ short pl2maxspdwk;

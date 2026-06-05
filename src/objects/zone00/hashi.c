@@ -5,6 +5,7 @@
 #include "../../types/spritestatus.h"
 #include "../../types/spritestatushandler.h"
 #include "../../utils/bits.h"
+#include "../../utils/direction.h"
 #include "../../utils/fp16.h"
 #include "../../action.h"
 #include "../../actset.h"
@@ -394,9 +395,9 @@ static void evhashiinit(SKC_sprite_status* p_actwk) {
   p_actwk->u.obj.actfree.evhashi.yposi_init = fp16_get_integer(p_actwk->yposi);
   short yoffset = p_actwk->u.obj.cddat.down == 0 ? -104 : 104;
   fp16_set_integer(&p_actwk->yposi, fp16_get_integer(p_actwk->yposi) + yoffset);
-  p_actwk->u.obj.actfree.evhashi.angle = (p_actwk->u.obj.cddat.down == 0 ? 192 : 64) << 16;
+  p_actwk->u.obj.actfree.evhashi.direction = (p_actwk->u.obj.cddat.down == 0 ? 192 : 64) << 16;
   yoffset = p_actwk->u.obj.cddat.down == 0 ? 240 : -240;
-  p_actwk->u.obj.actfree.evhashi.angle_mod = p_actwk->u.obj.cddat.right == 0 ? 512 : -512;
+  p_actwk->u.obj.actfree.evhashi.direc_mod = p_actwk->u.obj.cddat.right == 0 ? 512 : -512;
   SKC_actwkchk_result result = actwkchk2(p_actwk);
   if (result.actwk_ptr != 0) {
     result.actwk_ptr->r_ptr = &evhashimove3;
@@ -460,14 +461,15 @@ static void evhashimove(SKC_sprite_status* p_actwk) {
     p_actwk->sprvs = 8;
   }
   if (p_actwk->u.obj.actfree.evhashi.dropping) {
-    if (p_actwk->u.obj.actfree.evhashi.angle >> 8 == 0 || p_actwk->u.obj.actfree.evhashi.angle >> 8 == 128) {
+    if (p_actwk->u.obj.actfree.evhashi.direction >> 8 == 0
+        || p_actwk->u.obj.actfree.evhashi.direction >> 8 == 128) {
       p_actwk->u.obj.actfree.evhashi.dropping = false;
       soundset(86);
       p_actwk->r_ptr = &evhashimovesw;
     }
     else {
-      p_actwk->u.obj.actfree.evhashi.angle = (short)p_actwk->u.obj.actfree.evhashi.angle
-                                           + p_actwk->u.obj.actfree.evhashi.angle_mod;
+      p_actwk->u.obj.actfree.evhashi.direction = direction_sum(p_actwk->u.obj.actfree.evhashi.direction,
+                                                               p_actwk->u.obj.actfree.evhashi.direc_mod);
     }
   }
   evhashiposiset(p_actwk);
@@ -489,8 +491,9 @@ static void evhashimovesw(SKC_sprite_status* p_actwk) {
 
 static void evhashimove2(SKC_sprite_status* p_actwk) {
   SKC_hitchk_data data = { 19, 96, 97, fp16_get_integer(p_actwk->xposi) };
-  if (p_actwk->u.obj.actfree.evhashi.angle >> 8 == 0
-      || (p_actwk->u.obj.actfree.evhashi.angle >> 8 != 64 && p_actwk->u.obj.actfree.evhashi.angle >> 8 != 192)) {
+  if (p_actwk->u.obj.actfree.evhashi.direction >> 8 == 0
+      || (p_actwk->u.obj.actfree.evhashi.direction >> 8 != 64
+          && p_actwk->u.obj.actfree.evhashi.direction >> 8 != 192)) {
     data.sprhs = 107;
     data.sprvs_air = 8;
     data.sprvs_ground = 8;
@@ -529,7 +532,7 @@ static void evhashiposiset(SKC_sprite_status* p_actwk) {
   if (!p_actwk->u.obj.actfree.evhashi.dropping) return;
 
   short sin, cos;
-  sinset(p_actwk->u.obj.actfree.evhashi.angle >> 8, &sin, &cos);
+  sinset(p_actwk->u.obj.actfree.evhashi.direction >> 8, &sin, &cos);
   long sin_l = sin * 0x1000;
   long cos_l = cos * 0x1000;
   long sin_wk = sin_l;

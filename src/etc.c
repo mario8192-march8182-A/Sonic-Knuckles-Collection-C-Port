@@ -2,6 +2,7 @@
 #include <stdbool.h>
 #include <stdlib.h>
 #include "types/sonic3ram.h"
+#include "utils/direction.h"
 
 extern sonic3_ram g_ram;
 extern bool g_sonic3_alone;
@@ -50,7 +51,7 @@ void sinset(unsigned char angle, short* p_sin, short* p_cos) {
 }
 
 
-short atan(short x, short y) {
+unsigned char atan(short x, short y) {
   unsigned char atantbl[257] = {
      0,  0,  0,  0,  1,  1,  1,  1,  1,  1,  2,  2,  2,  2,  2,  2,
      3,  3,  3,  3,  3,  3,  3,  4,  4,  4,  4,  4,  4,  5,  5,  5,
@@ -72,22 +73,22 @@ short atan(short x, short y) {
   };
 
   int xl = x, yl = y;
-  short angle = 64;
-  if (xl | yl) {
+  unsigned char direction = 64;
+  if (xl != 0 || yl != 0) {
     xl = abs(xl);
     yl = abs(yl);
     if (xl > yl) {
-      angle = atantbl[(yl << 8) / xl];
+      direction = atantbl[(yl << 8) / xl];
     }
     else {
-      angle = 64 - (short)atantbl[(xl << 8) / yl];
+      direction = direction_sub(direction, atantbl[(xl << 8) / yl]);
     }
     if (x < 0) {
-      angle = -angle + 128;
+      direction = direction_sum(direction_hmirror(direction), 128);
     }
     if (y < 0) {
-      angle = -angle + 256;
+      direction = direction_hmirror(direction);
     }
   }
-  return angle;
+  return direction;
 }

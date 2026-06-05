@@ -11,6 +11,7 @@
 #include "../types/spritestatus.h"
 #include "../types/swdata.h"
 #include "../utils/bits.h"
+#include "../utils/direction.h"
 #include "../utils/fp16.h"
 #include "../utils/fp8.h"
 #include "../utils/stageno.h"
@@ -345,8 +346,8 @@ static void vsfoxmove(SKC_sprite_status* p_playerwk, SKC_play_work work) {
     short xposi = ((unsigned short)fp16_get_integer(p_playerwk->xposi) & g_ram.scrc3) + 0x400;
     fp16_set_integer(&p_playerwk->xposi, xposi);
     playposiwkset(p_playerwk);
-    p_playerwk->u.play.angle_front = g_ram.dirstk[0];
-    p_playerwk->u.play.angle_below = g_ram.dirstk[2];
+    p_playerwk->u.play.direc_front = g_ram.dirstk[0];
+    p_playerwk->u.play.direc_below = g_ram.dirstk[2];
     if (!BIT_IS_SET(p_playerwk->u.play.control_bitfield, 1)) {
       vspatchgmain(p_playerwk);
       vsfoxwrt(p_playerwk);
@@ -704,8 +705,8 @@ static void fox00move(SKC_sprite_status* p_playerwk, SKC_play_work work) {
   foxsupercnt(p_playerwk, work);
   playposiwkset(p_playerwk);
   foxwaterchk(p_playerwk, work);
-  p_playerwk->u.play.angle_front = g_ram.dirstk[0];
-  p_playerwk->u.play.angle_below = g_ram.dirstk[2];
+  p_playerwk->u.play.direc_front = g_ram.dirstk[0];
+  p_playerwk->u.play.direc_below = g_ram.dirstk[2];
   if (g_ram.watercoliflag2 != 0 && p_playerwk->mstno == 0) {
     p_playerwk->mstno = p_playerwk->mstrestart;
   }
@@ -889,8 +890,8 @@ static void foxcpu_wait0(SKC_sprite_status* p_actwk, SKC_sprite_status* p_player
     p_actwk->u.play.speedup_timer = 0;
     p_actwk->u.play.eventflag = 0;
     p_actwk->u.play.lever_ctr = 0;
-    p_actwk->u.play.angle_front = 0;
-    p_actwk->u.play.angle_below = 0;
+    p_actwk->u.play.direc_front = 0;
+    p_actwk->u.play.direc_below = 0;
     p_actwk->u.play.convex_flag = 0;
     p_actwk->u.play.spindash_flag = 0;
     p_actwk->u.play.spindash_ctr = 0;
@@ -1848,7 +1849,7 @@ static void levermove(SKC_sprite_status* p_playerwk, SKC_play_work work) {
       if (g_ram.swdata0.down.r == 1) {
         foxwalk_r(p_playerwk, work);
       }
-      if (!(p_playerwk->direc.b.b0 + 32 & 0xC0) && p_playerwk->mspeed == 0) {
+      if (!(direction_sum(p_playerwk->direc.b.b0, 32) & 0xC0) && p_playerwk->mspeed == 0) {
         p_playerwk->u.play.cddat.push = 0;
         p_playerwk->mstno = 5;
         bool balancing = false;
@@ -1875,12 +1876,12 @@ static void levermove(SKC_sprite_status* p_playerwk, SKC_play_work work) {
         else {
           SKC_dircol_result result = edgechk_d2_g(p_playerwk, fp16_get_integer(p_playerwk->xposi));
           if (result.offset >= 12) {
-            if (p_playerwk->u.play.angle_front == 3) {
+            if (p_playerwk->u.play.direc_front == 3) {
               p_playerwk->u.play.cddat.left = 0;
               p_playerwk->mstno = 6;
               balancing = true;
             }
-            else if (p_playerwk->u.play.angle_below == 3) {
+            else if (p_playerwk->u.play.direc_below == 3) {
               p_playerwk->u.play.cddat.left = 1;
               p_playerwk->mstno = 6;
               balancing = true;
@@ -1966,19 +1967,18 @@ static void levermove(SKC_sprite_status* p_playerwk, SKC_play_work work) {
 
 static void lmovecol(SKC_sprite_status* p_playerwk) {
   if (BIT_IS_SET(p_playerwk->u.play.control_bitfield, 6)) return;
-  if ((p_playerwk->direc.b.b0 & 0x3F) && (p_playerwk->direc.b.b0 + 64 & 0xFF) >= 128) return;
+  if ((p_playerwk->direc.b.b0 & 0x3F) && (direction_sum(p_playerwk->direc.b.b0, 64)) >= 128) return;
   if (p_playerwk->mspeed == 0) return;
 
   unsigned char add_dir = p_playerwk->mspeed >= 0 ? 64 : 192;
-  unsigned char miles_dir = p_playerwk->direc.b.b0 + add_dir;
-  miles_dir &= 0xFF;
+  unsigned char miles_dir = direction_sum(p_playerwk->direc.b.b0, add_dir);
   SKC_dircol_result result = dircolm(p_playerwk, miles_dir);
   if (result.offset < 0) {
     short add_speed = result.offset * 0x100;
     if (get_zone(g_ram.stageno) == SANDOPOLIS && miles_dir >= 128) {
-      --miles_dir;
+      miles_dir = direction_sub(miles_dir, 1);
     }
-    miles_dir += 32;
+    miles_dir = direction_sum(miles_dir, 32);
 
     switch (miles_dir & 0xC0) {
       case 0:
@@ -2029,7 +2029,9 @@ static void foxwalk_l(SKC_sprite_status* p_playerwk, SKC_play_work work) {
       cal_speed = -0x80;
     }
     p_playerwk->mspeed = cal_speed;
-    if (!(p_playerwk->direc.b.b0 + 32 & 0xC0) && cal_speed >= 0x400 && p_playerwk->u.play.flip_mst.reverse == 0) {
+    if (!(direction_sum(p_playerwk->direc.b.b0, 32) & 0xC0)
+        && cal_speed >= 0x400
+        && p_playerwk->u.play.flip_mst.reverse == 0) {
       soundset(54);
       p_playerwk->mstno = 13;
       p_playerwk->u.play.cddat.left = 0;
@@ -2065,7 +2067,9 @@ static void foxwalk_r(SKC_sprite_status* p_playerwk, SKC_play_work work) {
       cal_speed = 0x80;
     }
     p_playerwk->mspeed = cal_speed;
-    if (!(p_playerwk->direc.b.b0 + 32 & 0xC0) && cal_speed <= -0x400 && p_playerwk->u.play.flip_mst.reverse == 0) {
+    if (!(direction_sum(p_playerwk->direc.b.b0, 32) & 0xC0)
+        && cal_speed <= -0x400
+        && p_playerwk->u.play.flip_mst.reverse == 0) {
       soundset(54);
       p_playerwk->mstno = 13;
       p_playerwk->u.play.cddat.left = 1;
@@ -2291,15 +2295,13 @@ static bool jumpchk(SKC_sprite_status* p_playerwk) {
 
   unsigned char cal_direc = p_playerwk->direc.b.b0;
   if (g_ram.reverse_gravity_flag != 0) {
-    cal_direc = (256 - (cal_direc + 64) - 64);
+    cal_direc = direction_vmirror(cal_direc);
   }
-  cal_direc += 128;
-  cal_direc &= 0xFF;
+  cal_direc = direction_sum(cal_direc, 128);
   SKC_dircol_result result = dircol2(p_playerwk, cal_direc);
   if (result.offset >= 6) {
     short cal_jump = p_playerwk->u.play.cddat.underwater == 0 ? 0x680 : 0x380;
-    cal_direc = p_playerwk->direc.b.b0 - 64;
-    cal_direc &= 0xFF;
+    cal_direc = direction_sub(p_playerwk->direc.b.b0, 64);
     short sin, cos;
     sinset(cal_direc, &sin, &cos);
     p_playerwk->xspeed += cos * cal_jump / 0x100;
@@ -2500,7 +2502,7 @@ static bool foxspinchk(SKC_sprite_status* p_playerwk, SKC_play_work work) {
 
 static void foxjumpcolchk(SKC_sprite_status* p_playerwk) {
   g_ram.scdadr = p_playerwk->u.play.top_solid_bit == 12 ? g_ram.scd0adr : g_ram.scd1adr;
-  unsigned char cal_direc = atan(p_playerwk->xspeed, p_playerwk->yspeed) - 32;
+  unsigned char cal_direc = direction_sub(atan(p_playerwk->xspeed, p_playerwk->yspeed), 32);
 
   switch (cal_direc & 0xC0) {
     case 0: {
@@ -2518,13 +2520,13 @@ static void foxjumpcolchk(SKC_sprite_status* p_playerwk) {
       if (result.offset < 0) {
         signed char yspeed = -(fp8_get_integer(p_playerwk->yspeed) + 8);
         if (result.offset >= yspeed || result.offset2 >= yspeed) {
-          p_playerwk->direc.b.b0 = result.direc;
+          p_playerwk->direc.b.b0 = result.direction;
           if (g_ram.reverse_gravity_flag != 0) {
             result.offset = -result.offset;
           }
           fp16_set_integer(&p_playerwk->yposi, fp16_get_integer(p_playerwk->yposi) + result.offset);
-          if (!(p_playerwk->direc.b.b0 + 32 & 0x40)) {
-            if (p_playerwk->direc.b.b0 + 16 & 0x20) {
+          if (!(direction_sum(p_playerwk->direc.b.b0, 32) & 0x40)) {
+            if (direction_sum(p_playerwk->direc.b.b0, 16) & 0x20) {
               p_playerwk->yspeed /= 2;
             }
             else {
@@ -2583,7 +2585,7 @@ static void foxjumpcolchk(SKC_sprite_status* p_playerwk) {
             result.offset = -result.offset;
           }
           fp16_set_integer(&p_playerwk->yposi, fp16_get_integer(p_playerwk->yposi) + result.offset);
-          p_playerwk->direc.b.b0 = result.direc;
+          p_playerwk->direc.b.b0 = result.direction;
           p_playerwk->yspeed = 0;
           p_playerwk->mspeed = p_playerwk->xspeed;
           jumpcolsub(p_playerwk);
@@ -2608,11 +2610,11 @@ static void foxjumpcolchk(SKC_sprite_status* p_playerwk) {
           result.offset = -result.offset;
         }
         fp16_set_integer(&p_playerwk->yposi, fp16_get_integer(p_playerwk->yposi) - result.offset);
-        if (!(result.direc + 32 & 0x40)) {
+        if (!(direction_sum(result.direction, 32) & 0x40)) {
           p_playerwk->yspeed = 0;
         }
         else {
-          p_playerwk->direc.b.b0 = result.direc;
+          p_playerwk->direc.b.b0 = result.direction;
           jumpcolsub(p_playerwk);
           p_playerwk->mspeed = p_playerwk->yspeed;
           if (p_playerwk->direc.b.b0 >= 128) {
@@ -2646,7 +2648,7 @@ static void foxjumpcolchk(SKC_sprite_status* p_playerwk) {
             result.offset = -result.offset;
           }
           fp16_set_integer(&p_playerwk->yposi, fp16_get_integer(p_playerwk->yposi) + result.offset);
-          p_playerwk->direc.b.b0 = result.direc;
+          p_playerwk->direc.b.b0 = result.direction;
           p_playerwk->yspeed = 0;
           p_playerwk->mspeed = p_playerwk->xspeed;
           jumpcolsub(p_playerwk);
@@ -2679,8 +2681,7 @@ void foxjumpcolsub0(SKC_sprite_status* p_playerwk) {
     if (g_ram.reverse_gravity_flag != 0) {
       yoffset = -yoffset;
     }
-    unsigned char cal_direc = p_playerwk->direc.b.b0 + 64;
-    cal_direc &= 0xFF;
+    unsigned char cal_direc = direction_sum(p_playerwk->direc.b.b0, 64);
     if (cal_direc >= 128) {
       yoffset = -yoffset;
     }
@@ -2887,13 +2888,12 @@ static void foxrunchg(SKC_sprite_status* p_actwk, unsigned char patno) {
   else {
     unsigned char direction = p_actwk->direc.b.b0;
     if (direction < 128 && direction != 0) {
-      --direction;
+      direction = direction_sub(direction, 1);
     }
     if (p_actwk->u.play.cddat.left == 0) {
-      direction = 255 - direction;
+      direction = direction_hmirror(direction_sum(direction, 1));
     }
-    direction += 16;
-    direction &= 0xFF;
+    direction = direction_sum(direction, 16);
     if (direction >= 128) {
       p_actwk->actflg.hflip = p_actwk->u.play.cddat.left ^ 1;
       p_actwk->actflg.vflip = 1;
@@ -2970,28 +2970,26 @@ static void foxrunchg4(SKC_sprite_status* p_actwk) {
   if (p_actwk->pattim-- > 0) return;
 
   SKC_sprite_status* p_playerwk = &g_ram.actwk[p_actwk->u.play.ride_obj];
-  unsigned char angle = atan(p_playerwk->xspeed, p_playerwk->yspeed);
+  unsigned char direction = atan(p_playerwk->xspeed, p_playerwk->yspeed);
   if (get_zone(g_ram.stageno) == SLOT_MACHINE) {
     SKC_swdata swdata = g_ram.playrecwk[0].swdata;
-    angle += swdata.pressed.d
-           + swdata.pressed.u * 2
-           + swdata.pressed.l * 4
-           + swdata.pressed.r * 8
-           + swdata.pressed.b * 16
-           + swdata.pressed.c * 32
-           + swdata.pressed.a * 64
-           + swdata.pressed.s * 128;
-    angle &= 0xFF;
+    direction = direction_sum(direction, swdata.pressed.d);
+    direction = direction_sum(direction, swdata.pressed.u * 2);
+    direction = direction_sum(direction, swdata.pressed.l * 4);
+    direction = direction_sum(direction, swdata.pressed.r * 8);
+    direction = direction_sum(direction, swdata.pressed.b * 16);
+    direction = direction_sum(direction, swdata.pressed.c * 32);
+    direction = direction_sum(direction, swdata.pressed.a * 64);
+    direction = direction_sum(direction, swdata.pressed.s * 128);
   }
   if (p_actwk->u.play.cddat.left == 0) {
-    angle = 255 - angle;
+    direction = direction_hmirror(direction_sum(direction, 1));
   }
   else {
-    angle += 128;
+    direction = direction_sum(direction, 128);
   }
-  angle += 16;
-  angle &= 0xFF;
-  if (angle >= 128) {
+  direction = direction_sum(direction, 16);
+  if (direction >= 128) {
     p_actwk->actflg.hflip = p_actwk->u.play.cddat.left ^ 1;
     p_actwk->actflg.vflip = 1;
   }
@@ -3002,7 +3000,7 @@ static void foxrunchg4(SKC_sprite_status* p_actwk) {
   if (g_ram.reverse_gravity_flag != 0) {
     p_actwk->actflg.vflip ^= 1;
   }
-  unsigned char patno_add = angle / 8 & 0xC;
+  unsigned char patno_add = direction / 8 & 0xC;
   p_actwk->pattim = 3;
   patchgmain2(p_actwk, foxtailschg03);
   p_actwk->patno += patno_add;
@@ -3210,13 +3208,12 @@ static void vsfoxrunchg(SKC_sprite_status* p_actwk, unsigned char patno) {
   else {
     unsigned char direction = p_actwk->direc.b.b0;
     if (direction < 128 && direction != 0) {
-      --direction;
+      direction_sub(direction, 1);
     }
     if (p_actwk->u.play.cddat.left == 0) {
-      direction = 255 - direction;
+      direction = direction_hmirror(direction_sum(direction, 1));
     }
-    direction += 16;
-    direction &= 0xFF;
+    direction = direction_sum(direction, 16);
     if (direction >= 128) {
       p_actwk->actflg.hflip = p_actwk->u.play.cddat.left ^ 1;
       p_actwk->actflg.vflip = 1;
@@ -3259,22 +3256,21 @@ static void vsfoxflipchg(SKC_sprite_status* p_actwk) {
   p_actwk->actflg.hflip = 0;
   p_actwk->actflg.vflip = 0;
   if (p_actwk->u.play.cddat.left == 0) {
-    p_actwk->patno = (p_actwk->direc.b.b1 + 22 & 0xFF) / 44 + 21;
+    p_actwk->patno = direction_sum(direction_sum(p_actwk->direc.b.b1, 22) / 44, 21);
     p_actwk->pattim = 0;
   }
   else {
     unsigned char direction2 = p_actwk->direc.b.b1;
     if (p_actwk->u.play.flip_mst.reverse == 1) {
       p_actwk->actflg.hflip = 1;
-      direction2 += 22;
+      direction2 = direction_sum(direction2, 22);
     }
     else {
       p_actwk->actflg.hflip = 1;
       p_actwk->actflg.vflip = 1;
-      direction2 = 256 - direction2 + 154;
+      direction2 = direction_sum(direction_hmirror(direction2), 154);
     }
-    direction2 &= 0xFF;
-    p_actwk->patno = direction2 / 44 + 21;
+    p_actwk->patno = direction_sum(direction2 / 44, 21);
     p_actwk->pattim = 0;
   }
 }
@@ -3320,16 +3316,15 @@ static void vsfoxrunchg4(SKC_sprite_status* p_actwk) {
   if (p_actwk->pattim-- > 0) return;
 
   SKC_sprite_status* p_playerwk = &g_ram.actwk[p_actwk->u.play.ride_obj];
-  unsigned char angle = atan(p_playerwk->xspeed, p_playerwk->yspeed);
+  unsigned char direction = atan(p_playerwk->xspeed, p_playerwk->yspeed);
   if (p_actwk->u.play.cddat.left == 0) {
-    angle = 255 - angle;
+    direction = direction_hmirror(direction_sum(direction, 1));
   }
   else {
-    angle += 128;
+    direction = direction_sum(direction, 128);
   }
-  angle += 16;
-  angle &= 0xFF;
-  if (angle >= 128) {
+  direction = direction_sum(direction, 16);
+  if (direction >= 128) {
     p_actwk->actflg.hflip = p_actwk->u.play.cddat.left ^ 1;
     p_actwk->actflg.vflip = 1;
   }
@@ -3337,7 +3332,7 @@ static void vsfoxrunchg4(SKC_sprite_status* p_actwk) {
     p_actwk->actflg.hflip = p_actwk->u.play.cddat.left;
     p_actwk->actflg.vflip = 0;
   }
-  unsigned char patno_add = (angle / 32 & 3) * 3;
+  unsigned char patno_add = (direction / 32 & 3) * 3;
   p_actwk->pattim = 3;
   vspatchgmain2(p_actwk, vsfoxtailschg02);
   p_actwk->patno += patno_add;
