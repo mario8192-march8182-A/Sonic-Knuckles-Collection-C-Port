@@ -30,6 +30,7 @@
 #include "../sound.h"
 #include "fox.h"
 #include "knuckles.h"
+#include "playsub.h"
 #include "zone.h"
 static void vsplayinit(SKC_sprite_status* p_playerwk, SKC_play_work work);
 static void vsplaymove(SKC_sprite_status* p_playerwk, SKC_play_work work);
@@ -64,7 +65,7 @@ static void jumpchk3(SKC_sprite_status* p_playerwk, SKC_play_work work);
 static void playsupercnt0(SKC_sprite_status* p_playerwk, SKC_play_work work);
 static void jumpcolsub(SKC_sprite_status* p_playerwk);
 static void jumpcolsub1(SKC_sprite_status* p_playerwk);
-static void aqua_baria_bounce(SKC_sprite_status* p_playerwk);
+static void abariabounce(SKC_sprite_status* p_playerwk);
 static void play00damage(SKC_sprite_status* p_playerwk, SKC_play_work work);
 static void play00damage_sub(SKC_sprite_status* p_playerwk);
 static void play00die(SKC_sprite_status* p_playerwk, SKC_play_work work);
@@ -703,7 +704,7 @@ static void plwaterchk(SKC_sprite_status* p_playerwk, SKC_play_work work) {
       plairset(p_playerwk);
       g_ram.actwk[ACTWK_PL_AWA].r_ptr = &plawa;
       g_ram.actwk[ACTWK_PL_AWA].u.obj.userflag = 129;
-      g_ram.actwk[ACTWK_PL_AWA].u.obj.ko = p_playerwk - g_ram.actwk;
+      g_ram.actwk[ACTWK_PL_AWA].u.obj.actfree.plawa.pl_ptr = p_playerwk;
       *work.plmaxspdwk_ptr = g_ram.ssonicflag == 0 ? 0x300 : 0x500;
       *work.pladdspdwk_ptr = g_ram.ssonicflag == 0 ? 6 : 0x18;
       *work.plretspdwk_ptr = g_ram.ssonicflag == 0 ? 0x40 : 0x80;
@@ -1461,7 +1462,7 @@ static void jumpchk3(SKC_sprite_status* p_playerwk, SKC_play_work work) {
       break;
     case 0:
       if (p_playerwk->u.play.powerdat.muteki == 0) {
-        if (p_playerwk->u.play.powerdat.flame_baria == 1) {
+        if (p_playerwk->u.play.powerdat.fbaria == 1) {
           g_ram.actwk[ACTWK_PL_BARIA].mstno = 1;
           p_playerwk->u.play.talent_status = 1;
           p_playerwk->xspeed = p_playerwk->u.play.cddat.left == 0 ? 0x800 : -0x800;
@@ -1471,14 +1472,14 @@ static void jumpchk3(SKC_sprite_status* p_playerwk, SKC_play_work work) {
           playposiwkinit(p_playerwk);
           soundset(67);
         }
-        else if (p_playerwk->u.play.powerdat.thunder_baria == 1) {
+        else if (p_playerwk->u.play.powerdat.tbaria == 1) {
           g_ram.actwk[ACTWK_PL_BARIA].mstno = 1;
           p_playerwk->u.play.talent_status = 1;
           p_playerwk->yspeed = -0x580;
           p_playerwk->u.play.jump_flag = 0;
           soundset(69);
         }
-        else if (p_playerwk->u.play.powerdat.aqua_baria == 1) {
+        else if (p_playerwk->u.play.powerdat.abaria == 1) {
           g_ram.actwk[ACTWK_PL_BARIA].mstno = 1;
           p_playerwk->u.play.talent_status = 1;
           p_playerwk->xspeed = 0;
@@ -1504,12 +1505,12 @@ static void jumpchk3(SKC_sprite_status* p_playerwk, SKC_play_work work) {
             p_playerwk->mstno = 31;
             if (g_ram.semeraldcnt >= 7) {
               g_ram.ssonicflag = 0xFF;
-              g_ram.actwk[ACTWK_PL_MUTEKI].r_ptr = &hsonicstars;
-              g_ram.actwk[ACTWK_TRAIL].r_ptr = &hypertrail;
+              g_ram.actwk[ACTWK_PL_MUTEKI].r_ptr = &hstars;
+              g_ram.actwk[ACTWK_TRAIL].r_ptr = &imagetrail;
             }
             else {
               g_ram.ssonicflag = 1;
-              g_ram.actwk[ACTWK_TRAIL].r_ptr = &ssonicstars;
+              g_ram.actwk[ACTWK_TRAIL].r_ptr = &sstartrail;
             }
             *work.plmaxspdwk_ptr = 0xA00;
             *work.pladdspdwk_ptr = 0x30;
@@ -2062,15 +2063,15 @@ static void jumpcolsub1(SKC_sprite_status* p_playerwk) {
   if (p_playerwk->u.play.talent_status != 0) {
     if (p_playerwk->u.play.character == SONIC
         && g_ram.ssonicflag == 0
-        && p_playerwk->u.play.powerdat.aqua_baria == 1) {
-      aqua_baria_bounce(p_playerwk);
+        && p_playerwk->u.play.powerdat.abaria == 1) {
+      abariabounce(p_playerwk);
     }
     p_playerwk->u.play.talent_status = 0;
   }
 }
 
 
-static void aqua_baria_bounce(SKC_sprite_status* p_playerwk) {
+static void abariabounce(SKC_sprite_status* p_playerwk) {
   short speed = p_playerwk->u.play.cddat.underwater == 0 ? 0x780 : 0x400;
   unsigned char cal_direc = direction_sub(p_playerwk->direc.b.b0, 64);
   short sin, cos;

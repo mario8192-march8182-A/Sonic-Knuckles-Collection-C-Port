@@ -20,6 +20,7 @@
 #include "../etc.h"
 #include "../sound.h"
 #include "player.h"
+#include "playsub.h"
 static void knuckles_init(SKC_sprite_status* p_playerwk, SKC_play_work work);
 static void knuckles_move(SKC_sprite_status* p_playerwk, SKC_play_work work);
 static void knucklespowercnt(SKC_sprite_status* p_playerwk, SKC_play_work work);
@@ -291,7 +292,7 @@ static void nkwaterchk(SKC_sprite_status* p_playerwk, SKC_play_work work) {
       plairset(p_playerwk);
       g_ram.actwk[ACTWK_PL_AWA].r_ptr = &plawa;
       g_ram.actwk[ACTWK_PL_AWA].u.obj.userflag = 129;
-      g_ram.actwk[ACTWK_PL_AWA].u.obj.ko = p_playerwk - g_ram.actwk;
+      g_ram.actwk[ACTWK_PL_AWA].u.obj.actfree.plawa.pl_ptr = p_playerwk;
       *work.plmaxspdwk_ptr = g_ram.ssonicflag == 0 ? 0x300 : 0x400;
       *work.pladdspdwk_ptr = g_ram.ssonicflag == 0 ? 6 : 0xC;
       *work.plretspdwk_ptr = g_ram.ssonicflag == 0 ? 0x40 : 0x60;
@@ -1486,11 +1487,11 @@ static void jumpchk3(SKC_sprite_status* p_playerwk, SKC_play_work work) {
     p_playerwk->mstno = 31;
     if (g_ram.semeraldcnt >= 7) {
       g_ram.ssonicflag = 0xFF;
-      g_ram.actwk[ACTWK_TRAIL].r_ptr = &hypertrail;
+      g_ram.actwk[ACTWK_TRAIL].r_ptr = &imagetrail;
     }
     else {
       g_ram.ssonicflag = 1;
-      g_ram.actwk[ACTWK_TRAIL].r_ptr = &ssonicstars;
+      g_ram.actwk[ACTWK_TRAIL].r_ptr = &sstartrail;
     }
     *work.plmaxspdwk_ptr = 0x800;
     *work.pladdspdwk_ptr = 0x18;

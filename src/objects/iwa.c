@@ -371,7 +371,7 @@ static void iwamove3(SKC_sprite_status* p_actwk) {
     bool breakable_by_knuckles = BIT_IS_SET(p_actwk->u.obj.userflag, 7);
     bool breakable = !BIT_IS_SET(p_actwk->u.obj.userflag, 7);
     bool can_break_by_touch = g_ram.ssonicflag != 0 || g_ram.actwk[0].u.play.character == KNUCKLES;
-    bool can_break_as_ball = (g_ram.actwk[0].u.play.powerdat.flame_baria == 1 || p_actwk->u.obj.cddat.plpush == 1)
+    bool can_break_as_ball = (g_ram.actwk[0].u.play.powerdat.fbaria == 1 || p_actwk->u.obj.cddat.plpush == 1)
         && g_ram.actwk[0].mstno == 2
         && abs(plxspeed) >= 0x480;
     if (result.plcoli[0] == HITCHK_COLI_SIDE

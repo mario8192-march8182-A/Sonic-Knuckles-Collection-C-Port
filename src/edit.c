@@ -11,6 +11,7 @@
 #include "actset.h"
 #include "score.h"
 #include "objects/item.h"
+#include "objects/playsub.h"
 static void editinit(SKC_sprite_status* p_actwk);
 static void editmove(SKC_sprite_status* p_actwk);
 static void editwalk(SKC_sprite_status* p_actwk, SKC_edit_data* p_data);

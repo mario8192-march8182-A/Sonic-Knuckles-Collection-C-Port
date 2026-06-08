@@ -1307,13 +1307,13 @@ static SKC_sprite_pattern blocksp03 = {
 
 
 void itaicolit(SKC_sprite_status* p_actwk) {
-  p_actwk->u.obj.powerdat.thunder_baria_die = 1;
+  p_actwk->u.obj.powerdat.tbaria_die = 1;
   itaicoli(p_actwk);
 }
 
 
 void itaicolif(SKC_sprite_status* p_actwk) {
-  p_actwk->u.obj.powerdat.flame_baria_die = 1;
+  p_actwk->u.obj.powerdat.fbaria_die = 1;
   itaicoli(p_actwk);
 }
 
@@ -1419,9 +1419,9 @@ static void itaicolimovev(SKC_sprite_status* p_actwk) {
 static void itaicolisub(SKC_sprite_status* p_actwk, SKC_sprite_status* p_playerwk) {
   if (!((p_actwk->u.obj.powerdat.unused0 == 1 && p_playerwk->u.play.powerdat.baria == 1)
       || (p_actwk->u.obj.powerdat.unused1 == 1 && p_playerwk->u.play.powerdat.muteki == 1)
-      || (p_actwk->u.obj.powerdat.flame_baria_die == 1 && p_playerwk->u.play.powerdat.flame_baria == 1)
-      || (p_actwk->u.obj.powerdat.thunder_baria_die == 1 && p_playerwk->u.play.powerdat.thunder_baria == 1)
-      || (p_actwk->u.obj.powerdat.aqua_baria_die == 1 && p_playerwk->u.play.powerdat.aqua_baria == 1))) {
+      || (p_actwk->u.obj.powerdat.fbaria_die == 1 && p_playerwk->u.play.powerdat.fbaria == 1)
+      || (p_actwk->u.obj.powerdat.tbaria_die == 1 && p_playerwk->u.play.powerdat.tbaria == 1)
+      || (p_actwk->u.obj.powerdat.abaria_die == 1 && p_playerwk->u.play.powerdat.abaria == 1))) {
     togedamegesub(p_actwk, p_playerwk);
   }
 }

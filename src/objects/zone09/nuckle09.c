@@ -5,6 +5,7 @@
 #include "../../data/colortbl.h"
 #include "../../data/sintbl.h"
 #include "../../data/cg/clen.h"
+#include "../../data/cg/effect.h"
 #include "../../data/cg/eggmbl.h"
 #include "../../data/cg/knuckles.h"
 #include "../../data/cg/zone09/iwa091.h"
@@ -37,6 +38,7 @@
 #include "../explosion.h"
 #include "../fox.h"
 #include "../nuckle.h"
+#include "../playsub.h"
 #include "../zone00/bs00m.h"
 static void nuckle090_init(SKC_sprite_status* p_actwk);
 static void nuckle090_wait0(SKC_sprite_status* p_actwk);
@@ -2705,14 +2707,14 @@ static void nk0930_effect_wrt(SKC_sprite_status* p_actwk) {
   if (p_actwk->patno == p_actwk->u.obj.wrt.prev_patno) return;
 
   p_actwk->u.obj.wrt.prev_patno = p_actwk->patno;
-  unsigned short* p_wrtpat = effect_wrtpat_tbl[p_actwk->patno];
+  unsigned short* p_wrtpat = effectwrtpat[p_actwk->patno];
   unsigned short cnt = *p_wrtpat++;
   unsigned short vram_adr = 0xA000;
 
   for (int i = 0; i < cnt; ++i) {
     unsigned short command = *p_wrtpat++;
     command = command << 8 | command >> 8;
-    unsigned char* p_source = &effect_cg[(command & 0x0FFF) * 32];
+    unsigned char* p_source = &dusteffect_cg[(command & 0x0FFF) * 32];
     unsigned short size = (((command & 0xF000) >> 12) + 1) * 32;
     memcpy(&g_vram[vram_adr], p_source, size);
     vram_adr += size;

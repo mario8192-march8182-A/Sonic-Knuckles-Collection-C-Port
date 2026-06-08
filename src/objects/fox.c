@@ -24,6 +24,7 @@
 #include "../fcol.h"
 #include "../sound.h"
 #include "player.h"
+#include "playsub.h"
 static void vsfoxinit(SKC_sprite_status* p_playerwk, SKC_play_work work);
 static void vsfoxmove(SKC_sprite_status* p_playerwk, SKC_play_work work);
 static void vsfoxwalk(SKC_sprite_status* p_playerwk, SKC_play_work work);
@@ -1611,7 +1612,7 @@ static void foxwaterchk(SKC_sprite_status* p_playerwk, SKC_play_work work) {
       plairset(p_playerwk);
       g_ram.actwk[ACTWK_PL2_AWA].r_ptr = &plawa;
       g_ram.actwk[ACTWK_PL2_AWA].u.obj.userflag = 129;
-      g_ram.actwk[ACTWK_PL2_AWA].u.obj.ko = p_playerwk - g_ram.actwk;
+      g_ram.actwk[ACTWK_PL2_AWA].u.obj.actfree.plawa.pl_ptr = p_playerwk;
       *work.plmaxspdwk_ptr = g_ram.smilesflag == 0 ? 0x300 : 0x400;
       *work.pladdspdwk_ptr = g_ram.smilesflag == 0 ? 6 : 0xC;
       *work.plretspdwk_ptr = g_ram.smilesflag == 0 ? 0x40 : 0x60;
@@ -2377,7 +2378,7 @@ static void jumpchk3(SKC_sprite_status* p_playerwk, SKC_play_work work) {
     g_ram.ssonicring_timer = 60;
     p_playerwk->u.play.control_bitfield = 0x81;
     p_playerwk->mstno = 41;
-    g_ram.actwk[ACTWK_PL_MUTEKI].r_ptr = &smilesflickies;
+    g_ram.actwk[ACTWK_PL_MUTEKI].r_ptr = &sflickies;
     *work.plmaxspdwk_ptr = 0x800;
     *work.pladdspdwk_ptr = 0x18;
     *work.plretspdwk_ptr = 0xC0;

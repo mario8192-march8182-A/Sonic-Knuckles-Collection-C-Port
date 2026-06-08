@@ -36,9 +36,9 @@ typedef struct SKC_play_powerdat {
   unsigned int muteki : 1;
   unsigned int speedup : 1;
   unsigned int unused3 : 1;
-  unsigned int flame_baria : 1;
-  unsigned int thunder_baria : 1;
-  unsigned int aqua_baria : 1;
+  unsigned int fbaria : 1;
+  unsigned int tbaria : 1;
+  unsigned int abaria : 1;
   unsigned int mizuflag : 1;
 }
 SKC_play_powerdat;
@@ -113,9 +113,9 @@ typedef struct SKC_sprite_status {
         unsigned int unused1 : 1;
         unsigned int unused2 : 1;
         unsigned int baria_bounce : 1;
-        unsigned int flame_baria_die : 1;
-        unsigned int thunder_baria_die : 1;
-        unsigned int aqua_baria_die : 1;
+        unsigned int fbaria_die : 1;
+        unsigned int tbaria_die : 1;
+        unsigned int abaria_die : 1;
         unsigned int unused7 : 1;
       }
       powerdat;
@@ -220,6 +220,12 @@ typedef struct SKC_sprite_status {
         }
         bar;
         struct {
+          unsigned char* cg_ptr; // 0x38
+          unsigned short** wrtpat_ptr; // 0x3C
+          unsigned short vram_offset; // 0x40
+        }
+        baria;
+        struct {
           unsigned short points; // 0x3E
         }
         bakuhatu;
@@ -305,6 +311,11 @@ typedef struct SKC_sprite_status {
         }
         clen0930;
         struct {
+          bool miles; // 0x38
+          unsigned short vram_offset; // 0x40
+        }
+        effect;
+        struct {
           short prev_yposi; // 0x30
           short yposi_save; // 0x32
           short unknown3c; // 0x3C;
@@ -372,6 +383,11 @@ typedef struct SKC_sprite_status {
           short scra_h_posit; // 0x3A
         }
         hscroll_chk;
+        struct {
+          short xoffset; // 0x30
+          short yoffset; // 0x34
+        }
+        hstar;
         struct {
           unsigned char r_no1; // 0x3C
         }
@@ -444,6 +460,18 @@ typedef struct SKC_sprite_status {
         }
         opnbox_friend;
         struct {
+          unsigned short freeze_timer; // 0x30
+          unsigned char prev_patno; // 0x32
+          short xposi_init; // 0x34
+          unsigned char digit_timer; // 0x36
+          unsigned char digit_timer_init; // 0x37
+          unsigned char pending_bubble_cnt; // 0x38
+          unsigned short bitfield; // 0x3A
+          unsigned short bubble_timer; // 0x3E
+          SKC_sprite_status* pl_ptr; // 0x40
+        }
+        plawa;
+        struct {
           unsigned char player; // 0x3E
         }
         ring;
@@ -505,6 +533,11 @@ typedef struct SKC_sprite_status {
         }
         sai00;
         struct {
+          bool attacking; // 0x30
+          unsigned char direction; // 0x34
+        }
+        sflicky;
+        struct {
           unsigned char plmode; // 0x30
           unsigned char pl2mode; // 0x31
           unsigned char pltimer; // 0x32
@@ -538,6 +571,11 @@ typedef struct SKC_sprite_status {
           unsigned short unknown38; // 0x38
         }
         springsw;
+        struct {
+          bool active; // 0x34
+          bool posi_set_disabled; // 0x35
+        }
+        sstartrail;
         struct {
           unsigned short part_cnt; // 0x30
           unsigned short current_exit_no; // 0x32
@@ -629,6 +667,12 @@ typedef struct SKC_sprite_status {
         unsigned char patno;
       }
       children[8]; // 0x18
+      signed char* patno_tbl_ptr; // 0x30
+      unsigned char offset_tbl_index0; // 0x34
+      unsigned char offset_tbl_index1; // 0x35
+      unsigned char id; // 0x36
+      unsigned char patno_tbl_index; // 0x38
+      unsigned char ko; // 0x42
     }
     compound;
   }

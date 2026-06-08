@@ -170,10 +170,10 @@ void ringcol(SKC_sprite_status* p_playerwk) {
   if (p_playerwk->u.play.invulnerability_timer >= 90) return;
   if (g_ram.ringactadr == g_ram.ringactadr2) return;
 
-  short xposi = fp16_get_integer(p_playerwk->xposi) - (p_playerwk->u.play.powerdat.thunder_baria == 1 ? 64 : 8);
-  short sprvs = p_playerwk->u.play.powerdat.thunder_baria == 1 ? 64 : p_playerwk->sprvsize - 3;
-  short yposi = fp16_get_integer(p_playerwk->yposi) - (p_playerwk->u.play.powerdat.thunder_baria == 1 ? 64 : sprvs);
-  short sprhs = p_playerwk->u.play.powerdat.thunder_baria == 1 ? 128 : 16;
+  short xposi = fp16_get_integer(p_playerwk->xposi) - (p_playerwk->u.play.powerdat.tbaria == 1 ? 64 : 8);
+  short sprvs = p_playerwk->u.play.powerdat.tbaria == 1 ? 64 : p_playerwk->sprvsize - 3;
+  short yposi = fp16_get_integer(p_playerwk->yposi) - (p_playerwk->u.play.powerdat.tbaria == 1 ? 64 : sprvs);
+  short sprhs = p_playerwk->u.play.powerdat.tbaria == 1 ? 128 : 16;
   sprvs *= 2;
   int cnt = g_ram.ringactadr2 - g_ram.ringactadr;
 
@@ -216,7 +216,7 @@ static void coli_ychk(SKC_sprite_status* p_playerwk, SKC_ringwk_entry* p_entry, 
 
 
 static void coli_hit_chk(SKC_sprite_status* p_playerwk, SKC_ringwk_entry* p_entry) {
-  if (p_playerwk->u.play.powerdat.thunder_baria == 1) {
+  if (p_playerwk->u.play.powerdat.tbaria == 1) {
     ringcoltbaria(p_playerwk, p_entry);
   }
   if (p_entry->pattim == 0 && p_entry->patno == 0) {

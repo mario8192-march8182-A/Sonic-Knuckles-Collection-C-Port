@@ -15,6 +15,7 @@
 #include "../hitchk.h"
 #include "../sound.h"
 #include "common.h"
+#include "playsub.h"
 #include "toge.h"
 static void iteminit(SKC_sprite_status* p_actwk);
 static void itemmove(SKC_sprite_status* p_actwk);
@@ -395,16 +396,16 @@ static void item2_04(SKC_sprite_status* p_actwk, SKC_sprite_status* p_playerwk, 
 static void item2_05(SKC_sprite_status* p_actwk, SKC_sprite_status* p_playerwk, unsigned short* p_counter) {
   ++*p_counter;
   p_playerwk->u.play.powerdat.baria = 1;
-  p_playerwk->u.play.powerdat.flame_baria = 1;
-  p_playerwk->u.play.powerdat.thunder_baria = 0;
-  p_playerwk->u.play.powerdat.aqua_baria = 0;
+  p_playerwk->u.play.powerdat.fbaria = 1;
+  p_playerwk->u.play.powerdat.tbaria = 0;
+  p_playerwk->u.play.powerdat.abaria = 0;
   bgmset(62);
   if (p_actwk->u.obj.ko == 0) {
-    g_ram.actwk[ACTWK_PL_BARIA].r_ptr = &flamebaria;
+    g_ram.actwk[ACTWK_PL_BARIA].r_ptr = &fbaria;
     g_ram.actwk[ACTWK_PL_BARIA].u.obj.ko = p_actwk->u.obj.ko;
   }
   else {
-    g_ram.actwk[ACTWK_PL2_BARIA].r_ptr = &flamebaria;
+    g_ram.actwk[ACTWK_PL2_BARIA].r_ptr = &fbaria;
     g_ram.actwk[ACTWK_PL2_BARIA].u.obj.ko = p_actwk->u.obj.ko;
   }
 }
@@ -413,16 +414,16 @@ static void item2_05(SKC_sprite_status* p_actwk, SKC_sprite_status* p_playerwk, 
 static void item2_06(SKC_sprite_status* p_actwk, SKC_sprite_status* p_playerwk, unsigned short* p_counter) {
   ++*p_counter;
   p_playerwk->u.play.powerdat.baria = 1;
-  p_playerwk->u.play.powerdat.flame_baria = 0;
-  p_playerwk->u.play.powerdat.thunder_baria = 1;
-  p_playerwk->u.play.powerdat.aqua_baria = 0;
+  p_playerwk->u.play.powerdat.fbaria = 0;
+  p_playerwk->u.play.powerdat.tbaria = 1;
+  p_playerwk->u.play.powerdat.abaria = 0;
   bgmset(65);
   if (p_actwk->u.obj.ko == 0) {
-    g_ram.actwk[ACTWK_PL_BARIA].r_ptr = &thunderbaria;
+    g_ram.actwk[ACTWK_PL_BARIA].r_ptr = &tbaria;
     g_ram.actwk[ACTWK_PL_BARIA].u.obj.ko = p_actwk->u.obj.ko;
   }
   else {
-    g_ram.actwk[ACTWK_PL2_BARIA].r_ptr = &thunderbaria;
+    g_ram.actwk[ACTWK_PL2_BARIA].r_ptr = &tbaria;
     g_ram.actwk[ACTWK_PL2_BARIA].u.obj.ko = p_actwk->u.obj.ko;
   }
 }
@@ -431,16 +432,16 @@ static void item2_06(SKC_sprite_status* p_actwk, SKC_sprite_status* p_playerwk, 
 static void item2_07(SKC_sprite_status* p_actwk, SKC_sprite_status* p_playerwk, unsigned short* p_counter) {
   ++*p_counter;
   p_playerwk->u.play.powerdat.baria = 1;
-  p_playerwk->u.play.powerdat.flame_baria = 0;
-  p_playerwk->u.play.powerdat.thunder_baria = 0;
-  p_playerwk->u.play.powerdat.aqua_baria = 1;
+  p_playerwk->u.play.powerdat.fbaria = 0;
+  p_playerwk->u.play.powerdat.tbaria = 0;
+  p_playerwk->u.play.powerdat.abaria = 1;
   bgmset(63);
   if (p_actwk->u.obj.ko == 0) {
-    g_ram.actwk[ACTWK_PL_BARIA].r_ptr = &aquabaria;
+    g_ram.actwk[ACTWK_PL_BARIA].r_ptr = &abaria;
     g_ram.actwk[ACTWK_PL_BARIA].u.obj.ko = p_actwk->u.obj.ko;
   }
   else {
-    g_ram.actwk[ACTWK_PL2_BARIA].r_ptr = &aquabaria;
+    g_ram.actwk[ACTWK_PL2_BARIA].r_ptr = &abaria;
     g_ram.actwk[ACTWK_PL2_BARIA].u.obj.ko = p_actwk->u.obj.ko;
   }
 }
@@ -482,8 +483,8 @@ static void item2_09(SKC_sprite_status* p_actwk, SKC_sprite_status* p_playerwk, 
       g_ram.plmaxspdwk = 0xA00;
       g_ram.pladdspdwk = 0x30;
       g_ram.plretspdwk = 0x100;
-      g_ram.actwk[ACTWK_PL_MUTEKI].r_ptr = &hsonicstars;
-      g_ram.actwk[ACTWK_TRAIL].r_ptr = &hypertrail;
+      g_ram.actwk[ACTWK_PL_MUTEKI].r_ptr = &hstars;
+      g_ram.actwk[ACTWK_TRAIL].r_ptr = &imagetrail;
       break;
     case PLAY_TYPE_MILES:
       g_ram.smilesflag = 1;
@@ -491,7 +492,7 @@ static void item2_09(SKC_sprite_status* p_actwk, SKC_sprite_status* p_playerwk, 
       g_ram.pl2maxspdwk = 0x800;
       g_ram.pl2addspdwk = 0x18;
       g_ram.pl2retspdwk = 0xC0;
-      g_ram.actwk[ACTWK_PL_MUTEKI].r_ptr = &smilesflickies;
+      g_ram.actwk[ACTWK_PL_MUTEKI].r_ptr = &sflickies;
       break;
     case PLAY_TYPE_KNUCKLES:
       g_ram.ssonicflag = 0xFF;
@@ -499,7 +500,7 @@ static void item2_09(SKC_sprite_status* p_actwk, SKC_sprite_status* p_playerwk, 
       g_ram.plmaxspdwk = 0x800;
       g_ram.pladdspdwk = 0x18;
       g_ram.plretspdwk = 0xC0;
-      g_ram.actwk[ACTWK_TRAIL].r_ptr = &hypertrail;
+      g_ram.actwk[ACTWK_TRAIL].r_ptr = &imagetrail;
       break;
   }
 

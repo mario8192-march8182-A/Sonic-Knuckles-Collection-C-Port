@@ -55,6 +55,7 @@ typedef struct sonic3_ram {
   /* 08ffee2a */ unsigned short pl2posiwkadr;
   /* 08ffee2c */ short scra_vline;
   /* 08ffee2e */ short scra_vline2;
+  /* 08ffee30 */ unsigned short scroll_start;
   /* 08ffee33 */ unsigned char scr_resize_no;
   /* 08ffee39 */ unsigned char fast_scroll_flag;
   /* 08ffee3a */ unsigned long vs_vscroll;
@@ -133,8 +134,10 @@ typedef struct sonic3_ram {
   /* 08fff65f */ unsigned char ssonicpallet;
   /* 08fff664 */ unsigned char scd_bg_flag;
   /* 08fff665 */ unsigned char DAT_08fff665;
+  /* 08fff666 */ unsigned char ssonicdash_timer;
   /* 08fff667 */ unsigned char smilesflag;
   /* 08fff66a */ SKC_swdata swdata0;
+  /* 08fff66c */ unsigned char colibuffer_id;
   /* 08fff670 */ unsigned short ssonicring_timer;
   /* 08fff676 */ unsigned short custom_follow_flag;
   /* 08fff678 */ long custom_follow_xposi;

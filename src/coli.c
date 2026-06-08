@@ -24,7 +24,6 @@ static SKC_size colitbl[57];
 static bool coli_hit_chk(SKC_sprite_status* p_playerwk, SKC_sprite_status* p_coliwk);
 static void pcolitem(SKC_sprite_status* p_playerwk, SKC_sprite_status* p_coliwk);
 static void pcolnomal(SKC_sprite_status* p_playerwk, SKC_sprite_status* p_coliwk);
-static void emydieset(SKC_sprite_status* p_coliwk);
 static void pcolplay(SKC_sprite_status* p_playerwk, SKC_sprite_status* p_coliwk);
 static void bariabounce(SKC_sprite_status* p_playerwk, SKC_sprite_status* p_coliwk);
 static void pcole(SKC_sprite_status* p_playerwk, SKC_sprite_status* p_coliwk);
@@ -57,16 +56,16 @@ void pcol(SKC_sprite_status* p_playerwk) {
   if (p_playerwk->u.play.character == SONIC
       && p_playerwk->u.play.powerdat.baria == 0
       && p_playerwk->u.play.powerdat.muteki == 0
-      && p_playerwk->u.play.powerdat.flame_baria == 0
-      && p_playerwk->u.play.powerdat.thunder_baria == 0
-      && p_playerwk->u.play.powerdat.aqua_baria == 0
+      && p_playerwk->u.play.powerdat.fbaria == 0
+      && p_playerwk->u.play.powerdat.tbaria == 0
+      && p_playerwk->u.play.powerdat.abaria == 0
       && p_playerwk->u.play.talent_status == 1) {
-    bool muteki = p_playerwk->u.play.powerdat.muteki;
+    bool invincible = p_playerwk->u.play.powerdat.muteki;
     p_playerwk->u.play.powerdat.muteki = 1;
     short xposi = fp16_get_integer(p_playerwk->xposi) - 24;
     short yposi = fp16_get_integer(p_playerwk->yposi) - 24;
     pcol0(p_playerwk, xposi, yposi, 48, 48);
-    if (!muteki) {
+    if (!invincible) {
       p_playerwk->u.play.powerdat.muteki = 0;
     }
   }
@@ -302,7 +301,7 @@ static void pcolnomal(SKC_sprite_status* p_playerwk, SKC_sprite_status* p_coliwk
 }
 
 
-static void emydieset(SKC_sprite_status* p_coliwk) {
+void emydieset(SKC_sprite_status* p_coliwk) {
   if (p_coliwk->u.obj.cddat.wrt == 1) {
     CLEAR_BIT(g_ram.emy_wrt_flg[p_coliwk->u.obj.wrt.flg_index], p_coliwk->u.obj.wrt.flg_bit);
   }
@@ -313,12 +312,12 @@ static void emydieset(SKC_sprite_status* p_coliwk) {
 static void pcolplay(SKC_sprite_status* p_playerwk, SKC_sprite_status* p_coliwk) {
   bool protected = p_playerwk->u.play.powerdat.baria == 1
       || p_playerwk->u.play.powerdat.muteki == 1
-      || p_playerwk->u.play.powerdat.flame_baria == 1
-      || p_playerwk->u.play.powerdat.thunder_baria == 1
-      || p_playerwk->u.play.powerdat.aqua_baria == 1;
-  bool absorbing = (p_playerwk->u.play.powerdat.flame_baria == 1 && p_coliwk->u.obj.powerdat.flame_baria_die == 1)
-      || (p_playerwk->u.play.powerdat.thunder_baria == 1 && p_coliwk->u.obj.powerdat.thunder_baria_die == 1)
-      || (p_playerwk->u.play.powerdat.aqua_baria == 1 && p_coliwk->u.obj.powerdat.aqua_baria_die == 1);
+      || p_playerwk->u.play.powerdat.fbaria == 1
+      || p_playerwk->u.play.powerdat.tbaria == 1
+      || p_playerwk->u.play.powerdat.abaria == 1;
+  bool absorbing = (p_playerwk->u.play.powerdat.fbaria == 1 && p_coliwk->u.obj.powerdat.fbaria_die == 1)
+      || (p_playerwk->u.play.powerdat.tbaria == 1 && p_coliwk->u.obj.powerdat.tbaria_die == 1)
+      || (p_playerwk->u.play.powerdat.abaria == 1 && p_coliwk->u.obj.powerdat.abaria_die == 1);
   if (protected) {
     if (absorbing) return;
     if (p_playerwk->u.play.powerdat.baria == 1 && p_coliwk->u.obj.powerdat.baria_bounce == 1) {
@@ -381,9 +380,9 @@ void playdamageset(SKC_sprite_status* p_playerwk, SKC_sprite_status* p_coliwk) {
     }
     if (!BIT_IS_SET(p_playerwk->u.play.eventflag, 7)) {
       p_playerwk->u.play.powerdat.baria = 0;
-      p_playerwk->u.play.powerdat.flame_baria = 0;
-      p_playerwk->u.play.powerdat.thunder_baria = 0;
-      p_playerwk->u.play.powerdat.aqua_baria = 0;
+      p_playerwk->u.play.powerdat.fbaria = 0;
+      p_playerwk->u.play.powerdat.tbaria = 0;
+      p_playerwk->u.play.powerdat.abaria = 0;
     }
   }
   p_playerwk->r_no = 4;
@@ -456,9 +455,9 @@ void colibufferchk(SKC_sprite_status* p_actwk) {
 
 static void pcolbaria(SKC_sprite_status* p_playerwk) {
   if (p_playerwk->u.play.powerdat.baria == 0
-      && p_playerwk->u.play.powerdat.flame_baria == 0
-      && p_playerwk->u.play.powerdat.thunder_baria == 0
-      && p_playerwk->u.play.powerdat.aqua_baria == 0) return;
+      && p_playerwk->u.play.powerdat.fbaria == 0
+      && p_playerwk->u.play.powerdat.tbaria == 0
+      && p_playerwk->u.play.powerdat.abaria == 0) return;
 
   for (int slot = 1; slot < g_ram.colibuffer[0] + 1; ++slot) {
     SKC_sprite_status* p_coliwk = &g_ram.actwk[g_ram.colibuffer[slot]];

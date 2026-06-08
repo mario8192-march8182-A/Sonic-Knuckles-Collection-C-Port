@@ -35,6 +35,7 @@
 #include "objects/common.h"
 #include "objects/kanban.h"
 #include "objects/player.h"
+#include "objects/playsub.h"
 #include "objects/fox.h"
 #include "objects/knuckles.h"
 static void chk_pt_next(SKC_sprite_status* p_actwk, signed char* p_pg_data);
@@ -3441,7 +3442,7 @@ void chg_super(void) {
       g_ram.plmaxspdwk = 0xA00;
       g_ram.pladdspdwk = 0x30;
       g_ram.plretspdwk = 0x100;
-      g_ram.actwk[102].r_ptr = &hsonicstars;
+      g_ram.actwk[102].r_ptr = &hstars;
       break;
     case PLAY_TYPE_MILES:
       g_ram.ssonicflag = 0;
@@ -3450,10 +3451,10 @@ void chg_super(void) {
       g_ram.pl2maxspdwk = 800;
       g_ram.pl2addspdwk = 0x18;
       g_ram.pl2retspdwk = 0xC0;
-      g_ram.actwk[102].r_ptr = &smilesflickies;
+      g_ram.actwk[102].r_ptr = &sflickies;
       break;
     case PLAY_TYPE_KNUCKLES:
-      g_ram.actwk[96].r_ptr = &hypertrail;
+      g_ram.actwk[96].r_ptr = &imagetrail;
       break;
   }
 

@@ -381,7 +381,7 @@ static void tringmove(SKC_sprite_status* p_actwk) {
   }
   else {
     tringspdset(p_actwk);
-    if (g_ram.actwk[0].u.play.powerdat.thunder_baria == 0) {
+    if (g_ram.actwk[0].u.play.powerdat.tbaria == 0) {
       p_actwk->r_ptr = flyring;
       p_actwk->r_no = 2;
       g_ram.flyring_patcnt = 255;
