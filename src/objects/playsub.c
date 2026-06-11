@@ -1145,7 +1145,6 @@ static void effectwrt0(SKC_sprite_status* p_actwk, unsigned char* p_cg) {
 
   for (int i = 0; i < cnt; ++i) {
     unsigned short command = *p_wrtpat++;
-    command = command << 8 | command >> 8;
     unsigned char* p_source = &p_cg[(command & 0x0FFF) * 32];
     unsigned short size = (((command & 0xF000) >> 12) + 1) * 32;
     memcpy(&g_vram[vram_adr], p_source, size);
@@ -1343,32 +1342,32 @@ static SKC_sprite_pattern effectsp22 = {
 
 
 static unsigned short effectw00[1] = { 0 };
-static unsigned short effectw01[2] = { 1, 0x0050 };
-static unsigned short effectw02[2] = { 1, 0x06F0 };
-static unsigned short effectw03[2] = { 1, 0x16F0 };
-static unsigned short effectw04[2] = { 1, 0x26F0 };
-static unsigned short effectw05[2] = { 1, 0x36F0 };
-static unsigned short effectw06[2] = { 1, 0x46B0 };
-static unsigned short effectw07[2] = { 1, 0x5270 };
-static unsigned short effectw08[2] = { 1, 0x5A30 };
-static unsigned short effectw09[2] = { 1, 0x5E30 };
-static unsigned short effectw10[2] = { 1, 0x6270 };
-static unsigned short effectw11[2] = { 1, 0x6A70 };
-static unsigned short effectw12[2] = { 1, 0x7270 };
-static unsigned short effectw13[2] = { 1, 0x7AB0 };
-static unsigned short effectw14[2] = { 1, 0x86B0 };
-static unsigned short effectw15[2] = { 1, 0x92B0 };
-static unsigned short effectw16[2] = { 1, 0x9EB0 };
+static unsigned short effectw01[2] = { 1, 0x5000 };
+static unsigned short effectw02[2] = { 1, 0xF006 };
+static unsigned short effectw03[2] = { 1, 0xF016 };
+static unsigned short effectw04[2] = { 1, 0xF026 };
+static unsigned short effectw05[2] = { 1, 0xF036 };
+static unsigned short effectw06[2] = { 1, 0xB046 };
+static unsigned short effectw07[2] = { 1, 0x7052 };
+static unsigned short effectw08[2] = { 1, 0x305A };
+static unsigned short effectw09[2] = { 1, 0x305E };
+static unsigned short effectw10[2] = { 1, 0x7062 };
+static unsigned short effectw11[2] = { 1, 0x706A };
+static unsigned short effectw12[2] = { 1, 0x7072 };
+static unsigned short effectw13[2] = { 1, 0xB07A };
+static unsigned short effectw14[2] = { 1, 0xB086 };
+static unsigned short effectw15[2] = { 1, 0xB092 };
+static unsigned short effectw16[2] = { 1, 0xB09E };
 static unsigned short effectw17[1] = { 0 };
-static unsigned short effectw18[2] = { 1, 0xAAF0 };
-static unsigned short effectw19[2] = { 1, 0x00B0 };
-static unsigned short effectw20[2] = { 1, 0x0CF0 };
-static unsigned short effectw21[2] = { 1, 0x1CF0 };
-static unsigned short effectw22[2] = { 1, 0x2CF0 };
-static unsigned short effectw23[2] = { 1, 0x3CF0 };
-static unsigned short effectw24[2] = { 1, 0x4CF0 };
-static unsigned short effectw25[2] = { 1, 0x5CF0 };
-static unsigned short effectw26[2] = { 1, 0x6CF0 };
+static unsigned short effectw18[2] = { 1, 0xF0AA };
+static unsigned short effectw19[2] = { 1, 0xB000 };
+static unsigned short effectw20[2] = { 1, 0xF00C };
+static unsigned short effectw21[2] = { 1, 0xF01C };
+static unsigned short effectw22[2] = { 1, 0xF02C };
+static unsigned short effectw23[2] = { 1, 0xF03C };
+static unsigned short effectw24[2] = { 1, 0xF04C };
+static unsigned short effectw25[2] = { 1, 0xF05C };
+static unsigned short effectw26[2] = { 1, 0xF06C };
 
 
 unsigned short* effectwrtpat[30] = {
@@ -2222,7 +2221,6 @@ static void bariawrt(SKC_sprite_status* p_actwk) {
 
   for (int i = 0; i < cnt; ++i) {
     unsigned short command = *p_wrtpat++;
-    command = command << 8 | command >> 8;
     unsigned char* p_source = &p_actwk->u.obj.actfree.baria.cg_ptr[(command & 0x0FFF) * 32];
     unsigned short size = (((command & 0xF000) >> 12) + 1) * 32;
     memcpy(&g_vram[vram_adr], p_source, size);
@@ -2521,30 +2519,30 @@ static SKC_sprite_pattern fbariasp24 = {
 };
 
 
-unsigned short fbariaw00[4] = { 3, 0x0000, 0x0120, 0x0450 };
-unsigned short fbariaw01[4] = { 3, 0x0A10, 0x0C50, 0x1250 };
-unsigned short fbariaw02[4] = { 3, 0x1800, 0x1980, 0x2280 };
-unsigned short fbariaw03[4] = { 3, 0x2B20, 0x2E80, 0x3780 };
-unsigned short fbariaw04[3] = { 2, 0x4050, 0x4650 };
-unsigned short fbariaw05[4] = { 3, 0x2B20, 0x2E80, 0x3780 };
-unsigned short fbariaw06[4] = { 3, 0x1800, 0x1980, 0x2280 };
-unsigned short fbariaw07[4] = { 3, 0x0A10, 0x0C50, 0x1250 };
-unsigned short fbariaw08[4] = { 3, 0x0000, 0x0120, 0x0450 };
-unsigned short fbariaw09[4] = { 3, 0x4C70, 0x5420, 0x5710 };
-unsigned short fbariaw10[3] = { 2, 0x5980, 0x6280 };
-unsigned short fbariaw11[4] = { 3, 0x6BB0, 0x7780, 0x6BB0 };
-unsigned short fbariaw12[4] = { 3, 0x4C70, 0x5420, 0x5710 };
-unsigned short fbariaw13[3] = { 2, 0x80B0, 0x8C80 };
-unsigned short fbariaw14[3] = { 2, 0x95B0, 0xA1B0 };
-unsigned short fbariaw15[3] = { 2, 0xAD50, 0xB350 };
-unsigned short fbariaw16[3] = { 2, 0xB980, 0xC280 };
-unsigned short fbariaw17[4] = { 3, 0xCBB0, 0xD780, 0xE000 };
-unsigned short fbariaw18[4] = { 3, 0xE1B0, 0xEDB0, 0xF910 };
-unsigned short fbariaw19[3] = { 2, 0xFB80, 0x0481 };
-unsigned short fbariaw20[4] = { 3, 0xE1B0, 0xEDB0, 0xF910 };
-unsigned short fbariaw21[4] = { 3, 0xCBB0, 0xD780, 0xE000 };
-unsigned short fbariaw22[3] = { 2, 0xC280, 0xB980 };
-unsigned short fbariaw23[3] = { 2, 0xAD50, 0xB350 };
+unsigned short fbariaw00[4] = { 3, 0x0000, 0x2001, 0x5004 };
+unsigned short fbariaw01[4] = { 3, 0x100A, 0x500C, 0x5012 };
+unsigned short fbariaw02[4] = { 3, 0x0018, 0x8019, 0x8022 };
+unsigned short fbariaw03[4] = { 3, 0x202B, 0x802E, 0x8037 };
+unsigned short fbariaw04[3] = { 2, 0x5040, 0x5046 };
+unsigned short fbariaw05[4] = { 3, 0x202B, 0x802E, 0x8037 };
+unsigned short fbariaw06[4] = { 3, 0x0018, 0x8019, 0x8022 };
+unsigned short fbariaw07[4] = { 3, 0x100A, 0x500C, 0x5012 };
+unsigned short fbariaw08[4] = { 3, 0x0000, 0x2001, 0x5004 };
+unsigned short fbariaw09[4] = { 3, 0x704C, 0x2054, 0x1057 };
+unsigned short fbariaw10[3] = { 2, 0x8059, 0x8062 };
+unsigned short fbariaw11[4] = { 3, 0xB06B, 0x8077, 0xB06B };
+unsigned short fbariaw12[4] = { 3, 0x704C, 0x2054, 0x1057 };
+unsigned short fbariaw13[3] = { 2, 0xB080, 0x808C };
+unsigned short fbariaw14[3] = { 2, 0xB095, 0xB0A1 };
+unsigned short fbariaw15[3] = { 2, 0x50AD, 0x50B3 };
+unsigned short fbariaw16[3] = { 2, 0x80B9, 0x80C2 };
+unsigned short fbariaw17[4] = { 3, 0xB0CB, 0x80D7, 0x00E0 };
+unsigned short fbariaw18[4] = { 3, 0xB0E1, 0xB0ED, 0x10F9 };
+unsigned short fbariaw19[3] = { 2, 0x80FB, 0x8104 };
+unsigned short fbariaw20[4] = { 3, 0xB0E1, 0xB0ED, 0x10F9 };
+unsigned short fbariaw21[4] = { 3, 0xB0CB, 0x80D7, 0x00E0 };
+unsigned short fbariaw22[3] = { 2, 0x80C2, 0x80B9 };
+unsigned short fbariaw23[3] = { 2, 0x50AD, 0x50B3 };
 unsigned short fbariaw24[1] = { 0 };
 
 
@@ -2719,20 +2717,20 @@ static SKC_sprite_pattern tbariasp14 = {
 };
 
 
-static unsigned short tbariaw00[4] = { 3, 0x0030, 0x0470, 0x0C30 };
-static unsigned short tbariaw01[3] = { 2, 0x1080, 0x1980 };
-static unsigned short tbariaw02[4] = { 3, 0x2220, 0x25B0, 0x3120 };
-static unsigned short tbariaw03[4] = { 3, 0x3420, 0x37B0, 0x4350 };
-static unsigned short tbariaw04[3] = { 2, 0x4950, 0x4F50 };
-static unsigned short tbariaw05[4] = { 3, 0x3420, 0x37B0, 0x4350 };
-static unsigned short tbariaw06[4] = { 3, 0x2220, 0x25B0, 0x3120 };
-static unsigned short tbariaw07[3] = { 2, 0x1080, 0x1980 };
-static unsigned short tbariaw08[4] = { 3, 0x0030, 0x0470, 0x0C30 };
-static unsigned short tbariaw09[3] = { 2, 0x5580, 0x5E80 };
-static unsigned short tbariaw10[3] = { 2, 0x6780, 0x7080 };
-static unsigned short tbariaw11[2] = { 1, 0x7980 };
-static unsigned short tbariaw12[2] = { 1, 0x8200 };
-static unsigned short tbariaw13[2] = { 1, 0x8330 };
+static unsigned short tbariaw00[4] = { 3, 0x3000, 0x7004, 0x300C };
+static unsigned short tbariaw01[3] = { 2, 0x8010, 0x8019 };
+static unsigned short tbariaw02[4] = { 3, 0x2022, 0xB025, 0x2031 };
+static unsigned short tbariaw03[4] = { 3, 0x2034, 0xB037, 0x5043 };
+static unsigned short tbariaw04[3] = { 2, 0x5049, 0x504F };
+static unsigned short tbariaw05[4] = { 3, 0x2034, 0xB037, 0x5043 };
+static unsigned short tbariaw06[4] = { 3, 0x2022, 0xB025, 0x2031 };
+static unsigned short tbariaw07[3] = { 2, 0x8010, 0x8019 };
+static unsigned short tbariaw08[4] = { 3, 0x3000, 0x7004, 0x300C };
+static unsigned short tbariaw09[3] = { 2, 0x8055, 0x805E };
+static unsigned short tbariaw10[3] = { 2, 0x8067, 0x8070 };
+static unsigned short tbariaw11[2] = { 1, 0x8079 };
+static unsigned short tbariaw12[2] = { 1, 0x0082 };
+static unsigned short tbariaw13[2] = { 1, 0x3083 };
 
 
 static unsigned short* tbariawrtpat[23] = {
@@ -2878,19 +2876,19 @@ static SKC_sprite_pattern abariasp12 = {
 };
 
 
-static unsigned short abariaw00[2] = { 1, 0x0030 };
-static unsigned short abariaw01[2] = { 1, 0x0450 };
-static unsigned short abariaw02[2] = { 1, 0x0A80 };
-static unsigned short abariaw03[2] = { 1, 0x1380 };
-static unsigned short abariaw04[2] = { 1, 0x1CB0 };
-static unsigned short abariaw05[2] = { 1, 0x1380 };
-static unsigned short abariaw06[2] = { 1, 0x0A80 };
-static unsigned short abariaw07[2] = { 1, 0x0450 };
-static unsigned short abariaw08[2] = { 1, 0x0010 };
-static unsigned short abariaw09[3] = { 2, 0x2880, 0x3180 };
-static unsigned short abariaw10[3] = { 2, 0x3A80, 0x4380 };
-static unsigned short abariaw11[4] = { 3, 0x4C70, 0x5450, 0x5AB0 };
-static unsigned short abariaw12[4] = { 3, 0x66F0, 0x7630, 0x7AF0 };
+static unsigned short abariaw00[2] = { 1, 0x3000 };
+static unsigned short abariaw01[2] = { 1, 0x5004 };
+static unsigned short abariaw02[2] = { 1, 0x800A };
+static unsigned short abariaw03[2] = { 1, 0x8013 };
+static unsigned short abariaw04[2] = { 1, 0xB01C };
+static unsigned short abariaw05[2] = { 1, 0x8013 };
+static unsigned short abariaw06[2] = { 1, 0x800A };
+static unsigned short abariaw07[2] = { 1, 0x5004 };
+static unsigned short abariaw08[2] = { 1, 0x1000 };
+static unsigned short abariaw09[3] = { 2, 0x8028, 0x8031 };
+static unsigned short abariaw10[3] = { 2, 0x803A, 0x8043 };
+static unsigned short abariaw11[4] = { 3, 0x704C, 0x5054, 0xB05A };
+static unsigned short abariaw12[4] = { 3, 0xF066, 0x3076, 0xF07A };
 
 
 static unsigned short* abariawrtpat[13] = {
@@ -2975,8 +2973,8 @@ static SKC_sprite_pattern wspin06 = {
 };
 
 
-static unsigned short wspinw00[3] = { 0x2, 0x00F0, 0x1060 };
-static unsigned short wspinw01[3] = { 0x2, 0x17F0, 0x27C0 };
+static unsigned short wspinw00[3] = { 0x2, 0xF000, 0x6010 };
+static unsigned short wspinw01[3] = { 0x2, 0xF017, 0xC027 };
 
 
 static unsigned short* wspinwrtpat[8] = {
