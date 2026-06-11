@@ -210,6 +210,17 @@ typedef struct SKC_sprite_status {
         }
         appeariwa;
         struct {
+          bool large_bubble; // 0x2E
+          short xposi_init; // 0x30
+          unsigned char large_bubble_timer; // 0x32
+          unsigned char large_bubble_timer_init; // 0x33
+          unsigned char pending_small_bubble_cnt; // 0x34
+          unsigned short bitfield; // 0x36
+          unsigned short small_bubble_timer; // 0x38
+          unsigned char* tbl_ptr ; // 0x3C
+        }
+        awa;
+        struct {
           bool plholding; // 0x32
           bool pl2holding; // 0x33
           unsigned char plnograb_timer; // 0x34

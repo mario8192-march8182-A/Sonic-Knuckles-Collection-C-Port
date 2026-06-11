@@ -4,6 +4,7 @@
 #include "data/pat/zone00/snak00.h"
 #include "data/pat/zone04/obox04.h"
 #include "data/pat/zone0a/egjr0a.h"
+#include "objects/awa.h"
 #include "objects/bgspr.h"
 #include "objects/break.h"
 #include "objects/break3.h"

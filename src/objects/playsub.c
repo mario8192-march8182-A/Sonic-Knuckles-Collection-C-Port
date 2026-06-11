@@ -22,6 +22,7 @@
 #include "../dev.h"
 #include "../etc.h"
 #include "../sound.h"
+#include "awa.h"
 #include "common.h"
 #include "player.h"
 static void plawainit(SKC_sprite_status* p_actwk, SKC_sprite_status* p_playerwk);

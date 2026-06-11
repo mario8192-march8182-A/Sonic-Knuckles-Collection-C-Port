@@ -266,7 +266,7 @@ static SKC_edit_data edittbl000 = {
     { &hana00,    hana00pat,    0x252A,  0, 0x00 },
     { &saru00,    saru00pat,    0x2548,  0, 0x10 },
     { &save,      savepat,      0x05EC,  0, 0x01 },
-    //{ &awa,       awapat,       0x845C, 19, 0x81 },
+    { &awa,       awapat,       0x845C, 19, 0x81 },
     { &bryuka,    bryukapat,    0x4001,  0, 0x00 },
     { &bgsprz,    bgsprzpat,    0xC333,  0, 0x00 },
     { &bgsprz,    bgsprzpat,    0xC333,  1, 0x11 },
@@ -312,7 +312,7 @@ static SKC_edit_data edittbl001 = {
     { &saru00,    saru00pat,    0x2548,  0, 0x00 },
     { &snak00,    snak00pat,    0x255F,  0, 0x00 },
     { &save,      savepat,      0x05EC,  0, 0x01 },
-    //{ &awa,       awapat,       0x845C, 19, 0x81 },
+    { &awa,       awapat,       0x845C, 19, 0x81 },
     //{ &dai,       dai00pat,     0x4440,  0, 0x20 }
   }
 };
@@ -355,7 +355,7 @@ static SKC_edit_data edittbl010 = {
     { &bgspr,     bgsprpat,     0x4001,  8, 0x08 },
     { &bgspr,     bgsprpat,     0xC001,  9, 0x09 },
     { &bgspr,     bgsprpat,     0xC001, 10, 0x0A },
-    //{ &awa,       awapat,       0x845C, 19, 0x81 },
+    { &awa,       awapat,       0x845C, 19, 0x81 },
     //{ &dai,       dai01pat,     0x441D,  0, 0x14 },
     //{ &dai01,     dai01pat,     0x0028,  1, 0x00 },
     //{ &dai,       dai01pat,     0x441D,  0, 0x17 },
@@ -452,7 +452,7 @@ static SKC_edit_data edittbl030 = {
     { &brkabe,   brkabe03pat, 0x4420,  0, 0x00 },
     { &brkabe,   brkabe03pat, 0x4420,  2, 0x02 },
     //{ &rollpipe, ringpat,     0x86BC,  0, 0x00 },
-    //{ &awa,      awapat,      0x845C, 19, 0x81 },
+    { &awa,      awapat,      0x845C, 19, 0x81 },
     { &bryuka,   bryukapat3,  0x4430,  0, 0x01 },
     //{ &rolldai,  rolldaipat,  0x438E,  0, 0x49 }
   }
@@ -719,7 +719,7 @@ static SKC_edit_data edittbl061 = {
     //{ &lasr06,    lasr06pat,    0x2558,  0, 0x20 },
     //{ &bird06,    bird06pat,    0x2500,  0, 0x00 },
     { &save,      savepat,      0x05EC,  0, 0x01 },
-    //{ &awa,       awapat,       0x845C, 19, 0x81 },
+    { &awa,       awapat,       0x845C, 19, 0x81 },
     //{ &dai06,     dai06pat,     0x43C3,  0, 0x0D },
     //{ &rollelev,  rollelevpat,  0x440D,  0, 0x00 },
     //{ &relevprop, rollelevpat,  0x440D,  3, 0x06 },
