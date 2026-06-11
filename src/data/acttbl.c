@@ -7,6 +7,7 @@
 #include "../objects/bryuka.h"
 #include "../objects/colichg.h"
 #include "../objects/common.h"
+#include "../objects/hjump.h"
 #include "../objects/item.h"
 #include "../objects/itemug.h"
 #include "../objects/ring.h"
@@ -50,7 +51,7 @@ SKC_sprite_status_handler s3_act_tbl[256] = {
   &ring,
   &ropeswing,
   &brkabe,
-  0,//&hjump,
+  &hjump,
   &break2,
   0,//&rshoot,
   0,//&dai06,
@@ -308,7 +309,7 @@ SKC_sprite_status_handler sk_act_tbl[185] = {
   0,//&Obj_MHZSwingBarHorizontal,
   0,//&Obj_MHZSwingBarVertical,
   &brkabe,
-  0,//&hjump,
+  &hjump,
   &break2,
   &hbar,
   0,//&Obj_MHZMushroomPlatform,
