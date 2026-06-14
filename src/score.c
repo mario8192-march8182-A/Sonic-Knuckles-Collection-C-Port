@@ -191,7 +191,7 @@ void scoreset(void) {
       g_ram.pltime_f = 1;
     }
     else if (g_ram.pltime_f != 0 && g_ram.pauseflag == 0) {
-      if (g_ram.pltime.hours == 0
+      if (g_ram.pltime.reserved == 0
           && g_ram.pltime.minutes == 9
           && g_ram.pltime.seconds == 59
           && g_ram.pltime.frames == 59) {

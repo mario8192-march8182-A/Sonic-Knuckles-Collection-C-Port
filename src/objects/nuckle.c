@@ -615,7 +615,7 @@ static void nuckle000_run1(SKC_sprite_status* p_actwk) {
     }
     g_ram.DAT_08fff711 = 0x91;
     g_ram.pltime_f = 0x80;
-    g_ram.pltime.hours = 0;
+    g_ram.pltime.reserved = 0;
     g_ram.pltime.minutes = 0;
     g_ram.pltime.seconds = 0;
     g_ram.pltime.frames = 0;
@@ -2488,7 +2488,7 @@ static void end_open(SKC_sprite_status* p_actwk) {
   g_ram.plxposi_s = 0x6F4;
   g_ram.plyposi_s = 0x9EC;
   playsave1(p_actwk);
-  g_ram.pltime_s.hours = 0;
+  g_ram.pltime_s.reserved = 0;
   g_ram.pltime_s.minutes = 0;
   g_ram.pltime_s.seconds = 0;
   g_ram.pltime_s.frames = 0;

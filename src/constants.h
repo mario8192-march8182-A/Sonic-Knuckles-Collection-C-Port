@@ -82,4 +82,8 @@ sonic_game_modes;
 
 #define SPRITE_COUNT_LIMIT 80
 
+#define VS_SAVEDATA_SLOTS 5
+#define S3K_SAVEDATA_SLOTS 8
+#define S3_SAVEDATA_SLOTS 6
+
 #endif

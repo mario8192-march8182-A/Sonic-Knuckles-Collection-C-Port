@@ -30,6 +30,7 @@
 #include "dircol.h"
 #include "etc.h"
 #include "reloader.h"
+#include "savedata.h"
 #include "score.h"
 #include "sound.h"
 #include "objects/common.h"

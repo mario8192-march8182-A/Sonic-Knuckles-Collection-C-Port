@@ -1,7 +1,6 @@
 #ifndef SONIC3RAM_H
 #define SONIC3RAM_H
 
-#include "../constants.h"
 #include "acttimer.h"
 #include "aset.h"
 #include "cchgwork.h"
@@ -12,6 +11,8 @@
 #include "spritestatus.h"
 #include "spritestatushandler.h"
 #include "swdata.h"
+#include "../constants.h"
+#include "../savedata.h"
 
 typedef struct sonic3_ram {
   /* 08ff0000 */ unsigned char decompressed[0xA800];
@@ -33,9 +34,9 @@ typedef struct sonic3_ram {
   /* 08ffe438 */ unsigned short specspherecnt;
   /* 08ffe442 */ unsigned short specringcnt;
   /* 08ffe500 */ SKC_point playposiwk[64];
-  /* 08ffe600 */ unsigned char competitionmode_savedata[84];
-  /* 08ffe660 */ unsigned long p_saveslot;
-  /* 08ffe6ac */ unsigned char main_savedata[84];
+  /* 08ffe600 */ SKC_vs_savedata vs_savedata_slots[VS_SAVEDATA_SLOTS];
+  /* 08ffe660 */ SKC_savedata* curr_savedata_ptr;
+  /* 08ffe6ac */ SKC_savedata savedata_slots[S3K_SAVEDATA_SLOTS];
   /* 08ffe700 */ SKC_ringwk_entry ringwk[RINGWK_SLOTS];
   /* 08ffeb00 */ unsigned char flagwork[FLAGWORK_SLOTS];
   /* 08ffee00 */ short DAT_08ffee00;
@@ -94,7 +95,7 @@ typedef struct sonic3_ram {
   /* 08ffef3c */ unsigned short sprtbl_pageflip;
   /* 08ffef3e */ unsigned short sprtbl_pageready;
   /* 08ffef4b */ unsigned char dataselect_selection;
-  /* 08ffef4c */ SKC_play_type nosave_plmode;
+  /* 08ffef4c */ SKC_play_type nosave_play_type;
   /* 08ffef56 */ unsigned short disable_interrupts_sram;
   /* 08ffef5a */ SKC_sprite_status_handler* act_tbl_ptr;
   /* 08ffef5e */ unsigned short plring_s3;
@@ -241,7 +242,7 @@ typedef struct sonic3_ram {
   /* 08fffe0c */ unsigned long systemtimer;
   /* 08fffe10 */ unsigned short stageno;
   /* 08fffe12 */ unsigned char pl_suu;
-  /* 08fffe16 */ unsigned char DAT_08fffe16;
+  /* 08fffe16 */ unsigned char specstageno;
   /* 08fffe18 */ unsigned char plcontinuecnt;
   /* 08fffe19 */ unsigned char ssonicflag;
   /* 08fffe1a */ unsigned char pltimeover_f;

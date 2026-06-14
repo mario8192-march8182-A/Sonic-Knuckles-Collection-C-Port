@@ -17,6 +17,7 @@
 #include "../actset.h"
 #include "../constants.h"
 #include "../dev.h"
+#include "../savedata.h"
 #include "../score.h"
 #include "../shared.h"
 #include "../sound.h"
@@ -146,7 +147,7 @@ extern bool g_sonic3_alone;
 
 void over(SKC_sprite_status* p_actwk) {
   if (p_actwk->patno == 0) {
-    save_game_lives_continues();
+    save_game3();
   }
   short xposi = !BIT_IS_SET(p_actwk->patno, 0) ? 80 : 496;
   fp16_set_integer(&p_actwk->xposi, xposi);
@@ -301,7 +302,7 @@ static void title_move1(SKC_sprite_status* p_actwk) {
   }
   else {
     if (p_actwk->u.obj.actfree.title.act_start_flag != 0) {
-      g_ram.pltime.hours = 0;
+      g_ram.pltime.reserved = 0;
       g_ram.pltime.minutes = 0;
       g_ram.pltime.seconds = 0;
       g_ram.pltime.frames = 0;

@@ -2,7 +2,7 @@
 #define ACTTIMER_H
 
 typedef struct act_timer {
-  unsigned char hours;
+  unsigned char reserved;
   unsigned char minutes;
   unsigned char seconds;
   unsigned char frames;
