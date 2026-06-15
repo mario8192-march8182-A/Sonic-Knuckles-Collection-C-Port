@@ -16,6 +16,7 @@
 #include "../../action.h"
 #include "../../coli.h"
 #include "../../dev.h"
+#include "../../enecginit.h"
 #include "../../etc.h"
 #include "../../shared.h"
 #include "../../sound.h"
@@ -364,7 +365,7 @@ static void set_openbox_cg(SKC_sprite_status* p_actwk) {
 
 
 static void set_emy08_cg(SKC_sprite_status* p_actwk) {
-  LoadEnemyArt();
+  enecginit();
 }
 
 

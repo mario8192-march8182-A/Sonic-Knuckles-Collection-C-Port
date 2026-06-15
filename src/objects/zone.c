@@ -17,6 +17,7 @@
 #include "../actset.h"
 #include "../constants.h"
 #include "../dev.h"
+#include "../enecginit.h"
 #include "../savedata.h"
 #include "../score.h"
 #include "../shared.h"
@@ -349,7 +350,7 @@ static void title_move2(SKC_sprite_status* p_actwk) {
           divdevset2(&toge_cg_tbl);
         }
         if (g_ram.stageno != DEATH_EGG_BOSS) {
-          LoadEnemyArt();
+          enecginit();
           set_friend_cg(p_actwk);
         }
       }

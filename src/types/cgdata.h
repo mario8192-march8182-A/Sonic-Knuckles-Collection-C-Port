@@ -2,7 +2,7 @@
 #define SKC_CGDATA_H
 
 typedef struct SKC_cg_data {
-  unsigned short cnt;
+  short cnt;
   struct {
     unsigned char* cg_ptr;
     unsigned short offset;
