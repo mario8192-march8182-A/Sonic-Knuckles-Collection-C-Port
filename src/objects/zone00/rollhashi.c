@@ -63,7 +63,7 @@ static void rollhashiinit(SKC_sprite_status* p_actwk) {
     fp16_set_integer(&result.actwk_ptr->xposi, fp16_get_integer(p_actwk->xposi));
     fp16_set_integer(&result.actwk_ptr->yposi, fp16_get_integer(p_actwk->yposi));
     result.actwk_ptr->actflg.compound = 1;
-    result.actwk_ptr->u.compound.child_cnt = 8;
+    result.actwk_ptr->u.obj.compound.child_cnt = 8;
     short yposi = fp16_get_integer(p_actwk->yposi) + 32;
     short xposi = fp16_get_integer(p_actwk->xposi) - 112;
     signed char xoffset = 8;
@@ -73,10 +73,10 @@ static void rollhashiinit(SKC_sprite_status* p_actwk) {
     }
     unsigned char patno = 0;
 
-    for (int i = 0; i < result.actwk_ptr->u.compound.child_cnt; ++i) {
-      result.actwk_ptr->u.compound.children[i].xposi = xposi;
-      result.actwk_ptr->u.compound.children[i].yposi = yposi;
-      result.actwk_ptr->u.compound.children[i].patno = patno;
+    for (int i = 0; i < result.actwk_ptr->u.obj.compound.child_cnt; ++i) {
+      result.actwk_ptr->u.obj.compound.children[i].xposi = xposi;
+      result.actwk_ptr->u.obj.compound.children[i].yposi = yposi;
+      result.actwk_ptr->u.obj.compound.children[i].patno = patno;
       patno += 2;
       yposi += 32;
       xposi -= 32;
@@ -108,10 +108,10 @@ static void rollhashisub(SKC_sprite_status* p_actwk, SKC_sprite_status* p_childw
 
   p_actwk->pattim = p_actwk->pattimm;
   if (p_actwk->u.obj.actfree.rollhashi.patno_chg >= 0) {
-    for (int i = 0; i < p_childwk->u.compound.child_cnt; ++i) {
-      p_childwk->u.compound.children[i].patno += p_actwk->u.obj.actfree.rollhashi.patno_chg;
-      if (p_actwk->u.obj.actfree.rollhashi.patno_max <= p_childwk->u.compound.children[i].patno) {
-        p_childwk->u.compound.children[i].patno = 0;
+    for (int i = 0; i < p_childwk->u.obj.compound.child_cnt; ++i) {
+      p_childwk->u.obj.compound.children[i].patno += p_actwk->u.obj.actfree.rollhashi.patno_chg;
+      if (p_actwk->u.obj.actfree.rollhashi.patno_max <= p_childwk->u.obj.compound.children[i].patno) {
+        p_childwk->u.obj.compound.children[i].patno = 0;
       }
     }
 
@@ -120,14 +120,14 @@ static void rollhashisub(SKC_sprite_status* p_actwk, SKC_sprite_status* p_childw
     }
   }
   else {
-    for (int i = 0; i < p_childwk->u.compound.child_cnt; ++i) {
-      short patno = p_childwk->u.compound.children[i].patno;
+    for (int i = 0; i < p_childwk->u.obj.compound.child_cnt; ++i) {
+      short patno = p_childwk->u.obj.compound.children[i].patno;
       patno += p_actwk->u.obj.actfree.rollhashi.patno_chg;
       if (patno < 0) {
-        p_childwk->u.compound.children[i].patno = p_actwk->u.obj.actfree.rollhashi.patno_max;
+        p_childwk->u.obj.compound.children[i].patno = p_actwk->u.obj.actfree.rollhashi.patno_max;
       }
       else {
-        p_childwk->u.compound.children[i].patno = patno & 0xFF;
+        p_childwk->u.obj.compound.children[i].patno = patno & 0xFF;
       }
     }
 
@@ -185,7 +185,7 @@ static SKC_hitchk_coli ridechksub_ts__sub(SKC_sprite_status* p_actwk, SKC_sprite
     if (p_playerwk->u.play.cddat.jump == 1
         || distance >= 0
         || distance >= data.sprhs * 2
-        || p_childwk->u.compound.children[distance / 32].patno < 5) {
+        || p_childwk->u.obj.compound.children[distance / 32].patno < 5) {
       p_playerwk->u.play.cddat.ride = 0;
       p_playerwk->u.play.cddat.jump = 1;
     }
@@ -210,7 +210,7 @@ static void rideonchk_ts(SKC_sprite_status* p_actwk, SKC_sprite_status* p_childw
     distance = yposi - (p_playerwk->sprvsize + fp16_get_integer(p_playerwk->yposi) + 4);
     if (distance <= 0 && distance >= -16
         && p_playerwk->u.play.control_bitfield == 0 && p_playerwk->r_no < 6
-        && p_childwk->u.compound.children[distance / 32].patno >= 5) {
+        && p_childwk->u.obj.compound.children[distance / 32].patno >= 5) {
       yposi = fp16_get_integer(p_playerwk->yposi) + distance + 3;
       fp16_set_integer(&p_playerwk->yposi, yposi);
       set_ride(p_actwk, p_playerwk, p_plride);

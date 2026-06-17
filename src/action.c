@@ -321,16 +321,16 @@ static void patset_compound(SKC_sprite_status* p_actwk, SKC_patset_work* p_work)
       }
     }
     if (p_work->sprite_left_cnt > 0) {
-      for (int i = 0; i < p_actwk->u.compound.child_cnt; ++i) {
-        p_work->xposi = p_actwk->u.compound.children[i].xposi;
-        p_work->yposi = p_actwk->u.compound.children[i].yposi;
+      for (int i = 0; i < p_actwk->u.obj.compound.child_cnt; ++i) {
+        p_work->xposi = p_actwk->u.obj.compound.children[i].xposi;
+        p_work->yposi = p_actwk->u.obj.compound.children[i].yposi;
         if (p_actwk->actflg.relative_coordinates == 1) {
           p_work->xposi -= (g_ram.scra_h_posit_copy >> 16) + 128;
           p_work->yposi = p_work->yposi - (g_ram.scra_v_posit_copy >> 16) + 128;
           p_work->yposi = (unsigned short)p_work->yposi & g_ram.scrc_v;
         }
         SKC_sprite_pattern** pp_patterns = (SKC_sprite_pattern**)p_actwk->patbase;
-        SKC_sprite_pattern* p_patterns = pp_patterns[p_actwk->u.compound.children[i].patno];
+        SKC_sprite_pattern* p_patterns = pp_patterns[p_actwk->u.obj.compound.children[i].patno];
         if (p_patterns->cnt > 0) {
           p_work->placement_cnt = p_patterns->cnt;
           p_work->placements_ptr = p_patterns->spr;
@@ -544,15 +544,15 @@ static void vspatset_pl_compound(SKC_sprite_status* p_actwk, SKC_patset_work* p_
       }
     }
     if (p_work->sprite_left_cnt > 0) {
-      for (int i = 0; i < p_actwk->u.compound.child_cnt; ++i) {
-        p_work->xposi = p_actwk->u.compound.children[i].xposi;
+      for (int i = 0; i < p_actwk->u.obj.compound.child_cnt; ++i) {
+        p_work->xposi = p_actwk->u.obj.compound.children[i].xposi;
         p_work->xposi = p_work->xposi - (g_ram.scra_h_posit_copy >> 16) + 128;
         p_work->xposi = (unsigned short)p_work->xposi & g_ram.scrc3;
-        p_work->yposi = p_actwk->u.compound.children[i].yposi;
+        p_work->yposi = p_actwk->u.obj.compound.children[i].yposi;
         p_work->yposi = p_work->yposi - (g_ram.scra_v_posit_copy >> 16) + 128;
         p_work->yposi = (unsigned short)p_work->yposi & g_ram.scrc_v;
         SKC_sprite_pattern** pp_patterns = (SKC_sprite_pattern**)p_actwk->patbase;
-        SKC_sprite_pattern* p_patterns = pp_patterns[p_actwk->u.compound.children[i].patno];
+        SKC_sprite_pattern* p_patterns = pp_patterns[p_actwk->u.obj.compound.children[i].patno];
         if (p_patterns->cnt > 0) {
           p_work->placement_cnt = p_patterns->cnt;
           p_work->placements_ptr = p_patterns->spr;
@@ -588,16 +588,16 @@ static void vspatset_pl2_compound(SKC_sprite_status* p_actwk, SKC_patset_work* p
       }
     }
     if (p_work->sprite_left_cnt > 0) {
-      for (int i = 0; i < p_actwk->u.compound.child_cnt; ++i) {
-        p_work->xposi = p_actwk->u.compound.children[i].xposi;
+      for (int i = 0; i < p_actwk->u.obj.compound.child_cnt; ++i) {
+        p_work->xposi = p_actwk->u.obj.compound.children[i].xposi;
         p_work->xposi = p_work->xposi - (g_ram.vs_scra_h_posit_copy >> 16) + 128;
         p_work->xposi = (unsigned short)p_work->xposi & g_ram.scrc3;
-        p_work->yposi = p_actwk->u.compound.children[i].yposi;
+        p_work->yposi = p_actwk->u.obj.compound.children[i].yposi;
         p_work->yposi = p_work->yposi - (g_ram.vs_scra_v_posit_copy >> 16) + 128;
         p_work->yposi = (unsigned short)p_work->yposi & g_ram.scrc_v;
         p_work->yposi += SCREEN_HEIGHT_PX / 2;
         SKC_sprite_pattern** pp_patterns = (SKC_sprite_pattern**)p_actwk->patbase;
-        SKC_sprite_pattern* p_patterns = pp_patterns[p_actwk->u.compound.children[i].patno];
+        SKC_sprite_pattern* p_patterns = pp_patterns[p_actwk->u.obj.compound.children[i].patno];
         if (p_patterns->cnt > 0) {
           p_work->placement_cnt = p_patterns->cnt;
           p_work->placements_ptr = p_patterns->spr;

@@ -3412,13 +3412,13 @@ static void shake_se_act__cnt(SKC_sprite_status* p_actwk) {
 
 
 void set_many_posi(SKC_sprite_status* p_actwk, unsigned char* p_posi_data) {
-  for (int i = 0; i < p_actwk->u.compound.child_cnt; ++i) {
+  for (int i = 0; i < p_actwk->u.obj.compound.child_cnt; ++i) {
     short xposi = *p_posi_data++;
     if (p_actwk->actflg.hflip == 1) {
       xposi = -xposi;
     }
-    p_actwk->u.compound.children[i].xposi = xposi + fp16_get_integer(p_actwk->xposi);
-    p_actwk->u.compound.children[i].yposi = *p_posi_data++ + fp16_get_integer(p_actwk->yposi);
+    p_actwk->u.obj.compound.children[i].xposi = xposi + fp16_get_integer(p_actwk->xposi);
+    p_actwk->u.obj.compound.children[i].yposi = *p_posi_data++ + fp16_get_integer(p_actwk->yposi);
   }
 }
 

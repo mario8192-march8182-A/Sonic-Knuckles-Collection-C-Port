@@ -82,18 +82,18 @@ static void brhashiinit(SKC_sprite_status* p_actwk) {
       fp16_set_integer(&result.actwk_ptr->xposi, fp16_get_integer(p_actwk->xposi));
       fp16_set_integer(&result.actwk_ptr->yposi, fp16_get_integer(p_actwk->yposi));
       result.actwk_ptr->actflg.compound = 1;
-      result.actwk_ptr->u.compound.child_cnt = 6;
-      result.actwk_ptr->u.compound.children[0].patno = 1;
+      result.actwk_ptr->u.obj.compound.child_cnt = 6;
+      result.actwk_ptr->u.obj.compound.children[0].patno = 1;
       short xposi = fp16_get_integer(p_actwk->xposi) - 75;
       short yposi = fp16_get_integer(p_actwk->yposi);
 
-      for (int i = 0; i < result.actwk_ptr->u.compound.child_cnt; ++i) {
-        result.actwk_ptr->u.compound.children[i].xposi = xposi;
-        result.actwk_ptr->u.compound.children[i].yposi = yposi;
+      for (int i = 0; i < result.actwk_ptr->u.obj.compound.child_cnt; ++i) {
+        result.actwk_ptr->u.obj.compound.children[i].xposi = xposi;
+        result.actwk_ptr->u.obj.compound.children[i].yposi = yposi;
         xposi += 30;
       }
 
-      result.actwk_ptr->u.compound.children[5].patno = 2;
+      result.actwk_ptr->u.obj.compound.children[5].patno = 2;
       p_actwk->u.obj.ko = result.actwk_ptr - g_ram.actwk;
     }
     p_actwk->r_ptr = &brhashimove;
@@ -124,18 +124,18 @@ static void brhashiinit2(SKC_sprite_status* p_actwk) {
     fp16_set_integer(&result.actwk_ptr->xposi, fp16_get_integer(p_actwk->xposi));
     fp16_set_integer(&result.actwk_ptr->yposi, fp16_get_integer(p_actwk->yposi));
     result.actwk_ptr->actflg.compound = 1;
-    result.actwk_ptr->u.compound.child_cnt = 6;
-    result.actwk_ptr->u.compound.children[0].patno = 1;
+    result.actwk_ptr->u.obj.compound.child_cnt = 6;
+    result.actwk_ptr->u.obj.compound.children[0].patno = 1;
     short xposi = fp16_get_integer(p_actwk->xposi) - 80;
     short yposi = fp16_get_integer(p_actwk->yposi);
 
-    for (int i = 0; i < result.actwk_ptr->u.compound.child_cnt; ++i) {
-      result.actwk_ptr->u.compound.children[i].xposi = xposi;
-      result.actwk_ptr->u.compound.children[i].yposi = yposi;
+    for (int i = 0; i < result.actwk_ptr->u.obj.compound.child_cnt; ++i) {
+      result.actwk_ptr->u.obj.compound.children[i].xposi = xposi;
+      result.actwk_ptr->u.obj.compound.children[i].yposi = yposi;
       xposi += 32;
     }
 
-    result.actwk_ptr->u.compound.children[5].patno = 2;
+    result.actwk_ptr->u.obj.compound.children[5].patno = 2;
     p_actwk->u.obj.ko = result.actwk_ptr - g_ram.actwk;
   }
   p_actwk->r_ptr = &brhashimove4;
@@ -256,7 +256,7 @@ static void brhashibreakgo(SKC_sprite_status* p_actwk, SKC_sprite_status_handler
   p_childwk->actflg.compound = 0;
   SKC_sprite_status* p_new_actwk = p_childwk;
 
-  for (int i = 0; i < p_childwk->u.compound.child_cnt; ++i) {
+  for (int i = 0; i < p_childwk->u.obj.compound.child_cnt; ++i) {
     if (i != 0) {
       SKC_actwkchk_result result = actwkchk2(p_actwk);
       if (result.actwk_ptr == 0) break;
@@ -269,9 +269,9 @@ static void brhashibreakgo(SKC_sprite_status* p_actwk, SKC_sprite_status_handler
     p_new_actwk->sprpri = p_childwk->sprpri;
     p_new_actwk->sprhs = p_childwk->sprhs;
     p_new_actwk->sprvs = p_childwk->sprvs;
-    fp16_set_integer(&p_new_actwk->xposi, p_childwk->u.compound.children[i].xposi);
-    fp16_set_integer(&p_new_actwk->yposi, p_childwk->u.compound.children[i].yposi);
-    p_new_actwk->patno = p_childwk->u.compound.children[i].patno;
+    fp16_set_integer(&p_new_actwk->xposi, p_childwk->u.obj.compound.children[i].xposi);
+    fp16_set_integer(&p_new_actwk->yposi, p_childwk->u.obj.compound.children[i].yposi);
+    p_new_actwk->patno = p_childwk->u.obj.compound.children[i].patno;
     p_new_actwk->u.obj.timer = p_actwk->u.obj.actfree.brhashi.child_timer_init
                              + i * p_actwk->u.obj.actfree.brhashi.child_timer_increase;
   }
@@ -408,14 +408,14 @@ static void evhashiinit(SKC_sprite_status* p_actwk) {
     result.actwk_ptr->actflg.compound = 1;
     result.actwk_ptr->sprhs = 64;
     result.actwk_ptr->sprvs = 64;
-    result.actwk_ptr->u.compound.child_cnt = 8;
+    result.actwk_ptr->u.obj.compound.child_cnt = 8;
     short yposi = p_actwk->u.obj.actfree.evhashi.yposi_init;
 
-    for (int i = 0; i < result.actwk_ptr->u.compound.child_cnt; ++i) {
+    for (int i = 0; i < result.actwk_ptr->u.obj.compound.child_cnt; ++i) {
       yposi += yoffset;
-      result.actwk_ptr->u.compound.children[i].xposi = p_actwk->u.obj.actfree.evhashi.xposi_init;
-      result.actwk_ptr->u.compound.children[i].yposi = yposi;
-      result.actwk_ptr->u.compound.children[i].patno = 1;
+      result.actwk_ptr->u.obj.compound.children[i].xposi = p_actwk->u.obj.actfree.evhashi.xposi_init;
+      result.actwk_ptr->u.obj.compound.children[i].yposi = yposi;
+      result.actwk_ptr->u.obj.compound.children[i].patno = 1;
     }
 
     fp16_set_integer(&result.actwk_ptr->xposi, p_actwk->u.obj.actfree.evhashi.xposi_init);
@@ -431,17 +431,17 @@ static void evhashiinit(SKC_sprite_status* p_actwk) {
       result.actwk_ptr->actflg.compound = 1;
       result.actwk_ptr->sprhs = 64;
       result.actwk_ptr->sprvs = 64;
-      result.actwk_ptr->u.compound.child_cnt = 4;
+      result.actwk_ptr->u.obj.compound.child_cnt = 4;
 
-      for (int i = 0; i < result.actwk_ptr->u.compound.child_cnt; ++i) {
+      for (int i = 0; i < result.actwk_ptr->u.obj.compound.child_cnt; ++i) {
         yposi += yoffset;
-        result.actwk_ptr->u.compound.children[i].xposi = p_actwk->u.obj.actfree.evhashi.xposi_init;
-        result.actwk_ptr->u.compound.children[i].yposi = yposi;
-        result.actwk_ptr->u.compound.children[i].patno = 1;
+        result.actwk_ptr->u.obj.compound.children[i].xposi = p_actwk->u.obj.actfree.evhashi.xposi_init;
+        result.actwk_ptr->u.obj.compound.children[i].yposi = yposi;
+        result.actwk_ptr->u.obj.compound.children[i].patno = 1;
       }
 
-      fp16_set_integer(&result.actwk_ptr->xposi, result.actwk_ptr->u.compound.children[0].xposi);
-      fp16_set_integer(&result.actwk_ptr->yposi, result.actwk_ptr->u.compound.children[0].yposi);
+      fp16_set_integer(&result.actwk_ptr->xposi, result.actwk_ptr->u.obj.compound.children[0].xposi);
+      fp16_set_integer(&result.actwk_ptr->yposi, result.actwk_ptr->u.obj.compound.children[0].yposi);
       p_actwk->u.obj.actfree.evhashi.ko2 = result.actwk_ptr - g_ram.actwk;
     }
   }
@@ -538,10 +538,10 @@ static void evhashiposiset(SKC_sprite_status* p_actwk) {
   long sin_wk = sin_l;
   long cos_wk = cos_l;
   SKC_sprite_status* p_childwk = &g_ram.actwk[p_actwk->u.obj.ko];
-  if (p_childwk->u.compound.child_cnt > 0) {
-    for (int i = 0; i < p_childwk->u.compound.child_cnt; ++i) {
-      p_childwk->u.compound.children[i].xposi = p_actwk->u.obj.actfree.evhashi.xposi_init + (cos_wk / 0x10000);
-      p_childwk->u.compound.children[i].yposi = p_actwk->u.obj.actfree.evhashi.yposi_init + (sin_wk / 0x10000);
+  if (p_childwk->u.obj.compound.child_cnt > 0) {
+    for (int i = 0; i < p_childwk->u.obj.compound.child_cnt; ++i) {
+      p_childwk->u.obj.compound.children[i].xposi = p_actwk->u.obj.actfree.evhashi.xposi_init + (cos_wk / 0x10000);
+      p_childwk->u.obj.compound.children[i].yposi = p_actwk->u.obj.actfree.evhashi.yposi_init + (sin_wk / 0x10000);
       sin_wk += sin_l;
       cos_wk += cos_l;
     }
@@ -549,10 +549,10 @@ static void evhashiposiset(SKC_sprite_status* p_actwk) {
     fp16_set_integer(&p_childwk->xposi, p_actwk->u.obj.actfree.evhashi.xposi_init);
     fp16_set_integer(&p_childwk->yposi, p_actwk->u.obj.actfree.evhashi.yposi_init);
     p_childwk = &g_ram.actwk[p_actwk->u.obj.actfree.evhashi.ko2];
-    if (p_childwk->u.compound.child_cnt > 0) {
-      for (int i = 0; i < p_childwk->u.compound.child_cnt; ++i) {
-        p_childwk->u.compound.children[i].xposi = p_actwk->u.obj.actfree.evhashi.xposi_init + (cos_wk / 0x10000);
-        p_childwk->u.compound.children[i].yposi = p_actwk->u.obj.actfree.evhashi.yposi_init + (sin_wk / 0x10000);
+    if (p_childwk->u.obj.compound.child_cnt > 0) {
+      for (int i = 0; i < p_childwk->u.obj.compound.child_cnt; ++i) {
+        p_childwk->u.obj.compound.children[i].xposi = p_actwk->u.obj.actfree.evhashi.xposi_init + (cos_wk / 0x10000);
+        p_childwk->u.obj.compound.children[i].yposi = p_actwk->u.obj.actfree.evhashi.yposi_init + (sin_wk / 0x10000);
         sin_wk += sin_l;
         cos_wk += cos_l;
       }
@@ -621,7 +621,7 @@ static void evhashibreakgo__sub(SKC_sprite_status* p_actwk, SKC_sprite_status* p
   p_childwk->actflg.compound = 0;
   SKC_sprite_status* p_new_actwk = p_childwk;
 
-  for (int i = 0; i < p_childwk->u.compound.child_cnt; ++i) {
+  for (int i = 0; i < p_childwk->u.obj.compound.child_cnt; ++i) {
     if (i != 0) {
       SKC_actwkchk_result result = actwkchk2(p_actwk);
       if (result.actwk_ptr == 0) break;
@@ -634,9 +634,9 @@ static void evhashibreakgo__sub(SKC_sprite_status* p_actwk, SKC_sprite_status* p
     p_new_actwk->sprpri = p_childwk->sprpri;
     p_new_actwk->sprhs = p_childwk->sprhs;
     p_new_actwk->sprvs = p_childwk->sprvs;
-    fp16_set_integer(&p_new_actwk->xposi, p_childwk->u.compound.children[i].xposi);
-    fp16_set_integer(&p_new_actwk->yposi, p_childwk->u.compound.children[i].yposi);
-    p_new_actwk->patno = p_childwk->u.compound.children[i].patno;
+    fp16_set_integer(&p_new_actwk->xposi, p_childwk->u.obj.compound.children[i].xposi);
+    fp16_set_integer(&p_new_actwk->yposi, p_childwk->u.obj.compound.children[i].yposi);
+    p_new_actwk->patno = p_childwk->u.obj.compound.children[i].patno;
     p_new_actwk->u.obj.timer = tbl[i];
     SKC_actwkchk_result result = actwkchk2(p_actwk);
     if (result.actwk_ptr == 0) break;

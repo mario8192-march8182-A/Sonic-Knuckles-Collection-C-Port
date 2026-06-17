@@ -1109,9 +1109,9 @@ static void waterinit(SKC_sprite_status* p_actwk) {
   p_actwk->sprhs = 128;
   p_actwk->sprvs = 8;
   p_actwk->actflg.compound = 1;
-  p_actwk->u.compound.child_cnt = 1;
-  p_actwk->u.compound.children[0].xposi = fp16_get_integer(p_actwk->xposi) + 192;
-  p_actwk->u.compound.children[0].yposi = fp16_get_integer(p_actwk->yposi);
+  p_actwk->u.obj.compound.child_cnt = 1;
+  p_actwk->u.obj.compound.children[0].xposi = fp16_get_integer(p_actwk->xposi) + 192;
+  p_actwk->u.obj.compound.children[0].yposi = fp16_get_integer(p_actwk->yposi);
   p_actwk->r_ptr = &watermove;
   watermove(p_actwk);
 }
@@ -1124,8 +1124,8 @@ static void watermove(SKC_sprite_status* p_actwk) {
   }
   fp16_set_integer(&p_actwk->xposi, xposi);
   fp16_set_integer(&p_actwk->yposi, g_ram.waterposi);
-  p_actwk->u.compound.children[0].xposi = fp16_get_integer(p_actwk->xposi) + 192;
-  p_actwk->u.compound.children[0].yposi = fp16_get_integer(p_actwk->yposi);
+  p_actwk->u.obj.compound.children[0].xposi = fp16_get_integer(p_actwk->xposi) + 192;
+  p_actwk->u.obj.compound.children[0].yposi = fp16_get_integer(p_actwk->yposi);
   if (!p_actwk->u.obj.actfree.water.paused) {
     if (g_ram.swdata.pressed.s == 1 || g_ram.swdata0.pressed.s == 1) {
       p_actwk->patno += 3;
@@ -1154,7 +1154,7 @@ static void watermove(SKC_sprite_status* p_actwk) {
       }
     }
   }
-  p_actwk->u.compound.children[0].patno = p_actwk->patno;
+  p_actwk->u.obj.compound.children[0].patno = p_actwk->patno;
   actionsub(p_actwk);
 }
 

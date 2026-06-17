@@ -432,6 +432,14 @@ typedef struct SKC_sprite_status {
         }
         magnet;
         struct {
+          signed char* patno_tbl_ptr; // 0x30
+          unsigned char offset_tbl_index0; // 0x34
+          unsigned char offset_tbl_index1; // 0x35
+          unsigned char id; // 0x36
+          unsigned char patno_tbl_index; // 0x38
+        }
+        muteki;
+        struct {
           unsigned char footwk_pg_loop_cnt; // 0x39
           short accel; // 0x40
           unsigned short wrt_index; // 0x44
@@ -634,6 +642,16 @@ typedef struct SKC_sprite_status {
         water;
       }
       actfree;
+      struct {
+        unsigned short child_cnt; // 0x16
+        struct {
+          short xposi;
+          short yposi;
+          unsigned char patno;
+        }
+        children[8]; // 0x18
+      }
+      compound;
     }
     obj;
     struct {
@@ -670,22 +688,6 @@ typedef struct SKC_sprite_status {
       unsigned char lrb_solid_bit; // 0x47
     }
     play;
-    struct {
-      unsigned short child_cnt; // 0x16
-      struct {
-        short xposi;
-        short yposi;
-        unsigned char patno;
-      }
-      children[8]; // 0x18
-      signed char* patno_tbl_ptr; // 0x30
-      unsigned char offset_tbl_index0; // 0x34
-      unsigned char offset_tbl_index1; // 0x35
-      unsigned char id; // 0x36
-      unsigned char patno_tbl_index; // 0x38
-      unsigned char ko; // 0x42
-    }
-    compound;
   }
   u;
 }

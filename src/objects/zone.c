@@ -719,21 +719,21 @@ static void clear_bonus(SKC_sprite_status* p_actwk, unsigned short bonus) {
 
 
 static void clear_bonus_move(SKC_sprite_status* p_actwk, unsigned short bonus) {
-  p_actwk->u.compound.child_cnt = 7;
+  p_actwk->u.obj.compound.child_cnt = 7;
   unsigned long decimal_bonus = rotate_long_left(score_to_nibbles(p_actwk, bonus), 4);
   short xposi = fp16_get_integer(p_actwk->xposi - 56);
   short yposi = fp16_get_integer(p_actwk->yposi);
   unsigned char unknown = 0;
 
-  for (int i = 0; i < p_actwk->u.compound.child_cnt; ++i) {
-    p_actwk->u.compound.children[i].xposi = xposi;
-    p_actwk->u.compound.children[i].yposi = yposi;
+  for (int i = 0; i < p_actwk->u.obj.compound.child_cnt; ++i) {
+    p_actwk->u.obj.compound.children[i].xposi = xposi;
+    p_actwk->u.obj.compound.children[i].yposi = yposi;
     decimal_bonus = rotate_long_left(decimal_bonus, 4);
     unsigned char patno = decimal_bonus & 0xF;
     if (patno != 0) {
       unknown = 1;
     }
-    p_actwk->u.compound.children[i].patno = patno + unknown;
+    p_actwk->u.obj.compound.children[i].patno = patno + unknown;
     xposi += 8;
   }
 }

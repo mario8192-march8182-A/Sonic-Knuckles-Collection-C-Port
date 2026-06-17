@@ -704,12 +704,12 @@ void muteki(SKC_sprite_status* p_actwk) {
     p_actwk[i].actflg.relative_coordinates = 1;
     p_actwk[i].actflg.compound = 1;
     p_actwk[i].sprhs = 16;
-    p_actwk[i].u.compound.child_cnt = 2;
-    p_actwk[i].u.compound.ko = ko;
-    p_actwk[i].u.compound.id = i;
-    p_actwk[i].u.compound.patno_tbl_ptr = tbl[i].patno_tbl_ptr;
-    p_actwk[i].u.compound.offset_tbl_index0 = tbl[i].offset_tbl_index0;
-    p_actwk[i].u.compound.offset_tbl_index1 = tbl[i].offset_tbl_index1;
+    p_actwk[i].u.obj.compound.child_cnt = 2;
+    p_actwk[i].u.obj.ko = ko;
+    p_actwk[i].u.obj.actfree.muteki.id = i;
+    p_actwk[i].u.obj.actfree.muteki.patno_tbl_ptr = tbl[i].patno_tbl_ptr;
+    p_actwk[i].u.obj.actfree.muteki.offset_tbl_index0 = tbl[i].offset_tbl_index0;
+    p_actwk[i].u.obj.actfree.muteki.offset_tbl_index1 = tbl[i].offset_tbl_index1;
   }
 
   p_actwk->r_ptr = &mutekimove;
@@ -718,59 +718,59 @@ void muteki(SKC_sprite_status* p_actwk) {
 
 
 static void mutekimove(SKC_sprite_status* p_actwk) {
-  SKC_sprite_status* p_playerwk = &g_ram.actwk[p_actwk->u.compound.ko];
+  SKC_sprite_status* p_playerwk = &g_ram.actwk[p_actwk->u.obj.ko];
   if (g_ram.ssonicflag != 0 || g_ram.smilesflag != 0 || p_playerwk->u.play.powerdat.muteki == 0) {
     frameout(p_actwk);
   }
   else {
     fp16_set_integer(&p_actwk->xposi, fp16_get_integer(p_playerwk->xposi));
     fp16_set_integer(&p_actwk->yposi, fp16_get_integer(p_playerwk->yposi));
-    signed char patno = patno_tbl0[p_actwk->u.compound.patno_tbl_index];
+    signed char patno = patno_tbl0[p_actwk->u.obj.actfree.muteki.patno_tbl_index];
     if (patno < 0) {
-      p_actwk->u.compound.patno_tbl_index = 0;
-      patno = patno_tbl0[p_actwk->u.compound.patno_tbl_index];
+      p_actwk->u.obj.actfree.muteki.patno_tbl_index = 0;
+      patno = patno_tbl0[p_actwk->u.obj.actfree.muteki.patno_tbl_index];
     }
-    ++p_actwk->u.compound.patno_tbl_index;
-    unsigned char index = p_actwk->u.compound.offset_tbl_index0 & 0x1F;
-    p_actwk->u.compound.children[0].xposi = fp16_get_integer(p_actwk->xposi) + offset_tbl[index / 2][0];
-    p_actwk->u.compound.children[0].yposi = fp16_get_integer(p_actwk->yposi) + offset_tbl[index / 2][1];
-    p_actwk->u.compound.children[0].patno = patno;
+    ++p_actwk->u.obj.actfree.muteki.patno_tbl_index;
+    unsigned char index = p_actwk->u.obj.actfree.muteki.offset_tbl_index0 & 0x1F;
+    p_actwk->u.obj.compound.children[0].xposi = fp16_get_integer(p_actwk->xposi) + offset_tbl[index / 2][0];
+    p_actwk->u.obj.compound.children[0].yposi = fp16_get_integer(p_actwk->yposi) + offset_tbl[index / 2][1];
+    p_actwk->u.obj.compound.children[0].patno = patno;
     index = index + 32 & 0x3E;
-    p_actwk->u.compound.children[1].xposi = fp16_get_integer(p_actwk->xposi) + offset_tbl[index / 2][0];
-    p_actwk->u.compound.children[1].yposi = fp16_get_integer(p_actwk->yposi) + offset_tbl[index / 2][1];
-    p_actwk->u.compound.children[1].patno = patno;
-    p_actwk->u.compound.offset_tbl_index0 += p_playerwk->u.play.cddat.left == 0 ? 18 : -18;
+    p_actwk->u.obj.compound.children[1].xposi = fp16_get_integer(p_actwk->xposi) + offset_tbl[index / 2][0];
+    p_actwk->u.obj.compound.children[1].yposi = fp16_get_integer(p_actwk->yposi) + offset_tbl[index / 2][1];
+    p_actwk->u.obj.compound.children[1].patno = patno;
+    p_actwk->u.obj.actfree.muteki.offset_tbl_index0 += p_playerwk->u.play.cddat.left == 0 ? 18 : -18;
     actionsub(p_actwk);
   }
 }
 
 
 static void muteki_sub(SKC_sprite_status* p_actwk) {
-  SKC_sprite_status* p_playerwk = &g_ram.actwk[p_actwk->u.compound.ko];
+  SKC_sprite_status* p_playerwk = &g_ram.actwk[p_actwk->u.obj.ko];
   if (g_ram.ssonicflag != 0 || g_ram.smilesflag != 0 || p_playerwk->u.play.powerdat.muteki == 0) {
     frameout(p_actwk);
   }
   else {
-    unsigned short index = g_ram.plposiwkadr - p_actwk->u.compound.id * 3;
+    unsigned short index = g_ram.plposiwkadr - p_actwk->u.obj.actfree.muteki.id * 3;
     fp16_set_integer(&p_actwk->xposi, g_ram.playposiwk[index].x);
     fp16_set_integer(&p_actwk->yposi, g_ram.playposiwk[index].y);
-    signed char patno = p_actwk->u.compound.patno_tbl_ptr[p_actwk->u.compound.patno_tbl_index];
+    signed char patno = p_actwk->u.obj.actfree.muteki.patno_tbl_ptr[p_actwk->u.obj.actfree.muteki.patno_tbl_index];
     if (patno < 0) {
-      p_actwk->u.compound.patno_tbl_index = 0;
-      patno = p_actwk->u.compound.patno_tbl_ptr[p_actwk->u.compound.patno_tbl_index];
+      p_actwk->u.obj.actfree.muteki.patno_tbl_index = 0;
+      patno = p_actwk->u.obj.actfree.muteki.patno_tbl_ptr[p_actwk->u.obj.actfree.muteki.patno_tbl_index];
     }
-    index = p_actwk->u.compound.patno_tbl_index + p_actwk->u.compound.offset_tbl_index0;
-    signed char patno2 = p_actwk->u.compound.patno_tbl_ptr[index];
-    ++p_actwk->u.compound.patno_tbl_index;
-    index = p_actwk->u.compound.offset_tbl_index1 & 0x3E;
-    p_actwk->u.compound.children[0].xposi = fp16_get_integer(p_actwk->xposi) + offset_tbl[index / 2][0];
-    p_actwk->u.compound.children[0].yposi = fp16_get_integer(p_actwk->yposi) + offset_tbl[index / 2][1];
-    p_actwk->u.compound.children[0].patno = patno2;
+    index = p_actwk->u.obj.actfree.muteki.patno_tbl_index + p_actwk->u.obj.actfree.muteki.offset_tbl_index0;
+    signed char patno2 = p_actwk->u.obj.actfree.muteki.patno_tbl_ptr[index];
+    ++p_actwk->u.obj.actfree.muteki.patno_tbl_index;
+    index = p_actwk->u.obj.actfree.muteki.offset_tbl_index1 & 0x3E;
+    p_actwk->u.obj.compound.children[0].xposi = fp16_get_integer(p_actwk->xposi) + offset_tbl[index / 2][0];
+    p_actwk->u.obj.compound.children[0].yposi = fp16_get_integer(p_actwk->yposi) + offset_tbl[index / 2][1];
+    p_actwk->u.obj.compound.children[0].patno = patno2;
     index = index + 32 & 0x3E;
-    p_actwk->u.compound.children[1].xposi = fp16_get_integer(p_actwk->xposi) + offset_tbl[index / 2][0];
-    p_actwk->u.compound.children[1].yposi = fp16_get_integer(p_actwk->yposi) + offset_tbl[index / 2][1];
-    p_actwk->u.compound.children[1].patno = patno;
-    p_actwk->u.compound.offset_tbl_index1 += p_playerwk->u.play.cddat.left == 0 ? 2 : -2;
+    p_actwk->u.obj.compound.children[1].xposi = fp16_get_integer(p_actwk->xposi) + offset_tbl[index / 2][0];
+    p_actwk->u.obj.compound.children[1].yposi = fp16_get_integer(p_actwk->yposi) + offset_tbl[index / 2][1];
+    p_actwk->u.obj.compound.children[1].patno = patno;
+    p_actwk->u.obj.actfree.muteki.offset_tbl_index1 += p_playerwk->u.play.cddat.left == 0 ? 2 : -2;
     actionsub(p_actwk);
   }
 }
