@@ -3146,7 +3146,7 @@ void wrt_zoom(SKC_sprite_status* p_actwk) {
   g_ram.zoom_tile_cnt = 0;
   memset(g_ram.zoombuffer, 0, sizeof(g_ram.zoombuffer));
   FUN_0082698c(p_actwk->sproffset);
-  copy_data_vram(g_ram.zoombuffer, p_actwk->u.obj.zoom.vram_offset, g_ram.zoom_tile_cnt * 16);
+  memcpy(&g_vram[p_actwk->u.obj.zoom.vram_offset], g_ram.zoombuffer, g_ram.zoom_tile_cnt * 32);
 }
 
 
