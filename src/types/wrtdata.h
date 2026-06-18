@@ -2,8 +2,8 @@
 #define SKC_WRTDATA_H
 
 typedef struct SKC_wrt_data {
-  unsigned char* pat;
-  unsigned short** wrtpat;
+  unsigned char* cg_ptr;
+  unsigned short** wrtpat_ptr;
 }
 SKC_wrt_data;
 

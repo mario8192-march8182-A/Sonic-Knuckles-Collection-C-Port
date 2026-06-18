@@ -1465,12 +1465,12 @@ void set_emy_wchg(SKC_sprite_status* p_actwk, SKC_wrt_data* p_data) {
 
   p_actwk->u.obj.wrt.prev_patno = p_actwk->patno;
   unsigned short vram_adr = (p_actwk->sproffset & 0x7FF) << 5;
-  unsigned short* p_wrtpat = p_data->wrtpat[p_actwk->patno];
+  unsigned short* p_wrtpat = p_data->wrtpat_ptr[p_actwk->patno];
   unsigned short cnt = *p_wrtpat++ + 1;
 
   for (int i = 0; i < cnt; ++i) {
     unsigned short command = *p_wrtpat++;
-    unsigned char* p_source = p_data->pat + ((command & 0xFFF0) * 2);
+    unsigned char* p_source = &p_data->cg_ptr[(command & 0xFFF0) * 2];
     unsigned short size = ((command & 0x000F) + 1) * 32;
     memcpy(&g_vram[vram_adr], p_source, size);
     vram_adr += size;
