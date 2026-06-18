@@ -351,7 +351,7 @@ static void title_move2(SKC_sprite_status* p_actwk) {
         }
         if (g_ram.stageno != DEATH_EGG_BOSS) {
           enecginit();
-          set_friend_cg(p_actwk);
+          set_friend_cg();
         }
       }
     }

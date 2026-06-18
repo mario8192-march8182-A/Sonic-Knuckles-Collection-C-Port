@@ -2968,13 +2968,13 @@ void wrt_player0(SKC_sprite_status* p_playerwk) {
 }
 
 
-void set_friend_cg(SKC_sprite_status* p_actwk) {
+void set_friend_cg(void) {
   divdevset2(&bakuhatu_cg_tbl);
-  set_friend_cg0(p_actwk);
+  set_friend_cg0();
 }
 
 
-void set_friend_cg0(SKC_sprite_status* p_actwk) {
+void set_friend_cg0(void) {
   static SKC_cg_data z00 = {
     1,
     {
