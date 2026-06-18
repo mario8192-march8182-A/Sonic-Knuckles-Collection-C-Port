@@ -4,6 +4,7 @@
 #include "data/cg/kanban.h"
 #include "data/cg/friend.h"
 #include "data/cg/item.h"
+#include "data/pat/maskspr.h"
 #include "data/pat/play.h"
 #include "types/cchgcntinfo.h"
 #include "types/cchgitem.h"
@@ -3285,7 +3286,7 @@ void mask_spr(SKC_sprite_status* p_actwk) {
 
 void mask_spr0(SKC_sprite_status* p_actwk) {
   p_actwk->sproffset = 0;
-  p_actwk->patbase = maskpat;
+  p_actwk->patbase = mask_spr_pat;
   p_actwk->sprhs = 32;
   p_actwk->r_ptr = !BIT_IS_SET(p_actwk->u.obj.userflag, 3) ? &mask_spr0__wait0 : &mask_spr0__wait1;
   p_actwk->sprvs = (p_actwk->u.obj.userflag & 0xF0) >> 2;

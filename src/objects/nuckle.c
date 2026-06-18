@@ -15,6 +15,7 @@
 #include "../data/cg/zone0a/kumo0a.h"
 #include "../data/cg/zone0a/nk0a00.h"
 #include "../data/pat/knuckles.h"
+#include "../data/pat/maskspr.h"
 #include "../data/pat/nuckle.h"
 #include "../data/pat/zone06/bomb06.h"
 #include "../data/wrt/knuckles.h"
@@ -3654,7 +3655,7 @@ static SKC_wrt_init_data kumo0a_init_tbl = {
 
 
 static SKC_enemy_init0_data mask0a_init_tbl = {
-  maskpat,
+  mask_spr_pat,
   0x0000,
   PRI_4,
   64,
