@@ -406,7 +406,7 @@ static SKC_edit_data edittbl020 = {
     //{ &turndai,   turndaipat,   0x435F,  1, 0x00 },
     //{ &tekyu,     tekyupat,     0x235F,  1, 0x00 },
     //{ &tekyu,     tekyupat,     0x235F,  2, 0x01 },
-    //{ &Lmask,     maskpat,      0xA3FF,  6, 0x00 },
+    { &mask,     maskpat,      0xA3FF,  6, 0x00 },
     //{ &mpillar,   mpillarpat,   0x4001,  0, 0x00 },
     //{ &moveyuka,  moveyukapat,  0x4001,  1, 0x11 },
     //{ &rswitch,   rswitchpat,   0x235F,  0, 0x01 },

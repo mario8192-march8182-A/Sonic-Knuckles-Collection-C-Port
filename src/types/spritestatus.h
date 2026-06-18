@@ -432,6 +432,17 @@ typedef struct SKC_sprite_status {
         }
         magnet;
         struct {
+          short xoffset; // 0x30
+          bool inactive; // 0x34
+        }
+        mask;
+        struct {
+          signed char side; // 0x32
+          short yoffset; // 0x34
+          short xposi_init; // 0x36
+        }
+        moveyuka;
+        struct {
           signed char* patno_tbl_ptr; // 0x30
           unsigned char offset_tbl_index0; // 0x34
           unsigned char offset_tbl_index1; // 0x35

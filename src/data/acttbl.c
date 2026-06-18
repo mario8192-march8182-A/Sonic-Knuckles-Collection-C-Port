@@ -30,6 +30,7 @@
 #include "../objects/zone00/snak00.h"
 #include "../objects/zone00/tloop.h"
 #include "../objects/zone00/togetree.h"
+#include "../objects/zone02/mask.h"
 #include "../objects/zone03/magnet.h"
 #include "../objects/zone04/betl04.h"
 #include "../objects/zone04/mous04.h"
@@ -122,7 +123,7 @@ SKC_sprite_status_handler s3_act_tbl[256] = {
   0,//&airhammer,
   0,//&turndai,
   0,//&awa,
-  0,//&Lmask,
+  &mask,
   0,//&mpillar,
   0,//&moveyuka,
   0,//&tekyu,
