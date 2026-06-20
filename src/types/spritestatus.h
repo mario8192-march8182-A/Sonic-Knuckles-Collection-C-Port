@@ -287,6 +287,11 @@ typedef struct SKC_sprite_status {
         bryuka;
         struct {
           unsigned char tbl_index; // 0x39
+          unsigned char unknown3a; // 0x3A
+        }
+        bs00b0_fexit;
+        struct {
+          unsigned char tbl_index; // 0x39
         }
         cchg0320_act;
         struct {

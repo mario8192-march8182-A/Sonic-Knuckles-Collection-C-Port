@@ -14,6 +14,7 @@
 #include "../dev.h"
 #include "../shared.h"
 #include "explosion.h"
+#include "zone00/bs00b0.h"
 #include "zone00/bs00m.h"
 static void mbl_eggman0_init(SKC_sprite_status* p_actwk);
 static void mbl_eggman0_wait0(SKC_sprite_status* p_actwk);
