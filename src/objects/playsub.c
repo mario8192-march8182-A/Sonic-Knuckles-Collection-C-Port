@@ -1832,7 +1832,7 @@ static void hstar_move0(SKC_sprite_status* p_actwk) {
     fp16_set_integer(&p_actwk->xposi, fp16_get_integer(g_ram.actwk[0].xposi));
     fp16_set_integer(&p_actwk->yposi, fp16_get_integer(g_ram.actwk[0].yposi));
     tbariasub0(p_actwk, 2);
-    g_ram.ssonicdash_timer = 4;
+    g_ram.ssonicdashtim = 4;
   }
   hstar_move1(p_actwk);
 }

@@ -2372,10 +2372,10 @@ static void jumpchk3(SKC_sprite_status* p_playerwk, SKC_play_work work) {
     setflyswim(p_playerwk);
   }
   else {
-    g_ram.ssonicpallet = 1;
-    g_ram.ssonicpallet_next = 15;
+    g_ram.ssonicclchg = 1;
+    g_ram.ssonicclchgtim = 15;
     g_ram.smilesflag = 1;
-    g_ram.ssonicring_timer = 60;
+    g_ram.ssonicringtim = 60;
     p_playerwk->u.play.control_bitfield = 0x81;
     p_playerwk->mstno = 41;
     g_ram.actwk[ACTWK_PL_MUTEKI].r_ptr = &sflickies;

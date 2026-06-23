@@ -1497,9 +1497,9 @@ static void jumpchk3(SKC_sprite_status* p_playerwk, SKC_play_work work) {
             }
           }
           else {
-            g_ram.ssonicpallet = 1;
-            g_ram.ssonicpallet_next = 15;
-            g_ram.ssonicring_timer = 60;
+            g_ram.ssonicclchg = 1;
+            g_ram.ssonicclchgtim = 15;
+            g_ram.ssonicringtim = 60;
             p_playerwk->patbase = splaypat;
             p_playerwk->u.play.control_bitfield = 0x81;
             p_playerwk->mstno = 31;
@@ -1566,8 +1566,8 @@ static void playsupercnt0(SKC_sprite_status* p_playerwk, SKC_play_work work) {
   if (g_ram.pltime_f == 0) {
     transforming = true;
   }
-  else if (g_ram.ssonicring_timer-- == 0) {
-    g_ram.ssonicring_timer = 60;
+  else if (g_ram.ssonicringtim-- == 0) {
+    g_ram.ssonicringtim = 60;
     if (g_ram.plring != 0) {
       SET_BIT(g_ram.plring_f, 0);
       if (g_ram.plring == 1 || g_ram.plring == 10 || g_ram.plring == 100) {
@@ -1580,8 +1580,8 @@ static void playsupercnt0(SKC_sprite_status* p_playerwk, SKC_play_work work) {
     }
   }
   if (transforming) {
-    g_ram.ssonicpallet = 2;
-    g_ram.DAT_08fff65c = 30;
+    g_ram.ssonicclchg = 2;
+    g_ram.ssonicclchgcnt = 30;
     g_ram.ssonicflag = 0;
     g_ram.smilesflag = 0;
     g_ram.playpatno = 0xFF;

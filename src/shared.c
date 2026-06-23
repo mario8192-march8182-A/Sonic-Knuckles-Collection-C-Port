@@ -3426,10 +3426,10 @@ void set_many_posi(SKC_sprite_status* p_actwk, unsigned char* p_posi_data) {
 
 void chg_super(void) {
   g_ram.plring += 50;
-  g_ram.ssonicpallet = 1;
-  g_ram.ssonicpallet_next = 15;
+  g_ram.ssonicclchg = 1;
+  g_ram.ssonicclchgtim = 15;
   g_ram.ssonicflag = 1;
-  g_ram.ssonicring_timer = 60;
+  g_ram.ssonicringtim = 60;
   g_ram.plmaxspdwk = 0x800;
   g_ram.pladdspdwk = 0x18;
   g_ram.plretspdwk = 0xC0;
