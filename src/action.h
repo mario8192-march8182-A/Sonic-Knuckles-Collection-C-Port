@@ -5,7 +5,7 @@
 #include "types/spritestatus.h"
 
 void action(void);
-void speedset(SKC_sprite_status* p_actwk);
+short speedset(SKC_sprite_status* p_actwk);
 void speedset2(SKC_sprite_status* p_actwk);
 void speedset_g(SKC_sprite_status* p_actwk);
 void speedset2_g(SKC_sprite_status* p_actwk);

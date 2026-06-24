@@ -81,6 +81,7 @@ typedef struct sonic3_ram {
   /* 08ffeea8 */ unsigned short scrc3;
   /* 08ffeeaa */ unsigned short scrc_v;
   /* 08ffeeae */ unsigned short scr_row;
+  /* 08ffeeb6 */ short DAT_08ffeeb6;
   /* 08ffeebc */ short frame_offset_x;
   /* 08ffeec0 */ unsigned short scr_evta;
   /* 08ffeec4 */ unsigned short DAT_08ffeec4;

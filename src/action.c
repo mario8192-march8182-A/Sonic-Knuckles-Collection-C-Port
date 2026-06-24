@@ -70,10 +70,12 @@ static SKC_sprite_status* vsaction0(SKC_sprite_status* p_actwk, int cnt) {
 }
 
 
-void speedset(SKC_sprite_status* p_actwk) {
+short speedset(SKC_sprite_status* p_actwk) {
+  short prev_yspeed = p_actwk->yspeed;
   p_actwk->xposi += p_actwk->xspeed * 0x100;
   p_actwk->yposi += p_actwk->yspeed * 0x100;
   p_actwk->yspeed += 0x38;
+  return prev_yspeed;
 }
 
 

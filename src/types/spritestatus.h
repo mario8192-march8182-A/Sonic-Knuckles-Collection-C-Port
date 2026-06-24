@@ -348,6 +348,11 @@ typedef struct SKC_sprite_status {
         }
         embl_hand;
         struct {
+          unsigned short timer2; // 0x3A
+          short shibuki_xoffset; // 0x40
+        }
+        ev0000;
+        struct {
           short xposi_init; // 0x30
           short yposi_init; // 0x32
           short direc_mod; // 0x34
