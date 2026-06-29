@@ -66,7 +66,7 @@ typedef struct sonic3_ram {
   /* 08ffee46 */ SKC_point* ringactadr2;
   /* 08ffee4a */ SKC_ringwk_entry* ringwkadr;
   /* 08ffee4e */ unsigned short stageno_i;
-  /* 08ffee50 */ short colorcycle;
+  /* 08ffee50 */ short fadecnt;
   /* 08ffee5e */ unsigned char notitle;
   /* 08ffee60 */ long vs_scra_h_posit;
   /* 08ffee64 */ long vs_scra_v_posit;
@@ -122,6 +122,7 @@ typedef struct sonic3_ram {
   /* 08fff628 */ unsigned short DAT_08fff628;
   /* 08fff62a */ unsigned char int_flg;
   /* 08fff62c */ unsigned char linkdata;
+  /* 08fff632 */ unsigned short clchgcnt;
   /* 08fff634 */ unsigned short clchgtim;
   /* 08fff636 */ unsigned long ranum;
   /* 08fff63a */ unsigned short pauseflag;
@@ -130,7 +131,12 @@ typedef struct sonic3_ram {
   /* 08fff64a */ unsigned short watermoveposi;
   /* 08fff64d */ unsigned char water_flag;
   /* 08fff64e */ unsigned char waterflag;
-  /* 08fff650 */ unsigned char pal_anim_ctr0;
+  /* 08fff650 */ unsigned char clchgtim2;
+  /* 08fff652 */ unsigned short clchgcnt2;
+  /* 08fff654 */ unsigned short clchgcnt3;
+  /* 08fff656 */ unsigned short clchgcnt4;
+  /* 08fff658 */ unsigned short clchgtim3;
+  /* 08fff65a */ unsigned short clchgtim4;
   /* 08fff65c */ unsigned short ssonicclchgcnt;
   /* 08fff65e */ unsigned char ssonicclchgtim;
   /* 08fff65f */ unsigned char ssonicclchg;
@@ -138,6 +144,8 @@ typedef struct sonic3_ram {
   /* 08fff665 */ unsigned char DAT_08fff665;
   /* 08fff666 */ unsigned char ssonicdashtim;
   /* 08fff667 */ unsigned char smilesflag;
+  /* 08fff668 */ unsigned char smilesclchgcnt;
+  /* 08fff669 */ unsigned char smilesclchgtim;
   /* 08fff66a */ SKC_swdata swdata0;
   /* 08fff66c */ unsigned char colibuffer_id;
   /* 08fff670 */ unsigned short ssonicringtim;
@@ -154,6 +162,7 @@ typedef struct sonic3_ram {
   /* 08fff70f */ unsigned char DAT_08fff70f;
   /* 08fff710 */ unsigned char ringactset_rno;
   /* 08fff711 */ unsigned char DAT_08fff711;
+  /* 08fff72e */ unsigned char DAT_08fff72e;
   /* 08fff730 */ unsigned char watermode;
   /* 08fff73e */ unsigned char miles_carry_flag;
   /* 08fff73f */ unsigned char miles_nograb_timer;

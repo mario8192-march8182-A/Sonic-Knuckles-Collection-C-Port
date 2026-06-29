@@ -606,7 +606,7 @@ static void nuckle000_run1(SKC_sprite_status* p_actwk) {
     speedset2(p_actwk);
   }
   else {
-    g_ram.pal_anim_ctr0 = 0;
+    g_ram.clchgtim2 = 0;
     g_ram.pl_input_lock_flag = 0;
     cg_reset();
     clr_wchg_bit(p_actwk);

@@ -10,6 +10,7 @@
 #include "../../types/spritestatus.h"
 #include "../../utils/fp16.h"
 #include "../../action.h"
+#include "../../color.h"
 #include "../../dev.h"
 #include "../../shared.h"
 #include "../nuckle.h"
@@ -264,7 +265,7 @@ static void ev0000_move6(SKC_sprite_status* p_actwk) {
 static void ev0000_move7(SKC_sprite_status* p_actwk) {
   ev0000_super_move(p_actwk);
   if ((unsigned short)fp16_get_integer(g_ram.actwk[0].xposi) >= 0x13D0) {
-    g_ram.pal_anim_ctr0 = 0xFF;
+    g_ram.clchgtim2 = 0xFF;
     SKC_sprite_status* p_playerwk = &g_ram.actwk[0];
     p_playerwk->r_no = 4;
     p_playerwk->u.play.cddat.jump = 1;
@@ -277,7 +278,7 @@ static void ev0000_move7(SKC_sprite_status* p_actwk) {
     g_ram.pl_input_lock_flag = 0xFF;
     g_ram.ssonicflag = 0;
     g_ram.ssonicclchg = 2;
-    g_ram.ssonicclchgcnt = 30;
+    g_ram.ssonicclchgcnt = 5;
     memcpy(&g_ram.colorwk[48], emeraldscolor, sizeof(emeraldscolor));
     set_act05(p_actwk, &emeralds_set_tbl);
     set_emy_fout0(p_actwk);
@@ -434,7 +435,7 @@ static void ev0000_super(SKC_sprite_status* p_actwk) {
   p_actwk->patbase = splaypat;
   p_actwk->patno = 33;
   g_ram.ssonicclchgtim = 0;
-  g_ram.ssonicclchgcnt = 36;
+  g_ram.ssonicclchgcnt = 6;
   g_ram.ssonicringtim = 0x7FFF;
 }
 
@@ -444,10 +445,10 @@ static void ev0000_super_move(SKC_sprite_status* p_actwk) {
   p_actwk->patno = !(g_ram.systemtimer & 2) ? 33 : 34;
   if (g_ram.ssonicclchgtim-- == 0) {
     g_ram.ssonicclchgtim = 6;
-    memcpy(&g_ram.colorwk[2], &ssoniccolor[g_ram.ssonicclchgcnt / 2], sizeof(unsigned short) * 3);
-    g_ram.ssonicclchgcnt += 6;
-    if (g_ram.ssonicclchgcnt >= 54) {
-      g_ram.ssonicclchgcnt = 36;
+    memcpy(&g_ram.colorwk[2], ssoniccolor[g_ram.ssonicclchgcnt], sizeof(ssoniccolor[g_ram.ssonicclchgcnt]));
+    ++g_ram.ssonicclchgcnt;
+    if (g_ram.ssonicclchgcnt >= 10) {
+      g_ram.ssonicclchgcnt = 6;
     }
   }
 }

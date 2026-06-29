@@ -2086,7 +2086,7 @@ static void tbariamove(SKC_sprite_status* p_actwk) {
         p_playerwk->u.play.powerdat.fbaria = 0;
         p_playerwk->u.play.powerdat.tbaria = 0;
         p_playerwk->u.play.powerdat.abaria = 0;
-        if (g_ram.colorcycle != 0) {
+        if (g_ram.fadecnt != 0) {
           p_actwk->r_ptr = &wspin;
         }
         else {

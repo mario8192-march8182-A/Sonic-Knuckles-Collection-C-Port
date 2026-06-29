@@ -1,126 +1,72 @@
-#include "../types/colortblentry.h"
-
-unsigned short sega_color[64];
-unsigned short opening_color[16];
-unsigned short stageselect_color[64];
-unsigned short menu_color[64];
-unsigned short knuckles_color[16];
-unsigned short angelisland1_color[48];
-unsigned short angelisland12_color[48];
-unsigned short angelisland2_color[48];
-unsigned short angelislandboss_color[48];
-unsigned short angelisland1water_color[64];
-unsigned short angelisland2water_color[64];
-unsigned short hydrocity1_color[48];
-unsigned short hydrocity2_color[48];
-unsigned short hydrocity1water_color[64];
-unsigned short hydrocity2water_color[64];
-unsigned short marblegarden_color[48];
-unsigned short carnivalnight_color[48];
-unsigned short carnivalnight2water_color[64];
-unsigned short flyingbattery1_color[48];
-unsigned short flyingbattery2_color[48];
-unsigned short icecap1_color[48];
-unsigned short icecap2_color[48];
-unsigned short icecap2water_color[64];
-unsigned short launchbase1_color[48];
-unsigned short launchbase2_color[48];
-unsigned short launchbasewater_color[64];
-unsigned short launchbasewater2_color[48];
-unsigned short mushroomhill1_color[48];
-unsigned short mushroomhill2_color[48];
-unsigned short sandopolis1_color[48];
-unsigned short sandopolis2_color[48];
-unsigned short sandopolis12_color[48];
-unsigned short sandopolis22_color[48];
-unsigned short lavareef1_color[48];
-unsigned short lavareef2_color[48];
-unsigned short skysanctuary1_color[48];
-unsigned short skysanctuary2_color[48];
-unsigned short ending1_color[48];
-unsigned short ending2_color[48];
-unsigned short deathegg1_color[48];
-unsigned short deathegg2_color[48];
-unsigned short doomsday_color[48];
-unsigned short azurelake_color[48];
-unsigned short balloonpark_color[48];
-unsigned short desertpalace_color[48];
-unsigned short chromegadget_color[48];
-unsigned short endlessmine_color[48];
-unsigned short gumballmachine_color[48];
-unsigned short rollingjump_color[48];
-unsigned short slotmachine_color[48];
-unsigned short lavareefboss_color[48];
-unsigned short hiddenpalace_color[48];
-unsigned short deatheggboss_color[48];
+#include "colortbl.h"
 
 SKC_colortbl_entry colortbl[66] = {
-  { sega_color, 0, 31 },
-  { opening_color, 32, 7 },
-  { stageselect_color, 0, 31 },
-  { &stageselect_color[48], 0, 7 },
-  { menu_color, 0, 31 },
-  { knuckles_color, 0, 7 },
-  { sega_color, 0, 31 },
-  { sega_color, 0, 31 },
-  { sega_color, 0, 31 },
-  { sega_color, 0, 31 },
-  { angelisland1_color, 32, 23 },
-  { angelisland2_color, 32, 23 },
-  { hydrocity1_color, 32, 23 },
-  { hydrocity2_color, 32, 23 },
-  { marblegarden_color, 32, 23 },
-  { marblegarden_color, 32, 23 },
-  { carnivalnight_color, 32, 23 },
-  { carnivalnight_color, 32, 23 },
-  { flyingbattery1_color, 32, 23 },
-  { flyingbattery2_color, 32, 23 },
-  { icecap1_color, 32, 23 },
-  { icecap2_color, 32, 23 },
-  { launchbase1_color, 32, 23 },
-  { launchbase2_color, 32, 23 },
-  { mushroomhill1_color, 32, 23 },
-  { mushroomhill2_color, 32, 23 },
-  { sandopolis1_color, 32, 23 },
-  { sandopolis2_color, 32, 23 },
-  { lavareef1_color, 32, 23 },
-  { lavareef2_color, 32, 23 },
-  { skysanctuary1_color, 32, 23 },
-  { skysanctuary2_color, 32, 23 },
-  { deathegg1_color, 32, 23 },
-  { deathegg2_color, 32, 23 },
-  { doomsday_color, 32, 23 },
-  { doomsday_color, 32, 23 },
-  { ending1_color, 32, 23 },
-  { ending2_color, 32, 23 },
-  { azurelake_color, 32, 23 },
-  { azurelake_color, 32, 23 },
-  { balloonpark_color, 32, 23 },
-  { balloonpark_color, 32, 23 },
-  { angelisland12_color, 32, 23 },
-  { angelisland1water_color, 0, 31 },
-  { angelisland2water_color, 0, 31 },
-  { launchbasewater_color, 0, 31 },
-  { launchbasewater_color, 0, 31 },
-  { launchbasewater2_color, 32, 23 },
-  { angelislandboss_color, 32, 23 },
-  { hydrocity1water_color, 0, 31 },
-  { hydrocity2water_color, 0, 31 },
-  { gumballmachine_color, 32, 23 },
-  { desertpalace_color, 32, 23 },
-  { chromegadget_color, 32, 23 },
-  { endlessmine_color, 32, 23 },
-  { rollingjump_color, 32, 23 },
-  { slotmachine_color, 32, 23 },
-  { icecap2water_color, 0, 31 },
-  { carnivalnight2water_color, 0, 31 },
-  { angelisland12_color, 32, 23 },
-  { sandopolis12_color, 32, 23 },
-  { sandopolis22_color, 32, 23 },
-  { lavareefboss_color, 32, 23 },
-  { hiddenpalace_color, 32, 23 },
-  { deatheggboss_color, 32, 23 },
-  { deatheggboss_color, 32, 23 }
+  { sega_color, 0, 64 },
+  { opening_color, 16, 16 },
+  { stageselect_color, 0, 64 },
+  { &stageselect_color[48], 0, 16 },
+  { menu_color, 0, 64 },
+  { knuckles_color, 0, 16 },
+  { sega_color, 0, 64 },
+  { sega_color, 0, 64 },
+  { sega_color, 0, 64 },
+  { sega_color, 0, 64 },
+  { angelisland1_color, 16, 48 },
+  { angelisland2_color, 16, 48 },
+  { hydrocity1_color, 16, 48 },
+  { hydrocity2_color, 16, 48 },
+  { marblegarden_color, 16, 48 },
+  { marblegarden_color, 16, 48 },
+  { carnivalnight_color, 16, 48 },
+  { carnivalnight_color, 16, 48 },
+  { flyingbattery1_color, 16, 48 },
+  { flyingbattery2_color, 16, 48 },
+  { icecap1_color, 16, 48 },
+  { icecap2_color, 16, 48 },
+  { launchbase1_color, 16, 48 },
+  { launchbase2_color, 16, 48 },
+  { mushroomhill1_color, 16, 48 },
+  { mushroomhill2_color, 16, 48 },
+  { sandopolis1_color, 16, 48 },
+  { sandopolis2_color, 16, 48 },
+  { lavareef1_color, 16, 48 },
+  { lavareef2_color, 16, 48 },
+  { skysanctuary1_color, 16, 48 },
+  { skysanctuary2_color, 16, 48 },
+  { deathegg1_color, 16, 48 },
+  { deathegg2_color, 16, 48 },
+  { doomsday_color, 16, 48 },
+  { doomsday_color, 16, 48 },
+  { ending1_color, 16, 48 },
+  { ending2_color, 16, 48 },
+  { azurelake_color, 16, 48 },
+  { azurelake_color, 16, 48 },
+  { balloonpark_color, 16, 48 },
+  { balloonpark_color, 16, 48 },
+  { angelisland12_color, 16, 48 },
+  { angelisland1water_color, 0, 64 },
+  { angelisland2water_color, 0, 64 },
+  { launchbasewater_color, 0, 64 },
+  { launchbasewater_color, 0, 64 },
+  { launchbasewater2_color, 16, 48 },
+  { angelislandboss_color, 16, 48 },
+  { hydrocity1water_color, 0, 64 },
+  { hydrocity2water_color, 0, 64 },
+  { gumballmachine_color, 16, 48 },
+  { desertpalace_color, 16, 48 },
+  { chromegadget_color, 16, 48 },
+  { endlessmine_color, 16, 48 },
+  { rollingjump_color, 16, 48 },
+  { slotmachine_color, 16, 48 },
+  { icecap2water_color, 0, 64 },
+  { carnivalnight2water_color, 0, 64 },
+  { angelisland12_color, 16, 48 },
+  { sandopolis12_color, 16, 48 },
+  { sandopolis22_color, 16, 48 },
+  { lavareefboss_color, 16, 48 },
+  { hiddenpalace_color, 16, 48 },
+  { deatheggboss_color, 16, 48 },
+  { deatheggboss_color, 16, 48 }
 };
 
 unsigned short sega_color[64] = {
