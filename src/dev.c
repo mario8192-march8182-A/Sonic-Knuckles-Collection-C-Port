@@ -162,6 +162,19 @@ void copy_map_vram(unsigned char* p_source, unsigned short offset, unsigned shor
 }
 
 
+void copy_map_vram2(unsigned char* p_source, unsigned short offset, unsigned short col_cnt, unsigned short row_cnt) {
+  unsigned char* p_vram = &g_vram[offset];
+  unsigned short size = col_cnt * sizeof(unsigned short);
+  unsigned short padding = (128 - col_cnt) * 2;
+
+  for (int row = 0; row < row_cnt; ++row) {
+    memcpy(p_vram, p_source, size);
+    p_source += size;
+    p_vram += size + padding;
+  }
+}
+
+
 void mapdevr(unsigned short* p_destination, unsigned char* p_source, unsigned short offset) {
   unsigned char inline_copy_len = *p_source++;
   unsigned char bitfield = *p_source++ << 3;
