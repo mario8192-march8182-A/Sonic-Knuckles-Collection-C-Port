@@ -1,5 +1,6 @@
 #include "dev.h"
 #include <stdbool.h>
+#include <string.h>
 #include "types/bitdevrcodetableentry.h"
 #include "types/bitdevrwork.h"
 #include "types/mapdevrwork.h"
@@ -144,6 +145,19 @@ void divdevset(unsigned short id) {
 void divdevset2(SKC_cg_data* p_data) {
   for (int i = 0; i < p_data->cnt; ++i) {
     bitdevr(&g_vram[p_data->data[i].offset], p_data->data[i].cg_ptr);
+  }
+}
+
+
+void copy_map_vram(unsigned char* p_source, unsigned short offset, unsigned short col_cnt, unsigned short row_cnt) {
+  unsigned char* p_vram = &g_vram[offset];
+  unsigned short size = col_cnt * sizeof(unsigned short);
+  unsigned short padding = (64 - col_cnt) * 2;
+
+  for (int row = 0; row < row_cnt; ++row) {
+    memcpy(p_vram, p_source, size);
+    p_source += size;
+    p_vram += size + padding;
   }
 }
 

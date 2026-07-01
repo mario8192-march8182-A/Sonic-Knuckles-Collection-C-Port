@@ -732,19 +732,6 @@ void FUN_0040fd4f(unsigned long* p_surface, long pitch) {
 }
 
 
-// 00410384
-void copy_map_vram(unsigned short* p_source, unsigned short offset, unsigned long row_cnt, unsigned long cell_cnt) {
-  unsigned short* p_destination = (unsigned short*)&g_vram[offset];
-  unsigned long row_offset = (128 - (cell_cnt + 1) * 2) / 2;
-  for (int row = row_cnt + 1; row != 0 ; --row) {
-    for (int cell = cell_cnt + 1; cell != 0 ; --cell) {
-      *p_destination++ = *p_source++;
-    }
-    p_destination += row_offset;
-  }
-}
-
-
 // 00410426
 void copy_data_vram(void* p_source, unsigned short offset, unsigned short size) {
   memcpy(&g_vram[offset], p_source, size * 2);

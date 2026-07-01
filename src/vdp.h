@@ -15,7 +15,6 @@ void FUN_0040f89b(unsigned long* p_surface, long pitch);
 void FUN_0040f96a(unsigned long* p_surface, long pitch);
 void FUN_0040fceb(unsigned long* p_surface, long pitch);
 void FUN_0040fd4f(unsigned long* p_surface, long pitch);
-void copy_map_vram(unsigned short* p_source, unsigned short offset, unsigned long row_cnt, unsigned long cell_cnt);
 void copy_data_vram(void* p_source, unsigned short offset, unsigned short size);
 void FUN_0041439c();
 void FUN_0041448e();
