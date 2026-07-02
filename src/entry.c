@@ -2,6 +2,7 @@
 #include <string.h>
 #include "types/sonic3ram.h"
 #include "constants.h"
+#include "io.h"
 static void entry(unsigned short cartridge);
 static void mainloop(void);
 static void (*gmmodetbl[21])(void);
