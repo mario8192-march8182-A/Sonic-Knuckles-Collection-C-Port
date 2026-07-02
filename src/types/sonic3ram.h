@@ -340,7 +340,7 @@ typedef struct sonic3_ram {
   /* 08ffff9c */ unsigned short stageno_is2;
   /* 08ffff9f */ unsigned char romheadermdflag;
   /* 08ffffa0 */ unsigned char specmodefull;
-  /* 08ffffa1 */ unsigned char specmodemenu;
+  /* 08ffffa1 */ unsigned char bsmodemenu;
   /* 08ffffa2 */ unsigned long specmodecode;
   /* 08ffffa6 */ unsigned long specmodelevel;
   /* 08ffffaa */ unsigned char DAT_08ffffaa;

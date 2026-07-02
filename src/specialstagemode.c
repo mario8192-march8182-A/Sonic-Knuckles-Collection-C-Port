@@ -137,7 +137,7 @@ void specialstagemode() {
   mapdevr((unsigned short*)g_ram.levellayout, specialstagemode_bg_map, 0x4197);
   copy_map_vram((unsigned short*)g_ram.levellayout, 0xE09C, 7, 11);
   unsigned char* p_text = getbluespheres;
-  if (g_ram.specmodemenu == 0) {
+  if (g_ram.bsmodemenu == 0) {
     p_text = noway;
     g_ram.levelselect_plmode = TEAM_SONIC;
     g_ram.vscrolla = -16;
@@ -207,7 +207,7 @@ static void update_hscrollbuff() {
 // 006a484f
 static void init_specmodevars() {
   g_ram.specmodefull = 1;
-  if (g_ram.specmodemenu == 0) {
+  if (g_ram.bsmodemenu == 0) {
     g_ram.DAT_08ffffab = 0;
     g_ram.specmodelevel = 0;
     g_ram.specmodecode = 0x3020100;
@@ -217,7 +217,7 @@ static void init_specmodevars() {
 
 // 006a4fba
 static void menu_init(sprite_status* p_actwk) {
-  if (g_ram.specmodemenu == 0) {
+  if (g_ram.bsmodemenu == 0) {
     p_actwk->r_ptr = &menu_wait;
     p_actwk->actfree.dynamic.timer = 30;
     menu_wait(p_actwk);
@@ -246,7 +246,7 @@ static void menu_move0(sprite_status* p_actwk) {
   p_actwk->r_ptr = &menu_move1;
   g_ram.actwk[6].r_ptr = &header_init;
   util__assign_high(&g_ram.actwk[6].yposi, 192);
-  g_ram.specmodemenu = 1;
+  g_ram.bsmodemenu = 1;
   g_ram.DAT_08ffffaa = 0;
   g_ram.actwk[46].r_ptr = &starsphere_init;
   g_ram.actwk[47].r_ptr = &starsphere_init;
@@ -282,7 +282,7 @@ static void menu_move1(sprite_status* p_actwk) {
         ++a1;
       }
     }
-    if (!(g_ram.specmodemenu & 0x80)) {
+    if (!(g_ram.bsmodemenu & 0x80)) {
       if (IS_BUTTON_PRESSED(g_ram.swdata1, PAD_U) && g_ram.DAT_08ffffaa != 0) {
         --g_ram.DAT_08ffffaa;
         soundset(137);
@@ -291,7 +291,7 @@ static void menu_move1(sprite_status* p_actwk) {
         ++g_ram.DAT_08ffffaa;
         soundset(137);
         if (g_ram.DAT_08ffffaa == 2) {
-          g_ram.specmodemenu |= 0x80;
+          g_ram.bsmodemenu |= 0x80;
           g_ram.swdata1 &= 0xFF00;
         }
       }
@@ -587,7 +587,7 @@ static void init_codedigit(sprite_status* p_actwk, void(*r_ptr)(sprite_status*))
 
 // 006a5e09
 static void currentcode_move(sprite_status* p_actwk) {
-  if (g_ram.specmodemenu & 0x80) return;
+  if (g_ram.bsmodemenu & 0x80) return;
 
   unsigned char* a2 = g_ram.direc_x;
   a2[3] = (g_ram.specmodelevel & 0x000000FF);
@@ -623,7 +623,7 @@ static void currentcode_move(sprite_status* p_actwk) {
 
 // 006a5f81
 static void codeinput_move(sprite_status* p_actwk) {
-  if (!(g_ram.specmodemenu & 0x80)) {
+  if (!(g_ram.bsmodemenu & 0x80)) {
     SPRITE_STATUS_USHORT(p_actwk, 48) = 0;
     return;
   }
@@ -656,7 +656,7 @@ static void codeinput_move(sprite_status* p_actwk) {
     }
   }
 
-  if (g_ram.specmodemenu & 0x80) {
+  if (g_ram.bsmodemenu & 0x80) {
     p_next_actwk = p_actwk + (SPRITE_STATUS_USHORT(p_actwk, 48) + 1);
     p_next_actwk->sproffset = 0x8562;
   }
@@ -732,12 +732,12 @@ static void chk_code(sprite_status* p_actwk) {
 
     set_palette(g_ram.colorwk);
     soundset(99);
-    g_ram.specmodemenu &= 0x7F;
+    g_ram.bsmodemenu &= 0x7F;
     g_ram.DAT_08ffffaa = 1;
   }
   else {
     soundset(178);
-    g_ram.specmodemenu &= 0x7F;
+    g_ram.bsmodemenu &= 0x7F;
     g_ram.DAT_08ffffaa = 1;
   }
 }
@@ -790,7 +790,7 @@ static void currentcodedigit_init(sprite_status* p_actwk) {
 
 // 006a678b
 static void currentcodedigit_move(sprite_status* p_actwk) {
-  if (!(g_ram.specmodemenu & 0x80)) {
+  if (!(g_ram.bsmodemenu & 0x80)) {
     actionsub(p_actwk);
   }
 }
@@ -806,7 +806,7 @@ static void codeinputdigit_init(sprite_status* p_actwk) {
 
 // 006a67ac
 static void codeinputdigit_move(sprite_status* p_actwk) {
-  if (g_ram.specmodemenu & 0x80) {
+  if (g_ram.bsmodemenu & 0x80) {
     actionsub(p_actwk);
   }
 }
@@ -1187,7 +1187,7 @@ static void character_init(sprite_status* p_actwk) {
     p_next_actwk->sproffset = 0x20FE;
     util__assign_high(&p_next_actwk->xposi, spriteposi[i][0]);
     util__assign_high(&p_next_actwk->yposi, spriteposi[i][1]);
-    if (g_ram.specmodemenu != 0 && g_ram.specmodefull != 0) {
+    if (g_ram.bsmodemenu != 0 && g_ram.specmodefull != 0) {
       p_next_actwk->yposi -= SHORT_TO_LONG_HIGH(16);
     }
     p_next_actwk->sprpri = PRI_3;

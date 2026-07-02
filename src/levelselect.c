@@ -157,7 +157,7 @@ void levelselect() {
           }
         }
         else {
-          g_ram.specmodemenu = 0;
+          g_ram.bsmodemenu = 0;
           g_ram.gmmode = 44;
           nextmode = true;
         }

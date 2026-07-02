@@ -1,6 +1,14 @@
 #ifndef CONSTANTS_H
 #define CONSTANTS_H
 
+typedef enum SKC_game_mode {
+  LOGOMD = 0,
+  OPENINGMD = 4,
+  STAGESELMD = 28,
+  BSMENUMD = 44
+}
+SKC_game_mode;
+
 typedef enum SKC_play_type {
   PLAY_TYPE_SONIC_AND_MILES = 0,
   PLAY_TYPE_SONIC = 1,
