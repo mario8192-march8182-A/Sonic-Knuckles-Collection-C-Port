@@ -625,7 +625,7 @@ void uploadPalette() {
     palette[i].rgbBlue = (pColorwk[i] >> 8 & 0xF) * 17;
   }
 
-  palette[0] = palette[DAT_008549d8];
+  palette[0] = palette[g_bg_color_index];
   palette[16] = palette[0];
   palette[32] = palette[0];
   palette[48] = palette[0];

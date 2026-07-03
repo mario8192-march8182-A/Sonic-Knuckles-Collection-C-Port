@@ -292,7 +292,7 @@ void opening() {
   }
   g_vdpScrollPlaneAOffset = 0xC000;
   g_vdpScrollPlaneBOffset = 0xE000;
-  DAT_008549d8 = 0;
+  g_bg_color_index = 0;
   DAT_00854dec = 1;
   g_ram.waterflag = 0;
   if (!g_sonic3_alone) {

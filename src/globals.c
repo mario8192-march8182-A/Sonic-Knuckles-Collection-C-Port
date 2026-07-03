@@ -456,7 +456,7 @@
 /* 0085499c */ USHORT* g_pLevelSelectVram;
 /* 008549a4 */ ULONG g_mdRegisterD0;
 /* 008549cc */ ULONG g_vdpScrollPlaneAOffset;
-/* 008549d8 */ ULONG DAT_008549d8;
+/* 008549d8 */ ULONG g_bg_color_index;
 /* 008549dc */ BOOL g_vdp_hint_disabled;
 /* 008549e0 */ UCHAR* g_pVdpReadPos;
 /* 008549e4 */ UCHAR* g_pPixelBuffer;

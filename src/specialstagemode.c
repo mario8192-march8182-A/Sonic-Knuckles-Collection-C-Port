@@ -104,7 +104,7 @@ extern void vInt();
 static void init_graphics() {
   g_vdpScrollPlaneAOffset = 0xC000;
   g_vdpScrollPlaneBOffset = 0xE000;
-  DAT_008549d8 = 32;
+  g_bg_color_index = 32;
   DAT_00854dec = 1;
   g_ram.waterflag = 0;
   g_ram.watermode = 0;

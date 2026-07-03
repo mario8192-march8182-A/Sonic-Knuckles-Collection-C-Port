@@ -94,7 +94,7 @@ extern UCHAR g_spriteMasks[448];
 extern USHORT* g_pLevelSelectVram;
 extern ULONG g_mdRegisterD0;
 extern ULONG g_vdpScrollPlaneAOffset;
-extern ULONG DAT_008549d8;
+extern ULONG g_bg_color_index;
 extern BOOL g_vdp_hint_disabled;
 extern UCHAR* g_pVdpReadPos;
 extern UCHAR* g_pPixelBuffer;
