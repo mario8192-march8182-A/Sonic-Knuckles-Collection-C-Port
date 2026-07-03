@@ -15,7 +15,7 @@ static void save_s3_game(void);
 static void save_s3_game2(void);
 
 extern sonic3_ram g_ram;
-extern bool g_sonic3_alone;
+extern int g_sonic3_alone;
 
 
 void read_savedata(void) {

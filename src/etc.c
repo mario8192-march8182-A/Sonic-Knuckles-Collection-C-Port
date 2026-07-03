@@ -1,11 +1,10 @@
 #include "etc.h"
-#include <stdbool.h>
 #include <stdlib.h>
 #include "types/sonic3ram.h"
 #include "utils/direction.h"
 
 extern sonic3_ram g_ram;
-extern bool g_sonic3_alone;
+extern int g_sonic3_alone;
 
 
 unsigned long random(void) {

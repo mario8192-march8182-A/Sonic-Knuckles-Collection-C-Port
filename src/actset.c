@@ -1,5 +1,4 @@
 #include "actset.h"
-#include <stdbool.h>
 #include <string.h>
 #include "data/acttbl.h"
 #include "data/asettbl.h"
@@ -19,7 +18,7 @@ static void actnoset_ywrap(SKC_sprite_status* p_actwk, SKC_aset* p_aset, unsigne
 static void actnoset(SKC_sprite_status* p_actwk, SKC_aset* p_aset, unsigned char* p_flagwork, short scra_v_up, short scra_v_down);
 
 extern sonic3_ram g_ram;
-extern bool g_sonic3_alone;
+extern int g_sonic3_alone;
 
 
 void actsetchk(void) {

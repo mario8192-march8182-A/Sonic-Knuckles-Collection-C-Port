@@ -143,7 +143,7 @@ static SKC_sprite_pattern clearsp58;
 
 extern sonic3_ram g_ram;
 extern unsigned char g_vram[0x10000];
-extern bool g_sonic3_alone;
+extern int g_sonic3_alone;
 
 
 void over(SKC_sprite_status* p_actwk) {

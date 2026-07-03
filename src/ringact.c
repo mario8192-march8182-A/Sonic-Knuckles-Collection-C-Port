@@ -1,5 +1,4 @@
 #include "ringact.h"
-#include <stdbool.h>
 #include <string.h>
 #include "data/ringacttbl.h"
 #include "types/patsetwork.h"
@@ -25,7 +24,7 @@ static void ringcoltbaria(SKC_sprite_status* p_playerwk, SKC_ringwk_entry* p_ent
 static void ringactinit2(void);
 
 extern sonic3_ram g_ram;
-extern bool g_sonic3_alone;
+extern int g_sonic3_alone;
 
 
 void ringactsetchk(void) {
