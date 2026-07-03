@@ -105,7 +105,7 @@ static void init_graphics() {
   g_vdpScrollPlaneAOffset = 0xC000;
   g_vdpScrollPlaneBOffset = 0xE000;
   g_bg_color_index = 32;
-  DAT_00854dec = 1;
+  g_vdp_hscroll_scanline = 1;
   g_ram.waterflag = 0;
   g_ram.watermode = 0;
   scrinit();

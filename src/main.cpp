@@ -690,7 +690,7 @@ void blitGraphics() {
   else {
     g_vscrollCopy = g_vscrollPlaneB;
     if (g_pHscrollbuff2 != 0) {
-      if (DAT_00854dec != 0) {
+      if (g_vdp_hscroll_scanline != 0) {
         for (int i = 0; i < 224; ++i) {
           g_convertedHscrollbuff[i] = -*g_pHscrollbuff2 & 0x3FF;
           g_pHscrollbuff2 += 2;
@@ -728,7 +728,7 @@ void blitGraphics() {
 
     g_vscrollCopy = g_vscrollPlaneA;
     if (g_pHscrollbuff != 0) {
-      if (DAT_00854dec != 0) {
+      if (g_vdp_hscroll_scanline != 0) {
         for (int i = 0; i < 224; ++i) {
           g_convertedHscrollbuff[i] = -*g_pHscrollbuff & 0x3FF;
           g_pHscrollbuff += 2;

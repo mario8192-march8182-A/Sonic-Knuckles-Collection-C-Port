@@ -100,7 +100,7 @@ extern UCHAR* g_pVdpReadPos;
 extern UCHAR* g_pPixelBuffer;
 extern BYTE g_saveFile[1024];
 extern ULONG g_vdp_mode;
-extern ULONG DAT_00854dec;
+extern BOOL g_vdp_hscroll_scanline;
 extern Sprite g_sprites[80];
 extern USHORT* g_pHscrollbuff;
 extern ULONG g_vIntScanline;

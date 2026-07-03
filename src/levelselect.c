@@ -59,7 +59,7 @@ void levelselect() {
   g_vdpScrollPlaneAOffset = 0xC000;
   g_vdpScrollPlaneBOffset = 0xE000;
   g_bg_color_index = 0;
-  DAT_00854dec = 0;
+  g_vdp_hscroll_scanline = 0;
   memset(g_ram.pbuffer, 0, sizeof(g_ram.pbuffer));
   memset(g_ram.actwk, 0, sizeof(g_ram.actwk) + 52);
   bitdevr((unsigned long*)&g_vram[512], levelselect_main_cg, g_ram.bitdevwk);
@@ -551,7 +551,7 @@ static void s3levelselect() {
   g_vdpScrollPlaneAOffset = 0xC000;
   g_vdpScrollPlaneBOffset = 0xE000;
   g_bg_color_index = 0;
-  DAT_00854dec = 0;
+  g_vdp_hscroll_scanline = 0;
   memset(g_ram.pbuffer, 0, sizeof(g_ram.pbuffer));
   memset(g_ram.actwk, 0, sizeof(g_ram.actwk) + 52);
   bitdevr((unsigned long*)&g_vram[512], levelselect_main_cg, g_ram.bitdevwk);
