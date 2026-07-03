@@ -335,7 +335,7 @@ void freeRamAndVram() {
 // 00404564
 void blitSprites() {
   Sprite* pSprite;
-  if (DAT_00854de8 == 5) {
+  if (g_vdp_mode == 5) {
     pSprite = &g_sprites[g_spriteCnt - 1];
 
     for (unsigned int i = 0; i < g_spriteCnt; ++i) {
@@ -631,7 +631,7 @@ void uploadPalette() {
   palette[48] = palette[0];
 
   CGraphics* pGraphics = getGraphicsPtr();
-  if (DAT_00854de8 == 5) {
+  if (g_vdp_mode == 5) {
     pGraphics->copyPaletteToWk4(palette);
     for (int i = 0; i < 64; ++i) {
       palette[i].rgbRed >>= 1;
@@ -707,7 +707,7 @@ void blitGraphics() {
     }
     g_pVdpReadPos = &g_vram[g_vdpScrollPlaneBOffset];
 
-    switch (DAT_00854de8) {
+    switch (g_vdp_mode) {
       case 0:
         FUN_0040f4c8();
         break;
@@ -745,7 +745,7 @@ void blitGraphics() {
     }
     g_pVdpReadPos = &g_vram[g_vdpScrollPlaneAOffset];
 
-    switch (DAT_00854de8) {
+    switch (g_vdp_mode) {
       case 0:
         if (DAT_00854758 != 0) {
           FUN_0040ee9e();

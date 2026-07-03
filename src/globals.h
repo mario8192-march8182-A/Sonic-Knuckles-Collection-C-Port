@@ -99,7 +99,7 @@ extern ULONG DAT_008549dc;
 extern UCHAR* g_pVdpReadPos;
 extern UCHAR* g_pPixelBuffer;
 extern BYTE g_saveFile[1024];
-extern ULONG DAT_00854de8;
+extern ULONG g_vdp_mode;
 extern ULONG DAT_00854dec;
 extern Sprite g_sprites[80];
 extern USHORT* g_pHscrollbuff;

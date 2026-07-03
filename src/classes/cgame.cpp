@@ -57,7 +57,7 @@ extern int g_bgmMode;
 extern int g_cdCheckEnable;
 extern HINSTANCE g_hInstance;
 extern char* g_lpCmdLine;
-extern ULONG DAT_00854de8;
+extern ULONG g_vdp_mode;
 extern CRITICAL_SECTION g_CriticalSectionObj;
 
 
@@ -874,7 +874,7 @@ void CGame::updateScreen() {
       for (int i = 0; i < 32; ++i) {
         memset(&pSurface[i * pitch], 0, 640);
       }
-      if (DAT_00854de8 == 5) {
+      if (g_vdp_mode == 5) {
         ::FUN_0040fd4f((unsigned long*)&pSurface[32 * pitch], pitch);
       }
       else {
@@ -885,7 +885,7 @@ void CGame::updateScreen() {
       for (int i = 0; i < 16; ++i) {
         memset(&pSurface[i * pitch], 0, 320);
       }
-      if (DAT_00854de8 == 5) {
+      if (g_vdp_mode == 5) {
         ::FUN_0040fceb((unsigned long*)&pSurface[16 * pitch], pitch);
       }
       else {
@@ -901,7 +901,7 @@ void CGame::updateScreen() {
       for (int i = 0; i < 16; ++i) {
         memset(&pSurface[(240 + i) * pitch], 0, 640);
       }
-      if (DAT_00854de8 == 5) {
+      if (g_vdp_mode == 5) {
         ::FUN_0040fd4f((unsigned long*)&pSurface[16 * pitch], pitch);
       }
       else {
@@ -915,7 +915,7 @@ void CGame::updateScreen() {
       for (int i = 0; i < 8; ++i) {
         memset(&pSurface[(232 + i) * pitch], 0, 320);
       }
-      if (DAT_00854de8 == 5) {
+      if (g_vdp_mode == 5) {
         ::FUN_0040fceb((unsigned long*)&pSurface[8 * pitch], pitch);
       }
       else {

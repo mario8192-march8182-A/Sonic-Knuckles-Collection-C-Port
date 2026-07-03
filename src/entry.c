@@ -10,6 +10,7 @@ static void logo_init(void);
 static void logo(void);
 
 extern sonic3_ram g_ram;
+extern unsigned long g_vdp_mode;
 
 
 void debug_entry(void) {
@@ -52,7 +53,7 @@ static void entry(unsigned short cartridge) {
 static void mainloop(void) {
   while (1) {
     DAT_008549dc = 0;
-    DAT_00854de8 = 0;
+    g_vdp_mode = 0;
     DAT_00854758 = 0;
     DAT_0082ddc8 = 0;
     gmmodetbl[g_ram.gmmode >> 2]();

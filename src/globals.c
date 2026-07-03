@@ -461,7 +461,7 @@
 /* 008549e0 */ UCHAR* g_pVdpReadPos;
 /* 008549e4 */ UCHAR* g_pPixelBuffer;
 /* 008549e8 */ BYTE g_saveFile[1024];
-/* 00854de8 */ ULONG DAT_00854de8;
+/* 00854de8 */ ULONG g_vdp_mode;
 /* 00854dec */ ULONG DAT_00854dec;
 /* 00854df0 */ Sprite g_sprites[80];
 /* 00856df8 */ USHORT* g_pHscrollbuff;
