@@ -95,7 +95,7 @@ extern USHORT* g_pLevelSelectVram;
 extern ULONG g_mdRegisterD0;
 extern ULONG g_vdpScrollPlaneAOffset;
 extern ULONG DAT_008549d8;
-extern ULONG DAT_008549dc;
+extern BOOL g_vdp_hint_disabled;
 extern UCHAR* g_pVdpReadPos;
 extern UCHAR* g_pPixelBuffer;
 extern BYTE g_saveFile[1024];

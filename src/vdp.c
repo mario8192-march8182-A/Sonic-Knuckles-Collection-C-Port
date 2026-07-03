@@ -495,7 +495,7 @@ void FUN_0040f89b(unsigned long* p_surface, long pitch) {
   unsigned long* p_pixelbuffer = (unsigned long*)g_pixelBuffer;
   pitch -= 320;
   unsigned char hint = g_ram.vdp_hint_cache;
-  if (DAT_008549dc != 0) {
+  if (g_vdp_hint_disabled != 0) {
     hint = 255;
   }
 
@@ -526,7 +526,7 @@ void FUN_0040f96a(unsigned long* p_surface, long pitch) {
   unsigned long* p_pixelbuffer = (unsigned long*)g_pixelBuffer;
   long pitch2 = pitch * 2 - 640;
   unsigned char hint = g_ram.vdp_hint_cache;
-  if (DAT_008549dc != 0) {
+  if (g_vdp_hint_disabled != 0) {
     hint = 255;
   }
 

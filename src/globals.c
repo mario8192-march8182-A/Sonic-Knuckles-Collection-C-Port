@@ -457,7 +457,7 @@
 /* 008549a4 */ ULONG g_mdRegisterD0;
 /* 008549cc */ ULONG g_vdpScrollPlaneAOffset;
 /* 008549d8 */ ULONG DAT_008549d8;
-/* 008549dc */ ULONG DAT_008549dc;
+/* 008549dc */ BOOL g_vdp_hint_disabled;
 /* 008549e0 */ UCHAR* g_pVdpReadPos;
 /* 008549e4 */ UCHAR* g_pPixelBuffer;
 /* 008549e8 */ BYTE g_saveFile[1024];
