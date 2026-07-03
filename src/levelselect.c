@@ -46,7 +46,7 @@ extern void vInt();
 // 00415104
 void levelselect() {
   soundtestpos = 32;
-  DAT_0082ddc8 = 1;
+  g_numpad_unlocked = 1;
   if (g_sonic3_alone) {
     soundtestpos = 28;
     s3levelselect();

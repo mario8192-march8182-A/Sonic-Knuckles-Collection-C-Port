@@ -12,6 +12,7 @@ static void logo(void);
 extern sonic3_ram g_ram;
 extern int g_vdp_hint_disabled;
 extern unsigned long g_vdp_mode;
+extern int g_numpad_unlocked;
 
 
 void debug_entry(void) {
@@ -56,7 +57,7 @@ static void mainloop(void) {
     g_vdp_hint_disabled = 0;
     g_vdp_mode = 0;
     DAT_00854758 = 0;
-    DAT_0082ddc8 = 0;
+    g_numpad_unlocked = 0;
     gmmodetbl[g_ram.gmmode >> 2]();
   }
 }

@@ -226,7 +226,7 @@
   38, 39, 40, 41, 42, 43, 44, 45, 46, 47,
   48
 };
-/* 0082ddc8 */ ULONG DAT_0082ddc8;
+/* 0082ddc8 */ BOOL g_numpad_unlocked;
 /* 0082ddcc */ UCHAR DAT_0082ddcc[4] = { 0, 0, 0x50, 0xFA };
 /* 0082ddd0 */ char g_kbKeyNames[4][30][32] = {
   {

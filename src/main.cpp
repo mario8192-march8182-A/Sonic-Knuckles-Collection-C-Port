@@ -1316,7 +1316,7 @@ void pollWindowsControllers() {
     if (GetAsyncKeyState(VK_RETURN) < 0) {
       g_kbKeysP1Down |= 0x80;
     }
-    if (DAT_0082ddc8 != 0) {
+    if (g_numpad_unlocked != 0) {
       if (GetAsyncKeyState(VK_NUMPAD1) < 0) {
         g_kbKeysP1Down |= 0x40;
       }

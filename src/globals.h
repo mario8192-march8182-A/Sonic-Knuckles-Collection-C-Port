@@ -45,7 +45,7 @@ extern int g_unknownSoundMapping3[224];
 extern int g_soundFrequencies[20];
 extern ULONG g_unknownSoundFrequencyValue;
 extern int g_soundMapping[51];
-extern ULONG DAT_0082ddc8;
+extern BOOL g_numpad_unlocked;
 extern UCHAR DAT_0082ddcc[4];
 extern char g_kbKeyNames[4][30][32];
 extern int g_kbKeyCodes[30];
