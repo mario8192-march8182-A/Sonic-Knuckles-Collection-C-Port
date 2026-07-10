@@ -26,6 +26,6 @@ void scrinit(void) {
   g_ram.vscrolla = 0;
   g_ram.vscrollb = 0;
   g_ram.hscroll = 0;
-  memset(g_ram.ramf8, 0, sizeof(g_ram.ramf8));
+  memset(g_ram.sprtbl, 0, sizeof(g_ram.sprtbl));
   memset(g_ram.hscrollbuff, 0, sizeof(g_ram.hscrollbuff));
 }

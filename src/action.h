@@ -4,6 +4,7 @@
 #include "types/patsetwork.h"
 #include "types/spritestatus.h"
 
+void sprtblinit2(void);
 void action(void);
 short speedset(SKC_sprite_status* p_actwk);
 void speedset2(SKC_sprite_status* p_actwk);

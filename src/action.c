@@ -10,8 +10,10 @@
 #include "utils/fp16.h"
 #include "utils/stageno.h"
 #include "coli.h"
+#include "constants.h"
 #include "ringact.h"
 #include "score.h"
+static void sprtblinit(SKC_sprite_data (*p_sprtbl)[SPRITE_COUNT_LIMIT]);
 static SKC_sprite_status* action0(SKC_sprite_status* p_actwk, int cnt);
 static void vsaction(SKC_sprite_status* p_actwk);
 static SKC_sprite_status* vsaction0(SKC_sprite_status* p_actwk, int cnt);
@@ -25,6 +27,32 @@ static void vspatset_pl2_compound(SKC_sprite_status* p_actwk, SKC_patset_work* p
 
 extern sonic3_ram g_ram;
 extern unsigned long DAT_008547bc;
+
+
+void sprtblinit2(void) {
+  g_ram.sprhmasks = 0;
+  g_ram.sprtbl_pageflip = 0;
+  g_ram.sprtbl_pageready = 0;
+  if (g_ram.vs_flag != 0) {
+    sprtblinit(&g_ram.sprtbl);
+    sprtblinit(&g_ram.vssprtbl[0]);
+    sprtblinit(&g_ram.vssprtbl[1]);
+    sprtblinit(&g_ram.vssprtbl[2]);
+  }
+  else {
+    sprtblinit(&g_ram.sprtbl);
+  }
+}
+
+
+static void sprtblinit(SKC_sprite_data (*p_sprtbl)[SPRITE_COUNT_LIMIT]) {
+  for (int i = 0; i < SPRITE_COUNT_LIMIT; ++i) {
+    (*p_sprtbl)[i].vp = 0;
+    (*p_sprtbl)[i].next = i + 1;
+  }
+
+  (*p_sprtbl)[SPRITE_COUNT_LIMIT - 1].next = 0;
+}
 
 
 void action(void) {
@@ -211,7 +239,7 @@ void patset(void) {
   }
   else {
     SKC_patset_work work = {
-      .sprite_tbl_ptr = g_ram.ramf8,
+      .sprite_tbl_ptr = g_ram.sprtbl,
       .sprite_left_cnt = SPRITE_COUNT_LIMIT
     };
     if (g_ram.DAT_08fff711 != 0) {
@@ -272,7 +300,7 @@ void patset(void) {
         g_ram.sprhmasks = 0;
       }
       DAT_008547bc = 1;
-      SKC_sprite_data* p_sprite_tbl = g_ram.ramf8;
+      SKC_sprite_data* p_sprite_tbl = g_ram.sprtbl;
 
       for (int i = 0; i < SPRITE_COUNT_LIMIT - 1; ++i) {
         if (p_sprite_tbl->vp == 0x7C0) {
@@ -406,7 +434,7 @@ static void spatset_compound(SKC_patset_work* p_work, SKC_actflg actflg, unsigne
 
 static void vspatset(void) {
   SKC_patset_work work = {
-    .sprite_tbl_ptr = &g_ram.ramf8[2],
+    .sprite_tbl_ptr = &g_ram.sprtbl[2],
     .sprite_left_cnt = SPRITE_COUNT_LIMIT - 2
   };
   if (g_ram.sprtbl_pageflip != 0) {
