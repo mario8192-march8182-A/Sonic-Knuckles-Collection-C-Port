@@ -175,7 +175,7 @@ void copy_map_vram2(unsigned char* p_source, unsigned short offset, unsigned sho
 }
 
 
-void mapdevr(unsigned short* p_destination, unsigned char* p_source, unsigned short offset) {
+void mapdevr(unsigned char* p_destination, unsigned char* p_source, unsigned short offset) {
   unsigned char inline_copy_len = *p_source++;
   unsigned char bitfield = *p_source++ << 3;
   unsigned short incremental_copy = (p_source[0] | p_source[1] << 8) + offset;
@@ -199,19 +199,23 @@ void mapdevr(unsigned short* p_destination, unsigned char* p_source, unsigned sh
     switch (type) {
       case 0:
         for (int i = 0; i < repeat_cnt; ++i) {
-          *p_destination++ = incremental_copy++;
+          *p_destination++ = incremental_copy & 0xFF;
+          *p_destination++ = incremental_copy >> 8;
+          ++incremental_copy;
         }
         break;
       case 1:
         for (int i = 0; i < repeat_cnt; ++i) {
-          *p_destination++ = literal_copy;
+          *p_destination++ = literal_copy & 0xFF;
+          *p_destination++ = literal_copy >> 8;
         }
         break;
       case 4: {
         unsigned short inline_copy = get_inline_copy(&p_source, &work, offset, bitfield, inline_copy_len);
 
         for (int i = 0; i < repeat_cnt; ++i) {
-          *p_destination++ = inline_copy;
+          *p_destination++ = inline_copy & 0xFF;
+          *p_destination++ = inline_copy >> 8;
         }
         break;
       }
@@ -219,7 +223,9 @@ void mapdevr(unsigned short* p_destination, unsigned char* p_source, unsigned sh
         unsigned short inline_copy = get_inline_copy(&p_source, &work, offset, bitfield, inline_copy_len);
 
         for (int i = 0; i < repeat_cnt; ++i) {
-          *p_destination++ = inline_copy++;
+          *p_destination++ = inline_copy & 0xFF;
+          *p_destination++ = inline_copy >> 8;
+          ++inline_copy;
         }
         break;
       }
@@ -227,7 +233,9 @@ void mapdevr(unsigned short* p_destination, unsigned char* p_source, unsigned sh
         unsigned short inline_copy = get_inline_copy(&p_source, &work, offset, bitfield, inline_copy_len);
 
         for (int i = 0; i < repeat_cnt; ++i) {
-          *p_destination++ = inline_copy--;
+          *p_destination++ = inline_copy & 0xFF;
+          *p_destination++ = inline_copy >> 8;
+          --inline_copy;
         }
         break;
       }
@@ -238,7 +246,8 @@ void mapdevr(unsigned short* p_destination, unsigned char* p_source, unsigned sh
         else {
           for (int i = 0; i < repeat_cnt; ++i) {
             unsigned short inline_copy = get_inline_copy(&p_source, &work, offset, bitfield, inline_copy_len);
-            *p_destination++ = inline_copy;
+            *p_destination++ = inline_copy & 0xFF;
+            *p_destination++ = inline_copy >> 8;
           }
         }
         break;
