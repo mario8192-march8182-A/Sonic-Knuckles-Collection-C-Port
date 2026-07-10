@@ -310,7 +310,7 @@ static void title_move1(SKC_sprite_status* p_actwk) {
       g_ram.plring = 0;
       g_ram.plring_act = 0;
       g_ram.plring_f2 = 0;
-      g_ram.DAT_08fffed2 = 0;
+      g_ram.pl2time = 0;
       g_ram.pl2ring = 0;
       g_ram.pl2ring_act = 0;
       g_ram.pltime_f = 0xFF;

@@ -670,7 +670,7 @@ void blitGraphics() {
     else {
       memset(g_convertedHscrollbuff, 0, sizeof(g_convertedHscrollbuff));
     }
-    g_pVdpReadPos = &g_vram[g_vdpScrollPlaneBOffset];
+    g_pVdpReadPos = &g_vram[g_vdp_scrollb_adr];
     FUN_00415039();
     for (int i = 0; i < 20; ++i) {
       g_mdVsram[i] = g_ram.vscrollbuff[i];
@@ -684,7 +684,7 @@ void blitGraphics() {
     else {
       memset(g_convertedHscrollbuff, 0, sizeof(g_convertedHscrollbuff));
     }
-    g_pVdpReadPos = &g_vram[g_vdpScrollPlaneAOffset];
+    g_pVdpReadPos = &g_vram[g_vdp_scrolla_adr];
     FUN_00414f70();
   }
   else {
@@ -705,7 +705,7 @@ void blitGraphics() {
     else {
       memset(g_convertedHscrollbuff, 0, sizeof(g_convertedHscrollbuff));
     }
-    g_pVdpReadPos = &g_vram[g_vdpScrollPlaneBOffset];
+    g_pVdpReadPos = &g_vram[g_vdp_scrollb_adr];
 
     switch (g_vdp_mode) {
       case 0:
@@ -743,7 +743,7 @@ void blitGraphics() {
     else {
       memset(g_convertedHscrollbuff, 0, sizeof(g_convertedHscrollbuff));
     }
-    g_pVdpReadPos = &g_vram[g_vdpScrollPlaneAOffset];
+    g_pVdpReadPos = &g_vram[g_vdp_scrolla_adr];
 
     switch (g_vdp_mode) {
       case 0:

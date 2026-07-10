@@ -587,7 +587,7 @@ static void handlesub__kcheck(SKC_sprite_status* p_actwk, SKC_sprite_status* p_p
   if (are_same_buttons_used(swdata.pressed, ktbl[p_actwk->pattimm])) {
     ++p_actwk->pattimm;
     if (!are_any_buttons_used(ktbl[p_actwk->pattimm])) {
-      g_ram.levelselectcheat = 1;
+      g_ram.stageselcheat = 1;
       g_ram.slowmotioncheat = 1;
       soundset(51);
       p_actwk->pattimm = 0;

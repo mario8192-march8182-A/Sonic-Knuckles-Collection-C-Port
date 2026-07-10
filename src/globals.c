@@ -448,14 +448,14 @@
 /* 00831750 */ ULONG DAT_00831750;
 /* 00854758 */ ULONG DAT_00854758;
 /* 0085475c */ ULONG g_createFileError;
-/* 00854760 */ ULONG g_vdpScrollPlaneBOffset;
+/* 00854760 */ ULONG g_vdp_scrollb_adr;
 /* 00854768 */ ULONG g_mdVsram[20];
 /* 008547bc */ ULONG DAT_008547bc;
 /* 008547c4 */ ULONG* g_pConvertedHscrollbuff;
 /* 008547d8 */ UCHAR g_spriteMasks[448];
 /* 0085499c */ USHORT* g_pLevelSelectVram;
 /* 008549a4 */ ULONG g_mdRegisterD0;
-/* 008549cc */ ULONG g_vdpScrollPlaneAOffset;
+/* 008549cc */ ULONG g_vdp_scrolla_adr;
 /* 008549d8 */ ULONG g_bg_color_index;
 /* 008549dc */ BOOL g_vdp_hint_disabled;
 /* 008549e0 */ UCHAR* g_pVdpReadPos;

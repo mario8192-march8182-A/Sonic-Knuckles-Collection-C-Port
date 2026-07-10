@@ -102,8 +102,8 @@ extern void vInt();
 
 // 006a42d4
 static void init_graphics() {
-  g_vdpScrollPlaneAOffset = 0xC000;
-  g_vdpScrollPlaneBOffset = 0xE000;
+  g_vdp_scrolla_adr = 0xC000;
+  g_vdp_scrollb_adr = 0xE000;
   g_bg_color_index = 32;
   g_vdp_hscroll_scanline = 1;
   g_ram.waterflag = 0;
@@ -300,7 +300,7 @@ static void menu_move1(sprite_status* p_actwk) {
   }
   if (IS_BUTTON_PRESSED(g_ram.swdata1, PAD_B | PAD_S)) {
     g_ram.marker_flag = 0;
-    g_ram.specmode = 1;
+    g_ram.bsmode = 1;
     g_ram.plmode = g_ram.levelselect_plmode;
     g_ram.pl_suu = 3;
     g_ram.cartridgespec = 0;

@@ -290,8 +290,8 @@ void opening() {
   if (!g_sonic3_alone) {
     g_ram.stageno = 0;
   }
-  g_vdpScrollPlaneAOffset = 0xC000;
-  g_vdpScrollPlaneBOffset = 0xE000;
+  g_vdp_scrolla_adr = 0xC000;
+  g_vdp_scrollb_adr = 0xE000;
   g_bg_color_index = 0;
   g_vdp_hscroll_scanline = 1;
   g_ram.waterflag = 0;
@@ -355,9 +355,9 @@ void opening() {
   g_ram.DAT_08fff711 = 0;
   g_ram.DAT_08ffffda = 0;
   g_ram.vs_flag = 0;
-  g_ram.editmodecheatcounter = 0;
-  g_ram.allemeraldscheatcounter = 0;
-  g_ram.specmode = 0;
+  g_ram.editmodecheatcnt = 0;
+  g_ram.allemeraldscheatcnt = 0;
+  g_ram.bsmode = 0;
   g_ram.demotimer = 359;
   if (g_ram.cartridge == 0) {
     s3kopening();
@@ -752,14 +752,14 @@ static void selection_move(sprite_status* p_actwk) {
     if (IS_BUTTON_PRESSED(swdata, PAD_U)) {
       if (wk-- == 0) {
         wk = 2;
-        if (g_ram.levelselectcheat == 0) {
+        if (g_ram.stageselcheat == 0) {
           wk = 1;
         }
       }
     }
     if (IS_BUTTON_PRESSED(swdata, PAD_D)) {
       ++wk;
-      if (g_ram.levelselectcheat == 0) {
+      if (g_ram.stageselcheat == 0) {
         wk &= 1;
       }
       if (wk >= 3) {
