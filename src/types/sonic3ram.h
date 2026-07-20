@@ -72,10 +72,14 @@ typedef struct sonic3_ram {
   /* 08ffee64 */ long vs_scra_v_posit;
   /* 08ffee68 */ long vs_scra_h_posit_copy;
   /* 08ffee6c */ long vs_scra_v_posit_copy;
+  /* 08ffee70 */ long vs_scrb_h_posit;
+  /* 08ffee74 */ long vs_scrb_v_posit;
   /* 08ffee78 */ long scra_h_posit;
   /* 08ffee7c */ long scra_v_posit;
   /* 08ffee80 */ long scra_h_posit_copy;
   /* 08ffee84 */ long scra_v_posit_copy;
+  /* 08ffee8c */ long scrb_h_posit;
+  /* 08ffee90 */ long scrb_v_posit;
   /* 08ffee9c */ short DAT_08ffee9c;
   /* 08ffeea6 */ unsigned short vint_rno;
   /* 08ffeea8 */ unsigned short scrc3;
@@ -89,6 +93,8 @@ typedef struct sonic3_ram {
   /* 08ffeecc */ short scr_shake_flg;
   /* 08ffeed2 */ unsigned short DAT_08ffeed2;
   /* 08ffeedb */ unsigned char DAT_08ffeedb;
+  /* 08ffeee2 */ short DAT_08ffeee2;
+  /* 08ffeee4 */ short DAT_08ffeee4;
   /* 08ffeee6 */ short DAT_08ffeee6;
   /* 08ffeee8 */ unsigned short DAT_08ffeee8;
   /* 08ffeeea */ unsigned short vscrollbuff[40];
@@ -207,8 +213,11 @@ typedef struct sonic3_ram {
   /* 08fff7de */ unsigned char foxpatno;
   /* 08fff7df */ unsigned char foxtailspatno;
   /* 08fff7e0 */ unsigned char stage_triggers[STAGE_TRIGGERS_SLOTS];
-  /* 08fff7f0 */ unsigned char cgchgtim;
-  /* 08fff7f1 */ unsigned char cgchgcnt;
+  /* 08fff7f0 */ unsigned char cgchgtim[8];
+  /* 08fff7f1 */ unsigned char cgchgcnt[8];
+                 short waterlinecgchgcnt[2];
+                 unsigned short cgchg14cnt;
+                 unsigned short cgchg14cnt2;
   /* 08fff800 */ SKC_sprite_data sprtbl[SPRITE_COUNT_LIMIT];
   /* 08ff7880 */ SKC_sprite_data vssprtbl[3][SPRITE_COUNT_LIMIT];
   /* 08fffa82 */ short DAT_08fffa82;
