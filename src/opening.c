@@ -324,7 +324,7 @@ void opening() {
   g_ram.scralim_left = 0;
   g_ram.scralim_right = 0;
   g_ram.scralim_down = 0;
-  g_ram.scr_resize_no = 0;
+  g_ram.zone_flag = 0;
   g_ram.vs_vscroll = 0;
   g_ram.stageno_i = 0;
   g_ram.colorcycle = 0;

@@ -57,7 +57,7 @@ typedef struct sonic3_ram {
   /* 08ffee2c */ short scra_vline;
   /* 08ffee2e */ short scra_vline2;
   /* 08ffee30 */ unsigned short scroll_start;
-  /* 08ffee33 */ unsigned char scr_resize_no;
+  /* 08ffee33 */ unsigned char zone_flag;
   /* 08ffee39 */ unsigned char fast_scroll_flag;
   /* 08ffee3a */ unsigned long vs_vscroll;
   /* 08ffee3e */ short scr_h_posit_ofs;
@@ -282,7 +282,7 @@ typedef struct sonic3_ram {
   /* 08fffe42 */ unsigned char waterflag_s;
   /* 08fffe43 */ unsigned char plring_f2_s;
   /* 08fffe44 */ short scralim_down_s;
-  /* 08fffe46 */ unsigned char scr_resize_no_s;
+  /* 08fffe46 */ unsigned char zone_flag_s;
   /* 08fffe47 */ SKC_play_powerdat plpowerdat_s;
   /* 08fffe48 */ unsigned char marker_flag;
   /* 08fffe49 */ unsigned char markerno_s2;
@@ -300,7 +300,7 @@ typedef struct sonic3_ram {
   /* 08fffe60 */ unsigned char waterflag_s2;
   /* 08fffe61 */ unsigned char plring_f2_s2;
   /* 08fffe62 */ short scralim_down_s2;
-  /* 08fffe64 */ unsigned char scr_resize_no_s2;
+  /* 08fffe64 */ unsigned char zone_flag_s2;
   /* 08fffe7c */ short sysdirec3;
   /* 08fffe84 */ short sysdirec5;
   /* 08fffeb3 */ unsigned char ring_patno;

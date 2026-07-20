@@ -179,7 +179,7 @@ void playsave1(SKC_sprite_status* p_actwk) {
   g_ram.plring_s = g_ram.plring;
   g_ram.plring_f2_s = g_ram.plring_f2;
   g_ram.pltime_s = g_ram.pltime;
-  g_ram.scr_resize_no_s = g_ram.scr_resize_no;
+  g_ram.zone_flag_s = g_ram.zone_flag;
   g_ram.scralim_down_s = g_ram.scralim_down;
   g_ram.scra_h_posit_s = g_ram.scra_h_posit >> 16;
   g_ram.scra_v_posit_s = g_ram.scra_v_posit >> 16;
@@ -200,7 +200,7 @@ void playsave2(SKC_sprite_status* p_actwk) {
   g_ram.plring_s2 = g_ram.plring;
   g_ram.plring_f2_s2 = g_ram.plring_f2;
   g_ram.pltime_s2 = g_ram.pltime;
-  g_ram.scr_resize_no_s2 = g_ram.scr_resize_no;
+  g_ram.zone_flag_s2 = g_ram.zone_flag;
   g_ram.scralim_down_s2 = g_ram.scralim_down;
   g_ram.scra_h_posit_s2 = g_ram.scra_h_posit >> 16;
   g_ram.scra_v_posit_s2 = g_ram.scra_v_posit >> 16;
@@ -232,7 +232,7 @@ void playload(SKC_sprite_status* p_actwk) {
     g_ram.actwk[0].sproffset = g_ram.plsproffset_s;
     g_ram.actwk[0].u.play.top_solid_bit = g_ram.pl_top_solid_bit_s;
     g_ram.actwk[0].u.play.lrb_solid_bit = g_ram.pl_lrb_solid_bit_s;
-    g_ram.scr_resize_no = g_ram.scr_resize_no_s;
+    g_ram.zone_flag = g_ram.zone_flag_s;
     g_ram.scralim_down = g_ram.scralim_down_s;
     g_ram.scralim_n_down = g_ram.scralim_down_s;
     g_ram.scra_h_posit = g_ram.scra_h_posit_s << 16 | g_ram.scra_h_posit & 0x0000FFFF;
@@ -259,7 +259,7 @@ static void playload2(SKC_sprite_status* p_actwk) {
   g_ram.actwk[0].sproffset = g_ram.plsproffset_s2;
   g_ram.actwk[0].u.play.top_solid_bit = g_ram.pl_top_solid_bit_s2;
   g_ram.actwk[0].u.play.lrb_solid_bit = g_ram.pl_lrb_solid_bit_s2;
-  g_ram.scr_resize_no = g_ram.scr_resize_no_s2;
+  g_ram.zone_flag = g_ram.zone_flag_s2;
   g_ram.scralim_down = g_ram.scralim_down_s2;
   g_ram.scralim_n_down = g_ram.scralim_down_s2;
   g_ram.scra_h_posit = g_ram.scra_h_posit_s2 << 16 | g_ram.scra_h_posit & 0x0000FFFF;
