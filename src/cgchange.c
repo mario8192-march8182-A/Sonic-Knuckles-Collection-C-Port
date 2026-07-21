@@ -1492,8 +1492,6 @@ void cg_change_init(void) {
         memcpy(&p_destination[(i * 2 + 1) * 128], &p_source[i * 128], 128);
       }
 
-      p_destination = &g_ram.screens[0x7800];
-      unlze(&p_destination, DAT_004db190);
       break;
     }
     case LAVA_REEF_BOSS:

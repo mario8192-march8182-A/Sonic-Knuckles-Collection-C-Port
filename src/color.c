@@ -1,6 +1,7 @@
 #include "color.h"
 #include <stdbool.h>
 #include <string.h>
+#include "data/colchg14color.h"
 #include "data/colortbl.h"
 #include "types/sonic3ram.h"
 #include "utils/stageno.h"
@@ -484,19 +485,19 @@ static void colchg12(void) {
 static void colchg14(void) {
   if (g_ram.clchgtim-- == 0) {
     g_ram.clchgtim = 0;
-    memcpy(&g_ram.colorwk[56], DAT_08ff7800[g_ram.clchgcnt], sizeof(DAT_08ff7800[g_ram.clchgcnt]));
-    g_ram.clchgcnt += 7;
-    if (g_ram.clchgcnt >= 126) {
+    memcpy(&g_ram.colorwk[56], col140col[g_ram.clchgcnt], sizeof(col140col[g_ram.clchgcnt]));
+    ++g_ram.clchgcnt;
+    if (g_ram.clchgcnt >= 18) {
       g_ram.clchgcnt = 0;
     }
   }
   if (g_ram.clchgtim3-- == 0) {
     g_ram.clchgtim3 = 3;
-    memcpy(&g_ram.colorwk[33], DAT_08ff78fc[g_ram.clchgcnt2 + 40], sizeof(unsigned short) * 3);
-    memcpy(&g_ram.colorwk[36], DAT_08ff78fc[g_ram.clchgcnt2 + 20], sizeof(unsigned short) * 3);
-    memcpy(&g_ram.colorwk[39], DAT_08ff78fc[g_ram.clchgcnt2], sizeof(unsigned short) * 3);
-    g_ram.clchgcnt2 += 5;
-    if (g_ram.clchgcnt2 >= 500) {
+    memcpy(&g_ram.colorwk[33], col141col[g_ram.clchgcnt2 + 8], sizeof(col141col[g_ram.clchgcnt2 + 8]));
+    memcpy(&g_ram.colorwk[38], col141col[g_ram.clchgcnt2 + 4], sizeof(col141col[g_ram.clchgcnt2 + 4]));
+    memcpy(&g_ram.colorwk[43], col141col[g_ram.clchgcnt2], sizeof(col141col[g_ram.clchgcnt2]));
+    ++g_ram.clchgcnt2;
+    if (g_ram.clchgcnt2 >= 100) {
       g_ram.clchgcnt2 = 0;
     }
   }
