@@ -12,9 +12,10 @@ typedef struct SKC_vs_savedata {
 SKC_vs_savedata;
 
 typedef struct SKC_s3k_savedata {
-  unsigned int new : 6;
+  unsigned int new : 1;
+  unsigned int unused0 : 5;
   unsigned int clear_type : 2;
-  unsigned int unused;
+  unsigned int unused1 : 8;
   unsigned int play_type : 4;
   unsigned int specstageno : 4;
   unsigned char zone;
@@ -33,7 +34,8 @@ typedef struct SKC_s3k_savedata {
 SKC_s3k_savedata;
 
 typedef struct SKC_s3_savedata {
-  unsigned char new;
+  unsigned int new : 1;
+  unsigned int unused : 7;
   unsigned char brings1;
   unsigned char play_type;
   unsigned char zone;

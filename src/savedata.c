@@ -75,10 +75,11 @@ static void read_s3k_savedata(void) {
     unsigned char* p_buffer = buffer;
 
     for (int i = 0; i < S3K_SAVEDATA_SLOTS; ++i) {
-      g_ram.savedata_slots[i].s3k.new = *p_buffer >> 2;
+      g_ram.savedata_slots[i].s3k.new = *p_buffer >> 7;
+      g_ram.savedata_slots[i].s3k.unused0 = *p_buffer >> 2;
       g_ram.savedata_slots[i].s3k.clear_type = *p_buffer;
       ++p_buffer;
-      g_ram.savedata_slots[i].s3k.unused = ++*p_buffer;
+      g_ram.savedata_slots[i].s3k.unused1 = ++*p_buffer;
       g_ram.savedata_slots[i].s3k.play_type = *p_buffer >> 4;
       g_ram.savedata_slots[i].s3k.specstageno = *p_buffer;
       ++p_buffer;
@@ -123,9 +124,10 @@ static SKC_vs_savedata default_vs_savedata = {
 
 
 static SKC_s3k_savedata default_s3k_savedata = {
-  .new = 0x20,
+  .new = 1,
+  .unused0 = 0,
   .clear_type = 0,
-  .unused = 0,
+  .unused1 = 0,
   .play_type = PLAY_TYPE_SONIC_AND_MILES,
   .specstageno = 0,
   .zone = ANGEL_ISLAND,
@@ -174,9 +176,12 @@ void write_savedata(void) {
 
   if (!g_sonic3_alone) {
     for (int i = 0; i < S3K_SAVEDATA_SLOTS; ++i) {
-      *p_buffer++ = g_ram.savedata_slots[i].s3k.new << 2 | g_ram.savedata_slots[i].s3k.clear_type;
-      *p_buffer++ = g_ram.savedata_slots[i].s3k.unused;
-      *p_buffer++ = g_ram.savedata_slots[i].s3k.play_type << 4 | g_ram.savedata_slots[i].s3k.specstageno;
+      *p_buffer++ = g_ram.savedata_slots[i].s3k.new << 7
+                  | g_ram.savedata_slots[i].s3k.unused0 << 2
+                  | g_ram.savedata_slots[i].s3k.clear_type;
+      *p_buffer++ = g_ram.savedata_slots[i].s3k.unused1;
+      *p_buffer++ = g_ram.savedata_slots[i].s3k.play_type << 4
+                  | g_ram.savedata_slots[i].s3k.specstageno;
       *p_buffer++ = g_ram.savedata_slots[i].s3k.zone;
       *p_buffer++ = g_ram.savedata_slots[i].s3k.brings & 0x00FF;
       *p_buffer++ = g_ram.savedata_slots[i].s3k.brings >> 8;
@@ -198,7 +203,8 @@ void write_savedata(void) {
   }
   else {
     for (int i = 0; i < S3_SAVEDATA_SLOTS; ++i) {
-      *p_buffer++ = g_ram.savedata_slots[i].s3.new;
+      *p_buffer++ = g_ram.savedata_slots[i].s3.new << 7
+                  | g_ram.savedata_slots[i].s3.unused;
       *p_buffer++ = g_ram.savedata_slots[i].s3.brings1;
       *p_buffer++ = g_ram.savedata_slots[i].s3.play_type;
       *p_buffer++ = g_ram.savedata_slots[i].s3.zone;
@@ -378,7 +384,8 @@ static void read_s3_savedata(void) {
 
 
 static SKC_s3_savedata default_s3_savedata = {
-  .new = 0x80,
+  .new = 1,
+  .unused = 0,
   .brings1 = 0,
   .play_type = PLAY_TYPE_SONIC_AND_MILES,
   .zone = ANGEL_ISLAND,
