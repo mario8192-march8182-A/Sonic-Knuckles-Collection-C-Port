@@ -1,11 +1,9 @@
 #ifndef SKC_NUCKLE09_H
 #define SKC_NUCKLE09_H
 
-#include "../../types/enemyinitdata.h"
-#include "../../types/setactdata.h"
 #include "../../types/spritepattern.h"
 #include "../../types/spritestatus.h"
-#include "../../types/wrtdata.h"
+#include "../../shared.h"
 
 void nuckle090(SKC_sprite_status* p_actwk);
 void ev0910(SKC_sprite_status* p_actwk);

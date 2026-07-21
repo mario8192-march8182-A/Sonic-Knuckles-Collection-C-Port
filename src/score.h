@@ -1,7 +1,7 @@
 #ifndef SKC_SCORE_H
 #define SKC_SCORE_H
 
-#include "types/patsetwork.h"
+#include "action.h"
 
 void vsscore(SKC_patset_work* p_work);
 void score(SKC_patset_work* p_work);

@@ -1,8 +1,6 @@
 #include "eggmbl.h"
 #include "../data/cg/mblmeggman.h"
 #include "../data/cg/mblmsonic.h"
-#include "../types/enemyinitdata.h"
-#include "../types/setactdata.h"
 #include "../types/sonic3ram.h"
 #include "../types/spritepattern.h"
 #include "../types/spritestatus.h"

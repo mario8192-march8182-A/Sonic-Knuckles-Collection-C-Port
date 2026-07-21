@@ -1,8 +1,6 @@
 #include "snak00.h"
 #include "../../data/pat/zone00/saru00.h"
 #include "../../data/pat/zone00/snak00.h"
-#include "../../types/enemyinitdata.h"
-#include "../../types/setactdata.h"
 #include "../../types/spritestatus.h"
 #include "../../types/spritestatushandler.h"
 #include "../../action.h"

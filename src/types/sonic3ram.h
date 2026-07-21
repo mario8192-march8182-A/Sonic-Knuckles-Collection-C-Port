@@ -2,16 +2,16 @@
 #define SONIC3RAM_H
 
 #include "acttimer.h"
-#include "aset.h"
 #include "cchgwork.h"
 #include "point.h"
-#include "ringwkentry.h"
 #include "spritedata.h"
 #include "spritepattern.h"
 #include "spritestatus.h"
 #include "spritestatushandler.h"
 #include "swdata.h"
+#include "../actset.h"
 #include "../constants.h"
+#include "../ringact.h"
 #include "../savedata.h"
 
 typedef struct sonic3_ram {

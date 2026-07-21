@@ -1,6 +1,4 @@
 #include "betl04.h"
-#include "../../types/enemyinitdata.h"
-#include "../../types/setactdata.h"
 #include "../../types/sonic3ram.h"
 #include "../../types/spritepattern.h"
 #include "../../types/spritestatus.h"

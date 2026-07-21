@@ -1,9 +1,9 @@
 #ifndef SKC_EGGMBL_H
 #define SKC_EGGMBL_H
 
-#include "../types/setactdata.h"
 #include "../types/spritepattern.h"
 #include "../types/spritestatus.h"
+#include "../shared.h"
 
 void mbl_eggman0(SKC_sprite_status* p_actwk);
 void set_megmbl(SKC_sprite_status* p_actwk);

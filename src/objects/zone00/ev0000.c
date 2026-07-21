@@ -4,8 +4,6 @@
 #include "../../data/cg/tornado.h"
 #include "../../data/pat/play.h"
 #include "../../data/pat/zone00/ev0000.h"
-#include "../../types/enemyinitdata.h"
-#include "../../types/setactdata.h"
 #include "../../types/sonic3ram.h"
 #include "../../types/spritestatus.h"
 #include "../../utils/fp16.h"

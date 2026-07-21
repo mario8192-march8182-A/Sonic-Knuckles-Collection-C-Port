@@ -2,8 +2,6 @@
 #include <string.h>
 #include "../../data/cg/zone00/bs00b0.h"
 #include "../../data/pat/zone00/bs00b0.h"
-#include "../../types/enemyinitdata.h"
-#include "../../types/setactdata.h"
 #include "../../types/sonic3ram.h"
 #include "../../types/spritestatus.h"
 #include "../../utils/bits.h"

@@ -1,10 +1,9 @@
 #ifndef SKC_EXPLOSION_H
 #define SKC_EXPLOSION_H
 
-#include "../types/enemyinitdata.h"
-#include "../types/setactdata.h"
 #include "../types/spritepattern.h"
 #include "../types/spritestatus.h"
+#include "../shared.h"
 
 void bsexp01_set(SKC_sprite_status* p_actwk);
 void set_exp01(SKC_sprite_status* p_actwk);

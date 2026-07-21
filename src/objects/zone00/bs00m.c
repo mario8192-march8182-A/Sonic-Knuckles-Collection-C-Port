@@ -1,8 +1,6 @@
 #include "bs00m.h"
 #include "../../data/pat/zone00/bs00m.h"
 #include "../../data/pat/zone00/kaen00m0.h"
-#include "../../types/enemyinitdata.h"
-#include "../../types/setactdata.h"
 #include "../../types/sonic3ram.h"
 #include "../../types/spritestatus.h"
 #include "../../utils/fp16.h"

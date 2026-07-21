@@ -1,11 +1,9 @@
 #ifndef SKC_NUCKLE_H
 #define SKC_NUCKLE_H
 
-#include "../types/enemyinitdata.h"
 #include "../types/spritepattern.h"
 #include "../types/spritestatus.h"
-#include "../types/wrtdata.h"
-#include "../types/wrtinitdata.h"
+#include "../shared.h"
 
 void nuckle(SKC_sprite_status* p_actwk);
 void nuckle_fout(SKC_sprite_status* p_actwk);

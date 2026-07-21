@@ -3,6 +3,14 @@
 
 #include "types/spritestatus.h"
 
+typedef struct SKC_aset {
+  unsigned short x;
+  unsigned short y;
+  unsigned char id;
+  unsigned char userflag;
+}
+SKC_aset;
+
 typedef struct SKC_actwkchk_result {
   SKC_sprite_status* actwk_ptr;
   int remaining_slot_cnt;

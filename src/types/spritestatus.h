@@ -2,10 +2,10 @@
 #define SPRITESTATUS_H
 
 #include <stdbool.h>
-#include "enemyinitdata.h"
 #include "speed.h"
 #include "spritestatushandler.h"
 #include "swdata.h"
+#include "../shared.h"
 
 typedef struct SKC_actflg {
   unsigned int hflip : 1;

@@ -1,10 +1,9 @@
 #ifndef SKC_OPNBOX_H
 #define SKC_OPNBOX_H
 
-#include "../types/enemyinitdata.h"
-#include "../types/setactdata.h"
 #include "../types/spritepattern.h"
 #include "../types/spritestatus.h"
+#include "../shared.h"
 
 void opnbox(SKC_sprite_status* p_actwk);
 void switch_wait0(SKC_sprite_status* p_actwk);

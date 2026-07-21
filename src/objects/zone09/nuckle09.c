@@ -14,8 +14,6 @@
 #include "../../data/pat/zone09/door09.h"
 #include "../../data/wrt/knuckles.h"
 #include "../../types/cgdata.h"
-#include "../../types/enemyinitdata.h"
-#include "../../types/setactdata.h"
 #include "../../types/sonic3ram.h"
 #include "../../types/spritepattern.h"
 #include "../../types/spritestatus.h"

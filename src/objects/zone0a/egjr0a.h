@@ -1,9 +1,8 @@
 #ifndef SKC_EGJR0A_H
 #define SKC_EGJR0A_H
 
-#include "../../types/enemyinitdata.h"
-#include "../../types/setactdata.h"
 #include "../../types/spritestatus.h"
+#include "../../shared.h"
 
 void egjr0a(SKC_sprite_status* p_actwk);
 void egjr0a_puka_init(SKC_sprite_status* p_actwk);

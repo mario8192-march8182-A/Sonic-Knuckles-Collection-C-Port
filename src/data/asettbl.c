@@ -1,4 +1,4 @@
-#include "../types/aset.h"
+#include "../actset.h"
 
 SKC_aset* asettbl[24][2] = {
   { asettbl000, asettbl001 },

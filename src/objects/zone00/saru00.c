@@ -1,8 +1,6 @@
 #include "saru00.h"
 #include <stdbool.h>
 #include "../../data/pat/zone00/saru00.h"
-#include "../../types/enemyinitdata.h"
-#include "../../types/setactdata.h"
 #include "../../types/sonic3ram.h"
 #include "../../types/spritestatus.h"
 #include "../../types/spritestatushandler.h"

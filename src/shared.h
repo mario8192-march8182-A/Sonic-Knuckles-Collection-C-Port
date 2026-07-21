@@ -4,11 +4,138 @@
 #include <stdbool.h>
 #include "types/cchgcntinfo.h"
 #include "types/cgdata.h"
-#include "types/enemyinitdata.h"
-#include "types/setactdata.h"
+#include "types/spritepattern.h"
 #include "types/spritestatus.h"
-#include "types/wrtdata.h"
-#include "types/wrtinitdata.h"
+
+typedef struct SKC_enemy_init0_data {
+  SKC_sprite_pattern** patbase;
+  unsigned short sproffset;
+  unsigned short sprpri;
+  unsigned char sprhs;
+  unsigned char sprvs;
+  unsigned char patno;
+  unsigned char colino;
+}
+SKC_enemy_init0_data;
+
+typedef struct SKC_enemy_init1_data {
+  unsigned short sproffset;
+  unsigned short sprpri;
+  unsigned char sprhs;
+  unsigned char sprvs;
+  unsigned char patno;
+  unsigned char colino;
+}
+SKC_enemy_init1_data;
+
+typedef struct SKC_enemy_init2_data {
+  unsigned short sprpri;
+  unsigned char sprhs;
+  unsigned char sprvs;
+  unsigned char patno;
+  unsigned char colino;
+}
+SKC_enemy_init2_data;
+
+typedef struct SKC_set_act00_data {
+  unsigned short cnt;
+  struct {
+    SKC_sprite_status_handler r_ptr;
+    signed char xoffset;
+    signed char yoffset;
+  }
+  data[];
+}
+SKC_set_act00_data;
+
+typedef struct SKC_set_act01_data {
+  unsigned short cnt;
+  struct {
+    SKC_sprite_status_handler r_ptr;
+    SKC_enemy_init0_data* enemy_init0_data_ptr;
+    signed char* pg_data_ptr;
+    SKC_sprite_status_handler callback_ptr;
+    signed char xoffset;
+    signed char yoffset;
+    short xspeed;
+    short yspeed;
+  }
+  data[];
+}
+SKC_set_act01_data;
+
+typedef struct SKC_set_act02_data {
+  unsigned short cnt;
+  SKC_sprite_status_handler r_ptr;
+  signed char xoffset;
+  signed char yoffset;
+}
+SKC_set_act02_data;
+
+typedef struct SKC_set_act03_data {
+  unsigned short cnt;
+  SKC_sprite_status_handler r_ptr;
+}
+SKC_set_act03_data;
+
+typedef struct SKC_set_act04_data {
+  unsigned short cnt;
+  struct {
+    SKC_sprite_status_handler r_ptr;
+    SKC_enemy_init0_data* enemy_init0_data_ptr;
+    signed char* pg_data_ptr;
+    SKC_sprite_status_handler callback_ptr;
+    signed char xoffset;
+    signed char yoffset;
+    short xspeed;
+    short yspeed;
+  }
+  data[];
+}
+SKC_set_act04_data;
+
+typedef struct SKC_set_act05_data {
+  unsigned short cnt;
+  SKC_sprite_status_handler r_ptr;
+}
+SKC_set_act05_data;
+
+typedef struct SKC_set_act06_data {
+  unsigned short cnt;
+  struct {
+    SKC_sprite_status_handler r_ptr;
+    signed char xoffset;
+    signed char yoffset;
+  }
+  data[];
+}
+SKC_set_act06_data;
+
+typedef struct SKC_set_act07_data {
+  unsigned short cnt;
+  SKC_sprite_status_handler r_ptr;
+}
+SKC_set_act07_data;
+
+typedef struct SKC_set_act08_data {
+  unsigned short cnt;
+  struct {
+    SKC_sprite_status_handler r_ptr;
+  }
+  data[];
+}
+SKC_set_act08_data;
+
+typedef struct SKC_set_act09_data {
+  unsigned short cnt;
+  struct {
+    SKC_sprite_status_handler r_ptr;
+    signed char xoffset;
+    signed char yoffset;
+  }
+  data[];
+}
+SKC_set_act09_data;
 
 typedef struct SKC_chk_distance_result {
   bool right;
@@ -17,6 +144,26 @@ typedef struct SKC_chk_distance_result {
   short ydistance;
 }
 SKC_chk_distance_result;
+
+typedef struct SKC_wrt_init_data {
+  unsigned short cnt;
+  unsigned short sproffset;
+  unsigned short sproffset_increase;
+  unsigned short flg_index;
+  SKC_sprite_pattern** patbase;
+  unsigned short sprpri;
+  unsigned char sprhs;
+  unsigned char sprvs;
+  unsigned char patno;
+  unsigned char colino;
+}
+SKC_wrt_init_data;
+
+typedef struct SKC_wrt_data {
+  unsigned char* cg_ptr;
+  unsigned short** wrtpat_ptr;
+}
+SKC_wrt_data;
 
 typedef struct SKC_chk_emy_colt_result {
   bool pl;
