@@ -348,8 +348,7 @@ unsigned short unlze(unsigned char** pp_destination, unsigned char* p_source) {
   do {
     unsigned char type = get_next_bit(&p_source, &buffer, &buffer_len);
     if (type == 0) {
-      type <<= 1;
-      type |= get_next_bit(&p_source, &buffer, &buffer_len);
+      type |= get_next_bit(&p_source, &buffer, &buffer_len) << 1;
     }
 
     switch (type) {
@@ -373,8 +372,9 @@ unsigned short unlze(unsigned char** pp_destination, unsigned char* p_source) {
         unsigned short data = p_source[0] | p_source[1] << 8;
         p_source += 2;
         short offset = (-256 + (short)(data >> 8)) * 32;
-        offset -= offset % 256;
-        offset += (short)(data & 0x00FF);
+        short wk = (unsigned short)offset >> 8;
+        wk = (wk & 0x7F) - (wk & 0x80);
+        offset = wk * 256 + (short)(data & 0xFF);
         unsigned char repeat_cnt = (data >> 8) & 7;
         if (repeat_cnt == 0) {
           repeat_cnt = *p_source++;
