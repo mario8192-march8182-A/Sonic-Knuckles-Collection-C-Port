@@ -747,7 +747,7 @@ void blitGraphics() {
 
     switch (g_vdp_mode) {
       case 0:
-        if (DAT_00854758 != 0) {
+        if (g_vdp_window_height != 0) {
           FUN_0040ee9e();
           g_vscrollCopy = 0;
           memset(g_convertedHscrollbuff, 0, sizeof(g_convertedHscrollbuff));

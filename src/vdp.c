@@ -66,7 +66,7 @@ void FUN_0040ee9e() {
   unsigned char* p_scrollplane = &g_pVdpReadPos[vscroll_high << 7];
   unsigned char vscroll_low = g_vscrollCopy & 7;
 
-  for (int i = 0; i < DAT_00854758; ++i) {
+  for (int i = 0; i < g_vdp_window_height; ++i) {
     blit_scanline_ver1((unsigned short*)p_scrollplane, vscroll_low);
     ++vscroll_low;
     if (vscroll_low >= 8) {
@@ -81,8 +81,8 @@ void FUN_0040ee9e() {
 
 // 0040ef0c
 void FUN_0040ef0c() {
-  g_vscrollCopy += DAT_00854758;
-  g_pPixelBuffer = &g_pixelBuffer[DAT_00854758 * 320];
+  g_vscrollCopy += g_vdp_window_height;
+  g_pPixelBuffer = &g_pixelBuffer[g_vdp_window_height * 320];
   g_pConvertedHscrollbuff = g_convertedHscrollbuff;
   unsigned char vscroll_high = g_vscrollCopy >> 3 & 0x1F;
   unsigned char* p_scrollplane = &g_pVdpReadPos[vscroll_high << 7];

@@ -13,6 +13,7 @@ static void logo(void);
 extern sonic3_ram g_ram;
 extern int g_vdp_hint_disabled;
 extern unsigned long g_vdp_mode;
+extern unsigned long g_vdp_window_height;
 extern int g_numpad_unlocked;
 
 
@@ -57,7 +58,7 @@ static void mainloop(void) {
   while (1) {
     g_vdp_hint_disabled = 0;
     g_vdp_mode = 0;
-    DAT_00854758 = 0;
+    g_vdp_window_height = 0;
     g_numpad_unlocked = 0;
     gmmodetbl[g_ram.gmmode >> 2]();
   }

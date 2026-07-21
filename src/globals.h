@@ -84,7 +84,7 @@ extern ULONG g_convertedHscrollbuff[224];
 extern ULONG g_spriteCnt;
 extern ULONG g_vscrollCopy;
 extern ULONG DAT_00831750;
-extern ULONG DAT_00854758;
+extern ULONG g_vdp_window_height;
 extern ULONG g_createFileError;
 extern ULONG g_vdp_scrollb_adr;
 extern ULONG g_mdVsram[20];
