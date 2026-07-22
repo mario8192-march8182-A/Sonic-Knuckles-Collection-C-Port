@@ -9,12 +9,13 @@
 #include "macros.h"
 #include "imidi.h"
 #include "types/sprite.h"
+#include "types/spritedata.h"
 #include "classes/cfile.h"
 #include "classes/cgame.h"
 #include "classes/cgraphics.h"
 #include "classes/csound.h"
 #include "classes/cwinregistry.h"
-#include "game.h"
+#include "entry.h"
 #include "vdp.h"
 
 void vInt18();
@@ -176,18 +177,18 @@ DWORD WINAPI gameThreadStartRoutine(void* pParameter) {
   switch (g_startGameMode) {
     case STARTGAMEMODE_NORMAL:
       if (g_sonicGameMode == SONICGAMEMODE_SONICKNUCKLES) {
-        start_game(0xFFFF);
+        sk_entry();
       }
       else {
-        start_game(0);
+        s3_entry();
       }
       break;
     case STARTGAMEMODE_SPECIALSTAGEMODE:
       g_bResetMdRam = TRUE;
-      start_specialstagemode();
+      bs_entry();
       break;
     case STARTGAMEMODE_DEBUG:
-      start_debug();
+      debug_entry();
       break;
   }
 
@@ -416,22 +417,23 @@ void blitSprites() {
 
 
 // 004049eb
-Sprite* uploadSprites(USHORT* pSource, Sprite* pSprite) {
+Sprite* uploadSprites(SKC_sprite_data* pSource, Sprite* pSprite) {
   g_spriteCnt = 0;
   DAT_00831750 = 0;
 
-  while (((UCHAR*)pSource)[3] != 0 && (pSource[0] != 0 || pSource[2] != 0 || pSource[3] != 0)) {
-    pSprite->x = pSource[3] - 128;
-    pSprite->y = pSource[0] - 128;
-    pSprite->w = ((((UCHAR*)pSource)[2] & 0xC) >> 2) + 1;
-    pSprite->h = (((UCHAR*)pSource)[2] & 3) * 8 + 8;
-    pSprite->flags = (((pSource[2] & 0x6000) >> 9) + 16)
-                   | (pSource[2] & 0x1800) >> 3
-                   | (pSource[2] & 0x8000) >> 8;
-    pSprite->vram_offset = ((pSource[2] & 0x7FF) << 5);
+  while (pSource->next && (pSource->vp || pSource->gfx || pSource->hf || pSource->vf || pSource->pl || pSource->pr || pSource->hp)) {
+    pSprite->x = pSource->hp - 128;
+    pSprite->y = pSource->vp - 128;
+    pSprite->w = pSource->hs + 1;
+    pSprite->h = pSource->vs * 8 + 8;
+    pSprite->flags = pSource->pl + 16
+                   | pSource->vf << 9
+                   | pSource->hf << 8
+                   | pSource->pr << 7;
+    pSprite->vram_offset = pSource->gfx << 5;
     ++g_spriteCnt;
     ++pSprite;
-    pSource += 4;
+    ++pSource;
   }
 
   return pSprite;
@@ -548,7 +550,7 @@ void vInt18() {
   g_pHscrollbuff = &g_ram.hscrollbuff[0];
   g_pHscrollbuff2 = &g_ram.hscrollbuff[1];
   uploadPalette();
-  uploadSprites(g_ram.ramf8, g_sprites);
+  uploadSprites(g_ram.sprtbl, g_sprites);
   pollMdControllers();
 }
 
@@ -557,7 +559,7 @@ void vInt18() {
 void vInt4() {
   memcpy(g_ram.colorwk, g_ram.colorwk2, sizeof(g_ram.colorwk));
   uploadPalette();
-  uploadSprites(g_ram.ramf8, g_sprites);
+  uploadSprites(g_ram.sprtbl, g_sprites);
   pollMdControllers();
   if (g_ram.demotimer != 0) {
     --g_ram.demotimer;
@@ -586,7 +588,7 @@ void vInt2() {
 // 004052dc
 void vInt22() {
   uploadPalette();
-  uploadSprites(g_ram.ramf8, g_sprites);
+  uploadSprites(g_ram.sprtbl, g_sprites);
   pollMdControllers();
   if (g_ram.demotimer != 0) {
     --g_ram.demotimer;
@@ -599,7 +601,7 @@ void vInt26() {
   g_pHscrollbuff = &g_ram.hscrollbuff[0];
   g_pHscrollbuff2 = &g_ram.hscrollbuff[1];
   uploadPalette();
-  uploadSprites(g_ram.ramf8, g_sprites);
+  uploadSprites(g_ram.sprtbl, g_sprites);
   pollMdControllers();
   if (g_ram.demotimer != 0) {
     --g_ram.demotimer;
@@ -650,8 +652,40 @@ void uploadPalette() {
 // 00405a45
 void pollMdControllers() {
   pollWindowsControllers();
-  g_ram.swdata1 = getPressedController1Buttons();
-  g_ram.swdata2 = getPressedController2Buttons();
+  USHORT swdata = getPressedController1Buttons();
+  g_ram.swdata1.pressed.u = swdata;
+  g_ram.swdata1.pressed.d = swdata >> 1;
+  g_ram.swdata1.pressed.l = swdata >> 2;
+  g_ram.swdata1.pressed.r = swdata >> 3;
+  g_ram.swdata1.pressed.b = swdata >> 4;
+  g_ram.swdata1.pressed.c = swdata >> 5;
+  g_ram.swdata1.pressed.a = swdata >> 6;
+  g_ram.swdata1.pressed.s = swdata >> 7;
+  g_ram.swdata1.down.u = swdata >> 8;
+  g_ram.swdata1.down.d = swdata >> 9;
+  g_ram.swdata1.down.l = swdata >> 10;
+  g_ram.swdata1.down.r = swdata >> 11;
+  g_ram.swdata1.down.b = swdata >> 12;
+  g_ram.swdata1.down.c = swdata >> 13;
+  g_ram.swdata1.down.a = swdata >> 14;
+  g_ram.swdata1.down.s = swdata >> 15;
+  swdata = getPressedController2Buttons();
+  g_ram.swdata2.pressed.u = swdata;
+  g_ram.swdata2.pressed.d = swdata >> 1;
+  g_ram.swdata2.pressed.l = swdata >> 2;
+  g_ram.swdata2.pressed.r = swdata >> 3;
+  g_ram.swdata2.pressed.b = swdata >> 4;
+  g_ram.swdata2.pressed.c = swdata >> 5;
+  g_ram.swdata2.pressed.a = swdata >> 6;
+  g_ram.swdata2.pressed.s = swdata >> 7;
+  g_ram.swdata2.down.u = swdata >> 8;
+  g_ram.swdata2.down.d = swdata >> 9;
+  g_ram.swdata2.down.l = swdata >> 10;
+  g_ram.swdata2.down.r = swdata >> 11;
+  g_ram.swdata2.down.b = swdata >> 12;
+  g_ram.swdata2.down.c = swdata >> 13;
+  g_ram.swdata2.down.a = swdata >> 14;
+  g_ram.swdata2.down.s = swdata >> 15;
 }
 
 
