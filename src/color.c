@@ -84,6 +84,7 @@ static void flashin2(unsigned short* p_destination, unsigned short* p_source);
 static void flashout2(unsigned short* p_destination);
 
 extern sonic3_ram g_ram;
+extern void v_int(void);
 
 
 void clchgctr(void) {

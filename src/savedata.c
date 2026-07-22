@@ -16,6 +16,8 @@ static void save_s3_game2(void);
 
 extern sonic3_ram g_ram;
 extern int g_sonic3_alone;
+extern int sys_read_savedata(unsigned char* p_destination, int savefile_offset, unsigned short word_cnt, unsigned short check_value);
+extern void sys_write_savedata(unsigned char* p_source, int savefile_offset, unsigned short word_cnt);
 
 
 void read_savedata(void) {
@@ -30,7 +32,7 @@ void read_savedata(void) {
 
 static void read_vs_savedata(void) {
   unsigned char buffer[84];
-  if (sys_read_savedata(0, 0x60, buffer, 0, 41, 0x4C44) == 0) {
+  if (sys_read_savedata(buffer, 0, 41, 0x4C44) == 0) {
     unsigned char* p_buffer = buffer;
 
     for (int i = 0; i < VS_SAVEDATA_SLOTS; ++i) {
@@ -71,7 +73,7 @@ static void read_s3k_savedata(void) {
   read_vs_savedata();
   unsigned char buffer[84];
   bool active_found = false;
-  if (sys_read_savedata(0x180, 0x1E0, buffer, 41, 0x4244) == 0) {
+  if (sys_read_savedata(buffer, 0x180, 41, 0x4244) == 0) {
     unsigned char* p_buffer = buffer;
 
     for (int i = 0; i < S3K_SAVEDATA_SLOTS; ++i) {
@@ -166,7 +168,7 @@ void write_vs_savedata(void) {
 
   *p_buffer++ = 0x44;
   *p_buffer++ = 0x4C;
-  sys_write_savedata(0, 0x60, buffer, 41);
+  sys_write_savedata(buffer, 0, 41);
 }
 
 
@@ -199,7 +201,7 @@ void write_savedata(void) {
 
     *p_buffer++ = 0x44;
     *p_buffer++ = 0x42;
-    sys_write_savedata(0x180, 0x1E0, buffer, 41);
+    sys_write_savedata(buffer, 0x180, 41);
   }
   else {
     for (int i = 0; i < S3_SAVEDATA_SLOTS; ++i) {
@@ -223,7 +225,7 @@ void write_savedata(void) {
 
     *p_buffer++ = 0x44;
     *p_buffer++ = 0x42;
-    sys_write_savedata(0xC0, 0x120, buffer, 41);
+    sys_write_savedata(buffer, 0xC0, 41);
   }
 }
 
@@ -350,7 +352,7 @@ void save_game3(void) {
 static void read_s3_savedata(void) {
   read_vs_savedata();
   unsigned char buffer[82];
-  if (sys_read_savedata(0xC0, 0x120, buffer, 25, 0x4244) == 0) {
+  if (sys_read_savedata(buffer, 0xC0, 25, 0x4244) == 0) {
     unsigned char* p_buffer = buffer;
 
     for (int i = 0; i < S3_SAVEDATA_SLOTS; ++i) {

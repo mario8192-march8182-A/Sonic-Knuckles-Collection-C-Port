@@ -480,18 +480,18 @@ void writeSaveFile() {
 
 
 // 00404fd5
-extern "C" void writeSaveData(unsigned char* pSource, int saveFileOffset, USHORT words) {
-  memcpy(&g_saveFile[saveFileOffset], pSource, words * 2 + 2);
+extern "C" void sys_write_savedata(unsigned char* p_source, int savefile_offset, unsigned short word_cnt) {
+  memcpy(&g_saveFile[savefile_offset], p_source, word_cnt * 2 + 2);
 }
 
 
 // 00405020
-extern "C" int readSaveData(unsigned char* pDestination, int saveFileOffset, USHORT words, USHORT checkValue) {
-  ULONG size = words * 2 + 2;
+extern "C" int sys_read_savedata(unsigned char* p_destination, int savefile_offset, unsigned short word_cnt, unsigned short check_value) {
+  ULONG size = word_cnt * 2 + 2;
 
-  memcpy(pDestination, &g_saveFile[saveFileOffset], size);
-  USHORT readCheckValue = *((USHORT*)&g_saveFile[saveFileOffset + size - 2 - 2]);
-  if (checkValue != readCheckValue) {
+  memcpy(p_destination, &g_saveFile[savefile_offset], size);
+  USHORT readCheckValue = *((USHORT*)&g_saveFile[savefile_offset + size - 2 - 2]);
+  if (check_value != readCheckValue) {
     return -1;
   }
 
@@ -500,7 +500,7 @@ extern "C" int readSaveData(unsigned char* pDestination, int saveFileOffset, USH
 
 
 // 004050c0
-extern "C" void vInt() {
+extern "C" void v_int(void) {
   g_pHscrollbuff2 = g_pHscrollbuff = 0;
   g_vscrollPlaneA = g_ram.vscrolla;
   g_vscrollPlaneB = g_ram.vscrollb;
@@ -830,7 +830,7 @@ void loadControlsConfig(const char* pPublisherKeyName, const char* pGameKeyName,
 
 
 // 0040a98e
-extern "C" void playSoundEffect2(signed char command) {
+extern "C" void execute_sound_command(short command) {
   if (g_noSoundEffect != 0) return;
 
   short soundId = command;
@@ -906,14 +906,14 @@ void resetSound() {
 
 
 // 0040ac4d
-extern "C" void executeBgmCommand(signed char command) {
+extern "C" void execute_bgm_command(short command) {
   if (command == -31 || command == -30 || command == -2 || command == -1) {
     stopBgm();
     BOOL_00856e10 = 0;
     g_bgmId = 0;
   }
   else if (command > 50 || (command < 0 && command != -36)) {
-    playSoundEffect2(command);
+    execute_sound_command(command);
   }
   else {
     if (command == -36) {

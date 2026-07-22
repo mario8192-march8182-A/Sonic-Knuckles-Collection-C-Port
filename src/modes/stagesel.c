@@ -56,6 +56,7 @@ extern unsigned long g_vdp_scrollb_adr;
 extern int g_vdp_hscroll_scanline;
 extern unsigned long g_bg_color_index;
 extern int g_numpad_unlocked;
+extern void v_int(void);
 
 
 void stagesel(void) {
