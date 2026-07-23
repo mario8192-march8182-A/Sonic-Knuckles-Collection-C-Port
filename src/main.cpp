@@ -480,7 +480,7 @@ void writeSaveFile() {
 
 
 // 00404fd5
-extern "C" void sys_write_savedata(unsigned char* p_source, int savefile_offset, unsigned short word_cnt) {
+extern "C" void write_sram(unsigned char* p_source, int savefile_offset, unsigned short word_cnt) {
   memcpy(&g_saveFile[savefile_offset], p_source, word_cnt * 2 + 2);
 }
 

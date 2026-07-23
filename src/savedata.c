@@ -17,7 +17,7 @@ static void save_s3_game2(void);
 extern sonic3_ram g_ram;
 extern int g_sonic3_alone;
 extern int read_sram(unsigned char* p_destination, int savefile_offset, unsigned short word_cnt, unsigned short check_value);
-extern void sys_write_savedata(unsigned char* p_source, int savefile_offset, unsigned short word_cnt);
+extern void write_sram(unsigned char* p_source, int savefile_offset, unsigned short word_cnt);
 
 
 void read_savedata(void) {
@@ -168,7 +168,7 @@ void write_vs_savedata(void) {
 
   *p_buffer++ = 0x44;
   *p_buffer++ = 0x4C;
-  sys_write_savedata(buffer, 0, 41);
+  write_sram(buffer, 0, 41);
 }
 
 
@@ -201,7 +201,7 @@ void write_savedata(void) {
 
     *p_buffer++ = 0x44;
     *p_buffer++ = 0x42;
-    sys_write_savedata(buffer, 0x180, 41);
+    write_sram(buffer, 0x180, 41);
   }
   else {
     for (int i = 0; i < S3_SAVEDATA_SLOTS; ++i) {
@@ -225,7 +225,7 @@ void write_savedata(void) {
 
     *p_buffer++ = 0x44;
     *p_buffer++ = 0x42;
-    sys_write_savedata(buffer, 0xC0, 41);
+    write_sram(buffer, 0xC0, 41);
   }
 }
 
