@@ -486,7 +486,7 @@ extern "C" void sys_write_savedata(unsigned char* p_source, int savefile_offset,
 
 
 // 00405020
-extern "C" int sys_read_savedata(unsigned char* p_destination, int savefile_offset, unsigned short word_cnt, unsigned short check_value) {
+extern "C" int read_sram(unsigned char* p_destination, int savefile_offset, unsigned short word_cnt, unsigned short check_value) {
   ULONG size = word_cnt * 2 + 2;
 
   memcpy(p_destination, &g_saveFile[savefile_offset], size);
