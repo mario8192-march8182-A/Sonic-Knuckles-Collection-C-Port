@@ -877,7 +877,7 @@ static void cg_chg0(SKC_cg_chg_data* p_data, unsigned char* p_cgchgtim, unsigned
 
 
 static void cg_chg1(SKC_cg_chg_item* p_item, unsigned char* p_cgchgtim, unsigned char* p_cgchgcnt) {
-  if (*p_cgchgtim-- == 0) {
+  if ((*p_cgchgtim)-- == 0) {
     if (*p_cgchgcnt >= p_item->chgcnt) {
       *p_cgchgcnt = 0;
     }
