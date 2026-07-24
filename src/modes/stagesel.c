@@ -21,8 +21,8 @@
 #define TILE_3 19
 #define TILE_4 20
 #define TILE_ASTERISK 26
-#define LINE1_END 14 * 2
-#define LINE2_END (40 + 14) * 2
+#define LINE1_END 15 * 2
+#define LINE2_END (40 + 15) * 2
 #define SKSOUND_TEST_INDEX 32
 #define S3SOUND_TEST_INDEX 28
 static void levermove(void);
@@ -327,7 +327,7 @@ static void levermove(void) {
   };
 
   unsigned short sound_test_index = !g_sonic3_alone ? SKSOUND_TEST_INDEX : S3SOUND_TEST_INDEX;
-  if (g_ram.swdata1.pressed.u == 1 || g_ram.swdata1.pressed.d == 1 || g_ram.stagesel_inputtimer-- > 0) {
+  if (g_ram.swdata1.pressed.u == 1 || g_ram.swdata1.pressed.d == 1 || g_ram.stagesel_inputtimer-- == 0) {
     g_ram.stagesel_inputtimer = 11;
     if (g_ram.swdata1.down.u == 1 || g_ram.swdata1.down.d == 1) {
       if (g_ram.swdata1.down.u == 1) {
