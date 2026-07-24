@@ -190,21 +190,27 @@ void mapdevr(unsigned char* p_destination, unsigned char* p_source, unsigned sho
   bool done = false;
 
   do {
-    unsigned char entry = work.buffer >> work.shift - work.entry_len & 0x7F;
-    unsigned char type = entry & 0x40 ? (entry & 0x70) >> 4 : (entry & 0x60) >> 5;
-    unsigned char repeat_cnt = entry & 0x40 ? (entry & 0x0F) + 1 : ((entry & 0x1E) >> 1) + 1;
-    work.entry_len = entry & 0x40 ? 7 : 6;
+    work.entry_len = 7;
+    unsigned char entry = (work.buffer >> (work.shift - work.entry_len)) & 0x7F;
+    unsigned char type = entry >> 4;
+    if (!(entry & 0x40)) {
+      work.entry_len = 6;
+      entry >>= 1;
+    }
     prepare_next_entry(&p_source, &work);
+    unsigned char repeat_cnt = (entry & 0xF) + 1;
 
     switch (type) {
       case 0:
+      case 1:
         for (int i = 0; i < repeat_cnt; ++i) {
           *p_destination++ = incremental_copy & 0xFF;
           *p_destination++ = incremental_copy >> 8;
           ++incremental_copy;
         }
         break;
-      case 1:
+      case 2:
+      case 3:
         for (int i = 0; i < repeat_cnt; ++i) {
           *p_destination++ = literal_copy & 0xFF;
           *p_destination++ = literal_copy >> 8;
@@ -240,7 +246,7 @@ void mapdevr(unsigned char* p_destination, unsigned char* p_source, unsigned sho
         break;
       }
       case 7:
-        if (repeat_cnt == 0xF) {
+        if (repeat_cnt == 16) {
           done = true;
         }
         else {
