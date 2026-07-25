@@ -1,7 +1,7 @@
 #include "globals.h"
 #include "macros.h"
 #include "vdp.h"
-#include "ram.h"
+#include "../ram.h"
 static void blit_scanline_ver1(unsigned short* p_scrollplane, unsigned char vscroll_low);
 static unsigned char pixeloffsets[8];
 static unsigned char* blit_8pixels_ver1(unsigned char* p_pixelbuffer, unsigned short tile, unsigned char vscroll_low);

@@ -4,20 +4,20 @@
 #include <mbstring.h>
 #include "globals.h"
 #include "globalobjects.hpp"
-#include "constants.h"
+#include "../constants.h"
 #include "winresource.h"
 #include "macros.h"
 #include "imidi.h"
 #include "types/sprite.h"
-#include "types/spritedata.h"
+#include "../types/spritedata.h"
 #include "classes/cfile.h"
 #include "classes/cgame.h"
 #include "classes/cgraphics.h"
 #include "classes/csound.h"
 #include "classes/cwinregistry.h"
 extern "C" {
-  #include "entry.h"
-  #include "ram.h"
+  #include "../entry.h"
+  #include "../ram.h"
   #include "vdp.h"
 }
 
