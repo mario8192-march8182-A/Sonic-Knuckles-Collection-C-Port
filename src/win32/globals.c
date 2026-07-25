@@ -1,7 +1,7 @@
 #include <windows.h>
 #include <ddraw.h>
 #include <dsound.h>
-#include "../constants.h"
+#include "constants.h"
 #include "strings.h"
 #include "types/sprite.h"
 

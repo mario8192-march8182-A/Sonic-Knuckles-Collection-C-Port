@@ -1,7 +1,7 @@
 #ifndef MACROS_H
 #define MACROS_H
 
-#include "../constants.h"
+#include "constants.h"
 
 #define SET_BIT_0(value) (value |= 1)
 #define SET_BIT_1(value) (value |= 2)

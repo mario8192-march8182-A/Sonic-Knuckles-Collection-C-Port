@@ -5,7 +5,7 @@
 #include <windows.h>
 #include <ddraw.h>
 #include <dsound.h>
-#include "../constants.h"
+#include "constants.h"
 #include "types/sprite.h"
 
 extern ULONG DAT_00829058[10];

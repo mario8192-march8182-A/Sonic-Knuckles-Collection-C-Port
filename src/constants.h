@@ -1,5 +1,5 @@
-#ifndef CONSTANTS_H
-#define CONSTANTS_H
+#ifndef SKC_CONSTANTS_H
+#define SKC_CONSTANTS_H
 
 typedef enum SKC_game_mode {
   LOGOMD = 0,
@@ -18,20 +18,6 @@ typedef enum SKC_play_type {
   PLAY_TYPE_KNUCKLES = 3
 }
 SKC_play_type;
-
-typedef enum start_game_modes {
-  STARTGAMEMODE_NORMAL = 0,
-  STARTGAMEMODE_SPECIALSTAGEMODE = 1,
-  STARTGAMEMODE_DEBUG = 2
-}
-start_game_modes;
-
-typedef enum sonic_game_modes {
-  SONICGAMEMODE_SONIC3KNUCKLES = 0,
-  SONICGAMEMODE_SONICKNUCKLES = 1,
-  SONICGAMEMODE_SONIC3 = 2
-}
-sonic_game_modes;
 
 #define PBUFFER_LEVELS 8
 #define PBUFFER_LEVEL_SLOTS 64

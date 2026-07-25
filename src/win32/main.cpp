@@ -4,7 +4,7 @@
 #include <mbstring.h>
 #include "globals.h"
 #include "globalobjects.hpp"
-#include "../constants.h"
+#include "constants.h"
 #include "winresource.h"
 #include "macros.h"
 #include "imidi.h"
