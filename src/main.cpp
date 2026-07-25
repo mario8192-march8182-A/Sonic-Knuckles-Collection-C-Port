@@ -17,6 +17,7 @@
 #include "classes/cwinregistry.h"
 extern "C" {
   #include "entry.h"
+  #include "ram.h"
   #include "vdp.h"
 }
 
@@ -169,12 +170,12 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, char* lpCmdLine
 // 00403d27
 DWORD WINAPI gameThreadStartRoutine(void* pParameter) {
   if (g_bResetMdRam) {
-    memset(&g_ram, 0, sizeof(g_ram));
+    clear_game_ram();
     g_bResetMdRam = FALSE;
   }
   memset(g_vram, 0, 0x10000);
 
-  SET_MDREGION_OVERSEAS(g_ram.mdstatus);
+  set_region(2);
 
   switch (g_startGameMode) {
     case STARTGAMEMODE_NORMAL:
@@ -312,7 +313,7 @@ int allocRamAndVram() {
     return 1;
   }
 
-  memset(&g_ram, 0, sizeof(g_ram));
+  clear_game_ram();
   memset(g_vram, 0, 0x10000);
   memset(g_pixelBuffer, 0, 0x23000);
 
@@ -504,11 +505,11 @@ extern "C" int read_sram(unsigned char* p_destination, int savefile_offset, unsi
 // 004050c0
 extern "C" void v_int(void) {
   g_pHscrollbuff2 = g_pHscrollbuff = 0;
-  g_vscrollPlaneA = g_ram.vscrolla;
-  g_vscrollPlaneB = g_ram.vscrollb;
+  g_vscrollPlaneA = get_vscrolla();
+  g_vscrollPlaneB = get_vscrollb();
   g_bVscrollCopy = FALSE;
 
-  switch (g_ram.int_flg) {
+  switch (*get_int_flg_ptr()) {
     case 2:
       vInt2();
       break;
@@ -541,30 +542,30 @@ extern "C" void v_int(void) {
       break;
   }
 
-  ++g_ram.systemtimer;
+  inc_systemtimer();
   g_game.update();
-  g_ram.int_flg = 0;
+  *get_int_flg_ptr() = 0;
 }
 
 
 // 00405201
 void vInt18() {
-  g_pHscrollbuff = &g_ram.hscrollbuff[0];
-  g_pHscrollbuff2 = &g_ram.hscrollbuff[1];
+  g_pHscrollbuff = &get_hscrollbuff()[0];
+  g_pHscrollbuff2 = &get_hscrollbuff()[1];
   uploadPalette();
-  uploadSprites(g_ram.sprtbl, g_sprites);
+  uploadSprites(get_sprite_table(), g_sprites);
   pollMdControllers();
 }
 
 
 // 00405237
 void vInt4() {
-  memcpy(g_ram.colorwk, g_ram.colorwk2, sizeof(g_ram.colorwk));
+  memcpy(get_colorwk(), get_colorwk2(), sizeof(unsigned short) * 64);
   uploadPalette();
-  uploadSprites(g_ram.sprtbl, g_sprites);
+  uploadSprites(get_sprite_table(), g_sprites);
   pollMdControllers();
-  if (g_ram.demotimer != 0) {
-    --g_ram.demotimer;
+  if (*get_demotimer_ptr() != 0) {
+    --*get_demotimer_ptr();
   }
 }
 
@@ -572,8 +573,8 @@ void vInt4() {
 // 00405284
 void vInt20() {
   uploadPalette();
-  if (g_ram.demotimer != 0) {
-    --g_ram.demotimer;
+  if (*get_demotimer_ptr() != 0) {
+    --*get_demotimer_ptr();
   }
 }
 
@@ -581,8 +582,8 @@ void vInt20() {
 // 004052b0
 void vInt2() {
   uploadPalette();
-  if (g_ram.demotimer != 0) {
-    --g_ram.demotimer;
+  if (*get_demotimer_ptr() != 0) {
+    --*get_demotimer_ptr();
   }
 }
 
@@ -590,23 +591,23 @@ void vInt2() {
 // 004052dc
 void vInt22() {
   uploadPalette();
-  uploadSprites(g_ram.sprtbl, g_sprites);
+  uploadSprites(get_sprite_table(), g_sprites);
   pollMdControllers();
-  if (g_ram.demotimer != 0) {
-    --g_ram.demotimer;
+  if (*get_demotimer_ptr() != 0) {
+    --*get_demotimer_ptr();
   }
 }
 
 
 // 00405312
 void vInt26() {
-  g_pHscrollbuff = &g_ram.hscrollbuff[0];
-  g_pHscrollbuff2 = &g_ram.hscrollbuff[1];
+  g_pHscrollbuff = &get_hscrollbuff()[0];
+  g_pHscrollbuff2 = &get_hscrollbuff()[1];
   uploadPalette();
-  uploadSprites(g_ram.sprtbl, g_sprites);
+  uploadSprites(get_sprite_table(), g_sprites);
   pollMdControllers();
-  if (g_ram.demotimer != 0) {
-    --g_ram.demotimer;
+  if (*get_demotimer_ptr() != 0) {
+    --*get_demotimer_ptr();
   }
 }
 
@@ -616,11 +617,11 @@ void uploadPalette() {
   RGBQUAD palette[64];
   memset(palette, 0, sizeof(palette));
   unsigned short* pColorwk;
-  if (g_ram.waterflag != 0) {
-    pColorwk = g_ram.colorwk3;
+  if (get_waterflag() != 0) {
+    pColorwk = get_colorwk3();
   }
   else {
-    pColorwk = g_ram.colorwk;
+    pColorwk = get_colorwk();
   }
 
   for (int i = 0; i < 64; ++i) {
@@ -654,40 +655,8 @@ void uploadPalette() {
 // 00405a45
 void pollMdControllers() {
   pollWindowsControllers();
-  USHORT swdata = getPressedController1Buttons();
-  g_ram.swdata1.pressed.u = swdata;
-  g_ram.swdata1.pressed.d = swdata >> 1;
-  g_ram.swdata1.pressed.l = swdata >> 2;
-  g_ram.swdata1.pressed.r = swdata >> 3;
-  g_ram.swdata1.pressed.b = swdata >> 4;
-  g_ram.swdata1.pressed.c = swdata >> 5;
-  g_ram.swdata1.pressed.a = swdata >> 6;
-  g_ram.swdata1.pressed.s = swdata >> 7;
-  g_ram.swdata1.down.u = swdata >> 8;
-  g_ram.swdata1.down.d = swdata >> 9;
-  g_ram.swdata1.down.l = swdata >> 10;
-  g_ram.swdata1.down.r = swdata >> 11;
-  g_ram.swdata1.down.b = swdata >> 12;
-  g_ram.swdata1.down.c = swdata >> 13;
-  g_ram.swdata1.down.a = swdata >> 14;
-  g_ram.swdata1.down.s = swdata >> 15;
-  swdata = getPressedController2Buttons();
-  g_ram.swdata2.pressed.u = swdata;
-  g_ram.swdata2.pressed.d = swdata >> 1;
-  g_ram.swdata2.pressed.l = swdata >> 2;
-  g_ram.swdata2.pressed.r = swdata >> 3;
-  g_ram.swdata2.pressed.b = swdata >> 4;
-  g_ram.swdata2.pressed.c = swdata >> 5;
-  g_ram.swdata2.pressed.a = swdata >> 6;
-  g_ram.swdata2.pressed.s = swdata >> 7;
-  g_ram.swdata2.down.u = swdata >> 8;
-  g_ram.swdata2.down.d = swdata >> 9;
-  g_ram.swdata2.down.l = swdata >> 10;
-  g_ram.swdata2.down.r = swdata >> 11;
-  g_ram.swdata2.down.b = swdata >> 12;
-  g_ram.swdata2.down.c = swdata >> 13;
-  g_ram.swdata2.down.a = swdata >> 14;
-  g_ram.swdata2.down.s = swdata >> 15;
+  set_swdata1(getPressedController1Buttons());
+  set_swdata2(getPressedController2Buttons());
 }
 
 
@@ -695,7 +664,7 @@ void pollMdControllers() {
 void blitGraphics() {
   if (g_bVscrollCopy) {
     for (int i = 0; i < 20; ++i) {
-      g_mdVsram[i] = g_ram.vscrollbuff[i + 1];
+      g_mdVsram[i] = get_vscrollbuff()[i + 1];
     }
     if (g_pHscrollbuff2 != 0) {
       for (int i = 0; i < 224; ++i) {
@@ -709,7 +678,7 @@ void blitGraphics() {
     g_pVdpReadPos = &g_vram[g_vdp_scrollb_adr];
     FUN_00415039();
     for (int i = 0; i < 20; ++i) {
-      g_mdVsram[i] = g_ram.vscrollbuff[i];
+      g_mdVsram[i] = get_vscrollbuff()[i];
     }
     if (g_pHscrollbuff != 0) {
       for (int i = 0; i < 224; ++i) {

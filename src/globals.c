@@ -3,7 +3,6 @@
 #include <dsound.h>
 #include "constants.h"
 #include "strings.h"
-#include "types/sonic3ram.h"
 #include "types/sprite.h"
 
 /* 00829058 */ ULONG DAT_00829058[10] = { 20, 19, 10, 7, 5, 4, 3, 2, 0, 0 };
@@ -496,6 +495,6 @@
 /* 00856ec0 */ BOOL g_joystickAvailability[32];
 /* 00856f40 */ int g_kbKeysEdit[2][5];
 /* 00856f68 */ UINT g_joystickCnt;
-/* 08000000 */ BYTE g_vram[0x10000];
+/* 08000000 */ // BYTE g_vram[0x10000];
 /* 00831758 */ BYTE g_pixelBuffer[0x23000];
-/* 08ff0000 */ sonic3_ram g_ram;
+/* 08ff0000 */ // BYTE g_ram[0x0x10000];

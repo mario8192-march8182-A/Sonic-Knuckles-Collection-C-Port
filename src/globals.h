@@ -6,7 +6,6 @@
 #include <ddraw.h>
 #include <dsound.h>
 #include "constants.h"
-#include "types/sonic3ram.h"
 #include "types/sprite.h"
 
 extern ULONG DAT_00829058[10];
@@ -131,8 +130,6 @@ extern int g_selectKeyDialogCurrentKey;
 extern BOOL g_joystickAvailability[32];
 extern int g_kbKeysEdit[2][5];
 extern UINT g_joystickCnt;
-extern BYTE g_vram[0x10000];
 extern BYTE g_pixelBuffer[0x23000];
-extern sonic3_ram g_ram;
 
 #endif
