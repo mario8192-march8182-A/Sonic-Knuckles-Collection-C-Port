@@ -15,8 +15,10 @@
 #include "classes/cgraphics.h"
 #include "classes/csound.h"
 #include "classes/cwinregistry.h"
-#include "entry.h"
-#include "vdp.h"
+extern "C" {
+  #include "entry.h"
+  #include "vdp.h"
+}
 
 void vInt18();
 void vInt4();
