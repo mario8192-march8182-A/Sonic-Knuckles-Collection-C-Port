@@ -97,10 +97,10 @@ static unsigned char* write_pixels(unsigned char* p_destination, SKC_bitdevr_wor
 
 static unsigned char* write_xor_pixels(unsigned char* p_destination, SKC_bitdevr_work* p_work) {
   p_work->prev_pixels ^= p_work->pixels;
-  *p_destination++ = (p_work->pixels & 0xFF000000) >> 24;
-  *p_destination++ = (p_work->pixels & 0x00FF0000) >> 16;
-  *p_destination++ = (p_work->pixels & 0x0000FF00) >> 8;
-  *p_destination++ = p_work->pixels & 0x000000FF;
+  *p_destination++ = (p_work->prev_pixels & 0xFF000000) >> 24;
+  *p_destination++ = (p_work->prev_pixels & 0x00FF0000) >> 16;
+  *p_destination++ = (p_work->prev_pixels & 0x0000FF00) >> 8;
+  *p_destination++ = p_work->prev_pixels & 0x000000FF;
   --p_work->row_cnt;
   return p_destination;
 }
