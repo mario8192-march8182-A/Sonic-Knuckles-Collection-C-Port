@@ -137,18 +137,29 @@ void stagesel(void) {
 
     for (int j = 0; j < p_text_tbl[i][0]; ++j) {
       p_map[j * 2] = p_text_tbl[i][j + 1];
+      p_map[j * 2 + 1] = 0;
+    }
+
+    for (int j = p_text_tbl[i][0]; j < 15; ++j) {
+      p_map[j * 2] = 0;
+      p_map[j * 2 + 1] = 0;
     }
 
     if (!g_sonic3_alone && i == SKTEXT_TBL_LAVA_REEF2_INDEX) {
       p_map[LINE1_END] = TILE_3;
+      p_map[LINE1_END + 1] = 0;
       p_map[LINE2_END] = TILE_4;
+      p_map[LINE2_END + 1] = 0;
     }
     else if (i == text_tbl_size - 1) {
       p_map[LINE1_END] = TILE_ASTERISK;
+      p_map[LINE1_END + 1] = 0;
     }
     else {
       p_map[LINE1_END] = TILE_1;
+      p_map[LINE1_END + 1] = 0;
       p_map[LINE2_END] = TILE_2;
+      p_map[LINE2_END + 1] = 0;
     }
   }
 
