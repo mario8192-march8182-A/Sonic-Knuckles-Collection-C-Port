@@ -21,8 +21,9 @@
 #define TILE_3 19
 #define TILE_4 20
 #define TILE_ASTERISK 26
-#define LINE1_END 15 * 2
-#define LINE2_END (40 + 15) * 2
+#define LINE_MAX 16
+#define LINE1_END (LINE_MAX - 1) * 2
+#define LINE2_END (40 + (LINE_MAX - 1)) * 2
 #define SKSOUND_TEST_INDEX 32
 #define S3SOUND_TEST_INDEX 28
 static void levermove(void);
@@ -140,7 +141,7 @@ void stagesel(void) {
       p_map[j * 2 + 1] = 0;
     }
 
-    for (int j = p_text_tbl[i][0]; j < 15; ++j) {
+    for (int j = p_text_tbl[i][0]; j < LINE_MAX - 1; ++j) {
       p_map[j * 2] = 0;
       p_map[j * 2 + 1] = 0;
     }
@@ -422,7 +423,7 @@ static void set_selpalline(unsigned char line) {
   int offset = 0xC000 + p_textpos_tbl[g_ram.stagesel_sel][0][1] * 128 + p_textpos_tbl[g_ram.stagesel_sel][0][0];
   unsigned char* p_vram = &g_vram[offset];
 
-  for (int i = 0; i < 15; ++i) {
+  for (int i = 0; i < LINE_MAX - 1; ++i) {
     unsigned short tile = p_vram[0] | p_vram[1] << 8;
     tile = (tile & 0x9FFF) | line << 13;
     *p_vram++ = tile & 0xFF;
