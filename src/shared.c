@@ -3300,7 +3300,7 @@ static void mask_spr0__wait0(SKC_sprite_status* p_actwk) {
 static void mask_spr0__wait1(SKC_sprite_status* p_actwk) {
   g_ram.sprhmasks = 0xFF;
   SKC_sprite_status* p_parentwk = &g_ram.actwk[p_actwk->u.obj.oya];
-  if (p_actwk->u.obj.actflg0.end == 0) {
+  if (p_parentwk->u.obj.actflg0.end == 0) {
     actionsub(p_actwk);
   }
   else {
