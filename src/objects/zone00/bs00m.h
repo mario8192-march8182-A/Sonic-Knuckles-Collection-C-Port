@@ -1,8 +1,9 @@
 #ifndef SKC_BS00M_H
 #define SKC_BS00M_H
 
-#include "../../types/spritestatus.h"
 #include "../../shared.h"
+
+typedef struct SKC_sprite_status SKC_sprite_status;
 
 void bs00m0_body(SKC_sprite_status* p_actwk);
 void bs00m0_puka_init(SKC_sprite_status* p_actwk);

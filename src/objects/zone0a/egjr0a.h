@@ -1,8 +1,9 @@
 #ifndef SKC_EGJR0A_H
 #define SKC_EGJR0A_H
 
-#include "../../types/spritestatus.h"
 #include "../../shared.h"
+
+typedef struct SKC_sprite_status SKC_sprite_status;
 
 void egjr0a(SKC_sprite_status* p_actwk);
 void egjr0a_puka_init(SKC_sprite_status* p_actwk);

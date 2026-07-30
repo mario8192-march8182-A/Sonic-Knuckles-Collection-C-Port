@@ -1,7 +1,7 @@
 #ifndef SKC_COLI_H
 #define SKC_COLI_H
 
-#include "types/spritestatus.h"
+typedef struct SKC_sprite_status SKC_sprite_status;
 
 void vspcol(SKC_sprite_status* p_playerwk);
 void pcol(SKC_sprite_status* p_playerwk);

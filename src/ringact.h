@@ -1,8 +1,8 @@
 #ifndef SKC_RINGACT_H
 #define SKC_RINGACT_H
 
-#include "types/spritestatus.h"
-#include "action.h"
+typedef struct SKC_patset_work SKC_patset_work;
+typedef struct SKC_sprite_status SKC_sprite_status;
 
 typedef struct SKC_ringwk_entry {
   signed char pattim;

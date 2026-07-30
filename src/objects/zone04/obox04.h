@@ -1,8 +1,9 @@
 #ifndef SKC_OBOX04_H
 #define SKC_OBOX04_H
 
-#include "../../types/spritestatus.h"
 #include "../../shared.h"
+
+typedef struct SKC_sprite_status SKC_sprite_status;
 
 void obox04(SKC_sprite_status* p_actwk);
 void obox04_wait0(SKC_sprite_status* p_actwk);

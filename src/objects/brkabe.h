@@ -1,9 +1,9 @@
 #ifndef SKC_BRKABE_H
 #define SKC_BRKABE_H
 
-#include "../types/speed.h"
-#include "../types/spritepattern.h"
-#include "../types/spritestatus.h"
+typedef struct SKC_speed SKC_speed;
+typedef struct SKC_sprite_pattern SKC_sprite_pattern;
+typedef struct SKC_sprite_status SKC_sprite_status;
 
 void brkabe(SKC_sprite_status* p_actwk);
 void breakgosubf(SKC_sprite_status* p_actwk, SKC_speed* p_spdtbl);

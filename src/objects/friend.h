@@ -2,8 +2,9 @@
 #define SKC_FRIEND_H
 
 #include "../types/friendinitdata.h"
-#include "../types/spritepattern.h"
-#include "../types/spritestatus.h"
+
+typedef struct SKC_sprite_pattern SKC_sprite_pattern;
+typedef struct SKC_sprite_status SKC_sprite_status;
 
 void friend(SKC_sprite_status* p_actwk);
 extern unsigned char zone_friend_tbl[24][2];

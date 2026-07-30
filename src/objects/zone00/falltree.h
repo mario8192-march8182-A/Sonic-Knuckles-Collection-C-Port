@@ -1,8 +1,8 @@
 #ifndef SKC_FALLTREE_H
 #define SKC_FALLTREE_H
 
-#include "../../types/spritepattern.h"
-#include "../../types/spritestatus.h"
+typedef struct SKC_sprite_pattern SKC_sprite_pattern;
+typedef struct SKC_sprite_status SKC_sprite_status;
 
 void falltree(SKC_sprite_status* p_actwk);
 void falltreemove2(SKC_sprite_status* p_actwk);

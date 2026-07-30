@@ -1,8 +1,8 @@
 #ifndef SKC_ROPE_H
 #define SKC_ROPE_H
 
-#include "../types/spritepattern.h"
-#include "../types/spritestatus.h"
+typedef struct SKC_sprite_pattern SKC_sprite_pattern;
+typedef struct SKC_sprite_status SKC_sprite_status;
 
 void rope(SKC_sprite_status* p_actwk);
 void ropeswing(SKC_sprite_status* p_actwk);

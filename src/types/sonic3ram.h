@@ -5,7 +5,6 @@
 #include "cchgwork.h"
 #include "point.h"
 #include "spritedata.h"
-#include "spritepattern.h"
 #include "spritestatus.h"
 #include "spritestatushandler.h"
 #include "swdata.h"
@@ -13,6 +12,8 @@
 #include "../constants.h"
 #include "../ringact.h"
 #include "../savedata.h"
+
+typedef struct SKC_sprite_pattern SKC_sprite_pattern;
 
 typedef struct sonic3_ram {
   /* 08ff0000 */ unsigned char decompressed[0xA800];

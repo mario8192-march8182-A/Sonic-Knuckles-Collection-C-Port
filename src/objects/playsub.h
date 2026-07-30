@@ -1,8 +1,8 @@
 #ifndef SKC_PLAYSUB_H
 #define SKC_PLAYSUB_H
 
-#include "../types/spritepattern.h"
-#include "../types/spritestatus.h"
+typedef struct SKC_sprite_pattern SKC_sprite_pattern;
+typedef struct SKC_sprite_status SKC_sprite_status;
 
 void plawa(SKC_sprite_status* p_actwk);
 extern signed char awasintbl[128];

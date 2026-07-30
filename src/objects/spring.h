@@ -1,8 +1,8 @@
 #ifndef SKC_SPRING_H
 #define SKC_SPRING_H
 
-#include "../types/spritepattern.h"
-#include "../types/spritestatus.h"
+typedef struct SKC_sprite_pattern SKC_sprite_pattern;
+typedef struct SKC_sprite_status SKC_sprite_status;
 
 void sjump(SKC_sprite_status* p_actwk);
 void sjumpsub(SKC_sprite_status* p_actwk, SKC_sprite_status* p_playerwk);

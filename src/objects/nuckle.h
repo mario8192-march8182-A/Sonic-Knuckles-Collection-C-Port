@@ -1,9 +1,10 @@
 #ifndef SKC_NUCKLE_H
 #define SKC_NUCKLE_H
 
-#include "../types/spritepattern.h"
-#include "../types/spritestatus.h"
 #include "../shared.h"
+
+typedef struct SKC_sprite_pattern SKC_sprite_pattern;
+typedef struct SKC_sprite_status SKC_sprite_status;
 
 void nuckle(SKC_sprite_status* p_actwk);
 void nuckle_fout(SKC_sprite_status* p_actwk);

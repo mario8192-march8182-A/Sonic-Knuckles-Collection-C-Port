@@ -1,7 +1,7 @@
 #ifndef SKC_EV0000_H
 #define SKC_EV0000_H
 
-#include "../../types/spritestatus.h"
+typedef struct SKC_sprite_status SKC_sprite_status;
 
 void ev0000(SKC_sprite_status* p_actwk);
 

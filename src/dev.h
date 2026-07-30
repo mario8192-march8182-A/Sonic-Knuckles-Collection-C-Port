@@ -1,7 +1,7 @@
 #ifndef SKC_DEV_H
 #define SKC_DEV_H
 
-#include "types/cgdata.h"
+typedef struct SKC_cg_data SKC_cg_data;
 
 void bitdevr(unsigned char* p_destination, unsigned char* p_source);
 void divdevset(unsigned short id);

@@ -3,6 +3,7 @@
 #include <string.h>
 #include "types/bitdevrcodetableentry.h"
 #include "types/bitdevrwork.h"
+#include "types/cgdata.h"
 #include "types/mapdevrwork.h"
 #include "utils/bits.h"
 typedef unsigned char*(*SKC_bitdevr_write_handler)(unsigned char*, SKC_bitdevr_work*);

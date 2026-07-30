@@ -1,8 +1,8 @@
 #ifndef SKC_SAVE_H
 #define SKC_SAVE_H
 
-#include "../types/spritepattern.h"
-#include "../types/spritestatus.h"
+typedef struct SKC_sprite_pattern SKC_sprite_pattern;
+typedef struct SKC_sprite_status SKC_sprite_status;
 
 void save(SKC_sprite_status* p_actwk);
 void playsave1(SKC_sprite_status* p_actwk);

@@ -1,7 +1,7 @@
 #ifndef SKC_FOX_H
 #define SKC_FOX_H
 
-#include "../types/spritestatus.h"
+typedef struct SKC_sprite_status SKC_sprite_status;
 
 void vsfox(SKC_sprite_status* p_playerwk);
 void fox00(SKC_sprite_status* p_playerwk);

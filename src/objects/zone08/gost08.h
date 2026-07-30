@@ -1,7 +1,7 @@
 #ifndef SKC_GOST08_H
 #define SKC_GOST08_H
 
-#include "../../types/spritestatus.h"
+typedef struct SKC_sprite_status SKC_sprite_status;
 
 void gost08(SKC_sprite_status* p_actwk);
 void setcg(SKC_sprite_status* p_actwk);

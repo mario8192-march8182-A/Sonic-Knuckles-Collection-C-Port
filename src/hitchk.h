@@ -2,7 +2,8 @@
 #define SKC_HITCHK_H
 
 #include <stdbool.h>
-#include "types/spritestatus.h"
+
+typedef struct SKC_sprite_status SKC_sprite_status;
 
 typedef enum SKC_hitchk_coli {
   HITCHK_COLI_NONE = 0,

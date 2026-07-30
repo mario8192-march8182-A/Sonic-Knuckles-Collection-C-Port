@@ -2,8 +2,9 @@
 #define SKC_BRYUKA_H
 
 #include "../types/speed.h"
-#include "../types/spritepattern.h"
-#include "../types/spritestatus.h"
+
+typedef struct SKC_sprite_pattern SKC_sprite_pattern;
+typedef struct SKC_sprite_status SKC_sprite_status;
 
 void bryuka(SKC_sprite_status* p_actwk);
 void bryukamove2(SKC_sprite_status* p_actwk);

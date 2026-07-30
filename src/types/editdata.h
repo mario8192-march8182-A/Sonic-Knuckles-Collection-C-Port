@@ -1,8 +1,9 @@
 #ifndef SKC_EDITDATA_H
 #define SKC_EDITDATA_H
 
-#include "spritepattern.h"
 #include "spritestatushandler.h"
+
+typedef struct SKC_sprite_pattern SKC_sprite_pattern;
 
 typedef struct SKC_edit_data {
   unsigned short cnt;

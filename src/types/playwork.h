@@ -1,7 +1,7 @@
 #ifndef SKC_PLAYWORK_H
 #define SKC_PLAYWORK_H
 
-#include "spritestatus.h"
+typedef struct SKC_sprite_status SKC_sprite_status;
 
 typedef struct SKC_play_work {
   short* plmaxspdwk_ptr;

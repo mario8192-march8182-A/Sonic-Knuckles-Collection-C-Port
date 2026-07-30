@@ -1,9 +1,10 @@
 #ifndef SKC_ACTION_H
 #define SKC_ACTION_H
 
-#include "types/spritedata.h"
-#include "types/spriteplacement.h"
 #include "types/spritestatus.h"
+
+typedef struct SKC_sprite_data SKC_sprite_data;
+typedef struct SKC_sprite_placement SKC_sprite_placement;
 
 typedef struct SKC_patset_work {
   SKC_sprite_data* sprite_tbl_ptr;

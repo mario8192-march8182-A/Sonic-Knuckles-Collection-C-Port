@@ -1,7 +1,7 @@
 #ifndef SKC_ACTSET_H
 #define SKC_ACTSET_H
 
-#include "types/spritestatus.h"
+typedef struct SKC_sprite_status SKC_sprite_status;
 
 typedef struct SKC_aset {
   unsigned short x;

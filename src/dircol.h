@@ -1,7 +1,7 @@
 #ifndef SKC_DIRCOL_H
 #define SKC_DIRCOL_H
 
-#include "types/spritestatus.h"
+typedef struct SKC_sprite_status SKC_sprite_status;
 
 typedef struct SKC_dircol_result {
   signed char offset;

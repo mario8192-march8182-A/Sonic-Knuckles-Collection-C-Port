@@ -3,8 +3,9 @@
 
 #include <stdbool.h>
 #include "../types/playwork.h"
-#include "../types/spritestatus.h"
 #include "../dircol.h"
+
+typedef struct SKC_sprite_status SKC_sprite_status;
 
 void vsplay(SKC_sprite_status* p_playerwk);
 void play00(SKC_sprite_status* p_playerwk);

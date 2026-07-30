@@ -1,7 +1,7 @@
 #ifndef SKC_RAM_H
 #define SKC_RAM_H
 
-#include "types/spritedata.h"
+typedef struct SKC_sprite_data SKC_sprite_data;
 
 extern unsigned char g_vram[0x10000];
 unsigned short* get_colorwk(void);
