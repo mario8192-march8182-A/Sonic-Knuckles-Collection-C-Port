@@ -429,7 +429,7 @@ Sprite* uploadSprites(SKC_sprite_data* pSource, Sprite* pSprite) {
     pSprite->y = pSource->vp - 128;
     pSprite->w = pSource->hs + 1;
     pSprite->h = pSource->vs * 8 + 8;
-    pSprite->flags = pSource->pl + 16
+    pSprite->flags = pSource->pl * 16 + 16
                    | pSource->vf << 9
                    | pSource->hf << 8
                    | pSource->pr << 7;
