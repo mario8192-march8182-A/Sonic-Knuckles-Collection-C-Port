@@ -160,9 +160,9 @@ void patchg(SKC_sprite_status* p_actwk, signed char** p_chg_data) {
   if (p_actwk->pattim-- == 0) {
     signed char* p_data = p_chg_data[p_actwk->mstno];
     p_actwk->pattim = p_data[0];
-    signed char patno = p_data[p_actwk->patcnt];
+    signed char patno = p_data[p_actwk->patcnt + 1];
     if (patno < 0) {
-      switch (-patno) {
+      switch (patno) {
         case PATCHG_CONTROL_LOOP:
           p_actwk->patcnt = 0;
           patno = p_data[1];
@@ -204,7 +204,7 @@ void time_patchg(SKC_sprite_status* p_actwk, signed char** p_chg_data) {
     signed char* p_data = p_chg_data[p_actwk->mstno];
     signed char patno = p_data[p_actwk->patcnt * 2];
     if (patno < 0) {
-      switch (-patno) {
+      switch (patno) {
         case PATCHG_CONTROL_LOOP:
           p_actwk->patcnt = 0;
           patno = p_data[0];
