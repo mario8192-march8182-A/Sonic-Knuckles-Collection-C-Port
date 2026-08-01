@@ -292,7 +292,12 @@ void patset(void) {
       }
     }
 
-    memset(work.sprite_tbl_ptr, 0, work.sprite_left_cnt * sizeof(SKC_sprite_data));
+    for (int i = 0; i < work.sprite_left_cnt; ++i) {
+      work.sprite_tbl_ptr[i].vp = 0;
+      work.sprite_tbl_ptr[i].vs = 0;
+      work.sprite_tbl_ptr[i].hs = 0;
+    }
+
     g_ram.linkdata = SPRITE_COUNT_LIMIT - work.sprite_left_cnt;
     if (g_ram.sprhmasks != 0) {
       if (g_ram.actwk[0].r_no < 6) {
