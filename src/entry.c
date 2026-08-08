@@ -3,6 +3,7 @@
 #include "types/sonic3ram.h"
 #include "constants.h"
 #include "io.h"
+#include "modes/opening.h"
 #include "modes/stagesel.h"
 static void entry(unsigned short cartridge);
 static void mainloop(void);
@@ -21,7 +22,7 @@ void debug_entry(void) {
   g_ram.cartridge = 0;
   vdpinit();
   read_savedata();
-  g_ram.gmmode = STAGESELMD;
+  g_ram.gmmode = STAGESELMD1;
   mainloop();
 }
 
@@ -67,7 +68,7 @@ static void mainloop(void) {
 
 static void (*gmmodetbl[21])(void) = {
   &logo,
-  0,
+  &opening,
   0,
   0,
   &logo_init,

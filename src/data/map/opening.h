@@ -1,5 +1,5 @@
-#ifndef OPENINGMAP_H
-#define OPENINGMAP_H
+#ifndef SKC_OPENINGMAP_H
+#define SKC_OPENINGMAP_H
 
 extern unsigned char s3opening_frame1_map[188];
 extern unsigned char s3opening_frame2_map[194];
@@ -15,7 +15,7 @@ extern unsigned char s3opening_frame11_map[158];
 extern unsigned char s3opening_frame12_map[208];
 extern unsigned char s3opening_frame13_map[250];
 extern unsigned char s3opening_frame14_map[206];
-extern unsigned char skopening_segalogo_map[202];
+extern unsigned char skopening_logo_map[202];
 extern unsigned char skopening_frame1_map[430];
 extern unsigned char skopening_frame2_map[606];
 extern unsigned char skopening_frame3_map[646];

@@ -4,10 +4,14 @@
 typedef enum SKC_game_mode {
   LOGOMD = 0,
   OPENINGMD = 4,
-  GAMEMD = 12,
-  STAGESELMD = 28,
+  GAMEMD1 = 8,
+  GAMEMD2 = 12,
+  STAGESELMD1 = 28,
+  STAGESELMD3 = 40,
   BSMENUMD = 44,
-  SPGAMEMD = 52
+  SPGAMEMD = 52,
+  VSMENUMD = 56,
+  DATASELMD = 76
 }
 SKC_game_mode;
 

@@ -328,6 +328,11 @@ typedef struct SKC_sprite_status {
         }
         clen0930;
         struct {
+          long xposiwk; // 0x2E
+          long yposiwk; // 0x32
+        }
+        deathegg;
+        struct {
           bool miles; // 0x38
           unsigned short vram_offset; // 0x40
         }
@@ -493,6 +498,11 @@ typedef struct SKC_sprite_status {
         }
         obox04_friend;
         struct {
+          long yposiwk; // 0x30
+          signed char dir; // 0x34
+        }
+        opening_banner;
+        struct {
           short xspeed; // 0x3A
         }
         opnbox;
@@ -588,6 +598,11 @@ typedef struct SKC_sprite_status {
         }
         shooter3;
         struct {
+          unsigned char tim[4]; // 0x30
+          unsigned char cnt[4];
+        }
+        skopening_cg_chg;
+        struct {
           short* unknown2e_ptr; // 0x2E
           long angled_xposi; // 0x34
           long angled_yposi; // 0x38
@@ -655,6 +670,10 @@ typedef struct SKC_sprite_status {
         }
         togetree;
         struct {
+          bool reverse; // 0x30
+        }
+        tornado;
+        struct {
           unsigned short ringwk_index; // 0x30
         }
         tring;
@@ -721,33 +740,6 @@ SKC_sprite_status;
       enemy_init0_data* init_data_ptr;
       unsigned char reserved2[8];
     } enemy_uninit_0;
-    struct {
-      unsigned char reserved1[2];
-      long yposiwk;
-      unsigned char dir;
-    } s3opening_banner;
-    struct {
-      unsigned char reserved1[2];
-      long yposiwk;
-      unsigned char dir;
-    } skopening_banner;
-    struct {
-      unsigned char reserved1[2];
-      unsigned char sonicsmile_anim[2];
-      unsigned char sonicfinger_anim[2];
-      unsigned char knuckleshand1_anim[2];
-      unsigned char knuckleshand2_anim[2];
-    } skopening_anims;
-    struct {
-      unsigned char reserved1[2];
-      long xposi;
-      long yposi;
-    } skopening_deathegg;
-    struct {
-      unsigned char reserved[22];
-      short xposi;
-      short yposi;
-    } skopening_nameroulette;
     struct {
       unsigned char reserved1[2];
       short* p_posi;

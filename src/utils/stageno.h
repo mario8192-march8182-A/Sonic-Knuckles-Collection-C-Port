@@ -87,6 +87,9 @@ inline unsigned char get_act(unsigned short stageno) {
   unsigned char result = stageno & 0xFF;
   return result;
 }
+inline void set_zone(unsigned short* p_stageno, unsigned char zone) {
+  *p_stageno = zone << 8 | *p_stageno & 0x00FF;
+}
 inline void set_act(unsigned short* p_stageno, unsigned char act) {
   *p_stageno = *p_stageno & 0xFF00 | act;
 }

@@ -298,7 +298,7 @@ void stagesel(void) {
             g_ram.scralim_down_s = 0x1000;
             g_ram.scralim_down_s2 = 0x1000;
           }
-          g_ram.gmmode = GAMEMD;
+          g_ram.gmmode = GAMEMD2;
           g_ram.pl_suu = 3;
           g_ram.pl2_suu = 3;
           g_ram.plring = 0;
@@ -321,7 +321,7 @@ void stagesel(void) {
       }
     }
   }
-  while (g_ram.gmmode == STAGESELMD);
+  while (g_ram.gmmode == STAGESELMD1 || g_ram.gmmode == STAGESELMD3);
 }
 
 
