@@ -23,7 +23,7 @@ typedef struct sonic3_ram {
   /* 08ffac00 */ unsigned char pbuffer[PBUFFER_LEVELS][PBUFFER_LEVEL_SLOTS];
   /* 08ffb000 */ SKC_sprite_status actwk[ACTWK_SLOTS];
   /* 08ffd000 */ unsigned char zoombuffer[0x1000];
-  /* 08ffe000 */ unsigned short hscrollbuff[448];
+  /* 08ffe000 */ short hscrollbuff[448];
   /* 08ffe380 */ unsigned char colibuffer[COLIBUFFER_SLOTS];
   /* 08ffe400 */ struct {
                    SKC_swdata swdata;

@@ -34,7 +34,7 @@ unsigned short* get_demotimer_ptr(void) {
 }
 
 
-unsigned short* get_hscrollbuff(void) {
+short* get_hscrollbuff(void) {
   return g_ram.hscrollbuff;
 }
 

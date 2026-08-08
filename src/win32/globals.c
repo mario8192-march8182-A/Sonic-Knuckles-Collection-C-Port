@@ -463,10 +463,10 @@
 /* 00854de8 */ ULONG g_vdp_mode;
 /* 00854dec */ BOOL g_vdp_hscroll_scanline;
 /* 00854df0 */ Sprite g_sprites[80];
-/* 00856df8 */ USHORT* g_pHscrollbuff;
+/* 00856df8 */ SHORT* g_pHscrollbuff;
 /* 00856df0 */ ULONG g_vIntScanline;
 /* 00856df4 */ ULONG DAT_00856df4;
-/* 00856dfc */ USHORT* g_pHscrollbuff2;
+/* 00856dfc */ SHORT* g_pHscrollbuff2;
 /* 00856e00 */ ULONG g_vscrollPlaneB;
 /* 00856e04 */ ULONG g_vscrollPlaneA;
 /* 00856e08 */ BOOL g_bVscrollCopy;

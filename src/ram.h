@@ -9,7 +9,7 @@ unsigned short* get_colorwk2(void);
 unsigned short* get_colorwk3(void);
 void clear_game_ram(void);
 unsigned short* get_demotimer_ptr(void);
-unsigned short* get_hscrollbuff(void);
+short* get_hscrollbuff(void);
 unsigned char* get_int_flg_ptr(void);
 long get_scra_v_posit_copy(void);
 SKC_sprite_data* get_sprite_table(void);
