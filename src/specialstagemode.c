@@ -140,13 +140,13 @@ void specialstagemode() {
   if (g_ram.bsmodemenu == 0) {
     p_text = noway;
     g_ram.levelselect_plmode = TEAM_SONIC;
-    g_ram.vscrolla = -16;
-    g_ram.vscrollb = -8;
+    g_ram.vscroll.a = -16;
+    g_ram.vscroll.b = -8;
   }
   load_string_vram(p_text, 256, 0x5BF);
   if (g_ram.specmodefull == 0) {
-    g_ram.vscrolla = -16;
-    g_ram.vscrollb = -8;
+    g_ram.vscroll.a = -16;
+    g_ram.vscroll.b = -8;
   }
   g_ram.actwk[0].r_ptr = &menu_init;
   g_ram.actwk[1].r_ptr = &copyright_init;
@@ -270,10 +270,10 @@ static void menu_move0(sprite_status* p_actwk) {
 // 006a5126
 static void menu_move1(sprite_status* p_actwk) {
   if (g_ram.specmodefull != 0) {
-    if (g_ram.vscrolla != 0 || g_ram.vscrollb != 0) {
-      ++g_ram.vscrolla;
-      if (g_ram.vscrolla % 2) {
-        ++g_ram.vscrollb;
+    if (g_ram.vscroll.a != 0 || g_ram.vscroll.b != 0) {
+      ++g_ram.vscroll.a;
+      if (g_ram.vscroll.a % 2) {
+        ++g_ram.vscroll.b;
       }
       sprite_status* a1 = &g_ram.actwk[2];
 

@@ -60,12 +60,12 @@ unsigned char get_vdp_hint_cache(void) {
 
 
 short get_vscrolla(void) {
-  return g_ram.vscrolla;
+  return g_ram.vscroll.a;
 }
 
 
 short get_vscrollb(void) {
-  return g_ram.vscrollb;
+  return g_ram.vscroll.b;
 }
 
 

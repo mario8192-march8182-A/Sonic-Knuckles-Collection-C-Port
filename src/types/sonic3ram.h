@@ -119,8 +119,11 @@ typedef struct sonic3_ram {
   /* 08fff604 */ SKC_swdata swdata1;
   /* 08fff606 */ SKC_swdata swdata2;
   /* 08fff614 */ unsigned short demotimer;
-  /* 08fff616 */ short vscrolla;
-  /* 08fff618 */ short vscrollb;
+  /* 08fff616 */ struct {
+                   short a;
+                   short b;
+                 }
+                 vscroll;
   /* 08fff61a */ unsigned long hscroll;
   /* 08fff623 */ unsigned char teleport;
   /* 08fff624 */ unsigned char vdp_hint_cache;

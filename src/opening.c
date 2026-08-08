@@ -624,8 +624,8 @@ static void s3banner_move0(sprite_status* p_actwk) {
   }
   util__assign_high(&p_actwk->yposi, yposi);
   if (!g_sonic3_alone) {
-    if (g_ram.vscrolla != 16) {
-      ++g_ram.vscrolla;
+    if (g_ram.vscroll.a != 16) {
+      ++g_ram.vscroll.a;
     }
   }
   s3banner_move1(p_actwk);
@@ -793,7 +793,7 @@ static void sonicfinger_init(sprite_status* p_actwk) {
 // 006dd79f
 static void sonicfinger_move(sprite_status* p_actwk) {
   if (!g_sonic3_alone) {
-    util__assign_high(&p_actwk->yposi, 220 - g_ram.vscrolla);
+    util__assign_high(&p_actwk->yposi, 220 - g_ram.vscroll.a);
   }
   patchg(p_actwk, s3opening_sonicfinger_chg);
   actionsub(p_actwk);
@@ -827,7 +827,7 @@ static void sonicwink_init(sprite_status* p_actwk) {
 // 006dd86d
 static void sonicwink_move(sprite_status* p_actwk) {
   if (!g_sonic3_alone) {
-    util__assign_high(&p_actwk->yposi, 200 - g_ram.vscrolla);
+    util__assign_high(&p_actwk->yposi, 200 - g_ram.vscroll.a);
   }
   patchg2(p_actwk, s3opening_sonicwink_chg);
   actionsub(p_actwk);
@@ -1138,7 +1138,7 @@ LAB_006de36c:
   util__assign_high(&g_ram.actwk[1].actfree.skopening_deathegg.yposi, 112);
   g_ram.scr_evta = 3;
   g_ram.scr_shake_flg = 0;
-  g_ram.vscrollb = 256;
+  g_ram.vscroll.b = 256;
   util__assign_high(&g_ram.scra_v_posit, 256);
   util__assign_high(&g_ram.vs_scra_v_posit, 256);
   memcpy(&g_ram.colorwk[16], skopening_knuckles_color, sizeof(skopening_knuckles_color));
@@ -1693,12 +1693,12 @@ static void shake_screen() {
 
 // 006dfddb
 static void deform_bg() {
-  g_ram.vscrolla = util__longhigh_to_short(g_ram.scra_v_posit);
-  g_ram.vscrollb = util__longhigh_to_short(g_ram.vs_scra_v_posit);
+  g_ram.vscroll.a = util__longhigh_to_short(g_ram.scra_v_posit);
+  g_ram.vscroll.b = util__longhigh_to_short(g_ram.vs_scra_v_posit);
   short scra_h_posit = 0;
   if (g_ram.scr_shake_flg != 0) {
-    g_ram.vscrolla += util__longhigh_to_short(g_ram.vs_scra_v_posit_copy);
-    g_ram.vscrollb += util__longhigh_to_short(g_ram.vs_scra_v_posit_copy);
+    g_ram.vscroll.a += util__longhigh_to_short(g_ram.vs_scra_v_posit_copy);
+    g_ram.vscroll.b += util__longhigh_to_short(g_ram.vs_scra_v_posit_copy);
     scra_h_posit = g_ram.vs_scra_h_posit_copy;
   }
 
