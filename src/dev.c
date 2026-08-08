@@ -13,6 +13,7 @@ static unsigned char* write_xor_pixels(unsigned char* p_destination, SKC_bitdevr
 static unsigned char* build_codetable(unsigned char* p_source, SKC_bitdevr_codetable_entry (*codetable)[256]);
 static unsigned short get_inline_copy(unsigned char** pp_source, SKC_mapdevr_work* p_work, unsigned short offset, unsigned char bitfield, unsigned char inline_copy_len);
 static void prepare_next_entry(unsigned char** pp_source, SKC_mapdevr_work* p_work);
+static unsigned short unlze2(unsigned char** pp_destination, unsigned char* p_source);
 static unsigned char get_next_bit(unsigned char** pp_source, unsigned short* p_buffer, unsigned char* p_buffer_len);
 
 extern unsigned char g_vram[0x10000];
@@ -345,7 +346,12 @@ static void prepare_next_entry(unsigned char** pp_source, SKC_mapdevr_work* p_wo
 }
 
 
-unsigned short unlze(unsigned char** pp_destination, unsigned char* p_source) {
+void unlze(unsigned char* p_destination, unsigned char* p_source) {
+  unlze2(&p_destination, p_source);
+}
+
+
+static unsigned short unlze2(unsigned char** pp_destination, unsigned char* p_source) {
   unsigned char* p_source_start = p_source;
   unsigned short buffer = p_source[0] | p_source[1] << 8;
   p_source += 2;
@@ -432,7 +438,7 @@ void unlze_moduled(unsigned char* p_destination, unsigned char* p_source) {
     unsigned char module_cnt = size & 0x0FFF ? (size >> 12) + 1 : size >> 12;
 
     for (int i = 0; i < module_cnt; ++i) {
-      unsigned short read_byte_cnt = unlze(&p_destination, p_source);
+      unsigned short read_byte_cnt = unlze2(&p_destination, p_source);
       if (read_byte_cnt % 16 != 0) {
         read_byte_cnt &= 0xFFF0;
         read_byte_cnt += 16;

@@ -1480,11 +1480,9 @@ void cg_change_init(void) {
       break;
     case ROLLING_JUMP_ACT_1:
     case ROLLING_JUMP_ACT_2: {
-      unsigned char* p_destination = &g_ram.screens[0x1000];
-      unlze(&p_destination, bg_14_00_cg);
-      p_destination = &g_ram.screens[0x7000];
-      unlze(&p_destination, bg_14_01_cg);
-      p_destination = &g_ram.screens[0x6000];
+      unlze(&g_ram.screens[0x1000], bg_14_00_cg);
+      unlze(&g_ram.screens[0x7000], bg_14_01_cg);
+      unsigned char* p_destination = &g_ram.screens[0x6000];
       unsigned char* p_source = &g_ram.screens[0x7000];
 
       for (int i = 0 ; i < 12; ++i) {
