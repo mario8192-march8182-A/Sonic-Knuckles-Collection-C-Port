@@ -168,7 +168,7 @@ void patchg(SKC_sprite_status* p_actwk, signed char** p_chg_data) {
           patno = p_data[1];
           break;
         case PATCHG_CONTROL_REWIND:
-          p_actwk->patcnt = p_data[p_actwk->patcnt + 2];
+          p_actwk->patcnt -= p_data[p_actwk->patcnt + 2];
           patno = p_data[p_actwk->patcnt + 1];
           break;
         case PATCHG_CONTROL_NEXT:
