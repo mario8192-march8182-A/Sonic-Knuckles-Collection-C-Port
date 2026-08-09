@@ -298,7 +298,7 @@ void ringpatset(SKC_patset_work* p_work) {
         short xposi = g_ram.ringactadr[i].x - (g_ram.scra_h_posit_copy >> 16) + 128;
         unsigned char patno = g_ram.ringwkadr[i].patno;
         if (patno == 0) {
-          patno = g_ram.ring_patno;
+          patno = g_ram.syspatno2;
         }
         SKC_sprite_data* p_data = p_work->sprite_tbl_ptr;
         p_data->vp = yposi + pat[patno].yoff;

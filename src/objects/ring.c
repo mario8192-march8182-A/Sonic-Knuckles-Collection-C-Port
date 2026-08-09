@@ -85,7 +85,7 @@ static void ringinit(SKC_sprite_status* p_actwk) {
 
 
 static void ringmove(SKC_sprite_status* p_actwk) {
-  p_actwk->patno = g_ram.ring_patno;
+  p_actwk->patno = g_ram.syspatno2;
   frameoutchkc(p_actwk);
 }
 
