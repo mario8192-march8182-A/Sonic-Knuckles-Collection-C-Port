@@ -280,7 +280,7 @@ static void flyringinit(SKC_sprite_status* p_actwk) {
 
 
 static void flyringmove(SKC_sprite_status* p_actwk) {
-  p_actwk->patno = g_ram.flyring_patno;
+  p_actwk->patno = g_ram.sys_patno4;
   speedset2(p_actwk);
   p_actwk->yspeed += 0x18;
   if (p_actwk->yspeed >= 0) {
@@ -328,7 +328,7 @@ static void flyringerase(SKC_sprite_status* p_actwk) {
 
 
 static void flyringmoveg(SKC_sprite_status* p_actwk) {
-  p_actwk->patno = g_ram.flyring_patno;
+  p_actwk->patno = g_ram.sys_patno4;
   speedset2_g(p_actwk);
   p_actwk->yspeed += 0x18;
   if (p_actwk->yspeed >= 0) {

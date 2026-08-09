@@ -318,7 +318,7 @@ typedef struct sonic3_ram {
   /* 08fffe84 */ short sysdirec5;
   /* 08fffeb3 */ unsigned char syspatno2;
   /* 08fffeb6 */ unsigned char sys_pattim4;
-  /* 08fffeb7 */ unsigned char flyring_patno;
+  /* 08fffeb7 */ unsigned char sys_patno4;
   /* 08fffeba */ unsigned short ropeswing_dir;
   /* 08fffebe */ unsigned char pl2ring_f;
   /* 08fffebf */ unsigned char pl2ring_f2;
