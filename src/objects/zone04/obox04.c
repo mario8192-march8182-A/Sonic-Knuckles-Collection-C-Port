@@ -145,7 +145,7 @@ static void obox04_friend_move0(SKC_sprite_status* p_actwk) {
 static void obox04_ring(SKC_sprite_status* p_actwk) {
   enemy_init0(p_actwk, &obox04_ring_init_tbl);
   p_actwk->r_ptr = &flyring;
-  g_ram.flyring_patcnt = 255;
+  g_ram.sys_pattim4 = 255;
   p_actwk->sprvsize = 8;
   p_actwk->sprhsize = 8;
   p_actwk->actflg.relative_coordinates = 1;

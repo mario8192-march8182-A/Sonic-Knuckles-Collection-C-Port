@@ -245,7 +245,7 @@ static void flyringinit(SKC_sprite_status* p_actwk) {
     p_new_actwk->sprpri = PRI_3;
     p_new_actwk->colino = 0x47;
     p_new_actwk->sprhs = 8;
-    g_ram.flyring_patcnt = 255;
+    g_ram.sys_pattim4 = 255;
     if (direction < 0x8000) {
       short sin, cos;
       sinset(direction & 0xFF, &sin, &cos);
@@ -294,7 +294,7 @@ static void flyringmove(SKC_sprite_status* p_actwk) {
           p_actwk->yspeed = -p_actwk->yspeed;
         }
       }
-      if (g_ram.flyring_patcnt == 0
+      if (g_ram.sys_pattim4 == 0
           || g_ram.scralim_down + SCREEN_HEIGHT_PX < (unsigned short)fp16_get_integer(p_actwk->yposi)) {
         flyringerase(p_actwk);
         return;
@@ -342,7 +342,7 @@ static void flyringmoveg(SKC_sprite_status* p_actwk) {
           p_actwk->yspeed = -p_actwk->yspeed;
         }
       }
-      if (g_ram.flyring_patcnt == 0
+      if (g_ram.sys_pattim4 == 0
           || g_ram.scralim_down + SCREEN_HEIGHT_PX < (unsigned short)fp16_get_integer(p_actwk->yposi)) {
         flyringerase(p_actwk);
         return;
@@ -384,7 +384,7 @@ static void tringmove(SKC_sprite_status* p_actwk) {
     if (g_ram.actwk[0].u.play.powerdat.tbaria == 0) {
       p_actwk->r_ptr = flyring;
       p_actwk->r_no = 2;
-      g_ram.flyring_patcnt = 255;
+      g_ram.sys_pattim4 = 255;
     }
     if (p_actwk->pattim-- == 0) {
       p_actwk->pattim = 3;
