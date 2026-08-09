@@ -49,7 +49,7 @@ extern BOOL g_bTrial;
 extern int g_sonicGameMode;
 extern int g_langMode;
 extern int g_debug_mode;
-extern BOOL BOOL_00831198;
+extern BOOL g_bFullGameStage;
 extern BOOL g_bDemo;
 extern CGame g_game;
 extern int g_seMode;
@@ -738,7 +738,7 @@ int CGame::setupGameThread() {
   m_unknown52 = 0;
   m_bPaused = m_unknown52;
   m_unknown48 = m_bPaused;
-  BOOL_00831198 = FALSE;
+  g_bFullGameStage = FALSE;
   ::resetSound();
   ::readSaveFile();
   m_unknown68 = 0;
@@ -786,8 +786,8 @@ void CGame::terminateGameThread() {
 
 // 00403101
 void CGame::update() {
-  if (BOOL_00831198) {
-    BOOL_00831198 = FALSE;
+  if (g_bFullGameStage) {
+    g_bFullGameStage = FALSE;
     if (g_bTrial != 0) {
       PostMessage(m_hWnd, 0x46E, 0, 0);
     }

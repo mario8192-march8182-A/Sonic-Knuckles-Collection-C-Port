@@ -433,7 +433,7 @@
 /* 00831188 */ int g_sonicGameMode = 0;
 /* 00831190 */ int g_langMode = 0;
 /* 00831194 */ int g_debug_mode = 0;
-/* 00831198 */ BOOL BOOL_00831198 = FALSE;
+/* 00831198 */ BOOL g_bFullGameStage = FALSE;
 /* 0083119c */ BOOL g_bDemo = FALSE;
 /* 008311a0 */ // CGame g_game;
 /* 00831368 */ int g_seMode;

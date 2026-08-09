@@ -72,7 +72,7 @@ extern BOOL g_bTrial;
 extern int g_sonicGameMode;
 extern int g_langMode;
 extern int g_debug_mode;
-extern BOOL BOOL_00831198;
+extern BOOL g_bFullGameStage;
 extern BOOL g_bDemo;
 extern int g_seMode;
 extern int g_bgmMode;
