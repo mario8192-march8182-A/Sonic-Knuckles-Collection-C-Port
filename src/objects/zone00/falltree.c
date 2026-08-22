@@ -107,7 +107,7 @@ static void falltreeset(SKC_sprite_status* p_actwk) {
 
 static void falltreemove(SKC_sprite_status* p_actwk) {
   fp16_set_integer(&p_actwk->yposi, fp16_get_integer(p_actwk->yposi) + 1);
-  if ((unsigned short)fp16_get_integer(p_actwk->yposi) >= g_ram.waterposi) {
+  if ((unsigned short)fp16_get_integer(p_actwk->yposi) >= (unsigned short)g_ram.waterposi) {
     p_actwk->r_ptr = &falltreemove1;
     p_actwk->pattim = 60;
   }
