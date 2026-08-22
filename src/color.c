@@ -77,7 +77,6 @@ static unsigned short smilescolor[6][3];
 static unsigned short sknucklescolor[10][3];
 static unsigned short sknucklescolor2[1][3];
 static void fadein2(unsigned short* p_destination, unsigned short* p_source);
-static void fadein0(void);
 static void fadeout2(unsigned short* p_destination);
 static void flashin0(void);
 static void flashin2(unsigned short* p_destination, unsigned short* p_source);
@@ -1474,7 +1473,7 @@ static void fadein2(unsigned short* p_destination, unsigned short* p_source) {
 }
 
 
-static void fadein0(void) {
+void fadein0(void) {
   if (g_ram.stageno == ENDING || g_ram.stageno == MASTER_EMERALD_SHRINE) {
     flashin0();
   }

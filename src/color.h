@@ -6,6 +6,7 @@ void colchgsuper(void);
 extern unsigned short ssoniccolor[10][3];
 void fadein(void);
 void fadein1(void);
+void fadein0(void);
 void colchg(void);
 void fadeout(void);
 void fadeout1(void);

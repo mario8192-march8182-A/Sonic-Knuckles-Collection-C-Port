@@ -685,7 +685,7 @@ static void ropeswingfoutchk(SKC_sprite_status* p_actwk) {
 static void ropeswingmove2(SKC_sprite_status* p_actwk) {
   if (true) {
     short sin, cos;
-    sinset(g_ram.ropeswing_dir >> 8, &sin, &cos);
+    sinset(g_ram.sys_ropetimer >> 8, &sin, &cos);
     p_actwk->direc.w = (unsigned short)sin * 44;
     p_actwk->direc.w &= 0xFFFF;
     p_actwk->u.obj.actfree.rope.unknown3aw = (unsigned short)sin * 44 / 8;
