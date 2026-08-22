@@ -22,7 +22,7 @@ unsigned char get_waterflag(void);
 void inc_systemtimer(void);
 void set_int_flg(unsigned char value);
 void set_region(unsigned char region);
-void set_swdata1(unsigned short swdata);
-void set_swdata2(unsigned short swdata);
+void set_swdata1(unsigned short raw_swdata);
+void set_swdata2(unsigned short raw_swdata);
 
 #endif

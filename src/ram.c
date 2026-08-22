@@ -3,7 +3,6 @@
 #include "types/sonic3ram.h"
 #include "types/spritedata.h"
 #include "types/swdata.h"
-static void set_swdata(SKC_swdata* p_swdata, unsigned short raw_swdata);
 
 sonic3_ram g_ram;
 unsigned char g_vram[0x10000];
@@ -95,31 +94,11 @@ void set_region(unsigned char region) {
 }
 
 
-void set_swdata1(unsigned short swdata) {
-  set_swdata(&g_ram.swdata1, swdata);
+void set_swdata1(unsigned short raw_swdata) {
+  g_ram.swdata1 = get_swdata(raw_swdata);
 }
 
 
-void set_swdata2(unsigned short swdata) {
-  set_swdata(&g_ram.swdata2, swdata);
-}
-
-
-static void set_swdata(SKC_swdata* p_swdata, unsigned short raw_swdata) {
-  p_swdata->pressed.u = raw_swdata;
-  p_swdata->pressed.d = raw_swdata >> 1;
-  p_swdata->pressed.l = raw_swdata >> 2;
-  p_swdata->pressed.r = raw_swdata >> 3;
-  p_swdata->pressed.b = raw_swdata >> 4;
-  p_swdata->pressed.c = raw_swdata >> 5;
-  p_swdata->pressed.a = raw_swdata >> 6;
-  p_swdata->pressed.s = raw_swdata >> 7;
-  p_swdata->down.u = raw_swdata >> 8;
-  p_swdata->down.d = raw_swdata >> 9;
-  p_swdata->down.l = raw_swdata >> 10;
-  p_swdata->down.r = raw_swdata >> 11;
-  p_swdata->down.b = raw_swdata >> 12;
-  p_swdata->down.c = raw_swdata >> 13;
-  p_swdata->down.a = raw_swdata >> 14;
-  p_swdata->down.s = raw_swdata >> 15;
+void set_swdata2(unsigned short raw_swdata) {
+  g_ram.swdata2 = get_swdata(raw_swdata);
 }

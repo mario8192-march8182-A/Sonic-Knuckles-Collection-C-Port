@@ -43,5 +43,22 @@ inline bool are_same_buttons_used(SKC_pad pad0, SKC_pad pad1) {
          && pad0.a == pad1.a
          && pad0.s == pad1.s;
 }
+inline SKC_pad get_pad(unsigned char raw_swdata) {
+  SKC_pad pad = {
+    .u = raw_swdata,
+    .d = raw_swdata >> 1,
+    .l = raw_swdata >> 2,
+    .r = raw_swdata >> 3,
+    .b = raw_swdata >> 4,
+    .c = raw_swdata >> 5,
+    .a = raw_swdata >> 6,
+    .s = raw_swdata >> 7
+  };
+  return pad;
+}
+inline SKC_swdata get_swdata(unsigned short raw_swdata) {
+  SKC_swdata swdata = { .pressed = get_pad(raw_swdata & 0xFF), .down = get_pad(raw_swdata >> 8) };
+  return swdata;
+}
 
 #endif
