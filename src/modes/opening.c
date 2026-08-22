@@ -541,7 +541,7 @@ static void play_demo(void) {
     if (g_ram.cartridge == 1 && stageno == MUSHROOM_HILL_ACT_1) {
       demo0700_init(stageno);
     }
-    g_ram.gmmode = GAMEMD1;
+    g_ram.gmmode = DEMOMD;
   }
   g_ram.demoflag = 1;
   g_ram.pl_suu = 3;
@@ -1231,7 +1231,7 @@ static void skopening(void) {
         play_demo();
       }
       else if (g_ram.swdata1.pressed.s == 1) {
-        g_ram.gmmode = GAMEMD2;
+        g_ram.gmmode = GAMEMD;
         g_ram.pl_suu = 3;
         g_ram.pl2_suu = 3;
         g_ram.plring = 0;

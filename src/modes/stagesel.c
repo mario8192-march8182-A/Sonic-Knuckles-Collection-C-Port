@@ -298,7 +298,7 @@ void stagesel(void) {
             g_ram.scralim_down_s = 0x1000;
             g_ram.scralim_down_s2 = 0x1000;
           }
-          g_ram.gmmode = GAMEMD2;
+          g_ram.gmmode = GAMEMD;
           g_ram.pl_suu = 3;
           g_ram.pl2_suu = 3;
           g_ram.plring = 0;
