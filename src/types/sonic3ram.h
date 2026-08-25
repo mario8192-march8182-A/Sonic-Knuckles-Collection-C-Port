@@ -18,8 +18,8 @@ typedef struct SKC_sprite_pattern SKC_sprite_pattern;
 typedef struct sonic3_ram {
   /* 08ff0000 */ unsigned char decompressed[0xA800];
   /* 08ff0000 */ unsigned char mapwk[0x8000];
-  /* 08ff8000 */ unsigned char stage_layout[0x1000];
   /* 08ff9000 */ unsigned char blockmappings16[0x1800];
+  /* 08ff8000 */ unsigned char zonemapwk[0x1000];
   /* 08ffac00 */ unsigned char pbuffer[PBUFFER_LEVELS][PBUFFER_LEVEL_SLOTS];
   /* 08ffb000 */ SKC_sprite_status actwk[ACTWK_SLOTS];
   /* 08ffd000 */ unsigned char zoombuffer[0x1000];

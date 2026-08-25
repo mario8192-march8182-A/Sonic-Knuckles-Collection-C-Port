@@ -986,26 +986,26 @@ static void water0001chk(void) {
           result.actwk_ptr->pattim = 180;
         }
       }
-      unsigned char* p_layout = &g_ram.stage_layout[0x24];
-      unsigned short screen_row_offset = p_layout[0] | p_layout[1] << 8;
+      unsigned char* p_zonemap = &g_ram.zonemapwk[0x24];
+      unsigned short screen_row_offset = p_zonemap[0] | p_zonemap[1] << 8;
       unsigned short screen_offset = screen_row_offset + 0x4E;
       screen_offset ^= 1; /* Stage data is byte-swapped. */
       g_ram.mapwk[screen_offset] = 0;
 
-      p_layout = &g_ram.stage_layout[0x28];
-      screen_row_offset = p_layout[0] | p_layout[1] << 8;
+      p_zonemap = &g_ram.zonemapwk[0x28];
+      screen_row_offset = p_zonemap[0] | p_zonemap[1] << 8;
       screen_offset = screen_row_offset + 0x4E;
       screen_offset ^= 1; /* Stage data is byte-swapped. */
       g_ram.mapwk[screen_offset] = 0;
 
-      p_layout = &g_ram.stage_layout[0x2C];
-      screen_row_offset = p_layout[0] | p_layout[1] << 8;
+      p_zonemap = &g_ram.zonemapwk[0x2C];
+      screen_row_offset = p_zonemap[0] | p_zonemap[1] << 8;
       screen_offset = screen_row_offset + 0x4E;
       screen_offset ^= 1; /* Stage data is byte-swapped. */
       g_ram.mapwk[screen_offset] = 0;
 
-      p_layout = &g_ram.stage_layout[0x30];
-      screen_row_offset = p_layout[0] | p_layout[1] << 8;
+      p_zonemap = &g_ram.zonemapwk[0x30];
+      screen_row_offset = p_zonemap[0] | p_zonemap[1] << 8;
       screen_offset = screen_row_offset + 0x4E;
       screen_offset ^= 1; /* Stage data is byte-swapped. */
       g_ram.mapwk[screen_offset] = 0;
@@ -1235,8 +1235,8 @@ static void FUN_0041c829(SKC_sprite_status* p_actwk, SKC_pad pad) {
   bool found = false;
   if (p_actwk->u.play.cddat.jump == 0 && p_actwk->u.play.top_solid_bit != 12) {
     unsigned short yposi = (unsigned short)(fp16_get_integer(p_actwk->yposi) / 32) & g_ram.scr_row;
-    unsigned char* p_layout = &g_ram.stage_layout[0x8 + yposi];
-    unsigned short screen_row_offset = p_layout[0] | p_layout[1] << 8;
+    unsigned char* p_zonemap = &g_ram.zonemapwk[0x8 + yposi];
+    unsigned short screen_row_offset = p_zonemap[0] | p_zonemap[1] << 8;
     unsigned short xposi = (unsigned short)(fp16_get_integer(p_actwk->xposi) / 128);
     unsigned short screen_offset = screen_row_offset + xposi;
     screen_offset ^= 1; /* Stage data is byte-swapped. */
@@ -1271,8 +1271,8 @@ static void FUN_0041c9b7(SKC_sprite_status* p_actwk, SKC_pad pad) {
   int i;
   if (p_actwk->u.play.cddat.jump == 0 && p_actwk->u.play.cddat.ride == 0) {
     unsigned short yposi = (unsigned short)(fp16_get_integer(p_actwk->yposi) / 32) & g_ram.scr_row;
-    unsigned char* p_layout = &g_ram.stage_layout[0x8 + yposi];
-    unsigned short screen_row_offset = p_layout[0] | p_layout[1] << 8;
+    unsigned char* p_zonemap = &g_ram.zonemapwk[0x8 + yposi];
+    unsigned short screen_row_offset = p_zonemap[0] | p_zonemap[1] << 8;
     unsigned short xposi = (unsigned short)(fp16_get_integer(p_actwk->xposi) / 128);
     unsigned short screen_offset = screen_row_offset + xposi;
     screen_offset ^= 1; /* Stage data is byte-swapped. */
@@ -1368,8 +1368,8 @@ static void FUN_0041cdca(SKC_sprite_status* p_actwk, SKC_pad pad) {
   int i;
   if (p_actwk->u.play.cddat.jump == 0 && p_actwk->u.play.cddat.ride == 0) {
     unsigned short yposi = (unsigned short)(fp16_get_integer(p_actwk->yposi + 20) / 32) & g_ram.scr_row;
-    unsigned char* p_layout = &g_ram.stage_layout[0x8 + yposi];
-    unsigned short screen_row_offset = p_layout[0] | p_layout[1] << 8;
+    unsigned char* p_zonemap = &g_ram.zonemapwk[0x8 + yposi];
+    unsigned short screen_row_offset = p_zonemap[0] | p_zonemap[1] << 8;
     unsigned short xposi = (unsigned short)(fp16_get_integer(p_actwk->xposi) / 128);
     unsigned short screen_offset = screen_row_offset + xposi;
     screen_offset ^= 1; /* Stage data is byte-swapped. */

@@ -3159,25 +3159,25 @@ static void switchact_030(SKC_sprite_status* p_actwk) {
 
 static void switchact_031(SKC_sprite_status* p_actwk) {
   g_ram.scr_shake_flg = 20;
-  unsigned char* p_layout = &g_ram.stage_layout[0x48];
-  unsigned short screen_row_offset = p_layout[0] | p_layout[1] << 8;
+  unsigned char* p_zonemap = &g_ram.zonemapwk[0x48];
+  unsigned short screen_row_offset = p_zonemap[0] | p_zonemap[1] << 8;
   unsigned short screen_offset = screen_row_offset + 0x8E;
 
   screen_offset ^= 1; /* Stage data is byte-swapped. */
   g_ram.mapwk[screen_offset] = 20;
   screen_offset ^= 1; /* Undo adjustment. */
 
-  screen_offset += g_ram.stage_layout[0];
+  screen_offset += g_ram.zonemapwk[0];
   screen_offset ^= 1; /* Stage data is byte-swapped. */
   g_ram.mapwk[screen_offset] = 15;
   screen_offset ^= 1; /* Undo adjustment. */
 
-  screen_offset += g_ram.stage_layout[0];
+  screen_offset += g_ram.zonemapwk[0];
   screen_offset ^= 1; /* Stage data is byte-swapped. */
   g_ram.mapwk[screen_offset] = 15;
   screen_offset ^= 1; /* Undo adjustment. */
 
-  screen_offset += g_ram.stage_layout[0];
+  screen_offset += g_ram.zonemapwk[0];
   screen_offset ^= 1; /* Stage data is byte-swapped. */
   g_ram.mapwk[screen_offset] = 136;
   screen_offset ^= 1; /* Undo adjustment. */
