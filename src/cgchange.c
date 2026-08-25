@@ -768,16 +768,16 @@ static void cg_chg_14(SKC_cg_chg_data* p_data) {
       0x180, 0x120, 0x0C0, 0x060, 0x400, 0x3A0, 0x340, 0x2E0, 0x680, 0x620, 0x5C0, 0x560, 0x180, 0x120, 0x0C0, 0x060
     };
 
-    memcpy(&g_ram.screens[0x7000], &g_ram.screens[0x6000 + g_ram.cgchg14cnt2], 0x600);
+    memcpy(&g_ram.mapwk[0x7000], &g_ram.mapwk[0x6000 + g_ram.cgchg14cnt2], 0x600);
     g_ram.cgchg14cnt2 -= 4;
     g_ram.cgchg14cnt2 &= 0x7F;
 
     for (int i = 0; i < 3; ++i) {
-      unsigned char* a3 = &g_ram.screens[0x7200 + i * 0x200];
+      unsigned char* a3 = &g_ram.mapwk[0x7200 + i * 0x200];
 
       for (int j = 0; j < 4; ++j) {
-        unsigned char* a1 = &g_ram.screens[0x7000 + offset_tbl[i * 4 + j]];
-        unsigned char* a2 = &g_ram.screens[0x7000 + offset_tbl[i * 4 + j + 2]];
+        unsigned char* a1 = &g_ram.mapwk[0x7000 + offset_tbl[i * 4 + j]];
+        unsigned char* a2 = &g_ram.mapwk[0x7000 + offset_tbl[i * 4 + j + 2]];
 
         for (int k = 0; k < 8; ++k) {
           unsigned long d0 = (a1[0] | a1[1] << 8 | a1[2] << 8 | a1[3] << 8) & (0x000000FF << k * 4);
@@ -802,7 +802,7 @@ static void cg_chg_14(SKC_cg_chg_data* p_data) {
       if (g_ram.cgchg14cnt >= 0x5000) {
         g_ram.cgchg14cnt = 0;
       }
-      memcpy(&g_vram[0x1D20], &g_ram.screens[0x7000], 0x780);
+      memcpy(&g_vram[0x1D20], &g_ram.mapwk[0x7000], 0x780);
     }
   }
   cg_chg0(p_data, &g_ram.cgchgtim[3], &g_ram.cgchgcnt[3]);
@@ -816,12 +816,12 @@ static void FUN_0044c42b(void) {
     { 0xA0, 0x0A, 0x50, 0x05 }
   };
 
-  unsigned char* a3 = &g_ram.screens[0x7000 + (g_ram.cgchgtim[1] - 1) * 0x280];
+  unsigned char* a3 = &g_ram.mapwk[0x7000 + (g_ram.cgchgtim[1] - 1) * 0x280];
   unsigned char d3 = unknown_tbl[g_ram.cgchgtim[1] - 1][0];
   unsigned char d4 = unknown_tbl[g_ram.cgchgtim[1] - 1][1];
   unsigned char d5 = unknown_tbl[g_ram.cgchgtim[1] - 1][2];
   unsigned char d6 = unknown_tbl[g_ram.cgchgtim[1] - 1][3];
-  unsigned char* a1 = &g_ram.screens[0x1000 + g_ram.cgchg14cnt];
+  unsigned char* a1 = &g_ram.mapwk[0x1000 + g_ram.cgchg14cnt];
 
   for (int i = 0; i < 512; ++i) {
     if (a1[i] != 0) {
@@ -1480,10 +1480,10 @@ void cg_change_init(void) {
       break;
     case ROLLING_JUMP_ACT_1:
     case ROLLING_JUMP_ACT_2: {
-      unlze(&g_ram.screens[0x1000], bg_14_00_cg);
-      unlze(&g_ram.screens[0x7000], bg_14_01_cg);
-      unsigned char* p_destination = &g_ram.screens[0x6000];
-      unsigned char* p_source = &g_ram.screens[0x7000];
+      unlze(&g_ram.mapwk[0x1000], bg_14_00_cg);
+      unlze(&g_ram.mapwk[0x7000], bg_14_01_cg);
+      unsigned char* p_destination = &g_ram.mapwk[0x6000];
+      unsigned char* p_source = &g_ram.mapwk[0x7000];
 
       for (int i = 0 ; i < 12; ++i) {
         memcpy(&p_destination[i * 2 * 128], &p_source[i * 128], 128);
