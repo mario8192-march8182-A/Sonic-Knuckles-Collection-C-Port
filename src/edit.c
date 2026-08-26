@@ -17,36 +17,36 @@ static void editmove(SKC_sprite_status* p_actwk);
 static void editwalk(SKC_sprite_status* p_actwk, SKC_edit_data* p_data);
 static void editpatchg(SKC_sprite_status* p_actwk, SKC_edit_data* p_data);
 static SKC_edit_data* edittbl[24][2];
-static SKC_edit_data edittbl000;
-static SKC_edit_data edittbl001;
-static SKC_edit_data edittbl010;
-static SKC_edit_data edittbl020;
-static SKC_edit_data edittbl030;
-static SKC_edit_data edittbl040;
-static SKC_edit_data edittbl041;
-static SKC_edit_data edittbl050;
-static SKC_edit_data edittbl051;
-static SKC_edit_data edittbl060;
-static SKC_edit_data edittbl061;
-static SKC_edit_data edittbl070;
-static SKC_edit_data edittbl080;
-static SKC_edit_data edittbl081;
-static SKC_edit_data edittbl090;
-static SKC_edit_data edittbl091;
-static SKC_edit_data edittbl0a0;
-static SKC_edit_data edittbl0b0;
-static SKC_edit_data edittbl0b1;
-static SKC_edit_data edittbl0c0;
-static SKC_edit_data edittbl0c1;
-static SKC_edit_data edittbl0d0;
-static SKC_edit_data edittbl0e0;
-static SKC_edit_data edittbl0f0;
-static SKC_edit_data edittbl100;
-static SKC_edit_data edittbl110;
-static SKC_edit_data edittbl120;
-static SKC_edit_data edittbl140;
-static SKC_edit_data edittbl160;
-static SKC_edit_data edittbl170;
+static SKC_edit_data edit000tbl;
+static SKC_edit_data edit001tbl;
+static SKC_edit_data edit01tbl;
+static SKC_edit_data edit02tbl;
+static SKC_edit_data edit03tbl;
+static SKC_edit_data edit040tbl;
+static SKC_edit_data edit041tbl;
+static SKC_edit_data edit050tbl;
+static SKC_edit_data edit051tbl;
+static SKC_edit_data edit060tbl;
+static SKC_edit_data edit061tbl;
+static SKC_edit_data edit07tbl;
+static SKC_edit_data edit080tbl;
+static SKC_edit_data edit081tbl;
+static SKC_edit_data edit090tbl;
+static SKC_edit_data edit091tbl;
+static SKC_edit_data edit0atbl;
+static SKC_edit_data edit0b0tbl;
+static SKC_edit_data edit0b1tbl;
+static SKC_edit_data edit0c0tbl;
+static SKC_edit_data edit0c1tbl;
+static SKC_edit_data edit0dtbl;
+static SKC_edit_data edit0etbl;
+static SKC_edit_data edit0ftbl;
+static SKC_edit_data edit10tbl;
+static SKC_edit_data edit11tbl;
+static SKC_edit_data edit12tbl;
+static SKC_edit_data edit14tbl;
+static SKC_edit_data edit16tbl;
+static SKC_edit_data edit17tbl;
 
 extern sonic3_ram g_ram;
 
@@ -217,34 +217,34 @@ static void editpatchg(SKC_sprite_status* p_actwk, SKC_edit_data* p_data) {
 
 
 static SKC_edit_data* edittbl[24][2] = {
-  { &edittbl000, &edittbl001 },
-  { &edittbl010, &edittbl010 },
-  { &edittbl020, &edittbl020 },
-  { &edittbl030, &edittbl030 },
-  { &edittbl040, &edittbl041 },
-  { &edittbl050, &edittbl051 },
-  { &edittbl060, &edittbl061 },
-  { &edittbl070, &edittbl070 },
-  { &edittbl080, &edittbl081 },
-  { &edittbl090, &edittbl091 },
-  { &edittbl0a0, &edittbl0a0 },
-  { &edittbl0b0, &edittbl0b1 },
-  { &edittbl0c0, &edittbl0c1 },
-  { &edittbl0d0, &edittbl0d0 },
-  { &edittbl0e0, &edittbl0e0 },
-  { &edittbl0f0, &edittbl0f0 },
-  { &edittbl100, &edittbl100 },
-  { &edittbl110, &edittbl110 },
-  { &edittbl120, &edittbl120 },
-  { &edittbl170, &edittbl170 },
-  { &edittbl140, &edittbl140 },
-  { &edittbl170, &edittbl170 },
-  { &edittbl160, &edittbl160 },
-  { &edittbl170, &edittbl170 }
+  { &edit000tbl, &edit001tbl },
+  { &edit01tbl,  &edit01tbl },
+  { &edit02tbl,  &edit02tbl },
+  { &edit03tbl,  &edit03tbl },
+  { &edit040tbl, &edit041tbl },
+  { &edit050tbl, &edit051tbl },
+  { &edit060tbl, &edit061tbl },
+  { &edit07tbl,  &edit07tbl },
+  { &edit080tbl, &edit081tbl },
+  { &edit090tbl, &edit091tbl },
+  { &edit0atbl,  &edit0atbl },
+  { &edit0b0tbl, &edit0b1tbl },
+  { &edit0c0tbl, &edit0c1tbl },
+  { &edit0dtbl,  &edit0dtbl },
+  { &edit0etbl,  &edit0etbl },
+  { &edit0ftbl,  &edit0ftbl },
+  { &edit10tbl,  &edit10tbl },
+  { &edit11tbl,  &edit11tbl },
+  { &edit12tbl,  &edit12tbl },
+  { &edit17tbl, &edit17tbl },
+  { &edit14tbl,  &edit14tbl },
+  { &edit17tbl, &edit17tbl },
+  { &edit16tbl, &edit16tbl },
+  { &edit17tbl, &edit17tbl }
 };
 
 
-static SKC_edit_data edittbl000 = {
+static SKC_edit_data edit000tbl = {
   29,
   {
     { &ring,      ringpat,      0xA6BC,  0, 0x00 },
@@ -278,7 +278,7 @@ static SKC_edit_data edittbl000 = {
     //{ &dai,       dai00pat,     0x43F7,  0, 0x20 }
   }
 };
-static SKC_edit_data edittbl001 = {
+static SKC_edit_data edit001tbl = {
   37,
   {
     { &sjump,     banepat,      0x04A4,  0, 0x81 },
@@ -316,7 +316,7 @@ static SKC_edit_data edittbl001 = {
     //{ &dai,       dai00pat,     0x4440,  0, 0x20 }
   }
 };
-static SKC_edit_data edittbl010 = {
+static SKC_edit_data edit01tbl = {
   54,
   {
     { &ring,      ringpat,      0xA6BC,  0, 0x00 },
@@ -375,7 +375,7 @@ static SKC_edit_data edittbl010 = {
     { &brkabe,    brkabe01pat,  0x4350,  2, 0x02 }
   }
 };
-static SKC_edit_data edittbl020 = {
+static SKC_edit_data edit02tbl = {
   36,
   {
     { &ring,      ringpat,      0xA6BC,  0, 0x00 },
@@ -416,7 +416,7 @@ static SKC_edit_data edittbl020 = {
     { &save,      savepat,      0x05EC,  0, 0x01 }
   }
 };
-static SKC_edit_data edittbl030 = {
+static SKC_edit_data edit03tbl = {
   36,
   {
     { &ring,     ringpat,     0xA6BC,  0, 0x00 },
@@ -457,7 +457,7 @@ static SKC_edit_data edittbl030 = {
     //{ &rolldai,  rolldaipat,  0x438E,  0, 0x49 }
   }
 };
-static SKC_edit_data edittbl040 = {
+static SKC_edit_data edit040tbl = {
   49,
   {
     { &ring,    ringpat,     0xA6BC,  0, 0x00 },
@@ -511,7 +511,7 @@ static SKC_edit_data edittbl040 = {
     //{ &Obj_FBZFlamethrower, DAT_007d4cfe, 0x041D, 3, 0xC0 }
   }
 };
-static SKC_edit_data edittbl041 = {
+static SKC_edit_data edit041tbl = {
   48,
   {
     { &ring,    ringpat,     0xA6BC,  0, 0x00 },
@@ -564,7 +564,7 @@ static SKC_edit_data edittbl041 = {
     //{ &Obj_FBZMagneticPendulum, DAT_007d69ea, 0x2323, 1, 0x80 }
   }
 };
-static SKC_edit_data edittbl050 = {
+static SKC_edit_data edit050tbl = {
   34,
   {
     { &ring,    ringpat,     0xA6BC,  0, 0x00 },
@@ -603,7 +603,7 @@ static SKC_edit_data edittbl050 = {
     { &switch_, switchpat,   0x0456,  2, 0x10 }
   }
 };
-static SKC_edit_data edittbl051 = {
+static SKC_edit_data edit051tbl = {
   35,
   {
     { &ring,    ringpat,     0xA6BC,  0, 0x00 },
@@ -643,7 +643,7 @@ static SKC_edit_data edittbl051 = {
     { &switch_, switchpat,   0x0456,  2, 0x10 }
   }
 };
-static SKC_edit_data edittbl060 = {
+static SKC_edit_data edit060tbl = {
   36,
   {
     { &ring,      ringpat,     0xA6BC,  0, 0x00 },
@@ -684,7 +684,7 @@ static SKC_edit_data edittbl060 = {
     { &bgspr,     bgsprpat,    0x2433, 22, 0x16 }
   }
 };
-static SKC_edit_data edittbl061 = {
+static SKC_edit_data edit061tbl = {
   40,
   {
     { &ring,      ringpat,      0xA6BC,  0, 0x00 },
@@ -729,7 +729,7 @@ static SKC_edit_data edittbl061 = {
     { &bgspr,     bgsprpat,     0x2433, 22, 0x16 }
   }
 };
-static SKC_edit_data edittbl070 = {
+static SKC_edit_data edit07tbl = {
   34,
   {
     { &ring,    ringpat,     0xA6BC,  0, 0x00 },
@@ -768,7 +768,7 @@ static SKC_edit_data edittbl070 = {
     { &hbar,    ropepat,     0x0455, 35, 0x00 }
   }
 };
-static SKC_edit_data edittbl080 = {
+static SKC_edit_data edit080tbl = {
   35,
   {
     { &ring,     ringpat,     0xA6BC,  0, 0x00 },
@@ -808,7 +808,7 @@ static SKC_edit_data edittbl080 = {
     { &brkabe,   brkabe03pat, 0x448C,  4, 0x04 }
   }
 };
-static SKC_edit_data edittbl081 = {
+static SKC_edit_data edit081tbl = {
   37,
   {
     { &ring,     ringpat,     0xA6BC,  0, 0x00 },
@@ -850,7 +850,7 @@ static SKC_edit_data edittbl081 = {
     { &brkabe,   brkabe03pat, 0x448C,  4, 0x04 }
   }
 };
-static SKC_edit_data edittbl090 = {
+static SKC_edit_data edit090tbl = {
   38,
   {
     { &ring,    ringpat,     0xA6BC,  0, 0x00 },
@@ -893,7 +893,7 @@ static SKC_edit_data edittbl090 = {
     { &bgspr,   bgsprpat,    0xA3A1, 38, 0x26 }
   }
 };
-static SKC_edit_data edittbl091 = {
+static SKC_edit_data edit091tbl = {
   38,
   {
     { &ring,    ringpat,     0xA6BC,  0, 0x00 },
@@ -936,7 +936,7 @@ static SKC_edit_data edittbl091 = {
     //{ &Obj_LRZSpikeBallLauncher, DAT_007afec4, 0x240D, 3, 0x60 }
   }
 };
-static SKC_edit_data edittbl0a0 = {
+static SKC_edit_data edit0atbl = {
   22,
   {
     { &ring,    ringpat,    0xA6BC, 0, 0x00 },
@@ -963,7 +963,7 @@ static SKC_edit_data edittbl0a0 = {
     { &egjr0a,  egjr0apat,  0x0500, 0, 0x04 }
   }
 };
-static SKC_edit_data edittbl0b0 = {
+static SKC_edit_data edit0b0tbl = {
   31,
   {
     { &ring,    ringpat,    0xA6BC,  0, 0x00 },
@@ -999,7 +999,7 @@ static SKC_edit_data edittbl0b0 = {
     //{ &Obj_DEZGravityPuzzle, DAT_007ccc52, 0x232D, 0, 0x00 }
   }
 };
-static SKC_edit_data edittbl0b1 = {
+static SKC_edit_data edit0b1tbl = {
   28,
   {
     { &ring,    ringpat,    0xA6BC,  0, 0x00 },
@@ -1032,7 +1032,7 @@ static SKC_edit_data edittbl0b1 = {
     //{ &Obj_DEZGravitySwitch, DAT_007c9c83, 0x2490, 0, 0x00 }
   }
 };
-static SKC_edit_data edittbl0c0 = {
+static SKC_edit_data edit0c0tbl = {
   12,
   {
     { &ring,    ringpat,    0xA6BC,  0, 0x00 },
@@ -1049,7 +1049,7 @@ static SKC_edit_data edittbl0c0 = {
     //{ &iwa0c,   bs0cb0_pt,  0x22DB, 40, 0x22 }
   }
 };
-static SKC_edit_data edittbl0c1 = {
+static SKC_edit_data edit0c1tbl = {
   8,
   {
     { &ring,    ringpat,    0xA6BC, 0, 0x00 },
@@ -1062,7 +1062,7 @@ static SKC_edit_data edittbl0c1 = {
     { &toge,    togepat,    0x049C, 0, 0x00 }
   }
 };
-static SKC_edit_data edittbl0d0 = {
+static SKC_edit_data edit0dtbl = {
   8,
   {
     { &ring,    ringpat,    0xA6BC, 0, 0x00 },
@@ -1075,7 +1075,7 @@ static SKC_edit_data edittbl0d0 = {
     { &toge,    togepat,    0x049C, 0, 0x00 }
   }
 };
-static SKC_edit_data edittbl0e0 = {
+static SKC_edit_data edit0etbl = {
   18,
   {
     { &ring,    ringpat,     0xE3D2, 0, 0x00 },
@@ -1098,7 +1098,7 @@ static SKC_edit_data edittbl0e0 = {
     //{ &vsspole, vsspolepat,  0x06BC, 0, 0x00 }
   }
 };
-static SKC_edit_data edittbl0f0 = {
+static SKC_edit_data edit0ftbl = {
   21,
   {
     { &ring,      ringpat,      0xE3D2, 0, 0x00 },
@@ -1124,7 +1124,7 @@ static SKC_edit_data edittbl0f0 = {
     //{ &vsspole,   vsspolepat,   0x06BC, 0, 0x00 }
   }
 };
-static SKC_edit_data edittbl100 = {
+static SKC_edit_data edit10tbl = {
   21,
   {
     { &ring,    ringpat,     0xE3D2,  0, 0x00 },
@@ -1150,7 +1150,7 @@ static SKC_edit_data edittbl100 = {
     //{ &vsspole, vsspolepat,  0x06BC,  0, 0x00 }
   }
 };
-static SKC_edit_data edittbl110 = {
+static SKC_edit_data edit11tbl = {
   20,
   {
     { &ring,    ringpat,     0xE3D2, 0, 0x00 },
@@ -1175,7 +1175,7 @@ static SKC_edit_data edittbl110 = {
     //{ &vsspole, vsspolepat,  0x06BC, 0, 0x00 }
   }
 };
-static SKC_edit_data edittbl120 = {
+static SKC_edit_data edit12tbl = {
   22,
   {
     { &ring,    ringpat,     0xE3D2, 0, 0x00 },
@@ -1202,7 +1202,7 @@ static SKC_edit_data edittbl120 = {
     { &vsiwa,   vsiwapat,    0x6300, 0, 0x33 }
   }
 };
-static SKC_edit_data edittbl140 = {
+static SKC_edit_data edit14tbl = {
   9,
   {
     { &ring,  ringpat,    0xA6BC, 0, 0x00 },
@@ -1216,7 +1216,7 @@ static SKC_edit_data edittbl140 = {
     //{ &Obj_PachinkoItemOrb, LAB_007be2d4, 0xE364, 0, 0x00 }
   }
 };
-static SKC_edit_data edittbl160 = {
+static SKC_edit_data edit16tbl = {
   10,
   {
     { &ring,    ringpat,     0xA6BC, 0, 0x00 },
@@ -1231,7 +1231,7 @@ static SKC_edit_data edittbl160 = {
     //{ &Obj_SSZHPZTeleporter, LAB_007c4738, 0x052E, 10, 0x00 },
   }
 };
-static SKC_edit_data edittbl170 = {
+static SKC_edit_data edit17tbl = {
   8,
   {
     { &ring,    ringpat,    0xA6BC, 0, 0x00 },
