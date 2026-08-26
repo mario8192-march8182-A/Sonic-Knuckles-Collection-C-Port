@@ -373,7 +373,7 @@ static void playsuuwrt(void) {
   for (int i = 0; i < 2; ++i) {
     unsigned char digit = pl_suu / base;
     if (i == 1 || digit > 0) {
-      memcpy(p_vram, &scorewrtcg[digit * 32], 32);
+      memcpy(p_vram, &playsuucg[digit * 32], 32);
     }
     else {
       memset(p_vram, 0, 32);
