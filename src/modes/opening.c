@@ -233,10 +233,10 @@ void opening(void) {
   memset(g_ram.waterlinecgchgcnt, 0, sizeof(g_ram.waterlinecgchgcnt));
   g_ram.cgchg14cnt = 0;
   g_ram.cgchg14cnt2 = 0;
-  g_ram.DAT_08ffee00 = 0;
-  g_ram.DAT_08ffee02 = 0;
-  g_ram.DAT_08ffee04 = 0;
-  g_ram.DAT_08ffee06 = 0;
+  g_ram.scra_hz = 0;
+  g_ram.scra_vz = 0;
+  g_ram.scra_hz2 = 0;
+  g_ram.scra_vz2 = 0;
   // DAT_08ffee08
   g_ram.pl_scr_lock_flag = 0;
   g_ram.pl2_scr_lock_flag = 0;

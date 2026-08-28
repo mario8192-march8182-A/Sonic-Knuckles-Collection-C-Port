@@ -346,8 +346,9 @@ static void prepare_next_entry(unsigned char** pp_source, SKC_mapdevr_work* p_wo
 }
 
 
-void unlze(unsigned char* p_destination, unsigned char* p_source) {
+unsigned char* unlze(unsigned char* p_destination, unsigned char* p_source) {
   unlze2(&p_destination, p_source);
+  return p_destination;
 }
 
 

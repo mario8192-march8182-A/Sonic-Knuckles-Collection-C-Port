@@ -21,6 +21,7 @@
 #include "../dev.h"
 #include "../io.h"
 #include "../score.h"
+#include "../scroll.h"
 #include "../shared.h"
 #include "../sound.h"
 #include "../objects/common.h"
