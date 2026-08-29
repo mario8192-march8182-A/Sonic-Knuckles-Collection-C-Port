@@ -461,7 +461,7 @@ void set_gost08(SKC_sprite_status* p_actwk) {
   g_ram.markerno = 1;
   g_ram.plxposi_s = playpositbl[SANDOPOLIS][ACT_2].x;
   g_ram.plyposi_s = playpositbl[SANDOPOLIS][ACT_2].y;
-  playsave1(p_actwk);
+  playsave1();
   set_act00(p_actwk, &obox08_gost_set_tbl);
 }
 

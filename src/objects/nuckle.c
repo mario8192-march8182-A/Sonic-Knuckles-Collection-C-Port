@@ -1855,7 +1855,7 @@ static void ev0700_fout0(SKC_sprite_status* p_actwk) {
   g_ram.markerno = 1;
   g_ram.plxposi_s = 0x190;
   g_ram.plyposi_s = 0x56C;
-  playsave1(p_actwk);
+  playsave1();
   set_emy_fout0(p_actwk);
 }
 
@@ -2321,7 +2321,7 @@ static void ev0701_move0(SKC_sprite_status* p_actwk) {
     g_ram.markerno = 7;
     g_ram.plxposi_s = 0x52A;
     g_ram.plyposi_s = 0x5AC;
-    playsave1(p_actwk);
+    playsave1();
     frameout(p_actwk);
   }
 }
@@ -2484,7 +2484,7 @@ static void end_open(SKC_sprite_status* p_actwk) {
   g_ram.markerno = 1;
   g_ram.plxposi_s = 0x6F4;
   g_ram.plyposi_s = 0x9EC;
-  playsave1(p_actwk);
+  playsave1();
   g_ram.pltime_s.reserved = 0;
   g_ram.pltime_s.minutes = 0;
   g_ram.pltime_s.seconds = 0;
@@ -2920,7 +2920,7 @@ static void nuckle0a0_wait5(SKC_sprite_status* p_actwk) {
     g_ram.markerno = 1;
     g_ram.plxposi_s = 0x140;
     g_ram.plyposi_s = 0xC6C;
-    playsave1(p_actwk);
+    playsave1();
     memcpy(&g_ram.colorwk[16], &g_ram.colorwk2[16], sizeof(unsigned short) * 16);
     divdevset2(&item_cg_tbl);
     clr_wchg_bit(p_actwk);

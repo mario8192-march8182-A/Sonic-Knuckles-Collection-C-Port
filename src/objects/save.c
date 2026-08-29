@@ -165,11 +165,11 @@ static void playsave(SKC_sprite_status* p_actwk) {
   g_ram.markerno = p_actwk->u.obj.userflag & 0xFF;
   g_ram.plxposi_s = fp16_get_integer(p_actwk->xposi);
   g_ram.plyposi_s = fp16_get_integer(p_actwk->yposi);
-  playsave1(p_actwk);
+  playsave1();
 }
 
 
-void playsave1(SKC_sprite_status* p_actwk) {
+void playsave1(void) {
   g_ram.markerno_s = g_ram.markerno;
   g_ram.stageno_s = g_ram.stageno;
   g_ram.stageno_is = g_ram.stageno_i;
