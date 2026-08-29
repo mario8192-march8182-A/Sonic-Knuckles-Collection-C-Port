@@ -13,6 +13,7 @@
 #include "color.h"
 #include "constants.h"
 #include "dev.h"
+#include "scrchk.h"
 #include "objects/save.h"
 typedef struct SKC_scroll_work {
   SKC_sprite_status* sprite_ptr;
