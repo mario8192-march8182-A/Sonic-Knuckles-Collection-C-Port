@@ -230,7 +230,7 @@ typedef struct sonic3_ram {
   /* 08fff7d0 */ unsigned short emyscorecnt;
   /* 08fff7d2 */ unsigned short timebonus;
   /* 08fff7d4 */ unsigned short ringbonus;
-  /* 08fff7da */ short scr_x_no;
+  /* 08fff7da */ short sc1ahposit;
   /* 08fff7de */ unsigned char foxpatno;
   /* 08fff7df */ unsigned char foxtailspatno;
   /* 08fff7e0 */ unsigned char stage_triggers[STAGE_TRIGGERS_SLOTS];

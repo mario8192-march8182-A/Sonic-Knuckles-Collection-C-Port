@@ -391,7 +391,7 @@ static void tringmove(SKC_sprite_status* p_actwk) {
       ++p_actwk->patno;
       p_actwk->patno &= 3;
     }
-    short chunk_xposi = fp16_get_integer(p_actwk->xposi) - fp16_get_integer(p_actwk->xposi) % 128 - g_ram.scr_x_no;
+    short chunk_xposi = fp16_get_integer(p_actwk->xposi) - fp16_get_integer(p_actwk->xposi) % 128 - g_ram.sc1ahposit;
     if ((unsigned short)chunk_xposi <= 640) {
       colibufferchk(p_actwk);
       actionsub(p_actwk);

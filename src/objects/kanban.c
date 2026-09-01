@@ -186,7 +186,7 @@ static void kanban_move3(SKC_sprite_status* p_actwk) {
   if (!skip_yspeed_zero) {
     p_actwk->yspeed = 0;
   }
-  short chunk_xposi = fp16_get_integer(p_actwk->xposi) - fp16_get_integer(p_actwk->xposi) % 128 - g_ram.scr_x_no;
+  short chunk_xposi = fp16_get_integer(p_actwk->xposi) - fp16_get_integer(p_actwk->xposi) % 128 - g_ram.sc1ahposit;
   if (chunk_xposi <= 640) {
     short yposi = fp16_get_integer(p_actwk->yposi) - (g_ram.scra_v_posit >> 16) + 128;
     if (yposi <= 512) {

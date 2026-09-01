@@ -543,7 +543,7 @@ void scopec(SKC_sprite_status* p_actwk) {
 
 static void scopecmove(SKC_sprite_status* p_actwk) {
   if (g_ram.vs_flag == 0) {
-    short chunk_xposi = fp16_get_integer(p_actwk->xposi) - fp16_get_integer(p_actwk->xposi) % 128 - g_ram.scr_x_no;
+    short chunk_xposi = fp16_get_integer(p_actwk->xposi) - fp16_get_integer(p_actwk->xposi) % 128 - g_ram.sc1ahposit;
     if ((unsigned short)chunk_xposi > 640) {
       frameout_(p_actwk);
       return;
@@ -638,7 +638,7 @@ static void scolimove(SKC_sprite_status* p_actwk) {
     fp16_get_integer(p_actwk->xposi)
   };
   hitchk_skip_onscreen(p_actwk, data);
-  short chunk_xposi = fp16_get_integer(p_actwk->xposi) - fp16_get_integer(p_actwk->xposi) % 128 - g_ram.scr_x_no;
+  short chunk_xposi = fp16_get_integer(p_actwk->xposi) - fp16_get_integer(p_actwk->xposi) % 128 - g_ram.sc1ahposit;
   if ((unsigned short)chunk_xposi > 640) {
     frameout_(p_actwk);
   }
@@ -1358,7 +1358,7 @@ static void itaicolimove(SKC_sprite_status* p_actwk) {
   if (p_actwk->u.obj.cddat.pl2ride == 1) {
     itaicolisub(p_actwk, &g_ram.actwk[1]);
   }
-  short chunk_xposi = fp16_get_integer(p_actwk->xposi) - fp16_get_integer(p_actwk->xposi) % 128 - g_ram.scr_x_no;
+  short chunk_xposi = fp16_get_integer(p_actwk->xposi) - fp16_get_integer(p_actwk->xposi) % 128 - g_ram.sc1ahposit;
   if ((unsigned short)chunk_xposi > 640) {
     frameout_(p_actwk);
   }
@@ -1382,7 +1382,7 @@ static void itaicolimoveh(SKC_sprite_status* p_actwk) {
   if (result.plcoli[1] == HITCHK_COLI_SIDE) {
     itaicolisub(p_actwk, &g_ram.actwk[0]);
   }
-  short chunk_xposi = fp16_get_integer(p_actwk->xposi) - fp16_get_integer(p_actwk->xposi) % 128 - g_ram.scr_x_no;
+  short chunk_xposi = fp16_get_integer(p_actwk->xposi) - fp16_get_integer(p_actwk->xposi) % 128 - g_ram.sc1ahposit;
   if ((unsigned short)chunk_xposi > 640) {
     frameout_(p_actwk);
   }
@@ -1406,7 +1406,7 @@ static void itaicolimovev(SKC_sprite_status* p_actwk) {
   if (result.plcoli[1] == HITCHK_COLI_BOTTOM) {
     itaicolisub(p_actwk, &g_ram.actwk[0]);
   }
-  short chunk_xposi = fp16_get_integer(p_actwk->xposi) - fp16_get_integer(p_actwk->xposi) % 128 - g_ram.scr_x_no;
+  short chunk_xposi = fp16_get_integer(p_actwk->xposi) - fp16_get_integer(p_actwk->xposi) % 128 - g_ram.sc1ahposit;
   if ((unsigned short)chunk_xposi > 640) {
     frameout_(p_actwk);
   }
@@ -1467,7 +1467,7 @@ static void killcolimove(SKC_sprite_status* p_actwk) {
   if (p_actwk->u.obj.cddat.pl2ride == 1) {
     killcolisub(&g_ram.actwk[1]);
   }
-  short chunk_xposi = fp16_get_integer(p_actwk->xposi) - fp16_get_integer(p_actwk->xposi) % 128 - g_ram.scr_x_no;
+  short chunk_xposi = fp16_get_integer(p_actwk->xposi) - fp16_get_integer(p_actwk->xposi) % 128 - g_ram.sc1ahposit;
   if ((unsigned short)chunk_xposi > 640) {
     frameout_(p_actwk);
   }
@@ -1491,7 +1491,7 @@ static void killcolimoveh(SKC_sprite_status* p_actwk) {
   if (result.plcoli[1] == HITCHK_COLI_SIDE) {
     itaicolisub(p_actwk, &g_ram.actwk[0]);
   }
-  short chunk_xposi = fp16_get_integer(p_actwk->xposi) - fp16_get_integer(p_actwk->xposi) % 128 - g_ram.scr_x_no;
+  short chunk_xposi = fp16_get_integer(p_actwk->xposi) - fp16_get_integer(p_actwk->xposi) % 128 - g_ram.sc1ahposit;
   if ((unsigned short)chunk_xposi > 640) {
     frameout_(p_actwk);
   }
@@ -1515,7 +1515,7 @@ static void killcolimovev(SKC_sprite_status* p_actwk) {
   if (result.plcoli[1] == HITCHK_COLI_BOTTOM) {
     itaicolisub(p_actwk, &g_ram.actwk[0]);
   }
-  short chunk_xposi = fp16_get_integer(p_actwk->xposi) - fp16_get_integer(p_actwk->xposi) % 128 - g_ram.scr_x_no;
+  short chunk_xposi = fp16_get_integer(p_actwk->xposi) - fp16_get_integer(p_actwk->xposi) % 128 - g_ram.sc1ahposit;
   if ((unsigned short)chunk_xposi > 640) {
     frameout_(p_actwk);
   }

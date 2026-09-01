@@ -504,7 +504,7 @@ static void evhashimove2(SKC_sprite_status* p_actwk) {
 
 
 static void evhashifoutchk(SKC_sprite_status* p_actwk) {
-  short chunk_xposi = fp16_get_integer(p_actwk->xposi) - fp16_get_integer(p_actwk->xposi) % 128 - g_ram.scr_x_no;
+  short chunk_xposi = fp16_get_integer(p_actwk->xposi) - fp16_get_integer(p_actwk->xposi) % 128 - g_ram.sc1ahposit;
   if ((unsigned short)chunk_xposi <= 640) {
     actionsub(p_actwk);
   }

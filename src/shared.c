@@ -1475,7 +1475,7 @@ void set_emy_wchg(SKC_sprite_status* p_actwk, SKC_wrt_data* p_data) {
 
 
 void chk_emy_fout0(SKC_sprite_status* p_actwk) {
-  short chunk_xposi = fp16_get_integer(p_actwk->xposi) - fp16_get_integer(p_actwk->xposi) % 128 - g_ram.scr_x_no;
+  short chunk_xposi = fp16_get_integer(p_actwk->xposi) - fp16_get_integer(p_actwk->xposi) % 128 - g_ram.sc1ahposit;
   if ((unsigned short)chunk_xposi > 640) {
     emy_fout(p_actwk);
   }
@@ -1495,7 +1495,7 @@ void emy_fout(SKC_sprite_status* p_actwk) {
 
 
 void chk_emy_fout1(SKC_sprite_status* p_actwk) {
-  short chunk_xposi = fp16_get_integer(p_actwk->xposi) - fp16_get_integer(p_actwk->xposi) % 128 - g_ram.scr_x_no;
+  short chunk_xposi = fp16_get_integer(p_actwk->xposi) - fp16_get_integer(p_actwk->xposi) % 128 - g_ram.sc1ahposit;
   if ((unsigned short)chunk_xposi > 640) {
     emy_fout1(p_actwk);
   }
@@ -1515,7 +1515,7 @@ void emy_fout1(SKC_sprite_status* p_actwk) {
 
 
 void chk_emy_fout3(SKC_sprite_status* p_actwk) {
-  short chunk_xposi = fp16_get_integer(p_actwk->xposi) - fp16_get_integer(p_actwk->xposi) % 128 - g_ram.scr_x_no;
+  short chunk_xposi = fp16_get_integer(p_actwk->xposi) - fp16_get_integer(p_actwk->xposi) % 128 - g_ram.sc1ahposit;
   if ((unsigned short)chunk_xposi > 640) {
     set_emy_fout0(p_actwk);
   }
@@ -1533,7 +1533,7 @@ void chk_emy_fout3(SKC_sprite_status* p_actwk) {
 
 void chk_break_fout(SKC_sprite_status* p_actwk) {
   speedset(p_actwk);
-  short chunk_xposi = fp16_get_integer(p_actwk->xposi) - fp16_get_integer(p_actwk->xposi) % 128 - g_ram.scr_x_no;
+  short chunk_xposi = fp16_get_integer(p_actwk->xposi) - fp16_get_integer(p_actwk->xposi) % 128 - g_ram.sc1ahposit;
   if ((unsigned short)chunk_xposi > 640) {
     set_emy_fout01(p_actwk);
   }
@@ -1553,7 +1553,7 @@ void chk_break_fout(SKC_sprite_status* p_actwk) {
 
 
 void chk_emy_foutc0(SKC_sprite_status* p_actwk) {
-  short chunk_xposi = fp16_get_integer(p_actwk->xposi) - fp16_get_integer(p_actwk->xposi) % 128 - g_ram.scr_x_no;
+  short chunk_xposi = fp16_get_integer(p_actwk->xposi) - fp16_get_integer(p_actwk->xposi) % 128 - g_ram.sc1ahposit;
   if ((unsigned short)chunk_xposi > 640) {
     emy_fout(p_actwk);
   }
@@ -1565,7 +1565,7 @@ void chk_emy_foutc0(SKC_sprite_status* p_actwk) {
 
 
 void chk_emy_foutc1(SKC_sprite_status* p_actwk) {
-  short chunk_xposi = fp16_get_integer(p_actwk->xposi) - fp16_get_integer(p_actwk->xposi) % 128 - g_ram.scr_x_no;
+  short chunk_xposi = fp16_get_integer(p_actwk->xposi) - fp16_get_integer(p_actwk->xposi) % 128 - g_ram.sc1ahposit;
   if ((unsigned short)chunk_xposi > 640) {
     emy_fout1(p_actwk);
   }
@@ -1577,7 +1577,7 @@ void chk_emy_foutc1(SKC_sprite_status* p_actwk) {
 
 
 void chk_emy_foutc3(SKC_sprite_status* p_actwk) {
-  short chunk_xposi = fp16_get_integer(p_actwk->xposi) - fp16_get_integer(p_actwk->xposi) % 128 - g_ram.scr_x_no;
+  short chunk_xposi = fp16_get_integer(p_actwk->xposi) - fp16_get_integer(p_actwk->xposi) % 128 - g_ram.sc1ahposit;
   if ((unsigned short)chunk_xposi > 640) {
     set_emy_fout0(p_actwk);
   }
@@ -1595,7 +1595,7 @@ void chk_emy_foutc3(SKC_sprite_status* p_actwk) {
 
 
 void chk_emy_foutw0(SKC_sprite_status* p_actwk) {
-  short chunk_xposi = fp16_get_integer(p_actwk->xposi) - fp16_get_integer(p_actwk->xposi) % 128 - g_ram.scr_x_no;
+  short chunk_xposi = fp16_get_integer(p_actwk->xposi) - fp16_get_integer(p_actwk->xposi) % 128 - g_ram.sc1ahposit;
   if ((unsigned short)chunk_xposi > 640) {
     wchg_fout(p_actwk);
   }
@@ -1626,7 +1626,7 @@ void clr_wchg_bit(SKC_sprite_status* p_actwk) {
 
 
 void chk_emy_foutw1(SKC_sprite_status* p_actwk) {
-  short chunk_xposi = fp16_get_integer(p_actwk->xposi) - fp16_get_integer(p_actwk->xposi) % 128 - g_ram.scr_x_no;
+  short chunk_xposi = fp16_get_integer(p_actwk->xposi) - fp16_get_integer(p_actwk->xposi) % 128 - g_ram.sc1ahposit;
   if ((unsigned short)chunk_xposi > 640) {
     wchg_fout(p_actwk);
   }
@@ -1641,7 +1641,7 @@ void chk_emy_foutwc0(SKC_sprite_status* p_actwk) {
     wchg_die(p_actwk);
   }
   else {
-    short chunk_xposi = fp16_get_integer(p_actwk->xposi) - fp16_get_integer(p_actwk->xposi) % 128 - g_ram.scr_x_no;
+    short chunk_xposi = fp16_get_integer(p_actwk->xposi) - fp16_get_integer(p_actwk->xposi) % 128 - g_ram.sc1ahposit;
     if ((unsigned short)chunk_xposi > 640) {
       wchg_fout(p_actwk);
     }
@@ -1664,7 +1664,7 @@ void chk_emy_foutwc1(SKC_sprite_status* p_actwk) {
     wchg_die(p_actwk);
   }
   else {
-    short chunk_xposi = fp16_get_integer(p_actwk->xposi) - fp16_get_integer(p_actwk->xposi) % 128 - g_ram.scr_x_no;
+    short chunk_xposi = fp16_get_integer(p_actwk->xposi) - fp16_get_integer(p_actwk->xposi) % 128 - g_ram.sc1ahposit;
     if ((unsigned short)chunk_xposi > 640) {
       wchg_fout(p_actwk);
     }
@@ -1677,7 +1677,7 @@ void chk_emy_foutwc1(SKC_sprite_status* p_actwk) {
 
 
 void chk_emy_foutn0(SKC_sprite_status* p_actwk) {
-  short chunk_xposi = fp16_get_integer(p_actwk->xposi) - fp16_get_integer(p_actwk->xposi) % 128 - g_ram.scr_x_no;
+  short chunk_xposi = fp16_get_integer(p_actwk->xposi) - fp16_get_integer(p_actwk->xposi) % 128 - g_ram.sc1ahposit;
   if ((unsigned short)chunk_xposi > 640) {
     emy_fout(p_actwk);
   }
@@ -1685,7 +1685,7 @@ void chk_emy_foutn0(SKC_sprite_status* p_actwk) {
 
 
 void chk_emy_foutn1(SKC_sprite_status* p_actwk) {
-  short chunk_xposi = fp16_get_integer(p_actwk->xposi) - fp16_get_integer(p_actwk->xposi) % 128 - g_ram.scr_x_no;
+  short chunk_xposi = fp16_get_integer(p_actwk->xposi) - fp16_get_integer(p_actwk->xposi) % 128 - g_ram.sc1ahposit;
   if ((unsigned short)chunk_xposi > 640) {
     emy_fout(p_actwk);
   }
@@ -1693,7 +1693,7 @@ void chk_emy_foutn1(SKC_sprite_status* p_actwk) {
 
 
 void chk_emy_foutnc0(SKC_sprite_status* p_actwk) {
-  short chunk_xposi = fp16_get_integer(p_actwk->xposi) - fp16_get_integer(p_actwk->xposi) % 128 - g_ram.scr_x_no;
+  short chunk_xposi = fp16_get_integer(p_actwk->xposi) - fp16_get_integer(p_actwk->xposi) % 128 - g_ram.sc1ahposit;
   if ((unsigned short)chunk_xposi > 640) {
     emy_fout(p_actwk);
   }
@@ -2490,7 +2490,7 @@ void chk_framein(SKC_sprite_status* p_actwk, SKC_sprite_status_handler p_return)
 
 static void chk_framein__chk(SKC_sprite_status* p_actwk) {
   if (p_actwk->actflg.onscreen == 0) {
-    short chunk_xposi = fp16_get_integer(p_actwk->xposi) - fp16_get_integer(p_actwk->xposi) % 128 - g_ram.scr_x_no;
+    short chunk_xposi = fp16_get_integer(p_actwk->xposi) - fp16_get_integer(p_actwk->xposi) % 128 - g_ram.sc1ahposit;
     if ((unsigned short)chunk_xposi <= 640) {
       actionsub(p_actwk);
     }

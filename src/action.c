@@ -645,7 +645,7 @@ static void vspatset_pl2_compound(SKC_sprite_status* p_actwk, SKC_patset_work* p
 
 
 void frameoutchk(SKC_sprite_status* p_actwk) {
-  short chunk_xposi = fp16_get_integer(p_actwk->xposi) - fp16_get_integer(p_actwk->xposi) % 128 - g_ram.scr_x_no;
+  short chunk_xposi = fp16_get_integer(p_actwk->xposi) - fp16_get_integer(p_actwk->xposi) % 128 - g_ram.sc1ahposit;
   if ((unsigned short)chunk_xposi <= 640) {
     actionsub(p_actwk);
   }
@@ -659,7 +659,7 @@ void frameoutchk(SKC_sprite_status* p_actwk) {
 
 
 void frameoutchk2(SKC_sprite_status* p_actwk, short xposi) {
-  short chunk_xposi = xposi - xposi % 128 - g_ram.scr_x_no;
+  short chunk_xposi = xposi - xposi % 128 - g_ram.sc1ahposit;
   if ((unsigned short)chunk_xposi <= 640) {
     actionsub(p_actwk);
   }
@@ -673,7 +673,7 @@ void frameoutchk2(SKC_sprite_status* p_actwk, short xposi) {
 
 
 void frameoutchk3(SKC_sprite_status* p_actwk) {
-  short chunk_xposi = fp16_get_integer(p_actwk->xposi) - fp16_get_integer(p_actwk->xposi) % 128 - g_ram.scr_x_no;
+  short chunk_xposi = fp16_get_integer(p_actwk->xposi) - fp16_get_integer(p_actwk->xposi) % 128 - g_ram.sc1ahposit;
   if ((unsigned short) chunk_xposi > 640) {
     if (p_actwk->u.obj.flagwork_index != 0) {
       CLEAR_BIT(g_ram.flagwork[p_actwk->u.obj.flagwork_index - 1], 7);
@@ -690,7 +690,7 @@ void frameoutchkc(SKC_sprite_status* p_actwk) {
 
 
 void frameoutchkc0(SKC_sprite_status* p_actwk, short xposi) {
-  short chunk_xposi = xposi - xposi % 128 - g_ram.scr_x_no;
+  short chunk_xposi = xposi - xposi % 128 - g_ram.sc1ahposit;
   if ((unsigned short)chunk_xposi <= 640) {
     colibufferchk(p_actwk);
     actionsub(p_actwk);

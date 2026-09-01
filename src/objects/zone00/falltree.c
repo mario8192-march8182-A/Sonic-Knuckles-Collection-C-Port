@@ -130,7 +130,7 @@ static void falltreemove1(SKC_sprite_status* p_actwk) {
 static void falltreemovesub(SKC_sprite_status* p_actwk) {
   SKC_hitchk_data data = { p_actwk->sprhs, 0, 8, fp16_get_integer(p_actwk->xposi) };
   SKC_hitchk_result result = ridechk(p_actwk, data);
-  short chunk_xposi = fp16_get_integer(p_actwk->xposi) - fp16_get_integer(p_actwk->xposi) % 128 - g_ram.scr_x_no;
+  short chunk_xposi = fp16_get_integer(p_actwk->xposi) - fp16_get_integer(p_actwk->xposi) % 128 - g_ram.sc1ahposit;
   if ((unsigned short)chunk_xposi <= 640) {
     if (!p_actwk->u.obj.actfree.falltree.invisible) {
       actionsub(p_actwk);

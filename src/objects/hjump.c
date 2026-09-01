@@ -24,7 +24,7 @@ static void hjumpinit(SKC_sprite_status* p_actwk) {
 static void hjumpmove(SKC_sprite_status* p_actwk) {
   hjumpmove__sub(p_actwk, &g_ram.actwk[0]);
   hjumpmove__sub(p_actwk, &g_ram.actwk[1]);
-  short chunk_xposi = fp16_get_integer(p_actwk->xposi) - fp16_get_integer(p_actwk->xposi) % 128 - g_ram.scr_x_no;
+  short chunk_xposi = fp16_get_integer(p_actwk->xposi) - fp16_get_integer(p_actwk->xposi) % 128 - g_ram.sc1ahposit;
   if ((unsigned short)chunk_xposi > 640) {
     if (p_actwk->u.obj.flagwork_index != 0) {
       CLEAR_BIT(g_ram.flagwork[p_actwk->u.obj.flagwork_index - 1], 7);

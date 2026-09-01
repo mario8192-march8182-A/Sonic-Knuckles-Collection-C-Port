@@ -224,7 +224,7 @@ void opening(void) {
   g_ram.emyscorecnt = 0;
   g_ram.timebonus = 0;
   g_ram.ringbonus = 0;
-  g_ram.scr_x_no = 0;
+  g_ram.sc1ahposit = 0;
   g_ram.foxpatno = 0;
   g_ram.foxtailspatno = 0;
   memset(g_ram.stage_triggers, 0, sizeof(g_ram.stage_triggers));

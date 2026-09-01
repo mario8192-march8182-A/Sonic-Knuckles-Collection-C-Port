@@ -65,11 +65,11 @@ static void actsetinit(void) {
       }
     }
     if (g_ram.stageno != MASTER_EMERALD_SHRINE) {
-      g_ram.scr_x_no = 0;
+      g_ram.sc1ahposit = 0;
     }
     else {
       short wk = (g_ram.scra_h_posit >> 16) - 128;
-      g_ram.scr_x_no = wk - wk % 128;
+      g_ram.sc1ahposit = wk - wk % 128;
     }
   }
   else {
@@ -110,7 +110,7 @@ static void actset(void) {
   short wk = (g_ram.scra_v_posit >> 16) - 128;
   g_ram.scr_y_no = wk - wk % 128;
   wk = (g_ram.scra_h_posit >> 16) - 128;
-  g_ram.scr_x_no = wk - wk % 128;
+  g_ram.sc1ahposit = wk - wk % 128;
   short scra_v_up = g_ram.scra_v_posit >> 16 & 0xFF80;
   short scra_v_down = (g_ram.scra_v_posit >> 16 & 0xFF80) + 512;
   void(*p_actnoset)(SKC_sprite_status*, SKC_aset*, unsigned char*, short, short);
