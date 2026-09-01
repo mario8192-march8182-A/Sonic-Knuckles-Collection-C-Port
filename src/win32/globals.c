@@ -445,7 +445,7 @@
 /* 00831740 */ ULONG g_spriteCnt;
 /* 0083174c */ ULONG g_vscrollCopy;
 /* 00831750 */ ULONG DAT_00831750;
-/* 00854758 */ ULONG g_vdp_window_height;
+/* 00854758 */ ULONG g_vdp_window_yposi;
 /* 0085475c */ ULONG g_createFileError;
 /* 00854760 */ ULONG g_vdp_scrollb_adr;
 /* 00854768 */ ULONG g_mdVsram[20];
