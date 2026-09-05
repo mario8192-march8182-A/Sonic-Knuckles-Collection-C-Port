@@ -524,9 +524,14 @@ void mapwrt(void) {
   if (p_data->mapdata1_ptr != p_data->mapdata2_ptr) {
     unlze(p_next, p_data->mapdata2_ptr);
   }
-  memcpy(g_ram.zonemapwk,
-         zonemaptbl[get_zone(g_ram.stageno)][get_act(g_ram.stageno)],
-         sizeof(zonemaptbl[get_zone(g_ram.stageno)][get_act(g_ram.stageno)]));
+  SKC_zonemap* p_zonemap = zonemaptbl[get_zone(g_ram.stageno)][get_act(g_ram.stageno)];
+  g_ram.zonemapwk.mapa_col_cnt = p_zonemap->mapa_col_cnt;
+  g_ram.zonemapwk.mapb_col_cnt = p_zonemap->mapb_col_cnt;
+  g_ram.zonemapwk.mapa_row_cnt = p_zonemap->mapa_row_cnt;
+  g_ram.zonemapwk.mapb_row_cnt = p_zonemap->mapb_row_cnt;
+  memcpy(g_ram.zonemapwk.row_offsets, p_zonemap->row_offsets, sizeof(g_ram.zonemapwk.row_offsets));
+  int cnt = p_zonemap->mapa_col_cnt * p_zonemap->mapa_row_cnt + p_zonemap->mapb_col_cnt * p_zonemap->mapb_row_cnt;
+  memcpy(g_ram.zonemapwk.data, p_zonemap->data, cnt);
   if (p_data->ini_cg_no2 != 0 && p_data->ini_cg_no1 != p_data->ini_cg_no2) {
     divdevset(p_data->ini_cg_no2);
   }

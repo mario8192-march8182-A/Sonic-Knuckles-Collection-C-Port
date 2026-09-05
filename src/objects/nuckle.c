@@ -3159,29 +3159,15 @@ static void switchact_030(SKC_sprite_status* p_actwk) {
 
 static void switchact_031(SKC_sprite_status* p_actwk) {
   g_ram.scr_shake_flg = 20;
-  unsigned char* p_zonemap = &g_ram.zonemapwk[0x48];
-  unsigned short screen_row_offset = p_zonemap[0] | p_zonemap[1] << 8;
-  unsigned short screen_offset = screen_row_offset + 0x8E;
-
-  screen_offset ^= 1; /* Stage data is byte-swapped. */
-  g_ram.zonemapwk[screen_offset] = 20;
-  screen_offset ^= 1; /* Undo adjustment. */
-
-  screen_offset += g_ram.zonemapwk[0];
-  screen_offset ^= 1; /* Stage data is byte-swapped. */
-  g_ram.zonemapwk[screen_offset] = 15;
-  screen_offset ^= 1; /* Undo adjustment. */
-
-  screen_offset += g_ram.zonemapwk[0];
-  screen_offset ^= 1; /* Stage data is byte-swapped. */
-  g_ram.zonemapwk[screen_offset] = 15;
-  screen_offset ^= 1; /* Undo adjustment. */
-
-  screen_offset += g_ram.zonemapwk[0];
-  screen_offset ^= 1; /* Stage data is byte-swapped. */
-  g_ram.zonemapwk[screen_offset] = 136;
-  screen_offset ^= 1; /* Undo adjustment. */
-
+  unsigned short* p_row_offsets = &g_ram.zonemapwk.row_offsets[32];
+  unsigned short offset = *p_row_offsets + 142;
+  g_ram.zonemapwk.data[offset] = 20;
+  offset += g_ram.zonemapwk.mapa_col_cnt;
+  g_ram.zonemapwk.data[offset] = 15;
+  offset += g_ram.zonemapwk.mapa_col_cnt;
+  g_ram.zonemapwk.data[offset] = 15;
+  offset += g_ram.zonemapwk.mapa_col_cnt;
+  g_ram.zonemapwk.data[offset] = 136;
   SKC_actwkchk_result result = actwkchk();
   if (result.actwk_ptr != 0) {
     result.actwk_ptr->r_ptr = &shooter3;

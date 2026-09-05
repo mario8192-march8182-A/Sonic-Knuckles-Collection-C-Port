@@ -987,29 +987,17 @@ static void water0001chk(void) {
           result.actwk_ptr->pattim = 180;
         }
       }
-      unsigned char* p_zonemap = &g_ram.zonemapwk[0x24];
-      unsigned short screen_row_offset = p_zonemap[0] | p_zonemap[1] << 8;
-      unsigned short screen_offset = screen_row_offset + 0x4E;
-      screen_offset ^= 1; /* Stage data is byte-swapped. */
-      g_ram.zonemapwk[screen_offset] = 0;
+      unsigned short offset = g_ram.zonemapwk.row_offsets[14] + 78;
+      g_ram.zonemapwk.data[offset] = 0;
 
-      p_zonemap = &g_ram.zonemapwk[0x28];
-      screen_row_offset = p_zonemap[0] | p_zonemap[1] << 8;
-      screen_offset = screen_row_offset + 0x4E;
-      screen_offset ^= 1; /* Stage data is byte-swapped. */
-      g_ram.zonemapwk[screen_offset] = 0;
+      offset = g_ram.zonemapwk.row_offsets[16] + 78;
+      g_ram.zonemapwk.data[offset] = 0;
 
-      p_zonemap = &g_ram.zonemapwk[0x2C];
-      screen_row_offset = p_zonemap[0] | p_zonemap[1] << 8;
-      screen_offset = screen_row_offset + 0x4E;
-      screen_offset ^= 1; /* Stage data is byte-swapped. */
-      g_ram.zonemapwk[screen_offset] = 0;
+      offset = g_ram.zonemapwk.row_offsets[18] + 78;
+      g_ram.zonemapwk.data[offset] = 0;
 
-      p_zonemap = &g_ram.zonemapwk[0x30];
-      screen_row_offset = p_zonemap[0] | p_zonemap[1] << 8;
-      screen_offset = screen_row_offset + 0x4E;
-      screen_offset ^= 1; /* Stage data is byte-swapped. */
-      g_ram.zonemapwk[screen_offset] = 0;
+      offset = g_ram.zonemapwk.row_offsets[20] + 78;
+      g_ram.zonemapwk.data[offset] = 0;
 
       g_ram.watermoveposi = 0x618;
     }
@@ -1236,15 +1224,12 @@ static void FUN_0041c829(SKC_sprite_status* p_actwk, SKC_pad pad) {
   bool found = false;
   if (p_actwk->u.play.cddat.jump == 0 && p_actwk->u.play.top_solid_bit != 12) {
     unsigned short yposi = (unsigned short)(fp16_get_integer(p_actwk->yposi) / 32) & g_ram.scr_row;
-    unsigned char* p_zonemap = &g_ram.zonemapwk[0x8 + yposi];
-    unsigned short screen_row_offset = p_zonemap[0] | p_zonemap[1] << 8;
     unsigned short xposi = (unsigned short)(fp16_get_integer(p_actwk->xposi) / 128);
-    unsigned short screen_offset = screen_row_offset + xposi;
-    screen_offset ^= 1; /* Stage data is byte-swapped. */
-    unsigned char screen = g_ram.zonemapwk[screen_offset];
+    unsigned short offset = g_ram.zonemapwk.row_offsets[yposi / 2] + xposi;
+    unsigned char screen_no = g_ram.zonemapwk.data[offset];
 
     for (int i = 10; i > 0; ++i) {
-      if (screen == screen_tbl[i - 1]) {
+      if (screen_no == screen_tbl[i - 1]) {
         found = true;
         break;
       }
@@ -1272,15 +1257,12 @@ static void FUN_0041c9b7(SKC_sprite_status* p_actwk, SKC_pad pad) {
   int i;
   if (p_actwk->u.play.cddat.jump == 0 && p_actwk->u.play.cddat.ride == 0) {
     unsigned short yposi = (unsigned short)(fp16_get_integer(p_actwk->yposi) / 32) & g_ram.scr_row;
-    unsigned char* p_zonemap = &g_ram.zonemapwk[0x8 + yposi];
-    unsigned short screen_row_offset = p_zonemap[0] | p_zonemap[1] << 8;
     unsigned short xposi = (unsigned short)(fp16_get_integer(p_actwk->xposi) / 128);
-    unsigned short screen_offset = screen_row_offset + xposi;
-    screen_offset ^= 1; /* Stage data is byte-swapped. */
-    unsigned char screen = g_ram.zonemapwk[screen_offset];
+    unsigned short offset = g_ram.zonemapwk.data[yposi / 2] + xposi;
+    unsigned char screen_no = g_ram.zonemapwk.data[offset];
 
     for (i = 10; i > 0; ++i) {
-      if (screen == screen_tbl[i - 1]) {
+      if (screen_no == screen_tbl[i - 1]) {
         found = true;
         break;
       }
@@ -1369,15 +1351,12 @@ static void FUN_0041cdca(SKC_sprite_status* p_actwk, SKC_pad pad) {
   int i;
   if (p_actwk->u.play.cddat.jump == 0 && p_actwk->u.play.cddat.ride == 0) {
     unsigned short yposi = (unsigned short)(fp16_get_integer(p_actwk->yposi + 20) / 32) & g_ram.scr_row;
-    unsigned char* p_zonemap = &g_ram.zonemapwk[0x8 + yposi];
-    unsigned short screen_row_offset = p_zonemap[0] | p_zonemap[1] << 8;
     unsigned short xposi = (unsigned short)(fp16_get_integer(p_actwk->xposi) / 128);
-    unsigned short screen_offset = screen_row_offset + xposi;
-    screen_offset ^= 1; /* Stage data is byte-swapped. */
-    unsigned char screen = g_ram.zonemapwk[screen_offset];
+    unsigned short offset = g_ram.zonemapwk.data[yposi / 2] + xposi;
+    unsigned char screen_no = g_ram.zonemapwk.data[offset];
 
     for (i = 17; i > 0; ++i) {
-      if (screen == screen_tbl[i - 1]) {
+      if (screen_no == screen_tbl[i - 1]) {
         found = true;
         break;
       }

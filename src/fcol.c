@@ -2,6 +2,7 @@
 #include <stdbool.h>
 #include <stdlib.h>
 #include "data/scd.h"
+#include "data/zonemaptbl.h"
 #include "types/sonic3ram.h"
 #include "types/spritestatus.h"
 #include "utils/fp16.h"
@@ -14,16 +15,16 @@ static bool fcol_d(SKC_sprite_status* p_actwk);
 static bool fcol_r(SKC_sprite_status* p_actwk);
 static bool fcol_u(SKC_sprite_status* p_actwk);
 static bool fcol_l(SKC_sprite_status* p_actwk);
-static unsigned short scramapad(short xposi, short yposi, unsigned char* p_zonemap);
-static signed char scdend(short xposi, short yposi, short yoffset, unsigned short blk_msk, unsigned char solid_bit, unsigned char* p_dirstk, unsigned char* p_zonemap);
-static signed char scdend2(short xposi, short yposi, short yoffset, unsigned short blk_msk, unsigned char solid_bit, unsigned char* p_dirstk, unsigned char* p_zonemap);
-static signed char scdchk(short xposi, short yposi, short yoffset, unsigned short blk_msk, unsigned char solid_bit, unsigned char* p_dirstk, unsigned char* p_zonemap);
-static signed char scdchk2(short xposi, short yposi, unsigned short blk_msk, unsigned char solid_bit, unsigned char* p_dirstk, unsigned char* p_zonemap);
-static unsigned char flyringscdchk(short xposi, short yposi, short yoffset, unsigned short blk_msk, unsigned char solid_bit, unsigned char* p_dirstk, unsigned char* p_zonemap);
-static signed char scdchk_r(short xposi, short yposi, short yoffset, unsigned short blk_msk, unsigned char solid_bit, unsigned char* p_dirstk, unsigned char* p_zonemap);
-static signed char scdend_r(short xposi, short yposi, short yoffset, unsigned short blk_msk, unsigned char solid_bit, unsigned char* p_dirstk, unsigned char* p_zonemap);
-static signed char scdend2_r(short xposi, short yposi, short yoffset, unsigned short blk_msk, unsigned char solid_bit, unsigned char* p_dirstk, unsigned char* p_zonemap);
-static signed char scdchk2_r(short xposi, short yposi, unsigned short blk_msk, unsigned char solid_bit, unsigned char* p_dirstk, unsigned char* p_zonemap);
+static unsigned short scramapad(short xposi, short yposi, unsigned short* p_zonemap_row_offsets);
+static signed char scdend(short xposi, short yposi, short yoffset, unsigned short blk_msk, unsigned char solid_bit, unsigned char* p_dirstk, unsigned short* p_zonemap_row_offsets);
+static signed char scdend2(short xposi, short yposi, short yoffset, unsigned short blk_msk, unsigned char solid_bit, unsigned char* p_dirstk, unsigned short* p_zonemap_row_offsets);
+static signed char scdchk(short xposi, short yposi, short yoffset, unsigned short blk_msk, unsigned char solid_bit, unsigned char* p_dirstk, unsigned short* p_zonemap_row_offsets);
+static signed char scdchk2(short xposi, short yposi, unsigned short blk_msk, unsigned char solid_bit, unsigned char* p_dirstk, unsigned short* p_zonemap_row_offsets);
+static unsigned char flyringscdchk(short xposi, short yposi, short yoffset, unsigned short blk_msk, unsigned char solid_bit, unsigned char* p_dirstk, unsigned short* p_zonemap_row_offsets);
+static signed char scdchk_r(short xposi, short yposi, short yoffset, unsigned short blk_msk, unsigned char solid_bit, unsigned char* p_dirstk, unsigned short* p_zonemap_row_offsets);
+static signed char scdend_r(short xposi, short yposi, short yoffset, unsigned short blk_msk, unsigned char solid_bit, unsigned char* p_dirstk, unsigned short* p_zonemap_row_offsets);
+static signed char scdend2_r(short xposi, short yposi, short yoffset, unsigned short blk_msk, unsigned char solid_bit, unsigned char* p_dirstk, unsigned short* p_zonemap_row_offsets);
+static signed char scdchk2_r(short xposi, short yposi, unsigned short blk_msk, unsigned char solid_bit, unsigned char* p_dirstk, unsigned short* p_zonemap_row_offsets);
 
 extern sonic3_ram g_ram;
 
@@ -231,12 +232,10 @@ static bool fcol_l(SKC_sprite_status* p_actwk) {
 }
 
 
-static unsigned short scramapad(short xposi, short yposi, unsigned char* p_zonemap) {
+static unsigned short scramapad(short xposi, short yposi, unsigned short* p_zonemap_row_offsets) {
   unsigned short yposi_wk = (yposi / 32) & g_ram.scr_row;
-  unsigned short screen_row_offset = p_zonemap[yposi_wk] | p_zonemap[yposi_wk + 1] << 8;
-  unsigned short screen_offset = screen_row_offset + xposi / 128;
-  screen_offset ^= 1; /* Stage data is byte-swapped. */
-  unsigned char screen_no = g_ram.zonemapwk[screen_offset];
+  unsigned short offset = p_zonemap_row_offsets[yposi_wk / 2] + xposi / 128;
+  unsigned char screen_no = g_ram.zonemapwk.data[offset];
   unsigned short block_offset = screen_no * 128 + (yposi & 0x0070) + (xposi / 8 & 0x000E);
   unsigned short block_no = g_ram.mapwk[block_offset] << 8 | g_ram.mapwk[block_offset + 1];
   return block_no;
@@ -244,14 +243,14 @@ static unsigned short scramapad(short xposi, short yposi, unsigned char* p_zonem
 
 
 signed char scd2chk(short xposi, short yposi, short yoffset, unsigned short blk_msk, unsigned char solid_bit, unsigned char* p_dirstk) {
-  unsigned char* p_zonemap = &g_ram.zonemapwk[8];
+  unsigned short* p_row_offsets = g_ram.zonemapwk.row_offsets;
   if (g_ram.scd_bg_flag == 0) {
-    return scdchk(xposi, yposi, yoffset, blk_msk, solid_bit, p_dirstk, p_zonemap);
+    return scdchk(xposi, yposi, yoffset, blk_msk, solid_bit, p_dirstk, p_row_offsets);
   }
-  signed char scd0 = scdchk(xposi, yposi, yoffset, blk_msk, solid_bit, p_dirstk, p_zonemap);
+  signed char scd0 = scdchk(xposi, yposi, yoffset, blk_msk, solid_bit, p_dirstk, p_row_offsets);
   p_dirstk[1] = p_dirstk[0];
-  p_zonemap += 2;
-  signed char scd1 = scdchk(xposi - g_ram.scr_h_posit_ofs, yposi - g_ram.scr_v_posit_ofs, yoffset, blk_msk, solid_bit, p_dirstk, p_zonemap);
+  ++p_row_offsets;
+  signed char scd1 = scdchk(xposi - g_ram.scr_h_posit_ofs, yposi - g_ram.scr_v_posit_ofs, yoffset, blk_msk, solid_bit, p_dirstk, p_row_offsets);
   if (scd1 > scd0) {
     p_dirstk[0] = p_dirstk[1];
     scd1 = scd0;
@@ -260,27 +259,27 @@ signed char scd2chk(short xposi, short yposi, short yoffset, unsigned short blk_
 }
 
 
-static signed char scdend(short xposi, short yposi, short yoffset, unsigned short blk_msk, unsigned char solid_bit, unsigned char* p_dirstk, unsigned char* p_zonemap) {
-  signed char scd = scdchk2(xposi, yposi + yoffset, blk_msk, solid_bit, p_dirstk, p_zonemap);
+static signed char scdend(short xposi, short yposi, short yoffset, unsigned short blk_msk, unsigned char solid_bit, unsigned char* p_dirstk, unsigned short* p_zonemap_row_offsets) {
+  signed char scd = scdchk2(xposi, yposi + yoffset, blk_msk, solid_bit, p_dirstk, p_zonemap_row_offsets);
   return scd + 16;
 }
 
 
-static signed char scdend2(short xposi, short yposi, short yoffset, unsigned short blk_msk, unsigned char solid_bit, unsigned char* p_dirstk, unsigned char* p_zonemap) {
-  signed char scd = scdchk2(xposi, yposi + yoffset, blk_msk, solid_bit, p_dirstk, p_zonemap);
+static signed char scdend2(short xposi, short yposi, short yoffset, unsigned short blk_msk, unsigned char solid_bit, unsigned char* p_dirstk, unsigned short* p_zonemap_row_offsets) {
+  signed char scd = scdchk2(xposi, yposi + yoffset, blk_msk, solid_bit, p_dirstk, p_zonemap_row_offsets);
   return scd - 16;
 }
 
 
-static signed char scdchk(short xposi, short yposi, short yoffset, unsigned short blk_msk, unsigned char solid_bit, unsigned char* p_dirstk, unsigned char* p_zonemap) {
-  unsigned short blk_no = scramapad(xposi, yposi, p_zonemap);
+static signed char scdchk(short xposi, short yposi, short yoffset, unsigned short blk_msk, unsigned char solid_bit, unsigned char* p_dirstk, unsigned short* p_zonemap_row_offsets) {
+  unsigned short blk_no = scramapad(xposi, yposi, p_zonemap_row_offsets);
   unsigned short blk_offset = blk_no & 0x3FF;
   if (blk_offset == 0 || !BIT_IS_SET(blk_no, solid_bit)) {
-    return scdend(xposi, yposi, yoffset, blk_msk, solid_bit, p_dirstk, p_zonemap);
+    return scdend(xposi, yposi, yoffset, blk_msk, solid_bit, p_dirstk, p_zonemap_row_offsets);
   }
   unsigned char scd_no = g_ram.scdadr[blk_no * 2];
   if (scd_no == 0) {
-    return scdend(xposi, yposi, yoffset, blk_msk, solid_bit, p_dirstk, p_zonemap);
+    return scdend(xposi, yposi, yoffset, blk_msk, solid_bit, p_dirstk, p_zonemap_row_offsets);
   }
   unsigned char direction_wk = scddirtbl[scd_no];
   short xposi_wk = xposi;
@@ -299,7 +298,7 @@ static signed char scdchk(short xposi, short yposi, short yoffset, unsigned shor
     scd_data = -scd_data;
   }
   if (scd_data == 0) {
-    return scdend(xposi, yposi, yoffset, blk_msk, solid_bit, p_dirstk, p_zonemap);
+    return scdend(xposi, yposi, yoffset, blk_msk, solid_bit, p_dirstk, p_zonemap_row_offsets);
   }
   if (scd_data >= 0) {
     if (scd_data != 16) {
@@ -309,15 +308,15 @@ static signed char scdchk(short xposi, short yposi, short yoffset, unsigned shor
   else {
     scd_data += (signed char)((unsigned short)yposi & 0x000F);
     if (scd_data >= 0) {
-      return scdend(xposi, yposi, yoffset, blk_msk, solid_bit, p_dirstk, p_zonemap);
+      return scdend(xposi, yposi, yoffset, blk_msk, solid_bit, p_dirstk, p_zonemap_row_offsets);
     }
   }
-  return scdend2(xposi, yposi, yoffset, blk_msk, solid_bit, p_dirstk, p_zonemap);
+  return scdend2(xposi, yposi, yoffset, blk_msk, solid_bit, p_dirstk, p_zonemap_row_offsets);
 }
 
 
-static signed char scdchk2(short xposi, short yposi, unsigned short blk_msk, unsigned char solid_bit, unsigned char* p_dirstk, unsigned char* p_zonemap) {
-  unsigned short blk_no = scramapad(xposi, yposi, p_zonemap);
+static signed char scdchk2(short xposi, short yposi, unsigned short blk_msk, unsigned char solid_bit, unsigned char* p_dirstk, unsigned short* p_zonemap_row_offsets) {
+  unsigned short blk_no = scramapad(xposi, yposi, p_zonemap_row_offsets);
   unsigned short blk_offset = blk_no & 0x3FF;
   if (blk_offset == 0 || !BIT_IS_SET(blk_no, solid_bit)) {
     return 15 - (signed char)((unsigned short)yposi & 0x000F);
@@ -357,14 +356,14 @@ static signed char scdchk2(short xposi, short yposi, unsigned short blk_msk, uns
 
 
 signed char flyringscd2chk(short xposi, short yposi, short yoffset, unsigned short blk_msk, unsigned char solid_bit, unsigned char* p_dirstk) {
-  unsigned char* p_zonemap = &g_ram.zonemapwk[8];
+  unsigned short* p_row_offsets = g_ram.zonemapwk.row_offsets;
   if (g_ram.scd_bg_flag == 0) {
-    return flyringscdchk(xposi, yposi, yoffset, blk_msk, solid_bit, p_dirstk, p_zonemap);
+    return flyringscdchk(xposi, yposi, yoffset, blk_msk, solid_bit, p_dirstk, p_row_offsets);
   }
-  signed char scd0 = flyringscdchk(xposi, yposi, yoffset, blk_msk, solid_bit, p_dirstk, p_zonemap);
+  signed char scd0 = flyringscdchk(xposi, yposi, yoffset, blk_msk, solid_bit, p_dirstk, p_row_offsets);
   p_dirstk[1] = p_dirstk[0];
-  p_zonemap += 2;
-  signed char scd1 = flyringscdchk(xposi + g_ram.scr_h_posit_ofs, yposi + g_ram.scr_v_posit_ofs, yoffset, blk_msk, solid_bit, p_dirstk, p_zonemap);
+  ++p_row_offsets;
+  signed char scd1 = flyringscdchk(xposi + g_ram.scr_h_posit_ofs, yposi + g_ram.scr_v_posit_ofs, yoffset, blk_msk, solid_bit, p_dirstk, p_row_offsets);
   if (scd1 > scd0) {
     p_dirstk[0] = p_dirstk[1];
     scd1 = scd0;
@@ -373,8 +372,8 @@ signed char flyringscd2chk(short xposi, short yposi, short yoffset, unsigned sho
 }
 
 
-static unsigned char flyringscdchk(short xposi, short yposi, short yoffset, unsigned short blk_msk, unsigned char solid_bit, unsigned char* p_dirstk, unsigned char* p_zonemap) {
-  unsigned short blk_no = scramapad(xposi, yposi, p_zonemap);
+static unsigned char flyringscdchk(short xposi, short yposi, short yoffset, unsigned short blk_msk, unsigned char solid_bit, unsigned char* p_dirstk, unsigned short* p_zonemap_row_offsets) {
+  unsigned short blk_no = scramapad(xposi, yposi, p_zonemap_row_offsets);
   unsigned short blk_offset = blk_no & 0x3FF;
   if (blk_offset == 0 || !BIT_IS_SET(blk_no, solid_bit)) {
     return 16;
@@ -413,16 +412,16 @@ static unsigned char flyringscdchk(short xposi, short yposi, short yoffset, unsi
       return 16;
     }
   }
-  return scdend2(xposi, yposi, yoffset, blk_msk, solid_bit, p_dirstk, p_zonemap);
+  return scdend2(xposi, yposi, yoffset, blk_msk, solid_bit, p_dirstk, p_zonemap_row_offsets);
 }
 
 
 signed char scd2chk_r(short xposi, short yposi, short yoffset, unsigned short blk_msk, unsigned char solid_bit, unsigned char* p_dirstk) {
-  unsigned char* p_zonemap = &g_ram.zonemapwk[8];
+  unsigned short* p_row_offsets = g_ram.zonemapwk.row_offsets;
   if (g_ram.scd_bg_flag == 0) {
-    return scdchk_r(xposi, yposi, yoffset, blk_msk, solid_bit, p_dirstk, p_zonemap);
+    return scdchk_r(xposi, yposi, yoffset, blk_msk, solid_bit, p_dirstk, p_row_offsets);
   }
-  signed char scd0 = scdchk_r(xposi, yposi, yoffset, blk_msk, solid_bit, p_dirstk, p_zonemap);
+  signed char scd0 = scdchk_r(xposi, yposi, yoffset, blk_msk, solid_bit, p_dirstk, p_row_offsets);
   p_dirstk[1] = p_dirstk[0];
   if (yoffset < 0) {
     xposi = (xposi ^ 15) - g_ram.scr_h_posit_ofs ^ 15;
@@ -431,8 +430,8 @@ signed char scd2chk_r(short xposi, short yposi, short yoffset, unsigned short bl
     xposi -= g_ram.scr_h_posit_ofs;
   }
   yposi -= g_ram.scr_v_posit_ofs;
-  p_zonemap += 2;
-  signed char scd1 = scdchk_r(xposi, yposi, yoffset, blk_msk, solid_bit, p_dirstk, p_zonemap);
+  ++p_row_offsets;
+  signed char scd1 = scdchk_r(xposi, yposi, yoffset, blk_msk, solid_bit, p_dirstk, p_row_offsets);
   if (scd1 > scd0) {
     p_dirstk[0] = p_dirstk[1];
     scd1 = scd0;
@@ -441,15 +440,15 @@ signed char scd2chk_r(short xposi, short yposi, short yoffset, unsigned short bl
 }
 
 
-static signed char scdchk_r(short xposi, short yposi, short yoffset, unsigned short blk_msk, unsigned char solid_bit, unsigned char* p_dirstk, unsigned char* p_zonemap) {
-  unsigned short blk_no = scramapad(xposi, yposi, p_zonemap);
+static signed char scdchk_r(short xposi, short yposi, short yoffset, unsigned short blk_msk, unsigned char solid_bit, unsigned char* p_dirstk, unsigned short* p_zonemap_row_offsets) {
+  unsigned short blk_no = scramapad(xposi, yposi, p_zonemap_row_offsets);
   unsigned short blk_offset = blk_no & 0x3FF;
   if (blk_offset == 0 || !BIT_IS_SET(blk_no, solid_bit)) {
-    return scdend_r(xposi, yposi, yoffset, blk_msk, solid_bit, p_dirstk, p_zonemap);
+    return scdend_r(xposi, yposi, yoffset, blk_msk, solid_bit, p_dirstk, p_zonemap_row_offsets);
   }
   unsigned char scd_no = g_ram.scdadr[blk_no * 2];
   if (scd_no == 0) {
-    return scdend_r(xposi, yposi, yoffset, blk_msk, solid_bit, p_dirstk, p_zonemap);
+    return scdend_r(xposi, yposi, yoffset, blk_msk, solid_bit, p_dirstk, p_zonemap_row_offsets);
   }
   unsigned char direction_wk = scddirtbl[scd_no];
   short yposi_wk = yposi;
@@ -468,7 +467,7 @@ static signed char scdchk_r(short xposi, short yposi, short yoffset, unsigned sh
     scd_data = -scd_data;
   }
   if (scd_data == 0) {
-    return scdend_r(xposi, yposi, yoffset, blk_msk, solid_bit, p_dirstk, p_zonemap);
+    return scdend_r(xposi, yposi, yoffset, blk_msk, solid_bit, p_dirstk, p_zonemap_row_offsets);
   }
   if (scd_data >= 0) {
     if (scd_data != 16) {
@@ -478,27 +477,27 @@ static signed char scdchk_r(short xposi, short yposi, short yoffset, unsigned sh
   else {
     scd_data += (signed char)((unsigned short)xposi & 0x000F);
     if (scd_data >= 0) {
-      return scdend_r(xposi, yposi, yoffset, blk_msk, solid_bit, p_dirstk, p_zonemap);
+      return scdend_r(xposi, yposi, yoffset, blk_msk, solid_bit, p_dirstk, p_zonemap_row_offsets);
     }
   }
-  return scdend2_r(xposi, yposi, yoffset, blk_msk, solid_bit, p_dirstk, p_zonemap);
+  return scdend2_r(xposi, yposi, yoffset, blk_msk, solid_bit, p_dirstk, p_zonemap_row_offsets);
 }
 
 
-static signed char scdend_r(short xposi, short yposi, short yoffset, unsigned short blk_msk, unsigned char solid_bit, unsigned char* p_dirstk, unsigned char* p_zonemap) {
-  signed char scd = scdchk2_r(xposi, yposi + yoffset, blk_msk, solid_bit, p_dirstk, p_zonemap);
+static signed char scdend_r(short xposi, short yposi, short yoffset, unsigned short blk_msk, unsigned char solid_bit, unsigned char* p_dirstk, unsigned short* p_zonemap_row_offsets) {
+  signed char scd = scdchk2_r(xposi, yposi + yoffset, blk_msk, solid_bit, p_dirstk, p_zonemap_row_offsets);
   return scd + 16;
 }
 
 
-static signed char scdend2_r(short xposi, short yposi, short yoffset, unsigned short blk_msk, unsigned char solid_bit, unsigned char* p_dirstk, unsigned char* p_zonemap) {
-  signed char scd = scdchk2_r(xposi, yposi + yoffset, blk_msk, solid_bit, p_dirstk, p_zonemap);
+static signed char scdend2_r(short xposi, short yposi, short yoffset, unsigned short blk_msk, unsigned char solid_bit, unsigned char* p_dirstk, unsigned short* p_zonemap_row_offsets) {
+  signed char scd = scdchk2_r(xposi, yposi + yoffset, blk_msk, solid_bit, p_dirstk, p_zonemap_row_offsets);
   return scd - 16;
 }
 
 
-static signed char scdchk2_r(short xposi, short yposi, unsigned short blk_msk, unsigned char solid_bit, unsigned char* p_dirstk, unsigned char* p_zonemap) {
-  unsigned short blk_no = scramapad(xposi, yposi, p_zonemap);
+static signed char scdchk2_r(short xposi, short yposi, unsigned short blk_msk, unsigned char solid_bit, unsigned char* p_dirstk, unsigned short* p_zonemap_row_offsets) {
+  unsigned short blk_no = scramapad(xposi, yposi, p_zonemap_row_offsets);
   unsigned short blk_offset = blk_no & 0x3FF;
   if (blk_offset == 0 || !BIT_IS_SET(blk_no, solid_bit)) {
     return 15 - (signed char)((unsigned short)xposi & 0x000F);
