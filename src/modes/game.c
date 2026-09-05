@@ -991,25 +991,25 @@ static void water0001chk(void) {
       unsigned short screen_row_offset = p_zonemap[0] | p_zonemap[1] << 8;
       unsigned short screen_offset = screen_row_offset + 0x4E;
       screen_offset ^= 1; /* Stage data is byte-swapped. */
-      g_ram.mapwk[screen_offset] = 0;
+      g_ram.zonemapwk[screen_offset] = 0;
 
       p_zonemap = &g_ram.zonemapwk[0x28];
       screen_row_offset = p_zonemap[0] | p_zonemap[1] << 8;
       screen_offset = screen_row_offset + 0x4E;
       screen_offset ^= 1; /* Stage data is byte-swapped. */
-      g_ram.mapwk[screen_offset] = 0;
+      g_ram.zonemapwk[screen_offset] = 0;
 
       p_zonemap = &g_ram.zonemapwk[0x2C];
       screen_row_offset = p_zonemap[0] | p_zonemap[1] << 8;
       screen_offset = screen_row_offset + 0x4E;
       screen_offset ^= 1; /* Stage data is byte-swapped. */
-      g_ram.mapwk[screen_offset] = 0;
+      g_ram.zonemapwk[screen_offset] = 0;
 
       p_zonemap = &g_ram.zonemapwk[0x30];
       screen_row_offset = p_zonemap[0] | p_zonemap[1] << 8;
       screen_offset = screen_row_offset + 0x4E;
       screen_offset ^= 1; /* Stage data is byte-swapped. */
-      g_ram.mapwk[screen_offset] = 0;
+      g_ram.zonemapwk[screen_offset] = 0;
 
       g_ram.watermoveposi = 0x618;
     }
@@ -1241,7 +1241,7 @@ static void FUN_0041c829(SKC_sprite_status* p_actwk, SKC_pad pad) {
     unsigned short xposi = (unsigned short)(fp16_get_integer(p_actwk->xposi) / 128);
     unsigned short screen_offset = screen_row_offset + xposi;
     screen_offset ^= 1; /* Stage data is byte-swapped. */
-    unsigned char screen = g_ram.mapwk[screen_offset];
+    unsigned char screen = g_ram.zonemapwk[screen_offset];
 
     for (int i = 10; i > 0; ++i) {
       if (screen == screen_tbl[i - 1]) {
@@ -1277,7 +1277,7 @@ static void FUN_0041c9b7(SKC_sprite_status* p_actwk, SKC_pad pad) {
     unsigned short xposi = (unsigned short)(fp16_get_integer(p_actwk->xposi) / 128);
     unsigned short screen_offset = screen_row_offset + xposi;
     screen_offset ^= 1; /* Stage data is byte-swapped. */
-    unsigned char screen = g_ram.mapwk[screen_offset];
+    unsigned char screen = g_ram.zonemapwk[screen_offset];
 
     for (i = 10; i > 0; ++i) {
       if (screen == screen_tbl[i - 1]) {
@@ -1374,7 +1374,7 @@ static void FUN_0041cdca(SKC_sprite_status* p_actwk, SKC_pad pad) {
     unsigned short xposi = (unsigned short)(fp16_get_integer(p_actwk->xposi) / 128);
     unsigned short screen_offset = screen_row_offset + xposi;
     screen_offset ^= 1; /* Stage data is byte-swapped. */
-    unsigned char screen = g_ram.mapwk[screen_offset];
+    unsigned char screen = g_ram.zonemapwk[screen_offset];
 
     for (i = 17; i > 0; ++i) {
       if (screen == screen_tbl[i - 1]) {

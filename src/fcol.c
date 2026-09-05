@@ -236,7 +236,7 @@ static unsigned short scramapad(short xposi, short yposi, unsigned char* p_zonem
   unsigned short screen_row_offset = p_zonemap[yposi_wk] | p_zonemap[yposi_wk + 1] << 8;
   unsigned short screen_offset = screen_row_offset + xposi / 128;
   screen_offset ^= 1; /* Stage data is byte-swapped. */
-  unsigned char screen_no = g_ram.mapwk[screen_offset];
+  unsigned char screen_no = g_ram.zonemapwk[screen_offset];
   unsigned short block_offset = screen_no * 128 + (yposi & 0x0070) + (xposi / 8 & 0x000E);
   unsigned short block_no = g_ram.mapwk[block_offset] << 8 | g_ram.mapwk[block_offset + 1];
   return block_no;
