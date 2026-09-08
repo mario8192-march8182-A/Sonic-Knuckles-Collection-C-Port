@@ -16,11 +16,11 @@
 #define SKTEXT_TBL_SOUND_TEST_INDEX 16
 #define S3TEXT_TBL_SIZE 15
 #define S3TEXT_TBL_SOUND_TEST_INDEX 15
-#define TILE_1 17
-#define TILE_2 18
-#define TILE_3 19
-#define TILE_4 20
-#define TILE_ASTERISK 26
+#define PATTERN_1 17
+#define PATTERN_2 18
+#define PATTERN_3 19
+#define PATTERN_4 20
+#define PATTERN_ASTERISK 26
 #define LINE_MAX 16
 #define LINE1_END (LINE_MAX - 1) * 2
 #define LINE2_END (40 + (LINE_MAX - 1)) * 2
@@ -147,19 +147,19 @@ void stagesel(void) {
     }
 
     if (!g_sonic3_alone && i == SKTEXT_TBL_LAVA_REEF2_INDEX) {
-      p_map[LINE1_END] = TILE_3;
+      p_map[LINE1_END] = PATTERN_3;
       p_map[LINE1_END + 1] = 0;
-      p_map[LINE2_END] = TILE_4;
+      p_map[LINE2_END] = PATTERN_4;
       p_map[LINE2_END + 1] = 0;
     }
     else if (i == text_tbl_size - 1) {
-      p_map[LINE1_END] = TILE_ASTERISK;
+      p_map[LINE1_END] = PATTERN_ASTERISK;
       p_map[LINE1_END + 1] = 0;
     }
     else {
-      p_map[LINE1_END] = TILE_1;
+      p_map[LINE1_END] = PATTERN_1;
       p_map[LINE1_END + 1] = 0;
-      p_map[LINE2_END] = TILE_2;
+      p_map[LINE2_END] = PATTERN_2;
       p_map[LINE2_END + 1] = 0;
     }
   }
@@ -424,19 +424,19 @@ static void set_selpalline(unsigned char line) {
   unsigned char* p_vram = &g_vram[offset];
 
   for (int i = 0; i < LINE_MAX - 1; ++i) {
-    unsigned short tile = p_vram[0] | p_vram[1] << 8;
-    tile = (tile & 0x9FFF) | line << 13;
-    *p_vram++ = tile & 0xFF;
-    *p_vram++ = tile >> 8;
+    unsigned short pat = p_vram[0] | p_vram[1] << 8;
+    pat = (pat & 0x9FFF) | line << 13;
+    *p_vram++ = pat & 0xFF;
+    *p_vram++ = pat >> 8;
   }
 
   if (p_textpos_tbl[g_ram.stagesel_sel][1][1] != 0) {
     offset = 0xC000 + p_textpos_tbl[g_ram.stagesel_sel][1][1] * 128 + p_textpos_tbl[g_ram.stagesel_sel][1][0];
     p_vram = &g_vram[offset];
-    unsigned short tile = p_vram[0] | p_vram[1] << 8;
-    tile = (tile & 0x9FFF) | line << 13;
-    p_vram[0] = tile & 0xFF;
-    p_vram[1] = tile >> 8;
+    unsigned short pat = p_vram[0] | p_vram[1] << 8;
+    pat = (pat & 0x9FFF) | line << 13;
+    p_vram[0] = pat & 0xFF;
+    p_vram[1] = pat >> 8;
   }
   if (g_ram.stagesel_sel == sound_test_index) {
     set_digits(line);
@@ -466,14 +466,14 @@ static void set_digits0(unsigned char* p_vram, unsigned short sel, unsigned char
 
 
 static void set_digit(unsigned char* p_vram, unsigned short sel, unsigned char palline) {
-  unsigned short tile = sel & 0x000F;
-  if (tile >= 10) {
-    tile += 4;
+  unsigned short pat = sel & 0x000F;
+  if (pat >= 10) {
+    pat += 4;
   }
-  tile += 16;
-  tile = (tile & 0x9FFF) | palline << 13;
-  p_vram[0] = tile & 0xFF;
-  p_vram[1] = tile >> 8;
+  pat += 16;
+  pat = (pat & 0x9FFF) | palline << 13;
+  p_vram[0] = pat & 0xFF;
+  p_vram[1] = pat >> 8;
 }
 
 

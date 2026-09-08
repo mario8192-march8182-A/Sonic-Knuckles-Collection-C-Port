@@ -179,7 +179,7 @@ void opening(void) {
   g_ram.watermode = 0;
   g_ram.miles_carry_flag = 0;
   g_ram.miles_nograb_timer = 0;
-  g_ram.zoom_tile_cnt = 0;
+  g_ram.zoom_pat_cnt = 0;
   g_ram.foxxspeed = 0;
   g_ram.markno_s = 0;
   // DAT_08fff748

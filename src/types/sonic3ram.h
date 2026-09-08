@@ -200,7 +200,7 @@ typedef struct sonic3_ram {
   /* 08fff730 */ unsigned char watermode;
   /* 08fff73e */ unsigned char miles_carry_flag;
   /* 08fff73f */ unsigned char miles_nograb_timer;
-  /* 08fff740 */ unsigned short zoom_tile_cnt;
+  /* 08fff740 */ unsigned short zoom_pat_cnt;
   /* 08fff744 */ short foxxspeed;
   /* 08fff746 */ unsigned char markno_s;
   /* 08fff74a */ unsigned char DAT_08fff74a;

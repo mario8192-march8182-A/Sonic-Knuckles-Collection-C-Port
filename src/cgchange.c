@@ -891,7 +891,7 @@ static void cg_chg1(SKC_cg_chg_item* p_item, unsigned char* p_cgchgtim, unsigned
       *p_cgchgtim = p_item->tim;
       p_source += p_item->data_ptr[*p_cgchgcnt] * 32;
     }
-    memcpy(&g_vram[p_item->vram_adr], p_source, p_item->tilecnt * 32);
+    memcpy(&g_vram[p_item->vram_adr], p_source, p_item->patcnt * 32);
     ++*p_cgchgcnt;
   }
 }

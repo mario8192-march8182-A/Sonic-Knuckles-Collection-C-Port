@@ -6,7 +6,7 @@ typedef struct SKC_cg_chg_item {
   unsigned char* cg_ptr;
   unsigned short vram_adr;
   unsigned char chgcnt;
-  unsigned char tilecnt;
+  unsigned char patcnt;
   unsigned char* data_ptr;
 }
 SKC_cg_chg_item;
