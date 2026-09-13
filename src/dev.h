@@ -1,6 +1,7 @@
 #ifndef SKC_DEV_H
 #define SKC_DEV_H
 
+typedef struct SKC_block SKC_block;
 typedef struct SKC_cg_data SKC_cg_data;
 
 void bitdevr(unsigned char* p_destination, unsigned char* p_source);
@@ -11,5 +12,6 @@ void copy_map_vram2(unsigned char* p_source, unsigned short offset, unsigned sho
 void mapdevr(unsigned char* p_destination, unsigned char* p_source, unsigned short offset);
 unsigned char* unlze(unsigned char* p_destination, unsigned char* p_source);
 void unlze_moduled(unsigned char* p_destination, unsigned char* p_source);
+unsigned short unlze_blocks(SKC_block* p_destination, unsigned char* p_source);
 
 #endif

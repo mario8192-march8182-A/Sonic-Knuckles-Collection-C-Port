@@ -2,6 +2,7 @@
 #define SONIC3RAM_H
 
 #include "acttimer.h"
+#include "block.h"
 #include "cchgwork.h"
 #include "patternname.h"
 #include "point.h"
@@ -28,7 +29,7 @@ typedef struct sonic3_ram {
                    unsigned char data[0xF78];
                  }
                  zonemapwk;
-  /* 08ff9000 */ unsigned char blockwk[0x1800];
+  /* 08ff9000 */ SKC_block blockwk[768];
   /* 08ffac00 */ unsigned char pbuffer[PBUFFER_LEVELS][PBUFFER_LEVEL_SLOTS];
   /* 08ffb000 */ SKC_sprite_status actwk[ACTWK_SLOTS];
   /* 08ffd000 */ unsigned char zoombuffer[0x1000];

@@ -3,8 +3,10 @@
 #include <string.h>
 #include "types/bitdevrcodetableentry.h"
 #include "types/bitdevrwork.h"
+#include "types/block.h"
 #include "types/cgdata.h"
 #include "types/mapdevrwork.h"
+#include "types/patternname.h"
 #include "utils/bits.h"
 typedef unsigned char*(*SKC_bitdevr_write_handler)(unsigned char*, SKC_bitdevr_work*);
 static unsigned char* process_inline_data(unsigned char* p_source, SKC_bitdevr_work* p_work);
@@ -15,6 +17,7 @@ static unsigned short get_inline_copy(unsigned char** pp_source, SKC_mapdevr_wor
 static void prepare_next_entry(unsigned char** pp_source, SKC_mapdevr_work* p_work);
 static unsigned short unlze2(unsigned char** pp_destination, unsigned char* p_source);
 static unsigned char get_next_bit(unsigned char** pp_source, unsigned short* p_buffer, unsigned char* p_buffer_len);
+static void write_blocks(SKC_block* p_destination, unsigned char* p_source, unsigned short block_cnt);
 
 extern unsigned char g_vram[0x10000];
 
@@ -445,6 +448,95 @@ void unlze_moduled(unsigned char* p_destination, unsigned char* p_source) {
         read_byte_cnt += 16;
       }
       p_source += read_byte_cnt;
+    }
+  }
+}
+
+
+unsigned short unlze_blocks(SKC_block* p_destination, unsigned char* p_source) {
+  unsigned short total_block_cnt = 0;
+  unsigned char decompressed[256 * 2 + 8];
+  unsigned char* p_decompressed = decompressed;
+  unsigned short buffer = p_source[0] | p_source[1] << 8;
+  p_source += 2;
+  unsigned char buffer_len = 16;
+  bool done = false;
+
+  do {
+    unsigned char type = get_next_bit(&p_source, &buffer, &buffer_len);
+    if (type == 0) {
+      type |= get_next_bit(&p_source, &buffer, &buffer_len) << 1;
+    }
+
+    switch (type) {
+      case 1:
+        *p_decompressed++ = *p_source++;
+        break;
+      case 0: {
+        unsigned char repeat_cnt = get_next_bit(&p_source, &buffer, &buffer_len);
+        repeat_cnt <<= 1;
+        repeat_cnt |= get_next_bit(&p_source, &buffer, &buffer_len);
+        repeat_cnt += 2;
+        short offset = -256 + *p_source++;
+
+        for (int i = 0; i < repeat_cnt; ++i) {
+          unsigned char value = p_decompressed[offset];
+          *p_decompressed++ = value;
+        }
+        break;
+      }
+      case 2: {
+        unsigned short data = p_source[0] | p_source[1] << 8;
+        p_source += 2;
+        short offset = (-256 + (short)(data >> 8)) * 32;
+        short wk = (unsigned short)offset >> 8;
+        wk = (wk & 0x7F) - (wk & 0x80);
+        offset = wk * 256 + (short)(data & 0xFF);
+        unsigned char repeat_cnt = (data >> 8) & 7;
+        if (repeat_cnt == 0) {
+          repeat_cnt = *p_source++;
+
+          switch (repeat_cnt) {
+            case 0: done = true; break;
+            case 1: break;
+            default: ++repeat_cnt; break;
+          }
+        }
+        else {
+          repeat_cnt += 2;
+        }
+        if (!done && repeat_cnt != 1) {
+          for (int i = 0; i < repeat_cnt; ++i) {
+            unsigned char value = p_decompressed[offset];
+            *p_decompressed++ = value;
+          }
+        }
+        break;
+      }
+    }
+
+    unsigned short block_cnt = (p_decompressed - decompressed - 256) / 8;
+    write_blocks(p_destination, decompressed, block_cnt);
+    p_destination += block_cnt;
+    total_block_cnt += block_cnt;
+    unsigned short copy_cnt = 256 * 2 + 8 - block_cnt * 8;
+    memcpy(decompressed, &decompressed[copy_cnt], copy_cnt);
+    p_decompressed -= copy_cnt;
+  }
+  while (!done);
+
+  unsigned short block_cnt = (p_decompressed - decompressed) / 8;
+  write_blocks(p_destination, decompressed, block_cnt);
+  total_block_cnt += block_cnt;
+  return total_block_cnt;
+}
+
+
+static void write_blocks(SKC_block* p_destination, unsigned char* p_source, unsigned short block_cnt) {
+  for (int i = 0; i < block_cnt; ++i) {
+    for (int j = 0; j < 4; ++j) {
+      unsigned short raw_pattern_name = p_source[i * 8 + j * 2 + 1] | p_source[i * 8 + j * 2] << 8;
+      p_destination[i].patterns[j / 2][j % 2] = get_pattern_name(raw_pattern_name);
     }
   }
 }

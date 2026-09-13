@@ -516,11 +516,11 @@ void mapwrt(void) {
     stageno = ANGEL_ISLAND_ACT_1_NO_INTRO;
   }
   SKC_mapinit_data* p_data = &mapinittbl[get_zone(stageno)][get_act(stageno)];
-  unsigned char* p_next = unlze(g_ram.blockwk, p_data->blkdata1_ptr);
+  unsigned short block_cnt = unlze_blocks(g_ram.blockwk, p_data->blkdata1_ptr);
   if (p_data->blkdata1_ptr != p_data->blkdata2_ptr) {
-    unlze(p_next, p_data->blkdata2_ptr);
+    unlze_blocks(&g_ram.blockwk[block_cnt], p_data->blkdata2_ptr);
   }
-  p_next = unlze(g_ram.mapwk, p_data->mapdata1_ptr);
+  unsigned char* p_next = unlze(g_ram.mapwk, p_data->mapdata1_ptr);
   if (p_data->mapdata1_ptr != p_data->mapdata2_ptr) {
     unlze(p_next, p_data->mapdata2_ptr);
   }

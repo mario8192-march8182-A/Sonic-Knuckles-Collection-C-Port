@@ -151,7 +151,7 @@ static void zone000chk1(void) {
   if (g_ram.scra_h_posit >> 16 >= 0x1400) {
     bool play_type_is_sonic = g_ram.play_type == PLAY_TYPE_SONIC_AND_MILES || g_ram.play_type == PLAY_TYPE_SONIC;
     if (g_ram.markerno == 0 && play_type_is_sonic) {
-      unlze(&g_ram.blockwk[0x268], zone0d0blk2);
+      unlze_blocks(&g_ram.blockwk[77], zone0d0blk2);
       unlze_moduled(&g_vram[0x17C0], zone0d0cg2);
       g_ram.event_flag_3 = 0xFF;
       g_ram.cgchgtim[0] = 0;
@@ -299,7 +299,7 @@ static void zone001chk3(void) {
 static void zone001chk4(void) {
   if (g_ram.scra_h_posit >> 16 < 0x3C00) return;
 
-  unlze(&g_ram.blockwk[0xAB8], DAT_005fe304);
+  unlze_blocks(&g_ram.blockwk[343], DAT_005fe304);
   unlze_moduled(&g_vram[0x3F80], DAT_00601858);
   unlze_moduled(&g_vram[0xA000], DAT_0054a870);
   colorset2(48);
@@ -381,7 +381,7 @@ static void zone001chk11(void) {
 static void zone001chk12(void) {
   if (g_ram.scra_h_posit >> 16 < 0x3B80) return;
 
-  unlze(&g_ram.blockwk[0xAB8], DAT_005fe304);
+  unlze_blocks(&g_ram.blockwk[343], DAT_005fe304);
   unlze_moduled(&g_vram[0x3F80], DAT_00601858);
   colorset2(48);
   g_ram.scralim_left = 0x3B80;
@@ -603,7 +603,7 @@ static void zone061chk0(void) {
   if (g_ram.scra_v_posit >> 16 < 0x500) return;
 
   g_ram.zone_flag += 2;
-  unlze(g_ram.blockwk, DAT_00633942);
+  unlze_blocks(g_ram.blockwk, DAT_00633942);
   unlze(g_ram.mapwk, DAT_0063a366);
   unlze_moduled(&g_vram[0], DAT_00635f04);
   unlze_moduled(&g_vram[0xB400], DAT_0053025c);
