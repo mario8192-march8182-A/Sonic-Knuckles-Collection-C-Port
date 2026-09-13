@@ -1,4 +1,5 @@
 #include "bs00m.h"
+#include <string.h>
 #include "../../data/pat/zone00/bs00m.h"
 #include "../../data/pat/zone00/kaen00m0.h"
 #include "../../types/sonic3ram.h"
@@ -519,7 +520,9 @@ static void bs00m0_kaen0_move(SKC_sprite_status* p_actwk) {
 
 static void kaen_pg_init(SKC_sprite_status* p_actwk) {
   p_actwk->patbase = exp01_pt;
-  p_actwk->sproffset = 0x84D2;
+  memset(&p_actwk->sproffset, 0, sizeof(p_actwk->sproffset));
+  p_actwk->sproffset.gfx = 0x4D2;
+  p_actwk->sproffset.pr = 1;
   p_actwk->u.obj.pg_data_ptr = kaen00m0_pg01;
   p_actwk->u.obj.callback_ptr = &set_emy_fout0;
   if (p_actwk->u.obj.userflag == 6) {
@@ -892,7 +895,8 @@ void bs00m0_napmexp(SKC_sprite_status* p_actwk) {
 static void bs00m0_napmexp_init(SKC_sprite_status* p_actwk) {
   enemy_init0(p_actwk, &napmexp_init_tbl);
   if (get_act(g_ram.stageno) != ACT_1) {
-    p_actwk->sproffset = 0x0500;
+    memset(&p_actwk->sproffset, 0, sizeof(p_actwk->sproffset));
+    p_actwk->sproffset.gfx = 0x500;
   }
   SKC_sprite_status* p_parentwk = &g_ram.actwk[p_actwk->u.obj.oya];
   if (p_parentwk->colino == 0) {
@@ -1058,7 +1062,7 @@ static void chk_bs00m0_damage(SKC_sprite_status* p_actwk) {
 
 static SKC_enemy_init0_data bs00m0_init_tbl = {
   bs00m0_pt,
-  0xA41A,
+  { 0x41A, 0, 0, 1, 1 },
   PRI_4,
   32,
   32,
@@ -1068,7 +1072,7 @@ static SKC_enemy_init0_data bs00m0_init_tbl = {
 
 
 static SKC_enemy_init1_data jet00m0_init_tbl = {
-  0x841A,
+  { 0x41A, 0, 0, 0, 1 },
   PRI_3,
   40,
   16,
@@ -1078,7 +1082,7 @@ static SKC_enemy_init1_data jet00m0_init_tbl = {
 
 
 static SKC_enemy_init1_data exit00m0_init_tbl = {
-  0xA41A,
+  { 0x41A, 0, 0, 1, 1 },
   PRI_4,
   4,
   8,
@@ -1088,7 +1092,7 @@ static SKC_enemy_init1_data exit00m0_init_tbl = {
 
 
 static SKC_enemy_init1_data futa00m0_init_tbl = {
-  0xA41A,
+  { 0x41A, 0, 0, 1, 1 },
   PRI_5,
   8,
   8,
@@ -1098,7 +1102,7 @@ static SKC_enemy_init1_data futa00m0_init_tbl = {
 
 
 static SKC_enemy_init1_data napf00m0_init_tbl = {
-  0x041A,
+  { 0x41A, 0, 0, 0, 0 },
   PRI_4,
   8,
   8,
@@ -1108,7 +1112,7 @@ static SKC_enemy_init1_data napf00m0_init_tbl = {
 
 
 static SKC_enemy_init1_data napm00m0_init_tbl = {
-  0x041A,
+  { 0x41A, 0, 0, 0, 0 },
   PRI_5,
   8,
   16,
@@ -1119,7 +1123,7 @@ static SKC_enemy_init1_data napm00m0_init_tbl = {
 
 static SKC_enemy_init0_data napmexp_init_tbl = {
   exp01_pt,
-  0x04D2,
+  { 0x4D2, 0, 0, 0, 0 },
   PRI_1,
   12,
   12,
@@ -1130,7 +1134,7 @@ static SKC_enemy_init0_data napmexp_init_tbl = {
 
 static SKC_enemy_init0_data kaen00m0_init_tbl = {
   kaen00m0_pt,
-  0x8482,
+  { 0x482, 0, 0, 0, 1 },
   PRI_2,
   16,
   16,
@@ -1141,7 +1145,7 @@ static SKC_enemy_init0_data kaen00m0_init_tbl = {
 
 static SKC_enemy_init0_data bs00m2_init_tbl = {
   bs00m2_pt,
-  0x2474,
+  { 0x474, 0, 0, 1, 0 },
   PRI_7,
   16,
   16,

@@ -1,5 +1,6 @@
 #include "common.h"
 #include <stdbool.h>
+#include <string.h>
 #include "../types/point.h"
 #include "../types/size.h"
 #include "../types/sonic3ram.h"
@@ -140,7 +141,8 @@ static void bakuhatuinit2(SKC_sprite_status* p_actwk) {
 
 static void bakuhatuinit3(SKC_sprite_status* p_actwk) {
   p_actwk->patbase = bakuhatupat;
-  p_actwk->sproffset = (p_actwk->sproffset & 0x8000) | 0x05A0;
+  p_actwk->sproffset.pr = 1;
+  p_actwk->sproffset.gfx |= 0x5A0;
   p_actwk->actflg.relative_coordinates = 1;
   p_actwk->sprpri = PRI_1;
   p_actwk->colino = 0;
@@ -168,7 +170,8 @@ static void bakuhatumove(SKC_sprite_status* p_actwk) {
 
 void bakuhatu2(SKC_sprite_status* p_actwk) {
   p_actwk->patbase = bakuhatupat;
-  p_actwk->sproffset = 0x05A0;
+  memset(&p_actwk->sproffset, 0, sizeof(p_actwk->sproffset));
+  p_actwk->sproffset.gfx = 0x5A0;
   p_actwk->actflg.relative_coordinates = 1;
   p_actwk->sprpri = PRI_5;
   p_actwk->sprhs = 12;
@@ -196,7 +199,9 @@ static void bakuhatumove2(SKC_sprite_status* p_actwk) {
 
 void bakuhatu3(SKC_sprite_status* p_actwk) {
   p_actwk->patbase = bakuhatupat;
-  p_actwk->sproffset = 0x85A0;
+  memset(&p_actwk->sproffset, 0, sizeof(p_actwk->sproffset));
+  p_actwk->sproffset.gfx = 0x5A0;
+  p_actwk->sproffset.pr = 1;
   p_actwk->actflg.relative_coordinates = 1;
   p_actwk->sprpri = PRI_2;
   p_actwk->sprhs = 12;
@@ -281,7 +286,8 @@ static void miki00init(SKC_sprite_status* p_actwk) {
   p_actwk->sprpri = PRI_3;
   p_actwk->sprhs = 8;
   p_actwk->actflg.relative_coordinates = 1;
-  p_actwk->sproffset = 0x4001;
+  p_actwk->sproffset = 0x001;
+  p_actwk->sproffset.pl = 2;
   p_actwk->r_ptr = &miki00move;
   miki00move(p_actwk);
 }
@@ -317,7 +323,9 @@ static void joint00init(SKC_sprite_status* p_actwk) {
   p_actwk->sprpri = PRI_7;
   p_actwk->sprhs = 32;
   p_actwk->actflg.relative_coordinates = 1;
-  p_actwk->sproffset = 0x4324;
+  memset(&p_actwk->sproffset, 0, sizeof(p_actwk->sproffset));
+  p_actwk->sproffset.gfx = 0x324;
+  p_actwk->sproffset.pl = 2;
   p_actwk->r_ptr = &joint00move;
   joint00move(p_actwk);
 }
@@ -354,7 +362,8 @@ static void rollcinit(SKC_sprite_status* p_actwk) {
   };
 
   p_actwk->patbase = colichgpat;
-  p_actwk->sproffset = 0x06BC;
+  memset(&p_actwk->sproffset, 0, sizeof(p_actwk->sproffset));
+  p_actwk->sproffset.gfx = 0x6BC;
   p_actwk->actflg.relative_coordinates = 1;
   p_actwk->sprhs = 128;
   p_actwk->sprvs = 128;
@@ -529,7 +538,9 @@ void scopec(SKC_sprite_status* p_actwk) {
 
   p_actwk->colino = scopecinittbl[p_actwk->u.obj.userflag];
   p_actwk->patbase = g_ram.editmode == 0 ? scopecpatr : scopecpat;
-  p_actwk->sproffset = 0x86BC;
+  memset(&p_actwk->sproffset, 0, sizeof(p_actwk->sproffset));
+  p_actwk->sproffset.gfx = 0x6BC;
+  p_actwk->sproffset.pr = 1;
   p_actwk->actflg.relative_coordinates = 1;
   p_actwk->actflg.onscreen = 1;
   p_actwk->sprhs = 128;
@@ -619,7 +630,9 @@ void scoli(SKC_sprite_status* p_actwk) {
 
 static void scoliinit(SKC_sprite_status* p_actwk) {
   p_actwk->patbase = scolipat;
-  p_actwk->sproffset = 0x86BC;
+  memset(&p_actwk->sproffset, 0, sizeof(p_actwk->sproffset));
+  p_actwk->sproffset.gfx = 0x6BC;
+  p_actwk->sproffset.pr = 1;
   p_actwk->actflg.relative_coordinates = 1;
   p_actwk->sprpri = PRI_4;
   p_actwk->actflg.onscreen = 1;
@@ -714,7 +727,9 @@ static void barinit(SKC_sprite_status* p_actwk) {
   };
 
   p_actwk->patbase = barpat;
-  p_actwk->sproffset = 0x43CA;
+  memset(&p_actwk->sproffset, 0, sizeof(p_actwk->sproffset));
+  p_actwk->sproffset.gfx = 0x3CA;
+  p_actwk->sproffset.pl = 2;
   p_actwk->actflg.relative_coordinates = 1;
   p_actwk->sprpri = PRI_4;
   p_actwk->u.obj.timer = (p_actwk->u.obj.userflag & 0x0F) * 60;
@@ -1104,7 +1119,9 @@ void water(SKC_sprite_status* p_actwk) {
 
 static void waterinit(SKC_sprite_status* p_actwk) {
   p_actwk->patbase = waterpat;
-  p_actwk->sproffset = 0x842E;
+  memset(&p_actwk->sproffset, 0, sizeof(p_actwk->sproffset));
+  p_actwk->sproffset.gfx = 0x42E;
+  p_actwk->sproffset.pr = 1;
   p_actwk->actflg.relative_coordinates = 1;
   p_actwk->sprhs = 128;
   p_actwk->sprvs = 8;
@@ -1246,7 +1263,9 @@ static void blockinit(SKC_sprite_status* p_actwk) {
   p_actwk->sprhs = blocktbl[p_actwk->u.obj.userflag].w;
   p_actwk->sprvs = blocktbl[p_actwk->u.obj.userflag].h;
   p_actwk->patbase = blockpat;
-  p_actwk->sproffset = 0x43D4;
+  memset(&p_actwk->sproffset, 0, sizeof(p_actwk->sproffset));
+  p_actwk->sproffset.gfx = 0x3D4;
+  p_actwk->sproffset.pl = 2;
   p_actwk->actflg.relative_coordinates = 1;
   p_actwk->sprpri = PRI_5;
   p_actwk->r_ptr = &blockmove;
@@ -1325,7 +1344,9 @@ void itaicoli(SKC_sprite_status* p_actwk) {
 
 static void itaicoliinit(SKC_sprite_status* p_actwk) {
   p_actwk->patbase = scolipat;
-  p_actwk->sproffset = 0x86BC;
+  memset(&p_actwk->sproffset, 0, sizeof(p_actwk->sproffset));
+  p_actwk->sproffset.gfx = 0x6BC;
+  p_actwk->sproffset.pr = 1;
   p_actwk->actflg.relative_coordinates = 1;
   p_actwk->sprpri = PRI_4;
   p_actwk->u.obj.cddat.die = 1;
@@ -1434,7 +1455,9 @@ void killcoli(SKC_sprite_status* p_actwk) {
 
 static void killcoliinit(SKC_sprite_status* p_actwk) {
   p_actwk->patbase = scolipat;
-  p_actwk->sproffset = 0x86BC;
+  memset(&p_actwk->sproffset, 0, sizeof(p_actwk->sproffset));
+  p_actwk->sproffset.gfx = 0x6BC;
+  p_actwk->sproffset.pr = 1;
   p_actwk->actflg.relative_coordinates == 1;
   p_actwk->sprpri = PRI_4;
   p_actwk->u.obj.cddat.die = 1;

@@ -500,7 +500,7 @@ static void nuckle000(SKC_sprite_status* p_actwk) {
 
 static void nuckle000_init(SKC_sprite_status* p_actwk) {
   emy_wrt_init(p_actwk, &nuckle_init_tbl);
-  CLEAR_BIT(p_actwk->sproffset, 15);
+  p_actwk->sproffset.pr = 0;
   p_actwk->sprvsize = 19;
   p_actwk->patno = 8;
   fp16_set_integer(&p_actwk->xposi, 0x1400);
@@ -1598,7 +1598,7 @@ void tekotu(SKC_sprite_status* p_actwk) {
   enemy_init0(p_actwk, &tekotu_init_tbl);
   if (p_actwk->actflg.vflip == 1) {
     p_actwk->actflg.vflip = 0;
-    SET_BIT(p_actwk->sproffset, 15);
+    p_actwk->sproffset.pr = 1;
   }
   if (p_actwk->actflg.hflip == 1) {
     p_actwk->actflg.hflip = 0;
@@ -1662,7 +1662,7 @@ static void nuckle070(SKC_sprite_status* p_actwk) {
 
 static void nuckle070_init(SKC_sprite_status* p_actwk) {
   emy_wrt_init(p_actwk, &nuckle_init_tbl);
-  CLEAR_BIT(p_actwk->sproffset, 15);
+  p_actwk->sproffset.pr = 0;
   p_actwk->u.obj.timer = 119;
   p_actwk->u.obj.pg_data_ptr = run_pg00;
   fp16_set_integer(&p_actwk->xposi, 0x2B0);
@@ -2007,7 +2007,7 @@ static void nk0700_apar0(SKC_sprite_status* p_actwk) {
 static void nk0700_kyoro0_init(SKC_sprite_status* p_actwk) {
   p_actwk->r_ptr = &nk0700_kyoro0;
   p_actwk->u.obj.callback_ptr = &nk0700_away0_init;
-  SET_BIT(p_actwk->sproffset, 15);
+  p_actwk->sproffset.pr = 1;
 }
 
 
@@ -2022,7 +2022,7 @@ static void nk0700_away0_init(SKC_sprite_status* p_actwk) {
   p_actwk->xspeed = -0x400;
   p_actwk->u.obj.timer = 15;
   p_actwk->u.obj.callback_ptr = &nk0700_away0;
-  CLEAR_BIT(p_actwk->sproffset, 15);
+  p_actwk->sproffset.pr = 0;
 }
 
 
@@ -2242,7 +2242,9 @@ static void sw0701(SKC_sprite_status* p_actwk) {
   p_actwk->r_ptr = &sw0701_wait0;
   if (g_ram.actwk[0].u.play.character == KNUCKLES) {
     p_actwk->r_ptr = &frameoutchk;
-    p_actwk->sproffset = 0x8528;
+    memset(&p_actwk->sproffset, 0, sizeof(p_actwk->sproffset));
+    p_actwk->sproffset.gfx = 0x528;
+    p_actwk->sproffset.pr = 1;
     SKC_sprite_status* p_parentwk = &g_ram.actwk[p_actwk->u.obj.oya];
     p_actwk->u.obj.flagwork_index = p_parentwk->u.obj.flagwork_index;
   }
@@ -2296,7 +2298,7 @@ static void ev0701(SKC_sprite_status* p_actwk) {
   g_ram.actwk[actid].u.play.control_bitfield = 0x81;
   g_ram.actwk[actid].mstno = 15;
   g_ram.actwk[actid].actflg.vflip = 0;
-  SET_BIT(g_ram.actwk[actid].sproffset, 15);
+  g_ram.actwk[actid].sproffset.pr = 1;
   g_ram.fast_scroll_flag = 0xFF;
 }
 
@@ -2313,7 +2315,7 @@ static void ev0701_move0(SKC_sprite_status* p_actwk) {
     memset(&g_ram.swdata, 0, sizeof(g_ram.swdata));
     memset(&g_ram.swdata0, 0, sizeof(g_ram.swdata0));
     p_playerwk->u.play.control_bitfield = 0;
-    CLEAR_BIT(p_playerwk->sproffset, 15);
+    p_playerwk->sproffset.pr = 0;
     p_playerwk->mstno = 0;
     p_playerwk->mspeed = 16;
     g_ram.fast_scroll_flag = 0;
@@ -2518,12 +2520,12 @@ static void friend07(SKC_sprite_status* p_actwk) {
   SKC_friend07_init_data risu_tbl = {
     &risu_move0,
     rickypat,
-    0x580
+    { 0x580, 0, 0, 0, 0 }
   };
   SKC_friend07_init_data flicky_tbl = {
     &flicky_move0,
     cuckyflickypat,
-    0x592
+    { 0x592, 0, 0, 0, 0 }
   };
 
   fp16_set_integer(&p_actwk->xposi, posi_tbl[p_actwk->u.obj.userflag / 2]);
@@ -3407,7 +3409,7 @@ static void nkmiles_wrt(SKC_sprite_status* p_actwk) {
 
 SKC_wrt_init_data nuckle_init_tbl = {
   0,
-  0xA4DA,
+  { 0x4DA, 0, 0, 1, 1 },
   46,
   0,
   nuckle_pt,
@@ -3421,7 +3423,7 @@ SKC_wrt_init_data nuckle_init_tbl = {
 
 static SKC_wrt_init_data nk0701_init_tbl = {
   0,
-  0xA4DA,
+  { 0x4DA, 0, 0, 1, 1 },
   46,
   0,
   nk0701_pt,
@@ -3435,7 +3437,7 @@ static SKC_wrt_init_data nk0701_init_tbl = {
 
 static SKC_wrt_init_data nk0702_init_tbl = {
   0,
-  0x06A0,
+  { 0x6A0, 0, 0, 0, 0 },
   46,
   0,
   nkopen_pt,
@@ -3449,7 +3451,7 @@ static SKC_wrt_init_data nk0702_init_tbl = {
 
 static SKC_wrt_init_data nk0931_init_tbl = {
   0,
-  0xA4DA,
+  { 0x4DA, 0, 0, 1, 1 },
   46,
   0,
   nk0931_pt,
@@ -3463,7 +3465,7 @@ static SKC_wrt_init_data nk0931_init_tbl = {
 
 static SKC_enemy_init0_data nucksw_init_tbl = {
   switchpat,
-  0x8456,
+  { 0x456, 0, 0, 0, 1 },
   PRI_2,
   16,
   8,
@@ -3474,7 +3476,7 @@ static SKC_enemy_init0_data nucksw_init_tbl = {
 
 static SKC_enemy_init0_data bomb06_init_tbl = {
   bomb06_pt,
-  0xA4D6,
+  { 0x4D6, 0, 0, 1, 1 },
   PRI_1,
   8,
   8,
@@ -3485,7 +3487,7 @@ static SKC_enemy_init0_data bomb06_init_tbl = {
 
 static SKC_enemy_init0_data nuckle061_dai_init_tbl = {
   tekotu_pt,
-  0x45A0,
+  { 0x5A0, 0, 0, 2, 0 },
   PRI_5,
   16,
   16,
@@ -3496,7 +3498,7 @@ static SKC_enemy_init0_data nuckle061_dai_init_tbl = {
 
 static SKC_enemy_init0_data tekotu_init_tbl = {
   tekotu_pt,
-  0x45A0,
+  { 0x5A0, 0, 0, 2, 0 },
   PRI_5,
   16,
   128,
@@ -3507,7 +3509,7 @@ static SKC_enemy_init0_data tekotu_init_tbl = {
 
 static SKC_enemy_init0_data opniwa_init_tbl = {
   bryukapat,
-  0x4001,
+  { 0x001, 0, 0, 2, 0 },
   PRI_3,
   16,
   24,
@@ -3518,7 +3520,7 @@ static SKC_enemy_init0_data opniwa_init_tbl = {
 
 static SKC_enemy_init0_data nk0700_init_tbl = {
   nk0700_pt,
-  0x2500,
+  { 0x500, 0, 0, 1, 0 },
   PRI_3,
   16,
   16,
@@ -3529,7 +3531,7 @@ static SKC_enemy_init0_data nk0700_init_tbl = {
 
 static SKC_enemy_init0_data sw0700_init_tbl = {
   switchpat,
-  0x0341,
+  { 0x341, 0, 0, 0, 0 },
   PRI_2,
   128,
   128,
@@ -3540,7 +3542,7 @@ static SKC_enemy_init0_data sw0700_init_tbl = {
 
 static SKC_enemy_init0_data sw0701_init_tbl = {
   sw0701_pt,
-  0xA528,
+  { 0x528, 0, 0, 1, 1 },
   PRI_6,
   16,
   16,
@@ -3551,7 +3553,7 @@ static SKC_enemy_init0_data sw0701_init_tbl = {
 
 static SKC_enemy_init0_data shut07_init_tbl = {
   shut07_pt,
-  0x63C9,
+  { 0x3C9, 0, 0, 3, 0 },
   PRI_1,
   16,
   32,
@@ -3562,7 +3564,7 @@ static SKC_enemy_init0_data shut07_init_tbl = {
 
 SKC_enemy_init0_data housi071_init_tbl = {
   housi071_pt,
-  0xE368,
+  { 0x368, 0, 0, 3, 1 },
   PRI_0,
   4,
   4,
@@ -3573,7 +3575,7 @@ SKC_enemy_init0_data housi071_init_tbl = {
 
 static SKC_enemy_init0_data egbomb07_init_tbl = {
   egbomb_pt,
-  0x252E,
+  { 0x52E, 0, 0, 1, 0 },
   PRI_3,
   12,
   16,
@@ -3603,7 +3605,7 @@ static SKC_enemy_init2_data egbomb07_smoke_init_tbl = {
 static SKC_enemy_init0_data sw0a00_init_tbl = {
   switchpat,
   PRI_3,
-  0x048E,
+  { 0x48E, 0, 0, 0, 0 },
   16,
   8,
   1,
@@ -3613,7 +3615,7 @@ static SKC_enemy_init0_data sw0a00_init_tbl = {
 
 static SKC_enemy_init0_data deth0a_init_tbl = {
   deth0a_pt,
-  0x6500,
+  { 0x500, 0, 0, 3, 0 },
   PRI_7,
   60,
   48,
@@ -3624,7 +3626,7 @@ static SKC_enemy_init0_data deth0a_init_tbl = {
 
 static SKC_wrt_init_data kumo0a_init_tbl = {
   0,
-  0x64C9,
+  { 0x4C9, 0, 0, 3, 0 },
   16,
   2,
   kumo0a_pt,
@@ -3638,7 +3640,7 @@ static SKC_wrt_init_data kumo0a_init_tbl = {
 
 static SKC_enemy_init0_data mask0a_init_tbl = {
   mask_spr_pat,
-  0x0000,
+  { 0x000, 0, 0, 0, 0 },
   PRI_4,
   64,
   48,
@@ -3657,7 +3659,7 @@ static SKC_enemy_init2_data suji0a_init_tbl = {
 
 
 static SKC_enemy_init1_data megj0a_init_tbl = {
-  0x0500,
+  { 0x500, 0, 0, 0, 0 },
   PRI_5,
   8,
   8,

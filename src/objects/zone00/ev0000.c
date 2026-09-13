@@ -91,7 +91,8 @@ void ev0000(SKC_sprite_status* p_actwk) {
 static void ev0000_init(SKC_sprite_status* p_actwk) {
   p_actwk->r_no += 2;
   p_actwk->patbase = playpat;
-  p_actwk->sproffset = 0x0680;
+  memset(&p_actwk->sproffset, 0, sizeof(p_actwk->sproffset));
+  p_actwk->sproffset.gfx = 0x680;
   p_actwk->sprpri = PRI_5;
   p_actwk->patno = 186;
   p_actwk->sprhs = 64;
@@ -287,7 +288,8 @@ static void ev0000_move7(SKC_sprite_status* p_actwk) {
 static void tornado(SKC_sprite_status* p_actwk) {
   p_actwk->r_ptr = &tornado_move0;
   p_actwk->patbase = tornado_pt;
-  p_actwk->sproffset = 0x0529;
+  memset(&p_actwk->sproffset, 0, sizeof(p_actwk->sproffset));
+  p_actwk->sproffset.gfx = 0x529;
   p_actwk->sprpri = PRI_5;
   p_actwk->sprhs = 64;
   p_actwk->sprvs = 32;
@@ -327,7 +329,8 @@ static void tornado_move1(SKC_sprite_status* p_actwk) {
 
 static void propera0(SKC_sprite_status* p_actwk) {
   p_actwk->patbase = tornado_pt;
-  p_actwk->sproffset = 0x0529;
+  memset(&p_actwk->sproffset, 0, sizeof(p_actwk->sproffset));
+  p_actwk->sproffset.gfx = 0x529;
   p_actwk->sprpri = PRI_5;
   p_actwk->sprhs = 4;
   p_actwk->sprvs = 12;
@@ -345,7 +348,8 @@ static void propera0_move(SKC_sprite_status* p_actwk) {
 
 static void propera1(SKC_sprite_status* p_actwk) {
   p_actwk->patbase = tornado_pt;
-  p_actwk->sproffset = 0x0529;
+  memset(&p_actwk->sproffset, 0, sizeof(p_actwk->sproffset));
+  p_actwk->sproffset.gfx = 0x529;
   p_actwk->sprpri = PRI_5;
   p_actwk->sprhs = 4;
   p_actwk->sprhs = 12;
@@ -364,7 +368,8 @@ static void propera1_move(SKC_sprite_status* p_actwk) {
 static void shibuki(SKC_sprite_status* p_actwk) {
   p_actwk->r_ptr = &shibuki_move;
   p_actwk->patbase = shibuki_pt;
-  p_actwk->sproffset = 0x03D1;
+  memset(&p_actwk->sproffset, 0, sizeof(p_actwk->sproffset));
+  p_actwk->sproffset.gfx = 0x3D1;
   p_actwk->sprpri = PRI_2;
   p_actwk->sprhs = 16;
   p_actwk->actflg.hflip = 1;
@@ -474,7 +479,7 @@ static void ev0000_pt_chg(SKC_sprite_status* p_actwk) {
 
 static SKC_enemy_init0_data emerald_init_tbl = {
   emerald_pt,
-  0x65B1,
+  { 0x5B1, 0, 0, 3, 0 },
   PRI_5,
   4,
   4,

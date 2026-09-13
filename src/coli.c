@@ -420,7 +420,7 @@ static void playdieset0(SKC_sprite_status* p_playerwk, short sound_command) {
   p_playerwk->mspeed = 0;
   p_playerwk->mstno = 24;
   g_ram.plsproffset = p_playerwk->sproffset;
-  SET_BIT(p_playerwk->sproffset, 15);
+  p_playerwk->sproffset.pr = 1;
   soundset(sound_command);
 }
 

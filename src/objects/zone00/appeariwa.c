@@ -1,4 +1,5 @@
 #include "appeariwa.h"
+#include <string.h>
 #include "../../types/sonic3ram.h"
 #include "../../types/spritepattern.h"
 #include "../../types/spritestatus.h"
@@ -60,7 +61,9 @@ static void appeariwainit(SKC_sprite_status* p_actwk) {
   unsigned char shift = (p_actwk->u.obj.userflag & 0x0F) >= 3 ? (p_actwk->u.obj.userflag & 0x0F) - 3 : 0;
   p_actwk->u.obj.actfree.appeariwa.delay = ((p_actwk->u.obj.userflag & 0xF0) >> 4) << shift;
   p_actwk->patbase = appeariwapat;
-  p_actwk->sproffset = 0x4001;
+  memset(&p_actwk->sproffset, 0, sizeof(p_actwk->sproffset));
+  p_actwk->sproffset.gfx = 0x001;
+  p_actwk->sproffset.pl = 2;
   p_actwk->sprhs = 32;
   p_actwk->sprvs = 24;
   p_actwk->actflg.relative_coordinates = 1;
@@ -99,7 +102,9 @@ static void appeariwamove(SKC_sprite_status* p_actwk) {
       fp16_set_integer(&result.actwk_ptr->xposi, fp16_get_integer(p_actwk->xposi));
       fp16_set_integer(&result.actwk_ptr->yposi, fp16_get_integer(p_actwk->yposi));
       result.actwk_ptr->patbase = appeariwapat2;
-      result.actwk_ptr->sproffset = 0x62E9;
+      memset(&result.actwk_ptr->sproffset, 0, sizeof(result.actwk_ptr->sproffset));
+      result.actwk_ptr->sproffset.gfx = 0x2E9;
+      result.actwk_ptr->sproffset.pl = 3;
       result.actwk_ptr->sprhs = 40;
       result.actwk_ptr->sprvs = 32;
       result.actwk_ptr->actflg.relative_coordinates = 1;

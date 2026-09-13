@@ -1,4 +1,6 @@
 #include "opnbox.h"
+#include <string.h>
+#include "../types/patternname.h"
 #include "../types/sonic3ram.h"
 #include "../types/spritepattern.h"
 #include "../types/spritestatus.h"
@@ -294,7 +296,8 @@ static void switchud_wait1(SKC_sprite_status* p_actwk) {
 static void break_(SKC_sprite_status* p_actwk) {
   enemy_init0(p_actwk, &break_init_tbl);
   if (g_ram.stageno == FLYING_BATTERY_ACT_1) {
-    p_actwk->sproffset = 0x044E;
+    memset(&p_actwk->sproffset, 0, sizeof(p_actwk->sproffset));
+    p_actwk->sproffset.gfx = 0x44E;
   }
   p_actwk->r_ptr = chk_break_fout;
   set_obox_break_pt(p_actwk);
@@ -500,8 +503,8 @@ static void set_friend_init(SKC_sprite_status* p_actwk) {
   short spd_tbl[4] = {
     -0x380, -0x300, -0x280, -0x200
   };
-  unsigned short ofs_tbl[4] = {
-    0x8580, 0x8592, 0x842E, 0x8440
+  SKC_pattern_name ofs_tbl[4] = {
+    { 0x580, 0, 0, 0, 1 }, { 0x592, 0, 0, 0, 1 }, { 0x42E, 0, 0, 0, 1 }, { 0x440, 0, 0, 0, 1 }
   };
 
   short yspeed = spd_tbl[(p_actwk->u.obj.userflag & 6) / 2];
@@ -537,7 +540,7 @@ static void chk_spd_pt(SKC_sprite_status* p_actwk) {
 
 static SKC_enemy_init0_data opnbox_init_tbl = {
   openbox_pt,
-  0x8494,
+  { 0x494, 0, 0, 0, 1 },
   PRI_4,
   32,
   32,
@@ -557,7 +560,7 @@ SKC_enemy_init2_data switch_init_tbl = {
 
 static SKC_enemy_init0_data break_init_tbl = {
   openbox_pt,
-  0x8494,
+  { 0x494, 0, 0, 0, 1 },
   PRI_3,
   12,
   12,

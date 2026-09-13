@@ -1,6 +1,7 @@
 #include "colichg.h"
 #include <stdbool.h>
 #include <stdlib.h>
+#include <string.h>
 #include "../types/sonic3ram.h"
 #include "../types/spritepattern.h"
 #include "../types/spritestatus.h"
@@ -33,7 +34,9 @@ void colichg(SKC_sprite_status* p_actwk) {
   };
 
   p_actwk->patbase = colichgpat;
-  p_actwk->sproffset = g_ram.vs_flag == 0 ? 0x26BC : 0x63D2;
+  memset(&p_actwk->sproffset, 0, sizeof(p_actwk->sproffset));
+  p_actwk->sproffset.gfx = g_ram.vs_flag == 0 ? 0x6BC : 0x3D2;
+  p_actwk->sproffset.pl = g_ram.vs_flag == 0 ? 1 : 3;
   p_actwk->actflg.relative_coordinates = 1;
   p_actwk->sprhs = 64;
   p_actwk->sprvs = 64;
@@ -104,12 +107,7 @@ static void colichgmovevsub(SKC_sprite_status* p_actwk, SKC_sprite_status* p_pla
           p_playerwk->u.play.top_solid_bit = !BIT_IS_SET(p_actwk->u.obj.userflag, 3) ? 12 : 14;
           p_playerwk->u.play.lrb_solid_bit = !BIT_IS_SET(p_actwk->u.obj.userflag, 3) ? 13 : 15;
         }
-        if (!BIT_IS_SET(p_actwk->u.obj.userflag, 5)) {
-          CLEAR_BIT(p_playerwk->sproffset, 15);
-        }
-        else {
-          SET_BIT(p_playerwk->sproffset, 15);
-        }
+        p_playerwk->sproffset.pr = BIT_IS_SET(p_actwk->u.obj.userflag, 5);
       }
     }
   }
@@ -124,12 +122,7 @@ static void colichgmovevsub(SKC_sprite_status* p_actwk, SKC_sprite_status* p_pla
           p_playerwk->u.play.top_solid_bit = !BIT_IS_SET(p_actwk->u.obj.userflag, 4) ? 12 : 14;
           p_playerwk->u.play.lrb_solid_bit = !BIT_IS_SET(p_actwk->u.obj.userflag, 4) ? 13 : 15;
         }
-        if (!BIT_IS_SET(p_actwk->u.obj.userflag, 6)) {
-          CLEAR_BIT(p_playerwk->sproffset, 15);
-        }
-        else {
-          SET_BIT(p_playerwk->sproffset, 15);
-        }
+        p_playerwk->sproffset.pr = BIT_IS_SET(p_actwk->u.obj.userflag, 6);
       }
     }
   }
@@ -176,12 +169,7 @@ static void colichgmovehsub(SKC_sprite_status* p_actwk, SKC_sprite_status* p_pla
           p_playerwk->u.play.top_solid_bit = !BIT_IS_SET(p_actwk->u.obj.userflag, 3) ? 12 : 14;
           p_playerwk->u.play.lrb_solid_bit = !BIT_IS_SET(p_actwk->u.obj.userflag, 3) ? 13 : 15;
         }
-        if (!BIT_IS_SET(p_actwk->u.obj.userflag, 5)) {
-          CLEAR_BIT(p_playerwk->sproffset, 15);
-        }
-        else {
-          SET_BIT(p_playerwk->sproffset, 15);
-        }
+        p_playerwk->sproffset.pr = BIT_IS_SET(p_actwk->u.obj.userflag, 5);
       }
     }
   }
@@ -196,12 +184,7 @@ static void colichgmovehsub(SKC_sprite_status* p_actwk, SKC_sprite_status* p_pla
           p_playerwk->u.play.top_solid_bit = !BIT_IS_SET(p_actwk->u.obj.userflag, 4) ? 12 : 14;
           p_playerwk->u.play.lrb_solid_bit = !BIT_IS_SET(p_actwk->u.obj.userflag, 4) ? 13 : 15;
         }
-        if (!BIT_IS_SET(p_actwk->u.obj.userflag, 6)) {
-          CLEAR_BIT(p_playerwk->sproffset, 15);
-        }
-        else {
-          SET_BIT(p_playerwk->sproffset, 15);
-        }
+        p_playerwk->sproffset.pr = BIT_IS_SET(p_actwk->u.obj.userflag, 6);
       }
     }
   }
@@ -282,7 +265,9 @@ void colichg2(SKC_sprite_status* p_actwk) {
   };
 
   p_actwk->patbase = colichgpat;
-  p_actwk->sproffset = 0x26BC;
+  memset(&p_actwk->sproffset, 0, sizeof(p_actwk->sproffset));
+  p_actwk->sproffset.gfx = 0x6BC;
+  p_actwk->sproffset.pl = 1;
   p_actwk->actflg.relative_coordinates = 1;
   p_actwk->sprhs = 64;
   p_actwk->sprvs = 64;
@@ -370,12 +355,7 @@ static void colichg2movevsub(SKC_sprite_status* p_actwk, SKC_sprite_status* p_pl
             }
           }
         }
-        if (!BIT_IS_SET(p_actwk->u.obj.userflag, 5)) {
-          CLEAR_BIT(p_playerwk->sproffset, 15);
-        }
-        else {
-          SET_BIT(p_playerwk->sproffset, 15);
-        }
+        p_playerwk->sproffset.pr = BIT_IS_SET(p_actwk->u.obj.userflag, 5);
       }
     }
   }
@@ -420,12 +400,7 @@ static void colichg2movevsub(SKC_sprite_status* p_actwk, SKC_sprite_status* p_pl
             }
           }
         }
-        if (!BIT_IS_SET(p_actwk->u.obj.userflag, 6)) {
-          CLEAR_BIT(p_playerwk->sproffset, 15);
-        }
-        else {
-          SET_BIT(p_playerwk->sproffset, 15);
-        }
+        p_playerwk->sproffset.pr = BIT_IS_SET(p_actwk->u.obj.userflag, 6);
       }
     }
   }
@@ -489,12 +464,7 @@ static void colichg2movehsub(SKC_sprite_status* p_actwk, SKC_sprite_status* p_pl
             }
           }
         }
-        if (!BIT_IS_SET(p_actwk->u.obj.userflag, 5)) {
-          CLEAR_BIT(p_playerwk->sproffset, 15);
-        }
-        else {
-          SET_BIT(p_playerwk->sproffset, 15);
-        }
+        p_playerwk->sproffset.pr = BIT_IS_SET(p_actwk->u.obj.userflag, 5);
       }
     }
   }
@@ -539,12 +509,7 @@ static void colichg2movehsub(SKC_sprite_status* p_actwk, SKC_sprite_status* p_pl
             }
           }
         }
-        if (!BIT_IS_SET(p_actwk->u.obj.userflag, 6)) {
-          CLEAR_BIT(p_playerwk->sproffset, 15);
-        }
-        else {
-          SET_BIT(p_playerwk->sproffset, 15);
-        }
+        p_playerwk->sproffset.pr = BIT_IS_SET(p_actwk->u.obj.userflag, 6);
       }
     }
   }

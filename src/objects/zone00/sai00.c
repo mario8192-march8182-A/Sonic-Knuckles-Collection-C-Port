@@ -295,7 +295,7 @@ static bool sai00_down_col(SKC_sprite_status* p_actwk, SKC_sprite_status_handler
 
 static SKC_wrt_init_data sai00_init_tbl = {
   1,
-  0x2500,
+  { 0x500, 0, 0, 1, 0 },
   21,
   0,
   sai00pat,
@@ -309,7 +309,7 @@ static SKC_wrt_init_data sai00_init_tbl = {
 
 static SKC_wrt_init_data sai00_kemuri_init_tbl = {
   1,
-  0x044A,
+  { 0x44A, 0, 0, 0, 0 },
   6,
   2,
   sai00pat,

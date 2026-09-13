@@ -1,4 +1,5 @@
 #include "falltree.h"
+#include <string.h>
 #include "../../types/sonic3ram.h"
 #include "../../types/spritepattern.h"
 #include "../../types/spritestatus.h"
@@ -80,7 +81,9 @@ static void falltreeset(SKC_sprite_status* p_actwk) {
       fp16_set_integer(&result.actwk_ptr->xposi, fp16_get_integer(p_actwk->xposi));
       fp16_set_integer(&result.actwk_ptr->yposi, fp16_get_integer(p_actwk->yposi));
       result.actwk_ptr->patbase = get_act(g_ram.stageno) != ACT_1 ? falltreepat : falltreepat1;
-      result.actwk_ptr->sproffset = get_act(g_ram.stageno) != ACT_1 ? 0x42E9 : 0x43CF;
+      memset(&result.actwk_ptr->sproffset, 0, sizeof(result.actwk_ptr->sproffset));
+      result.actwk_ptr->sproffset.gfx = get_act(g_ram.stageno) != ACT_1 ? 0x2E9 : 0x3CF;
+      result.actwk_ptr->sproffset.pl = 2;
       result.actwk_ptr->sprhs = 24;
       result.actwk_ptr->sprvs = 8;
       result.actwk_ptr->actflg.relative_coordinates = 1;
@@ -91,7 +94,8 @@ static void falltreeset(SKC_sprite_status* p_actwk) {
         fp16_set_integer(&result2.actwk_ptr->xposi, fp16_get_integer(p_actwk->xposi));
         fp16_set_integer(&result2.actwk_ptr->yposi, fp16_get_integer(p_actwk->yposi));
         result2.actwk_ptr->patbase = get_act(g_ram.stageno) != ACT_1 ? falltreepat2 : falltreepat3;
-        result2.actwk_ptr->sproffset = get_act(g_ram.stageno) != ACT_1 ? 0x62E9 : 0x43CF;
+        result2.actwk_ptr->sproffset.gfx = get_act(g_ram.stageno) != ACT_1 ? 0x2E9 : 0x3CF;
+        result2.actwk_ptr->sproffset.pl = get_act(g_ram.stageno) != ACT_1 ? 3 : 2;
         result2.actwk_ptr->sprhs = 32;
         result2.actwk_ptr->sprvs = 16;
         result2.actwk_ptr->actflg.relative_coordinates = 1;

@@ -1,7 +1,6 @@
 #include "itemug.h"
 #include "../types/sonic3ram.h"
 #include "../types/spritestatus.h"
-#include "../utils/bits.h"
 #include "../utils/fp16.h"
 #include "../action.h"
 #include "../shared.h"
@@ -51,7 +50,7 @@ static void itemug_wait0(SKC_sprite_status* p_actwk) {
       soundset(68);
       if (p_actwk->actflg.hflip == 1) {
         p_actwk->actflg.hflip = 0;
-        SET_BIT(p_actwk->sproffset, 15);
+        p_actwk->sproffset.pr = 1;
         p_actwk->u.obj.cddat.right = 0;
         p_actwk->u.obj.cddat.down = 0;
         p_actwk->u.obj.cddat.wrt = 0;
@@ -72,7 +71,7 @@ static void itemug_wait0(SKC_sprite_status* p_actwk) {
 
 static SKC_enemy_init0_data itemug_init_tbl = {
   itempat,
-  0x04C4,
+  { 0x4C4, 0, 0, 0, 0 },
   PRI_5,
   14,
   16,

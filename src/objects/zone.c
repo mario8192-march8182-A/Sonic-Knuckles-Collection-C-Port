@@ -154,7 +154,9 @@ void over(SKC_sprite_status* p_actwk) {
   fp16_set_integer(&p_actwk->xposi, xposi);
   fp16_set_integer(&p_actwk->yposi, 240);
   p_actwk->patbase = overpat;
-  p_actwk->sproffset = 0x879C;
+  memset(&p_actwk->sproffset, 0, sizeof(p_actwk->sproffset));
+  p_actwk->sproffset.gfx = 0x79C;
+  p_actwk->sproffset.pr = 1;
   p_actwk->sprpri = PRI_0;
   p_actwk->r_ptr = &over_move;
   over_move(p_actwk);
@@ -674,7 +676,8 @@ static void clear_name(SKC_sprite_status* p_actwk) {
   }
 
   SKC_sprite_status* p_parentwk = &g_ram.actwk[p_actwk->u.obj.oya];
-  p_actwk->sproffset = p_parentwk->u.obj.userflag == 0 ? 0 : 40;
+  memset(&p_actwk->sproffset, 0, sizeof(p_actwk->sproffset));
+  p_actwk->sproffset.gfx = p_parentwk->u.obj.userflag == 0 ? 0x000 : 0x028;
   p_actwk->r_ptr = &clear_text;
   clear_text(p_actwk);
 }

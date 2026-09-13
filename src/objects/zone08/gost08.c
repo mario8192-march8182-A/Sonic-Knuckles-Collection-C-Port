@@ -540,7 +540,7 @@ static void puka_init_02(SKC_sprite_status* p_actwk) {
 
 static SKC_wrt_init_data gost08_init_tbl = {
   2,
-  0xA500,
+  { 0x500, 0, 0, 1, 1 },
   18,
   0,
   gost08pat,
@@ -554,7 +554,7 @@ static SKC_wrt_init_data gost08_init_tbl = {
 
 static SKC_enemy_init0_data obox08_init_tbl = {
   openbox_pt,
-  0x8536,
+  { 0x536, 0, 0, 0, 1 },
   PRI_3,
   48,
   64,
@@ -565,7 +565,7 @@ static SKC_enemy_init0_data obox08_init_tbl = {
 
 static SKC_enemy_init0_data obox08_gost_init_tbl = {
   gost08pat,
-  0xA500,
+  { 0x500, 0, 0, 1, 1 },
   PRI_4,
   48,
   32,

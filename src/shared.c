@@ -1442,7 +1442,7 @@ ok:
   SET_BIT(g_ram.emy_wrt_flg[p_data->flg_index], bit);
   p_actwk->u.obj.wrt.flg_bit = bit;
   p_actwk->u.obj.wrt.flg_index = p_data->flg_index;
-  p_actwk->sproffset = p_data->sproffset + bit * p_data->sproffset_increase;
+  p_actwk->sproffset = p_data->sproffset.gfx + bit * p_data->sproffset_increase;
   p_actwk->patbase = p_data->patbase;
   p_actwk->sprpri = p_data->sprpri;
   p_actwk->sprhs = p_data->sprhs;
@@ -1460,7 +1460,7 @@ void set_emy_wchg(SKC_sprite_status* p_actwk, SKC_wrt_data* p_data) {
   if (p_actwk->patno == p_actwk->u.obj.wrt.prev_patno) return;
 
   p_actwk->u.obj.wrt.prev_patno = p_actwk->patno;
-  unsigned short vram_adr = (p_actwk->sproffset & 0x7FF) << 5;
+  unsigned short vram_adr = p_actwk->sproffset.gfx << 5;
   unsigned short* p_wrtpat = p_data->wrtpat_ptr[p_actwk->patno];
   unsigned short cnt = *p_wrtpat++ + 1;
 
@@ -2408,17 +2408,17 @@ void cor_chg_cnt(SKC_sprite_status* p_actwk, SKC_cchg_cnt_info* p_info, unsigned
 
 void chk_oya_pri(SKC_sprite_status* p_actwk) {
   SKC_sprite_status* p_parentwk = &g_ram.actwk[p_actwk->u.obj.oya];
-  CLEAR_BIT(p_actwk->sproffset, 15);
-  p_actwk->sproffset |= p_parentwk->sproffset & 1 << 15;
+  p_actwk->sproffset.pr = p_parentwk->sproffset.pr;
   p_actwk->sprpri = p_parentwk->sprpri;
 }
 
 
 void chk_oya_pri_1(SKC_sprite_status* p_actwk, SKC_sprite_status_handler p_return) {
   SKC_sprite_status* p_parentwk = &g_ram.actwk[p_actwk->u.obj.oya];
-  CLEAR_BIT(p_actwk->sproffset, 15);
-  p_actwk->sproffset |= p_parentwk->sproffset & 1 << 15;
-  p_actwk->r_ptr = p_return;
+  if (p_parentwk->sproffset.pr == 1) {
+    p_actwk->sproffset.pr = 1;
+    p_actwk->r_ptr = p_return;
+  }
 }
 
 
@@ -3281,7 +3281,7 @@ void mask_spr(SKC_sprite_status* p_actwk) {
 
 
 void mask_spr0(SKC_sprite_status* p_actwk) {
-  p_actwk->sproffset = 0;
+  memset(&p_actwk->sproffset, 0, sizeof(p_actwk->sproffset));
   p_actwk->patbase = mask_spr_pat;
   p_actwk->sprhs = 32;
   p_actwk->r_ptr = !BIT_IS_SET(p_actwk->u.obj.userflag, 3) ? &mask_spr0__wait0 : &mask_spr0__wait1;

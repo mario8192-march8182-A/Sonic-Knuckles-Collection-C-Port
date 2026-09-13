@@ -319,7 +319,7 @@ static void mous04_move0_init1(SKC_sprite_status* p_actwk) {
 
 static SKC_enemy_init0_data mous04_init_tbl = {
   mous04_pt,
-  0xA52E,
+  { 0x52E, 0, 0, 1, 1 },
   PRI_5,
   12,
   8,
@@ -330,7 +330,7 @@ static SKC_enemy_init0_data mous04_init_tbl = {
 
 static SKC_enemy_init0_data mous04_init_tblu = {
   mous04_pt,
-  0xA52E,
+  { 0x52E, 0, 0, 1, 1 },
   PRI_5,
   8,
   12,

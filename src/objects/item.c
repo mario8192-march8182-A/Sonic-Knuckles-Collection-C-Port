@@ -1,5 +1,6 @@
 #include "item.h"
 #include <stdbool.h>
+#include <string.h>
 #include "../data/pat/play.h"
 #include "../types/sonic3ram.h"
 #include "../types/spritepattern.h"
@@ -86,7 +87,8 @@ static void iteminit(SKC_sprite_status* p_actwk) {
   p_actwk->sprvsize = 15;
   p_actwk->sprhsize = 15;
   p_actwk->patbase = itempat;
-  p_actwk->sproffset = 0x04C4;
+  memset(&p_actwk->sproffset, 0, sizeof(p_actwk->sproffset));
+  p_actwk->sproffset.gfx = 0x4C4;
   p_actwk->actflg.relative_coordinates = 1;
   p_actwk->sprpri = PRI_3;
   p_actwk->sprhs = 14;
@@ -266,7 +268,9 @@ void item2(SKC_sprite_status* p_actwk) {
 
 static void item2init(SKC_sprite_status* p_actwk) {
   p_actwk->r_no += 2;
-  p_actwk->sproffset = 0x84C4;
+  memset(&p_actwk->sproffset, 0, sizeof(p_actwk->sproffset));
+  p_actwk->sproffset.gfx = 0x4C4;
+  p_actwk->sproffset.pr = 1;
   p_actwk->actflg.relative_coordinates = 1;
   p_actwk->actflg.static_pattern = 1;
   p_actwk->sprpri = PRI_3;

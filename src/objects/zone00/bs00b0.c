@@ -226,7 +226,7 @@ static void bs00b0_aper0(SKC_sprite_status* p_actwk) {
 static void bs00b0_aper1_init(SKC_sprite_status* p_actwk) {
   p_actwk->r_no = 4;
   p_actwk->u.obj.actflg0.flicker = 0;
-  SET_BIT(p_actwk->sproffset, 15);
+  p_actwk->sproffset.pr = 1;
   p_actwk->colino = 0x16;
   p_actwk->u.obj.callback_ptr = &bs00b0_puka0_init0;
   set_act00(p_actwk, &embl_water_set_tbl);
@@ -322,7 +322,7 @@ static void bs00b0_move0_init(SKC_sprite_status* p_actwk) {
     p_actwk->r_no = 14;
   }
   p_actwk->u.obj.callback_ptr = &bs00b0_wait1_init;
-  CLEAR_BIT(p_actwk->sproffset, 15);
+  p_actwk->sproffset.pr = 0;
   p_actwk->patno = 0;
   set_bs00b0_posi(p_actwk);
 }
@@ -463,7 +463,7 @@ static void bs00b0_die6(SKC_sprite_status* p_actwk) {
   memset(&g_ram.swdata, 0, sizeof(g_ram.swdata));
   g_ram.swdata.pressed.c = 1;
   SKC_sprite_status* p_playerwk = &g_ram.actwk[0];
-  SET_BIT(p_playerwk->sproffset, 15);
+  p_playerwk->sproffset.pr = 1;
   if (p_playerwk->yspeed >= 0) {
     p_actwk->r_ptr = &bs00b0_die7;
     p_playerwk->u.play.control_bitfield = 0x83;
@@ -888,10 +888,7 @@ void chk_not_disp(SKC_sprite_status* p_actwk) {
   SKC_sprite_status* p_parentwk = &g_ram.actwk[p_actwk->u.obj.oya];
   if (p_parentwk->u.obj.actflg0.flicker == 0) {
     p_actwk->u.obj.actflg0.flicker = 0;
-    SET_BIT(p_actwk->sproffset, 15);
-    if (!BIT_IS_SET(p_parentwk->sproffset, 15)) {
-      CLEAR_BIT(p_actwk->sproffset, 15);
-    }
+    p_actwk->sproffset.pr = p_parentwk->sproffset.pr;
   }
   else {
     p_actwk->u.obj.actflg0.flicker = 1;
@@ -970,7 +967,7 @@ static void chk_bs00b0_damage(SKC_sprite_status* p_actwk) {
   else {
     p_actwk->r_ptr = &bos_tim_act;
     p_actwk->u.obj.actflg0.flicker = 0;
-    SET_BIT(p_actwk->sproffset, 15);
+    p_actwk->sproffset.pr = 1;
     p_actwk->patno = 0;
     p_actwk->u.obj.callback_ptr = &bs00b0_die0;
     boss_die_init(p_actwk);
@@ -1011,7 +1008,7 @@ static void chk_arm_die(SKC_sprite_status* p_actwk) {
 
 static SKC_enemy_init0_data bs00b0_init_tbl = {
   bs00b0_pt,
-  0xA180,
+  { 0x180, 0, 0, 1, 1 },
   PRI_5,
   40,
   32,
@@ -1066,7 +1063,7 @@ static SKC_enemy_init2_data bs00b0_kakera_init_tbl = {
 
 
 static SKC_enemy_init1_data bs00b0_water_init_tbl = {
-  0x8180,
+  { 0x180, 0, 0, 0, 1 },
   PRI_2,
   48,
   48,
@@ -1077,7 +1074,7 @@ static SKC_enemy_init1_data bs00b0_water_init_tbl = {
 
 static SKC_enemy_init0_data embl_water_init_tbl = {
   bs00b0_pt,
-  0x8180,
+  { 0x180, 0, 0, 0, 1 },
   PRI_2,
   24,
   16,

@@ -1,4 +1,5 @@
 #include "ring.h"
+#include <string.h>
 #include "../types/sonic3ram.h"
 #include "../types/spritepattern.h"
 #include "../types/spritestatus.h"
@@ -72,13 +73,18 @@ void ring(SKC_sprite_status* p_actwk) {
 static void ringinit(SKC_sprite_status* p_actwk) {
   p_actwk->r_no += 2;
   p_actwk->patbase = ringpat;
-  p_actwk->sproffset = 0xA6BC;
+  memset(&p_actwk->sproffset, 0, sizeof(p_actwk->sproffset));
+  p_actwk->sproffset.gfx = 0xA6BC;
+  p_actwk->sproffset.pl = 1;
+  p_actwk->sproffset.pr = 1;
   p_actwk->actflg.relative_coordinates = 1;
   p_actwk->sprpri = PRI_4;
   p_actwk->colino = 0x47;
   p_actwk->sprhs = 8;
   if (g_ram.vs_flag != 0) {
-    p_actwk->sproffset = 0x63D2;
+    p_actwk->sproffset.gfx = 0x3D2;
+    p_actwk->sproffset.pl = 3;
+    p_actwk->sproffset.pr = 0;
   }
   ringmove(p_actwk);
 }
@@ -239,7 +245,10 @@ static void flyringinit(SKC_sprite_status* p_actwk) {
     fp16_set_integer(&p_new_actwk->xposi, fp16_get_integer(p_actwk->xposi));
     fp16_set_integer(&p_new_actwk->yposi, fp16_get_integer(p_actwk->yposi));
     p_new_actwk->patbase = ringpat;
-    p_new_actwk->sproffset = 0xA6BC;
+    memset(&p_new_actwk->sproffset, 0, sizeof(p_new_actwk->sproffset));
+    p_new_actwk->sproffset.gfx = 0x6BC;
+    p_new_actwk->sproffset.pl = 1;
+    p_new_actwk->sproffset.pr = 1;
     p_new_actwk->actflg.relative_coordinates = 1;
     p_new_actwk->actflg.onscreen = 1;
     p_new_actwk->sprpri = PRI_3;
@@ -362,7 +371,10 @@ void tring(SKC_sprite_status* p_actwk) {
 
 static void tringinit(SKC_sprite_status* p_actwk) {
   p_actwk->patbase = ringpat;
-  p_actwk->sproffset = 0xA6BC;
+  memset(&p_actwk->sproffset, 0, sizeof(p_actwk->sproffset));
+  p_actwk->sproffset.gfx = 0x6BC;
+  p_actwk->sproffset.pl = 1;
+  p_actwk->sproffset.pr = 1;
   p_actwk->actflg.relative_coordinates = 1;
   p_actwk->sprpri = PRI_2;
   p_actwk->colino = 0x47;

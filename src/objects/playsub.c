@@ -292,7 +292,8 @@ void plawa(SKC_sprite_status* p_actwk) {
 static void plawainit(SKC_sprite_status* p_actwk, SKC_sprite_status* p_playerwk) {
   p_actwk->r_no += 2;
   p_actwk->patbase = p_playerwk == &g_ram.actwk[0] ? awapat : awapat2;
-  p_actwk->sproffset = 0x045C;
+  memset(&p_actwk->sproffset, 0, sizeof(p_actwk->sproffset));
+  p_actwk->sproffset.gfx = 0x45C;
   p_actwk->actflg.relative_coordinates = 1;
   p_actwk->actflg.onscreen = 1;
   p_actwk->sprpri = PRI_1;
@@ -513,7 +514,7 @@ static void plawamaster(SKC_sprite_status* p_actwk, SKC_sprite_status* p_playerw
         jumpcolsub0(p_playerwk);
         p_playerwk->mstno = 23;
         p_playerwk->u.play.cddat.jump = 1;
-        SET_BIT(p_playerwk->sproffset, 15);
+        p_playerwk->sproffset.pr = 1;
         p_playerwk->yspeed = 0;
         p_playerwk->xspeed = 0;
         p_playerwk->mspeed = 0;
@@ -653,7 +654,8 @@ static void bariainit(SKC_sprite_status* p_actwk) {
   p_actwk->actflg.relative_coordinates = 1;
   p_actwk->sprpri = PRI_1;
   p_actwk->sprhs = 24;
-  p_actwk->sproffset = 0x079C;
+  memset(&p_actwk->sproffset, 0, sizeof(p_actwk->sproffset));
+  p_actwk->sproffset.gfx = 0x79C;
   bariamove(p_actwk);
 }
 
@@ -666,10 +668,7 @@ static void bariamove(SKC_sprite_status* p_actwk) {
       fp16_set_integer(&p_actwk->yposi, fp16_get_integer(p_playerwk->yposi));
       p_actwk->u.obj.cddat.right = p_playerwk->u.play.cddat.left;
       p_actwk->u.obj.cddat.down = p_playerwk->u.play.cddat.jump;
-      CLEAR_BIT(p_actwk->sproffset, 15);
-      if (BIT_IS_SET(p_playerwk->sproffset, 15)) {
-        SET_BIT(p_actwk->sproffset, 15);
-      }
+      p_actwk->sproffset.pr = p_playerwk->sproffset.pr;
       patchg(p_actwk, bariachg);
       actionsub(p_actwk);
     }
@@ -699,7 +698,8 @@ void muteki(SKC_sprite_status* p_actwk) {
   for (int i = 0; i < 4; ++i) {
     p_actwk[i].r_ptr = &muteki_sub;
     p_actwk[i].patbase = mutekipat;
-    p_actwk[i].sproffset = 0x079C;
+    memset(&p_actwk[i].sproffset, 0, sizeof(p_actwk[i].sproffset));
+    p_actwk[i].sproffset.gfx = 0x79C;
     p_actwk[i].sprpri = PRI_1;
     p_actwk[i].actflg.relative_coordinates = 1;
     p_actwk[i].actflg.compound = 1;
@@ -978,13 +978,14 @@ static void effectinit(SKC_sprite_status* p_actwk) {
   p_actwk->actflg.relative_coordinates = 1;
   p_actwk->sprpri = PRI_1;
   p_actwk->sprhs = 16;
-  p_actwk->sproffset = 0x07E0;
+  memset(&p_actwk->sproffset, 0, sizeof(p_actwk->sproffset));
+  p_actwk->sproffset.gfx = 0x7E0;
   p_actwk->u.obj.ko = 0;
   p_actwk->u.obj.actfree.effect.vram_offset = 0xFC00;
   if (p_actwk != &g_ram.actwk[ACTWK_PL_EFFECT]) {
     p_actwk->u.obj.actfree.effect.miles = true;
     if (g_ram.play_type != PLAY_TYPE_MILES) {
-      p_actwk->sproffset = 0x07F0;
+      p_actwk->sproffset.gfx = 0x7F0;
       p_actwk->u.obj.ko = 1;
       p_actwk->u.obj.actfree.effect.vram_offset = 0xFE00;
     }
@@ -1012,7 +1013,7 @@ static void effect1move(SKC_sprite_status* p_actwk, SKC_sprite_status* p_playerw
   if (p_actwk->mstrestart == 0) {
     fp16_set_integer(&p_actwk->xposi, fp16_get_integer(p_playerwk->xposi));
     memset(&p_actwk->u.obj.cddat, 0, sizeof(p_actwk->u.obj.cddat));
-    CLEAR_BIT(p_actwk->sproffset, 15);
+    p_actwk->sproffset.pr = 0;
   }
   effect0move(p_actwk, p_playerwk);
 }
@@ -1022,7 +1023,7 @@ static void effect4move(SKC_sprite_status* p_actwk, SKC_sprite_status* p_playerw
   if (p_actwk->mstrestart == 0) {
     fp16_set_integer(&p_actwk->xposi, fp16_get_integer(p_playerwk->xposi));
     memset(&p_actwk->u.obj.cddat, 0, sizeof(p_actwk->u.obj.cddat));
-    CLEAR_BIT(p_actwk->sproffset, 15);
+    p_actwk->sproffset.pr = 0;
   }
   patchg(p_actwk, effectchg);
   effectwrt0(p_actwk, watereffect_cg);
@@ -1041,10 +1042,7 @@ static void effect2move(SKC_sprite_status* p_actwk, SKC_sprite_status* p_playerw
       fp16_set_integer(&p_actwk->yposi, fp16_get_integer(p_playerwk->yposi) - yoffset);
     }
     if (p_actwk->mstrestart == 0) {
-      CLEAR_BIT(p_actwk->sproffset, 15);
-      if (BIT_IS_SET(p_playerwk->sproffset, 15)) {
-        SET_BIT(p_actwk->sproffset, 15);
-      }
+      p_actwk->sproffset.pr = p_playerwk->sproffset.pr;
     }
     effect0move(p_actwk, p_playerwk);
   }
@@ -1118,10 +1116,7 @@ static void effectmove3(SKC_sprite_status* p_actwk) {
           result.actwk_ptr->sprhs = 4;
           result.actwk_ptr->sproffset = p_actwk->sproffset;
           result.actwk_ptr->u.obj.ko = p_actwk->u.obj.ko;
-          CLEAR_BIT(result.actwk_ptr->sproffset, 15);
-          if (BIT_IS_SET(p_playerwk->sproffset, 15)) {
-            SET_BIT(result.actwk_ptr->sproffset, 15);
-          }
+          result.actwk_ptr->sproffset.pr = p_playerwk->sproffset.pr;
         }
       }
     }
@@ -1421,7 +1416,8 @@ static void vseffectinit(SKC_sprite_status* p_actwk) {
   p_actwk->actflg.relative_coordinates = 1;
   p_actwk->sprpri = PRI_1;
   p_actwk->sprhs = 16;
-  p_actwk->sproffset = 0x07E0;
+  memset(&p_actwk->sproffset, 0, sizeof(p_actwk->sproffset));
+  p_actwk->sproffset.gfx = 0x7E0;
   p_actwk->u.obj.ko = p_actwk == &g_ram.actwk[ACTWK_PL_EFFECT] ? 0 : 1;
   vseffectmove(p_actwk);
 }
@@ -1454,10 +1450,7 @@ static void vseffect1move(SKC_sprite_status* p_actwk, SKC_sprite_status* p_playe
     p_actwk->u.obj.cddat.right = p_playerwk->u.play.cddat.left;
     p_actwk->u.obj.cddat.down = g_ram.reverse_gravity_flag;
     if (p_actwk->mstrestart == 0) {
-      CLEAR_BIT(p_actwk->sproffset, 15);
-      if (BIT_IS_SET(p_playerwk->sproffset, 15)) {
-        SET_BIT(p_actwk->sproffset, 15);
-      }
+      p_actwk->sproffset.pr = p_playerwk->sproffset.pr;
     }
     patchg(p_actwk, vseffectchg);
     actionsub(p_actwk);
@@ -1508,10 +1501,7 @@ static void vseffectmove3(SKC_sprite_status* p_actwk) {
         result.actwk_ptr->sprhs = 4;
         result.actwk_ptr->sproffset = p_actwk->sproffset;
         result.actwk_ptr->u.obj.ko = p_actwk->u.obj.ko;
-        CLEAR_BIT(result.actwk_ptr->sproffset, 15);
-        if (BIT_IS_SET(p_playerwk->sproffset, 15)) {
-          SET_BIT(result.actwk_ptr->sproffset, 15);
-        }
+        result.actwk_ptr->sproffset.pr = p_playerwk->sproffset.pr;
       }
     }
   }
@@ -1599,10 +1589,9 @@ void sstartrail(SKC_sprite_status* p_actwk) {
   p_actwk->sprpri = PRI_1;
   p_actwk->sprhs = 24;
   p_actwk->sprvs = 24;
-  p_actwk->sproffset = 0x079C;
-  if (BIT_IS_SET(g_ram.actwk[0].sproffset, 15)) {
-    SET_BIT(p_actwk->sproffset, 15);
-  }
+  memset(&p_actwk->sproffset, 0, sizeof(p_actwk->sproffset));
+  p_actwk->sproffset.gfx = 0x79C;
+  p_actwk->sproffset.pr = g_ram.actwk[0].sproffset.pr;
   p_actwk->r_ptr = &sstartrailmove;
 }
 
@@ -1664,7 +1653,9 @@ static void sstartrailmovesub(SKC_sprite_status* p_actwk) {
     fp16_set_integer(&result.actwk_ptr->xposi, fp16_get_integer(g_ram.actwk[0].xposi));
     fp16_set_integer(&result.actwk_ptr->yposi, fp16_get_integer(g_ram.actwk[0].yposi));
     result.actwk_ptr->patbase = &sstarpat;
-    result.actwk_ptr->sproffset = 0x879C;
+    memset(&result.actwk_ptr->sproffset, 0, sizeof(result.actwk_ptr->sproffset));
+    result.actwk_ptr->sproffset.gfx = 0x79C;
+    result.actwk_ptr->sproffset.pr = 1;
     result.actwk_ptr->actflg.relative_coordinates = 1;
     result.actwk_ptr->actflg.onscreen = 1;
     result.actwk_ptr->sprpri = PRI_7;
@@ -1814,7 +1805,8 @@ static void hstar(SKC_sprite_status* p_actwk) {
     p_actwk->sprpri = PRI_1;
     p_actwk->sprhs = 24;
     p_actwk->sprvs = 24;
-    p_actwk->sproffset = 0x079C;
+    memset(&p_actwk->sproffset, 0, sizeof(p_actwk->sproffset));
+    p_actwk->sproffset.gfx = 0x79C;
     p_actwk->patno = 6;
     if (p_actwk != &g_ram.actwk[ACTWK_PL_MUTEKI]) {
       p_actwk->r_ptr = &hstar_move1;
@@ -1866,10 +1858,7 @@ static void hstar_move1(SKC_sprite_status* p_actwk) {
     short yposi = fp8_get_integer(p_actwk->u.obj.actfree.hstar.yoffset);
     yposi += fp16_get_integer(g_ram.actwk[0].yposi);
     fp16_set_integer(&p_actwk->yposi, yposi);
-    CLEAR_BIT(p_actwk->sproffset, 15);
-    if (BIT_IS_SET(g_ram.actwk[0].sproffset, 15)) {
-      SET_BIT(p_actwk->sproffset, 15);
-    }
+    p_actwk->sproffset.pr = g_ram.actwk[0].sproffset.pr;
     actionsub(p_actwk);
   }
   else {
@@ -1935,11 +1924,10 @@ void wspin(SKC_sprite_status* p_actwk) {
   p_actwk->sprpri = PRI_1;
   p_actwk->sprhs = 24;
   p_actwk->sprvs = 24;
-  p_actwk->sproffset = 0x079C;
+  memset(&p_actwk->sproffset, 0, sizeof(p_actwk->sproffset));
+  p_actwk->sproffset.gfx = 0x79C;
   p_actwk->u.obj.actfree.baria.vram_offset = 0xF380;
-  if (BIT_IS_SET(g_ram.actwk[0].sproffset, 15)) {
-    SET_BIT(p_actwk->sproffset, 15);
-  }
+  p_actwk->sproffset.pr = g_ram.actwk[0].sproffset.pr;
   p_actwk->mstno = 0;
   p_actwk->mstrestart = 1;
   p_actwk->u.obj.wrt.prev_patno = 255;
@@ -1956,10 +1944,7 @@ static void wspinmove(SKC_sprite_status* p_actwk) {
     fp16_set_integer(&p_actwk->yposi, fp16_get_integer(p_playerwk->yposi));
     p_actwk->u.obj.cddat.right = p_playerwk->u.play.cddat.left;
     p_actwk->u.obj.cddat.down = g_ram.reverse_gravity_flag;
-    CLEAR_BIT(p_actwk->sproffset, 15);
-    if (BIT_IS_SET(p_playerwk->sproffset, 15)) {
-      SET_BIT(p_actwk->sproffset, 15);
-    }
+    p_actwk->sproffset.pr = p_playerwk->sproffset.pr;
     patchg(p_actwk, wspinchg);
     if (p_actwk->patno == 7 && p_playerwk->u.play.talent_status != 0) {
       p_playerwk->u.play.talent_status = 2;
@@ -1980,11 +1965,10 @@ void fbaria(SKC_sprite_status* p_actwk) {
   p_actwk->sprpri = PRI_1;
   p_actwk->sprhs = 24;
   p_actwk->sprvs = 24;
-  p_actwk->sproffset = 0x079C;
+  memset(&p_actwk->sproffset, 0, sizeof(p_actwk->sproffset));
+  p_actwk->sproffset.gfx = 0x79C;
   p_actwk->u.obj.actfree.baria.vram_offset = 0xF380;
-  if (BIT_IS_SET(g_ram.actwk[0].sproffset, 15)) {
-    SET_BIT(p_actwk->sproffset, 15);
-  }
+  p_actwk->sproffset.pr = g_ram.actwk[0].sproffset.pr;
   p_actwk->mstno = 0;
   p_actwk->mstrestart = 1;
   p_actwk->u.obj.wrt.prev_patno = 255;
@@ -2003,10 +1987,7 @@ static void fbariamove(SKC_sprite_status* p_actwk) {
         if (p_actwk->mstno == 0) {
           p_actwk->u.obj.cddat.right = p_playerwk->u.play.cddat.left;
           p_actwk->u.obj.cddat.down = g_ram.reverse_gravity_flag;
-          CLEAR_BIT(p_actwk->sproffset, 15);
-          if (BIT_IS_SET(p_playerwk->sproffset, 15)) {
-            SET_BIT(p_actwk->sproffset, 15);
-          }
+          p_actwk->sproffset.pr = p_playerwk->sproffset.pr;
         }
         patchg(p_actwk, fbariachg);
         p_actwk->sprpri = p_actwk->patno < 15 ? PRI_1 : PRI_4;
@@ -2046,11 +2027,10 @@ void tbaria(SKC_sprite_status* p_actwk) {
   p_actwk->sprpri = PRI_1;
   p_actwk->sprhs = 24;
   p_actwk->sprvs = 24;
-  p_actwk->sproffset = 0x079C;
+  memset(&p_actwk->sproffset, 0, sizeof(p_actwk->sproffset));
+  p_actwk->sproffset.gfx = 0x79C;
   p_actwk->u.obj.actfree.baria.vram_offset = 0xF380;
-  if (BIT_IS_SET(g_ram.actwk[0].sproffset, 15)) {
-    SET_BIT(p_actwk->sproffset, 15);
-  }
+  p_actwk->sproffset.pr = g_ram.actwk[0].sproffset.pr;
   p_actwk->mstno = 0;
   p_actwk->mstrestart = 1;
   p_actwk->u.obj.wrt.prev_patno = 255;
@@ -2068,10 +2048,7 @@ static void tbariamove(SKC_sprite_status* p_actwk) {
         fp16_set_integer(&p_actwk->yposi, fp16_get_integer(p_playerwk->yposi));
         p_actwk->u.obj.cddat.right = p_playerwk->u.play.cddat.left;
         p_actwk->u.obj.cddat.down = g_ram.reverse_gravity_flag;
-        CLEAR_BIT(p_actwk->sproffset, 15);
-        if (BIT_IS_SET(p_playerwk->sproffset, 15)) {
-          SET_BIT(p_actwk->sproffset, 15);
-        }
+        p_actwk->sproffset.pr = p_playerwk->sproffset.pr;
         if (p_actwk->mstno != 0) {
           tbariasub(p_actwk);
           p_actwk->mstno = 0;
@@ -2170,11 +2147,10 @@ void abaria(SKC_sprite_status* p_actwk) {
   p_actwk->sprpri = PRI_1;
   p_actwk->sprhs = 24;
   p_actwk->sprvs = 24;
-  p_actwk->sproffset = 0x079C;
+  memset(&p_actwk->sproffset, 0, sizeof(p_actwk->sproffset));
+  p_actwk->sproffset.gfx = 0x79C;
   p_actwk->u.obj.actfree.baria.vram_offset = 0xF380;
-  if (BIT_IS_SET(g_ram.actwk[0].sproffset, 15)) {
-    SET_BIT(p_actwk->sproffset, 15);
-  }
+  p_actwk->sproffset.pr = g_ram.actwk[0].sproffset.pr;
   p_actwk->mstno = 0;
   p_actwk->mstrestart = 1;
   p_actwk->u.obj.wrt.prev_patno = 255;
@@ -2193,10 +2169,7 @@ static void abariamove(SKC_sprite_status* p_actwk) {
       fp16_set_integer(&p_actwk->yposi, fp16_get_integer(p_playerwk->yposi));
       p_actwk->u.obj.cddat.right = p_playerwk->u.play.cddat.left;
       p_actwk->u.obj.cddat.down = g_ram.reverse_gravity_flag;
-      CLEAR_BIT(p_actwk->sproffset, 15);
-      if (BIT_IS_SET(p_playerwk->sproffset, 15)) {
-        SET_BIT(p_actwk->sproffset, 15);
-      }
+      p_actwk->sproffset.pr = p_playerwk->sproffset.pr;
       patchg(p_actwk, abariachg);
       bariawrt(p_actwk);
       actionsub(p_actwk);
@@ -3007,7 +2980,9 @@ static void sflicky(SKC_sprite_status* p_actwk) {
   p_actwk->sprpri = PRI_1;
   p_actwk->sprhs = 8;
   p_actwk->sprvs = 8;
-  p_actwk->sproffset = 0x8680;
+  memset(&p_actwk->sproffset, 0, sizeof(p_actwk->sproffset));
+  p_actwk->sproffset.gfx = 0x680;
+  p_actwk->sproffset.pr = 1;
   fp16_set_integer(&p_actwk->xposi, fp16_get_integer(g_ram.actwk[0].xposi));
   fp16_set_integer(&p_actwk->xposi, fp16_get_integer(p_actwk->xposi) + 192);
   fp16_set_integer(&p_actwk->yposi, fp16_get_integer(g_ram.actwk[0].yposi));
@@ -3275,7 +3250,8 @@ static SKC_sprite_pattern sflicky_pt02 = {
 
 void imagetrail(SKC_sprite_status* p_actwk) {
   p_actwk->patbase = g_ram.play_type == PLAY_TYPE_KNUCKLES ? knuckles_pt : splaypat;
-  p_actwk->sproffset = 0x0680;
+  memset(&p_actwk->sproffset, 0, sizeof(p_actwk->sproffset));
+  p_actwk->sproffset.gfx = 0x680;
   p_actwk->sprpri = PRI_2;
   p_actwk->sprhs = 24;
   p_actwk->sprvs = 24;
@@ -3294,10 +3270,8 @@ static void imagetrail_move(SKC_sprite_status* p_actwk) {
     unsigned short index = g_ram.plposiwkadr - offset;
     fp16_set_integer(&p_actwk->xposi, g_ram.playposiwk[index].x);
     fp16_set_integer(&p_actwk->yposi, g_ram.playposiwk[index].y);
-    CLEAR_BIT(p_actwk->sproffset, 13);
-    CLEAR_BIT(p_actwk->sproffset, 14);
-    CLEAR_BIT(p_actwk->sproffset, 15);
-    p_actwk->sproffset |= g_ram.playrecwk[index].sprdat << 8;
+    p_actwk->sproffset.pl = g_ram.playrecwk[index].sprdat.pl;
+    p_actwk->sproffset.pr = g_ram.playrecwk[index].sprdat.pr;
     p_actwk->patno = g_ram.actwk[0].patno;
     p_actwk->actflg = g_ram.actwk[0].actflg;
     p_actwk->sprpri = g_ram.actwk[0].sprpri;

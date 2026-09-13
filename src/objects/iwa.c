@@ -1,6 +1,7 @@
 #include "iwa.h"
 #include <stdbool.h>
 #include <stdlib.h>
+#include <string.h>
 #include "../types/iwabreakdata.h"
 #include "../types/size.h"
 #include "../types/sonic3ram.h"
@@ -133,27 +134,38 @@ static void iwainit(SKC_sprite_status* p_actwk) {
       switch (get_act(g_ram.stageno)) {
         case ACT_1:
           p_actwk->patbase = iwapat;
-          p_actwk->sproffset = 0x2333;
+          memset(&p_actwk->sproffset, 0, sizeof(p_actwk->sproffset));
+          p_actwk->sproffset.gfx = 0x333;
+          p_actwk->sproffset.pl = 1;
           break;
         case ACT_2:
           p_actwk->patbase = iwapat2;
-          p_actwk->sproffset = 0x42E9;
+          memset(&p_actwk->sproffset, 0, sizeof(p_actwk->sproffset));
+          p_actwk->sproffset.gfx = 0x2E9;
+          p_actwk->sproffset.pl = 2;
           break;
       }
       break;
     case ENDLESS_MINE_ACT_1:
       p_actwk->patbase = vsiwapat;
-      p_actwk->sproffset = 0xE300;
+      memset(&p_actwk->sproffset, 0, sizeof(p_actwk->sproffset));
+      p_actwk->sproffset.gfx = 0x300;
+      p_actwk->sproffset.pl = 3;
+      p_actwk->sproffset.pr = 1;
       p_actwk->patno = 0;
       break;
     case LAVA_REEF_ACT_1:
       p_actwk->patbase = iwapat9;
-      p_actwk->sproffset = 0x40D3;
+      memset(&p_actwk->sproffset, 0, sizeof(p_actwk->sproffset));
+      p_actwk->sproffset.gfx = 0x0D3;
+      p_actwk->sproffset.pl = 2;
       p_actwk->patno += 4;
       break;
     case LAVA_REEF_ACT_2:
       p_actwk->patbase = iwapat92;
-      p_actwk->sproffset = 0x640D;
+      memset(&p_actwk->sproffset, 0, sizeof(p_actwk->sproffset));
+      p_actwk->sproffset.gfx = 0x40D;
+      p_actwk->sproffset.pl = 3;
       p_actwk->patno += 4;
       break;
   }
@@ -600,7 +612,7 @@ static void iwabreakgosub2(SKC_sprite_status* p_actwk, SKC_speed* p_speed_data, 
     fp16_set_integer(&p_new_actwk->xposi, p_break_data->data[i].xoffset + fp16_get_integer(p_actwk->xposi));
     fp16_set_integer(&p_new_actwk->yposi, p_break_data->data[i].yoffset + fp16_get_integer(p_actwk->yposi));
     p_new_actwk->sproffset = p_actwk->sproffset;
-    p_new_actwk->sproffset |= 0x8000;
+    p_new_actwk->sproffset.pr = 1;
     p_new_actwk->sprpri = PRI_1;
     p_new_actwk->sprhs = 24;
     p_new_actwk->sprvs = 24;
@@ -640,7 +652,7 @@ static void iwabreakgosub4(SKC_sprite_status* p_actwk, SKC_speed* p_speed_data, 
     fp16_set_integer(&p_new_actwk->xposi, p_break_data->data[i].xoffset + fp16_get_integer(p_actwk->xposi));
     fp16_set_integer(&p_new_actwk->yposi, p_break_data->data[i].yoffset + fp16_get_integer(p_actwk->yposi));
     p_new_actwk->sproffset = p_actwk->sproffset;
-    p_new_actwk->sproffset |= 0x8000;
+    p_new_actwk->sproffset.pr = 1;
     p_new_actwk->sprpri = PRI_1;
     p_new_actwk->sprhs = 32;
     p_new_actwk->sprvs = 32;

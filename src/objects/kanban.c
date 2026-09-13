@@ -6,7 +6,6 @@
 #include "../types/spritepattern.h"
 #include "../types/spritestatus.h"
 #include "../types/spritestatushandler.h"
-#include "../utils/bits.h"
 #include "../utils/fp16.h"
 #include "../utils/stageno.h"
 #include "../action.h"
@@ -83,9 +82,7 @@ void kanban(SKC_sprite_status* p_actwk) {
 
 static void kanban_init(SKC_sprite_status* p_actwk) {
   emy_wrt_init(p_actwk, &kanban_init_tbl0);
-  if (BIT_IS_SET(g_ram.actwk[0].sproffset, 15)) {
-    SET_BIT(p_actwk->sproffset, 15);
-  }
+  p_actwk->sproffset.pr = g_ram.actwk[0].sproffset.pr;
   g_ram.save_obj = p_actwk - g_ram.actwk;
   p_actwk->sprhsize = 24;
   p_actwk->sprvsize = 30;
@@ -210,9 +207,7 @@ SKC_cg_data toge_cg_tbl = {
 
 static void kanban_move4(SKC_sprite_status* p_actwk) {
   enemy_init0(p_actwk, &kanban_init_tbl2);
-  if (BIT_IS_SET(g_ram.actwk[0].sproffset, 15)) {
-    SET_BIT(p_actwk->sproffset, 15);
-  }
+  p_actwk->sproffset.pr = g_ram.actwk[0].sproffset.pr;
   p_actwk->r_ptr = &kanban_move5;
   short yoffset = (short)(random() & 0x1F) - 16;
   fp16_set_integer(&p_actwk->yposi, fp16_get_integer(p_actwk->yposi) + yoffset);
@@ -237,9 +232,7 @@ static void kanban_move5(SKC_sprite_status* p_actwk) {
 static void kanbst_init(SKC_sprite_status* p_actwk) {
   enemy_init0(p_actwk, &kanban_init_tbl1);
   p_actwk->r_ptr = &kanbst_move;
-  if (BIT_IS_SET(g_ram.actwk[0].sproffset, 15)) {
-    SET_BIT(p_actwk->sproffset, 15);
-  }
+  p_actwk->sproffset.pr = g_ram.actwk[0].sproffset.pr;
 }
 
 
@@ -318,7 +311,7 @@ static void chk_scr_lim(SKC_sprite_status* p_actwk) {
 
 static SKC_wrt_init_data kanban_init_tbl0 = {
   0,
-  0x04AC,
+  { 0x4AC, 0, 0, 0, 0 },
   12,
   0,
   kanbanpat0,
@@ -332,7 +325,7 @@ static SKC_wrt_init_data kanban_init_tbl0 = {
 
 static SKC_enemy_init0_data kanban_init_tbl1 = {
   kanbanpat1,
-  0x069E,
+  { 0x69E, 0, 0, 0, 0 },
   PRI_6,
   4,
   8,
@@ -343,7 +336,7 @@ static SKC_enemy_init0_data kanban_init_tbl1 = {
 
 static SKC_enemy_init0_data kanban_init_tbl2 = {
   ringpat,
-  0x26BC,
+  { 0x6BC, 0, 0, 1, 0 },
   PRI_5,
   8,
   8,

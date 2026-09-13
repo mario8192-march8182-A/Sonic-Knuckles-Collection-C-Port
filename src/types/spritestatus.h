@@ -2,6 +2,7 @@
 #define SPRITESTATUS_H
 
 #include <stdbool.h>
+#include "patternname.h"
 #include "spritestatushandler.h"
 #include "swdata.h"
 
@@ -70,7 +71,7 @@ typedef struct SKC_sprite_status {
   unsigned char sprvs; // 0x06
   unsigned char sprhs; // 0x07
   SKC_sprite_priority_id sprpri; // 0x08
-  unsigned short sproffset; // 0x0A
+  SKC_pattern_name sproffset; // 0x0A
   void* patbase; // 0x0C
   long xposi; // 0x10
   long yposi; // 0x14

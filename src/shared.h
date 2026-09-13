@@ -4,12 +4,13 @@
 #include <stdbool.h>
 #include "types/cchgcntinfo.h"
 #include "types/cgdata.h"
+#include "types/patternname.h"
 #include "types/spritepattern.h"
 #include "types/spritestatus.h"
 
 typedef struct SKC_enemy_init0_data {
   SKC_sprite_pattern** patbase;
-  unsigned short sproffset;
+  SKC_pattern_name sproffset;
   unsigned short sprpri;
   unsigned char sprhs;
   unsigned char sprvs;
@@ -19,7 +20,7 @@ typedef struct SKC_enemy_init0_data {
 SKC_enemy_init0_data;
 
 typedef struct SKC_enemy_init1_data {
-  unsigned short sproffset;
+  SKC_pattern_name sproffset;
   unsigned short sprpri;
   unsigned char sprhs;
   unsigned char sprvs;
@@ -147,7 +148,7 @@ SKC_chk_distance_result;
 
 typedef struct SKC_wrt_init_data {
   unsigned short cnt;
-  unsigned short sproffset;
+  SKC_pattern_name sproffset;
   unsigned short sproffset_increase;
   unsigned short flg_index;
   SKC_sprite_pattern** patbase;

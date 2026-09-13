@@ -1,4 +1,5 @@
 #include "bgspr.h"
+#include "../types/patternname.h"
 #include "../types/sonic3ram.h"
 #include "../types/spritepattern.h"
 #include "../types/spritestatus.h"
@@ -115,63 +116,63 @@ void bgspr(SKC_sprite_status* p_actwk) {
 
 static void bgsprinit(SKC_sprite_status* p_actwk) {
   struct {
-    unsigned short sproffset;
+    SKC_pattern_name sproffset;
     unsigned short sprpri;
     unsigned char sprhs;
     unsigned char sprvs;
   }
   bgsprtbl[51] = {
-    { 0x42E9, PRI_6, 12,  12 },
-    { 0x42E9, PRI_6, 16,   8 },
-    { 0x42E9, PRI_6,  8,   4 },
-    { 0x4001, PRI_6,  8,   8 },
-    { 0x6001, PRI_6,  8,  32 },
-    { 0xC2E9, PRI_6, 12,  12 },
-    { 0xC001, PRI_0, 64,  64 },
-    { 0xC001, PRI_0, 64,  32 },
-    { 0x4001, PRI_6, 64,  16 },
-    { 0xC001, PRI_0, 64,  64 },
-    { 0xC001, PRI_0, 64,  96 },
-    { 0x4451, PRI_6, 16,  24 },
-    { 0x4451, PRI_6, 16,  24 },
-    { 0x4451, PRI_6, 16,  24 },
-    { 0x4451, PRI_6, 16,  24 },
-    { 0xC368, PRI_0,  8,  48 },
-    { 0xC379, PRI_0, 48,  24 },
-    { 0xC399, PRI_0, 12,  16 },
-    { 0xC3A4, PRI_0, 32,  52 },
-    { 0x4038, PRI_6,  4,  16 },
-    { 0x440D, PRI_6,  8,   8 },
-    { 0x2433, PRI_6, 16,  64 },
-    { 0x2433, PRI_6, 16, 128 },
-    { 0x2433, PRI_1, 16,  64 },
-    { 0xC357, PRI_1,  4,  16 },
-    { 0xC357, PRI_1,  4,  16 },
-    { 0xC357, PRI_1, 16,   4 },
-    { 0xE40E, PRI_1, 16,   8 },
-    { 0xE40E, PRI_1, 16,   8 },
-    { 0x441E, PRI_4, 16,   8 },
-    { 0x0347, PRI_5,  8,   8 },
-    { 0xC3A1, PRI_3, 16,   4 },
-    { 0xC3A1, PRI_3, 32,   4 },
-    { 0xC3A1, PRI_3, 48,   4 },
-    { 0xC0D3, PRI_1, 16,  16 },
-    { 0xA3A1, PRI_3,  4,  16 },
-    { 0xA3A1, PRI_3,  4,  32 },
-    { 0xA3A1, PRI_3,  4,  64 },
-    { 0xA3A1, PRI_3,  4,  16 },
-    { 0x4379, PRI_1,  8,  20 },
-    { 0x4379, PRI_1, 24,  20 },
-    { 0x4379, PRI_1, 40,  20 },
-    { 0x4379, PRI_1, 56,  20 },
-    { 0x2443, PRI_6,  4,  16 },
-    { 0x2339, PRI_0, 64,   4 },
-    { 0x2339, PRI_5, 64,   4 },
-    { 0xC001, PRI_2, 16,   8 },
-    { 0x03AF, PRI_0, 16,   4 },
-    { 0x23FF, PRI_5,  8,  12 },
-    { 0x23FF, PRI_5, 12,   8 },
-    { 0x2385, PRI_1, 16,  36 }
+    { { 0x2E9, 0, 0, 2, 0 }, PRI_6, 12,  12 },
+    { { 0x2E9, 0, 0, 2, 0 }, PRI_6, 16,   8 },
+    { { 0x2E9, 0, 0, 2, 0 }, PRI_6,  8,   4 },
+    { { 0x001, 0, 0, 2, 0 }, PRI_6,  8,   8 },
+    { { 0x001, 0, 0, 3, 0 }, PRI_6,  8,  32 },
+    { { 0x2E9, 0, 0, 2, 1 }, PRI_6, 12,  12 },
+    { { 0x001, 0, 0, 2, 1 }, PRI_0, 64,  64 },
+    { { 0x001, 0, 0, 2, 1 }, PRI_0, 64,  32 },
+    { { 0x001, 0, 0, 2, 0 }, PRI_6, 64,  16 },
+    { { 0x001, 0, 0, 2, 1 }, PRI_0, 64,  64 },
+    { { 0x001, 0, 0, 2, 1 }, PRI_0, 64,  96 },
+    { { 0x451, 0, 0, 2, 0 }, PRI_6, 16,  24 },
+    { { 0x451, 0, 0, 2, 0 }, PRI_6, 16,  24 },
+    { { 0x451, 0, 0, 2, 0 }, PRI_6, 16,  24 },
+    { { 0x451, 0, 0, 2, 0 }, PRI_6, 16,  24 },
+    { { 0x368, 0, 0, 2, 1 }, PRI_0,  8,  48 },
+    { { 0x379, 0, 0, 2, 1 }, PRI_0, 48,  24 },
+    { { 0x399, 0, 0, 2, 1 }, PRI_0, 12,  16 },
+    { { 0x3A4, 0, 0, 2, 1 }, PRI_0, 32,  52 },
+    { { 0x038, 0, 0, 2, 0 }, PRI_6,  4,  16 },
+    { { 0x40D, 0, 0, 2, 0 }, PRI_6,  8,   8 },
+    { { 0x433, 0, 0, 1, 0 }, PRI_6, 16,  64 },
+    { { 0x433, 0, 0, 1, 0 }, PRI_6, 16, 128 },
+    { { 0x433, 0, 0, 1, 0 }, PRI_1, 16,  64 },
+    { { 0x357, 0, 0, 2, 1 }, PRI_1,  4,  16 },
+    { { 0x357, 0, 0, 2, 1 }, PRI_1,  4,  16 },
+    { { 0x357, 0, 0, 2, 1 }, PRI_1, 16,   4 },
+    { { 0x40E, 0, 0, 3, 1 }, PRI_1, 16,   8 },
+    { { 0x40E, 0, 0, 3, 1 }, PRI_1, 16,   8 },
+    { { 0x41E, 0, 0, 2, 0 }, PRI_4, 16,   8 },
+    { { 0x347, 0, 0, 0, 0 }, PRI_5,  8,   8 },
+    { { 0x3A1, 0, 0, 2, 1 }, PRI_3, 16,   4 },
+    { { 0x3A1, 0, 0, 2, 1 }, PRI_3, 32,   4 },
+    { { 0x3A1, 0, 0, 2, 1 }, PRI_3, 48,   4 },
+    { { 0x0D3, 0, 0, 2, 1 }, PRI_1, 16,  16 },
+    { { 0x3A1, 0, 0, 1, 1 }, PRI_3,  4,  16 },
+    { { 0x3A1, 0, 0, 1, 1 }, PRI_3,  4,  32 },
+    { { 0x3A1, 0, 0, 1, 1 }, PRI_3,  4,  64 },
+    { { 0x3A1, 0, 0, 1, 1 }, PRI_3,  4,  16 },
+    { { 0x379, 0, 0, 2, 0 }, PRI_1,  8,  20 },
+    { { 0x379, 0, 0, 2, 0 }, PRI_1, 24,  20 },
+    { { 0x379, 0, 0, 2, 0 }, PRI_1, 40,  20 },
+    { { 0x379, 0, 0, 2, 0 }, PRI_1, 56,  20 },
+    { { 0x443, 0, 0, 1, 0 }, PRI_6,  4,  16 },
+    { { 0x339, 0, 0, 1, 0 }, PRI_0, 64,   4 },
+    { { 0x339, 0, 0, 1, 0 }, PRI_5, 64,   4 },
+    { { 0x001, 0, 0, 2, 1 }, PRI_2, 16,   8 },
+    { { 0x3AF, 0, 0, 0, 0 }, PRI_0, 16,   4 },
+    { { 0x3FF, 0, 0, 1, 0 }, PRI_5,  8,  12 },
+    { { 0x3FF, 0, 0, 1, 0 }, PRI_5, 12,   8 },
+    { { 0x385, 0, 0, 1, 0 }, PRI_1, 16,  36 }
   };
 
   p_actwk->patbase = bgsprpat;
@@ -655,20 +656,20 @@ void bgsprp(SKC_sprite_status* p_actwk) {
 
 static void bgsprpinit(SKC_sprite_status* p_actwk) {
   struct {
-    unsigned short sproffset;
+    SKC_pattern_name sproffset;
     unsigned short sprpri;
     unsigned char sprhs;
     unsigned char sprvs;
   }
   bgsprptbl[8] = {
-    { 0x62E9, PRI_6, 8, 12 },
-    { 0x62E9, PRI_6, 8, 12 },
-    { 0xC0D3, PRI_4, 16, 4 },
-    { 0x240D, PRI_6, 16, 4 },
-    { 0x440F, PRI_6,  4, 4 },
-    { 0x440F, PRI_6, 20, 4 },
-    { 0x440F, PRI_6, 52, 4 },
-    { 0x440F, PRI_6, 84, 4 }
+    { { 0x2E9, 0, 0, 3, 0 }, PRI_6, 8, 12 },
+    { { 0x2E9, 0, 0, 3, 0 }, PRI_6, 8, 12 },
+    { { 0x0D3, 0, 0, 2, 1 }, PRI_4, 16, 4 },
+    { { 0x40D, 0, 0, 1, 0 }, PRI_6, 16, 4 },
+    { { 0x40F, 0, 0, 2, 0 }, PRI_6,  4, 4 },
+    { { 0x40F, 0, 0, 2, 0 }, PRI_6, 20, 4 },
+    { { 0x40F, 0, 0, 2, 0 }, PRI_6, 52, 4 },
+    { { 0x40F, 0, 0, 2, 0 }, PRI_6, 84, 4 }
   };
 
   p_actwk->patbase = bgsprppat;
@@ -973,14 +974,14 @@ void bgsprz(SKC_sprite_status* p_actwk) {
 
 static void bgsprzinit(SKC_sprite_status* p_actwk) {
   struct {
-    unsigned short sproffset;
+    SKC_pattern_name sproffset;
     unsigned short sprpri;
     unsigned char sprhs;
     unsigned char sprvs;
   }
   bgsprztbl[2] = {
-    { 0xC333, PRI_0, 32, 48 },
-    { 0xC333, PRI_0, 32, 60 }
+    { { 0x333, 0, 0, 2, 1 }, PRI_0, 32, 48 },
+    { { 0x333, 0, 0, 2, 1 }, PRI_0, 32, 60 }
   };
   SKC_sprite_status_handler bgsprzadrtbl[7] = {
     &bgsprzmove,

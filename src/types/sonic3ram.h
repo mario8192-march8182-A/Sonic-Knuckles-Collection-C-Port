@@ -3,6 +3,7 @@
 
 #include "acttimer.h"
 #include "cchgwork.h"
+#include "patternname.h"
 #include "point.h"
 #include "spritedata.h"
 #include "spritestatus.h"
@@ -36,7 +37,13 @@ typedef struct sonic3_ram {
   /* 08ffe400 */ struct {
                    SKC_swdata swdata;
                    SKC_play_cddat cddat;
-                   unsigned char sprdat;
+                   struct {
+                     unsigned int hf : 1;
+                     unsigned int vf : 1;
+                     unsigned int pl : 2;
+                     unsigned int pr : 1;
+                   }
+                   sprdat;
                  }
                  playrecwk[64];
   /* 08ffe400 */ SKC_point play2posiwk[64];
@@ -311,7 +318,7 @@ typedef struct sonic3_ram {
   /* 08fffe30 */ short plyposi_s;
   /* 08fffe32 */ unsigned short plring_s;
   /* 08fffe34 */ act_timer pltime_s;
-  /* 08fffe38 */ unsigned short plsproffset_s;
+  /* 08fffe38 */ SKC_pattern_name plsproffset_s;
   /* 08fffe3a */ unsigned char pl_top_solid_bit_s;
   /* 08fffe3b */ unsigned char pl_lrb_solid_bit_s;
   /* 08fffe3c */ short scra_h_posit_s;
@@ -329,7 +336,7 @@ typedef struct sonic3_ram {
   /* 08fffe4e */ short plyposi_s2;
   /* 08fffe50 */ unsigned short plring_s2;
   /* 08fffe52 */ act_timer pltime_s2;
-  /* 08fffe56 */ unsigned short plsproffset_s2;
+  /* 08fffe56 */ SKC_pattern_name plsproffset_s2;
   /* 08fffe58 */ unsigned char pl_top_solid_bit_s2;
   /* 08fffe59 */ unsigned char pl_lrb_solid_bit_s2;
   /* 08fffe5a */ short scra_h_posit_s2;
@@ -433,7 +440,7 @@ typedef struct sonic3_ram {
   /* 08ffffc0 */ unsigned long extrascore;
   /* 08ffffc4 */ unsigned long extrascore2;
   /* 08ffffca */ SKC_sprite_pattern** plpatbase;
-  /* 08ffffce */ unsigned short plsproffset;
+  /* 08ffffce */ SKC_pattern_name plsproffset;
   /* 08ffffd0 */ unsigned short demoflag;
   /* 08ffffd2 */ unsigned short nextdemoid;
   /* 08ffffd4 */ unsigned char bsmode;

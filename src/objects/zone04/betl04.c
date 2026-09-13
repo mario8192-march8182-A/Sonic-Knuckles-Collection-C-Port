@@ -258,7 +258,7 @@ static bool chk_magnet(SKC_sprite_status* p_actwk) {
 
 static SKC_enemy_init0_data betl04_init_tbl = {
   betl04_pt,
-  0xA506,
+  { 0x506, 0, 0, 1, 1 },
   PRI_5,
   24,
   16,
@@ -278,7 +278,7 @@ static SKC_enemy_init2_data betl04_mazuru_init_tbl = {
 
 static SKC_enemy_init0_data betl04_shot_init_tbl = {
   betl04_pt,
-  0xA506,
+  { 0x506, 0, 0, 1, 1 },
   PRI_5,
   4,
   4,
@@ -289,7 +289,7 @@ static SKC_enemy_init0_data betl04_shot_init_tbl = {
 
 static SKC_enemy_init0_data betl04_yakyo_init_tbl = {
   betl04_pt,
-  0xA506,
+  { 0x506, 0, 0, 1, 1 },
   PRI_4,
   4,
   4,

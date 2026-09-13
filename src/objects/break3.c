@@ -1,5 +1,6 @@
 #include "break3.h"
 #include <stdbool.h>
+#include <string.h>
 #include "../types/break3initdata.h"
 #include "../types/sonic3ram.h"
 #include "../types/spritepattern.h"
@@ -47,7 +48,10 @@ void break3(SKC_sprite_status* p_actwk) {
   p_actwk->actflg.relative_coordinates = 1;
   p_actwk->sprpri = PRI_1;
   p_actwk->patbase = break090pat;
-  p_actwk->sproffset = 0xC0D3;
+  memset(&p_actwk->sproffset, 0, sizeof(p_actwk->sproffset));
+  p_actwk->sproffset.gfx = 0x0D3;
+  p_actwk->sproffset.pl = 2;
+  p_actwk->sproffset.pr = 1;
   p_actwk->u.obj.timer = (p_actwk->u.obj.userflag & 0x0F) * 16 + 8;
   unsigned char index = (p_actwk->u.obj.userflag & 0x0F) >> 4;
   p_actwk->sprhs = tbl09[index].sprhs;

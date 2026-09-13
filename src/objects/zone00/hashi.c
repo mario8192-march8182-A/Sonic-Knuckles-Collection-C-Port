@@ -1,5 +1,6 @@
 #include "hashi.h"
 #include <stdbool.h>
+#include <string.h>
 #include "../../types/sonic3ram.h"
 #include "../../types/spritepattern.h"
 #include "../../types/spritestatus.h"
@@ -65,7 +66,9 @@ static void brhashiinit(SKC_sprite_status* p_actwk) {
     p_actwk->u.obj.actfree.brhashi.main_timer_init = p_actwk->u.obj.userflag + 48;
     p_actwk->u.obj.actfree.brhashi.child_timer_increase = 8;
     p_actwk->patbase = brhashipat;
-    p_actwk->sproffset = 0x42E9;
+    memset(&p_actwk->sproffset, 0, sizeof(p_actwk->sproffset));
+    p_actwk->sproffset.gfx = 0x2E9;
+    p_actwk->sproffset.pl = 2;
     p_actwk->sprhs = 90;
     p_actwk->sprvs = 8;
     p_actwk->actflg.relative_coordinates = 1;
@@ -74,7 +77,9 @@ static void brhashiinit(SKC_sprite_status* p_actwk) {
     if (result.actwk_ptr != 0) {
       result.actwk_ptr->r_ptr = &brhashimove2;
       result.actwk_ptr->patbase = brhashipat;
-      result.actwk_ptr->sproffset = 0x42E9;
+      memset(&result.actwk_ptr->sproffset, 0, sizeof(result.actwk_ptr->sproffset));
+      result.actwk_ptr->sproffset.gfx = 0x2E9;
+      result.actwk_ptr->sproffset.pl = 2;
       result.actwk_ptr->actflg.relative_coordinates = 1;
       result.actwk_ptr->sprhs = 90;
       result.actwk_ptr->sprvs = 8;
@@ -107,7 +112,10 @@ static void brhashiinit2(SKC_sprite_status* p_actwk) {
   p_actwk->u.obj.actfree.brhashi.main_timer_init = (p_actwk->u.obj.userflag & 0x7F) + 48;
   p_actwk->u.obj.actfree.brhashi.child_timer_increase = 8;
   p_actwk->patbase = brhashipat2;
-  p_actwk->sproffset = 0xC2E9;
+  memset(&p_actwk->sproffset, 0, sizeof(p_actwk->sproffset));
+  p_actwk->sproffset.gfx = 0x2E9;
+  p_actwk->sproffset.pl = 2;
+  p_actwk->sproffset.pr = 1;
   p_actwk->sprhs = 96;
   p_actwk->sprvs = 8;
   p_actwk->actflg.relative_coordinates = 1;
@@ -385,7 +393,10 @@ void evhashi(SKC_sprite_status* p_actwk) {
 
 static void evhashiinit(SKC_sprite_status* p_actwk) {
   p_actwk->patbase = evhashipat;
-  p_actwk->sproffset = 0xC2E9;
+  memset(&p_actwk->sproffset, 0, sizeof(p_actwk->sproffset));
+  p_actwk->sproffset.gfx = 0x2E9;
+  p_actwk->sproffset.pl = 2;
+  p_actwk->sproffset.pr = 1;
   p_actwk->actflg.relative_coordinates = 1;
   p_actwk->sprpri = PRI_5;
   p_actwk->sprhs = 8;

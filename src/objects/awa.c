@@ -1,4 +1,5 @@
 #include "awa.h"
+#include <string.h>
 #include "../types/sonic3ram.h"
 #include "../types/spritestatus.h"
 #include "../utils/bits.h"
@@ -64,7 +65,8 @@ void awa(SKC_sprite_status* p_actwk) {
 static void awainit(SKC_sprite_status* p_actwk) {
   p_actwk->r_no += 2;
   p_actwk->patbase = awapat;
-  p_actwk->sproffset = 0x045C;
+  memset(&p_actwk->sproffset, 0, sizeof(p_actwk->sproffset));
+  p_actwk->sproffset.gfx = 0x45C;
   p_actwk->actflg.relative_coordinates = 1;
   p_actwk->actflg.onscreen = 1;
   p_actwk->sprhs = 16;

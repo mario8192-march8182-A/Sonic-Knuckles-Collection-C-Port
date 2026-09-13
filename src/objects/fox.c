@@ -278,9 +278,10 @@ static void vsfoxinit(SKC_sprite_status* p_playerwk, SKC_play_work work) {
   if (g_ram.markerno == 0) {
     p_playerwk->u.play.top_solid_bit = 12;
     p_playerwk->u.play.lrb_solid_bit = 13;
-    p_playerwk->sproffset = p_playerwk == &g_ram.actwk[0] ? 0x0680 : 0x06A0;
+    memset(&p_playerwk->sproffset, 0, sizeof(p_playerwk->sproffset));
+    p_playerwk->sproffset.gfx = p_playerwk == &g_ram.actwk[0] ? 0x680 : 0x6A0;
     if (get_zone(g_ram.stageno) == ENDLESS_MINE) {
-      SET_BIT(p_playerwk->sproffset, 15);
+      p_playerwk->sproffset.pr = 1;
     }
     if (p_playerwk == &g_ram.actwk[0]) {
       g_ram.plxposi_s = fp16_get_integer(p_playerwk->xposi);
@@ -613,7 +614,8 @@ static void fox00init(SKC_sprite_status* p_playerwk, SKC_play_work work) {
   *work.plretspdwk_ptr = 0x80;
   if (g_ram.play_type == PLAY_TYPE_MILES) {
     if (g_ram.markerno == 0) {
-      p_playerwk->sproffset = 0x6A0;
+      memset(&p_playerwk->sproffset, 0, sizeof(p_playerwk->sproffset));
+      p_playerwk->sproffset.gfx = 0x6A0;
       p_playerwk->u.play.top_solid_bit = 12;
       p_playerwk->u.play.lrb_solid_bit = 13;
       if (g_ram.marker_flag != 2) {
@@ -626,12 +628,11 @@ static void fox00init(SKC_sprite_status* p_playerwk, SKC_play_work work) {
     }
   }
   else {
-    p_playerwk->sproffset = 0x6A0;
+    memset(&p_playerwk->sproffset, 0, sizeof(p_playerwk->sproffset));
+    p_playerwk->sproffset.gfx = 0x6A0;
     p_playerwk->u.play.top_solid_bit = g_ram.actwk[0].u.play.top_solid_bit;
     p_playerwk->u.play.lrb_solid_bit = g_ram.actwk[0].u.play.lrb_solid_bit;
-    if (BIT_IS_SET(g_ram.actwk[0].sproffset, 15)) {
-      SET_BIT(p_playerwk->sproffset, 15);
-    }
+    p_playerwk->sproffset.pr = g_ram.actwk[0].sproffset.pr;
   }
   p_playerwk->u.play.flip_rev_cnt = 0;
   p_playerwk->u.play.flip_rev_frame_cnt = 4;
@@ -871,7 +872,7 @@ static void foxcpu_wait0(SKC_sprite_status* p_actwk, SKC_sprite_status* p_player
       yposi += 384;
     }
     fp16_set_integer(&p_actwk->yposi, yposi);
-    SET_BIT(p_actwk->sproffset, 15);
+    p_actwk->sproffset.pr = 1;
     p_actwk->sprpri = PRI_2;
     p_actwk->xspeed = 0;
     p_actwk->yspeed = 0;
@@ -976,10 +977,7 @@ static void foxcpu_appear(SKC_sprite_status* p_actwk, SKC_sprite_status* p_playe
     p_actwk->u.play.cddat.push = 0;
     p_actwk->u.play.cddat.unused7 = 0;
     p_actwk->u.play.hlock_timer = 0;
-    CLEAR_BIT(p_actwk->sproffset, 15);
-    if (BIT_IS_SET(p_playerwk->sproffset, 15)) {
-      SET_BIT(p_actwk->sproffset, 15);
-    }
+    p_actwk->sproffset = p_playerwk->sproffset.pr;
     p_actwk->u.play.top_solid_bit = p_playerwk->u.play.top_solid_bit;
     p_actwk->u.play.lrb_solid_bit = p_playerwk->u.play.lrb_solid_bit;
   }
@@ -1205,10 +1203,7 @@ static void foxcpu_drop_off(SKC_sprite_status* p_actwk, SKC_sprite_status* p_pla
     memset(&p_actwk->u.play.cddat, 0, sizeof(p_actwk->u.play.cddat));
     p_actwk->u.play.cddat.jump = 1;
     p_actwk->u.play.hlock_timer = 0;
-    CLEAR_BIT(p_actwk->sproffset, 15);
-    if (BIT_IS_SET(p_playerwk->sproffset, 15)) {
-      SET_BIT(p_actwk->sproffset, 15);
-    }
+    p_actwk->sproffset.pr = p_playerwk->sproffset.pr;
     p_actwk->u.play.top_solid_bit = p_playerwk->u.play.top_solid_bit;
     p_actwk->u.play.lrb_solid_bit = p_playerwk->u.play.lrb_solid_bit;
     if (g_ram.play_type == PLAY_TYPE_SONIC) {
@@ -1402,7 +1397,7 @@ static void foxcpu_land(SKC_sprite_status* p_actwk, SKC_sprite_status* p_playerw
     memset(&p_actwk->u.play.cddat, 0, sizeof(p_actwk->u.play.cddat));
     p_actwk->u.play.cddat.jump = 1;
     p_actwk->u.play.hlock_timer = 0;
-    CLEAR_BIT(p_actwk->sproffset, 15);
+    p_actwk->sproffset.pr = 0;
   }
 }
 
@@ -3439,7 +3434,8 @@ static void vsfoxwrt0(unsigned short* p_wrtpat, unsigned short cnt, unsigned sho
 
 static void foxtails(SKC_sprite_status* p_actwk) {
   p_actwk->patbase = foxtailspat;
-  p_actwk->sproffset = 0x06B0;
+  memset(&p_actwk->sproffset, 0, sizeof(p_actwk->sproffset));
+  p_actwk->sproffset.gfx = 0x6B0;
   p_actwk->sprpri = PRI_2;
   p_actwk->sprhs = 24;
   p_actwk->sprvs = 24;
@@ -3464,10 +3460,7 @@ static void foxtailsmove(SKC_sprite_status* p_actwk) {
   fp16_set_integer(&p_actwk->xposi, fp16_get_integer(p_playerwk->xposi));
   fp16_set_integer(&p_actwk->yposi, fp16_get_integer(p_playerwk->yposi));
   p_actwk->sprpri = p_playerwk->sprpri;
-  CLEAR_BIT(p_actwk->sproffset, 15);
-  if (BIT_IS_SET(p_playerwk->sproffset, 15)) {
-    SET_BIT(p_actwk->sproffset, 15);
-  }
+  p_actwk->sproffset.pr = p_playerwk->sproffset.pr;
   unsigned char mstno = p_playerwk->mstno;
   if (p_playerwk->u.play.cddat.push == 1 && g_ram.watercoliflag2 == 0
       && p_playerwk->mstno >= 169 && p_playerwk->mstno <= 172) {
@@ -3520,7 +3513,8 @@ static unsigned char foxtailschg12[4] = { 0, 39, 40, 255 };
 
 static void vsfoxtails(SKC_sprite_status* p_actwk) {
   p_actwk->patbase = vsfoxtailspat;
-  p_actwk->sproffset = p_actwk == &g_ram.actwk[ACTWK_MILES_TAILS] ? 0x06B0 : 0x0690;
+  memset(&p_actwk->sproffset, 0, sizeof(p_actwk->sproffset));
+  p_actwk->sproffset.gfx = p_actwk == &g_ram.actwk[ACTWK_MILES_TAILS] ? 0x6B0 : 0x690;
   p_actwk->sprpri = PRI_2;
   p_actwk->sprhs = 24;
   p_actwk->sprvs = 24;
@@ -3543,10 +3537,7 @@ static void vsfoxtailsmove(SKC_sprite_status* p_actwk) {
   fp16_set_integer(&p_actwk->xposi, fp16_get_integer(p_playerwk->xposi));
   fp16_set_integer(&p_actwk->yposi, fp16_get_integer(p_playerwk->yposi));
   p_actwk->sprpri = p_playerwk->sprpri;
-  CLEAR_BIT(p_actwk->sproffset, 15);
-  if (BIT_IS_SET(p_playerwk->sproffset, 15)) {
-    SET_BIT(p_actwk->sproffset, 15);
-  }
+  p_actwk->sproffset.pr = p_playerwk->sproffset.pr;
   unsigned char mstno = p_playerwk->mstno;
   if (p_playerwk->u.play.cddat.push == 1 && mstno != 5) {
     mstno = 4;

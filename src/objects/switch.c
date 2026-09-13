@@ -1,4 +1,5 @@
 #include "switch.h"
+#include <string.h>
 #include "../types/sonic3ram.h"
 #include "../types/spritestatus.h"
 #include "../utils/bits.h"
@@ -45,23 +46,31 @@ static void switchinit(SKC_sprite_status* p_actwk) {
     switch (get_zone(g_ram.stageno)) {
       default:
         p_actwk->patbase = switchpat;
-        p_actwk->sproffset = 0x0456;
+        memset(&p_actwk->sproffset, 0, sizeof(p_actwk->sproffset));
+        p_actwk->sproffset.gfx = 0x456;
         break;
       case HYDROCITY:
         p_actwk->patbase = switch01pat;
-        p_actwk->sproffset = 0x2426;
+        memset(&p_actwk->sproffset, 0, sizeof(p_actwk->sproffset));
+        p_actwk->sproffset.gfx = 0x426;
+        p_actwk->sproffset.pl = 1;
         break;
       case MARBLE_GARDEN:
         p_actwk->patbase = switch03pat;
-        p_actwk->sproffset = 0x441A;
+        memset(&p_actwk->sproffset, 0, sizeof(p_actwk->sproffset));
+        p_actwk->sproffset.gfx = 0x41A;
+        p_actwk->sproffset.pl = 2;
         break;
       case FLYING_BATTERY:
         p_actwk->patbase = switchpat;
-        p_actwk->sproffset = 0x0500;
+        memset(&p_actwk->sproffset, 0, sizeof(p_actwk->sproffset));
+        p_actwk->sproffset.gfx = 0x500;
         break;
       case LAVA_REEF:
         p_actwk->patbase = switch09pat;
-        p_actwk->sproffset = get_act(g_ram.stageno) == ACT_1 ? 0x63A1 : 0x2429;
+        memset(&p_actwk->sproffset, 0, sizeof(p_actwk->sproffset));
+        p_actwk->sproffset.gfx = get_act(g_ram.stageno) == ACT_1 ? 0x3A1 : 0x429;
+        p_actwk->sproffset.pl = get_act(g_ram.stageno) == ACT_1 ? 3 : 1;
         break;
     }
 
@@ -129,7 +138,8 @@ static void vsswitch(SKC_sprite_status* p_actwk) {
 
 static void vsswitchinit(SKC_sprite_status* p_actwk) {
   p_actwk->patbase = vsswitchpat;
-  p_actwk->sproffset = 0x03AD;
+  memset(&p_actwk->sproffset, 0, sizeof(p_actwk->sproffset));
+  p_actwk->sproffset.gfx = 0x3AD;
   p_actwk->actflg.relative_coordinates = 1;
   p_actwk->sprhs = 12;
   p_actwk->sprpri = PRI_4;

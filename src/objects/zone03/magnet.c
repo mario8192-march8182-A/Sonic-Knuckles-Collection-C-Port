@@ -1,4 +1,5 @@
 #include "magnet.h"
+#include <string.h>
 #include "../../types/sonic3ram.h"
 #include "../../types/spritepattern.h"
 #include "../../types/spritestatus.h"
@@ -32,7 +33,9 @@ void magnet(SKC_sprite_status* p_actwk) {
 
 static void magnetinit(SKC_sprite_status* p_actwk) {
   p_actwk->patbase = magnetpat;
-  p_actwk->sproffset = 0x43E8;
+  memset(&p_actwk->sproffset, 0, sizeof(p_actwk->sproffset));
+  p_actwk->sproffset.gfx = 0x3E8;
+  p_actwk->sproffset.pl = 2;
   p_actwk->actflg.relative_coordinates = 1;
   p_actwk->sprpri = PRI_5;
   p_actwk->sprhs = 16;

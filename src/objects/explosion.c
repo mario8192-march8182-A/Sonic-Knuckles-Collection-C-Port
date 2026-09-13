@@ -137,7 +137,7 @@ static void set_bakuhatu(SKC_sprite_status* p_actwk) {
     SKC_sprite_status* p_new_actwk = set_act05(p_actwk, &bakuhatu_set_tbl);
     if (p_new_actwk != 0) {
       p_new_actwk->r_no = 2;
-      p_new_actwk->sproffset |= 0x8000;
+      p_new_actwk->sproffset.pr = 1;
       set_ran_posi(p_actwk, p_new_actwk);
     }
   }
@@ -234,7 +234,7 @@ static void exp07_pchg(SKC_sprite_status* p_actwk) {
 
 SKC_enemy_init0_data exp01_init_tbl = {
   exp01_pt,
-  0x8500,
+  { 0x500, 0, 0, 0, 1 },
   PRI_0,
   12,
   12,
@@ -245,7 +245,7 @@ SKC_enemy_init0_data exp01_init_tbl = {
 
 static SKC_enemy_init0_data exp01i_init_tbl = {
   exp01_pt,
-  0x84D2,
+  { 0x4D2, 0, 0, 0, 1 },
   PRI_0,
   12,
   12,

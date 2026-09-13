@@ -1,5 +1,6 @@
 #include "rope.h"
 #include <stdbool.h>
+#include <string.h>
 #include "../types/sonic3ram.h"
 #include "../types/spritepattern.h"
 #include "../types/spritestatus.h"
@@ -141,7 +142,8 @@ static void ropeinit__sub(SKC_sprite_status* p_actwk) {
   p_actwk->sprvs = 8;
   p_actwk->sprpri = PRI_4;
   p_actwk->patbase = ropepat;
-  p_actwk->sproffset = 0x041B;
+  memset(&p_actwk->sproffset, 0, sizeof(p_actwk->sproffset));
+  p_actwk->sproffset.gfx = 0x41B;
 }
 
 
@@ -169,7 +171,9 @@ static void ropestart(SKC_sprite_status* p_actwk) {
       p_actwk->xspeed = 0x800;
       p_actwk->yspeed = 0x200;
       p_actwk->patbase = bgsprppat;
-      p_actwk->sproffset = 0x62E9;
+      memset(&p_actwk->sproffset, 0, sizeof(p_actwk->sproffset));
+      p_actwk->sproffset.gfx = 0x2E9;
+      p_actwk->sproffset.pl = 3;
       p_actwk->sprhs = 8;
       p_actwk->sprvs = 12;
       p_actwk->patno = 0;
@@ -651,7 +655,8 @@ static void ropeswinginit__sub(SKC_sprite_status* p_actwk) {
   p_actwk->sprvs = 8;
   p_actwk->sprpri = PRI_4;
   p_actwk->patbase = ropepat;
-  p_actwk->sproffset = 0x041B;
+  memset(&p_actwk->sproffset, 0, sizeof(p_actwk->sproffset));
+  p_actwk->sproffset.gfx = 0x41B;
 }
 
 
@@ -812,7 +817,8 @@ static void hbarinit__sub(SKC_sprite_status* p_actwk) {
   p_actwk->sprvs = 8;
   p_actwk->sprpri = PRI_4;
   p_actwk->patbase = ropepat;
-  p_actwk->sproffset = 0x0455;
+  memset(&p_actwk->sproffset, 0, sizeof(p_actwk->sproffset));
+  p_actwk->sproffset.gfx = 0x455;
 }
 
 

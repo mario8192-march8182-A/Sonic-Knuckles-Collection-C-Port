@@ -1,5 +1,6 @@
 #include "spring.h"
 #include <stdbool.h>
+#include <string.h>
 #include "../types/sonic3ram.h"
 #include "../types/spritepattern.h"
 #include "../types/spritestatus.h"
@@ -140,7 +141,8 @@ static void sjumpinit(SKC_sprite_status* p_actwk) {
   };
 
   p_actwk->patbase = banepat;
-  p_actwk->sproffset = 0x04A4;
+  memset(&p_actwk->sproffset, 0, sizeof(p_actwk->sproffset));
+  p_actwk->sproffset.gfx = 0x4A4;
   p_actwk->actflg.relative_coordinates = 1;
   p_actwk->sprhs = 16;
   p_actwk->sprvs = 16;
@@ -164,7 +166,8 @@ static void sjumpswinit(SKC_sprite_status* p_actwk) {
   };
 
   p_actwk->patbase = banepat;
-  p_actwk->sproffset = 0x04A4;
+  memset(&p_actwk->sproffset, 0, sizeof(p_actwk->sproffset));
+  p_actwk->sproffset.gfx = 0x4A4;
   p_actwk->actflg.relative_coordinates = 1;
   p_actwk->sprhs = 16;
   p_actwk->sprvs = 16;
@@ -179,12 +182,13 @@ static void sjumpswinit(SKC_sprite_status* p_actwk) {
 static void sdash_init(SKC_sprite_status* p_actwk) {
   p_actwk->mstno = 2;
   p_actwk->patno = 3;
-  p_actwk->sproffset = 0x04B4;
+  memset(&p_actwk->sproffset, 0, sizeof(p_actwk->sproffset));
+  p_actwk->sproffset.gfx = 0x4B4;
   p_actwk->sprhs = 8;
   p_actwk->r_ptr = &sdashmove;
   if (g_ram.vs_flag != 0) {
     p_actwk->patbase = vsbanepat;
-    p_actwk->sproffset = 0x03AD;
+    p_actwk->sproffset.gfx = 0x3AD;
     p_actwk->r_ptr = &vssdashmove;
   }
   sjumpinit_end(p_actwk);
@@ -205,7 +209,8 @@ static void sjumpr_initg(SKC_sprite_status* p_actwk) {
   if (g_ram.vs_flag != 0) {
     p_actwk->r_ptr = &vssjumprmove;
     p_actwk->patbase = vsbanepat;
-    p_actwk->sproffset = 0x0391;
+    memset(&p_actwk->sproffset, 0, sizeof(p_actwk->sproffset));
+    p_actwk->sproffset.gfx = 0x391;
   }
   sjumpinit_end(p_actwk);
 }
@@ -214,9 +219,10 @@ static void sjumpr_initg(SKC_sprite_status* p_actwk) {
 static void sjump45_init(SKC_sprite_status* p_actwk) {
   p_actwk->mstno = 4;
   p_actwk->patno = 7;
-  p_actwk->sproffset = 0x043A;
+  memset(&p_actwk->sproffset, 0, sizeof(p_actwk->sproffset));
+  p_actwk->sproffset.gfx = 0x43A;
   if (get_zone(g_ram.stageno) == MARBLE_GARDEN || get_zone(g_ram.stageno) == MUSHROOM_HILL) {
-    p_actwk->sproffset = 0x0478;
+    p_actwk->sproffset.gfx = 0x478;
   }
   p_actwk->r_ptr = &sjump45move;
   sjumpinit_end(p_actwk);
@@ -226,9 +232,10 @@ static void sjump45_init(SKC_sprite_status* p_actwk) {
 static void sjump45r_init(SKC_sprite_status* p_actwk) {
   p_actwk->mstno = 4;
   p_actwk->patno = 10;
-  p_actwk->sproffset = 0x043A;
+  memset(&p_actwk->sproffset, 0, sizeof(p_actwk->sproffset));
+  p_actwk->sproffset.gfx = 0x43A;
   if (get_zone(g_ram.stageno) == MARBLE_GARDEN || get_zone(g_ram.stageno) == MUSHROOM_HILL) {
-    p_actwk->sproffset = 0x0478;
+    p_actwk->sproffset.gfx = 0x478;
   }
   p_actwk->u.obj.cddat.down = 1;
   p_actwk->r_ptr = &sjump45rmove;
@@ -251,9 +258,10 @@ static void sjump_initg(SKC_sprite_status* p_actwk) {
   if (g_ram.vs_flag != 0) {
     p_actwk->r_ptr = &vssjumpmove;
     p_actwk->patbase = vsbanepat;
-    p_actwk->sproffset = 0x391;
+    memset(&p_actwk->sproffset, 0, sizeof(p_actwk->sproffset));
+    p_actwk->sproffset.gfx = 0x391;
     if (get_zone(g_ram.stageno) == ENDLESS_MINE) {
-      p_actwk->sproffset |= 0x8000;
+      p_actwk->sproffset.pr = 1;
     }
   }
   sjumpinit_end(p_actwk);
@@ -1272,7 +1280,8 @@ void sjumpsw(SKC_sprite_status* p_actwk) {
   if (result.actwk_ptr != 0) {
     result.actwk_ptr->r_ptr = &sjumpswmove;
     result.actwk_ptr->patbase = get_zone(g_ram.stageno) != ENDLESS_MINE ? banedaipat : banedaipat2;
-    result.actwk_ptr->sproffset = 0x0391;
+    memset(&result.actwk_ptr->sproffset, 0, sizeof(result.actwk_ptr->sproffset));
+    result.actwk_ptr->sproffset.gfx = 0x391;
     result.actwk_ptr->u.obj.userflag = p_actwk->u.obj.userflag;
     result.actwk_ptr->sprhs = sjumpswtbl[p_actwk->u.obj.userflag >> 2 & 0x1C].sprhs;
     result.actwk_ptr->sprvs = sjumpswtbl[p_actwk->u.obj.userflag >> 2 & 0x1C].sprvs;

@@ -82,7 +82,7 @@ static void hana00_wait_init(SKC_sprite_status* p_actwk) {
 
 static SKC_enemy_init0_data hana00_init_tbl = {
   hana00pat,
-  0x252A,
+  { 0x52A, 0, 0, 1, 0 },
   PRI_4,
   12,
   24,
@@ -93,7 +93,7 @@ static SKC_enemy_init0_data hana00_init_tbl = {
 
 static SKC_enemy_init0_data hana00_shot_init_tbl = {
   hana00pat,
-  0x252A,
+  { 0x52A, 0, 0, 1, 0 },
   PRI_5,
   8,
   8,

@@ -1,5 +1,6 @@
 #include "toge.h"
 #include <stdbool.h>
+#include <string.h>
 #include "../types/size.h"
 #include "../types/sonic3ram.h"
 #include "../types/spritepattern.h"
@@ -80,11 +81,12 @@ static void togeinit(SKC_sprite_status* p_actwk) {
     p_actwk->sprvs = togetbl[size_kind].h;
     p_actwk->r_ptr = &togemove;
     p_actwk->patbase = togepat;
-    p_actwk->sproffset = get_zone(g_ram.stageno) != FLYING_BATTERY ? 0x049C : 0x0200;
+    memset(&p_actwk->sproffset, 0, sizeof(p_actwk->sproffset));
+    p_actwk->sproffset.gfx = get_zone(g_ram.stageno) != FLYING_BATTERY ? 0x49C : 0x200;
     p_actwk->patno = size_kind;
     if (size_kind >= 4) {
       p_actwk->r_ptr = &togemove2;
-      p_actwk->sproffset = 0x0494;
+      p_actwk->sproffset.gfx = 0x494;
     }
     if ((g_ram.reverse_gravity_flag == 0 && p_actwk->u.obj.cddat.down == 1)
         || (g_ram.reverse_gravity_flag != 0 && p_actwk->u.obj.cddat.down == 0)) {
@@ -114,7 +116,8 @@ static void vstogeinit(SKC_sprite_status* p_actwk, unsigned char size_kind) {
   p_actwk->sprvs = vstogetbl[size_kind].h;
   p_actwk->r_ptr = &vstogemove;
   p_actwk->patbase = vstogepat;
-  p_actwk->sproffset = 0x0391;
+  memset(&p_actwk->sproffset, 0, sizeof(p_actwk->sproffset));
+  p_actwk->sproffset.gfx = 0x391;
   p_actwk->patno = size_kind;
   if (size_kind >= 4) {
     p_actwk->r_ptr = &vstogemove2;

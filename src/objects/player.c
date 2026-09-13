@@ -225,12 +225,13 @@ static void vsplayinit(SKC_sprite_status* p_playerwk, SKC_play_work work) {
   if (g_ram.markerno == 0) {
     p_playerwk->u.play.top_solid_bit = 12;
     p_playerwk->u.play.lrb_solid_bit = 13;
-    p_playerwk->sproffset = p_playerwk == &g_ram.actwk[0] ? 0x0680 : 0x06A0;
+    memset(&p_playerwk->sproffset, 0, sizeof(p_playerwk->sproffset));
+    p_playerwk->sproffset.gfx = p_playerwk == &g_ram.actwk[0] ? 0x680 : 0x6A0;
     if (p_playerwk->u.play.character != SONIC) {
-      p_playerwk->sproffset += 0x2000;
+      ++p_playerwk->sproffset.pl;
     }
     if (get_zone(g_ram.stageno) == ENDLESS_MINE) {
-      SET_BIT(p_playerwk->sproffset, 15);
+      p_playerwk->sproffset.pr = 1;
     }
     p_playerwk->patbase = p_playerwk->u.play.character == SONIC ? vsplaypat : vsknucklespat;
     if (p_playerwk == &g_ram.actwk[0]) {
@@ -526,7 +527,8 @@ static void play00init(SKC_sprite_status* p_playerwk, SKC_play_work work) {
   *work.pladdspdwk_ptr = 0xC;
   *work.plretspdwk_ptr = 0x80;
   if (g_ram.markerno == 0) {
-    p_playerwk->sproffset = 0x0680;
+    memset(&p_playerwk->sproffset, 0, sizeof(p_playerwk->sproffset));
+    p_playerwk->sproffset.gfx = 0x680;
     p_playerwk->u.play.top_solid_bit = 12;
     p_playerwk->u.play.lrb_solid_bit = 13;
     if (g_ram.marker_flag != 2) {
@@ -655,7 +657,10 @@ void playposiwkset(SKC_sprite_status* p_playerwk) {
     g_ram.playposiwk[g_ram.plposiwkadr].y = fp16_get_integer(p_playerwk->yposi);
     g_ram.playrecwk[g_ram.plposiwkadr].swdata = g_ram.swdata;
     g_ram.playrecwk[g_ram.plposiwkadr].cddat = p_playerwk->u.play.cddat;
-    g_ram.playrecwk[g_ram.plposiwkadr].sprdat = p_playerwk->sproffset >> 8;
+    g_ram.playrecwk[g_ram.plposiwkadr].sprdat.hf = p_playerwk->sproffset.hf;
+    g_ram.playrecwk[g_ram.plposiwkadr].sprdat.vf = p_playerwk->sproffset.vf;
+    g_ram.playrecwk[g_ram.plposiwkadr].sprdat.pl = p_playerwk->sproffset.pl;
+    g_ram.playrecwk[g_ram.plposiwkadr].sprdat.pr = p_playerwk->sproffset.pr;
     ++g_ram.plposiwkadr;
   }
   else {

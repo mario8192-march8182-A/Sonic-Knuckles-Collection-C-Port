@@ -1,4 +1,5 @@
 #include "mask.h"
+#include <string.h>
 #include "../../types/sonic3ram.h"
 #include "../../types/spritestatus.h"
 #include "../../utils/bits.h"
@@ -41,7 +42,10 @@ void mask(SKC_sprite_status* p_actwk) {
 
 static void maskinit(SKC_sprite_status* p_actwk) {
   p_actwk->patbase = maskpat;
-  p_actwk->sproffset = 0xA3FF;
+  memset(&p_actwk->sproffset, 0, sizeof(p_actwk->sproffset));
+  p_actwk->sproffset.gfx = 0x3FF;
+  p_actwk->sproffset.pl = 1;
+  p_actwk->sproffset.pr = 1;
   p_actwk->actflg.relative_coordinates = 1;
   p_actwk->sprpri = PRI_5;
   p_actwk->sprhs = 16;
@@ -91,7 +95,8 @@ static void maskmove(SKC_sprite_status* p_actwk) {
         if (result.actwk_ptr != 0) {
           result.actwk_ptr->r_ptr = p_actwk->colicnt != 0 ? &maskflash : &bakuhatu;
           if (p_actwk->colicnt == 0) {
-            result.actwk_ptr->sproffset = 0x8000;
+            memset(&result.actwk_ptr->sproffset, 0, sizeof(result.actwk_ptr->sproffset));
+            result.actwk_ptr->sproffset.pr = 1;
             result.actwk_ptr->r_no = 2;
             p_actwk->u.obj.actfree.mask.inactive = true;
             p_actwk->patno = 0;
@@ -127,7 +132,7 @@ static void maskmove(SKC_sprite_status* p_actwk) {
         result.actwk_ptr->actflg.compound = 0;
         result.actwk_ptr->patbase = p_actwk->patbase;
         result.actwk_ptr->sproffset = p_actwk->sproffset;
-        CLEAR_BIT(result.actwk_ptr->sproffset, 15);
+        result.actwk_ptr->sproffset.pr = 0;
         result.actwk_ptr->sprpri = PRI_6;
         result.actwk_ptr->sprhs = 16;
         result.actwk_ptr->sprvs = 4;
@@ -261,7 +266,9 @@ void moveyuka(SKC_sprite_status* p_actwk) {
   p_actwk->u.obj.timer = moveyukatbl[index].timer_init;
   p_actwk->u.obj.actfree.moveyuka.yoffset = index;
   p_actwk->patbase = moveyukapat;
-  p_actwk->sproffset = 0x4001;
+  memset(&p_actwk->sproffset, 0, sizeof(p_actwk->sproffset));
+  p_actwk->sproffset.gfx = 0x001;
+  p_actwk->sproffset.pl = 2;
   p_actwk->actflg.relative_coordinates = 1;
   p_actwk->sprpri = PRI_5;
   p_actwk->u.obj.actfree.moveyuka.xposi_init = fp16_get_integer(p_actwk->xposi);

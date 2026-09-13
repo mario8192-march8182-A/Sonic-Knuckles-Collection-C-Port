@@ -179,7 +179,7 @@ static void set_fire(SKC_sprite_status* p_actwk) {
 
 static SKC_enemy_init0_data snak00_init_tbl = {
   snak00pat,
-  0xA55F,
+  { 0x55F, 0, 0, 1, 1 },
   PRI_5,
   8,
   8,
@@ -190,7 +190,7 @@ static SKC_enemy_init0_data snak00_init_tbl = {
 
 static SKC_enemy_init0_data snak00_body_init_tbl0 = {
   snak00pat,
-  0xA55F,
+  { 0x55F, 0, 0, 1, 1 },
   PRI_5,
   8,
   12,
@@ -201,7 +201,7 @@ static SKC_enemy_init0_data snak00_body_init_tbl0 = {
 
 static SKC_enemy_init0_data snak00_body_init_tbl1 = {
   snak00pat,
-  0xA55F,
+  { 0x55F, 0, 0, 1, 1 },
   PRI_5,
   8,
   8,
@@ -212,7 +212,7 @@ static SKC_enemy_init0_data snak00_body_init_tbl1 = {
 
 static SKC_enemy_init0_data snak00_body_init_tbl2 = {
   saru00pat,
-  0xA548,
+  { 0x548, 0, 0, 1, 1 },
   PRI_5,
   4,
   4,

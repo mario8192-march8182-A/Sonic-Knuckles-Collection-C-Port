@@ -1,5 +1,6 @@
 #include "bryuka.h"
 #include <stdbool.h>
+#include <string.h>
 #include "../types/sonic3ram.h"
 #include "../types/speed.h"
 #include "../types/spritepattern.h"
@@ -61,28 +62,36 @@ static void bryukainit(SKC_sprite_status* p_actwk) {
   switch (get_zone(g_ram.stageno)) {
     default:
       p_actwk->patbase = get_act(g_ram.stageno) != ACT_2 ? bryukapat : bryukapat2;
-      p_actwk->sproffset = 0x4001;
+      memset(&p_actwk->sproffset, 0, sizeof(p_actwk->sproffset));
+      p_actwk->sproffset.gfx = 0x001;
+      p_actwk->sproffset.pl = 2;
       p_actwk->sprhs = 16;
       p_actwk->sprvs = get_act(g_ram.stageno) != ACT_2 ? 40 : 44;
       p_actwk->u.obj.actfree.bryuka.spdtbl_ptr = bryukaspdtbl;
       break;
     case CARNIVAL_NIGHT:
       p_actwk->patbase = bryukapat3;
-      p_actwk->sproffset = 0x4430;
+      memset(&p_actwk->sproffset, 0, sizeof(p_actwk->sproffset));
+      p_actwk->sproffset.gfx = 0x430;
+      p_actwk->sproffset.pl = 2;
       p_actwk->sprhs = 32;
       p_actwk->sprvs = 32;
       p_actwk->u.obj.actfree.bryuka.spdtbl_ptr = bryukaspdtbl2;
       break;
     case FLYING_BATTERY:
       p_actwk->patbase = bryukapat4;
-      p_actwk->sproffset = 0x243A;
+      memset(&p_actwk->sproffset, 0, sizeof(p_actwk->sproffset));
+      p_actwk->sproffset.gfx = 0x43A;
+      p_actwk->sproffset.pl = 1;
       p_actwk->sprhs = 16;
       p_actwk->sprvs = 16;
       p_actwk->u.obj.actfree.bryuka.spdtbl_ptr = bryukaspdtbl51;
       break;
     case ICECAP:
       p_actwk->patbase = bryukapat5;
-      p_actwk->sproffset = !BIT_IS_SET(p_actwk->u.obj.userflag, 4) ? 0x4001 : 0x43B6;
+      memset(&p_actwk->sproffset, 0, sizeof(p_actwk->sproffset));
+      p_actwk->sproffset.gfx = !BIT_IS_SET(p_actwk->u.obj.userflag, 4) ? 0x001 : 0x3B6;
+      p_actwk->sproffset.pl = 2;
       p_actwk->sprhs = 16;
       p_actwk->sprvs = !BIT_IS_SET(p_actwk->u.obj.userflag, 4) ? 36 : 16;
       p_actwk->patno = p_actwk->u.obj.userflag & 0x0F;
@@ -95,7 +104,9 @@ static void bryukainit(SKC_sprite_status* p_actwk) {
       break;
     case LAUNCH_BASE:
       p_actwk->patbase = bryukapat6;
-      p_actwk->sproffset = 0x4001;
+      memset(&p_actwk->sproffset, 0, sizeof(p_actwk->sproffset));
+      p_actwk->sproffset.gfx = 0x001;
+      p_actwk->sproffset.pl = 2;
       p_actwk->sprhs = 32;
       p_actwk->sprvs = 32;
       p_actwk->u.obj.actfree.bryuka.spdtbl_ptr = bryukaspdtbl2;

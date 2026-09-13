@@ -1,5 +1,6 @@
 #include "saru00.h"
 #include <stdbool.h>
+#include <string.h>
 #include "../../data/pat/zone00/saru00.h"
 #include "../../types/sonic3ram.h"
 #include "../../types/spritestatus.h"
@@ -510,7 +511,9 @@ static void chk_hand_shot(SKC_sprite_status* p_actwk) {
       if (p_basewk->u.obj.actflg0.unused2 == 1) {
         SKC_sprite_status* p_elbow = &g_ram.actwk[p_actwk->u.obj.actfree.saru00_arm.elbow];
         if (p_actwk->u.obj.actfree.saru00_arm.direction >= 124) {
-          p_actwk->sproffset = 0x2548;
+          memset(&p_actwk->sproffset, 0, sizeof(p_actwk->sproffset));
+          p_actwk->sproffset.gfx = 0x548;
+          p_actwk->sproffset.pl = 1;
           chk_hand_shot__set(p_actwk);
         }
       }
@@ -543,7 +546,7 @@ static void set_arm_timer(SKC_sprite_status* p_actwk) {
 
 static SKC_enemy_init0_data saru00_init_tbl = {
   saru00pat,
-  0x2548,
+  { 0x548, 0, 0, 1, 0 },
   PRI_5,
   32,
   32,
@@ -562,7 +565,7 @@ static SKC_enemy_init2_data saru00_arm_init_tbl = {
 
 
 static SKC_enemy_init1_data banana_init_tbl = {
-  0xA548,
+  { 0x548, 0, 0, 1, 1 },
   PRI_5,
   32,
   32,
@@ -573,7 +576,7 @@ static SKC_enemy_init1_data banana_init_tbl = {
 
 static SKC_enemy_init0_data yasi_init_tbl = {
   saru00pat,
-  0x0548,
+  { 0x548, 0, 0, 0, 0 },
   PRI_5,
   32,
   32,

@@ -675,7 +675,10 @@ static unsigned short s3opening_color[64] = {
 
 static void s3banner_init(SKC_sprite_status* p_actwk) {
   p_actwk->patbase = s3opening_banner_pt;
-  p_actwk->sproffset = 0xE500;
+  memset(&p_actwk->sproffset, 0, sizeof(p_actwk->sproffset));
+  p_actwk->sproffset.gfx = 0x500;
+  p_actwk->sproffset.pl = 3;
+  p_actwk->sproffset.pr = 1;
   p_actwk->sprpri = PRI_1;
   p_actwk->sprhs = 128;
   p_actwk->sprvs = 64;
@@ -741,7 +744,10 @@ static void s3banner_move1(SKC_sprite_status* p_actwk) {
 
 static void s3bannertm_init(SKC_sprite_status* p_actwk) {
   p_actwk->patbase = s3opening_banner_pt;
-  p_actwk->sproffset = 0xE500;
+  memset(&p_actwk->sproffset, 0, sizeof(p_actwk->sproffset));
+  p_actwk->sproffset.gfx = 0x500;
+  p_actwk->sproffset.pl = 3;
+  p_actwk->sproffset.pr = 1;
   fp16_set_integer(&p_actwk->xposi, 392);
   if (!g_sonic3_alone) {
     fp16_set_integer(&p_actwk->yposi, 236);
@@ -767,7 +773,10 @@ static void s3bannertm_move(SKC_sprite_status* p_actwk) {
 
 static void andknuckles_init(SKC_sprite_status* p_actwk) {
   p_actwk->patbase = andknuckles_pt;
-  p_actwk->sproffset = 0xE4C0;
+  memset(&p_actwk->sproffset, 0, sizeof(p_actwk->sproffset));
+  p_actwk->sproffset.gfx = 0x4C0;
+  p_actwk->sproffset.pl = 3;
+  p_actwk->sproffset.pr = 1;
   fp16_set_integer(&p_actwk->xposi, 288);
   fp16_set_integer(&p_actwk->yposi, 264);
   p_actwk->sprpri = PRI_1;
@@ -805,7 +814,10 @@ static SKC_sprite_pattern andknuckles_pt00 = {
 
 static void s3copyright_init(SKC_sprite_status* p_actwk) {
   p_actwk->patbase = s3selectioncopyright_pt;
-  p_actwk->sproffset = 0xE6A6;
+  memset(&p_actwk->sproffset, 0, sizeof(p_actwk->sproffset));
+  p_actwk->sproffset.gfx = 0x6A6;
+  p_actwk->sproffset.pl = 3;
+  p_actwk->sproffset.pr = 1;
   fp16_set_integer(&p_actwk->xposi, 328);
   fp16_set_integer(&p_actwk->yposi, 330);
   p_actwk->sprpri = PRI_1;
@@ -821,7 +833,10 @@ static void s3selection_init(SKC_sprite_status* p_actwk) {
   fp16_set_integer(&p_actwk->xposi, 240);
   fp16_set_integer(&p_actwk->yposi, 320);
   p_actwk->patbase = s3selectioncopyright_pt;
-  p_actwk->sproffset = 0xC680;
+  memset(&p_actwk->sproffset, 0, sizeof(p_actwk->sproffset));
+  p_actwk->sproffset.gfx = 0x680;
+  p_actwk->sproffset.pl = 2;
+  p_actwk->sproffset.pr = 1;
   g_ram.openingoption &= 1;
   p_actwk->patno = g_ram.openingoption;
   p_actwk->r_ptr = &s3selection_move;
@@ -855,7 +870,10 @@ static void s3selection_move(SKC_sprite_status* p_actwk) {
 
 static void sonichand_init(SKC_sprite_status* p_actwk) {
   p_actwk->patbase = sonicparts_pt;
-  p_actwk->sproffset = 0xA400;
+  memset(&p_actwk->sproffset, 0, sizeof(p_actwk->sproffset));
+  p_actwk->sproffset.gfx = 0x400;
+  p_actwk->sproffset.pl = 1;
+  p_actwk->sproffset.pr = 1;
   fp16_set_integer(&p_actwk->xposi, 328);
   fp16_set_integer(&p_actwk->yposi, 220);
   p_actwk->sprpri = PRI_3;
@@ -888,7 +906,10 @@ static signed char s3opening_sonichand_chg0[30] = {
 
 static void soniceye_init(SKC_sprite_status* p_actwk) {
   p_actwk->patbase = sonicparts_pt;
-  p_actwk->sproffset = 0xA400;
+  memset(&p_actwk->sproffset, 0, sizeof(p_actwk->sproffset));
+  p_actwk->sproffset.gfx = 0x400;
+  p_actwk->sproffset.pl = 1;
+  p_actwk->sproffset.pr = 1;
   fp16_set_integer(&p_actwk->xposi, 248);
   fp16_set_integer(&p_actwk->yposi, 200);
   p_actwk->sprpri = PRI_3;
@@ -921,7 +942,9 @@ static signed char soniceye_chg0[11] = {
 
 static void tornado_init(SKC_sprite_status* p_actwk) {
   p_actwk->patbase = tornado_pt;
-  p_actwk->sproffset = 0x6400;
+  memset(&p_actwk->sproffset, 0, sizeof(p_actwk->sproffset));
+  p_actwk->sproffset.gfx = 0x400;
+  p_actwk->sproffset.pl = 3;
   fp16_set_integer(&p_actwk->xposi, 0);
   fp16_set_integer(&p_actwk->yposi, 192);
   p_actwk->sprpri = PRI_7;
@@ -1280,7 +1303,8 @@ static void demo0700_init(unsigned short stageno) {
   g_ram.markerno_s = 1;
   g_ram.stageno_s = stageno;
   g_ram.stageno_is = stageno;
-  g_ram.plsproffset_s = 0x680;
+  memset(&g_ram.plsproffset_s, 0, sizeof(g_ram.plsproffset_s));
+  g_ram.plsproffset_s.gfx = 0x680;
   g_ram.pl_top_solid_bit_s = 12;
   g_ram.pl_lrb_solid_bit_s = 13;
   g_ram.plring_s = 0;
@@ -1308,7 +1332,8 @@ static unsigned short knuckles_color[16] = {
 
 static void sonicfalling_init(SKC_sprite_status* p_actwk) {
   p_actwk->patbase = skopening_sonicfalling_pt;
-  p_actwk->sproffset = 0x04EF;
+  memset(&p_actwk->sproffset, 0, sizeof(p_actwk->sproffset));
+  p_actwk->sproffset.gfx = 0x4EF;
   fp16_set_integer(&p_actwk->xposi, 232);
   fp16_set_integer(&p_actwk->yposi, 22);
   p_actwk->sprpri = PRI_1;
@@ -1324,7 +1349,7 @@ static void sonicfalling_move0(SKC_sprite_status* p_actwk) {
     fp16_set_integer(&p_actwk->yposi, fp16_get_integer(p_actwk->yposi) + 1);
   }
   if (g_ram.scr_evta == 3) {
-    SET_BIT(p_actwk->sproffset, 15);
+    p_actwk->sproffset.pr = 1;
     if (g_ram.scra_v_posit >> 16 < 224) {
       g_ram.scra_v_posit += 8 << 16;
       copy_mapline_vram(mapa, g_vdp_scrolla_adr, g_ram.scra_v_posit >> 16);
@@ -1386,7 +1411,9 @@ static void dummy(SKC_sprite_status* p_actwk) {
 
 static void deathegg_init(SKC_sprite_status* p_actwk) {
   p_actwk->patbase = skopening_deathegg_pt;
-  p_actwk->sproffset = 0x4680;
+  memset(&p_actwk->sproffset, 0, sizeof(p_actwk->sproffset));
+  p_actwk->sproffset.gfx = 0x680;
+  p_actwk->sproffset.pl = 2;
   fp16_set_integer(&p_actwk->xposi, 320);
   fp16_set_integer(&p_actwk->yposi, 176);
   p_actwk->sprpri = PRI_3;
@@ -1440,7 +1467,9 @@ static void deathegg_move1(SKC_sprite_status* p_actwk) {
 
 static void mountain_init(SKC_sprite_status* p_actwk) {
   p_actwk->patbase = skopening_mountain_pt;
-  p_actwk->sproffset = 0x67A0;
+  memset(&p_actwk->sproffset, 0, sizeof(p_actwk->sproffset));
+  p_actwk->sproffset.gfx = 0x7A0;
+  p_actwk->sproffset.pl = 3;
   p_actwk->sprpri = PRI_2;
   p_actwk->sprhs = 48;
   p_actwk->sprvs = 8;
@@ -1466,7 +1495,9 @@ static void skbanner_init(SKC_sprite_status* p_actwk) {
   --p_actwk->pattim;
   if (p_actwk->pattim == 0) {
     p_actwk->patbase = skopening_banner_pt;
-    p_actwk->sproffset = 0x84EE;
+    memset(&p_actwk->sproffset, 0, sizeof(p_actwk->sproffset));
+    p_actwk->sproffset.gfx = 0x4EE;
+    p_actwk->sproffset.pr = 1;
     p_actwk->sprpri = PRI_0;
     p_actwk->sprhs = 124;
     p_actwk->sprvs = 40;
@@ -1587,7 +1618,9 @@ static void skselection_init(SKC_sprite_status* p_actwk) {
   fp16_set_integer(&p_actwk->xposi, 264);
   fp16_set_integer(&p_actwk->yposi, 336);
   p_actwk->patbase = skselection_pt;
-  p_actwk->sproffset = 0x8462;
+  memset(&p_actwk->sproffset, 0, sizeof(p_actwk->sproffset));
+  p_actwk->sproffset.gfx = 0x462;
+  p_actwk->sproffset.pr = 1;
   p_actwk->actflg.compound = 1;
   p_actwk->u.obj.compound.child_cnt = 2;
   p_actwk->u.obj.compound.children[0].xposi = fp16_get_integer(p_actwk->xposi);
@@ -1649,7 +1682,9 @@ static void chibi_init(SKC_sprite_status* p_actwk) {
   fp16_set_integer(&p_actwk->xposi, 208);
   fp16_set_integer(&p_actwk->yposi, 332);
   p_actwk->patbase = skselection_pt;
-  p_actwk->sproffset = 0x8462;
+  memset(&p_actwk->sproffset, 0, sizeof(p_actwk->sproffset));
+  p_actwk->sproffset.gfx = 0x462;
+  p_actwk->sproffset.pr = 1;
   p_actwk->mstno = g_ram.openingoption;
   p_actwk->mstrestart = g_ram.openingoption;
   p_actwk->patcnt = 1;
@@ -1679,7 +1714,9 @@ static signed char chibi_chg2[3] = { 7, 4, -1 };
 
 static void skbannertm_init(SKC_sprite_status* p_actwk) {
   p_actwk->patbase = skbannertm_pt;
-  p_actwk->sproffset = 0x8462;
+  memset(&p_actwk->sproffset, 0, sizeof(p_actwk->sproffset));
+  p_actwk->sproffset.gfx = 0x462;
+  p_actwk->sproffset.pr = 1;
   fp16_set_integer(&p_actwk->xposi, 418);
   fp16_set_integer(&p_actwk->yposi, 285);
   p_actwk->sprpri = PRI_1;
@@ -1699,7 +1736,9 @@ static void skbannertm_move(SKC_sprite_status* p_actwk) {
 
 static void skcopyright_init(SKC_sprite_status* p_actwk) {
   p_actwk->patbase = skcopyright_pt;
-  p_actwk->sproffset = 0x8680;
+  memset(&p_actwk->sproffset, 0, sizeof(p_actwk->sproffset));
+  p_actwk->sproffset.gfx = 0x680;
+  p_actwk->sproffset.pr = 1;
   fp16_set_integer(&p_actwk->xposi, 327);
   fp16_set_integer(&p_actwk->yposi, 344);
   p_actwk->sprpri = PRI_1;

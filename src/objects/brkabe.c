@@ -1,6 +1,7 @@
 #include "brkabe.h"
 #include <stdbool.h>
 #include <stdlib.h>
+#include <string.h>
 #include "../types/sonic3ram.h"
 #include "../types/spritepattern.h"
 #include "../types/spritestatus.h"
@@ -72,7 +73,9 @@ static void brkabeinit(SKC_sprite_status* p_actwk) {
     switch(get_zone(g_ram.stageno)) {
       default:
         p_actwk->patbase = brkabepat;
-        p_actwk->sproffset = 0x4001;
+        memset(&p_actwk->sproffset, 0, sizeof(p_actwk->sproffset));
+        p_actwk->sproffset.gfx = 0x001;
+        p_actwk->sproffset.pl = 2;
         p_actwk->sprhs = 16;
         p_actwk->sprvs = 40;
         p_actwk->u.obj.actfree.brkabe.spdtbl_ptr = brkabespdtbl;
@@ -80,7 +83,9 @@ static void brkabeinit(SKC_sprite_status* p_actwk) {
         break;
       case HYDROCITY:
         p_actwk->patbase = brkabe01pat;
-        p_actwk->sproffset = p_actwk->patno != 2 ? 0x6001 : 0x4350;
+        memset(&p_actwk->sproffset, 0, sizeof(p_actwk->sproffset));
+        p_actwk->sproffset.gfx = p_actwk->patno != 2 ? 0x001 : 0x350
+        p_actwk->sproffset.pl = p_actwk->patno != 2 ? 3 : 2;
         p_actwk->sprhs = p_actwk->patno != 2 ? 16 : 24;
         p_actwk->sprvs = 32;
         p_actwk->u.obj.actfree.brkabe.spdtbl_ptr = brkabespdtbl01;
@@ -92,7 +97,9 @@ static void brkabeinit(SKC_sprite_status* p_actwk) {
         break;
       case MARBLE_GARDEN:
         p_actwk->patbase = brkabe02pat;
-        p_actwk->sproffset = 0x4001;
+        memset(&p_actwk->sproffset, 0, sizeof(p_actwk->sproffset));
+        p_actwk->sproffset.gfx = 0x001;
+        p_actwk->sproffset.pl = 2;
         p_actwk->sprhs = 32;
         p_actwk->sprvs = 40;
         p_actwk->u.obj.actfree.brkabe.spdtbl_ptr = brkabespdtbl02;
@@ -108,7 +115,9 @@ static void brkabeinit(SKC_sprite_status* p_actwk) {
         break;
       case CARNIVAL_NIGHT:
         p_actwk->patbase = brkabe03pat;
-        p_actwk->sproffset = 0x4420;
+        memset(&p_actwk->sproffset, 0, sizeof(p_actwk->sproffset));
+        p_actwk->sproffset.gfx = 0x420;
+        p_actwk->sproffset.pl = 2;
         p_actwk->sprhs = 16;
         p_actwk->sprvs = 32;
         p_actwk->u.obj.actfree.brkabe.spdtbl_ptr = brkabespdtbl03;
@@ -120,7 +129,9 @@ static void brkabeinit(SKC_sprite_status* p_actwk) {
         break;
       case LAUNCH_BASE:
         p_actwk->patbase = brkabe06pat;
-        p_actwk->sproffset = 0x22EA;
+        memset(&p_actwk->sproffset, 0, sizeof(p_actwk->sproffset));
+        p_actwk->sproffset.gfx = 0x2EA;
+        p_actwk->sproffset.pl = 1;
         p_actwk->sprhs = 16;
         p_actwk->sprvs = 32;
         p_actwk->u.obj.actfree.brkabe.spdtbl_ptr = brkabespdtbl01;
@@ -129,7 +140,9 @@ static void brkabeinit(SKC_sprite_status* p_actwk) {
         break;
       case MUSHROOM_HILL:
         p_actwk->patbase = brkabe07pat;
-        p_actwk->sproffset = 0x434B;
+        memset(&p_actwk->sproffset, 0, sizeof(p_actwk->sproffset));
+        p_actwk->sproffset.gfx = 0x34B;
+        p_actwk->sproffset.pl = 2;
         p_actwk->sprhs = 16;
         p_actwk->sprvs = 32;
         p_actwk->u.obj.actfree.brkabe.spdtbl_ptr = brkabespdtbl03;
@@ -138,7 +151,9 @@ static void brkabeinit(SKC_sprite_status* p_actwk) {
         break;
       case SANDOPOLIS:
         p_actwk->patbase = brkabe03pat;
-        p_actwk->sproffset = 0x448C;
+        memset(&p_actwk->sproffset, 0, sizeof(p_actwk->sproffset));
+        p_actwk->sproffset.gfx = 0x48C;
+        p_actwk->sproffset.pl = 2;
         p_actwk->sprhs = 16;
         p_actwk->sprvs = p_actwk->patno != 4 ? 32 : 48;
         p_actwk->u.obj.actfree.brkabe.spdtbl_ptr = p_actwk->patno != 4 ? brkabespdtbl03 : brkabespdtbl;
@@ -147,7 +162,9 @@ static void brkabeinit(SKC_sprite_status* p_actwk) {
         break;
       case LAVA_REEF:
         p_actwk->patbase = brkabe09pat;
-        p_actwk->sproffset = 0x640D;
+        memset(&p_actwk->sproffset, 0, sizeof(p_actwk->sproffset));
+        p_actwk->sproffset.gfx = 0x40D;
+        p_actwk->sproffset.pl = 3;
         p_actwk->sprhs = 16;
         p_actwk->sprvs = 32;
         p_actwk->u.obj.actfree.brkabe.spdtbl_ptr = brkabespdtbl03;
@@ -263,7 +280,7 @@ void breakgosub3(SKC_sprite_status* p_actwk, SKC_speed* p_spdtbl) {
     fp16_set_integer(&p_new_actwk->xposi, fp16_get_integer(p_actwk->xposi));
     fp16_set_integer(&p_new_actwk->yposi, fp16_get_integer(p_actwk->yposi));
     p_new_actwk->sproffset = p_actwk->sproffset;
-    SET_BIT(p_new_actwk->sproffset, 15);
+    p_new_actwk->sproffset.pr = 1;
     p_new_actwk->sprpri = p_actwk->sprpri;
     p_new_actwk->sprhs = p_actwk->sprhs;
     p_new_actwk->sprvs = p_actwk->sprvs;

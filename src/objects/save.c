@@ -1,4 +1,5 @@
 #include "save.h"
+#include <string.h>
 #include "../data/cg/save.h"
 #include "../types/sonic3ram.h"
 #include "../types/spritepattern.h"
@@ -69,7 +70,8 @@ void save(SKC_sprite_status* p_actwk) {
 static void saveinit(SKC_sprite_status* p_actwk) {
   p_actwk->r_no += 2;
   p_actwk->patbase = savepat;
-  p_actwk->sproffset = 0x05EC;
+  memset(&p_actwk->sproffset, 0, sizeof(p_actwk->sproffset));
+  p_actwk->sproffset.gfx = 0x5EC;
   p_actwk->actflg.relative_coordinates = 1;
   p_actwk->sprhs = 8;
   p_actwk->sprvs = 40;
@@ -369,7 +371,8 @@ void o_starinit(SKC_sprite_status* p_actwk) {
 
     result.actwk_ptr->r_ptr = p_actwk->r_ptr;
     result.actwk_ptr->patbase = starpat;
-    result.actwk_ptr->sproffset = 0x05EC;
+    memset(&result.actwk_ptr->sproffset, 0, sizeof(result.actwk_ptr->sproffset));
+    result.actwk_ptr->sproffset.gfx = 0x5EC;
     result.actwk_ptr->actflg.relative_coordinates = 1;
     result.actwk_ptr->r_no = 8;
     fp16_set_integer(&result.actwk_ptr->xposi, fp16_get_integer(p_actwk->xposi));

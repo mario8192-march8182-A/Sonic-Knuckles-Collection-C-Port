@@ -1,5 +1,6 @@
 #include "break.h"
 #include <stdbool.h>
+#include <string.h>
 #include "../types/break2initdata.h"
 #include "../types/break2timerdata.h"
 #include "../types/sonic3ram.h"
@@ -116,7 +117,9 @@ static void breakinit(SKC_sprite_status* p_actwk) {
   switch (get_zone(g_ram.stageno)) {
     default:
       p_actwk->patbase = get_act(g_ram.stageno) != ACT_2 ? break000pat : break001pat;
-      p_actwk->sproffset = 0x4001;
+      memset(&p_actwk->sproffset, 0, sizeof(p_actwk->sproffset));
+      p_actwk->sproffset.gfx = 0x001;
+      p_actwk->sproffset.pl = 2;
       p_actwk->u.obj.actfree.break_.timer_data_ptr = brgotbl00;
       p_actwk->u.obj.actfree.break_.slope_data_ptr = break00tbl;
       p_actwk->sprhs = 7;
@@ -124,7 +127,9 @@ static void breakinit(SKC_sprite_status* p_actwk) {
       break;
     case ICECAP:
       p_actwk->patbase = break050pat;
-      p_actwk->sproffset = 0x4001;
+      memset(&p_actwk->sproffset, 0, sizeof(p_actwk->sproffset));
+      p_actwk->sproffset.gfx = 0x001;
+      p_actwk->sproffset.pl = 2;
       p_actwk->u.obj.actfree.break_.timer_data_ptr = brgotbl05;
       p_actwk->u.obj.actfree.break_.slope_data_ptr = break05tbl;
       p_actwk->sprhs = 48;
@@ -228,7 +233,9 @@ static void break2init(SKC_sprite_status* p_actwk) {
       p_actwk->u.obj.timer = timer;
       if (!BIT_IS_SET(p_actwk->u.obj.userflag, 6)) {
         p_actwk->patbase = break060pat;
-        p_actwk->sproffset = 0x4001;
+        memset(&p_actwk->sproffset, 0, sizeof(p_actwk->sproffset));
+        p_actwk->sproffset.gfx = 0x001;
+        p_actwk->sproffset.pl = 2;
         p_actwk->sprhs = 64;
         p_actwk->sprvs = 16;
         p_actwk->u.obj.actfree.break_.timer_data_ptr = br2gotbl060;
@@ -236,7 +243,9 @@ static void break2init(SKC_sprite_status* p_actwk) {
       }
       else {
         p_actwk->patbase = break061pat;
-        p_actwk->sproffset = 0x4001;
+        memset(&p_actwk->sproffset, 0, sizeof(p_actwk->sproffset));
+        p_actwk->sproffset.gfx = 0x001;
+        p_actwk->sproffset.pl = 2;
         p_actwk->sprhs = 32;
         p_actwk->sprvs = 48;
         p_actwk->u.obj.actfree.break_.timer_data_ptr = br2gotbl061;
@@ -258,7 +267,10 @@ static void break2init(SKC_sprite_status* p_actwk) {
       };
 
       p_actwk->patbase = break010pat;
-      p_actwk->sproffset = 0xC001;
+      memset(&p_actwk->sproffset, 0, sizeof(p_actwk->sproffset));
+      p_actwk->sproffset.gfx = 0x001;
+      p_actwk->sproffset.pl = 2;
+      p_actwk->sproffset.pr = 1;
       unsigned short userflag = p_actwk->u.obj.userflag;
       if (BIT_IS_SET(userflag, 7)) {
         p_actwk->u.obj.actfree.break_.unknown2 = userflag & 0xF;
@@ -288,7 +300,9 @@ static void break2init(SKC_sprite_status* p_actwk) {
       };
 
       p_actwk->patbase = break020pat;
-      p_actwk->sproffset = 0x4001;
+      memset(&p_actwk->sproffset, 0, sizeof(p_actwk->sproffset));
+      p_actwk->sproffset.gfx = 0x001;
+      p_actwk->sproffset.pl = 2;
       p_actwk->u.obj.timer = (p_actwk->u.obj.userflag & 0xF) * 16 + 8 & 0xFF;
       unsigned short userflag = (p_actwk->u.obj.userflag & 0xF0) >> 8;
       p_actwk->sprhs = tbl02[userflag].sprhs;
@@ -309,7 +323,9 @@ static void break2init(SKC_sprite_status* p_actwk) {
       }
       p_actwk->u.obj.timer = (userflag & 0xF) * 16 + 8 & 0xFF;
       p_actwk->patbase = break050pat;
-      p_actwk->sproffset = 0x4001;
+      memset(&p_actwk->sproffset, 0, sizeof(p_actwk->sproffset));
+      p_actwk->sproffset.gfx = 0x001;
+      p_actwk->sproffset.pl = 2;
       p_actwk->sprhs = 80;
       p_actwk->sprvs = 56;
       p_actwk->u.obj.actfree.break_.timer_data_ptr = br2gotbl050;
@@ -319,7 +335,9 @@ static void break2init(SKC_sprite_status* p_actwk) {
     }
     case LAVA_REEF_BOSS_AND_HIDDEN_PALACE:
       p_actwk->patbase = break093pat;
-      p_actwk->sproffset = 0x4001;
+      memset(&p_actwk->sproffset, 0, sizeof(p_actwk->sproffset));
+      p_actwk->sproffset.gfx = 0x001;
+      p_actwk->sproffset.pl = 2;
       // fall-through
     case LAVA_REEF: {
       SKC_break2_init_data tbl09[1] = {
@@ -331,7 +349,9 @@ static void break2init(SKC_sprite_status* p_actwk) {
 
       if (get_zone(g_ram.stageno == LAVA_REEF)) {
         p_actwk->patbase = break091pat;
-        p_actwk->sproffset = 0x4090;
+        memset(&p_actwk->sproffset, 0, sizeof(p_actwk->sproffset));
+        p_actwk->sproffset.gfx = 0x090;
+        p_actwk->sproffset.pl = 2;
       }
       p_actwk->u.obj.timer = (p_actwk->u.obj.userflag & 0xF) * 16 + 8 & 0xFF;
       unsigned short userflag = (p_actwk->u.obj.userflag & 0x70) >> 8;
@@ -352,7 +372,9 @@ static void break2init(SKC_sprite_status* p_actwk) {
       };
 
       p_actwk->patbase = break041pat;
-      p_actwk->sproffset = 0x4001;
+      memset(&p_actwk->sproffset, 0, sizeof(p_actwk->sproffset));
+      p_actwk->sproffset.gfx = 0x001;
+      p_actwk->sproffset.pl = 2;
       p_actwk->u.obj.timer = (p_actwk->u.obj.userflag & 0xF) * 16 + 8 & 0xFF;
       unsigned char userflag = (p_actwk->u.obj.userflag & 0xF0) >> 8;
       p_actwk->sprhs = tbl04[userflag].sprhs;
@@ -372,7 +394,9 @@ static void break2init(SKC_sprite_status* p_actwk) {
       };
 
       p_actwk->patbase = break081pat;
-      p_actwk->sproffset = 0x4001;
+      memset(&p_actwk->sproffset, 0, sizeof(p_actwk->sproffset));
+      p_actwk->sproffset.gfx = 0x001;
+      p_actwk->sproffset.pl = 2;
       p_actwk->u.obj.timer = (p_actwk->u.obj.userflag & 0xF) * 16 + 8 & 0xFF;
       unsigned char userflag = (p_actwk->u.obj.userflag & 0x70) >> 8;
       p_actwk->sprhs = tbl08[userflag].sprhs;

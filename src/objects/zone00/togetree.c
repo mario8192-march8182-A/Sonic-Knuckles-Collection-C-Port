@@ -1,4 +1,5 @@
 #include "togetree.h"
+#include <string.h>
 #include "../../types/sonic3ram.h"
 #include "../../types/spritepattern.h"
 #include "../../types/spritestatus.h"
@@ -39,7 +40,9 @@ void togetree(SKC_sprite_status* p_actwk) {
 
 static void togetreeinit(SKC_sprite_status* p_actwk) {
   p_actwk->patbase = togetreepat;
-  p_actwk->sproffset = 0x42E9;
+  memset(&p_actwk->sproffset, 0, sizeof(p_actwk->sproffset));
+  p_actwk->sproffset.gfx = 0x2E9;
+  p_actwk->sproffset.pl = 2;
   p_actwk->sprhs = 24;
   p_actwk->sprvs = 8;
   p_actwk->actflg.relative_coordinates = 1;

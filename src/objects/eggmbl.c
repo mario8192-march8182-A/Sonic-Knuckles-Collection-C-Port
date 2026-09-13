@@ -1,4 +1,5 @@
 #include "eggmbl.h"
+#include <string.h>
 #include "../data/cg/mblmeggman.h"
 #include "../data/cg/mblmsonic.h"
 #include "../types/sonic3ram.h"
@@ -238,9 +239,7 @@ static void mbl_eggman3_init(SKC_sprite_status* p_actwk) {
 
 static void chk_pri(SKC_sprite_status* p_actwk) {
   SKC_sprite_status* p_parentwk = &g_ram.actwk[p_actwk->u.obj.oya];
-  if (BIT_IS_SET(p_parentwk->sproffset, 15)) {
-    SET_BIT(p_actwk->sproffset, 15);
-  }
+  p_actwk->sproffset.pr = p_parentwk->sproffset.pr;
 }
 
 
@@ -587,7 +586,9 @@ static void embl_jet_wait0(SKC_sprite_status* p_actwk) {
 void resultembl(SKC_sprite_status* p_actwk) {
   p_actwk->r_ptr = &resultembl_wait0;
   p_actwk->patbase = eggmbl_pt;
-  p_actwk->sproffset = 0x226F;
+  memset(&p_actwk->sproffset, 0, sizeof(p_actwk->sproffset));
+  p_actwk->sproffset.gfx = 0x26F;
+  p_actwk->sproffset.pl = 1;
   p_actwk->sprpri = PRI_5;
   p_actwk->sprhs = 32;
   p_actwk->sprvs = 32;
@@ -623,7 +624,7 @@ static void resmblegg_wait0(SKC_sprite_status* p_actwk) {
 
 static SKC_enemy_init0_data mbl_eggman0_init_tbl = {
   eggmbl_pt,
-  0x052E,
+  { 0x52E, 0, 0, 0, 0 },
   PRI_5,
   16,
   8,
@@ -634,7 +635,7 @@ static SKC_enemy_init0_data mbl_eggman0_init_tbl = {
 
 static SKC_enemy_init0_data mbl_eggman2_init_tbl = {
   egg2_pt,
-  0x0430,
+  { 0x430, 0, 0, 0, 0 },
   PRI_5,
   16,
   8,
@@ -645,7 +646,7 @@ static SKC_enemy_init0_data mbl_eggman2_init_tbl = {
 
 static SKC_enemy_init0_data eggmbl_init_tbl = {
   eggmbl_pt,
-  0x052E,
+  { 0x52E, 0, 0, 0, 0 },
   PRI_5,
   28,
   32,
@@ -665,7 +666,7 @@ static SKC_enemy_init2_data embl_jet_init_tbl = {
 
 static SKC_enemy_init0_data mbl_msonic_init_tbl = {
   msmbl_pt,
-  0x252E,
+  { 0x52E, 0, 0, 1, 0 },
   PRI_5,
   20,
   16,

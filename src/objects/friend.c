@@ -1,4 +1,5 @@
 #include "friend.h"
+#include <string.h>
 #include "../types/friendinitdata.h"
 #include "../types/point.h"
 #include "../types/sonic3ram.h"
@@ -168,17 +169,17 @@ static SKC_sprite_pattern** pat_tbl[11] = {
 
 
 static unsigned short ofs_tbl[11] = {
-  0x05A5,
-  0x05A5,
-  0x05A5,
-  0x0553,
-  0x0553,
-  0x0573,
-  0x0573,
-  0x0585,
-  0x0593,
-  0x0565,
-  0x05B3
+  { 0x5A5, 0, 0, 0, 0 },
+  { 0x5A5, 0, 0, 0, 0 },
+  { 0x5A5, 0, 0, 0, 0 },
+  { 0x553, 0, 0, 0, 0 },
+  { 0x553, 0, 0, 0, 0 },
+  { 0x573, 0, 0, 0, 0 },
+  { 0x573, 0, 0, 0, 0 },
+  { 0x585, 0, 0, 0, 0 },
+  { 0x593, 0, 0, 0, 0 },
+  { 0x565, 0, 0, 0, 0 },
+  { 0x5B3, 0, 0, 0, 0 }
 };
 
 
@@ -203,7 +204,8 @@ static void friendinit(SKC_sprite_status* p_actwk) {
   else {
     p_actwk->r_no += 2;
     unsigned char zone_type = random() & 1;
-    p_actwk->sproffset = zone_type == 0 ? 0x0580 : 0x592;
+    memset(&p_actwk->sproffset, 0, sizeof(p_actwk->sproffset));
+    p_actwk->sproffset.gfx = zone_type == 0 ? 0x580 : 0x592;
     p_actwk->u.obj.actfree.friend.type = zone_friend_tbl[g_ram.stageno][zone_type];
     p_actwk->u.obj.actfree.friend.xspeed_init = zone_friend_init_tbl[p_actwk->u.obj.actfree.friend.type].xspeed;
     p_actwk->u.obj.actfree.friend.yspeed_init = zone_friend_init_tbl[p_actwk->u.obj.actfree.friend.type].yspeed;
@@ -340,7 +342,9 @@ static void friendwait(SKC_sprite_status* p_actwk) {
 
 void ten(SKC_sprite_status* p_actwk) {
   p_actwk->patbase = tenpat;
-  p_actwk->sproffset = 0x85E4;
+  memset(&p_actwk->sproffset, 0, sizeof(p_actwk->sproffset));
+  p_actwk->sproffset.gfx = 0x5E4;
+  p_actwk->sproffset.pr = 1;
   p_actwk->actflg.relative_coordinates = 1;
   p_actwk->sprpri = PRI_1;
   p_actwk->sprhs = 8;
@@ -377,7 +381,9 @@ static SKC_set_act05_data cucky_group_set_tbl = {
 static void cucky_init(SKC_sprite_status* p_actwk) {
   p_actwk->r_ptr = &cucky_move;
   p_actwk->patbase = cuckyflickypat;
-  p_actwk->sproffset = 0x22C1;
+  memset(&p_actwk->sproffset, 0, sizeof(p_actwk->sproffset));
+  p_actwk->sproffset.gfx = 0x2C1;
+  p_actwk->sproffset.pl = 1;
   friend_init_sub(p_actwk, cucky_posi_tbl);
   FUN_007a57db();
 }
@@ -423,7 +429,9 @@ static SKC_set_act05_data ricky_group_set_tbl = {
 static void ricky_init(SKC_sprite_status* p_actwk) {
   p_actwk->r_ptr = &ricky_pocky_move;
   p_actwk->patbase = rickypat;
-  p_actwk->sproffset = 0x22CF;
+  memset(&p_actwk->sproffset, 0, sizeof(p_actwk->sproffset));
+  p_actwk->sproffset.gfx = 0x2CF;
+  p_actwk->sproffset.pl = 1;
   p_actwk->actflg.hflip = 1;
   p_actwk->u.obj.actfree.friend.yposi_init = fp16_get_integer(p_actwk->yposi);
 }
@@ -465,7 +473,9 @@ static SKC_set_act05_data pocky_group_set_tbl = {
 static void pocky_init(SKC_sprite_status* p_actwk) {
   p_actwk->r_ptr = &ricky_pocky_move;
   p_actwk->patbase = pockypeckypat;
-  p_actwk->sproffset = 0x22E1;
+  memset(&p_actwk->sproffset, 0, sizeof(p_actwk->sproffset));
+  p_actwk->sproffset.gfx = 0x2E1;
+  p_actwk->sproffset.pl = 1;
   friend_init_sub(p_actwk, pocky_posi_tbl);
   p_actwk->u.obj.actfree.friend.yposi_init = fp16_get_integer(p_actwk->yposi);
 }

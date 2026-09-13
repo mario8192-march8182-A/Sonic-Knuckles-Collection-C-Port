@@ -567,7 +567,9 @@ static void nk0930_boss_set(SKC_sprite_status* p_actwk) {
   }
   p_actwk->r_ptr = &nk0930_move;
   p_actwk->patbase = knuckles_pt;
-  p_actwk->sproffset = 0x24DA;
+  memset(&p_actwk->sproffset, 0, sizeof(p_actwk->sproffset));
+  p_actwk->sproffset.gfx = 0x4DA;
+  p_actwk->sproffset.pl = 1;
   p_actwk->sprpri = PRI_2;
   p_actwk->sprhs = 24;
   p_actwk->sprvs = 24;
@@ -1132,7 +1134,7 @@ static void wait0_init(SKC_sprite_status* p_actwk) {
   p_actwk->patbase = nk0931_pt;
   p_actwk->patno = 10;
   pg_init(p_actwk, wait_pg00);
-  SET_BIT(p_actwk->sproffset, 15);
+  p_actwk->sproffset.pr = 1;
   fp16_set_integer(&p_actwk->xposi, 0x1620);
   fp16_set_integer(&p_actwk->yposi, 0x3AC);
   g_ram.DAT_08fffab8_bitfield = 0;
@@ -1346,7 +1348,7 @@ static void nk0930_run3(SKC_sprite_status* p_actwk) {
 static void run3_init(SKC_sprite_status* p_actwk) {
   fp16_set_integer(&p_actwk->yposi, 0x3AB);
   p_actwk->r_no = 54;
-  CLEAR_BIT(p_actwk->sproffset, 15);
+  p_actwk->sproffset.pr = 0;
   p_actwk->u.obj.actfree.nk0930.wrt_index = 0;
   p_actwk->patbase = knuckles_pt;
   p_actwk->patno = 7;
@@ -2064,7 +2066,7 @@ static void clen0930_cach0(SKC_sprite_status* p_actwk) {
     SKC_sprite_status* p_parentwk = &g_ram.actwk[p_actwk->u.obj.oya];
     p_parentwk->u.obj.actflg0.unused2 = 1;
     SKC_sprite_status* p_caos09wk = &g_ram.actwk[g_ram.DAT_08fffaba_obj];
-    SET_BIT(p_caos09wk->sproffset, 15);
+    p_caos09wk->sproffset.pr = 1;
   }
   p_actwk->yspeed = yspeed;
   p_actwk->u.obj.oya_offset.y = p_actwk->u.obj.actfree.clen0930.yoffset_init + fp8_get_integer(p_actwk->yspeed);
@@ -2197,7 +2199,7 @@ static void caos09_frag_wait0(SKC_sprite_status* p_actwk) {
 
 static void frag_fall0_init(SKC_sprite_status* p_actwk) {
   p_actwk->r_ptr = &caos09_frag_fall0;
-  SET_BIT(p_actwk->sproffset, 15);
+  p_actwk->sproffset.pr = 1;
 }
 
 
@@ -2246,7 +2248,7 @@ static void nk0930_exp_wait0(SKC_sprite_status* p_actwk) {
   p_actwk->r_ptr = &bakuhatu;
   p_actwk->r_no = 2;
   p_actwk->r_ptr(p_actwk);
-  CLEAR_BIT(p_actwk->sproffset, 15);
+  p_actwk->sproffset.pr = 0;
 }
 
 
@@ -3158,7 +3160,7 @@ static SKC_set_act05_data door09_break_set_tbl = {
 
 static SKC_enemy_init0_data nk0930_effect_init_tbl = {
   effectpat,
-  0x0500,
+  { 0x500, 0, 0, 0, 0 },
   PRI_1,
   16,
   16,
@@ -3169,7 +3171,7 @@ static SKC_enemy_init0_data nk0930_effect_init_tbl = {
 
 SKC_enemy_init0_data embl0930_init_tbl = {
   eggmbl_pt,
-  0x852E,
+  { 0x52E, 0, 0, 0, 1 },
   PRI_0,
   28,
   32,
@@ -3180,7 +3182,7 @@ SKC_enemy_init0_data embl0930_init_tbl = {
 
 SKC_enemy_init0_data clen0930_init_tbl = {
   emblcl_pt,
-  0x84A7,
+  { 0x4A7, 0, 0, 0, 1 },
   PRI_3,
   20,
   20,
@@ -3209,7 +3211,7 @@ static SKC_enemy_init2_data clenchain_init_tbl = {
 
 static SKC_enemy_init0_data smok0930_init_tbl = {
   caos09_pt,
-  0x83B5,
+  { 0x3B5, 0, 0, 0, 1 },
   PRI_0,
   12,
   12,
@@ -3220,7 +3222,7 @@ static SKC_enemy_init0_data smok0930_init_tbl = {
 
 static SKC_enemy_init0_data caos09_frag_init_tbl = {
   caos09_pt,
-  0x43B5,
+  { 0x3B5, 0, 0, 2, 0 },
   PRI_3,
   4,
   8,
@@ -3231,7 +3233,7 @@ static SKC_enemy_init0_data caos09_frag_init_tbl = {
 
 static SKC_enemy_init0_data embl0930_handb_init_tbl = {
   emblcl_pt,
-  0x04A7,
+  { 0x4A7, 0, 0, 0, 0 },
   PRI_0,
   8,
   8,
@@ -3251,7 +3253,7 @@ static SKC_enemy_init2_data embl0930_lhand_init_tbl = {
 
 static SKC_enemy_init0_data door09_init_tbl = {
   door09_pt,
-  0xC001,
+  { 0x001, 0, 0, 2, 1 },
   PRI_0,
   16,
   32,
@@ -3271,7 +3273,7 @@ static SKC_enemy_init2_data door09_break_init_tbl = {
 
 static SKC_enemy_init0_data piyo09_init_tbl = {
   piyo09_pt,
-  0x2500,
+  { 0x500, 0, 0, 1, 0 },
   PRI_3,
   12,
   4,
@@ -3282,7 +3284,7 @@ static SKC_enemy_init0_data piyo09_init_tbl = {
 
 static SKC_enemy_init0_data iwa091_init_tbl = {
   iwa091_pt,
-  0x4500,
+  { 0x500, 0, 0, 2, 0 },
   PRI_4,
   32,
   32,

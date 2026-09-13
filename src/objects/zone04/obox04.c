@@ -211,7 +211,7 @@ static void set_obox04_friend_init(SKC_sprite_status* p_actwk) {
     -0x380, -0x300, -0x280, -0x200
   };
   static unsigned short ofs_tbl[2] = {
-    0x8580, 0x8592
+    { 0x580, 0, 0, 0, 1 }, { 0x592, 0, 0, 0, 1 }
   };
 
   short yspeed = spd_tbl[(p_actwk->u.obj.userflag & 6) / 2];
@@ -234,7 +234,7 @@ static void set_obox04_friend_init(SKC_sprite_status* p_actwk) {
 
 SKC_enemy_init0_data obox04_init_tbl = {
   obox04pat,
-  0,
+  { 0x000, 0, 0, 0, 0 },
   PRI_4,
   32,
   40,
@@ -245,7 +245,7 @@ SKC_enemy_init0_data obox04_init_tbl = {
 
 SKC_enemy_init0_data swit04_init_tbl = {
   obox04pat,
-  0,
+  { 0x000, 0, 0, 0, 0 },
   PRI_3,
   16,
   8,
@@ -274,7 +274,7 @@ static SKC_enemy_init2_data obox04_friend_init_tbl = {
 
 static SKC_enemy_init0_data obox04_ring_init_tbl = {
   ringpat,
-  0xA6BC,
+  { 0x6BC, 0, 0, 1, 1 },
   PRI_3,
   8,
   8,

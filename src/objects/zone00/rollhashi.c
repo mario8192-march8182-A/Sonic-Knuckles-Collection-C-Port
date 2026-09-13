@@ -1,4 +1,5 @@
 #include "rollhashi.h"
+#include <string.h>
 #include "../../types/sonic3ram.h"
 #include "../../types/spritepattern.h"
 #include "../../types/spritestatus.h"
@@ -34,7 +35,9 @@ void rollhashi(SKC_sprite_status* p_actwk) {
 
 static void rollhashiinit(SKC_sprite_status* p_actwk) {
   p_actwk->patbase = rollhashipat;
-  p_actwk->sproffset = 0x42E9;
+  memset(&p_actwk->sproffset, 0, sizeof(p_actwk->sproffset));
+  p_actwk->sproffset.gfx = 0x2E9;
+  p_actwk->sproffset.pl = 2;
   p_actwk->sprhs = 128;
   p_actwk->sprvs = 4;
   p_actwk->actflg.relative_coordinates = 1;
@@ -55,7 +58,9 @@ static void rollhashiinit(SKC_sprite_status* p_actwk) {
   if (result.actwk_ptr != 0) {
     result.actwk_ptr->r_ptr = &rollhashimove2;
     result.actwk_ptr->patbase = rollhashipat;
-    result.actwk_ptr->sproffset = 0x42E9;
+    memset(&result.actwk_ptr->sproffset, 0, sizeof(result.actwk_ptr->sproffset));
+    result.actwk_ptr->sproffset.gfx = 0x2E9;
+    result.actwk_ptr->sproffset.pl = 2;
     result.actwk_ptr->actflg.relative_coordinates = 1;
     result.actwk_ptr->sprhs = 128;
     result.actwk_ptr->sprvs = 64;

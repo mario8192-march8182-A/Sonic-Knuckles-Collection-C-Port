@@ -1,5 +1,6 @@
 #include "egjr0a.h"
 #include <stdbool.h>
+#include <string.h>
 #include "../../data/cg/zone0a/egjr0a.h"
 #include "../../data/pat/zone0a/egjr0a.h"
 #include "../../types/sonic3ram.h"
@@ -111,7 +112,7 @@ static void egjr0a_04_wait0(SKC_sprite_status* p_actwk) {
     if (p_actwk->u.obj.puka.cnt-- == 0) {
       p_actwk->r_ptr = &egjr0a_04_move0;
       enemy_init0(p_actwk, &egjr0a_init_tbl02);
-      CLEAR_BIT(p_actwk->sproffset, 15);
+      p_actwk->sproffset.pr = 0;
       p_actwk->xspeed = p_actwk->actflg.hflip == 0 ? -0x300 : 0x300;
       set_act00(p_actwk, &egjr0a_02_set_tbl);
     }
@@ -127,7 +128,7 @@ static void egjr0a_04_move0(SKC_sprite_status* p_actwk) {
   if (p_actwk->yspeed <= -0x200) {
     p_actwk->r_ptr = &egjr0a_04_wait1;
     p_actwk->xspeed = 0;
-    SET_BIT(p_actwk->sproffset, 15);
+    p_actwk->sproffset.pr = 1;
   }
   chk_emy_foutc0(p_actwk);
 }
@@ -227,7 +228,8 @@ static void egjr0a_friend(SKC_sprite_status* p_actwk) {
   p_actwk->r_no += 2;
   unsigned long number = random();
   unsigned char type = number & 1;
-  p_actwk->sproffset = type == 0 ? 0x0580 : 0x0592;
+  memset(&p_actwk->sproffset, 0, sizeof(p_actwk->sproffset));
+  p_actwk->sproffset.gfx = type == 0 ? 0x580 : 0x592;
   p_actwk->u.obj.actfree.friend.type = type;
   short xspeed = zone_friend_init_tbl[type].xspeed;
   p_actwk->xspeed = p_actwk->actflg.hflip == 0 ? xspeed : -xspeed;
@@ -341,7 +343,7 @@ void egjr0a_pg(SKC_sprite_status* p_actwk) {
 
 static SKC_enemy_init0_data egjr0a_init_tbl00 = {
   zoompat,
-  0xA500,
+  { 0x500, 0, 0, 1, 1 },
   PRI_5,
   32,
   32,
@@ -352,7 +354,7 @@ static SKC_enemy_init0_data egjr0a_init_tbl00 = {
 
 SKC_enemy_init0_data egjr0a_init_tbl02 = {
   egjr0apat,
-  0x8500,
+  { 0x500, 0, 0, 0, 1 },
   PRI_5,
   20,
   24,
@@ -363,7 +365,7 @@ SKC_enemy_init0_data egjr0a_init_tbl02 = {
 
 static SKC_enemy_init0_data egjr0a_init_tbl04 = {
   egjr0apat,
-  0x8500,
+  { 0x500, 0, 0, 0, 1 },
   PRI_5,
   4,
   4,
