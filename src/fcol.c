@@ -277,7 +277,7 @@ static signed char scdchk(short xposi, short yposi, short yoffset, unsigned shor
   if (blk_offset == 0 || !BIT_IS_SET(blk_no, solid_bit)) {
     return scdend(xposi, yposi, yoffset, blk_msk, solid_bit, p_dirstk, p_zonemap_row_offsets);
   }
-  unsigned char scd_no = g_ram.scdadr[blk_no * 2];
+  unsigned char scd_no = g_ram.scdadr[blk_offset * 2];
   if (scd_no == 0) {
     return scdend(xposi, yposi, yoffset, blk_msk, solid_bit, p_dirstk, p_zonemap_row_offsets);
   }
@@ -321,7 +321,7 @@ static signed char scdchk2(short xposi, short yposi, unsigned short blk_msk, uns
   if (blk_offset == 0 || !BIT_IS_SET(blk_no, solid_bit)) {
     return 15 - (signed char)((unsigned short)yposi & 0x000F);
   }
-  unsigned char scd_no = g_ram.scdadr[blk_no * 2];
+  unsigned char scd_no = g_ram.scdadr[blk_offset * 2];
   if (scd_no == 0) {
     return 15 - (signed char)((unsigned short)yposi & 0x000F);
   }
@@ -378,7 +378,7 @@ static unsigned char flyringscdchk(short xposi, short yposi, short yoffset, unsi
   if (blk_offset == 0 || !BIT_IS_SET(blk_no, solid_bit)) {
     return 16;
   }
-  unsigned char scd_no = g_ram.scdadr[blk_no * 2];
+  unsigned char scd_no = g_ram.scdadr[blk_offset * 2];
   if (scd_no == 0) {
     return 16;
   }
@@ -446,7 +446,7 @@ static signed char scdchk_r(short xposi, short yposi, short yoffset, unsigned sh
   if (blk_offset == 0 || !BIT_IS_SET(blk_no, solid_bit)) {
     return scdend_r(xposi, yposi, yoffset, blk_msk, solid_bit, p_dirstk, p_zonemap_row_offsets);
   }
-  unsigned char scd_no = g_ram.scdadr[blk_no * 2];
+  unsigned char scd_no = g_ram.scdadr[blk_offset * 2];
   if (scd_no == 0) {
     return scdend_r(xposi, yposi, yoffset, blk_msk, solid_bit, p_dirstk, p_zonemap_row_offsets);
   }
@@ -502,7 +502,7 @@ static signed char scdchk2_r(short xposi, short yposi, unsigned short blk_msk, u
   if (blk_offset == 0 || !BIT_IS_SET(blk_no, solid_bit)) {
     return 15 - (signed char)((unsigned short)xposi & 0x000F);
   }
-  unsigned char scd_no = g_ram.scdadr[blk_no * 2];
+  unsigned char scd_no = g_ram.scdadr[blk_offset * 2];
   if (scd_no == 0) {
     return 15 - (signed char)((unsigned short)xposi & 0x000F);
   }
