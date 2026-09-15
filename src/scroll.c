@@ -520,9 +520,9 @@ void mapwrt(void) {
   if (p_data->blkdata1_ptr != p_data->blkdata2_ptr) {
     unlze_blocks(&g_ram.blockwk[block_cnt], p_data->blkdata2_ptr);
   }
-  unsigned char* p_next = unlze(g_ram.mapwk, p_data->mapdata1_ptr);
+  unsigned short screen_cnt = unlze_screens(g_ram.mapwk, p_data->mapdata1_ptr);
   if (p_data->mapdata1_ptr != p_data->mapdata2_ptr) {
-    unlze(p_next, p_data->mapdata2_ptr);
+    unlze_screens(&g_ram.mapwk[screen_cnt], p_data->mapdata2_ptr);
   }
   SKC_zonemap* p_zonemap = zonemaptbl[get_zone(g_ram.stageno)][get_act(g_ram.stageno)];
   g_ram.zonemapwk.mapa_col_cnt = p_zonemap->mapa_col_cnt;

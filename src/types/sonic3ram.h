@@ -6,6 +6,7 @@
 #include "cchgwork.h"
 #include "patternname.h"
 #include "point.h"
+#include "screen.h"
 #include "spritedata.h"
 #include "spritestatus.h"
 #include "spritestatushandler.h"
@@ -19,7 +20,7 @@ typedef struct SKC_sprite_pattern SKC_sprite_pattern;
 
 typedef struct sonic3_ram {
   /* 08ff0000 */ unsigned char decompressed[0xA800];
-  /* 08ff0000 */ unsigned char mapwk[0x8000];
+  /* 08ff0000 */ SKC_screen mapwk[256];
   /* 08ff8000 */ struct {
                    unsigned short mapa_col_cnt;
                    unsigned short mapb_col_cnt;

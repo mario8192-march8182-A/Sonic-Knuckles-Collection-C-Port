@@ -604,7 +604,7 @@ static void zone061chk0(void) {
 
   g_ram.zone_flag += 2;
   unlze_blocks(g_ram.blockwk, DAT_00633942);
-  unlze(g_ram.mapwk, DAT_0063a366);
+  unlze_screens(g_ram.mapwk, DAT_0063a366);
   unlze_moduled(&g_vram[0], DAT_00635f04);
   unlze_moduled(&g_vram[0xB400], DAT_0053025c);
 }

@@ -3,6 +3,7 @@
 
 typedef struct SKC_block SKC_block;
 typedef struct SKC_cg_data SKC_cg_data;
+typedef struct SKC_screen SKC_screen;
 
 void bitdevr(unsigned char* p_destination, unsigned char* p_source);
 void divdevset(unsigned short id);
@@ -13,5 +14,6 @@ void mapdevr(unsigned char* p_destination, unsigned char* p_source, unsigned sho
 unsigned char* unlze(unsigned char* p_destination, unsigned char* p_source);
 void unlze_moduled(unsigned char* p_destination, unsigned char* p_source);
 unsigned short unlze_blocks(SKC_block* p_destination, unsigned char* p_source);
+unsigned short unlze_screens(SKC_screen* p_destination, unsigned char* p_source);
 
 #endif

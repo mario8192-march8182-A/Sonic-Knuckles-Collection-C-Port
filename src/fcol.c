@@ -3,6 +3,7 @@
 #include <stdlib.h>
 #include "data/scd.h"
 #include "data/zonemaptbl.h"
+#include "types/blockname.h"
 #include "types/sonic3ram.h"
 #include "types/spritestatus.h"
 #include "utils/fp16.h"
@@ -15,7 +16,7 @@ static bool fcol_d(SKC_sprite_status* p_actwk);
 static bool fcol_r(SKC_sprite_status* p_actwk);
 static bool fcol_u(SKC_sprite_status* p_actwk);
 static bool fcol_l(SKC_sprite_status* p_actwk);
-static unsigned short scramapad(short xposi, short yposi, unsigned short* p_zonemap_row_offsets);
+static SKC_block_name scramapad(short xposi, short yposi, unsigned short* p_zonemap_row_offsets);
 static signed char scdend(short xposi, short yposi, short yoffset, unsigned short blk_msk, unsigned char solid_bit, unsigned char* p_dirstk, unsigned short* p_zonemap_row_offsets);
 static signed char scdend2(short xposi, short yposi, short yoffset, unsigned short blk_msk, unsigned char solid_bit, unsigned char* p_dirstk, unsigned short* p_zonemap_row_offsets);
 static signed char scdchk(short xposi, short yposi, short yoffset, unsigned short blk_msk, unsigned char solid_bit, unsigned char* p_dirstk, unsigned short* p_zonemap_row_offsets);
@@ -232,13 +233,12 @@ static bool fcol_l(SKC_sprite_status* p_actwk) {
 }
 
 
-static unsigned short scramapad(short xposi, short yposi, unsigned short* p_zonemap_row_offsets) {
+static SKC_block_name scramapad(short xposi, short yposi, unsigned short* p_zonemap_row_offsets) {
   unsigned short yposi_wk = (yposi / 32) & g_ram.scr_row;
   unsigned short offset = p_zonemap_row_offsets[yposi_wk / 2] + xposi / 128;
   unsigned char screen_no = g_ram.zonemapwk.data[offset];
-  unsigned short block_offset = screen_no * 128 + (yposi & 0x0070) + (xposi / 8 & 0x000E);
-  unsigned short block_no = g_ram.mapwk[block_offset] << 8 | g_ram.mapwk[block_offset + 1];
-  return block_no;
+  SKC_block_name block_name = g_ram.mapwk[screen_no].blocks[yposi / 16 % 8][xposi / 16 % 8];
+  return block_name;
 }
 
 
@@ -272,29 +272,29 @@ static signed char scdend2(short xposi, short yposi, short yoffset, unsigned sho
 
 
 static signed char scdchk(short xposi, short yposi, short yoffset, unsigned short blk_msk, unsigned char solid_bit, unsigned char* p_dirstk, unsigned short* p_zonemap_row_offsets) {
-  unsigned short blk_no = scramapad(xposi, yposi, p_zonemap_row_offsets);
-  unsigned short blk_offset = blk_no & 0x3FF;
-  if (blk_offset == 0 || !BIT_IS_SET(blk_no, solid_bit)) {
+  SKC_block_name block = scramapad(xposi, yposi, p_zonemap_row_offsets);
+  if (block.index == 0 || !BIT_IS_SET(block.scd, solid_bit - BLOCKNAME_BIT_SCD)) {
     return scdend(xposi, yposi, yoffset, blk_msk, solid_bit, p_dirstk, p_zonemap_row_offsets);
   }
-  unsigned char scd_no = g_ram.scdadr[blk_offset * 2];
+  unsigned char scd_no = g_ram.scdadr[block.index * 2];
   if (scd_no == 0) {
     return scdend(xposi, yposi, yoffset, blk_msk, solid_bit, p_dirstk, p_zonemap_row_offsets);
   }
   unsigned char direction_wk = scddirtbl[scd_no];
   short xposi_wk = xposi;
-  if (BIT_IS_SET(blk_no, 10)) {
+  if (block.hf == 1) {
     xposi_wk = -xposi_wk - 1;
     direction_wk = direction_hmirror(direction_wk);
   }
-  if (BIT_IS_SET(blk_no, 11)) {
+  if (block.vf == 1) {
     direction_wk = direction_vmirror(direction_wk);
   }
   *p_dirstk = direction_wk;
   xposi_wk = (unsigned short)xposi_wk & 0x000F;
   signed char scd_data = scdtbl[scd_no][xposi_wk];
-  blk_no ^= blk_msk;
-  if (BIT_IS_SET(blk_no, 11)) {
+  block.hf ^= blk_msk >> BLOCKNAME_BIT_HF;
+  block.vf ^= blk_msk >> BLOCKNAME_BIT_VF;
+  if (block.vf == 1) {
     scd_data = -scd_data;
   }
   if (scd_data == 0) {
@@ -316,29 +316,29 @@ static signed char scdchk(short xposi, short yposi, short yoffset, unsigned shor
 
 
 static signed char scdchk2(short xposi, short yposi, unsigned short blk_msk, unsigned char solid_bit, unsigned char* p_dirstk, unsigned short* p_zonemap_row_offsets) {
-  unsigned short blk_no = scramapad(xposi, yposi, p_zonemap_row_offsets);
-  unsigned short blk_offset = blk_no & 0x3FF;
-  if (blk_offset == 0 || !BIT_IS_SET(blk_no, solid_bit)) {
+  SKC_block_name block = scramapad(xposi, yposi, p_zonemap_row_offsets);
+  if (block.index == 0 || !BIT_IS_SET(block.scd, solid_bit - BLOCKNAME_BIT_SCD)) {
     return 15 - (signed char)((unsigned short)yposi & 0x000F);
   }
-  unsigned char scd_no = g_ram.scdadr[blk_offset * 2];
+  unsigned char scd_no = g_ram.scdadr[block.index * 2];
   if (scd_no == 0) {
     return 15 - (signed char)((unsigned short)yposi & 0x000F);
   }
   unsigned char direction_wk = scddirtbl[scd_no];
   short xposi_wk = xposi;
-  if (BIT_IS_SET(blk_no, 10)) {
+  if (block.hf == 1) {
     xposi_wk = -xposi_wk - 1;
     direction_wk = direction_hmirror(direction_wk);
   }
-  if (BIT_IS_SET(blk_no, 11)) {
+  if (block.vf == 1) {
     direction_wk = direction_vmirror(direction_wk);
   }
   *p_dirstk = direction_wk;
   xposi_wk = (unsigned short)xposi_wk & 0x000F;
   signed char scd_data = scdtbl[scd_no][xposi_wk];
-  blk_no ^= blk_msk;
-  if (BIT_IS_SET(blk_no, 11)) {
+  block.hf ^= blk_msk >> BLOCKNAME_BIT_HF;
+  block.vf ^= blk_msk >> BLOCKNAME_BIT_VF;
+  if (block.vf == 1) {
     scd_data = -scd_data;
   }
   if (scd_data == 0) {
@@ -373,29 +373,29 @@ signed char flyringscd2chk(short xposi, short yposi, short yoffset, unsigned sho
 
 
 static unsigned char flyringscdchk(short xposi, short yposi, short yoffset, unsigned short blk_msk, unsigned char solid_bit, unsigned char* p_dirstk, unsigned short* p_zonemap_row_offsets) {
-  unsigned short blk_no = scramapad(xposi, yposi, p_zonemap_row_offsets);
-  unsigned short blk_offset = blk_no & 0x3FF;
-  if (blk_offset == 0 || !BIT_IS_SET(blk_no, solid_bit)) {
+  SKC_block_name block = scramapad(xposi, yposi, p_zonemap_row_offsets);
+  if (block.index == 0 || !BIT_IS_SET(block.scd, solid_bit - BLOCKNAME_BIT_SCD)) {
     return 16;
   }
-  unsigned char scd_no = g_ram.scdadr[blk_offset * 2];
+  unsigned char scd_no = g_ram.scdadr[block.index * 2];
   if (scd_no == 0) {
     return 16;
   }
   unsigned char direction_wk = scddirtbl[scd_no];
   short xposi_wk = xposi;
-  if (BIT_IS_SET(blk_no, 10)) {
+  if (block.hf == 1) {
     xposi_wk = -xposi_wk - 1;
     direction_wk = direction_hmirror(direction_wk);
   }
-  if (BIT_IS_SET(blk_no, 11)) {
+  if (block.vf == 1) {
     direction_wk = direction_vmirror(direction_wk);
   }
   *p_dirstk = direction_wk;
   xposi_wk = (unsigned short)xposi_wk & 0x000F;
   signed char scd_data = scdtbl[scd_no][xposi_wk];
-  blk_no ^= blk_msk;
-  if (BIT_IS_SET(blk_no, 11)) {
+  block.hf ^= blk_msk >> BLOCKNAME_BIT_HF;
+  block.vf ^= blk_msk >> BLOCKNAME_BIT_VF;
+  if (block.vf == 1) {
     scd_data = -scd_data;
   }
   if (scd_data == 0) {
@@ -441,29 +441,29 @@ signed char scd2chk_r(short xposi, short yposi, short yoffset, unsigned short bl
 
 
 static signed char scdchk_r(short xposi, short yposi, short yoffset, unsigned short blk_msk, unsigned char solid_bit, unsigned char* p_dirstk, unsigned short* p_zonemap_row_offsets) {
-  unsigned short blk_no = scramapad(xposi, yposi, p_zonemap_row_offsets);
-  unsigned short blk_offset = blk_no & 0x3FF;
-  if (blk_offset == 0 || !BIT_IS_SET(blk_no, solid_bit)) {
+  SKC_block_name block = scramapad(xposi, yposi, p_zonemap_row_offsets);
+  if (block.index == 0 || !BIT_IS_SET(block.scd, solid_bit - BLOCKNAME_BIT_SCD)) {
     return scdend_r(xposi, yposi, yoffset, blk_msk, solid_bit, p_dirstk, p_zonemap_row_offsets);
   }
-  unsigned char scd_no = g_ram.scdadr[blk_offset * 2];
+  unsigned char scd_no = g_ram.scdadr[block.index * 2];
   if (scd_no == 0) {
     return scdend_r(xposi, yposi, yoffset, blk_msk, solid_bit, p_dirstk, p_zonemap_row_offsets);
   }
   unsigned char direction_wk = scddirtbl[scd_no];
   short yposi_wk = yposi;
-  if (BIT_IS_SET(blk_no, 11)) {
+  if (block.vf == 1) {
     yposi_wk = -yposi_wk - 1;
     direction_wk = direction_vmirror(direction_wk);
   }
-  if (BIT_IS_SET(blk_no, 10)) {
+  if (block.hf == 1) {
     direction_wk = direction_hmirror(direction_wk);
   }
   *p_dirstk = direction_wk;
   yposi_wk = (unsigned short)yposi_wk & 0x000F;
   signed char scd_data = scdtbl[scd_no][yposi_wk];
-  blk_no ^= blk_msk;
-  if (BIT_IS_SET(blk_no, 10)) {
+  block.hf ^= blk_msk >> BLOCKNAME_BIT_HF;
+  block.vf ^= blk_msk >> BLOCKNAME_BIT_VF;
+  if (block.hf == 1) {
     scd_data = -scd_data;
   }
   if (scd_data == 0) {
@@ -497,29 +497,29 @@ static signed char scdend2_r(short xposi, short yposi, short yoffset, unsigned s
 
 
 static signed char scdchk2_r(short xposi, short yposi, unsigned short blk_msk, unsigned char solid_bit, unsigned char* p_dirstk, unsigned short* p_zonemap_row_offsets) {
-  unsigned short blk_no = scramapad(xposi, yposi, p_zonemap_row_offsets);
-  unsigned short blk_offset = blk_no & 0x3FF;
-  if (blk_offset == 0 || !BIT_IS_SET(blk_no, solid_bit)) {
+  SKC_block_name block = scramapad(xposi, yposi, p_zonemap_row_offsets);
+  if (block.index == 0 || !BIT_IS_SET(block.scd, solid_bit - BLOCKNAME_BIT_SCD)) {
     return 15 - (signed char)((unsigned short)xposi & 0x000F);
   }
-  unsigned char scd_no = g_ram.scdadr[blk_offset * 2];
+  unsigned char scd_no = g_ram.scdadr[block.index * 2];
   if (scd_no == 0) {
     return 15 - (signed char)((unsigned short)xposi & 0x000F);
   }
   unsigned char direction_wk = scddirtbl[scd_no];
   short yposi_wk = yposi;
-  if (BIT_IS_SET(blk_no, 11)) {
+  if (block.vf == 1) {
     yposi_wk = -yposi_wk - 1;
     direction_wk = direction_vmirror(direction_wk);
   }
-  if (BIT_IS_SET(blk_no, 10)) {
+  if (block.hf == 1) {
     direction_wk = direction_hmirror(direction_wk);
   }
   *p_dirstk = direction_wk;
   yposi_wk = (unsigned short)yposi_wk & 0x000F;
   signed char scd_data = scdtbl2[scd_no][yposi_wk];
-  blk_no ^= blk_msk;
-  if (BIT_IS_SET(blk_no, 10)) {
+  block.hf ^= blk_msk >> BLOCKNAME_BIT_HF;
+  block.vf ^= blk_msk >> BLOCKNAME_BIT_VF;
+  if (block.hf == 1) {
     scd_data = -scd_data;
   }
   if (scd_data == 0) {
