@@ -392,6 +392,55 @@ static scr_evta_000_init(void) {
 }
 
 
+// Adjust_AIZ1Chunks
+// 0x006b1f29
+// line 104441
+static Adjust_AIZ1Chunks(void) {
+  if (g_ram.play_type == PLAY_TYPE_KNUCKLES) return;
+
+  memcpy(&g_ram.colorwk2[56], DAT_006b2156, sizeof(unsigned short) * 4);
+  SKC_block_name block = { 75, 0, 0, 0 };
+
+  for (int i = 0; i < 8; ++i) {
+    g_ram.mapwk[152].blocks[14][i] = block;
+    g_ram.mapwk[153].blocks[14][i] = block;
+    g_ram.mapwk[154].blocks[14][i] = block;
+    g_ram.mapwk[165].blocks[14][i] = block;
+    g_ram.mapwk[147].blocks[0][i] = block;
+    g_ram.mapwk[155].blocks[0][i] = block;
+    g_ram.mapwk[104].blocks[4][i] = block;
+  }
+
+  g_ram.mapwk[104].blocks[5][0] = (SKC_block_name){ 2, 1, 0, 0 };
+
+  for (int i = 0; i < 6; ++i) {
+    g_ram.mapwk[104].blocks[5][1 + i] = block;
+  }
+
+  g_ram.mapwk[104].blocks[5][7] = (SKC_block_name){ 2, 0, 0, 0 };
+
+  for (int i = 0; i < 8; ++i) {
+    g_ram.mapwk[127].blocks[4][i] = block;
+  }
+
+  g_ram.mapwk[127].blocks[4][2] = (SKC_block_name){ 12, 0, 0, 0 };
+  g_ram.mapwk[127].blocks[4][3] = (SKC_block_name){ 6, 1, 0, 0 };
+  g_ram.mapwk[127].blocks[4][4] = block;
+  g_ram.mapwk[127].blocks[4][5] = block;
+  g_ram.mapwk[127].blocks[4][7] = (SKC_block_name){ 10, 1, 0, 0 };
+  g_ram.mapwk[176].blocks[4][0] = (SKC_block_name){ 11, 1, 0, 0 };
+
+  for (int i = 0; i < 6; ++i) {
+    g_ram.mapwk[176].blocks[4][1 + i] = block;
+  }
+
+  g_ram.mapwk[176].blocks[5][2] = (SKC_block_name){ 12, 0, 0, 0 };
+  g_ram.mapwk[176].blocks[5][3] = (SKC_block_name){ 6, 1, 0, 0 };
+  g_ram.mapwk[176].blocks[5][4] = block;
+  g_ram.mapwk[176].blocks[5][5] = block;
+}
+
+
 static void LAB_006b34f3(void) {
   g_ram.frame_offset_x = 0;
   short scra_h = (g_ram.scra_h_posit >> 16) + 4;
