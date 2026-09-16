@@ -2905,7 +2905,7 @@ static void nuckle0a0_jump1(SKC_sprite_status* p_actwk) {
       p_actwk->actflg.hflip = 0;
       p_actwk->u.obj.actflg0.flicker = 1;
       p_actwk->patno = 1;
-      g_ram.DAT_08ffeedb = 0xFF;
+      g_ram.scr_work4 = 0xFF00 | g_ram.scr_work4 & 0x00FF;
       soundset(91);
       pg_init(p_actwk, tired_pg01);
     }

@@ -104,6 +104,8 @@ typedef struct sonic3_ram {
   /* 08ffee7c */ long scra_v_posit;
   /* 08ffee80 */ long scra_h_posit_copy;
   /* 08ffee84 */ long scra_v_posit_copy;
+  /* 08ffee88 */ short scra_h_posit_blk;
+  /* 08ffee8a */ short scra_v_posit_blk;
   /* 08ffee8c */ long scrb_h_posit;
   /* 08ffee90 */ long scrb_v_posit;
   /* 08ffee9c */ short DAT_08ffee9c;
@@ -117,8 +119,11 @@ typedef struct sonic3_ram {
   /* 08ffeec4 */ unsigned short DAT_08ffeec4;
   /* 08ffeec6 */ unsigned short DAT_08ffeec6;
   /* 08ffeecc */ short scr_shake_flg;
-  /* 08ffeed2 */ unsigned short DAT_08ffeed2;
-  /* 08ffeedb */ unsigned char DAT_08ffeedb;
+  /* 08ffeed2 */ unsigned short scr_work0;
+  /* 08ffeed4 */ unsigned short scr_work1;
+  /* 08ffeed8 */ unsigned short scr_work3;
+  /* 08ffeeda */ unsigned short scr_work4;
+  /* 08ffeedc */ unsigned short scr_work5;
   /* 08ffeee2 */ short DAT_08ffeee2;
   /* 08ffeee4 */ short DAT_08ffeee4;
   /* 08ffeee6 */ short DAT_08ffeee6;
@@ -145,6 +150,7 @@ typedef struct sonic3_ram {
   /* 08ffef80 */ unsigned short ringbuffer[RINGBUFFER_SLOTS];
   /* 08fff000 */ unsigned short colorwk4[64];
   /* 08fff080 */ unsigned short colorwk3[64];
+  /* 08fff100 */ unsigned short scrollbuff[576];
   /* 08fff600 */ unsigned short gmmode;
   /* 08fff602 */ SKC_swdata swdata;
   /* 08fff604 */ SKC_swdata swdata1;

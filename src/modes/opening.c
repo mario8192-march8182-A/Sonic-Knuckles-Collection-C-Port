@@ -283,8 +283,8 @@ void opening(void) {
   g_ram.scra_v_posit = 0;
   g_ram.scra_h_posit_copy = 0;
   g_ram.scra_v_posit_copy = 0;
-  // DAT_08ffee88
-  // DAT_08ffee8a
+  g_ram.scra_h_posit_blk = 0;
+  g_ram.scra_v_posit_blk = 0;
   g_ram.scrb_h_posit = 0;
   g_ram.scrb_v_posit = 0;
   // DAT_08ffee94
@@ -318,13 +318,12 @@ void opening(void) {
   g_ram.scr_shake_flg = 0;
   // DAT_08ffeece
   // DAT_08ffeed0
-  g_ram.DAT_08ffeed2 = 0;
-  // DAT_08ffeed4
+  g_ram.scr_work0 = 0;
+  g_ram.scr_work1 = 0;
   // DAT_08ffeed6
-  // DAT_08ffeed8
-  // DAT_08ffeeda
-  g_ram.DAT_08ffeedb = 0;
-  // DAT_08ffeedc
+  g_ram.scr_work3 = 0;
+  g_ram.scr_work4 = 0;
+  g_ram.scr_work5 = 0;
   // DAT_08ffeede
   // DAT_08ffeedf
   // DAT_08ffeee0
@@ -1437,7 +1436,7 @@ static void deathegg_move0(SKC_sprite_status* p_actwk) {
     fp16_set_integer(&p_actwk->u.obj.actfree.deathegg.xposiwk, fp16_get_integer(p_actwk->xposi));
     fp16_set_integer(&p_actwk->u.obj.actfree.deathegg.yposiwk, fp16_get_integer(p_actwk->yposi));
     g_ram.vs_scra_v_posit = g_ram.vs_scra_v_posit & 0xFFFF0000 | 0x8000;
-    g_ram.DAT_08ffeed2 = 34;
+    g_ram.scr_work0 = 34;
     g_ram.scr_evta = 1;
     g_ram.scr_shake_flg = 30;
     p_actwk->r_ptr = &deathegg_move1;
@@ -1798,8 +1797,8 @@ static void skopening_scroll(void) {
       }
       break;
     case 2:
-      --g_ram.DAT_08ffeed2;
-      if (g_ram.DAT_08ffeed2 == 0) {
+      --g_ram.scr_work0;
+      if (g_ram.scr_work0 == 0) {
         ++g_ram.scr_evta;
         memset(&g_vram[0xC500], 0, 1024);
         memcpy(&g_ram.colorwk[16], knuckles_color, sizeof(unsigned short) * 16);
