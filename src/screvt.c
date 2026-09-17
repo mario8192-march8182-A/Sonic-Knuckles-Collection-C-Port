@@ -11,37 +11,6 @@ static void scrollwrt0(unsigned short* p_buffer);
 static void hblockwrt(unsigned short** pp_buffer, unsigned short vram_adr, unsigned short cnt);
 static void vblockwrt(unsigned short** pp_buffer, unsigned short vram_adr, unsigned short cnt);
 static void vsscrollwrt(void);
-static void hblockwrt2(unsigned short* p_scrollbuff, short xposi, short yposi, unsigned short blk_cnt, unsigned short* p_zonemap_row_offsets, unsigned short vram_base);
-static void hblockwrt2_sub(unsigned short** pp_scrollbuff, SKC_block_name (*p_blk_row)[8], short xposi, short yposi, unsigned short wrt_cnt, unsigned char* p_screen_row);
-static unsigned char* Get_LevelAddr(short xposi, short yposi, unsigned short* p_zonemap_row_offsets);
-static (SKC_block_name*)[8] Get_ChunkRow(short xposi, short yposi, unsigned char* p_screen_row);
-static void scr_reset(short scr_h_posit, short scr_v_posit_blk, unsigned short* p_zonemap_row_offsets, unsigned short vram_base);
-static void scra_posit_blk_set(void);
-static void worknai(void);
-static void scr_shake(void);
-static signed char shake_ofs_tbl[20];
-
-static void worknai(void);
-
-static void LAB_006b34f3(void);
-static void FUN_006b362a(SKC_sprite_status p_playerwk, short scra_h);
-
-static void LAB_006c2367(void);
-
-static void LAB_006c5cd1(void);
-
-static void LAB_006c7860(void);
-static void FUN_006c7a66(SKC_sprite_status p_playerwk, short scra_h);
-
-static void LAB_006c8ca5(void);
-static void LAB_006c8d00(void);
-static void LAB_006c8d31(void);
-static void LAB_006c8d71(void);
-static void LAB_006c8da2(void);
-static void LAB_006c8de2(void);
-static void LAB_006c8e13(void);
-static void LAB_006c8e47(void);
-static void FUN_006c8fa6(SKC_sprite_status* p_playerwk, short scra_h, long xoffset);
 
 extern sonic3_ram g_ram;
 extern unsigned long g_vdp_window_yposi;
