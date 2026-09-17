@@ -182,6 +182,14 @@ void SpecialVInt_LBZ2WindowClear(void) {
 }
 
 
+// Draw_TileColumn
+// Draw_TileColumn2
+// Setup_TileColumnDraw
+// Get_LevelChunkColumn
+// Draw_TileRow
+// Draw_TileRow2
+
+
 // Setup_TileRowDraw
 // 0x006ad96b
 // line 102871
@@ -283,6 +291,10 @@ static (SKC_block_name*)[8] Get_ChunkRow(short xposi, short yposi, unsigned char
 }
 
 
+// Setup_TileRowDraw_Competition
+// sub_4ECAA
+
+
 // Refresh_PlaneFull
 // 0x006adfab
 // line 103058
@@ -295,6 +307,43 @@ static void scr_reset(short scr_h_posit, short scr_v_posit_blk, unsigned short* 
 }
 
 
+// Refresh_PlaneTileDeform
+// Refresh_PlaneDirectVScroll
+// Refresh_PlaneFull_Competition
+// Refresh_PlaneFullDirect
+// Refresh_PlaneScreenDirect
+// Refresh_PlaneDirect2
+// Refresh_PlaneDirect
+// DrawTilesAsYouMove
+// DrawBGAsYouMove
+// loc_4EDD8
+// Draw_BG
+// Get_DeformDrawPosVert
+// sub_4EE8E
+// DrawTilesVDeform
+// DrawTilesVDeform2
+// Get_XDeformRange
+// sub_4EF46
+// Draw_PlaneVertBottomUp
+// Draw_PlaneVertSingleBottomUp
+// Draw_PlaneVertTopDown
+// Draw_PlaneHorzRightToLeft
+// sub_4EFCA
+// Draw_PlaneHorzLeftToRight
+// sub_4F004
+// Draw_PlaneVertBottomUpComplex
+// sub_4F03E
+// PlainDeformation
+// PlainDeformation_Flipped
+// MakeFGDeformArray
+// ApplyDeformation
+// ApplyDeformation3
+// ApplyDeformation2
+// ApplyFGDeformation
+// ApplyFGandBGDeformation
+// Apply_FGVScroll
+
+
 // Reset_TileOffsetPositionActual
 // 0x006aff3e
 // line 104030
@@ -302,6 +351,11 @@ static void scra_posit_blk_set(void) {
   g_ram.scra_h_posit_blk = g_ram.scra_h_posit_copy >> 16 & 0xFFF0;
   g_ram.scra_v_posit_blk = g_ram.scra_v_posit_copy >> 16 & g_ram.DAT_08ffeeac;
 }
+
+
+// Reset_TileOffsetPositionEff
+// Update_CameraPositionP2
+// Update_VScrollValueP2
 
 
 // 006b005a
