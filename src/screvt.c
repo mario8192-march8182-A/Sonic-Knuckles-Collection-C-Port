@@ -427,6 +427,86 @@ static scr_evta_000_init(SKC_screvt_context* p_context) {
 }
 
 
+static scr_evta_000(SKC_screvt_context* p_context) {
+  DrawTilesAsYouMove();
+  if (g_ram.DAT_08ffeec4 != 0) {
+    bool chg = true;
+    if (g_ram.scra_h_posit >> 16 < 0x2D30 && g_ram.DAT_08ffeec4 < 57) {
+      if (g_ram.DAT_08ffeec4 >= 52) {
+        FUN_006b1df0(p_context);
+      }
+      else if (g_ram.DAT_08ffeec4 >= 36) {
+        FUN_006b1e1e(p_context);
+      }
+      else if (g_ram.DAT_08ffeec4 >= 20) {
+        FUN_006b1e4c(p_context);
+      }
+      //a6 = DAT_006b0952;
+      if (!(g_ram.DAT_08ffeec4 & 1)) {
+        //a6 += 16;
+      }
+      unsigned short wk = (g_ram.DAT_08ffeec4 - 1) / 2;
+      g_ram.scr_work0 = wk;
+      if (wk >= 3) {
+        g_ram.scr_work0 = 2;
+      }
+      short yposi = -((short)wk * 16) + 1136;
+
+      do {
+        if (yposi < g_ram.scra_v_posit_blk) {
+          //a6 += 32;
+          yposi += 16;
+          chg = true;
+        }
+        else {
+          hblockwrt2(g_ram.scrollbuff, 0x2C80, yposi, 16, p_context);
+          yposi -= 640;
+          AIZ_TreeReveal();
+          //a6 += 16;
+          yposi += 656;
+          chg = false;
+        }
+      }
+      while (g_ram.scr_work0-- > 0);
+    }
+    if (chg) {
+      g_ram.DAT_08ffeec4 = 0;
+      unsigned short offset = p_context->screen_row_offset_ptr[10];
+      unsigned char* p_row = &g_ram.zonemapwk.data[offset];
+      p_row[90] = 88;
+      p_row[89] = 89;
+      FUN_006b1df0(p_context);
+    }
+  }
+}
+
+
+static void FUN_006b1df0(SKC_screvt_context* p_context) {
+  unsigned short offset = p_context->screen_row_offset_ptr[12];
+  unsigned char* p_row = &g_ram.zonemapwk.data[offset];
+  p_row[88] = 92;
+  p_row[91] = 90;
+  FUN_006b1e1e(p_context);
+}
+
+
+static void FUN_006b1e1e(SKC_screvt_context* p_context) {
+  unsigned short offset = p_context->screen_row_offset_ptr[14];
+  unsigned char* p_row = &g_ram.zonemapwk.data[offset];
+  p_row[90] = 91;
+  p_row[89] = 93;
+  FUN_006b1e4c(p_context);
+}
+
+
+static void FUN_006b1e4c(SKC_screvt_context* p_context) {
+  unsigned short offset = p_context->screen_row_offset_ptr[16];
+  unsigned char* p_row = &g_ram.zonemapwk.data[offset];
+  p_row[88] = 94;
+  p_row[91] = 95;
+}
+
+
 // Adjust_AIZ1Chunks
 // 0x006b1f29
 // line 104441
