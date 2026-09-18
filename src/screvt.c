@@ -91,6 +91,7 @@ void(*scr_evt_tbl[24][2][2][2])(SKC_screvt_context*) = {
 }
 
 
+// VInt_DrawLevel
 void scrollwrt(void) {
   scrollwrt0(g_ram.scrollbuff);
   if (g_ram.DAT_08ffef74 != 0) {
@@ -99,6 +100,7 @@ void scrollwrt(void) {
 }
 
 
+// VInt_DrawLevel_2
 static void scrollwrt0(unsigned short* p_buffer) {
   while (p_buffer[0] != 0) {
     unsigned short vram_adr = p_buffer[0];
@@ -130,6 +132,7 @@ static void hblockwrt(unsigned short** pp_buffer, unsigned short vram_adr, unsig
 }
 
 
+// VInt_DrawLevel_Col
 static void vblockwrt(unsigned short** pp_buffer, unsigned short vram_adr, unsigned short cnt) {
   unsigned char* p_vram = &g_vram[vram_adr];
 
