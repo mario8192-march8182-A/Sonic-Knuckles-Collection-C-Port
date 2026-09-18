@@ -205,7 +205,7 @@ void SpecialVInt_LBZ2WindowClear(void) {
 // Setup_TileRowDraw
 // 0x006ad96b
 // line 102871
-static void hblockwrt2(unsigned short* p_scrollbuff, short xposi, short yposi, unsigned short wrt_cnt, SKC_screvt_context* p_context) {
+static void Setup_TileRowDraw(unsigned short* p_scrollbuff, short xposi, short yposi, unsigned short wrt_cnt, SKC_screvt_context* p_context) {
   short cnt_to_edge = PLANE_WIDTH_BLOCKS - to_hblocks_in_plane(xposi);
   short cnt_to_edge_after_wrt = blk_cnt_to_edge - wrt_cnt;
   if (cnt_to_edge_after_wrt >= 0) {
@@ -217,7 +217,7 @@ static void hblockwrt2(unsigned short* p_scrollbuff, short xposi, short yposi, u
     *p_scrollbuff++ = wrt_cnt;
     unsigned char* p_screen_row = Get_LevelAddr(xposi, yposi, p_zonemap_row_offsets);
     SKC_block_name (*p_blk_row)[8] = Get_ChunkRow(xposi, yposi, p_screen_row);
-    hblockwrt2_sub(&p_scrollbuff, p_blk_row, xposi, yposi, wrt_cnt, p_screen_row);
+    TileRowDraw(&p_scrollbuff, p_blk_row, xposi, yposi, wrt_cnt, p_screen_row);
   }
   else {
     wrt_cnt = cnt_to_edge;
@@ -229,19 +229,19 @@ static void hblockwrt2(unsigned short* p_scrollbuff, short xposi, short yposi, u
     *p_scrollbuff++ = wrt_cnt;
     unsigned char* p_screen_row = Get_LevelAddr(xposi, yposi, p_zonemap_row_offsets);
     SKC_block_name (*p_blk_row)[8] = Get_ChunkRow(xposi, yposi, p_screen_row);
-    hblockwrt2_sub(&p_scrollbuff, p_blk_row, xposi, yposi, wrt_cnt, p_screen_row);
+    TileRowDraw(&p_scrollbuff, p_blk_row, xposi, yposi, wrt_cnt, p_screen_row);
     wrt_cnt = -cnt_to_edge_after_wrt;
     vram_adr = p_context->vram_base + to_vtiles_in_plane(yposi & 0xFFF0) * PLANE_WIDTH_TILES;
     vram_adr *= 2; // a tile is two bytes
     *p_scrollbuff++ = vram_adr;
     *p_scrollbuff++ = wrt_cnt;
     p_blk_row = Get_LevelAddr(xposi, yposi, p_zonemap_row_offsets);
-    hblockwrt2_sub(&p_scrollbuff, p_blk_row, xposi, yposi, wrt_cnt, p_screen_row);
+    TileRowDraw(&p_scrollbuff, p_blk_row, xposi, yposi, wrt_cnt, p_screen_row);
   }
 }
 
 
-static void hblockwrt2_sub(unsigned short** pp_scrollbuff, SKC_block_name (*p_blk_row)[8], short xposi, short yposi, unsigned short wrt_cnt, unsigned char* p_screen_row) {
+static void TileRowDraw(unsigned short** pp_scrollbuff, SKC_block_name (*p_blk_row)[8], short xposi, short yposi, unsigned short wrt_cnt, unsigned char* p_screen_row) {
   for (int i = 0; i < wrt_cnt; ++i) {
     SKC_block_name block_name = (*p_blk_row)[to_blocks_in_screen(xposi)];
     SKC_block block = g_ram.blockwk[block.index];
@@ -310,9 +310,9 @@ static (SKC_block_name*)[8] Get_ChunkRow(short xposi, short yposi, unsigned char
 // Refresh_PlaneFull
 // 0x006adfab
 // line 103058
-static void scr_reset(short scr_h_posit, short scr_v_posit_blk, SKC_screvt_context* p_context) {
+static void Refresh_PlaneFull(short scr_h_posit, short scr_v_posit_blk, SKC_screvt_context* p_context) {
   for (int i = 0; i < 16; ++i) {
-    hblockwrt2(g_ram.scrollbuff, scr_h_posit, scr_v_posit_blk, PLANE_WIDTH_BLOCKS, p_context);
+    Setup_TileRowDraw(g_ram.scrollbuff, scr_h_posit, scr_v_posit_blk, PLANE_WIDTH_BLOCKS, p_context);
     scrollwrt();
     scr_v_posit_blk += 16;
   }
@@ -359,7 +359,7 @@ static void scr_reset(short scr_h_posit, short scr_v_posit_blk, SKC_screvt_conte
 // Reset_TileOffsetPositionActual
 // 0x006aff3e
 // line 104030
-static void scra_posit_blk_set(void) {
+static void Reset_TileOffsetPositionActual(void) {
   g_ram.scra_h_posit_blk = g_ram.scra_h_posit_copy >> 16 & 0xFFF0;
   g_ram.scra_v_posit_blk = g_ram.scra_v_posit_copy >> 16 & g_ram.DAT_08ffeeac;
 }
@@ -422,8 +422,8 @@ static signed char shake_ofs_tbl[20] = {
 
 static scr_evta_000_init(SKC_screvt_context* p_context) {
   Adjust_AIZ1Chunks();
-  scra_posit_blk_set();
-  scr_reset();
+  Reset_TileOffsetPositionActual();
+  Refresh_PlaneFull();
 }
 
 
@@ -459,7 +459,7 @@ static scr_evta_000(SKC_screvt_context* p_context) {
           chg = true;
         }
         else {
-          hblockwrt2(g_ram.scrollbuff, 0x2C80, yposi, 16, p_context);
+          Setup_TileRowDraw(g_ram.scrollbuff, 0x2C80, yposi, 16, p_context);
           yposi -= 640;
           AIZ_TreeReveal();
           //a6 += 16;
