@@ -7,6 +7,10 @@
 #include "types/spritestatus.h"
 #include "utils/bits.h"
 #include "utils/fp16.h"
+typedef struct SKC_screvt_context {
+  unsigned short* screen_row_offset_ptr;
+  unsigned short vram_base;
+};
 static void scrollwrt0(unsigned short* p_buffer);
 static void hblockwrt(unsigned short** pp_buffer, unsigned short vram_adr, unsigned short cnt);
 static void vblockwrt(unsigned short** pp_buffer, unsigned short vram_adr, unsigned short cnt);
@@ -14,6 +18,8 @@ static void vsscrollwrt(void);
 
 extern sonic3_ram g_ram;
 extern unsigned long g_vdp_window_yposi;
+extern unsigned long g_vdp_scrolla_adr;
+extern unsigned long g_vdp_scrollb_adr;
 
 
 void scr_evt_init(void) {
@@ -50,8 +56,11 @@ void scr_evt_init(void) {
   g_ram.scr_row = 0x7C;
   g_ram.scra_h_posit_copy = g_ram.scra_h_posit & 0xFFFF0000 | g_ram.scra_h_posit_copy & 0x0000FFFF;
   g_ram.scra_v_posit_copy = g_ram.scra_v_posit & 0xFFFF0000 | g_ram.scra_v_posit_copy & 0x0000FFFF;
-  scr_evt_tbl[get_zone(g_ram.stageno)][0][get_act(g_ram.stageno)][0]();
-  scr_evt_tbl[get_zone(g_ram.stageno)][0][get_act(g_ram.stageno)][1]();
+  SKC_screvt_context context = { g_ram.zonemapwk.row_offsets, g_vdp_scrolla_adr };
+  scr_evt_tbl[get_zone(g_ram.stageno)][0][get_act(g_ram.stageno)][0](&context);
+  ++context.screen_row_offset_ptr;
+  context.vram_base = g_vdp_scrollb_adr;
+  scr_evt_tbl[get_zone(g_ram.stageno)][0][get_act(g_ram.stageno)][1](&context);
   g_ram.vscroll.a = g_ram.scra_v_posit_copy >> 16;
   g_ram.vscroll.b = g_ram.scrb_v_posit >> 16;
 }
@@ -61,14 +70,17 @@ void scr_evt_move(void) {
   g_ram.scra_h_posit_copy = g_ram.scra_h_posit & 0xFFFF0000 | g_ram.scra_h_posit_copy & 0x0000FFFF;
   g_ram.scra_v_posit_copy = g_ram.scra_v_posit & 0xFFFF0000 | g_ram.scra_v_posit_copy & 0x0000FFFF;
   scr_shake2();
-  scr_evt_tbl[get_zone(g_ram.stageno)][1][get_act(g_ram.stageno)][0]();
-  scr_evt_tbl[get_zone(g_ram.stageno)][1][get_act(g_ram.stageno)][1]();
+  SKC_screvt_context context = { g_ram.scrollbuff, g_ram.zonemapwk.row_offsets, g_vdp_scrolla_adr };
+  scr_evt_tbl[get_zone(g_ram.stageno)][1][get_act(g_ram.stageno)][0](&context);
+  ++context.screen_row_offset_ptr;
+  context.vram_base = g_vdp_scrollb_adr;
+  scr_evt_tbl[get_zone(g_ram.stageno)][1][get_act(g_ram.stageno)][1](&context);
   g_ram.vscroll.a = g_ram.scra_v_posit_copy >> 16;
   g_ram.vscroll.b = g_ram.scrb_v_posit >> 16;
 }
 
 
-void(*scr_evt_tbl[24][2][2][2])(void) = {
+void(*scr_evt_tbl[24][2][2][2])(SKC_screvt_context*) = {
   {
     {
       { &scr_evta_000_init, &scr_evtb_000_init }, { &scr_evta_001_init, &scr_evtb_001_init }
@@ -193,11 +205,11 @@ void SpecialVInt_LBZ2WindowClear(void) {
 // Setup_TileRowDraw
 // 0x006ad96b
 // line 102871
-static void hblockwrt2(unsigned short* p_scrollbuff, short xposi, short yposi, unsigned short wrt_cnt, unsigned short* p_zonemap_row_offsets, unsigned short vram_base) {
+static void hblockwrt2(unsigned short* p_scrollbuff, short xposi, short yposi, unsigned short wrt_cnt, SKC_screvt_context* p_context) {
   short cnt_to_edge = PLANE_WIDTH_BLOCKS - to_hblocks_in_plane(xposi);
   short cnt_to_edge_after_wrt = blk_cnt_to_edge - wrt_cnt;
   if (cnt_to_edge_after_wrt >= 0) {
-    unsigned short vram_adr = vram_base
+    unsigned short vram_adr = p_context->vram_base
                             + to_vtiles_in_plane(yposi & 0xFFF0) * PLANE_WIDTH_TILES
                             + to_htiles_in_plane(xposi);
     vram_adr *= 2; // a tile is two bytes
@@ -209,7 +221,7 @@ static void hblockwrt2(unsigned short* p_scrollbuff, short xposi, short yposi, u
   }
   else {
     wrt_cnt = cnt_to_edge;
-    unsigned short vram_adr = vram_base
+    unsigned short vram_adr = p_context->vram_base
                             + to_vtiles_in_plane(yposi & 0xFFF0) * PLANE_WIDTH_TILES
                             + to_htiles_in_plane(xposi);
     vram_adr *= 2; // a tile is two bytes
@@ -219,7 +231,7 @@ static void hblockwrt2(unsigned short* p_scrollbuff, short xposi, short yposi, u
     SKC_block_name (*p_blk_row)[8] = Get_ChunkRow(xposi, yposi, p_screen_row);
     hblockwrt2_sub(&p_scrollbuff, p_blk_row, xposi, yposi, wrt_cnt, p_screen_row);
     wrt_cnt = -cnt_to_edge_after_wrt;
-    vram_adr = vram_base + to_vtiles_in_plane(yposi & 0xFFF0) * PLANE_WIDTH_TILES;
+    vram_adr = p_context->vram_base + to_vtiles_in_plane(yposi & 0xFFF0) * PLANE_WIDTH_TILES;
     vram_adr *= 2; // a tile is two bytes
     *p_scrollbuff++ = vram_adr;
     *p_scrollbuff++ = wrt_cnt;
@@ -275,9 +287,9 @@ static void hblockwrt2_sub(unsigned short** pp_scrollbuff, SKC_block_name (*p_bl
 // Get_LevelAddrChunkRow
 // 0x006b4906
 // line 102977
-static unsigned char* Get_LevelAddr(short xposi, short yposi, unsigned short* p_zonemap_row_offsets) {
+static unsigned char* Get_LevelAddr(short xposi, short yposi, SKC_screvt_context* p_context) {
   unsigned short yposi_wk = yposi / 32 & g_ram.scr_row;
-  unsigned short offset = p_zonemap_row_offsets[yposi_wk / 2];
+  unsigned short offset = p_context->screen_row_offset_ptr[yposi_wk / 2];
   unsigned char* p_row = &zonemapwk.data[offset];
   return p_row;
 }
@@ -298,9 +310,9 @@ static (SKC_block_name*)[8] Get_ChunkRow(short xposi, short yposi, unsigned char
 // Refresh_PlaneFull
 // 0x006adfab
 // line 103058
-static void scr_reset(short scr_h_posit, short scr_v_posit_blk, unsigned short* p_zonemap_row_offsets, unsigned short vram_base) {
+static void scr_reset(short scr_h_posit, short scr_v_posit_blk, SKC_screvt_context* p_context) {
   for (int i = 0; i < 16; ++i) {
-    hblockwrt2(g_ram.scrollbuff, scr_h_posit, scr_v_posit_blk, PLANE_WIDTH_BLOCKS, p_zonemap_row_offsets, vram_base);
+    hblockwrt2(g_ram.scrollbuff, scr_h_posit, scr_v_posit_blk, PLANE_WIDTH_BLOCKS, p_context);
     scrollwrt();
     scr_v_posit_blk += 16;
   }
@@ -408,7 +420,7 @@ static signed char shake_ofs_tbl[20] = {
 };
 
 
-static scr_evta_000_init(void) {
+static scr_evta_000_init(SKC_screvt_context* p_context) {
   Adjust_AIZ1Chunks();
   scra_posit_blk_set();
   scr_reset();
