@@ -319,7 +319,14 @@ static void Refresh_PlaneFull(short scr_h_posit, short scr_v_posit_blk, SKC_scre
 // Refresh_PlaneScreenDirect
 // Refresh_PlaneDirect2
 // Refresh_PlaneDirect
-// DrawTilesAsYouMove
+
+
+static void DrawTilesAsYouMove(SKC_screvt_context* p_context) {
+  Draw_TileColumn(&g_ram.scra_h_posit_copy, &g_ram.scra_h_posit_blk, g_ram.scra_v_posit_copy >> 16, 16, p_context);
+  Draw_TileRow(&g_ram.scra_h_posit_copy, &g_ram.scra_v_posit_copy, g_ram.scra_v_posit_blk, 22, p_context);
+}
+
+
 // DrawBGAsYouMove
 // loc_4EDD8
 // Draw_BG
