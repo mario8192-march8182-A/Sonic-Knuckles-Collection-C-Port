@@ -202,9 +202,6 @@ void SpecialVInt_LBZ2WindowClear(void) {
 // Draw_TileRow2
 
 
-// Setup_TileRowDraw
-// 0x006ad96b
-// line 102871
 static void Setup_TileRowDraw(unsigned short* p_scrollbuff, short xposi, short yposi, unsigned short wrt_cnt, SKC_screvt_context* p_context) {
   short cnt_to_edge = PLANE_WIDTH_BLOCKS - to_hblocks_in_plane(xposi);
   short cnt_to_edge_after_wrt = blk_cnt_to_edge - wrt_cnt;
@@ -284,9 +281,6 @@ static void TileRowDraw(unsigned short** pp_scrollbuff, SKC_block_name (*p_blk_r
 }
 
 
-// Get_LevelAddrChunkRow
-// 0x006b4906
-// line 102977
 static unsigned char* Get_LevelAddr(short xposi, short yposi, SKC_screvt_context* p_context) {
   unsigned short yposi_wk = yposi / 32 & g_ram.scr_row;
   unsigned short offset = p_context->screen_row_offset_ptr[yposi_wk / 2];
@@ -295,7 +289,6 @@ static unsigned char* Get_LevelAddr(short xposi, short yposi, SKC_screvt_context
 }
 
 
-// right below
 static (SKC_block_name*)[8] Get_ChunkRow(short xposi, short yposi, unsigned char* p_screen_row) {
   unsigned char screen_no = p_zonemap_row[to_blocks(xposi)];
   SKC_block_name (*p_row)[8] = g_ram.mapwk[screen_no].blocks[to_blocks_in_screen(yposi)];
@@ -307,9 +300,6 @@ static (SKC_block_name*)[8] Get_ChunkRow(short xposi, short yposi, unsigned char
 // sub_4ECAA
 
 
-// Refresh_PlaneFull
-// 0x006adfab
-// line 103058
 static void Refresh_PlaneFull(short scr_h_posit, short scr_v_posit_blk, SKC_screvt_context* p_context) {
   for (int i = 0; i < 16; ++i) {
     Setup_TileRowDraw(g_ram.scrollbuff, scr_h_posit, scr_v_posit_blk, PLANE_WIDTH_BLOCKS, p_context);
@@ -356,9 +346,6 @@ static void Refresh_PlaneFull(short scr_h_posit, short scr_v_posit_blk, SKC_scre
 // Apply_FGVScroll
 
 
-// Reset_TileOffsetPositionActual
-// 0x006aff3e
-// line 104030
 static void Reset_TileOffsetPositionActual(void) {
   g_ram.scra_h_posit_blk = g_ram.scra_h_posit_copy >> 16 & 0xFFF0;
   g_ram.scra_v_posit_blk = g_ram.scra_v_posit_copy >> 16 & g_ram.DAT_08ffeeac;
@@ -370,8 +357,6 @@ static void Reset_TileOffsetPositionActual(void) {
 // Update_VScrollValueP2
 
 
-// 006b005a
-// line 104081
 void SpecialEvents(void) {
   void(*act_tbl[6])(void) = {
     &worknai,
@@ -507,9 +492,6 @@ static void FUN_006b1e4c(SKC_screvt_context* p_context) {
 }
 
 
-// Adjust_AIZ1Chunks
-// 0x006b1f29
-// line 104441
 static Adjust_AIZ1Chunks(void) {
   if (g_ram.play_type == PLAY_TYPE_KNUCKLES) return;
 
