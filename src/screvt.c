@@ -207,7 +207,7 @@ void SpecialVInt_LBZ2WindowClear(void) {
 
 static void Setup_TileRowDraw(unsigned short* p_scrollbuff, short xposi, short yposi, unsigned short wrt_cnt, SKC_screvt_context* p_context) {
   short cnt_to_edge = PLANE_WIDTH_BLOCKS - to_hblocks_in_plane(xposi);
-  short cnt_to_edge_after_wrt = blk_cnt_to_edge - wrt_cnt;
+  short cnt_to_edge_after_wrt = cnt_to_edge - wrt_cnt;
   if (cnt_to_edge_after_wrt >= 0) {
     unsigned short vram_adr = p_context->vram_base
                             + to_vtiles_in_plane(yposi & 0xFFF0) * PLANE_WIDTH_TILES
@@ -215,8 +215,8 @@ static void Setup_TileRowDraw(unsigned short* p_scrollbuff, short xposi, short y
     vram_adr *= 2; // a tile is two bytes
     *p_scrollbuff++ = vram_adr;
     *p_scrollbuff++ = wrt_cnt;
-    unsigned char* p_screen_row = Get_LevelAddr(xposi, yposi, p_zonemap_row_offsets);
-    SKC_block_name (*p_blk_row)[8] = Get_ChunkRow(xposi, yposi, p_screen_row);
+    unsigned char* p_screen_row = Get_LevelAddrChunkRow(xposi, yposi, p_zonemap_row_offsets);
+    SKC_block_name* p_blk_row = Get_ChunkRow(xposi, yposi, p_screen_row);
     TileRowDraw(&p_scrollbuff, p_blk_row, xposi, yposi, wrt_cnt, p_screen_row);
   }
   else {
@@ -227,23 +227,24 @@ static void Setup_TileRowDraw(unsigned short* p_scrollbuff, short xposi, short y
     vram_adr *= 2; // a tile is two bytes
     *p_scrollbuff++ = vram_adr;
     *p_scrollbuff++ = wrt_cnt;
-    unsigned char* p_screen_row = Get_LevelAddr(xposi, yposi, p_zonemap_row_offsets);
-    SKC_block_name (*p_blk_row)[8] = Get_ChunkRow(xposi, yposi, p_screen_row);
+    unsigned char* p_screen_row = Get_LevelAddrChunkRow(xposi, yposi, p_zonemap_row_offsets);
+    SKC_block_name* p_blk_row = Get_ChunkRow(xposi, yposi, p_screen_row);
     TileRowDraw(&p_scrollbuff, p_blk_row, xposi, yposi, wrt_cnt, p_screen_row);
     wrt_cnt = -cnt_to_edge_after_wrt;
     vram_adr = p_context->vram_base + to_vtiles_in_plane(yposi & 0xFFF0) * PLANE_WIDTH_TILES;
     vram_adr *= 2; // a tile is two bytes
     *p_scrollbuff++ = vram_adr;
     *p_scrollbuff++ = wrt_cnt;
-    p_blk_row = Get_LevelAddr(xposi, yposi, p_zonemap_row_offsets);
+    unsigned char* p_screen_row = Get_LevelAddrChunkRow(xposi, yposi, p_zonemap_row_offsets);
+    p_blk_row = Get_ChunkRow(xposi, yposi, p_screen_row);
     TileRowDraw(&p_scrollbuff, p_blk_row, xposi, yposi, wrt_cnt, p_screen_row);
   }
 }
 
 
-static void TileRowDraw(unsigned short** pp_scrollbuff, SKC_block_name (*p_blk_row)[8], short xposi, short yposi, unsigned short wrt_cnt, unsigned char* p_screen_row) {
+static void TileRowDraw(unsigned short** pp_scrollbuff, SKC_block_name* p_blk_row, short xposi, short yposi, unsigned short wrt_cnt, unsigned char* p_screen_row) {
   for (int i = 0; i < wrt_cnt; ++i) {
-    SKC_block_name block_name = (*p_blk_row)[to_blocks_in_screen(xposi)];
+    SKC_block_name block_name = p_blk_row[to_blocks_in_screen(xposi)];
     SKC_block block = g_ram.blockwk[block.index];
     if (block_name.vf == 1) {
       block.patterns[0][0].vf ^= 1;
@@ -284,7 +285,7 @@ static void TileRowDraw(unsigned short** pp_scrollbuff, SKC_block_name (*p_blk_r
 }
 
 
-static unsigned char* Get_LevelAddr(short xposi, short yposi, SKC_screvt_context* p_context) {
+static unsigned char* Get_LevelAddrChunkRow(short xposi, short yposi, SKC_screvt_context* p_context) {
   unsigned short yposi_wk = yposi / 32 & g_ram.scr_row;
   unsigned short offset = p_context->screen_row_offset_ptr[yposi_wk / 2];
   unsigned char* p_row = &zonemapwk.data[offset];
@@ -292,9 +293,9 @@ static unsigned char* Get_LevelAddr(short xposi, short yposi, SKC_screvt_context
 }
 
 
-static (SKC_block_name*)[8] Get_ChunkRow(short xposi, short yposi, unsigned char* p_screen_row) {
+static SKC_block_name* Get_ChunkRow(short xposi, short yposi, unsigned char* p_screen_row) {
   unsigned char screen_no = p_zonemap_row[to_blocks(xposi)];
-  SKC_block_name (*p_row)[8] = g_ram.mapwk[screen_no].blocks[to_blocks_in_screen(yposi)];
+  SKC_block_name* p_row = &g_ram.mapwk[screen_no].blocks[to_blocks_in_screen(yposi)][0];
   return p_row;
 }
 
