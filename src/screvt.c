@@ -197,10 +197,118 @@ void SpecialVInt_LBZ2WindowClear(void) {
 }
 
 
-// Draw_TileColumn
+static void Draw_TileColumn(long* p_scr_h_posit, short* p_scr_h_posit_blk, short scr_v_posit, unsigned short wrt_cnt, SKC_screvt_context* p_context) {
+  short prev_scr_h_posit_blk = *p_scr_h_posit_blk;
+  short scr_h_posit_blk = *p_scr_h_posit >> 16 & 0xFFF0;
+  *p_scr_h_posit_blk = scr_h_posit_blk;
+  short distance = prev_scr_h_posit_blk - *p_scr_h_posit_blk;
+  if (distance != 0) {
+    if (distance < 0) {
+      distance = -distance;
+      scr_h_posit_blk = prev_scr_h_posit_blk + 336;
+    }
+    g_ram.DAT_08ffeea4 = distance > 16 ? 0xFF : 0;
+    Setup_TileColumnDraw(g_ram.scrollbuff, scr_h_posit_blk, scr_v_posit, wrt_cnt, p_context);
+    if (g_ram.DAT_08ffeea4 != 0) {
+      scr_h_posit_blk += 16;
+      Setup_TileColumnDraw(g_ram.scrollbuff, scr_h_posit_blk, scr_v_posit, wrt_cnt, p_context);
+    }
+  }
+}
+
+
 // Draw_TileColumn2
-// Setup_TileColumnDraw
-// Get_LevelChunkColumn
+
+
+static void Setup_TileColumnDraw(unsigned short* p_scrollbuff, short xposi, short yposi, unsigned short wrt_cnt, SKC_screvt_context* p_context) {
+  short cnt_to_edge = PLANE_HEIGHT_BLOCKS - to_vblocks_in_plane(xposi);
+  short cnt_to_edge_after_wrt = cnt_to_edge - wrt_cnt;
+  if (cnt_to_edge_after_wrt >= 0) {
+    unsigned short vram_adr = p_context->vram_base
+                            + to_htiles_in_plane(xposi & 0xFFF0) * PLANE_HEIGHT_TILES
+                            + to_vtiles_in_plane(yposi);
+    vram_adr *= 2; // a tile is two bytes
+    *p_scrollbuff++ = vram_adr;
+    *p_scrollbuff++ = wrt_cnt;
+    SET_BIT(p_scrollbuff[-1], 7);
+    SKC_block_name* p_blk_col = Get_LevelChunkColumn(xposi, yposi, p_context);
+    TileColumnDraw(&p_scrollbuff, p_blk_col, xposi, yposi, wrt_cnt, p_screen_row);
+  }
+  else {
+    wrt_cnt = cnt_to_edge;
+    unsigned short vram_adr = p_context->vram_base
+                            + to_htiles_in_plane(xposi & 0xFFF0) * PLANE_HEIGHT_TILES
+                            + to_vtiles_in_plane(yposi);
+    vram_adr *= 2; // a tile is two bytes
+    *p_scrollbuff++ = vram_adr;
+    *p_scrollbuff++ = wrt_cnt;
+    SET_BIT(p_scrollbuff[-1], 7);
+    SKC_block_name* p_blk_col = Get_LevelChunkColumn(xposi, yposi, p_context);
+    TileColumnDraw(&p_scrollbuff, p_blk_col, xposi, yposi, wrt_cnt, p_screen_row);
+    wrt_cnt = -cnt_to_edge_after_wrt;
+    vram_adr = p_context->vram_base + to_htiles_in_plane(xposi & 0xFFF0) * PLANE_HEIGHT_TILES;
+    vram_adr *= 2; // a tile is two bytes
+    *p_scrollbuff++ = vram_adr;
+    *p_scrollbuff++ = wrt_cnt;
+    SET_BIT(p_scrollbuff[-1], 7);
+    TileColumnDraw(&p_scrollbuff, p_blk_col, xposi, yposi, wrt_cnt, p_screen_row);
+  }
+}
+
+
+static void TileColumnDraw(unsigned short** pp_scrollbuff, SKC_block_name* p_blk_col, short xposi, short yposi, unsigned short wrt_cnt) {
+  for (int i = 0; i < wrt_cnt; ++i) {
+    SKC_block_name block_name = p_blk_col[to_blocks_in_screen(yposi) * SCREEN_SIZE_BLOCKS];
+    SKC_block block = g_ram.blockwk[block.index];
+    if (block_name.vf == 1) {
+      block.patterns[0][0].vf ^= 1;
+      block.patterns[0][1].vf ^= 1;
+      block.patterns[1][0].vf ^= 1;
+      block.patterns[1][1].vf ^= 1;
+      SKC_pattern_name wk = block.patterns[0][0];
+      block.patterns[0][0] = block.patterns[1][0];
+      block.patterns[1][0] = wk;
+      wk = block.patterns[0][1];
+      block.patterns[0][1] = block.patterns[1][1];
+      block.patterns[1][1] = wk;
+    }
+    if (block_name.hf == 1) {
+      block.patterns[0][0].hf ^= 1;
+      block.patterns[0][1].hf ^= 1;
+      block.patterns[1][0].hf ^= 1;
+      block.patterns[1][1].hf ^= 1;
+      SKC_pattern_name wk = block.patterns[0][0];
+      block.patterns[0][0] = block.patterns[0][1];
+      wk = block.patterns[1][0];
+      block.patterns[1][0] = block.patterns[1][1];
+      block.patterns[1][1] = wk;
+    }
+    (*pp_scrollbuff)[0] = get_raw_pattern_name(block.patterns[0][0]);
+    (*pp_scrollbuff)[wrt_cnt * BLOCK_SIZE_TILES] = get_raw_pattern_name(block.patterns[0][1]);
+    ++*pp_scrollbuff;
+    (*pp_scrollbuff)[0] = get_raw_pattern_name(block.patterns[1][0]);
+    (*pp_scrollbuff)[wrt_cnt * BLOCK_SIZE_TILES] = get_raw_pattern_name(block.patterns[1][1]);
+    ++*pp_scrollbuff;
+    yposi += TILE_SIZE_PIXELS;
+    if (yposi % SCREEN_SIZE_PIXELS == 0) {
+      p_blk_col = Get_LevelChunkColumn(xposi, yposi, p_context);
+    }
+  }
+  *pp_scrollbuff += wrt_cnt * BLOCK_SIZE_TILES;
+  (*pp_scrollbuff)[0] = 0;
+}
+
+
+static SKC_block_name* Get_LevelChunkColumn(short xposi, short yposi, SKC_screvt_context* p_context) {
+  unsigned short yposi_wk = yposi / 32 & g_ram.scr_row;
+  unsigned short offset = p_context->screen_row_offset_ptr[yposi_wk / 2];
+  unsigned char* p_screen_row = &zonemapwk.data[offset];
+  unsigned char screen_no = p_zonemap_row[to_blocks(xposi)];
+  SKC_block_name* p_blk_row = &g_ram.mapwk[screen_no].blocks[0][to_blocks_in_screen(xposi)];
+  return p_blk_row;
+}
+
+
 // Draw_TileRow
 // Draw_TileRow2
 
