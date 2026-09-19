@@ -343,7 +343,7 @@ static void Setup_TileRowDraw(unsigned short* p_scrollbuff, short xposi, short y
     vram_adr *= 2; // a tile is two bytes
     *p_scrollbuff++ = vram_adr;
     *p_scrollbuff++ = wrt_cnt;
-    unsigned char* p_screen_row = Get_LevelAddrChunkRow(xposi, yposi, p_context->screen_row_offset_ptr);
+    p_screen_row = Get_LevelAddrChunkRow(xposi, yposi, p_context->screen_row_offset_ptr);
     p_blk_row = Get_ChunkRow(xposi, yposi, p_screen_row);
     TileRowDraw(&p_scrollbuff, p_blk_row, xposi, yposi, wrt_cnt, p_screen_row);
   }
