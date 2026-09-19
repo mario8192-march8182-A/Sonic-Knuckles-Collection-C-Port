@@ -524,6 +524,58 @@ static signed char shake_ofs_tbl[20] = {
 };
 
 
+static AIZ_TreeReveal(unsigned short* p_scrollbuff, short xposi, short yposi, unsigned char* p_tbl, SKC_screvt_context* p_context) {
+  p_scrollbuff += 2;
+  unsigned char* p_screen_row = Get_LevelAddrChunkRow(xposi, yposi, p_context->screen_row_offset_ptr);
+  SKC_block_name* p_blk_row = Get_ChunkRow(xposi, yposi, p_screen_row);
+
+  for (int i = 0; i < 16; ++i) {
+    SKC_block_name block_name = p_blk_row[to_blocks_in_screen(xposi)];
+    SKC_block block = g_ram.blockwk[block.index];
+    if (block_name.vf == 1) {
+      block.patterns[0][0].vf ^= 1;
+      block.patterns[0][1].vf ^= 1;
+      block.patterns[1][0].vf ^= 1;
+      block.patterns[1][1].vf ^= 1;
+      SKC_pattern_name wk = block.patterns[0][0];
+      block.patterns[0][0] = block.patterns[1][0];
+      block.patterns[1][0] = wk;
+      wk = block.patterns[0][1];
+      block.patterns[0][1] = block.patterns[1][1];
+      block.patterns[1][1] = wk;
+    }
+    if (block_name.hf == 1) {
+      block.patterns[0][0].hf ^= 1;
+      block.patterns[0][1].hf ^= 1;
+      block.patterns[1][0].hf ^= 1;
+      block.patterns[1][1].hf ^= 1;
+      SKC_pattern_name wk = block.patterns[0][0];
+      block.patterns[0][0] = block.patterns[0][1];
+      wk = block.patterns[1][0];
+      block.patterns[1][0] = block.patterns[1][1];
+      block.patterns[1][1] = wk;
+    }
+    if (p_tbl[i] != 0) {
+      p_scrollbuff[0] = get_raw_pattern_name(block.patterns[0][0]);
+      p_scrollbuff[1] = get_raw_pattern_name(block.patterns[0][1]);
+    }
+    if (p_tbl[i + 16] != 0) {
+      p_scrollbuff += 16 * BLOCK_SIZE_TILES;
+      p_scrollbuff[0] = get_raw_pattern_name(block.patterns[1][0]);
+      p_scrollbuff[1] = get_raw_pattern_name(block.patterns[1][1]);
+      p_scrollbuff -= 16 * BLOCK_SIZE_TILES;
+    }
+    p_scrollbuff += 2;
+    xposi += TILE_SIZE_PIXELS;
+    if (xposi % SCREEN_SIZE_PIXELS == 0) {
+      p_blk_row = Get_ChunkRow(xposi, yposi, p_screen_row);
+    }
+  }
+  p_scrollbuff += 16 * BLOCK_SIZE_TILES;
+  p_scrollbuff[0] = 0;
+}
+
+
 static scr_evta_000_init(SKC_screvt_context* p_context) {
   Adjust_AIZ1Chunks();
   Reset_TileOffsetPositionActual();
@@ -532,7 +584,17 @@ static scr_evta_000_init(SKC_screvt_context* p_context) {
 
 
 static scr_evta_000(SKC_screvt_context* p_context) {
-  DrawTilesAsYouMove();
+  unsigned char tloop_tbl[7][16] = {
+    { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+    { 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0 },
+    { 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0 },
+    { 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0 },
+    { 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0 },
+    { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 },
+    { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 }
+  };
+
+  DrawTilesAsYouMove(p_context);
   if (g_ram.DAT_08ffeec4 != 0) {
     bool chg = true;
     if (g_ram.scra_h_posit >> 16 < 0x2D30 && g_ram.DAT_08ffeec4 < 57) {
@@ -545,9 +607,9 @@ static scr_evta_000(SKC_screvt_context* p_context) {
       else if (g_ram.DAT_08ffeec4 >= 20) {
         FUN_006b1e4c(p_context);
       }
-      //a6 = DAT_006b0952;
+      unsigned char* p_tbl = tloop_tbl;
       if (!(g_ram.DAT_08ffeec4 & 1)) {
-        //a6 += 16;
+        p_tbl += 16;
       }
       unsigned short wk = (g_ram.DAT_08ffeec4 - 1) / 2;
       g_ram.scr_work0 = wk;
@@ -558,15 +620,15 @@ static scr_evta_000(SKC_screvt_context* p_context) {
 
       do {
         if (yposi < g_ram.scra_v_posit_blk) {
-          //a6 += 32;
+          p_tbl += 32;
           yposi += 16;
           chg = true;
         }
         else {
           Setup_TileRowDraw(g_ram.scrollbuff, 0x2C80, yposi, 16, p_context);
           yposi -= 640;
-          AIZ_TreeReveal();
-          //a6 += 16;
+          AIZ_TreeReveal(g_ram.scrollbuff, 0, yposi, 16, p_tbl, p_context);
+          p_tbl += 16;
           yposi += 656;
           chg = false;
         }
