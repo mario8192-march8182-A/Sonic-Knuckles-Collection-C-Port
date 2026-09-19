@@ -284,11 +284,12 @@ static void TileColumnDraw(unsigned short** pp_scrollbuff, SKC_block_name* p_blk
       block.patterns[1][1] = wk;
     }
     (*pp_scrollbuff)[0] = get_raw_pattern_name(block.patterns[0][0]);
-    (*pp_scrollbuff)[wrt_cnt * BLOCK_SIZE_TILES] = get_raw_pattern_name(block.patterns[0][1]);
-    ++*pp_scrollbuff;
-    (*pp_scrollbuff)[0] = get_raw_pattern_name(block.patterns[1][0]);
-    (*pp_scrollbuff)[wrt_cnt * BLOCK_SIZE_TILES] = get_raw_pattern_name(block.patterns[1][1]);
-    ++*pp_scrollbuff;
+    (*pp_scrollbuff)[1] = get_raw_pattern_name(block.patterns[1][0]);
+    *pp_scrollbuff += wrt_cnt * BLOCK_SIZE_TILES;
+    (*pp_scrollbuff)[0] = get_raw_pattern_name(block.patterns[0][1]);
+    (*pp_scrollbuff)[1] = get_raw_pattern_name(block.patterns[1][1]);
+    *pp_scrollbuff -= wrt_cnt * BLOCK_SIZE_TILES;
+    *pp_scrollbuff += 2;
     yposi += TILE_SIZE_PIXELS;
     if (yposi % SCREEN_SIZE_PIXELS == 0) {
       p_blk_col = Get_LevelChunkColumn(xposi, yposi, p_context);
@@ -378,11 +379,12 @@ static void TileRowDraw(unsigned short** pp_scrollbuff, SKC_block_name* p_blk_ro
       block.patterns[1][1] = wk;
     }
     (*pp_scrollbuff)[0] = get_raw_pattern_name(block.patterns[0][0]);
-    (*pp_scrollbuff)[wrt_cnt * BLOCK_SIZE_TILES] = get_raw_pattern_name(block.patterns[1][0]);
-    ++*pp_scrollbuff;
-    (*pp_scrollbuff)[0] = get_raw_pattern_name(block.patterns[0][1]);
-    (*pp_scrollbuff)[wrt_cnt * BLOCK_SIZE_TILES] = get_raw_pattern_name(block.patterns[1][1]);
-    ++*pp_scrollbuff;
+    (*pp_scrollbuff)[1] = get_raw_pattern_name(block.patterns[0][1]);
+    *pp_scrollbuff += wrt_cnt * BLOCK_SIZE_TILES;
+    (*pp_scrollbuff)[0] = get_raw_pattern_name(block.patterns[1][0]);
+    (*pp_scrollbuff)[1] = get_raw_pattern_name(block.patterns[1][1]);
+    *pp_scrollbuff -= wrt_cnt * BLOCK_SIZE_TILES;
+    *pp_scrollbuff += 2;
     xposi += TILE_SIZE_PIXELS;
     if (xposi % SCREEN_SIZE_PIXELS == 0) {
       p_blk_row = Get_ChunkRow(xposi, yposi, p_screen_row);
