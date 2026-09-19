@@ -303,7 +303,7 @@ static SKC_block_name* Get_LevelChunkColumn(short xposi, short yposi, SKC_screvt
   unsigned short yposi_wk = yposi / 32 & g_ram.scr_row;
   unsigned short offset = p_context->screen_row_offset_ptr[yposi_wk / 2];
   unsigned char* p_screen_row = &zonemapwk.data[offset];
-  unsigned char screen_no = p_zonemap_row[to_blocks(xposi)];
+  unsigned char screen_no = p_screen_row[to_blocks(xposi)];
   SKC_block_name* p_blk_row = &g_ram.mapwk[screen_no].blocks[0][to_blocks_in_screen(xposi)];
   return p_blk_row;
 }
@@ -402,7 +402,7 @@ static unsigned char* Get_LevelAddrChunkRow(short xposi, short yposi, SKC_screvt
 
 
 static SKC_block_name* Get_ChunkRow(short xposi, short yposi, unsigned char* p_screen_row) {
-  unsigned char screen_no = p_zonemap_row[to_blocks(xposi)];
+  unsigned char screen_no = p_screen_row[to_blocks(xposi)];
   SKC_block_name* p_row = &g_ram.mapwk[screen_no].blocks[to_blocks_in_screen(yposi)][0];
   return p_row;
 }
