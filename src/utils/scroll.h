@@ -33,7 +33,7 @@ inline short to_vtiles_in_plane(short yposi) {
   return to_tiles(yposi) % PLANE_HEIGHT_TILES;
 }
 inline short to_hblocks_in_plane(short xposi) {
-  return to_blocks(yposi) % PLANE_WIDTH_BLOCKS;
+  return to_blocks(xposi) % PLANE_WIDTH_BLOCKS;
 }
 inline short to_vblocks_in_plane(short yposi) {
   return to_blocks(yposi) % PLANE_HEIGHT_BLOCKS;
