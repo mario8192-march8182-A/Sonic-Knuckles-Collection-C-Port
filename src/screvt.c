@@ -694,6 +694,20 @@ static void AIZ1SE_ChangeChunk4(SKC_screvt_context* p_context) {
 }
 
 
+void Obj_AIZ1TreeRevealControl(SKC_sprite_status* p_actwk) {
+  if (p_actwk->u.obj.timer != 0 && g_ram.DAT_08ffeec4 == 0) {
+    frameout(p_actwk);
+  }
+  else {
+    --p_actwk->u.obj.timer;
+    unsigned short wk = (unsigned short)(0x480 - fp16_get_integer(g_ram.actwk[0].yposi)) / 8 + 3;
+    if (wk >= g_ram.DAT_08ffeec4 || !(p_actwk->u.obj.timer & 1)) {
+      ++g_ram.DAT_08ffeec4;
+    }
+  }
+}
+
+
 static void Adjust_AIZ1Chunks(void) {
   if (g_ram.play_type != PLAY_TYPE_KNUCKLES) return;
 

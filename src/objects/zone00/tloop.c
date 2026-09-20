@@ -9,6 +9,7 @@
 #include "../../etc.h"
 #include "../../hitchk.h"
 #include "../player.h"
+#include "../screvt.h"
 static void tloopinit(SKC_sprite_status* p_actwk);
 static void tloopmove(SKC_sprite_status* p_actwk);
 static void tloopmovesub(SKC_sprite_status* p_actwk);
