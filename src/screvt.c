@@ -613,13 +613,13 @@ static scr_evta_000(SKC_screvt_context* p_context) {
     bool chg = true;
     if (g_ram.scra_h_posit >> 16 < 0x2D30 && g_ram.DAT_08ffeec4 < 57) {
       if (g_ram.DAT_08ffeec4 >= 52) {
-        FUN_006b1df0(p_context);
+        AIZ1SE_ChangeChunk2(p_context);
       }
       else if (g_ram.DAT_08ffeec4 >= 36) {
-        FUN_006b1e1e(p_context);
+        AIZ1SE_ChangeChunk3(p_context);
       }
       else if (g_ram.DAT_08ffeec4 >= 20) {
-        FUN_006b1e4c(p_context);
+        AIZ1SE_ChangeChunk4(p_context);
       }
       unsigned char* p_tbl = tloop_tbl;
       if (!(g_ram.DAT_08ffeec4 & 1)) {
@@ -652,36 +652,41 @@ static scr_evta_000(SKC_screvt_context* p_context) {
       while (g_ram.scr_work0-- > 0);
     }
     if (chg) {
-      g_ram.DAT_08ffeec4 = 0;
-      unsigned short offset = p_context->screen_row_offset_ptr[10];
-      unsigned char* p_row = &g_ram.zonemapwk.data[offset];
-      p_row[90] = 88;
-      p_row[89] = 89;
-      FUN_006b1df0(p_context);
+      AIZ1SE_ChangeChunk1(p_context);
     }
   }
 }
 
 
-static void FUN_006b1df0(SKC_screvt_context* p_context) {
+static void AIZ1SE_ChangeChunk1(SKC_screvt_context* p_context) {
+  g_ram.DAT_08ffeec4 = 0;
+  unsigned short offset = p_context->screen_row_offset_ptr[10];
+  unsigned char* p_row = &g_ram.zonemapwk.data[offset];
+  p_row[90] = 88;
+  p_row[89] = 89;
+  AIZ1SE_ChangeChunk2(p_context);
+}
+
+
+static void AIZ1SE_ChangeChunk2(SKC_screvt_context* p_context) {
   unsigned short offset = p_context->screen_row_offset_ptr[12];
   unsigned char* p_row = &g_ram.zonemapwk.data[offset];
   p_row[88] = 92;
   p_row[91] = 90;
-  FUN_006b1e1e(p_context);
+  AIZ1SE_ChangeChunk3(p_context);
 }
 
 
-static void FUN_006b1e1e(SKC_screvt_context* p_context) {
+static void AIZ1SE_ChangeChunk3(SKC_screvt_context* p_context) {
   unsigned short offset = p_context->screen_row_offset_ptr[14];
   unsigned char* p_row = &g_ram.zonemapwk.data[offset];
   p_row[90] = 91;
   p_row[89] = 93;
-  FUN_006b1e4c(p_context);
+  AIZ1SE_ChangeChunk4(p_context);
 }
 
 
-static void FUN_006b1e4c(SKC_screvt_context* p_context) {
+static void AIZ1SE_ChangeChunk4(SKC_screvt_context* p_context) {
   unsigned short offset = p_context->screen_row_offset_ptr[16];
   unsigned char* p_row = &g_ram.zonemapwk.data[offset];
   p_row[88] = 94;
