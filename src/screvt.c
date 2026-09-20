@@ -414,11 +414,11 @@ static SKC_block_name* Get_ChunkRow(short xposi, short yposi, unsigned char* p_s
 // sub_4ECAA
 
 
-static void Refresh_PlaneFull(short scr_h_posit, short scr_v_posit_blk, SKC_screvt_context* p_context) {
-  for (int i = 0; i < 16; ++i) {
-    Setup_TileRowDraw(g_ram.scrollbuff, scr_h_posit, scr_v_posit_blk, PLANE_WIDTH_BLOCKS, p_context);
+static void Refresh_PlaneFull(short xposi, short yposi, SKC_screvt_context* p_context) {
+  for (int i = 0; i < PLANE_HEIGHT_BLOCKS; ++i) {
+    Setup_TileRowDraw(g_ram.scrollbuff, xposi, yposi, PLANE_WIDTH_BLOCKS, p_context);
     scrollwrt();
-    scr_v_posit_blk += 16;
+    yposi += BLOCK_SIZE_PIXELS;
   }
 }
 
