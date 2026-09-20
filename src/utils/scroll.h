@@ -38,3 +38,5 @@ inline short to_hblocks_in_plane(short xposi) {
 inline short to_vblocks_in_plane(short yposi) {
   return to_blocks(yposi) % PLANE_HEIGHT_BLOCKS;
 }
+
+#endif

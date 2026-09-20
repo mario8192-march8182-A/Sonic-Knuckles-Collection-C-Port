@@ -1,5 +1,6 @@
 #include "screvt.h"
 #include <stdbool.h>
+#include <string.h>
 #include "data/zonemaptbl.h"
 #include "types/block.h"
 #include "types/blockname.h"
@@ -7,17 +8,22 @@
 #include "types/spritestatus.h"
 #include "utils/bits.h"
 #include "utils/fp16.h"
+#include "utils/scroll.h"
+#include "utils/stageno.h"
+#include "coli.h"
 typedef struct SKC_screvt_context {
   unsigned short* scrollbuff_ptr;
   unsigned short* screen_row_offset_ptr;
   unsigned short vram_base;
-};
+}
+SKC_screvt_context;
 static void scrollwrt0(unsigned short* p_buffer);
 static void hblockwrt(unsigned short** pp_buffer, unsigned short vram_adr, unsigned short cnt);
 static void vblockwrt(unsigned short** pp_buffer, unsigned short vram_adr, unsigned short cnt);
 static void vsscrollwrt(void);
 
 extern sonic3_ram g_ram;
+extern unsigned char g_vram[0x10000];
 extern unsigned long g_vdp_window_yposi;
 extern unsigned long g_vdp_scrolla_adr;
 extern unsigned long g_vdp_scrollb_adr;
@@ -89,7 +95,7 @@ void(*scr_evt_tbl[24][2][2][2])(SKC_screvt_context*) = {
       { &scr_evta_000,      &scr_evtb_000 },      { &scr_evta_001,      &scr_evtb_001      }
     }
   }
-}
+};
 
 
 // VInt_DrawLevel
@@ -233,7 +239,7 @@ static void Setup_TileColumnDraw(short xposi, short yposi, unsigned short wrt_cn
     *p_context->scrollbuff_ptr++ = wrt_cnt;
     SET_BIT(p_context->scrollbuff_ptr[-1], 7);
     SKC_block_name* p_blk_col = Get_LevelChunkColumn(xposi, yposi, p_context);
-    TileColumnDraw(p_blk_col, xposi, yposi, wrt_cnt, p_screen_row);
+    TileColumnDraw(p_blk_col, xposi, yposi, wrt_cnt);
   }
   else {
     wrt_cnt = cnt_to_edge;
@@ -245,7 +251,7 @@ static void Setup_TileColumnDraw(short xposi, short yposi, unsigned short wrt_cn
     *p_context->scrollbuff_ptr++ = wrt_cnt;
     SET_BIT(p_context->scrollbuff_ptr[-1], 7);
     SKC_block_name* p_blk_col = Get_LevelChunkColumn(xposi, yposi, p_context);
-    TileColumnDraw(p_blk_col, xposi, yposi, wrt_cnt, p_screen_row);
+    TileColumnDraw(p_blk_col, xposi, yposi, wrt_cnt);
     yposi += wrt_cnt * TILE_SIZE_PIXELS;
     wrt_cnt = -cnt_to_edge_after_wrt;
     vram_adr = p_context->vram_base + to_htiles_in_plane(xposi & 0xFFF0) * PLANE_HEIGHT_TILES;
@@ -253,7 +259,7 @@ static void Setup_TileColumnDraw(short xposi, short yposi, unsigned short wrt_cn
     *p_context->scrollbuff_ptr++ = vram_adr;
     *p_context->scrollbuff_ptr++ = wrt_cnt;
     SET_BIT(p_context->scrollbuff_ptr[-1], 7);
-    TileColumnDraw(p_blk_col, xposi, yposi, wrt_cnt, p_screen_row);
+    TileColumnDraw(p_blk_col, xposi, yposi, wrt_cnt);
   }
 }
 
@@ -305,7 +311,7 @@ static void TileColumnDraw(SKC_block_name* p_blk_col, short xposi, short yposi, 
 static SKC_block_name* Get_LevelChunkColumn(short xposi, short yposi, SKC_screvt_context* p_context) {
   unsigned short yposi_wk = yposi / 32 & g_ram.scr_row;
   unsigned short offset = p_context->screen_row_offset_ptr[yposi_wk / 2];
-  unsigned char* p_screen_row = &zonemapwk.data[offset];
+  unsigned char* p_screen_row = &g_ram.zonemapwk.data[offset];
   unsigned char screen_no = p_screen_row[to_blocks(xposi)];
   SKC_block_name* p_blk_row = &g_ram.mapwk[screen_no].blocks[0][to_blocks_in_screen(xposi)];
   return p_blk_row;
@@ -357,7 +363,7 @@ static void Setup_TileRowDraw(short xposi, short yposi, unsigned short wrt_cnt, 
 static void TileRowDraw(SKC_block_name* p_blk_row, short xposi, short yposi, unsigned short wrt_cnt, unsigned char* p_screen_row, SKC_screvt_context* p_context) {
   for (int i = 0; i < wrt_cnt; ++i) {
     SKC_block_name block_name = p_blk_row[to_blocks_in_screen(xposi)];
-    SKC_block block = g_ram.blockwk[block.index];
+    SKC_block block = g_ram.blockwk[block_name.index];
     if (block_name.vf == 1) {
       block.patterns[0][0].vf ^= 1;
       block.patterns[0][1].vf ^= 1;
@@ -401,7 +407,7 @@ static void TileRowDraw(SKC_block_name* p_blk_row, short xposi, short yposi, uns
 static unsigned char* Get_LevelAddrChunkRow(short xposi, short yposi, SKC_screvt_context* p_context) {
   unsigned short yposi_wk = yposi / 32 & g_ram.scr_row;
   unsigned short offset = p_context->screen_row_offset_ptr[yposi_wk / 2];
-  unsigned char* p_row = &zonemapwk.data[offset];
+  unsigned char* p_row = &g_ram.zonemapwk.data[offset];
   return p_row;
 }
 
@@ -539,7 +545,7 @@ static AIZ_TreeReveal(short xposi, short yposi, unsigned char* p_tbl, SKC_screvt
 
   for (int i = 0; i < 16; ++i) {
     SKC_block_name block_name = p_blk_row[to_blocks_in_screen(xposi)];
-    SKC_block block = g_ram.blockwk[block.index];
+    SKC_block block = g_ram.blockwk[block_name.index];
     if (block_name.vf == 1) {
       block.patterns[0][0].vf ^= 1;
       block.patterns[0][1].vf ^= 1;
@@ -592,14 +598,14 @@ static scr_evta_000_init(SKC_screvt_context* p_context) {
 
 
 static scr_evta_000(SKC_screvt_context* p_context) {
-  unsigned char tloop_tbl[7][16] = {
-    { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-    { 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0 },
-    { 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0 },
-    { 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0 },
-    { 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0 },
-    { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 },
-    { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 }
+  unsigned char tloop_tbl[112] = {
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0,
+    0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0,
+    0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0,
+    0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0,
+    1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+    1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1
   };
 
   DrawTilesAsYouMove(p_context);
@@ -683,7 +689,7 @@ static void FUN_006b1e4c(SKC_screvt_context* p_context) {
 }
 
 
-static Adjust_AIZ1Chunks(void) {
+static void Adjust_AIZ1Chunks(void) {
   if (g_ram.play_type == PLAY_TYPE_KNUCKLES) return;
 
   memcpy(&g_ram.colorwk2[56], DAT_006b2156, sizeof(unsigned short) * 4);
@@ -749,7 +755,7 @@ static void LAB_006b34f3(void) {
 }
 
 
-static void FUN_006b362a(SKC_sprite_status p_playerwk, short scra_h) {
+static void FUN_006b362a(SKC_sprite_status* p_playerwk, short scra_h) {
   if (p_playerwk->mstno == 5) {
     p_playerwk->mstno = 0;
   }
@@ -833,7 +839,7 @@ static void LAB_006c7860(void) {
 }
 
 
-static void FUN_006c7a66(SKC_sprite_status p_playerwk, short scra_h) {
+static void FUN_006c7a66(SKC_sprite_status* p_playerwk, short scra_h) {
   if (p_playerwk->mstno == 5) {
     p_playerwk->mstno = 0;
   }
