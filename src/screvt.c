@@ -246,6 +246,7 @@ static void Setup_TileColumnDraw(short xposi, short yposi, unsigned short wrt_cn
     SET_BIT(p_context->scrollbuff_ptr[-1], 7);
     SKC_block_name* p_blk_col = Get_LevelChunkColumn(xposi, yposi, p_context);
     TileColumnDraw(p_blk_col, xposi, yposi, wrt_cnt, p_screen_row);
+    yposi += wrt_cnt * TILE_SIZE_PIXELS;
     wrt_cnt = -cnt_to_edge_after_wrt;
     vram_adr = p_context->vram_base + to_htiles_in_plane(xposi & 0xFFF0) * PLANE_HEIGHT_TILES;
     vram_adr *= 2; // a tile is two bytes
@@ -340,6 +341,7 @@ static void Setup_TileRowDraw(short xposi, short yposi, unsigned short wrt_cnt, 
     unsigned char* p_screen_row = Get_LevelAddrChunkRow(xposi, yposi, p_context->screen_row_offset_ptr);
     SKC_block_name* p_blk_row = Get_ChunkRow(xposi, yposi, p_screen_row);
     TileRowDraw(p_blk_row, xposi, yposi, wrt_cnt, p_screen_row);
+    xposi += wrt_cnt * TILE_SIZE_PIXELS;
     wrt_cnt = -cnt_to_edge_after_wrt;
     vram_adr = p_context->vram_base + to_vtiles_in_plane(yposi & 0xFFF0) * PLANE_WIDTH_TILES;
     vram_adr *= 2; // a tile is two bytes
