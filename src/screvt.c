@@ -581,7 +581,7 @@ static AIZ_TreeReveal(unsigned short* p_scrollbuff, short xposi, short yposi, un
 static scr_evta_000_init(SKC_screvt_context* p_context) {
   Adjust_AIZ1Chunks();
   Reset_TileOffsetPositionActual();
-  Refresh_PlaneFull();
+  Refresh_PlaneFull(g_ram.scra_h_posit_copy, g_ram.scra_v_posit_blk, p_context);
 }
 
 
