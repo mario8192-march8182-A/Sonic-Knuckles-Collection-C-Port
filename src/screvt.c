@@ -690,7 +690,7 @@ static void FUN_006b1e4c(SKC_screvt_context* p_context) {
 
 
 static void Adjust_AIZ1Chunks(void) {
-  if (g_ram.play_type == PLAY_TYPE_KNUCKLES) return;
+  if (g_ram.play_type != PLAY_TYPE_KNUCKLES) return;
 
   memcpy(&g_ram.colorwk2[56], DAT_006b2156, sizeof(unsigned short) * 4);
   SKC_block_name block = { 75, 0, 0, 0 };
