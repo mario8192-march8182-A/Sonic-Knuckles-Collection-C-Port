@@ -485,7 +485,12 @@ static void Reset_TileOffsetPositionActual(void) {
 }
 
 
-// Reset_TileOffsetPositionEff
+static void Reset_TileOffsetPositionEff(void) {
+  g_ram.scrb_h_posit_blk = g_ram.scrb_h_posit >> 16 & 0xFFF0;
+  g_ram.scrb_v_posit_blk = g_ram.scrb_v_posit >> 16 & g_ram.DAT_08ffeeac;
+}
+
+
 // Update_CameraPositionP2
 // Update_VScrollValueP2
 
