@@ -590,14 +590,14 @@ static AIZ_TreeReveal(short xposi, short yposi, unsigned char* p_tbl, SKC_screvt
 }
 
 
-static scr_evta_000_init(SKC_screvt_context* p_context) {
+static void scr_evta_000_init(SKC_screvt_context* p_context) {
   Adjust_AIZ1Chunks();
   Reset_TileOffsetPositionActual();
   Refresh_PlaneFull(g_ram.scra_h_posit_copy, g_ram.scra_v_posit_blk, p_context);
 }
 
 
-static scr_evta_000(SKC_screvt_context* p_context) {
+static void scr_evta_000(SKC_screvt_context* p_context) {
   unsigned char tloop_tbl[112] = {
     0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
     0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0,
