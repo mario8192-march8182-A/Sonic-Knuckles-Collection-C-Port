@@ -595,6 +595,35 @@ static AIZ_TreeReveal(short xposi, short yposi, unsigned char* p_tbl, SKC_screvt
 }
 
 
+static void AIZ1_IntroDeform(SKC_screvt_context* p_context) {
+  g_ram.scrb_v_posit = g_ram.scra_v_posit_copy & 0xFFFF0000 | g_ram.scrb_v_posit & 0x0000FFFF;
+  short xposi = g_ram.DAT_08ffeeb6 < 0 ? g_ram.DAT_08ffeeb6 : g_ram.scra_h_posit_copy >> 16;
+  xposi /= 2;
+  if (xposi >= 0x580) {
+    for (int i = 0; i < 37; ++i) {
+      g_ram.hscrollwork[20 + i] = xposi;
+    }
+  }
+  else {
+    g_ram.hscrollwork[20] = xposi;
+    xposi -= 0x580;
+    long xposi_wk = 0;
+    fp16_set_integer(&xposi_wk, xposi);
+    long xspeed = xposi * 0x800;
+
+    for (int i = 0; i < 36; ++i) {
+      xposi_wk += xspeed;
+      g_ram.hscrollwork[21 + i] = fp16_get_integer(xposi_wk) - 0x580;
+    }
+  }
+
+  for (int i = 0; i < 9; ++i) {
+    short wk = g_ram.hscrollwork[21 + i * 4];
+    g_ram.hscrollwork[2 + i * 2] = wk >= 0 ? wk : 0;
+  }
+}
+
+
 static void scr_evta_000_init(SKC_screvt_context* p_context) {
   Adjust_AIZ1Chunks();
   Reset_TileOffsetPositionActual();

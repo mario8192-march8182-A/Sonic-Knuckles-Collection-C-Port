@@ -31,6 +31,7 @@ typedef struct sonic3_ram {
                  }
                  zonemapwk;
   /* 08ff9000 */ SKC_block blockwk[768];
+  /* 08ffa800 */ short hscrollwork[256];
   /* 08ffac00 */ unsigned char pbuffer[PBUFFER_LEVELS][PBUFFER_LEVEL_SLOTS];
   /* 08ffb000 */ SKC_sprite_status actwk[ACTWK_SLOTS];
   /* 08ffd000 */ unsigned char zoombuffer[0x1000];
