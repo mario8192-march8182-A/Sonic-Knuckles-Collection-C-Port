@@ -332,7 +332,7 @@ static void vsfoxmove(SKC_sprite_status* p_playerwk, SKC_play_work work) {
       }
     }
     else {
-      if (g_ram.pl2_input_lock_flag == 0) {
+      if (g_ram.pl2autoflag == 0) {
         g_ram.swdata0 = g_ram.swdata2;
       }
     }
@@ -680,10 +680,10 @@ static void fox00move(SKC_sprite_status* p_playerwk, SKC_play_work work) {
     }
   }
   else {
-    if (g_ram.pl2_input_lock_flag == 0) {
+    if (g_ram.pl2autoflag == 0) {
       g_ram.swdata0 = g_ram.swdata2;
     }
-    if ((g_ram.pl2_input_lock_flag == 0 || BIT_IS_SET(g_ram.pl2_input_lock_flag, 7)) && g_ram.vs_flag == 0) {
+    if ((g_ram.pl2autoflag == 0 || BIT_IS_SET(g_ram.pl2autoflag, 7)) && g_ram.vs_flag == 0) {
       foxcpu(p_playerwk);
     }
   }

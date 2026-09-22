@@ -277,7 +277,7 @@ static void vsplaymove(SKC_sprite_status* p_playerwk, SKC_play_work work) {
       }
     }
     else {
-      if (g_ram.pl2_input_lock_flag == 0) {
+      if (g_ram.pl2autoflag == 0) {
         g_ram.swdata = g_ram.swdata2;
       }
     }

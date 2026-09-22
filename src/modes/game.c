@@ -275,7 +275,7 @@ void game(void) {
   g_ram.watercoliflag = 0;
   g_ram.watercoliflag2 = 0;
   g_ram.plautoflag = 0;
-  g_ram.pl2_input_lock_flag = 0;
+  g_ram.pl2autoflag = 0;
   g_ram.emyscorecnt = 0;
   g_ram.timebonus = 0;
   g_ram.ringbonus = 0;
@@ -438,7 +438,7 @@ void game(void) {
   memset(&g_ram.swdata1, 0, sizeof(g_ram.swdata1));
   memset(&g_ram.swdata2, 0, sizeof(g_ram.swdata2));
   g_ram.plautoflag = 1;
-  g_ram.pl2_input_lock_flag = 1;
+  g_ram.pl2autoflag = 1;
   g_ram.DAT_08fff711 = 0;
   if (g_ram.watermode != 0 && get_zone(g_ram.stageno) == HYDROCITY) {
     g_ram.actwk[109].r_ptr = &water;
@@ -499,7 +499,7 @@ void game(void) {
   watercolorset();
   memset(&g_ram.colorwk3[16], 0, sizeof(unsigned short) * 48);
   g_ram.plautoflag = 0;
-  g_ram.pl2_input_lock_flag = 0;
+  g_ram.pl2autoflag = 0;
   demoset();
   if (g_ram.vs_flag == 0) {
     if (!(g_ram.stageno == ANGEL_ISLAND_ACT_1 && g_ram.plflag == 0) && get_zone(g_ram.stageno) < AZURE_LAKE) {

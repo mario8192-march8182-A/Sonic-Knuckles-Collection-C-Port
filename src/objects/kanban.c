@@ -145,7 +145,7 @@ static void kanban_move1(SKC_sprite_status* p_actwk) {
       p_actwk->xspeed = 0;
       p_actwk->yspeed = 0;
       p_actwk->patno = patno_tbl[g_ram.play_type];
-      g_ram.pl2_input_lock_flag = 0xFF;
+      g_ram.pl2autoflag = 0xFF;
     }
   }
   else {

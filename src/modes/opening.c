@@ -220,7 +220,7 @@ void opening(void) {
   g_ram.watercoliflag = 0;
   g_ram.watercoliflag2 = 0;
   g_ram.plautoflag = 0;
-  g_ram.pl2_input_lock_flag = 0;
+  g_ram.pl2autoflag = 0;
   g_ram.emyscorecnt = 0;
   g_ram.timebonus = 0;
   g_ram.ringbonus = 0;

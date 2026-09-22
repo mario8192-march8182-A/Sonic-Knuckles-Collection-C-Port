@@ -129,7 +129,7 @@ static void opnbox_wait0(SKC_sprite_status* p_actwk) {
 
 static void set_break(SKC_sprite_status* p_actwk) {
   if (get_zone(g_ram.stageno) != MARBLE_GARDEN) {
-    g_ram.pl2_input_lock_flag = 0xFF;
+    g_ram.pl2autoflag = 0xFF;
   }
   p_actwk->patno = 1;
   p_actwk->u.obj.timer = 64;
@@ -417,7 +417,7 @@ void chk_pl2_pause(SKC_sprite_status* p_actwk) {
       && g_ram.actwk[1].u.play.cddat.jump == 0
       && g_ram.actwk[1].r_no < 6) {
     p_actwk->u.obj.actflg0.unused7 = 1;
-    g_ram.pl2_input_lock_flag = 0;
+    g_ram.pl2autoflag = 0;
     set_pl_pause(p_actwk, &g_ram.actwk[1]);
   }
 }

@@ -1826,7 +1826,7 @@ static void ev0930_move0(SKC_sprite_status* p_actwk) {
     g_ram.scralim_right = 0x17D0;
     g_ram.scralim_up = g_ram.scralim_down;
     g_ram.plautoflag = 0;
-    g_ram.pl2_input_lock_flag = 0;
+    g_ram.pl2autoflag = 0;
   }
 }
 
@@ -1895,7 +1895,7 @@ static void ev0930_wait6(SKC_sprite_status* p_actwk) {
   if ((unsigned short)fp16_get_integer(g_ram.actwk[0].xposi) >= 0x1660) return;
 
   p_actwk->r_ptr = &ev0930_wait7;
-  g_ram.pl2_input_lock_flag = 0;
+  g_ram.pl2autoflag = 0;
 }
 
 

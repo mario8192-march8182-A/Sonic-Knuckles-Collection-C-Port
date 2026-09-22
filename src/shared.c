@@ -3356,7 +3356,7 @@ void fox_auto(SKC_sprite_status* p_actwk) {
     frameout(p_actwk);
   }
   else {
-    g_ram.pl2_input_lock_flag = 1;
+    g_ram.pl2autoflag = 1;
     g_ram.foxcpu_timer = 0;
     p_actwk->r_ptr = &fox_auto__cnt;
     fox_auto__cnt(p_actwk);
@@ -3365,7 +3365,7 @@ void fox_auto(SKC_sprite_status* p_actwk) {
 
 
 static void fox_auto__cnt(SKC_sprite_status* p_actwk) {
-  if (g_ram.pl2_input_lock_flag != 0) {
+  if (g_ram.pl2autoflag != 0) {
     memset(&g_ram.swdata0, 0, sizeof(g_ram.swdata0));
   }
   else {
