@@ -446,7 +446,7 @@ static void ev0910_wait1(SKC_sprite_status* p_actwk) {
   if ((unsigned short)fp16_get_integer(g_ram.actwk[0].xposi) < 0x39B0) return;
 
   p_actwk->r_ptr = &ev0910_wait2;
-  g_ram.pl_input_lock_flag = 0xFF;
+  g_ram.plautoflag = 0xFF;
   memset(&g_ram.swdata, 0, sizeof(g_ram.swdata));
 }
 
@@ -458,7 +458,7 @@ static void ev0910_wait2(SKC_sprite_status* p_actwk) {
   SET_BIT(g_ram.DAT_08fffab8_bitfield, 0);
   g_ram.scralim_left = 0;
   g_ram.pl_scr_lock_flag = 0xFF;
-  g_ram.pl_input_lock_flag = 0;
+  g_ram.plautoflag = 0;
   g_ram.actwk[0].u.play.control_bitfield = 0x81;
   g_ram.actwk[0].mstno = 7;
 }
@@ -1749,7 +1749,7 @@ static void ev0930(SKC_sprite_status* p_actwk) {
 
   p_actwk->r_ptr = &ev0930_wait0;
   pl_spd_clr(&g_ram.actwk[0]);
-  g_ram.pl_input_lock_flag = 0xFF;
+  g_ram.plautoflag = 0xFF;
   memset(&g_ram.swdata, 0, sizeof(g_ram.swdata));
   SKC_actwkchk_result result = actwkchk();
   if (result.actwk_ptr != 0) {
@@ -1779,7 +1779,7 @@ static void ev0930_wait0(SKC_sprite_status* p_actwk) {
 
 
 static void set_pl_stop(SKC_sprite_status* p_playerwk) {
-  g_ram.pl_input_lock_flag = 0;
+  g_ram.plautoflag = 0;
   p_playerwk->u.play.control_bitfield = 0x83;
   p_playerwk->patno = p_playerwk->u.play.character != SONIC ? 196 : 176;
   p_playerwk->mstno = 7;
@@ -1803,7 +1803,7 @@ static void ev0930_wait2(SKC_sprite_status* p_actwk) {
 
   p_actwk->r_ptr = &ev0930_move0;
   g_ram.actwk[0].u.play.control_bitfield = 0;
-  g_ram.pl_input_lock_flag = 0xFF;
+  g_ram.plautoflag = 0xFF;
   memset(&g_ram.swdata, 0, sizeof(g_ram.swdata));
   g_ram.swdata.down.r = 1;
   g_ram.swdata.pressed.r = 1;
@@ -1825,7 +1825,7 @@ static void ev0930_move0(SKC_sprite_status* p_actwk) {
     g_ram.scralim_left = 0x17D0;
     g_ram.scralim_right = 0x17D0;
     g_ram.scralim_up = g_ram.scralim_down;
-    g_ram.pl_input_lock_flag = 0;
+    g_ram.plautoflag = 0;
     g_ram.pl2_input_lock_flag = 0;
   }
 }
@@ -1835,7 +1835,7 @@ static void ev0930_wait3(SKC_sprite_status* p_actwk) {
   if (!BIT_IS_SET(g_ram.DAT_08fffab8_bitfield, 5)) return;
 
   p_actwk->r_ptr = &ev0930_move1;
-  g_ram.pl_input_lock_flag = 0xFF;
+  g_ram.plautoflag = 0xFF;
   SKC_actwkchk_result result = actwkchk();
   if (result.actwk_ptr != 0) {
     result.actwk_ptr->r_ptr = &foxcpu;
@@ -1886,7 +1886,7 @@ static void ev0930_wait5(SKC_sprite_status* p_actwk) {
   if (g_ram.actwk[0].u.play.cddat.jump == 1) return;
 
   p_actwk->r_ptr = &ev0930_wait6;
-  g_ram.pl_input_lock_flag = 0;
+  g_ram.plautoflag = 0;
   g_ram.scralim_up = 0x5C0;
 }
 

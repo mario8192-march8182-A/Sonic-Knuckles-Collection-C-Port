@@ -392,7 +392,7 @@ static void bs00b0_die2(SKC_sprite_status* p_actwk) {
   reset_pl_data();
   reset_pl_data0(&g_ram.actwk[1]);
   reset_bgm();
-  g_ram.pl_input_lock_flag = 0xFF;;
+  g_ram.plautoflag = 0xFF;;
   memset(&g_ram.swdata, 0, sizeof(g_ram.swdata));
   SKC_actwkchk_result result = actwkchk();
   if (result.actwk_ptr != 0) {
@@ -433,7 +433,7 @@ static void bs00b0_die3(SKC_sprite_status* p_actwk) {
 
 static void bs00b0_die4(SKC_sprite_status* p_actwk) {
   g_ram.miles_nograb_timer = 5;
-  if (g_ram.pl_input_lock_flag != 0) {
+  if (g_ram.plautoflag != 0) {
     memset(&g_ram.swdata, 0, sizeof(g_ram.swdata));
     g_ram.swdata.pressed.u = 1;
     g_ram.swdata.down.u = 1;

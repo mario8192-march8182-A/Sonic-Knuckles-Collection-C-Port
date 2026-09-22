@@ -274,7 +274,7 @@ static void ev0000_move7(SKC_sprite_status* p_actwk) {
     p_playerwk->mstno = 26;
     p_playerwk->u.play.control_bitfield = 0;
     memset(&g_ram.swdata, 0, sizeof(g_ram.swdata));
-    g_ram.pl_input_lock_flag = 0xFF;
+    g_ram.plautoflag = 0xFF;
     g_ram.ssonicflag = 0;
     g_ram.ssonicclchg = 2;
     g_ram.ssonicclchgcnt = 5;

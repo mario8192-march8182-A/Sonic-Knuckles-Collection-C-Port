@@ -603,7 +603,7 @@ static void nuckle000_run1(SKC_sprite_status* p_actwk) {
   }
   else {
     g_ram.clchgtim2 = 0;
-    g_ram.pl_input_lock_flag = 0;
+    g_ram.plautoflag = 0;
     cg_reset();
     clr_wchg_bit(p_actwk);
     SKC_actwkchk_result result = actwkchk();
@@ -1125,7 +1125,7 @@ static void nuckle031_boss_set(SKC_sprite_status* p_actwk) {
 static void nuckle031_init(SKC_sprite_status* p_actwk) {
   emy_wrt_init(p_actwk, &nuckle_init_tbl);
   memset(&g_ram.swdata, 0, sizeof(g_ram.swdata));
-  g_ram.pl_input_lock_flag = 0xFF;
+  g_ram.plautoflag = 0xFF;
   g_ram.actwk[0].u.play.control_bitfield = 0x80;
   set_nuckle_bgm();
   set_emy_cor(&nuckle_cor_tbl);
@@ -1204,7 +1204,7 @@ static void nuckle031_wait4(SKC_sprite_status* p_actwk) {
   g_ram.swdata.down.l = 1;
   g_ram.swdata.pressed.l = 1;
   if ((g_ram.scra_v_posit >> 16) + 352 < (unsigned short)fp16_get_integer(p_actwk->yposi)) {
-    g_ram.pl_input_lock_flag = 0;
+    g_ram.plautoflag = 0;
     clr_wchg_bit(p_actwk);
     set_emy_fout0(p_actwk);
   }
@@ -1803,7 +1803,7 @@ static void ev0700_col0(SKC_sprite_status* p_actwk) {
   g_ram.DAT_08fffab8_bitfield = 4;
   g_ram.actwk[0].actflg.hflip = 0;
   g_ram.actwk[0].u.play.cddat.left = 0;
-  g_ram.pl_input_lock_flag = 0xFF;
+  g_ram.plautoflag = 0xFF;
   memset(&g_ram.swdata, 0, sizeof(g_ram.swdata));
   pl_spd_clr(&g_ram.actwk[0]);
   set_nuckle_bgm();
@@ -1846,7 +1846,7 @@ static void ev0700_wait2(SKC_sprite_status* p_actwk) {
 
 static void ev0700_fout0(SKC_sprite_status* p_actwk) {
   g_ram.DAT_08fffab8_bitfield = 0;
-  g_ram.pl_input_lock_flag = 0;
+  g_ram.plautoflag = 0;
   g_ram.pl2_input_lock_flag = 0;
   g_ram.pl_scr_lock_flag = 0;
   memset(&g_ram.swdata, 0, sizeof(g_ram.swdata));
@@ -2153,7 +2153,7 @@ static void nuckle071_wait1_init(SKC_sprite_status* p_actwk) {
   g_ram.scralim_left = g_ram.scralim_b_left;
   p_actwk->r_no = 4;
   p_actwk->u.obj.timer = 59;
-  g_ram.pl_input_lock_flag = 0xFF;
+  g_ram.plautoflag = 0xFF;
   g_ram.pl2_input_lock_flag = 0xFF;
   memset(&g_ram.swdata, 0, sizeof(g_ram.swdata));
   memset(&g_ram.swdata0, 0, sizeof(g_ram.swdata0));
@@ -2310,7 +2310,7 @@ static void ev0701_move0(SKC_sprite_status* p_actwk) {
   fp16_set_integer(&p_playerwk->xposi, fp16_get_integer(p_actwk->xposi));
   fp16_set_integer(&p_playerwk->yposi, fp16_get_integer(p_actwk->yposi));
   if (p_actwk->yspeed >= 0) {
-    g_ram.pl_input_lock_flag = 0;
+    g_ram.plautoflag = 0;
     g_ram.pl2_input_lock_flag = 0;
     memset(&g_ram.swdata, 0, sizeof(g_ram.swdata));
     memset(&g_ram.swdata0, 0, sizeof(g_ram.swdata0));
@@ -3134,7 +3134,7 @@ static void nucksw_wait1(SKC_sprite_status* p_actwk) {
 
 
 static void switchact_001(SKC_sprite_status* p_actwk) {
-  g_ram.pl_input_lock_flag = 0;
+  g_ram.plautoflag = 0;
   g_ram.scralim_m_down = 0x1000;
   g_ram.scralim_n_down = 0x1000;
   set_act05(p_actwk, &chglimd_set_tbl);

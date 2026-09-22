@@ -322,12 +322,12 @@ static void vsfoxmove(SKC_sprite_status* p_playerwk, SKC_play_work work) {
 
   if (g_ram.debugflag != 0 && p_playerwk == &g_ram.actwk[0] && g_ram.swdata1.pressed.b == 1) {
     g_ram.editmode = 1;
-    g_ram.pl_input_lock_flag = 0;
+    g_ram.plautoflag = 0;
   }
   else {
     if (p_playerwk == &g_ram.actwk[0]) {
       g_ram.swdata0 = g_ram.swdata;
-      if (g_ram.pl_input_lock_flag == 0) {
+      if (g_ram.plautoflag == 0) {
         g_ram.swdata0 = g_ram.swdata1;
       }
     }
@@ -664,7 +664,7 @@ static void fox00move(SKC_sprite_status* p_playerwk, SKC_play_work work) {
     }
     if (g_ram.swdata1.pressed.b == 1) {
       g_ram.editmode = 1;
-      g_ram.pl_input_lock_flag = 0;
+      g_ram.plautoflag = 0;
       if (g_ram.swdata1.down.c == 1) {
         g_ram.editmode = 2;
         p_playerwk->mstno = 0;
@@ -674,7 +674,7 @@ static void fox00move(SKC_sprite_status* p_playerwk, SKC_play_work work) {
   }
   if (p_playerwk == &g_ram.actwk[0]) {
     g_ram.swdata0 = g_ram.swdata;
-    if (g_ram.pl_input_lock_flag == 0) {
+    if (g_ram.plautoflag == 0) {
       g_ram.swdata0 = g_ram.swdata1;
       g_ram.swdata = g_ram.swdata1;
     }
@@ -2705,7 +2705,7 @@ static void jumpcolsub1(SKC_sprite_status* p_playerwk) {
 static void fox00damage(SKC_sprite_status* p_playerwk, SKC_play_work work) {
   if (g_ram.play_type == PLAY_TYPE_MILES && g_ram.debugflag != 0 && g_ram.swdata1.pressed.b == 1) {
     g_ram.editmode = 1;
-    g_ram.pl_input_lock_flag = 0;
+    g_ram.plautoflag = 0;
   }
   else {
     if (g_ram.miles_carry_flag != 0) {
@@ -2757,7 +2757,7 @@ static void fox00damage_sub(SKC_sprite_status* p_playerwk) {
 static void fox00die(SKC_sprite_status* p_playerwk, SKC_play_work work) {
   if (g_ram.play_type == PLAY_TYPE_MILES && g_ram.debugflag != 0 && g_ram.swdata1.pressed.b == 1) {
     g_ram.editmode = 1;
-    g_ram.pl_input_lock_flag = 0;
+    g_ram.plautoflag = 0;
   }
   else {
     if (g_ram.miles_carry_flag != 0) {

@@ -246,7 +246,7 @@ typedef struct sonic3_ram {
   /* 08fff7c6 */ unsigned char reverse_gravity_flag;
   /* 08fff7c8 */ unsigned char watercoliflag;
   /* 08fff7c9 */ unsigned char watercoliflag2;
-  /* 08fff7ca */ unsigned char pl_input_lock_flag;
+  /* 08fff7ca */ unsigned char plautoflag;
   /* 08fff7cb */ unsigned char pl2_input_lock_flag;
   /* 08fff7d0 */ unsigned short emyscorecnt;
   /* 08fff7d2 */ unsigned short timebonus;

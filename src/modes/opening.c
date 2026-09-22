@@ -219,7 +219,7 @@ void opening(void) {
   // DAT_08fff7c7
   g_ram.watercoliflag = 0;
   g_ram.watercoliflag2 = 0;
-  g_ram.pl_input_lock_flag = 0;
+  g_ram.plautoflag = 0;
   g_ram.pl2_input_lock_flag = 0;
   g_ram.emyscorecnt = 0;
   g_ram.timebonus = 0;

@@ -268,11 +268,11 @@ static void vsplaymove(SKC_sprite_status* p_playerwk, SKC_play_work work) {
 
   if (g_ram.debugflag != 0 && p_playerwk == &g_ram.actwk[0] && g_ram.swdata1.pressed.b == 1) {
     g_ram.editmode = 1;
-    g_ram.pl_input_lock_flag = 0;
+    g_ram.plautoflag = 0;
   }
   else {
     if (p_playerwk == &g_ram.actwk[0]) {
-      if (g_ram.pl_input_lock_flag == 0) {
+      if (g_ram.plautoflag == 0) {
         g_ram.swdata = g_ram.swdata1;
       }
     }
@@ -566,14 +566,14 @@ static void play00move(SKC_sprite_status* p_playerwk, SKC_play_work work) {
     }
     if (g_ram.swdata1.pressed.b == 1) {
       g_ram.editmode = 1;
-      g_ram.pl_input_lock_flag = 0;
+      g_ram.plautoflag = 0;
       if (g_ram.swdata1.down.c == 1) {
         g_ram.editmode = 2;
       }
       return;
     }
   }
-  if (g_ram.pl_input_lock_flag == 0) {
+  if (g_ram.plautoflag == 0) {
     g_ram.swdata = g_ram.swdata1;
   }
   if (BIT_IS_SET(p_playerwk->u.play.control_bitfield, 0)) {
@@ -2104,7 +2104,7 @@ static void abariabounce(SKC_sprite_status* p_playerwk) {
 static void play00damage(SKC_sprite_status* p_playerwk, SKC_play_work work) {
   if (g_ram.debugflag != 0 && g_ram.swdata1.pressed.b == 1) {
     g_ram.editmode = 1;
-    g_ram.pl_input_lock_flag = 0;
+    g_ram.plautoflag = 0;
   }
   else {
     speedset2_g(p_playerwk);
@@ -2151,7 +2151,7 @@ static void play00damage_sub(SKC_sprite_status* p_playerwk) {
 static void play00die(SKC_sprite_status* p_playerwk, SKC_play_work work) {
   if (g_ram.debugflag != 0 && g_ram.swdata1.pressed.b == 1) {
     g_ram.editmode = 1;
-    g_ram.pl_input_lock_flag = 0;
+    g_ram.plautoflag = 0;
   }
   else {
     play00die_sub(p_playerwk, work);
@@ -2292,7 +2292,7 @@ static void play00appear(SKC_sprite_status* p_playerwk, SKC_play_work work) {
 static void play00drown(SKC_sprite_status* p_playerwk, SKC_play_work work) {
   if (g_ram.debugflag != 0 && g_ram.swdata1.pressed.b == 1) {
     g_ram.editmode = 1;
-    g_ram.pl_input_lock_flag = 0;
+    g_ram.plautoflag = 0;
   }
   else {
     speedset2_g(p_playerwk);
