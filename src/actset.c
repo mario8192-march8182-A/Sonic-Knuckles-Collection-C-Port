@@ -89,7 +89,7 @@ static void actsetinit(void) {
       ++g_ram.asetadr;
       ++p_flagwork;
     }
-    g_ram.flagworkcnt = p_flagwork - g_ram.flagwork;
+    g_ram.flagworkadr = p_flagwork - g_ram.flagwork;
     p_flagwork = get_zone(g_ram.stageno) != ROLLING_JUMP ? g_ram.flagwork : &g_ram.flagwork[FLAGWORK_ROLLING_JUMP_START];
     scra_h -= 128;
     if (scra_h >= 0) {
@@ -98,7 +98,7 @@ static void actsetinit(void) {
         ++p_flagwork;
       }
     }
-    g_ram.flagworkcnt2 = p_flagwork - g_ram.flagwork;
+    g_ram.flagworkadr2 = p_flagwork - g_ram.flagwork;
     g_ram.asetposi = -1;
     g_ram.asetposi2 = g_ram.scra_v_posit >> 16 & 0xFF80;
     actset();
@@ -135,7 +135,7 @@ static void actset(void) {
   if (scra_h != g_ram.asetposi) {
     if (scra_h < g_ram.asetposi) {
       g_ram.asetposi = scra_h;
-      unsigned char* p_flagwork = &g_ram.flagwork[g_ram.flagworkcnt2];
+      unsigned char* p_flagwork = &g_ram.flagwork[g_ram.flagworkadr2];
       scra_h -= 128;
       if (scra_h >= 0) {
         SKC_actwkchk_result result = actwkchk();
@@ -153,18 +153,18 @@ static void actset(void) {
           }
         }
       }
-      g_ram.flagworkcnt2 = p_flagwork - g_ram.flagwork;
-      p_flagwork = &g_ram.flagwork[g_ram.flagworkcnt];
+      g_ram.flagworkadr2 = p_flagwork - g_ram.flagwork;
+      p_flagwork = &g_ram.flagwork[g_ram.flagworkadr];
       scra_h += 768;
       while (scra_h <= (g_ram.asetadr2 - 1)->x) {
         --g_ram.asetadr;
         --p_flagwork;
       }
-      g_ram.flagworkcnt = p_flagwork - g_ram.flagwork;
+      g_ram.flagworkadr = p_flagwork - g_ram.flagwork;
     }
     else {
       g_ram.asetposi = scra_h;
-      unsigned char* p_flagwork = &g_ram.flagwork[g_ram.flagworkcnt];
+      unsigned char* p_flagwork = &g_ram.flagwork[g_ram.flagworkadr];
       scra_h += 640;
       SKC_actwkchk_result result = actwkchk();
       if (result.actwk_ptr != 0) {
@@ -176,8 +176,8 @@ static void actset(void) {
           if (result.actwk_ptr == 0) break;
         }
       }
-      g_ram.flagworkcnt = p_flagwork - g_ram.flagwork;
-      p_flagwork = &g_ram.flagwork[g_ram.flagworkcnt2];
+      g_ram.flagworkadr = p_flagwork - g_ram.flagwork;
+      p_flagwork = &g_ram.flagwork[g_ram.flagworkadr2];
       scra_h -= 768;
       if (scra_h >= 0) {
         while (scra_h > g_ram.asetadr2->x) {
@@ -185,7 +185,7 @@ static void actset(void) {
           ++p_flagwork;
         }
       }
-      g_ram.flagworkcnt2 = p_flagwork - g_ram.flagwork;
+      g_ram.flagworkadr2 = p_flagwork - g_ram.flagwork;
     }
   }
   actset2();
@@ -241,7 +241,7 @@ static void actset2(void) {
     }
     SKC_actwkchk_result result = actwkchk();
     if (result.actwk_ptr != 0) {
-      unsigned char* p_flagwork = &g_ram.flagwork[g_ram.flagworkcnt2];
+      unsigned char* p_flagwork = &g_ram.flagwork[g_ram.flagworkadr2];
       int cnt = g_ram.asetadr - g_ram.asetadr2;
       for (int i = 0; i < cnt; ++i) {
         if (!BIT_IS_SET(*p_flagwork, 7)
@@ -376,7 +376,7 @@ void actset_sync(void) {
   if (scra_h != g_ram.asetposi) {
     if (scra_h < g_ram.asetposi) {
       g_ram.asetposi = scra_h;
-      unsigned char* p_flagwork = &g_ram.flagwork[g_ram.flagworkcnt2];
+      unsigned char* p_flagwork = &g_ram.flagwork[g_ram.flagworkadr2];
       scra_h -= 128;
       if (scra_h >= 0) {
         while (scra_h < (g_ram.asetadr2 - 1)->x) {
@@ -384,25 +384,25 @@ void actset_sync(void) {
           --p_flagwork;
         }
       }
-      g_ram.flagworkcnt2 = p_flagwork - g_ram.flagwork;
-      p_flagwork = &g_ram.flagwork[g_ram.flagworkcnt];
+      g_ram.flagworkadr2 = p_flagwork - g_ram.flagwork;
+      p_flagwork = &g_ram.flagwork[g_ram.flagworkadr];
       scra_h += 768;
       while (scra_h < (g_ram.asetadr - 1)->x) {
         --g_ram.asetadr2;
         --p_flagwork;
       }
-      g_ram.flagworkcnt = p_flagwork - g_ram.flagwork;
+      g_ram.flagworkadr = p_flagwork - g_ram.flagwork;
     }
     else {
       g_ram.asetposi = scra_h;
-      unsigned char* p_flagwork = &g_ram.flagwork[g_ram.flagworkcnt];
+      unsigned char* p_flagwork = &g_ram.flagwork[g_ram.flagworkadr];
       scra_h += 640;
       while (scra_h > g_ram.asetadr->x) {
         ++g_ram.asetadr;
         ++p_flagwork;
       }
-      g_ram.flagworkcnt = p_flagwork - g_ram.flagwork;
-      p_flagwork = &g_ram.flagwork[g_ram.flagworkcnt2];
+      g_ram.flagworkadr = p_flagwork - g_ram.flagwork;
+      p_flagwork = &g_ram.flagwork[g_ram.flagworkadr2];
       scra_h -= 768;
       if (scra_h >= 0) {
         while (scra_h > g_ram.asetadr2->x) {
@@ -410,7 +410,7 @@ void actset_sync(void) {
           ++p_flagwork;
         }
       }
-      g_ram.flagworkcnt2 = p_flagwork - g_ram.flagwork;
+      g_ram.flagworkadr2 = p_flagwork - g_ram.flagwork;
     }
   }
 }

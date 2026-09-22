@@ -234,8 +234,8 @@ typedef struct sonic3_ram {
   /* 08fff770 */ short asetposi2;
   /* 08fff772 */ SKC_aset* asetadr;
   /* 08fff776 */ SKC_aset* asetadr2;
-  /* 08fff77a */ unsigned short flagworkcnt;
-  /* 08fff77c */ unsigned short flagworkcnt2;
+  /* 08fff77a */ unsigned short flagworkadr;
+  /* 08fff77c */ unsigned short flagworkadr2;
   /* 08fff796 */ unsigned char* scdadr;
   /* 08fff7aa */ unsigned char bossstart;
   /* 08fff7b4 */ unsigned char* scd0adr;

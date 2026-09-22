@@ -253,8 +253,8 @@ void game(void) {
   g_ram.asetposi2 = 0;
   g_ram.asetadr = 0;
   g_ram.asetadr2 = 0;
-  g_ram.flagworkcnt = 0;
-  g_ram.flagworkcnt2 = 0;
+  g_ram.flagworkadr = 0;
+  g_ram.flagworkadr2 = 0;
   // DAT_08fff794
   g_ram.scdadr = 0;
   g_ram.bossstart = 0;
