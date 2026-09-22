@@ -1491,8 +1491,8 @@ void demoset(void) {
     demospec_swdata
   };
 
-  g_ram.swbufcnt = tbl[g_ram.demoid][0];
-  g_ram.demo_adr = &tbl[g_ram.demoid][1];
+  g_ram.swbufcnt = tbl[g_ram.demono][0];
+  g_ram.demo_adr = &tbl[g_ram.demono][1];
   g_ram.DAT_08ffef79 = 0;
   memset(&g_ram.swdata1, 0, sizeof(g_ram.swdata1));
   g_ram.swdata1.down.s = 1;

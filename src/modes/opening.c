@@ -355,7 +355,7 @@ void opening(void) {
   // DAT_08ffef6a
   // DAT_08ffef6c
   // DAT_08ffef6e
-  g_ram.demoid = 0;
+  g_ram.demono = 0;
   memset(g_ram.ringbuffer, 0, sizeof(g_ram.ringbuffer));
   sprtblinit2();
   memset(g_ram.colorwk, 0, sizeof(g_ram.colorwk));
@@ -500,30 +500,30 @@ static void play_demo(void) {
   };
 
   soundset(-31);
-  g_ram.demoid = g_ram.nextdemoid;
-  unsigned short stageno = stageno_tbl[g_ram.demoid & 7];
+  g_ram.demono = g_ram.nextdemono;
+  unsigned short stageno = stageno_tbl[g_ram.demono & 7];
   g_ram.stageno = stageno;
   g_ram.stageno_i = stageno;
   g_ram.stageno_s = stageno;
-  ++g_ram.nextdemoid;
+  ++g_ram.nextdemono;
   if (g_ram.cartridge == 0) {
     if (!g_sonic3_alone) {
-      if (g_ram.nextdemoid == 3) {
-        g_ram.nextdemoid = 4;
+      if (g_ram.nextdemono == 3) {
+        g_ram.nextdemono = 4;
       }
-      else if (g_ram.nextdemoid >= 7) {
-        g_ram.nextdemoid = 0;
+      else if (g_ram.nextdemono >= 7) {
+        g_ram.nextdemono = 0;
       }
     }
     else {
-      if (g_ram.nextdemoid >= 3) {
-        g_ram.nextdemoid = 0;
+      if (g_ram.nextdemono >= 3) {
+        g_ram.nextdemono = 0;
       }
     }
   }
   else {
-    if (g_ram.nextdemoid >= 7) {
-      g_ram.nextdemoid = 3;
+    if (g_ram.nextdemono >= 7) {
+      g_ram.nextdemono = 3;
     }
   }
   if (stageno == 0xFFFF) {

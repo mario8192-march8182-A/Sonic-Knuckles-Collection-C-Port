@@ -141,7 +141,7 @@ typedef struct sonic3_ram {
   /* 08ffef72 */ unsigned short nopause;
   /* 08ffef78 */ unsigned char swbufcnt;
   /* 08ffef79 */ unsigned char DAT_08ffef79;
-  /* 08ffef7a */ unsigned short demoid;
+  /* 08ffef7a */ unsigned short demono;
   /* 08ffef80 */ unsigned short ringbuffer[RINGBUFFER_SLOTS];
   /* 08fff000 */ unsigned short colorwk4[64];
   /* 08fff080 */ unsigned short colorwk3[64];
@@ -447,7 +447,7 @@ typedef struct sonic3_ram {
   /* 08ffffca */ SKC_sprite_pattern** plpatbase;
   /* 08ffffce */ SKC_pattern_name plsproffset;
   /* 08ffffd0 */ unsigned short demoflag;
-  /* 08ffffd2 */ unsigned short nextdemoid;
+  /* 08ffffd2 */ unsigned short nextdemono;
   /* 08ffffd4 */ unsigned char bsmode;
   /* 08ffffd8 */ unsigned char mdstatus;
   /* 08ffffda */ unsigned short debugflag;
