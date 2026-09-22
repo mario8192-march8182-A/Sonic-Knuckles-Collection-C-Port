@@ -53,8 +53,8 @@ SKC_sprite_data* get_sprite_table(void) {
 }
 
 
-unsigned char get_vdp_hint_cache(void) {
-  return g_ram.vdp_hint_cache;
+unsigned char get_hintposi(void) {
+  return g_ram.hintposi;
 }
 
 

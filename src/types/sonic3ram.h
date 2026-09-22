@@ -161,7 +161,7 @@ typedef struct sonic3_ram {
                  }
                  hscroll;
   /* 08fff623 */ unsigned char teleport;
-  /* 08fff624 */ unsigned char vdp_hint_cache;
+  /* 08fff624 */ unsigned char hintposi;
   /* 08fff626 */ unsigned char startcolor;
   /* 08fff627 */ unsigned char colorcnt;
   /* 08fff628 */ unsigned short DAT_08fff628;

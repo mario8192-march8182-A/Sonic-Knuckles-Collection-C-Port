@@ -383,7 +383,7 @@ void game(void) {
   if (g_ram.editmodecheat != 0 && g_ram.swdata1.down.a == 1) {
     g_ram.debugflag = 1;
   }
-  g_ram.vdp_hint_cache = 255;
+  g_ram.hintposi = 255;
   if (g_ram.vs_flag != 0) {
     g_vdp_scrolla_adr = 0x8000;
     g_vdp_scrollb_adr = 0xA000;
@@ -889,18 +889,18 @@ static void watercnt(void) {
       short distance = g_ram.waterposi - (g_ram.scra_v_posit >> 16);
       if (distance <= 0) {
         g_ram.waterflag = 1;
-        g_ram.vdp_hint_cache = 255;
+        g_ram.hintposi = 255;
       }
       else {
         if (distance >= 223) {
           distance = 255;
         }
-        g_ram.vdp_hint_cache = distance & 0xFF;
+        g_ram.hintposi = distance & 0xFF;
         FUN_0041c7d2();
       }
     }
     else {
-      g_ram.vdp_hint_cache = 255;
+      g_ram.hintposi = 255;
     }
   }
   else {

@@ -13,7 +13,7 @@ short* get_hscrollbuff(void);
 unsigned char* get_int_flg_ptr(void);
 long get_scra_v_posit_copy(void);
 SKC_sprite_data* get_sprite_table(void);
-unsigned char get_vdp_hint_cache(void);
+unsigned char get_hintposi(void);
 short get_vscrolla(void);
 short get_vscrollb(void);
 unsigned short* get_vscrollbuff(void);

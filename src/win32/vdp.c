@@ -495,13 +495,13 @@ static unsigned char* blit_remainingpixels_ver4(unsigned char* p_pixelbuffer, un
 void FUN_0040f89b(unsigned long* p_surface, long pitch) {
   unsigned long* p_pixelbuffer = (unsigned long*)g_pixelBuffer;
   pitch -= 320;
-  unsigned char hint = get_vdp_hint_cache();
+  unsigned char hintposi = get_hintposi();
   if (g_vdp_hint_disabled != 0) {
-    hint = 255;
+    hintposi = 255;
   }
 
   for (int scanline = 0; scanline < 224; ++scanline) {
-    if (scanline < hint) {
+    if (scanline < hintposi) {
       for (int i = 20; i != 0; --i) {
         *p_surface++ = *p_pixelbuffer++ & 0x7F7F7F7F;
         *p_surface++ = *p_pixelbuffer++ & 0x7F7F7F7F;
@@ -526,13 +526,13 @@ void FUN_0040f89b(unsigned long* p_surface, long pitch) {
 void FUN_0040f96a(unsigned long* p_surface, long pitch) {
   unsigned long* p_pixelbuffer = (unsigned long*)g_pixelBuffer;
   long pitch2 = pitch * 2 - 640;
-  unsigned char hint = get_vdp_hint_cache();
+  unsigned char hintposi = get_hintposi();
   if (g_vdp_hint_disabled != 0) {
-    hint = 255;
+    hintposi = 255;
   }
 
   for (int scanline = 0; scanline < 224; ++scanline) {
-    if (scanline < hint) {
+    if (scanline < hintposi) {
       for (int i = 20; i != 0; --i) {
         unsigned long pixel = *p_pixelbuffer++ & 0x7F7F7F7F;
         unsigned long pixel_mod = (pixel       & 0x000000FF)
@@ -653,7 +653,7 @@ void FUN_0040f96a(unsigned long* p_surface, long pitch) {
 void FUN_0040fceb(unsigned long* p_surface, long pitch) {
   unsigned long* p_pixelbuffer = (unsigned long*)g_pixelBuffer;
   pitch -= 320;
-  unsigned char hint = get_vdp_hint_cache();
+  unsigned char hintposi = get_hintposi();
 
   for (int scanline = 0; scanline < 224; ++scanline) {
     for (int i = 20; i != 0; --i) {
@@ -671,7 +671,7 @@ void FUN_0040fceb(unsigned long* p_surface, long pitch) {
 void FUN_0040fd4f(unsigned long* p_surface, long pitch) {
   unsigned long* p_pixelbuffer = (unsigned long*)g_pixelBuffer;
   long pitch2 = pitch * 2 - 640;
-  unsigned char hint = get_vdp_hint_cache();
+  unsigned char hintposi = get_hintposi();
 
   for (int scanline = 0; scanline < 224; ++scanline) {
     for (int i = 20; i != 0; --i) {
