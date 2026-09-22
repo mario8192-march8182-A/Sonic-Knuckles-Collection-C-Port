@@ -86,8 +86,8 @@ static void editinit(SKC_sprite_status* p_actwk) {
     g_ram.editno = 0;
   }
   editpatchg(p_actwk, p_data);
-  g_ram.edittimer = 12;
-  g_ram.edit_spd = 1;
+  g_ram.edittimer.timer = 12;
+  g_ram.edittimer.spd = 1;
   editmove(p_actwk);
 }
 
@@ -100,21 +100,21 @@ static void editmove(SKC_sprite_status* p_actwk) {
 
 static void editwalk(SKC_sprite_status* p_actwk, SKC_edit_data* p_data) {
   if (!are_any_dir_buttons_used(g_ram.swdata1.pressed) && !are_any_dir_buttons_used(g_ram.swdata1.down)) {
-    g_ram.edittimer = 12;
-    g_ram.edit_spd = 15;
+    g_ram.edittimer.timer = 12;
+    g_ram.edittimer.spd = 15;
   }
   else {
     if (!are_any_dir_buttons_used(g_ram.swdata1.pressed) && are_any_dir_buttons_used(g_ram.swdata1.down)) {
-      --g_ram.edittimer;
-      if (g_ram.edittimer == 0) {
-        g_ram.edittimer = 1;
-        ++g_ram.edit_spd;
-        if (g_ram.edit_spd == 0) {
-          g_ram.edit_spd = -1;
+      --g_ram.edittimer.timer;
+      if (g_ram.edittimer.timer == 0) {
+        g_ram.edittimer.timer = 1;
+        ++g_ram.edittimer.spd;
+        if (g_ram.edittimer.spd == 0) {
+          g_ram.edittimer.spd = -1;
         }
       }
     }
-    long edit_spd = (g_ram.edit_spd + 1) * 0x40000;
+    long edit_spd = (g_ram.edittimer.spd + 1) * 0x40000;
     long xposi = p_actwk->xposi;
     long yposi = p_actwk->yposi;
     if (g_ram.swdata1.down.u == 1) {

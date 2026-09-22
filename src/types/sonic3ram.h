@@ -296,8 +296,11 @@ typedef struct sonic3_ram {
   /* 08fffe04 */ unsigned short gametimer;
   /* 08fffe06 */ unsigned short editno;
   /* 08fffe08 */ unsigned short editmode;
-  /* 08fffe0a */ unsigned char edittimer;
-  /* 08fffe0b */ signed char edit_spd;
+  /* 08fffe0a */ struct {
+                   unsigned char timer;
+                   signed char spd;
+                 }
+                 edittimer;
   /* 08fffe0c */ unsigned long systemtimer;
   /* 08fffe10 */ unsigned short stageno;
   /* 08fffe12 */ unsigned char pl_suu;
