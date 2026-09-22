@@ -184,7 +184,7 @@ void game(void) {
   }
   memset(g_ram.pbuffer, 0, sizeof(g_ram.pbuffer));
   memset(g_ram.actwk, 0, sizeof(g_ram.actwk));
-  g_ram.DAT_08fff628 = 0;
+  g_ram.intcnt = 0;
   g_ram.int_flg = 0;
   g_ram.linkdata = 0;
   g_ram.clchgcnt = 0;

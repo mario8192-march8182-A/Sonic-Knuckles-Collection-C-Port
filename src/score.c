@@ -234,7 +234,7 @@ static void scoreset2(void) {
     g_ram.plring_f = 0;
     ringwrt(g_ram.plring, &g_vram[0xDF40]);
   }
-  timewrt1(g_ram.DAT_08fff628, &g_vram[0xDE40]);
+  timewrt1(g_ram.intcnt, &g_vram[0xDE40]);
   timewrt(g_ram.linkdata, &g_vram[0xDEC0]);
   if (g_ram.pl_suu_f != 0) {
     g_ram.pl_suu_f = 0;

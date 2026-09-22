@@ -164,7 +164,7 @@ typedef struct sonic3_ram {
   /* 08fff624 */ unsigned char hintposi;
   /* 08fff626 */ unsigned char startcolor;
   /* 08fff627 */ unsigned char colorcnt;
-  /* 08fff628 */ unsigned short DAT_08fff628;
+  /* 08fff628 */ unsigned char intcnt;
   /* 08fff62a */ unsigned char int_flg;
   /* 08fff62c */ unsigned char linkdata;
   /* 08fff632 */ unsigned short clchgcnt;
