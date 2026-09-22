@@ -211,7 +211,7 @@ typedef struct sonic3_ram {
   /* 08fff73f */ unsigned char miles_nograb_timer;
   /* 08fff740 */ unsigned short zoom_pat_cnt;
   /* 08fff744 */ short foxxspeed;
-  /* 08fff746 */ unsigned char markno_s;
+  /* 08fff746 */ unsigned char plflag_s;
   /* 08fff74a */ unsigned char DAT_08fff74a;
   /* 08fff74b */ unsigned char DAT_08fff74b;
   /* 08fff74c */ short foxyspeed;
@@ -313,8 +313,8 @@ typedef struct sonic3_ram {
   /* 08fffe20 */ unsigned short plring;
   /* 08fffe22 */ act_timer pltime;
   /* 08fffe26 */ unsigned long plscore;
-  /* 08fffe2a */ unsigned char markerno;
-  /* 08fffe2b */ unsigned char markerno_s;
+  /* 08fffe2a */ unsigned char plflag;
+  /* 08fffe2b */ unsigned char plflag_s;
   /* 08fffe2c */ unsigned short stageno_s;
   /* 08fffe2e */ short plxposi_s;
   /* 08fffe30 */ short plyposi_s;
@@ -332,7 +332,7 @@ typedef struct sonic3_ram {
   /* 08fffe46 */ unsigned char zone_flag_s;
   /* 08fffe47 */ SKC_play_powerdat plpowerdat_s;
   /* 08fffe48 */ unsigned char marker_flag;
-  /* 08fffe49 */ unsigned char markerno_s2;
+  /* 08fffe49 */ unsigned char plflag_s2;
   /* 08fffe4a */ unsigned short stageno_s2;
   /* 08fffe4c */ short plxposi_s2;
   /* 08fffe4e */ short plyposi_s2;

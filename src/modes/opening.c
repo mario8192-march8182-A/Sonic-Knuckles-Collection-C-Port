@@ -360,7 +360,7 @@ void opening(void) {
   sprtblinit2();
   memset(g_ram.colorwk, 0, sizeof(g_ram.colorwk));
   memset(g_ram.colorwk2, 0, sizeof(g_ram.colorwk2));
-  g_ram.markerno = 0;
+  g_ram.plflag = 0;
   g_ram.marker_flag = 0;
   g_ram.editmode = 0;
   g_ram.demoflag = 0;
@@ -1299,8 +1299,8 @@ static void skopening(void) {
 static void demo0700_init(unsigned short stageno) {
   g_ram.plxposi_s = 0x6F4;
   g_ram.plyposi_s = 0x9EC;
-  g_ram.markerno = 1;
-  g_ram.markerno_s = 1;
+  g_ram.plflag = 1;
+  g_ram.plflag_s = 1;
   g_ram.stageno_s = stageno;
   g_ram.stageno_is = stageno;
   memset(&g_ram.plsproffset_s, 0, sizeof(g_ram.plsproffset_s));

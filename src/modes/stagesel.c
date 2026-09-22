@@ -187,7 +187,7 @@ void stagesel(void) {
   g_ram.curr_savedata_ptr = 0;
   if (!g_sonic3_alone) {
     g_ram.brings = 0;
-    g_ram.markerno = 0;
+    g_ram.plflag = 0;
     g_ram.marker_flag = 0;
     g_ram.bsmode = 0;
   }

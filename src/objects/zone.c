@@ -637,7 +637,7 @@ static void clear_move2(SKC_sprite_status* p_actwk) {
   }
   else {
     set_act(&g_ram.stageno_i, ACT_2);
-    g_ram.markerno = 0;
+    g_ram.plflag = 0;
     g_ram.marker_flag = 0;
     g_ram.act_clear_flag = 0;
     if (get_zone(g_ram.stageno) != SANDOPOLIS && get_zone(g_ram.stageno) != DEATH_EGG) {

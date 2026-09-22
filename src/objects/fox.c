@@ -275,7 +275,7 @@ static void vsfoxinit(SKC_sprite_status* p_playerwk, SKC_play_work work) {
   *work.plmaxspdwk_ptr = vsplaydata[p_playerwk->u.play.character][0];
   *work.pladdspdwk_ptr = vsplaydata[p_playerwk->u.play.character][1];
   *work.plretspdwk_ptr = vsplaydata[p_playerwk->u.play.character][2];
-  if (g_ram.markerno == 0) {
+  if (g_ram.plflag == 0) {
     p_playerwk->u.play.top_solid_bit = 12;
     p_playerwk->u.play.lrb_solid_bit = 13;
     memset(&p_playerwk->sproffset, 0, sizeof(p_playerwk->sproffset));
@@ -613,7 +613,7 @@ static void fox00init(SKC_sprite_status* p_playerwk, SKC_play_work work) {
   *work.pladdspdwk_ptr = 0xC;
   *work.plretspdwk_ptr = 0x80;
   if (g_ram.play_type == PLAY_TYPE_MILES) {
-    if (g_ram.markerno == 0) {
+    if (g_ram.plflag == 0) {
       memset(&p_playerwk->sproffset, 0, sizeof(p_playerwk->sproffset));
       p_playerwk->sproffset.gfx = 0x6A0;
       p_playerwk->u.play.top_solid_bit = 12;
@@ -645,7 +645,7 @@ static void fox00init(SKC_sprite_status* p_playerwk, SKC_play_work work) {
   g_ram.fox_appear_timer = 0;
   g_ram.actwk[ACTWK_MILES_TAILS].r_ptr = &foxtails;
   g_ram.actwk[ACTWK_MILES_TAILS].u.play.ride_obj = p_playerwk - g_ram.actwk;
-  g_ram.markno_s = g_ram.markerno;
+  g_ram.markno_s = g_ram.plflag;
 }
 
 

@@ -132,7 +132,7 @@ static void zone000chk0(void) {
     g_ram.scralim_left = g_ram.scra_h_posit >> 16;
     if (g_ram.scra_h_posit >> 16 >= 0x1308) {
       bool play_type_is_sonic = g_ram.play_type == PLAY_TYPE_SONIC_AND_MILES || g_ram.play_type == PLAY_TYPE_SONIC;
-      if (g_ram.markerno == 0 && play_type_is_sonic) {
+      if (g_ram.plflag == 0 && play_type_is_sonic) {
         divdevset(11);
       }
       colorset2(42);
@@ -150,7 +150,7 @@ static void zone000chk1(void) {
   g_ram.scralim_left = 0x1308;
   if (g_ram.scra_h_posit >> 16 >= 0x1400) {
     bool play_type_is_sonic = g_ram.play_type == PLAY_TYPE_SONIC_AND_MILES || g_ram.play_type == PLAY_TYPE_SONIC;
-    if (g_ram.markerno == 0 && play_type_is_sonic) {
+    if (g_ram.plflag == 0 && play_type_is_sonic) {
       unlze_blocks(&g_ram.blockwk[77], zone0d0blk2);
       unlze_moduled(&g_vram[0x17C0], zone0d0cg2);
       g_ram.event_flag_3 = 0xFF;
@@ -161,7 +161,7 @@ static void zone000chk1(void) {
       g_ram.cgchgtim[2] = 0;
       g_ram.cgchgcnt[2] = 5;
     }
-    g_ram.markerno = 1;
+    g_ram.plflag = 1;
     g_ram.plxposi_s = 0x13A0;
     g_ram.plyposi_s = 0x41A;
     playsave1();

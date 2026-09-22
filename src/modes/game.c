@@ -141,7 +141,7 @@ void game(void) {
   if (!BIT_IS_SET(g_ram.demoflag, 7)) {
     scrinit();
     g_ram.gametimer = 0;
-    if (g_ram.markerno != 0) {
+    if (g_ram.plflag != 0) {
       if (g_ram.marker_flag == 0) {
         g_ram.stageno = g_ram.stageno_s;
         g_ram.stageno_i = g_ram.stageno_is;
@@ -153,10 +153,10 @@ void game(void) {
     }
     play_type_is_sonic = g_ram.play_type == PLAY_TYPE_SONIC_AND_MILES || g_ram.play_type == PLAY_TYPE_SONIC;
     unsigned short stageno = g_ram.stageno;
-    if (stageno == ANGEL_ISLAND_ACT_1 && (!play_type_is_sonic || g_ram.markerno != 0)) {
+    if (stageno == ANGEL_ISLAND_ACT_1 && (!play_type_is_sonic || g_ram.plflag != 0)) {
       stageno = ANGEL_ISLAND_ACT_1_NO_INTRO;
     }
-    if (g_ram.stageno != FLYING_BATTERY_ACT_2 || g_ram.markerno != 6) {
+    if (g_ram.stageno != FLYING_BATTERY_ACT_2 || g_ram.plflag != 6) {
       unsigned char ini_cg = mapinittbl[get_zone(stageno)][get_act(stageno)].ini_cg_no1;
       if (ini_cg != 0) {
         divdevset(ini_cg);
@@ -164,7 +164,7 @@ void game(void) {
     }
     play_type_set();
     play_type_is_sonic = g_ram.play_type == PLAY_TYPE_SONIC_AND_MILES || g_ram.play_type == PLAY_TYPE_SONIC;
-    if (g_ram.markerno == 0 && g_ram.stageno == ANGEL_ISLAND_ACT_1 && play_type_is_sonic) {
+    if (g_ram.plflag == 0 && g_ram.stageno == ANGEL_ISLAND_ACT_1 && play_type_is_sonic) {
       divdevset(1);
       divdevset(10);
     }
@@ -395,17 +395,17 @@ void game(void) {
   memset(&g_ram.colorwk3[16], 0, sizeof(unsigned short) * 48);
   if (!BIT_IS_SET(g_ram.demoflag, 7)) {
     short id = bgm_tbl[get_zone(g_ram.stageno)][get_act(g_ram.stageno)];
-    if (g_ram.stageno == ANGEL_ISLAND_ACT_2 && g_ram.markerno == 3) {
+    if (g_ram.stageno == ANGEL_ISLAND_ACT_2 && g_ram.plflag == 3) {
       id = 1;
     }
     bool is_knuckles_story = g_ram.stageno == MUSHROOM_HILL_ACT_1 && g_ram.play_type == PLAY_TYPE_KNUCKLES
-                             && g_ram.cartridge != 0 && g_ram.markerno == 0;
+                             && g_ram.cartridge != 0 && g_ram.plflag == 0;
     if (is_knuckles_story) {
       id = 31;
     }
     g_ram.bgm_act = id;
     bgmset(g_ram.bgm_act);
-    bool angel_island_with_intro = g_ram.stageno == ANGEL_ISLAND_ACT_1 && play_type_is_sonic && g_ram.markerno == 0;
+    bool angel_island_with_intro = g_ram.stageno == ANGEL_ISLAND_ACT_1 && play_type_is_sonic && g_ram.plflag == 0;
     if (is_knuckles_story) {
       bitdevr(&g_vram[0xB000], ricky_cg);
       bitdevr(&g_vram[0xB240], cucky_cg);
@@ -448,7 +448,7 @@ void game(void) {
   if (g_ram.stageno == MUSHROOM_HILL) {
     g_ram.actwk[4].r_ptr = &Obj_MHZ_Pollen_Spawner;
   }
-  if (g_ram.markerno == 0) {
+  if (g_ram.plflag == 0) {
     g_ram.plring = 0;
     memset(&g_ram.pltime, 0, sizeof(g_ram.pltime));
     g_ram.plring_f2 = 0;
@@ -502,7 +502,7 @@ void game(void) {
   g_ram.pl2_input_lock_flag = 0;
   demoset();
   if (g_ram.vs_flag == 0) {
-    if (!(g_ram.stageno == ANGEL_ISLAND_ACT_1 && g_ram.markerno == 0) && get_zone(g_ram.stageno) < AZURE_LAKE) {
+    if (!(g_ram.stageno == ANGEL_ISLAND_ACT_1 && g_ram.plflag == 0) && get_zone(g_ram.stageno) < AZURE_LAKE) {
       set_friend_cg();
     }
     g_ram.colorcnt = 48;
@@ -523,7 +523,7 @@ void game(void) {
     g_ram.swdata2.down.b = 1;
     g_ram.swdata2.down.c = 1;
     g_ram.swdata2.down.a = 1;
-    CLEAR_BIT(g_ram.markerno, 7);
+    CLEAR_BIT(g_ram.plflag, 7);
     CLEAR_BIT(g_ram.gmmode, 7);
 
     do {
@@ -609,7 +609,7 @@ static void stage_act_set(void) {
   g_ram.actwk[2].r_ptr = &colibufferclr;
   play_act_set();
   baria_act_set();
-  if (g_ram.markerno == 0 && g_ram.marker_flag == 0) {
+  if (g_ram.plflag == 0 && g_ram.marker_flag == 0) {
     switch (g_ram.stageno) {
       case ANGEL_ISLAND_ACT_1:
         if (g_ram.play_type == PLAY_TYPE_SONIC_AND_MILES || g_ram.play_type == PLAY_TYPE_SONIC) {
@@ -1690,7 +1690,7 @@ static void syspatchg(void) {
 static void mapinit(void) {
   unsigned short stageno = g_ram.stageno;
   bool play_type_is_sonic = g_ram.play_type == PLAY_TYPE_SONIC_AND_MILES || g_ram.play_type == PLAY_TYPE_SONIC;
-  if (stageno == ANGEL_ISLAND_ACT_1 && (!play_type_is_sonic || g_ram.markerno != 0)) {
+  if (stageno == ANGEL_ISLAND_ACT_1 && (!play_type_is_sonic || g_ram.plflag != 0)) {
     stageno = ANGEL_ISLAND_ACT_1_NO_INTRO;
   }
   SKC_mapinit_data* p_data = &mapinittbl[get_zone(stageno)][get_act(stageno)];
@@ -1747,7 +1747,7 @@ static void watercolorset(void) {
 
   colorset3(color_no);
   colorset4(color_no);
-  if (g_ram.markerno != 0) {
+  if (g_ram.plflag != 0) {
     g_ram.waterflag = g_ram.waterflag_s;
   }
   if (g_ram.play_type == PLAY_TYPE_KNUCKLES) {

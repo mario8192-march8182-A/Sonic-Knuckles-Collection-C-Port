@@ -1759,7 +1759,7 @@ static void nuckle070_run2(SKC_sprite_status* p_actwk) {
 
 
 void ev0700(SKC_sprite_status* p_actwk) {
-  if (g_ram.actwk[0].u.play.character == KNUCKLES || g_ram.markerno != 0 || g_ram.cartridge != 0) {
+  if (g_ram.actwk[0].u.play.character == KNUCKLES || g_ram.plflag != 0 || g_ram.cartridge != 0) {
     nuckle_fout(p_actwk);
   }
   else {
@@ -1852,7 +1852,7 @@ static void ev0700_fout0(SKC_sprite_status* p_actwk) {
   memset(&g_ram.swdata, 0, sizeof(g_ram.swdata));
   memset(&g_ram.swdata0, 0, sizeof(g_ram.swdata0));
   g_ram.actwk[1].mstno = 5;
-  g_ram.markerno = 1;
+  g_ram.plflag = 1;
   g_ram.plxposi_s = 0x190;
   g_ram.plyposi_s = 0x56C;
   playsave1();
@@ -1897,7 +1897,7 @@ static void ev0700m_wait0(SKC_sprite_status* p_actwk) {
 void sw0700(SKC_sprite_status* p_actwk) {
   enemy_init0(p_actwk, &sw0700_init_tbl);
   set_act05(p_actwk, &shut07_set_tbl);
-  bool skip = g_ram.markerno != 0 || g_ram.actwk[0].u.play.character == KNUCKLES;
+  bool skip = g_ram.plflag != 0 || g_ram.actwk[0].u.play.character == KNUCKLES;
   p_actwk->r_ptr = skip ? &sw0700_wait00 : &sw0700_wait0;
   actionsub(p_actwk);
 }
@@ -2097,7 +2097,7 @@ static unsigned short nuckle071_lim_tbl[8] = { 0x648, 0x848, 0x2D0, 0x4D0, 0x748
 
 static void nuckle071(SKC_sprite_status* p_actwk) {
   if (g_ram.actwk[0].u.play.character != KNUCKLES) {
-    if (g_ram.markerno >= 7) {
+    if (g_ram.plflag >= 7) {
       nuckle_fout(p_actwk);
     }
     else {
@@ -2320,7 +2320,7 @@ static void ev0701_move0(SKC_sprite_status* p_actwk) {
     p_playerwk->mspeed = 16;
     g_ram.fast_scroll_flag = 0;
     g_ram.DAT_08ffeee8 = 0;
-    g_ram.markerno = 7;
+    g_ram.plflag = 7;
     g_ram.plxposi_s = 0x52A;
     g_ram.plyposi_s = 0x5AC;
     playsave1();
@@ -2330,7 +2330,7 @@ static void ev0701_move0(SKC_sprite_status* p_actwk) {
 
 
 static void nuckle072(SKC_sprite_status* p_actwk) {
-  if (g_ram.actwk[0].u.play.character != KNUCKLES || g_ram.markerno != 0 || g_ram.cartridge == 0) {
+  if (g_ram.actwk[0].u.play.character != KNUCKLES || g_ram.plflag != 0 || g_ram.cartridge == 0) {
     nuckle_fout(p_actwk);
   }
   else {
@@ -2483,7 +2483,7 @@ static void nuckle072_run0(SKC_sprite_status* p_actwk) {
 
 
 static void end_open(SKC_sprite_status* p_actwk) {
-  g_ram.markerno = 1;
+  g_ram.plflag = 1;
   g_ram.plxposi_s = 0x6F4;
   g_ram.plyposi_s = 0x9EC;
   playsave1();
@@ -2919,7 +2919,7 @@ static void nuckle0a0_wait5(SKC_sprite_status* p_actwk) {
   short xposi = (g_ram.scra_h_posit >> 16) - 128;
   short yposi = fp16_get_integer(p_actwk->yposi) - (g_ram.scra_v_posit >> 16) + 128;
   if (xposi > fp16_get_integer(p_actwk->xposi) || (unsigned short)xposi > 0x200) {
-    g_ram.markerno = 1;
+    g_ram.plflag = 1;
     g_ram.plxposi_s = 0x140;
     g_ram.plyposi_s = 0xC6C;
     playsave1();

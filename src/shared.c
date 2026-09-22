@@ -2791,7 +2791,7 @@ void set_stageno(unsigned short stageno) {
   g_ram.stageno = stageno;
   g_ram.stageno_i = stageno;
   g_ram.gameflag = 1;
-  g_ram.markerno = 0;
+  g_ram.plflag = 0;
   g_ram.marker_flag = 0;
 }
 

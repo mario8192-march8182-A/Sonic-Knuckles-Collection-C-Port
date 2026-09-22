@@ -16,7 +16,7 @@
 #include "../sound.h"
 static void saveinit(SKC_sprite_status* pActwk);
 static void savemove(SKC_sprite_status* pActwk);
-static void savemove__sub(SKC_sprite_status* p_actwk, SKC_sprite_status* p_playerwk, unsigned char markerno);
+static void savemove__sub(SKC_sprite_status* p_actwk, SKC_sprite_status* p_playerwk, unsigned char plflag);
 static void savemove2(SKC_sprite_status* pActwk);
 static void savemove3(SKC_sprite_status* p_actwk);
 static void playsave(SKC_sprite_status* p_actwk);
@@ -77,7 +77,7 @@ static void saveinit(SKC_sprite_status* p_actwk) {
   p_actwk->sprvs = 40;
   p_actwk->sprpri = PRI_5;
   if (BIT_IS_SET(g_ram.flagwork[p_actwk->u.obj.flagwork_index - 1], 0)
-      || (g_ram.markerno & 0x7F) >= (p_actwk->u.obj.userflag & 0x7F)) {
+      || (g_ram.plflag & 0x7F) >= (p_actwk->u.obj.userflag & 0x7F)) {
     SET_BIT(g_ram.flagwork[p_actwk->u.obj.flagwork_index - 1], 0);
     p_actwk->mstno = 2;
   }
@@ -87,14 +87,14 @@ static void saveinit(SKC_sprite_status* p_actwk) {
 
 static void savemove(SKC_sprite_status* p_actwk) {
   if (g_ram.editmode == 0) {
-    savemove__sub(p_actwk, &g_ram.actwk[0], g_ram.markerno);
+    savemove__sub(p_actwk, &g_ram.actwk[0], g_ram.plflag);
   }
   savemove2(p_actwk);
 }
 
 
-static void savemove__sub(SKC_sprite_status* p_actwk, SKC_sprite_status* p_playerwk, unsigned char markerno) {
-  if ((markerno & 0x7F) < (p_actwk->u.obj.userflag & 0x7F)) {
+static void savemove__sub(SKC_sprite_status* p_actwk, SKC_sprite_status* p_playerwk, unsigned char plflag) {
+  if ((plflag & 0x7F) < (p_actwk->u.obj.userflag & 0x7F)) {
     short distance = fp16_get_integer(p_playerwk->xposi) - fp16_get_integer(p_actwk->xposi) + 8;
     if ((unsigned short)distance < 16) {
       distance = fp16_get_integer(p_playerwk->yposi) - fp16_get_integer(p_actwk->yposi) + 64;
@@ -164,7 +164,7 @@ static void savemove3(SKC_sprite_status* p_actwk) {
 
 
 static void playsave(SKC_sprite_status* p_actwk) {
-  g_ram.markerno = p_actwk->u.obj.userflag & 0xFF;
+  g_ram.plflag = p_actwk->u.obj.userflag & 0xFF;
   g_ram.plxposi_s = fp16_get_integer(p_actwk->xposi);
   g_ram.plyposi_s = fp16_get_integer(p_actwk->yposi);
   playsave1();
@@ -172,7 +172,7 @@ static void playsave(SKC_sprite_status* p_actwk) {
 
 
 void playsave1(void) {
-  g_ram.markerno_s = g_ram.markerno;
+  g_ram.plflag_s = g_ram.plflag;
   g_ram.stageno_s = g_ram.stageno;
   g_ram.stageno_is = g_ram.stageno_i;
   g_ram.plsproffset_s = g_ram.actwk[0].sproffset;
@@ -191,7 +191,7 @@ void playsave1(void) {
 
 
 void playsave2(SKC_sprite_status* p_actwk) {
-  g_ram.markerno_s2 = g_ram.markerno;
+  g_ram.plflag_s2 = g_ram.plflag;
   g_ram.stageno_s2 = g_ram.stageno;
   g_ram.stageno_is2 = g_ram.stageno_i;
   g_ram.plxposi_s2 = fp16_get_integer(p_actwk->xposi);
@@ -217,7 +217,7 @@ void playload(SKC_sprite_status* p_actwk) {
     playload2(p_actwk);
   }
   else {
-    g_ram.markerno = g_ram.markerno_s;
+    g_ram.plflag = g_ram.plflag_s;
     g_ram.stageno = g_ram.stageno_s;
     g_ram.stageno_i = g_ram.stageno_is;
     fp16_set_integer(&g_ram.actwk[0].xposi, g_ram.plxposi_s);
@@ -422,7 +422,7 @@ void o_star(SKC_sprite_status* p_actwk) {
       if (g_sonic3_alone) {
         g_ram.stageno = GUMBALL_MACHINE_ACT_1;
         g_ram.stageno_i = GUMBALL_MACHINE_ACT_1;
-        g_ram.markerno = 0;
+        g_ram.plflag = 0;
         g_ram.gameflag = 1;
         g_ram.plpowerdat_s2 = g_ram.actwk[0].u.play.powerdat;
         g_ram.plresetflag = 1;
@@ -451,7 +451,7 @@ void o_star(SKC_sprite_status* p_actwk) {
         g_ram.stageno_i = stageno;
         g_ram.plring_s = g_ram.plring;
         g_ram.plring_f2_s = g_ram.plring_f2;
-        g_ram.markerno = 0;
+        g_ram.plflag = 0;
         g_ram.gameflag = 1;
         g_ram.plpowerdat_s2 = g_ram.actwk[0].u.play.powerdat;
         g_ram.plpowerdat_s2.muteki = 0;

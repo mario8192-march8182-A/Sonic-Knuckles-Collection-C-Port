@@ -103,7 +103,7 @@ static void gost08_ctr(SKC_sprite_status* p_actwk) {
     0, 1, 2, 2, 3, 3
   };
 
-  if (g_ram.actwk[0].u.play.character != KNUCKLES && g_ram.markerno == 0) return;
+  if (g_ram.actwk[0].u.play.character != KNUCKLES && g_ram.plflag == 0) return;
 
   if (g_ram.soz_darkness_level != 0) {
     unsigned char max = cnt_tbl[g_ram.soz_darkness_level];
@@ -371,7 +371,7 @@ void obox08(SKC_sprite_status* p_actwk) {
   p_actwk->r_ptr = &obox04_wait0;
   p_actwk->u.obj.userflag = 3;
   set_act00(p_actwk, &obox08_switch_set_tbl);
-  if (g_ram.markerno != 0 || g_ram.actwk[0].u.play.character == KNUCKLES) {
+  if (g_ram.plflag != 0 || g_ram.actwk[0].u.play.character == KNUCKLES) {
     p_actwk->r_ptr = &obox04_wait1;
     p_actwk->patno = 1;
     p_actwk->u.obj.actflg0.end = 1;
@@ -382,7 +382,7 @@ void obox08(SKC_sprite_status* p_actwk) {
 static void obox08_switch(SKC_sprite_status* p_actwk) {
   enemy_init2(p_actwk, &switch_init_tbl);
   p_actwk->r_ptr = &switch_wait0;
-  if (g_ram.markerno != 0) {
+  if (g_ram.plflag != 0) {
     p_actwk->r_ptr = &switch_wait1;
     p_actwk->patno = 12;
   }
@@ -458,7 +458,7 @@ static void chk_gost08_limit(SKC_sprite_status* p_actwk) {
 
 
 void set_gost08(SKC_sprite_status* p_actwk) {
-  g_ram.markerno = 1;
+  g_ram.plflag = 1;
   g_ram.plxposi_s = playpositbl[SANDOPOLIS][ACT_2].x;
   g_ram.plyposi_s = playpositbl[SANDOPOLIS][ACT_2].y;
   playsave1();

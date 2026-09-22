@@ -103,7 +103,7 @@ void scr_set(void) {
 
 static void playposiset(void) {
   short xposi, yposi;
-  if (g_ram.markerno != 0) {
+  if (g_ram.plflag != 0) {
     playload(0);
     xposi = fp16_get_integer(g_ram.actwk[0].xposi);
     yposi = fp16_get_integer(g_ram.actwk[0].yposi);
@@ -114,7 +114,7 @@ static void playposiset(void) {
     yposi = p_playpositbl[get_zone(g_ram.stageno)][get_act(g_ram.stageno)].y;
     fp16_set_integer(&g_ram.actwk[0].xposi, xposi);
     fp16_set_integer(&g_ram.actwk[0].yposi, yposi);
-    if (g_ram.markerno == 0) {
+    if (g_ram.plflag == 0) {
       bool play_type_is_sonic = g_ram.play_type == PLAY_TYPE_SONIC_AND_MILES || g_ram.play_type == PLAY_TYPE_SONIC;
       if (g_ram.stageno == ANGEL_ISLAND_ACT_1 && play_type_is_sonic) {
         fp16_set_integer(&g_ram.actwk[0].xposi, 64);
@@ -512,7 +512,7 @@ static void vs_right_check(SKC_scroll_work work, short xoffset) {
 void mapwrt(void) {
   bool play_type_is_sonic = g_ram.play_type == PLAY_TYPE_SONIC_AND_MILES || g_ram.play_type == PLAY_TYPE_SONIC;
   unsigned short stageno = g_ram.stageno;
-  if (stageno == ANGEL_ISLAND_ACT_1 && (play_type_is_sonic || g_ram.markerno != 0)) {
+  if (stageno == ANGEL_ISLAND_ACT_1 && (play_type_is_sonic || g_ram.plflag != 0)) {
     stageno = ANGEL_ISLAND_ACT_1_NO_INTRO;
   }
   SKC_mapinit_data* p_data = &mapinittbl[get_zone(stageno)][get_act(stageno)];

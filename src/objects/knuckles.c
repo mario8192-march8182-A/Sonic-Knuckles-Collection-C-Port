@@ -168,7 +168,7 @@ static void knuckles_init(SKC_sprite_status* p_playerwk, SKC_play_work work) {
   *work.plmaxspdwk_ptr = 0x600;
   *work.pladdspdwk_ptr = 0xC;
   *work.plretspdwk_ptr = 0x80;
-  if (g_ram.markerno == 0) {
+  if (g_ram.plflag == 0) {
     memset(&p_playerwk->sproffset, 0, sizeof(p_actwk->sproffset));
     p_playerwk->sproffset.gfx = 0x680;
     p_playerwk->u.play.top_solid_bit = 12;
