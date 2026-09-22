@@ -517,7 +517,7 @@ static void break2movesw(SKC_sprite_status* p_actwk) {
     }
     --p_actwk->u.obj.timer;
   }
-  if (g_ram.stage_triggers[p_actwk->u.obj.actfree.break_.unknown2 & 0xF] != 0) {
+  if (g_ram.switchflag[p_actwk->u.obj.actfree.break_.unknown2 & 0xF] != 0) {
     p_actwk->u.obj.actfree.break_.unknown = 1;
     p_actwk->u.obj.flagwork_index = 0;
   }

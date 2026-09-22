@@ -64,7 +64,7 @@ static void brkabeinit(SKC_sprite_status* p_actwk) {
   p_actwk->actflg.relative_coordinates = 1;
   p_actwk->sprpri = PRI_5;
   p_actwk->r_ptr = &brkabemove;
-  if (BIT_IS_SET(p_actwk->u.obj.userflag, 7) && g_ram.stage_triggers[0] != 0) {
+  if (BIT_IS_SET(p_actwk->u.obj.userflag, 7) && g_ram.switchflag[0] != 0) {
     frameout(p_actwk);
   }
   else {
@@ -188,7 +188,7 @@ static void brkabemove(SKC_sprite_status* p_actwk) {
   };
   SKC_hitchk_result result = hitchk(p_actwk, data);
   if (BIT_IS_SET(p_actwk->u.obj.userflag, 7)) {
-    if (g_ram.stage_triggers[0] != 0) {
+    if (g_ram.switchflag[0] != 0) {
       frameout(p_actwk);
     }
     else {
@@ -356,7 +356,7 @@ static void brkabemovek(SKC_sprite_status* p_actwk) {
   };
   SKC_hitchk_result result = hitchk(p_actwk, data);
   if (BIT_IS_SET(p_actwk->u.obj.userflag, 7)) {
-    if (g_ram.stage_triggers[0] != 0) {
+    if (g_ram.switchflag[0] != 0) {
       frameout(p_actwk);
     }
     else {

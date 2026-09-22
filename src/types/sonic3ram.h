@@ -254,7 +254,7 @@ typedef struct sonic3_ram {
   /* 08fff7da */ short sc1ahposit;
   /* 08fff7de */ unsigned char foxpatno;
   /* 08fff7df */ unsigned char foxtailspatno;
-  /* 08fff7e0 */ unsigned char stage_triggers[STAGE_TRIGGERS_SLOTS];
+  /* 08fff7e0 */ unsigned char switchflag[SWITCHFLAG_SLOTS];
   /* 08fff7f0 */ unsigned char cgchgtim[8];
   /* 08fff7f1 */ unsigned char cgchgcnt[8];
                  short waterlinecgchgcnt[2];

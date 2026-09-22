@@ -282,7 +282,7 @@ void game(void) {
   g_ram.sc1ahposit = 0;
   g_ram.foxpatno = 0;
   g_ram.foxtailspatno = 0;
-  memset(g_ram.stage_triggers, 0, sizeof(g_ram.stage_triggers));
+  memset(g_ram.switchflag, 0, sizeof(g_ram.switchflag));
   memset(g_ram.cgchgtim, 0, sizeof(g_ram.cgchgtim));
   memset(g_ram.cgchgcnt, 0, sizeof(g_ram.cgchgcnt));
   memset(g_ram.waterlinecgchgcnt, 0, sizeof(g_ram.waterlinecgchgcnt));
@@ -975,10 +975,10 @@ static void water0001chk(void) {
     }
   }
   else {
-    if (g_ram.stage_triggers[0] == 0 && g_ram.scra_h_posit >> 16 >= 0x2850) {
-      g_ram.stage_triggers[0] = 1;
+    if (g_ram.switchflag[0] == 0 && g_ram.scra_h_posit >> 16 >= 0x2850) {
+      g_ram.switchflag[0] = 1;
     }
-    if (g_ram.stage_triggers[0] == 1 && g_ram.watermoveposi != 0x618) {
+    if (g_ram.switchflag[0] == 1 && g_ram.watermoveposi != 0x618) {
       if (g_ram.scra_h_posit >> 16 < 0x2900) {
         g_ram.scr_shake_flg = 0xFFFF;
         SKC_actwkchk_result result = actwkchk();

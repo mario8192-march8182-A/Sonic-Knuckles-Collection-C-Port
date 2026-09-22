@@ -54,7 +54,7 @@ SKC_play_type;
 
 #define RINGBUFFER_SLOTS 64
 
-#define STAGE_TRIGGERS_SLOTS 16
+#define SWITCHFLAG_SLOTS 16
 
 #define EMY_WRT_FLG_SLOTS 8
 

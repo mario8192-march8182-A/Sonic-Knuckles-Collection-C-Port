@@ -3142,7 +3142,7 @@ static void switchact_001(SKC_sprite_status* p_actwk) {
 
 
 static void switchact_010(SKC_sprite_status* p_actwk) {
-  g_ram.stage_triggers[8] = 0xFF;
+  g_ram.switchflag[8] = 0xFF;
 }
 
 

@@ -227,7 +227,7 @@ void opening(void) {
   g_ram.sc1ahposit = 0;
   g_ram.foxpatno = 0;
   g_ram.foxtailspatno = 0;
-  memset(g_ram.stage_triggers, 0, sizeof(g_ram.stage_triggers));
+  memset(g_ram.switchflag, 0, sizeof(g_ram.switchflag));
   memset(g_ram.cgchgtim, 0, sizeof(g_ram.cgchgtim));
   memset(g_ram.cgchgcnt, 0, sizeof(g_ram.cgchgcnt));
   memset(g_ram.waterlinecgchgcnt, 0, sizeof(g_ram.waterlinecgchgcnt));

@@ -61,7 +61,7 @@ static void maskinit(SKC_sprite_status* p_actwk) {
   if (p_actwk->u.obj.cddat.right == 0) {
     p_actwk->u.obj.actfree.mask.xoffset = 192;
   }
-  if (g_ram.stage_triggers[p_actwk->u.obj.userflag & 0x0F] != 0) {
+  if (g_ram.switchflag[p_actwk->u.obj.userflag & 0x0F] != 0) {
     p_actwk->u.obj.actfree.mask.inactive = true;
     p_actwk->patno = 0;
     p_actwk->colino = 0;
@@ -100,7 +100,7 @@ static void maskmove(SKC_sprite_status* p_actwk) {
             result.actwk_ptr->r_no = 2;
             p_actwk->u.obj.actfree.mask.inactive = true;
             p_actwk->patno = 0;
-            g_ram.stage_triggers[p_actwk->u.obj.userflag & 0x0F] = 1;
+            g_ram.switchflag[p_actwk->u.obj.userflag & 0x0F] = 1;
           }
           fp16_set_integer(&result.actwk_ptr->xposi, fp16_get_integer(p_actwk->xposi));
           fp16_set_integer(&result.actwk_ptr->yposi, fp16_get_integer(p_actwk->yposi));
@@ -273,7 +273,7 @@ void moveyuka(SKC_sprite_status* p_actwk) {
   p_actwk->sprpri = PRI_5;
   p_actwk->u.obj.actfree.moveyuka.xposi_init = fp16_get_integer(p_actwk->xposi);
   if (index != 0) {
-    if (g_ram.stage_triggers[p_actwk->u.obj.userflag & 0x0F] != 0) {
+    if (g_ram.switchflag[p_actwk->u.obj.userflag & 0x0F] != 0) {
       short yoffset = p_actwk->u.obj.actfree.moveyuka.yoffset;
       if (p_actwk->u.obj.cddat.right == 1) {
         yoffset = -yoffset;
@@ -297,7 +297,7 @@ void moveyuka(SKC_sprite_status* p_actwk) {
 
 
 static void moveyukamove(SKC_sprite_status* p_actwk) {
-  if (g_ram.stage_triggers[p_actwk->u.obj.userflag & 0x0F] != 0) {
+  if (g_ram.switchflag[p_actwk->u.obj.userflag & 0x0F] != 0) {
     short xoffset = p_actwk->u.obj.cddat.right == 0 ? 2 : -2;
     fp16_set_integer(&p_actwk->xposi, fp16_get_integer(p_actwk->xposi) + xoffset);
     g_ram.scr_shake_flg = 0xFFFF;
@@ -322,7 +322,7 @@ static void moveyukamove(SKC_sprite_status* p_actwk) {
 
 static void moveyukamovey(SKC_sprite_status* p_actwk) {
   bool open = false;
-  if (g_ram.stage_triggers[p_actwk->u.obj.userflag & 0x0F] == 0) {
+  if (g_ram.switchflag[p_actwk->u.obj.userflag & 0x0F] == 0) {
     open = true;
   }
   else if (p_actwk->u.obj.actfree.moveyuka.side >= 0) {

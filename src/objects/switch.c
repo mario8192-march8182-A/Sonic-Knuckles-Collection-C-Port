@@ -93,14 +93,14 @@ static void switchmove(SKC_sprite_status* p_actwk) {
     unsigned char bit = !BIT_IS_SET(p_actwk->u.obj.userflag, 6) ? 0 : 7;
     if (p_actwk->u.obj.cddat.plride == 0 && p_actwk->u.obj.cddat.pl2ride == 0) {
       if (!BIT_IS_SET(p_actwk->u.obj.userflag, 4)) {
-        CLEAR_BIT(g_ram.stage_triggers[p_actwk->u.obj.userflag & 0x0F], bit);
+        CLEAR_BIT(g_ram.switchflag[p_actwk->u.obj.userflag & 0x0F], bit);
       }
     }
     else {
-      if (g_ram.stage_triggers[p_actwk->u.obj.userflag & 0x0F] == 0) {
+      if (g_ram.switchflag[p_actwk->u.obj.userflag & 0x0F] == 0) {
         soundset(91);
       }
-      SET_BIT(g_ram.stage_triggers[p_actwk->u.obj.userflag & 0x0F], bit);
+      SET_BIT(g_ram.switchflag[p_actwk->u.obj.userflag & 0x0F], bit);
       p_actwk->patno = 1;
     }
   }
@@ -116,14 +116,14 @@ static void switchmove2(SKC_sprite_status* p_actwk) {
     unsigned char bit = !BIT_IS_SET(p_actwk->u.obj.userflag, 6) ? 0 : 7;
     if (p_actwk->u.obj.cddat.plride == 0 && p_actwk->u.obj.cddat.pl2ride == 0) {
       if (!BIT_IS_SET(p_actwk->u.obj.userflag, 4)) {
-        CLEAR_BIT(g_ram.stage_triggers[p_actwk->u.obj.userflag & 0x0F], bit);
+        CLEAR_BIT(g_ram.switchflag[p_actwk->u.obj.userflag & 0x0F], bit);
       }
     }
     else {
-      if (g_ram.stage_triggers[p_actwk->u.obj.userflag & 0x0F] == 0) {
+      if (g_ram.switchflag[p_actwk->u.obj.userflag & 0x0F] == 0) {
         soundset(91);
       }
-      SET_BIT(g_ram.stage_triggers[p_actwk->u.obj.userflag & 0x0F], bit);
+      SET_BIT(g_ram.switchflag[p_actwk->u.obj.userflag & 0x0F], bit);
       p_actwk->patno = 1;
     }
   }
@@ -156,14 +156,14 @@ static void vsswitchmove(SKC_sprite_status* p_actwk) {
   unsigned char bit = !BIT_IS_SET(p_actwk->u.obj.userflag, 6) ? 0 : 7;
   if (p_actwk->u.obj.cddat.plride == 0 && p_actwk->u.obj.cddat.pl2ride == 0) {
     if (!BIT_IS_SET(p_actwk->u.obj.userflag, 4)) {
-      CLEAR_BIT(g_ram.stage_triggers[p_actwk->u.obj.userflag & 0x0F], bit);
+      CLEAR_BIT(g_ram.switchflag[p_actwk->u.obj.userflag & 0x0F], bit);
     }
   }
   else {
-    if (g_ram.stage_triggers[p_actwk->u.obj.userflag & 0x0F] == 0) {
+    if (g_ram.switchflag[p_actwk->u.obj.userflag & 0x0F] == 0) {
       soundset(91);
     }
-    SET_BIT(g_ram.stage_triggers[p_actwk->u.obj.userflag & 0x0F], bit);
+    SET_BIT(g_ram.switchflag[p_actwk->u.obj.userflag & 0x0F], bit);
     p_actwk->patno = 1;
   }
   actionsub(p_actwk);
