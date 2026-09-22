@@ -9,7 +9,8 @@ extern unsigned char g_vram[0x10000];
 void vdpinit(void) {
   g_ram.vscroll.a = 0;
   g_ram.vscroll.b = 0;
-  g_ram.hscroll = 0;
+  g_ram.hscroll.a = 0;
+  g_ram.hscroll.b = 0;
   memset(g_vram, 0, sizeof(g_vram));
 }
 
@@ -25,7 +26,8 @@ void scrinit(void) {
   }
   g_ram.vscroll.a = 0;
   g_ram.vscroll.b = 0;
-  g_ram.hscroll = 0;
+  g_ram.hscroll.a = 0;
+  g_ram.hscroll.b = 0;
   memset(g_ram.sprtbl, 0, sizeof(g_ram.sprtbl));
   memset(g_ram.hscrollbuff, 0, sizeof(g_ram.hscrollbuff));
 }
