@@ -623,6 +623,41 @@ static void AIZ1_IntroDeform(void) {
 }
 
 
+static void AIZ1_Deform(void) {
+  g_ram.scrb_v_posit = (g_ram.scra_v_posit_copy / 2) & 0xFFFF0000 | g_ram.scrb_v_posit & 0x0000FFFF;
+  long offset = ((g_ram.scra_h_posit_copy >> 16) - 0x1300) * 0x800;
+  long offset_wk = offset * 14;
+  g_ram.hscrollwork[24] = fp16_get_integer(offset_wk);
+  offset_wk += offset * 2;
+  g_ram.hscrollwork[2] = fp16_get_integer(offset_wk);
+  g_ram.hscrollwork[25] = fp16_get_integer(offset_wk);
+  g_ram.hscrollwork[29] = fp16_get_integer(offset_wk);
+  offset_wk += offset * 2;
+  g_ram.hscrollwork[26] = fp16_get_integer(offset_wk);
+  g_ram.hscrollwork[28] = fp16_get_integer(offset_wk);
+  offset_wk += offset * 2;
+  g_ram.hscrollwork[27] = fp16_get_integer(offset_wk);
+  offset_wk = offset;
+  g_ram.hscrollwork[10] = fp16_get_integer(offset_wk);
+  short wk = g_ram.hscrollwork[30] * 0x10000;
+  g_ram.hscrollwork[30] += 32;
+  offset_wk /= 2;
+
+  for (int i = 0; i < 6; ++i) {
+    offset_wk += wk;
+    g_ram.hscrollwork[9 - i] = fp16_get_integer(offset_wk);
+    offset_wk += offset;
+  }
+
+  offset_wk = offset;
+
+  for (int i = 0; i < 13; ++i) {
+    offset_wk += offset / 8;
+    g_ram.hscrollwork[11 + i] = fp16_get_integer(offset_wk);
+  }
+}
+
+
 static void scr_evta_000_init(SKC_screvt_context* p_context) {
   Adjust_AIZ1Chunks();
   Reset_TileOffsetPositionActual();
