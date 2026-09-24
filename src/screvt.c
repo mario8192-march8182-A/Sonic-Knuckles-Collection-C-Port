@@ -597,22 +597,21 @@ static AIZ_TreeReveal(short xposi, short yposi, unsigned char* p_tbl, SKC_screvt
 
 static void AIZ1_IntroDeform(void) {
   g_ram.scrb_v_posit = g_ram.scra_v_posit_copy & 0xFFFF0000 | g_ram.scrb_v_posit & 0x0000FFFF;
-  short xposi = g_ram.DAT_08ffeeb6 < 0 ? g_ram.DAT_08ffeeb6 : g_ram.scra_h_posit_copy >> 16;
-  xposi /= 2;
-  if (xposi >= 0x580) {
+  short offset = (g_ram.DAT_08ffeeb6 < 0 ? g_ram.DAT_08ffeeb6 : g_ram.scra_h_posit_copy >> 16) / 2;
+  if (offset >= 0x580) {
     for (int i = 0; i < 37; ++i) {
-      g_ram.hscrollwork[20 + i] = xposi;
+      g_ram.hscrollwork[20 + i] = offset;
     }
   }
   else {
-    g_ram.hscrollwork[20] = xposi;
-    xposi -= 0x580;
-    long xposi_wk = xposi * 0x10000;
-    long xspeed = xposi * 0x800;
+    g_ram.hscrollwork[20] = offset;
+    offset -= 0x580;
+    long offset_wk = offset * 0x10000;
+    long delta = offset * 0x800;
 
     for (int i = 0; i < 36; ++i) {
-      xposi_wk += xspeed;
-      g_ram.hscrollwork[21 + i] = fp16_get_integer(xposi_wk) - 0x580;
+      offset_wk += delta;
+      g_ram.hscrollwork[21 + i] = fp16_get_integer(offset_wk) - 0x580;
     }
   }
 
