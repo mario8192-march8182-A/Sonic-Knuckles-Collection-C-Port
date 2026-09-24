@@ -435,7 +435,24 @@ static void Refresh_PlaneFull(short xposi, short yposi, SKC_screvt_context* p_co
 }
 
 
-// Refresh_PlaneTileDeform
+static void Refresh_PlaneTileDeform(short yposi, short* a4, short* a5, SKC_screvt_context* p_context) {
+  unsigned short* p_scrollbuff = p_context->scrollbuff_ptr;
+  short d2 = *a4++;
+
+  for (int i = 0; i < PLANE_HEIGHT_BLOCKS; ++i) {
+    while (yposi >= d2) {
+      d2 += *a4++;
+      a5 += 4;
+    }
+
+    Setup_TileRowDraw(*a5, yposi, PLANE_WIDTH_BLOCKS, p_context);
+    scrollwrt();
+    p_context->scrollbuff_ptr = p_scrollbuff;
+    yposi += BLOCK_SIZE_PIXELS;
+  }
+}
+
+
 // Refresh_PlaneDirectVScroll
 // Refresh_PlaneFull_Competition
 // Refresh_PlaneFullDirect
