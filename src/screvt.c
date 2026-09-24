@@ -471,9 +471,84 @@ static void DrawTilesAsYouMove(SKC_screvt_context* p_context) {
 // PlainDeformation
 // PlainDeformation_Flipped
 // MakeFGDeformArray
-// ApplyDeformation
-// ApplyDeformation3
-// ApplyDeformation2
+
+
+static void ApplyDeformation(unsigned short* a4, short* a5) {
+  ApplyDeformation3(a4, a5, 223);
+}
+
+
+static void ApplyDeformation3(unsigned short* a4, short* a5, unsigned short line_cnt) {
+  ApplyDeformation2(g_ram.hscrollbuff, a4, a5, g_ram.scra_h_posit_copy >> 16, g_ram.scrb_v_posit >> 16, line_cnt);
+}
+
+
+static void ApplyDeformation2(short* p_hscrollbuff, unsigned short* a4, short* a5, short xposi, short yposi, unsigned short line_cnt) {
+  bool repeat;
+  short d2;
+
+  do {
+    repeat = BIT_IS_SET(*a4, 15);
+    d2 = *a4++ & 0x7FFF;
+    yposi -= d2;
+    if (yposi >= 0) {
+      ++a5;
+      if (repeat) {
+        --a5;
+        a5 += d2;
+      }
+    }
+  }
+  while (yposi >= 0);
+
+  if (repeat) {
+    d2 += yposi;
+    a5 += d2;
+  }
+  yposi = -yposi;
+  d2 = (short)line_cnt - yposi;
+  if (d2 < 0) {
+    yposi = line_cnt + 1;
+  }
+  xposi = -xposi;
+  --yposi;
+  bool done = false;
+
+  do {
+    if (repeat) {
+      for (int i = 0; i < yposi + 1; ++i) {
+        *p_hscrollbuff++ = -*a5++;
+        *p_hscrollbuff++ = xposi;
+      }
+    }
+    else {
+      for (int i = 0; i < yposi + 1; ++i) {
+        *p_hscrollbuff++ = -*a5;
+        *p_hscrollbuff++ = xposi;
+      }
+
+      ++a5;
+    }
+    if (d2 < 0) {
+      done = true;
+    }
+    else {
+      repeat = BIT_IS_SET(*a4, 15);
+      yposi = *a4++ & 0x7FFF;
+      xposi = d2;
+      d2 -= yposi;
+      if (d2 >= 0) {
+        --yposi;
+      }
+      else {
+        yposi = xposi;
+      }
+    }
+  }
+  while (!done);
+}
+
+
 // ApplyFGDeformation
 // ApplyFGandBGDeformation
 // Apply_FGVScroll
