@@ -267,7 +267,7 @@ static void Setup_TileColumnDraw(short xposi, short yposi, unsigned short wrt_cn
 static void TileColumnDraw(SKC_block_name* p_blk_col, short xposi, short yposi, unsigned short wrt_cnt, SKC_screvt_context* p_context) {
   for (int i = 0; i < wrt_cnt; ++i) {
     SKC_block_name block_name = p_blk_col[to_blocks_in_screen(yposi) * SCREEN_SIZE_BLOCKS];
-    SKC_block block = g_ram.blockwk[block.index];
+    SKC_block block = g_ram.blockwk[block_name.index];
     if (block_name.vf == 1) {
       block.patterns[0][0].vf ^= 1;
       block.patterns[0][1].vf ^= 1;
