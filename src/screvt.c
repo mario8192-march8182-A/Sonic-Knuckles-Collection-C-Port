@@ -490,79 +490,68 @@ static void DrawTilesAsYouMove(SKC_screvt_context* p_context) {
 // MakeFGDeformArray
 
 
-static void ApplyDeformation(unsigned short* a4, short* a5) {
-  ApplyDeformation3(a4, a5, 223);
+static short* ApplyDeformation(unsigned short* p_scrtbl, short* p_hscrollwork) {
+  return ApplyDeformation3(p_scrtbl, p_hscrollwork, 224);
 }
 
 
-static void ApplyDeformation3(unsigned short* a4, short* a5, unsigned short line_cnt) {
-  ApplyDeformation2(g_ram.hscrollbuff, a4, a5, g_ram.scra_h_posit_copy >> 16, g_ram.scrb_v_posit >> 16, line_cnt);
+static short* ApplyDeformation3(unsigned short* p_scrtbl, short* p_hscrollwork, unsigned short line_cnt) {
+  return ApplyDeformation2(g_ram.hscrollbuff, p_scrtbl, p_hscrollwork,
+                           g_ram.scra_h_posit_copy >> 16, g_ram.scrb_v_posit >> 16, line_cnt);
 }
 
 
-static void ApplyDeformation2(short* p_hscrollbuff, unsigned short* a4, short* a5, short xposi, short yposi, unsigned short line_cnt) {
-  bool repeat;
-  short d2;
+static short* ApplyDeformation2(short* p_hscrollbuff, unsigned short* p_scrtbl, short* p_hscrollwork, short xposi, short yposi, unsigned short line_cnt) {
+  bool line_scr;
+  unsigned short pending_line_cnt;
 
   do {
-    repeat = BIT_IS_SET(*a4, 15);
-    d2 = *a4++ & 0x7FFF;
-    yposi -= d2;
+    line_scr = BIT_IS_SET(*p_scrtbl, 15);
+    pending_line_cnt = *p_scrtbl++ & 0x7FFF;
+    yposi -= pending_line_cnt;
     if (yposi >= 0) {
-      ++a5;
-      if (repeat) {
-        --a5;
-        a5 += d2;
+      if (!line_scr) {
+        ++p_hscrollwork;
       }
+      else {
+        p_hscrollwork += pending_line_cnt;
+      }
+    }
+    else if (line_scr) {
+      p_hscrollwork += pending_line_cnt - -yposi;
     }
   }
   while (yposi >= 0);
 
-  if (repeat) {
-    d2 += yposi;
-    a5 += d2;
-  }
-  yposi = -yposi;
-  d2 = (short)line_cnt - yposi;
-  if (d2 < 0) {
-    yposi = line_cnt + 1;
-  }
-  xposi = -xposi;
-  --yposi;
-  bool done = false;
+  pending_line_cnt = -yposi <= line_cnt ? -yposi : line_cnt;
+  unsigned short total_pending_line_cnt = line_cnt;
+  goto skip_first;
 
   do {
-    if (repeat) {
-      for (int i = 0; i < yposi + 1; ++i) {
-        *p_hscrollbuff++ = -*a5++;
-        *p_hscrollbuff++ = xposi;
+    line_scr = BIT_IS_SET(*p_scrtbl, 15);
+    short wk = *p_scrtbl++ & 0x7FFF;
+    pending_line_cnt = wk <= total_pending_line_cnt ? wk : total_pending_line_cnt;
+
+skip_first:
+    if (line_scr) {
+      for (int i = 0; i < pending_line_cnt; ++i) {
+        *p_hscrollbuff++ = -*p_hscrollwork++;
+        *p_hscrollbuff++ = -xposi;
       }
     }
     else {
-      for (int i = 0; i < yposi + 1; ++i) {
-        *p_hscrollbuff++ = -*a5;
-        *p_hscrollbuff++ = xposi;
+      for (int i = 0; i < pending_line_cnt; ++i) {
+        *p_hscrollbuff++ = -*p_hscrollwork;
+        *p_hscrollbuff++ = -xposi;
       }
 
-      ++a5;
+      ++p_hscrollwork;
     }
-    if (d2 < 0) {
-      done = true;
-    }
-    else {
-      repeat = BIT_IS_SET(*a4, 15);
-      yposi = *a4++ & 0x7FFF;
-      xposi = d2;
-      d2 -= yposi;
-      if (d2 >= 0) {
-        --yposi;
-      }
-      else {
-        yposi = xposi;
-      }
-    }
+    total_pending_line_cnt -= pending_line_cnt;
   }
-  while (!done);
+  while (total_pending_line_cnt != 0);
+
+  return p_hscrollbuff;
 }
 
 
