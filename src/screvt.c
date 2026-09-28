@@ -487,7 +487,13 @@ static void DrawTilesAsYouMove(SKC_screvt_context* p_context) {
 // sub_4F03E
 // PlainDeformation
 // PlainDeformation_Flipped
-// MakeFGDeformArray
+
+
+static void MakeFGDeformArray(short* p_hscrollwork, short* p_scrtbl, unsigned short line_cnt, short offset) {
+  for (int i = 0; i < line_cnt; ++i) {
+    p_hscrollwork[i] = p_scrtbl[i] + offset;
+  }
+}
 
 
 static short* ApplyDeformation(unsigned short* p_scrtbl, short* p_hscrollwork) {
