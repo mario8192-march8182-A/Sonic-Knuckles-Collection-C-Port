@@ -435,17 +435,17 @@ static void Refresh_PlaneFull(short xposi, short yposi, SKC_screvt_context* p_co
 }
 
 
-static void Refresh_PlaneTileDeform(short yposi, short* a4, short* a5, SKC_screvt_context* p_context) {
+static void Refresh_PlaneTileDeform(short yposi, short* p_scrtbl, short* p_hscrollwork, SKC_screvt_context* p_context) {
   unsigned short* p_scrollbuff = p_context->scrollbuff_ptr;
-  short d2 = *a4++;
+  short line_cnt = *p_scrtbl++;
 
   for (int i = 0; i < PLANE_HEIGHT_BLOCKS; ++i) {
-    while (yposi >= d2) {
-      d2 += *a4++;
-      a5 += 4;
+    while (yposi >= line_cnt) {
+      line_cnt += *p_scrtbl++;
+      p_hscrollwork += 2;
     }
 
-    Setup_TileRowDraw(*a5, yposi, PLANE_WIDTH_BLOCKS, p_context);
+    Setup_TileRowDraw(*p_hscrollwork, yposi, PLANE_WIDTH_BLOCKS, p_context);
     scrollwrt();
     p_context->scrollbuff_ptr = p_scrollbuff;
     yposi += BLOCK_SIZE_PIXELS;
