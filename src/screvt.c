@@ -797,6 +797,25 @@ static void AIZ1_Deform(void) {
 }
 
 
+static void AIZ1_ApplyDeformWater(void) {
+  short dry_line_cnt = g_ram.waterposi - g_ram.scra_v_posit_copy >> 16;
+  if (dry_line_cnt >= 224) {
+    ApplyDeformation(AIZ1_DeformArray, &g_ram.hscrollwork[4]);
+  }
+  else {
+    short* p_hscrollbuff = ApplyDeformation3(AIZ1_DeformArray, &g_ram.hscrollwork[4], dry_line_cnt);
+    short underwater_line_cnt = -(dry_line_cnt - 224);
+    unsigned short d2 = g_ram.gametimer / 2 + g_ram.waterposi & 0x003F;
+    MakeFGDeformArray(&g_ram.hscrollwork[32], &AIZ1_WaterFGDeformDelta[d2],
+                      underwater_line_cnt, -(g_ram.scra_h_posit_copy >> 16));
+    short waterposi = g_ram.waterposi - (g_ram.scra_v_posit_copy >> 16) + (g_ram.scrb_v_posit >> 16);
+    d2 = g_ram.gametimer / 2 + waterposi & 0x003F;
+    ApplyFGandBGDeformation(p_hscrollbuff, AIZ1_DeformArray, &AIZ1_WaterBGDeformDelta[d2],
+                            &g_ram.hscrollwork[32], &g_ram.hscrollwork[4], waterposi, underwater_line_cnt);
+  }
+}
+
+
 static void scr_evta_000_init(SKC_screvt_context* p_context) {
   Adjust_AIZ1Chunks();
   Reset_TileOffsetPositionActual();
