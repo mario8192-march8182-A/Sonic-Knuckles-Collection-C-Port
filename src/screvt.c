@@ -980,6 +980,27 @@ static void Adjust_AIZ1Chunks(void) {
 }
 
 
+static void scr_evtb_000_init(SKC_screvt_context* p_context) {
+  if (g_ram.scra_h_posit >> 16 < 0x1300) {
+    memset(g_ram.hscrollwork, 0, sizeof(short) * 20);
+    AIZ1_IntroDeform();
+    Reset_TileOffsetPositionEff();
+    Refresh_PlaneFull(g_ram.scrb_h_posit, g_ram.scrb_v_posit_blk, p_context);
+    ApplyDeformation(AIZ1_IntroDeformArray, &g_ram.hscrollwork[20]);
+  }
+  else {
+    g_ram.DAT_08ffeec2 = 8;
+    AIZ1_Deform();
+    Reset_TileOffsetPositionEff();
+    g_ram.hscrollwork[0] = 0;
+    g_ram.hscrollwork[1] = 0;
+    g_ram.hscrollwork[3] = g_ram.scrb_h_posit_blk;
+    Refresh_PlaneTileDeform(g_ram.scrb_v_posit_blk, AIZ1_BGDrawArray, g_ram.hscrollwork, p_context);
+    AIZ1_ApplyDeformWater();
+  }
+}
+
+
 static void LAB_006b34f3(void) {
   g_ram.frame_offset_x = 0;
   short scra_h = (g_ram.scra_h_posit >> 16) + 4;
