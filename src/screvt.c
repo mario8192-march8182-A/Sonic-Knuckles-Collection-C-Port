@@ -435,13 +435,13 @@ static void Refresh_PlaneFull(short xposi, short yposi, SKC_screvt_context* p_co
 }
 
 
-static void Refresh_PlaneTileDeform(short yposi, short* p_scrtbl, short* p_hscrollwork, SKC_screvt_context* p_context) {
+static void Refresh_PlaneTileDeform(short yposi, short* p_scr_tbl, short* p_hscrollwork, SKC_screvt_context* p_context) {
   unsigned short* p_scrollbuff = p_context->scrollbuff_ptr;
-  short line_cnt = *p_scrtbl++;
+  short line_cnt = *p_scr_tbl++;
 
   for (int i = 0; i < PLANE_HEIGHT_BLOCKS; ++i) {
     while (yposi >= line_cnt) {
-      line_cnt += *p_scrtbl++;
+      line_cnt += *p_scr_tbl++;
       p_hscrollwork += 2;
     }
 
@@ -489,31 +489,31 @@ static void DrawTilesAsYouMove(SKC_screvt_context* p_context) {
 // PlainDeformation_Flipped
 
 
-static void MakeFGDeformArray(short* p_hscrollwork, short* p_scrtbl, unsigned short line_cnt, short offset) {
+static void MakeFGDeformArray(short* p_hscrollwork, short* p_scr_tbl, unsigned short line_cnt, short offset) {
   for (int i = 0; i < line_cnt; ++i) {
-    p_hscrollwork[i] = p_scrtbl[i] + offset;
+    p_hscrollwork[i] = p_scr_tbl[i] + offset;
   }
 }
 
 
-static short* ApplyDeformation(unsigned short* p_scrtbl, short* p_hscrollwork) {
-  return ApplyDeformation3(p_scrtbl, p_hscrollwork, 224);
+static short* ApplyDeformation(unsigned short* p_scr_tbl, short* p_hscrollwork) {
+  return ApplyDeformation3(p_scr_tbl, p_hscrollwork, 224);
 }
 
 
-static short* ApplyDeformation3(unsigned short* p_scrtbl, short* p_hscrollwork, unsigned short line_cnt) {
-  return ApplyDeformation2(g_ram.hscrollbuff, p_scrtbl, p_hscrollwork,
+static short* ApplyDeformation3(unsigned short* p_scr_tbl, short* p_hscrollwork, unsigned short line_cnt) {
+  return ApplyDeformation2(g_ram.hscrollbuff, p_scr_tbl, p_hscrollwork,
                            g_ram.scra_h_posit_copy >> 16, g_ram.scrb_v_posit >> 16, line_cnt);
 }
 
 
-static short* ApplyDeformation2(short* p_hscrollbuff, unsigned short* p_scrtbl, short* p_hscrollwork, short xposi, short yposi, unsigned short line_cnt) {
+static short* ApplyDeformation2(short* p_hscrollbuff, unsigned short* p_scr_tbl, short* p_hscrollwork, short xposi, short yposi, unsigned short line_cnt) {
   bool line_scr;
   unsigned short pending_line_cnt;
 
   do {
-    line_scr = BIT_IS_SET(*p_scrtbl, 15);
-    pending_line_cnt = *p_scrtbl++ & 0x7FFF;
+    line_scr = BIT_IS_SET(*p_scr_tbl, 15);
+    pending_line_cnt = *p_scr_tbl++ & 0x7FFF;
     yposi -= pending_line_cnt;
     if (yposi >= 0) {
       if (!line_scr) {
@@ -534,8 +534,8 @@ static short* ApplyDeformation2(short* p_hscrollbuff, unsigned short* p_scrtbl, 
   goto skip_first;
 
   do {
-    line_scr = BIT_IS_SET(*p_scrtbl, 15);
-    short wk = *p_scrtbl++ & 0x7FFF;
+    line_scr = BIT_IS_SET(*p_scr_tbl, 15);
+    short wk = *p_scr_tbl++ & 0x7FFF;
     pending_line_cnt = wk <= total_pending_line_cnt ? wk : total_pending_line_cnt;
 
 skip_first:
