@@ -562,7 +562,60 @@ skip_first:
 
 
 // ApplyFGDeformation
-// ApplyFGandBGDeformation
+
+
+static void ApplyFGandBGDeformation(short* p_hscrollbuff, unsigned short* p_scr_tbl, short* p_ofs_tbl, short* p_hscrollawork, short* p_hscrollbwork, short yposi, unsigned short line_cnt) {
+  bool line_scr;
+  unsigned short pending_line_cnt;
+
+  do {
+    line_scr = BIT_IS_SET(*p_scr_tbl, 15);
+    pending_line_cnt = *p_scr_tbl++ & 0x7FFF;
+    yposi -= pending_line_cnt;
+    if (yposi >= 0) {
+      if (!line_scr) {
+        ++p_hscrollawork;
+      }
+      else {
+        p_hscrollawork += pending_line_cnt;
+      }
+    }
+    else if (line_scr) {
+      p_hscrollawork += pending_line_cnt - -yposi;
+    }
+  }
+  while (yposi >= 0);
+
+  pending_line_cnt = -yposi <= line_cnt ? -yposi : line_cnt;
+  unsigned short total_pending_line_cnt = line_cnt;
+  goto skip_first;
+
+  do {
+    line_scr = BIT_IS_SET(*p_scr_tbl, 15);
+    short wk = *p_scr_tbl++ & 0x7FFF;
+    pending_line_cnt = wk <= total_pending_line_cnt ? wk : total_pending_line_cnt;
+
+skip_first:
+    if (line_scr) {
+      for (int i = 0; i < pending_line_cnt; ++i) {
+        *p_hscrollbuff++ = -*p_hscrollawork++ + *p_ofs_tbl++;
+        *p_hscrollbuff++ = *p_hscrollbwork++;
+      }
+    }
+    else {
+      for (int i = 0; i < pending_line_cnt; ++i) {
+        *p_hscrollbuff++ = -*p_hscrollawork + *p_ofs_tbl++;
+        *p_hscrollbuff++ = *p_hscrollbwork++;
+      }
+
+      ++p_hscrollawork;
+    }
+    total_pending_line_cnt -= pending_line_cnt;
+  }
+  while (total_pending_line_cnt != 0);
+}
+
+
 // Apply_FGVScroll
 
 
