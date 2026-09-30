@@ -564,7 +564,7 @@ skip_first:
 // ApplyFGDeformation
 
 
-static void ApplyFGandBGDeformation(short* p_hscrollbuff, unsigned short* p_scr_tbl, short* p_ofs_tbl, short* p_hscrollawork, short* p_hscrollbwork, short yposi, unsigned short line_cnt) {
+static void ApplyFGandBGDeformation(short* p_hscrollbuff, short* p_hscrollawork, unsigned short* p_scr_tbl, short* p_hscrollbwork, short* p_ofs_tbl, short yposi, unsigned short line_cnt) {
   bool line_scr;
   unsigned short pending_line_cnt;
 
@@ -810,8 +810,8 @@ static void AIZ1_ApplyDeformWater(void) {
                       underwater_line_cnt, -(g_ram.scra_h_posit_copy >> 16));
     short waterposi = g_ram.waterposi - (g_ram.scra_v_posit_copy >> 16) + (g_ram.scrb_v_posit >> 16);
     d2 = g_ram.gametimer / 2 + waterposi & 0x003F;
-    ApplyFGandBGDeformation(p_hscrollbuff, AIZ1_DeformArray, &AIZ1_WaterBGDeformDelta[d2],
-                            &g_ram.hscrollwork[32], &g_ram.hscrollwork[4], waterposi, underwater_line_cnt);
+    ApplyFGandBGDeformation(p_hscrollbuff, &g_ram.hscrollwork[32], AIZ1_DeformArray, &g_ram.hscrollwork[4],
+                            &AIZ1_WaterBGDeformDelta[d2], waterposi, underwater_line_cnt);
   }
 }
 
