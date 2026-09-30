@@ -541,14 +541,14 @@ static short* ApplyDeformation2(short* p_hscrollbuff, unsigned short* p_scr_tbl,
 skip_first:
     if (line_scr) {
       for (int i = 0; i < pending_line_cnt; ++i) {
-        *p_hscrollbuff++ = -*p_hscrollwork++;
         *p_hscrollbuff++ = -xposi;
+        *p_hscrollbuff++ = -*p_hscrollwork++;
       }
     }
     else {
       for (int i = 0; i < pending_line_cnt; ++i) {
-        *p_hscrollbuff++ = -*p_hscrollwork;
         *p_hscrollbuff++ = -xposi;
+        *p_hscrollbuff++ = -*p_hscrollwork;
       }
 
       ++p_hscrollwork;
