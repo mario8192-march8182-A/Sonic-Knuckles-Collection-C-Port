@@ -340,7 +340,28 @@ static void Draw_TileRow(long* p_scr_v_posit, short* p_scr_v_posit_blk, short sc
 }
 
 
-// Draw_TileRow2
+static void Draw_TileRow2(long* p_scr_v_posit, short* p_scr_v_posit_blk, short (*xposi_tbl)[2], unsigned short wrt_cnt, SKC_screvt_context* p_context) {
+  short prev_scr_v_posit_blk = *p_scr_v_posit_blk;
+  short scr_v_posit_blk = *p_scr_v_posit >> 16 & g_ram.DAT_08ffeeac;
+  *p_scr_v_posit_blk = scr_v_posit_blk;
+  short distance = prev_scr_v_posit_blk - *p_scr_v_posit_blk;
+  if (distance != 0) {
+    short xposi = (*xposi_tbl)[0];
+    if (distance < 0) {
+      distance = -distance;
+      scr_v_posit_blk = prev_scr_v_posit_blk + 240;
+      scr_v_posit_blk &= g_ram.DAT_08ffeeac;
+      xposi = (*xposi_tbl)[1];
+    }
+    g_ram.DAT_08ffeea4 = distance > BLOCK_SIZE_PIXELS ? 0xFF : 0;
+    Setup_TileRowDraw(xposi, scr_v_posit_blk, wrt_cnt, p_context);
+    if (g_ram.DAT_08ffeea4 != 0) {
+      scr_v_posit_blk += BLOCK_SIZE_PIXELS;
+      scr_v_posit_blk &= g_ram.DAT_08ffeeac;
+      Setup_TileRowDraw(xposi, scr_v_posit_blk, wrt_cnt, p_context);
+    }
+  }
+}
 
 
 static void Setup_TileRowDraw(short xposi, short yposi, unsigned short wrt_cnt, SKC_screvt_context* p_context) {
