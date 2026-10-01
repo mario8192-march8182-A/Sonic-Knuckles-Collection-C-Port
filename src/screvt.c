@@ -491,8 +491,28 @@ static void DrawTilesAsYouMove(SKC_screvt_context* p_context) {
 // DrawBGAsYouMove
 // loc_4EDD8
 // Draw_BG
-// Get_DeformDrawPosVert
-// sub_4EE8E
+
+
+static void Get_DeformDrawPosVert(short* p_scr_tbl, short* p_hscrollwork, short yposi, short (*p_xposi_tbl)[2]) {
+  short yposi_wk = *p_scr_tbl++;
+
+  while (yposi >= yposi_wk) {
+    yposi_wk += *p_scr_tbl++;
+    p_hscrollwork += 2;
+  }
+
+  (*p_xposi_tbl)[0] = *p_hscrollwork;
+  yposi += 224;
+
+  while (yposi >= yposi_wk) {
+    yposi_wk += *p_scr_tbl++;
+    p_hscrollwork += 2;
+  }
+
+  (*p_xposi_tbl)[1] = *p_hscrollwork;
+}
+
+
 // DrawTilesVDeform
 // DrawTilesVDeform2
 // Get_XDeformRange
