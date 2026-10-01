@@ -214,11 +214,11 @@ static void Draw_TileColumn(long* p_scr_h_posit, short* p_scr_h_posit_blk, short
       distance = -distance;
       scr_h_posit_blk = prev_scr_h_posit_blk + 336;
     }
-    g_ram.DAT_08ffeea4 = distance > 16 ? 0xFF : 0;
-    Setup_TileColumnDraw(g_ram.scrollbuff, scr_h_posit_blk, scr_v_posit, wrt_cnt, p_context);
+    g_ram.DAT_08ffeea4 = distance > BLOCK_SIZE_PIXELS ? 0xFF : 0;
+    Setup_TileColumnDraw(scr_h_posit_blk, scr_v_posit, wrt_cnt, p_context);
     if (g_ram.DAT_08ffeea4 != 0) {
-      scr_h_posit_blk += 16;
-      Setup_TileColumnDraw(g_ram.scrollbuff, scr_h_posit_blk, scr_v_posit, wrt_cnt, p_context);
+      scr_h_posit_blk += BLOCK_SIZE_PIXELS;
+      Setup_TileColumnDraw(scr_h_posit_blk, scr_v_posit, wrt_cnt, p_context);
     }
   }
 }
