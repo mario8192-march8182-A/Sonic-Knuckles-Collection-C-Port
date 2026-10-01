@@ -204,7 +204,7 @@ void SpecialVInt_LBZ2WindowClear(void) {
 }
 
 
-static void Draw_TileColumn(long* p_scr_h_posit, short* p_scr_h_posit_blk, short scr_v_posit, unsigned short wrt_cnt, SKC_screvt_context* p_context) {
+static void Draw_TileColumn(long* p_scr_h_posit, short* p_scr_h_posit_blk, short yposi, unsigned short wrt_cnt, SKC_screvt_context* p_context) {
   short prev_scr_h_posit_blk = *p_scr_h_posit_blk;
   short scr_h_posit_blk = *p_scr_h_posit >> 16 & 0xFFF0;
   *p_scr_h_posit_blk = scr_h_posit_blk;
@@ -215,10 +215,10 @@ static void Draw_TileColumn(long* p_scr_h_posit, short* p_scr_h_posit_blk, short
       scr_h_posit_blk = prev_scr_h_posit_blk + 336;
     }
     g_ram.DAT_08ffeea4 = distance > BLOCK_SIZE_PIXELS ? 0xFF : 0;
-    Setup_TileColumnDraw(scr_h_posit_blk, scr_v_posit, wrt_cnt, p_context);
+    Setup_TileColumnDraw(scr_h_posit_blk, yposi, wrt_cnt, p_context);
     if (g_ram.DAT_08ffeea4 != 0) {
       scr_h_posit_blk += BLOCK_SIZE_PIXELS;
-      Setup_TileColumnDraw(scr_h_posit_blk, scr_v_posit, wrt_cnt, p_context);
+      Setup_TileColumnDraw(scr_h_posit_blk, yposi, wrt_cnt, p_context);
     }
   }
 }
@@ -318,8 +318,8 @@ static SKC_block_name* Get_LevelChunkColumn(short xposi, short yposi, SKC_screvt
 }
 
 
-static void Draw_TileRow(long* p_scr_v_posit, short* p_scr_v_posit_blk, short scr_h_posit, unsigned short wrt_cnt, SKC_screvt_context* p_context) {
-  short xposi_tbl[2] = { scr_h_posit, scr_h_posit };
+static void Draw_TileRow(long* p_scr_v_posit, short* p_scr_v_posit_blk, short xposi, unsigned short wrt_cnt, SKC_screvt_context* p_context) {
+  short xposi_tbl[2] = { xposi, xposi };
   Draw_TileRow2(p_scr_v_posit, p_scr_v_posit_blk, &xposi_tbl, wrt_cnt, p_context);
 }
 
