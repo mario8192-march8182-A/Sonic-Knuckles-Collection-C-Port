@@ -319,24 +319,8 @@ static SKC_block_name* Get_LevelChunkColumn(short xposi, short yposi, SKC_screvt
 
 
 static void Draw_TileRow(long* p_scr_v_posit, short* p_scr_v_posit_blk, short scr_h_posit, unsigned short wrt_cnt, SKC_screvt_context* p_context) {
-  short prev_scr_v_posit_blk = *p_scr_v_posit_blk;
-  short scr_v_posit_blk = *p_scr_v_posit >> 16 & g_ram.DAT_08ffeeac;
-  *p_scr_v_posit_blk = scr_v_posit_blk;
-  short distance = prev_scr_v_posit_blk - *p_scr_v_posit_blk;
-  if (distance != 0) {
-    if (distance < 0) {
-      distance = -distance;
-      scr_v_posit_blk = prev_scr_v_posit_blk + 240;
-      scr_v_posit_blk &= g_ram.DAT_08ffeeac;
-    }
-    g_ram.DAT_08ffeea4 = distance > BLOCK_SIZE_PIXELS ? 0xFF : 0;
-    Setup_TileRowDraw(scr_h_posit, scr_v_posit_blk, wrt_cnt, p_context);
-    if (g_ram.DAT_08ffeea4 != 0) {
-      scr_v_posit_blk += BLOCK_SIZE_PIXELS;
-      scr_v_posit_blk &= g_ram.DAT_08ffeeac;
-      Setup_TileRowDraw(scr_h_posit, scr_v_posit_blk, wrt_cnt, p_context);
-    }
-  }
+  short xposi_tbl[2] = { scr_h_posit, scr_h_posit };
+  Draw_TileRow2(p_scr_v_posit, p_scr_v_posit_blk, &xposi_tbl, wrt_cnt, p_context);
 }
 
 
