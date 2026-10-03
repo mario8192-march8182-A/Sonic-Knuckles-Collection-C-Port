@@ -1098,6 +1098,20 @@ static void scr_evtb_000_init(SKC_screvt_context* p_context) {
 }
 
 
+static void scr_evtb_000(SKC_screvt_context* p_context) {
+  void(*act_tbl[6])(SKC_screvt_context*) = {
+    &scr_evtb_0000,
+    &scr_evtb_0001,
+    &scr_evtb_0002,
+    &scr_evtb_0003,
+    &scr_evtb_0004,
+    &scr_evtb_0005
+  };
+
+  act_tbl[g_ram.scr_evtb / 4](p_context);
+}
+
+
 static void LAB_006b34f3(void) {
   g_ram.frame_offset_x = 0;
   short scra_h = (g_ram.scra_h_posit >> 16) + 4;
