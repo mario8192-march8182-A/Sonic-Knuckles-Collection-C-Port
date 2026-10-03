@@ -489,7 +489,7 @@ static void Refresh_PlaneTileDeform(short yposi, short* p_scr_tbl, short* p_hscr
 
 static void DrawTilesAsYouMove(SKC_screvt_context* p_context) {
   Draw_TileColumn(&g_ram.scra_h_posit_copy, &g_ram.scra_h_posit_blk, g_ram.scra_v_posit_copy >> 16, 16, p_context);
-  Draw_TileRow(&g_ram.scra_h_posit_copy, &g_ram.scra_v_posit_copy, g_ram.scra_v_posit_blk, 22, p_context);
+  Draw_TileRow(&g_ram.scra_v_posit_copy, &g_ram.scra_v_posit_blk, g_ram.scra_h_posit_copy, 22, p_context);
 }
 
 
