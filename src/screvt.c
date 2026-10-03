@@ -39,7 +39,7 @@ void scr_evt_init(void) {
   g_ram.scr_evta = 0;
   g_ram.DAT_08ffeec2 = 0;
   g_ram.DAT_08ffeec4 = 0;
-  g_ram.event_flag_3 = 0;
+  g_ram.DAT_08ffeec6 = 0;
   g_ram.scr_shake_flg = 0;
   g_ram.DAT_08ffeece = 0;
   g_ram.DAT_08ffeed0 = 0;
@@ -1113,8 +1113,8 @@ static void scr_evtb_000(SKC_screvt_context* p_context) {
 
 
 static void scr_evtb_0000(SKC_screvt_context* p_context) {
-  if (g_ram.event_flag_3 != 0) {
-    g_ram.event_flag_3 = 0;
+  if (g_ram.DAT_08ffeec6 != 0) {
+    g_ram.DAT_08ffeec6 = 0;
     AIZ1_Deform();
     Reset_TileOffsetPositionEff();
     g_ram.hscrollwork[0] = 0;
@@ -1198,8 +1198,8 @@ static void LAB_006c7860(void) {
   g_ram.frame_offset_x = 0;
   short scra_h = (g_ram.scra_h_posit >> 16) + (g_ram.play_type != PLAY_TYPE_KNUCKLES ? 4 : 5);
   if (scra_h >= 0x4280) {
-    if (g_ram.event_flag_3 != 0) {
-      g_ram.event_flag_3 = 0xFF;
+    if (g_ram.DAT_08ffeec6 != 0) {
+      g_ram.DAT_08ffeec6 = 0xFF;
       if (scra_h >= 0x4420) {
         scra_h = 0x4420;
         g_ram.scralim_right = 0x45A0;
