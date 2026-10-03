@@ -1112,6 +1112,27 @@ static void scr_evtb_000(SKC_screvt_context* p_context) {
 }
 
 
+static void scr_evtb_0000(SKC_screvt_context* p_context) {
+  if (g_ram.event_flag_3 != 0) {
+    g_ram.event_flag_3 = 0;
+    AIZ1_Deform();
+    Reset_TileOffsetPositionEff();
+    g_ram.hscrollwork[0] = 0;
+    g_ram.hscrollwork[1] = 0;
+    g_ram.hscrollwork[3] = g_ram.scrb_h_posit_blk;
+    g_ram.DAT_08ffeec8 = g_ram.scrb_v_posit_blk + 224 & g_ram.DAT_08ffeeac;
+    g_ram.DAT_08ffeeca = 15;
+    g_ram.scr_evtb += 4;
+    scr_evtb_0001_2(p_context);
+  }
+  else {
+    AIZ1_IntroDeform();
+    Draw_BG(AIZ1_IntroDrawArray, g_ram.hscrollwork, 10, PLANE_WIDTH_BLOCKS, p_context);
+    ApplyDeformation(AIZ1_IntroDeformArray, &g_ram.hscrollwork[20]);
+  }
+}
+
+
 static void LAB_006b34f3(void) {
   g_ram.frame_offset_x = 0;
   short scra_h = (g_ram.scra_h_posit >> 16) + 4;
