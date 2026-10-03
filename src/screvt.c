@@ -495,7 +495,58 @@ static void DrawTilesAsYouMove(SKC_screvt_context* p_context) {
 
 // DrawBGAsYouMove
 // loc_4EDD8
-// Draw_BG
+
+
+static void Draw_BG(short* p_scr_tbl, short* p_hscrollwork, unsigned short d5, unsigned short wrt_cnt, SKC_screvt_context* p_context) {
+  short xposi_tbl[2] = { 0 };
+  Get_DeformDrawPosVert(AIZ1_IntroDrawArray, p_hscrollwork, g_ram.scrb_v_posit, &xposi_tbl);
+  Draw_TileRow2(&g_ram.scrb_v_posit, &g_ram.scrb_v_posit_blk, &xposi_tbl, wrt_cnt, p_context);
+  short scrb_v_posit_blk = g_ram.scrb_v_posit_blk;
+  if (fp16_get_integer(g_ram.scrb_v_posit) < 0) {
+    short wk = fp16_get_integer(g_ram.scrb_v_posit);
+    scrb_v_posit_blk = wk - wk % BLOCK_SIZE_PIXELS;
+  }
+  short yposi = scrb_v_posit_blk;
+
+  while ((scrb_v_posit_blk -= *p_scr_tbl++) >= 0) {
+    p_hscrollwork[1] = p_hscrollwork[0] & 0xFFF0;
+    p_hscrollwork += 2;
+    --d5;
+  }
+
+  wrt_cnt = (-scrb_v_posit_blk / BLOCK_SIZE_PIXELS) + 1;
+  unsigned short pending_wrt_cnt = 16;
+  if (pending_wrt_cnt >= wrt_cnt) {
+    pending_wrt_cnt -= wrt_cnt;
+  }
+  else {
+    pending_wrt_cnt = 0;
+    wrt_cnt = 16;
+  }
+  goto skip_first;
+
+  do {
+    yposi += wrt_cnt * BLOCK_SIZE_PIXELS;
+    --d5;
+    wrt_cnt = (*AIZ1_IntroDrawArray++ / BLOCK_SIZE_PIXELS) + 1;
+    if (pending_wrt_cnt >= wrt_cnt) {
+      pending_wrt_cnt -= wrt_cnt;
+    }
+    else {
+      wrt_cnt = pending_wrt_cnt;
+      pending_wrt_cnt = 0;
+    }
+
+skip_first:
+    Draw_TileColumn(&p_hscrollwork[1], &p_hscrollwork[0], yposi, wrt_cnt, p_context);
+    p_hscrollwork += 2;
+  }
+  while (pending_wrt_cnt != 0);
+
+  while (--d5 != 0) {
+    p_hscrollwork[1] = p_hscrollwork[0] & 0xFFF0;
+  }
+}
 
 
 static void Get_DeformDrawPosVert(short* p_scr_tbl, short* p_hscrollwork, short yposi, short (*p_xposi_tbl)[2]) {
