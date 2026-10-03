@@ -580,8 +580,36 @@ static void Get_DeformDrawPosVert(short* p_scr_tbl, short* p_hscrollwork, short 
 // sub_4EFCA
 // Draw_PlaneHorzLeftToRight
 // sub_4F004
-// Draw_PlaneVertBottomUpComplex
-// sub_4F03E
+
+
+static bool Draw_PlaneVertBottomUpComplex(short* p_scr_tbl, short* p_scr_tbl2, short yposi, SKC_screvt_context* p_context) {
+  bool done = Draw_PlaneVertBottomUpComplex_sub(p_scr_tbl, p_scr_tbl2, yposi, p_context);
+  if (!done) {
+    done = Draw_PlaneVertBottomUpComplex_sub(p_scr_tbl, p_scr_tbl2, yposi, p_context);
+  }
+  return done;
+}
+
+
+static bool Draw_PlaneVertBottomUpComplex_sub(short* p_scr_tbl, short* p_scr_tbl2, short yposi, SKC_screvt_context* p_context) {
+  yposi &= g_ram.DAT_08ffeeac;
+  short yposi2 = (yposi + 240) & g_ram.DAT_08ffeeac;
+  if (g_ram.DAT_08ffeec8 >= yposi && g_ram.DAT_08ffeec8 <= yposi2) {
+    do {
+      p_scr_tbl2 += 2;
+    }
+    while (g_ram.DAT_08ffeec8 >= *p_scr_tbl++);
+
+    Setup_TileRowDraw(*p_scr_tbl2, yposi, PLANE_WIDTH_BLOCKS, p_context);
+  }
+  g_ram.DAT_08ffeec8 -= 16;
+  if (g_ram.DAT_08ffeeca-- == 0) {
+    return true;
+  }
+  return false;
+}
+
+
 // PlainDeformation
 // PlainDeformation_Flipped
 
