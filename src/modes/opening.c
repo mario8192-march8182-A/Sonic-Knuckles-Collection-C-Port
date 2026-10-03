@@ -312,7 +312,7 @@ void opening(void) {
   g_ram.scr_evta = 0;
   // DAT_08ffeec2
   g_ram.DAT_08ffeec4 = 0;
-  g_ram.event_flag_3 = 0;
+  g_ram.DAT_08ffeec6 = 0;
   // DAT_08ffeec8
   // DAT_08ffeeca
   g_ram.scr_shake_flg = 0;

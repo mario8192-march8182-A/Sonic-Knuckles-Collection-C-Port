@@ -153,7 +153,7 @@ static void zone000chk1(void) {
     if (g_ram.plflag == 0 && play_type_is_sonic) {
       unlze_blocks(&g_ram.blockwk[77], zone0d0blk2);
       unlze_moduled(&g_vram[0x17C0], zone0d0cg2);
-      g_ram.event_flag_3 = 0xFF;
+      g_ram.DAT_08ffeec6 = 0xFF;
       g_ram.cgchgtim[0] = 0;
       g_ram.cgchgcnt[0] = 5;
       g_ram.cgchgtim[1] = 0;
@@ -303,7 +303,7 @@ static void zone001chk4(void) {
   unlze_moduled(&g_vram[0x3F80], DAT_00601858);
   unlze_moduled(&g_vram[0xA000], DAT_0054a870);
   colorset2(48);
-  g_ram.event_flag_3 = 0xFF;
+  g_ram.DAT_08ffeec6 = 0xFF;
   g_ram.zone_flag += 2;
 }
 
@@ -386,7 +386,7 @@ static void zone001chk12(void) {
   colorset2(48);
   g_ram.scralim_left = 0x3B80;
   g_ram.scralim_n_down = 0x5DA;
-  g_ram.event_flag_3 = 0xFF;
+  g_ram.DAT_08ffeec6 = 0xFF;
   g_ram.zone_flag += 2;
 }
 
@@ -460,7 +460,7 @@ static void zone011chk(void) {
 static void zone011chk0(void) {
   if (g_ram.scra_h_posit >> 16 < 0xC00) return;
 
-  g_ram.event_flag_3 = 0xFF;
+  g_ram.DAT_08ffeec6 = 0xFF;
   g_ram.zone_flag += 2;
 }
 
@@ -544,7 +544,7 @@ static void zone050chk0(void) {
   if (g_ram.scra_h_posit >> 16 < 0x3700) return;
   if (g_ram.scra_v_posit >> 16 < 0x68C) return;
 
-  g_ram.event_flag_3 = 0xFF;
+  g_ram.DAT_08ffeec6 = 0xFF;
   g_ram.zone_flag += 2;
 }
 
@@ -552,7 +552,7 @@ static void zone050chk0(void) {
 static void zone050chk1(void) {
   if (g_ram.scra_h_posit >> 16 < 0x3940) return;
 
-  g_ram.event_flag_3 = 0xFF;
+  g_ram.DAT_08ffeec6 = 0xFF;
   g_ram.zone_flag += 2;
 }
 

@@ -575,7 +575,7 @@ static void clear_move0(SKC_sprite_status* p_actwk) {
     if (get_act(g_ram.stageno_i) == ACT_1
         && get_zone(g_ram.stageno_i) != ANGEL_ISLAND
         && get_zone(g_ram.stageno_i) != ICECAP) {
-      g_ram.event_flag_3 = 0xFF;
+      g_ram.DAT_08ffeec6 = 0xFF;
     }
   }
 }
