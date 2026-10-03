@@ -610,7 +610,14 @@ static bool Draw_PlaneVertBottomUpComplex_sub(short* p_scr_tbl, short* p_scr_tbl
 }
 
 
-// PlainDeformation
+static void PlainDeformation(void) {
+  for (int i = 0; i < 224; ++i) {
+    g_ram.hscrollbuff[i * 2] = -(g_ram.scra_h_posit_copy >> 16);
+    g_ram.hscrollbuff[i * 2 + 1] = -(g_ram.scrb_h_posit >> 16);
+  }
+}
+
+
 // PlainDeformation_Flipped
 
 
