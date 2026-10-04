@@ -1210,6 +1210,35 @@ static void scr_evtb_0001_2(SKC_screvt_context* p_context) {
 }
 
 
+static void scr_evtb_0002(SKC_screvt_context* p_context) {
+  if (g_ram.DAT_08ffeec6 == 0) {
+    AIZ1_Deform();
+    scr_evtb_0002_2(p_context);
+  }
+  else {
+    g_ram.DAT_08ffeec6 = 0;
+    g_ram.colorwk[49] = 0x004E;
+    g_ram.colorwk[50] = 0x006E;
+    g_ram.colorwk[51] = 0x00AE;
+    g_ram.colorwk[52] = 0x00CE;
+    g_ram.colorwk[53] = 0x02EE;
+    g_ram.colorwk[54] = 0x0AEE;
+    g_ram.scrb_v_posit = 0x00200000;
+    g_ram.scrb_v_posit_blk = 16;
+    g_ram.scr_work0 = 104;
+    g_ram.vint_rno = 4;
+    g_ram.scr_evtb += 4;
+    scr_evtb_0003(p_context);
+  }
+}
+
+
+static void scr_evtb_0002_2(SKC_screvt_context* p_context) {
+  Draw_BG(AIZ1_BGDrawArray, g_ram.hscrollwork, 2, PLANE_WIDTH_BLOCKS, p_context);
+  AIZ1_ApplyDeformWater();
+}
+
+
 static void LAB_006b34f3(void) {
   g_ram.frame_offset_x = 0;
   short scra_h = (g_ram.scra_h_posit >> 16) + 4;
