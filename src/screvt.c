@@ -499,7 +499,7 @@ static void DrawTilesAsYouMove(SKC_screvt_context* p_context) {
 
 static void Draw_BG(short* p_scr_tbl, short* p_hscrollwork, unsigned short d5, unsigned short wrt_cnt, SKC_screvt_context* p_context) {
   short xposi_tbl[2] = { 0 };
-  Get_DeformDrawPosVert(AIZ1_IntroDrawArray, p_hscrollwork, g_ram.scrb_v_posit, &xposi_tbl);
+  Get_DeformDrawPosVert(AIZ1_IntroDrawArray, p_hscrollwork, g_ram.scrb_v_posit >> 16, &xposi_tbl);
   Draw_TileRow2(&g_ram.scrb_v_posit, &g_ram.scrb_v_posit_blk, &xposi_tbl, wrt_cnt, p_context);
   short scrb_v_posit_blk = g_ram.scrb_v_posit_blk;
   if (fp16_get_integer(g_ram.scrb_v_posit) < 0) {
