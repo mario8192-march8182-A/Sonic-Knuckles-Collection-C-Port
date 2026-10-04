@@ -1239,6 +1239,44 @@ static void scr_evtb_0002_2(SKC_screvt_context* p_context) {
 }
 
 
+static void scr_evtb_0003(SKC_screvt_context* p_context) {
+  if (g_ram.scr_work1 == 0) {
+    if (g_ram.actwk[0].r_no < 6) {
+      long wk = (g_ram.scrb_v_posit - (short)g_ram.scr_work0 * 0x10000) / 32;
+      if (wk < 0x1400) {
+        AIZ1_FireRise();
+      }
+    }
+  }
+  else {
+    AIZ1_FireRise();
+  }
+  Draw_TileRow(&g_ram.scrb_v_posit, &g_ram.scrb_v_posit_blk, 0x1000, PLANE_WIDTH_BLOCKS, p_context);
+  if (g_ram.scrb_v_posit >> 16 >= 0x190) {
+    unlze_screens(g_ram.mapwk, mapdata_0001);
+    unlze_blocks(g_ram.blockwk, blkdata_0001_1);
+    unlze_blocks(&g_ram.blockwk[343], blkdata_0001_2);
+    unlze_moduled(g_vram, cg_data_0001_1);
+    unlze_moduled(&g_vram[0x3F80], cg_data_0001_2);
+    divdevset2(toge_cg_tbl);
+    SKC_actwkchk_result result = actwkchk();
+    if (result.actwk_ptr != 0) {
+      result.actwk_ptr->r_ptr = LAB_006b28c9;
+      fp16_set_integer(result.actwk_ptr->xposi, 0x2FB0);
+      fp16_set_integer(result.actwk_ptr->yposi, 0x3A0);
+    }
+    g_ram.DAT_08ffeec8 = 240;
+    g_ram.DAT_08ffeeca = 15;
+    g_ram.scr_evtb += 4;
+    scr_evtb_0004(p_context);
+  }
+  else {
+    AIZTrans_WavyFlame();
+    PlainDeformation();
+  }
+}
+
+
 static void LAB_006b34f3(void) {
   g_ram.frame_offset_x = 0;
   short scra_h = (g_ram.scra_h_posit >> 16) + 4;
