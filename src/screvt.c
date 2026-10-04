@@ -948,6 +948,17 @@ static void AIZ1_ApplyDeformWater(void) {
 }
 
 
+static void AIZ1_FireRise(void) {
+  if (g_ram.actwk[0].r_no >= 6) return;
+
+  g_ram.scr_work1 += 640;
+  if (g_ram.scr_work1 >= 0xA000) {
+    g_ram.scr_work1 = 0xA000;
+  }
+  g_ram.scrb_v_posit += (short)g_ram.scr_work1 * 16;
+}
+
+
 static void scr_evta_000_init(SKC_screvt_context* p_context) {
   Adjust_AIZ1Chunks();
   Reset_TileOffsetPositionActual();
