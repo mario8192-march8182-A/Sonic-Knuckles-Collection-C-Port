@@ -1195,6 +1195,21 @@ static void scr_evtb_0000(SKC_screvt_context* p_context) {
 }
 
 
+static void scr_evtb_0001(SKC_screvt_context* p_context) {
+  AIZ1_Deform();
+  scr_evtb_0001_2(p_context);
+}
+
+
+static void scr_evtb_0001_2(SKC_screvt_context* p_context) {
+  bool done = Draw_PlaneVertBottomUpComplex(AIZ1_BGDrawArray, AIZ1_IntroDrawArray, g_ram.scrb_v_posit >> 16, p_context);
+  if (done) {
+    g_ram.scr_evtb += 4;
+  }
+  scr_evtb_0002_2(p_context);
+}
+
+
 static void LAB_006b34f3(void) {
   g_ram.frame_offset_x = 0;
   short scra_h = (g_ram.scra_h_posit >> 16) + 4;
