@@ -959,6 +959,22 @@ static void AIZ1_FireRise(void) {
 }
 
 
+static void AIZTrans_WavyFlame(void) {
+  if (g_ram.actwk[0].r_no >= 6) return;
+
+  g_ram.DAT_08ffee8e += 6;
+  short xposi = (g_ram.DAT_08ffee8e & 0x60) + 0x1000;
+  fp16_set_integer(&g_ram.scrb_h_posit, xposi);
+  unsigned short index_base = (g_ram.gametimer & 0x0000FFFF) / 4;
+
+  for (int i = 0; i < 20; ++i) {
+    g_ram.vscrollbuff[i * 2] = g_ram.scra_v_posit_copy >> 16;
+    unsigned short index = index_base + (i + 1) * 2 & 0x0F;
+    g_ram.vscrollbuff[i * 2 + 1] = AIZ_FlameVScroll[index] + fp16_get_integer(g_ram.scrb_v_posit);
+  }
+}
+
+
 static void scr_evta_000_init(SKC_screvt_context* p_context) {
   Adjust_AIZ1Chunks();
   Reset_TileOffsetPositionActual();
